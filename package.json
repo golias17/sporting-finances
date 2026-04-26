@@ -1,0 +1,21 @@
+{
+  "name": "sporting-finances",
+  "version": "1.0.0",
+  "description": "An interactive, high-fidelity single-page application dashboard tracing the financial evolution of **Sporting Clube de Portugal - Futebol, SAD** over the last 13 fiscal years.",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "clean": "rm -rf dist",
+    "clean:all": "npm run clean && rm -rf node_modules",
+    "build": "vite build --base=./",
+    "preview": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "puppeteer": "^25.0.4",
+    "vite": "^8.0.13"
+  }
+}

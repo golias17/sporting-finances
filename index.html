@@ -1,0 +1,1800 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta
+      name="description"
+      content="Interactive financial dashboard tracing Sporting Clube de Portugal SAD's evolution from −€119M equity to investment-grade status across 13 fiscal years (2012/13 – 2025/26). Revenue, debt, transfers, squad value and more."
+    />
+    <meta
+      property="og:title"
+      content="Sporting CP — Financial Evolution Dashboard"
+    />
+    <meta
+      property="og:description"
+      content="From −€119M to +€41M. Thirteen fiscal years of Sporting SAD finances, told through interactive charts and data."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Sporting CP — Financial Evolution Dashboard"
+    />
+    <meta
+      name="twitter:description"
+      content="From −€119M to +€41M. Thirteen fiscal years of Sporting SAD finances, told through interactive charts and data."
+    />
+    <link href="assets/LOGO.svg" rel="icon" type="image/svg+xml" />
+    <title data-i18n="auto-txt-title-0">
+      Sporting CP — Financial Evolution Dashboard (2012/13 → 2025/26)
+    </title>
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"
+    ></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link href="assets/styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="topbar">
+      <div class="wrap">
+        <span data-i18n="topbar-update"
+          ><span class="dot"></span>Last update · 25/26 H1</span
+        >
+        <span data-i18n="topbar-listing">Sporting SAD · Euronext Lisbon</span>
+        <div class="lang-switcher">
+          <a class="lang-link active" data-lang="en" href="index.html">EN</a>
+          <span class="lang-sep">|</span>
+          <a class="lang-link" data-lang="pt" href="index_pt.html">PT</a>
+        </div>
+        <button
+          aria-label="Toggle light/dark mode"
+          class="theme-toggle-btn"
+          id="themeToggleBtn"
+        >
+          <svg
+            class="icon-inline"
+            fill="none"
+            height="12"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            width="12"
+          >
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <span data-i18n="auto-txt-span-1">Dark Mode</span>
+        </button>
+      </div>
+    </div>
+    <header class="hero">
+      <div class="wrap">
+        <div class="lead">
+          <div class="badge-row">
+            <img
+              alt="Sporting Clube de Portugal crest"
+              class="club-badge"
+              src="assets/LOGO.svg"
+            />
+          </div>
+          <p class="eyebrow" data-i18n="hero-eyebrow">
+            A Financial Dossier · 2012 → 2026
+          </p>
+          <h1 data-i18n="auto-txt-h1-2">
+            From insolvency to <em>investment grade</em>.
+          </h1>
+          <p class="sub" data-i18n="hero-sub">
+            A 13-year journey at Sporting Clube de Portugal — through a capital
+            restructuring, a training-ground attack, an empty-stadium league
+            title, two bond conversions, and a €225M investment-grade placement.
+            Annual data drawn directly from official Sporting SAD reports.
+          </p>
+        </div>
+        <aside class="hero-stat">
+          <span class="stat-eyebrow" data-i18n="hero-stat-eyebrow"
+            >Shareholders' equity · 2012/13 → 2024/25</span
+          >
+          <div class="stat-row" data-i18n="auto-txt-div-3">
+            <span class="stat-from">−€119M</span>
+            <span class="stat-arrow">→</span>
+            <span class="stat-to">+€41M</span>
+          </div>
+          <span class="stat-foot" data-i18n="hero-stat-foot"
+            ><strong>Thirteen fiscal years.</strong> Annual data from Sporting
+            SAD reports filed with CMVM.</span
+          >
+        </aside>
+      </div>
+    </header>
+    <div class="container">
+      <!-- HEADLINE KPIs -->
+      <div class="kpi-strip">
+        <div class="kpis" id="kpiRow"></div>
+      </div>
+      <!-- TABS -->
+      <nav aria-label="Dashboard sections" class="tabs" role="tablist">
+        <button
+          aria-controls="tab-overview"
+          aria-selected="true"
+          class="active"
+          data-i18n="tab-btn-overview"
+          data-tab="overview"
+          id="btn-tab-overview"
+          role="tab"
+        >
+          <span class="tab-num">01</span>Overview
+        </button>
+        <button
+          aria-controls="tab-revenue"
+          aria-selected="false"
+          data-i18n="tab-btn-revenue"
+          data-tab="revenue"
+          id="btn-tab-revenue"
+          role="tab"
+        >
+          <span class="tab-num">02</span>Revenue
+        </button>
+        <button
+          aria-controls="tab-healthcheck"
+          aria-selected="false"
+          data-i18n="tab-btn-healthcheck"
+          data-tab="healthcheck"
+          id="btn-tab-healthcheck"
+          role="tab"
+        >
+          <span class="tab-num">03</span>Health
+        </button>
+        <button
+          aria-controls="tab-debt"
+          aria-selected="false"
+          data-i18n="tab-btn-debt"
+          data-tab="debt"
+          id="btn-tab-debt"
+          role="tab"
+        >
+          <span class="tab-num">04</span>Debt
+        </button>
+        <button
+          aria-controls="tab-bonds"
+          aria-selected="false"
+          data-i18n="tab-btn-bonds"
+          data-tab="bonds"
+          id="btn-tab-bonds"
+          role="tab"
+        >
+          <span class="tab-num">05</span>Instruments
+        </button>
+        <button
+          aria-controls="tab-squad"
+          aria-selected="false"
+          data-i18n="tab-btn-squad"
+          data-tab="squad"
+          id="btn-tab-squad"
+          role="tab"
+        >
+          <span class="tab-num">06</span>Squad
+        </button>
+        <button
+          aria-controls="tab-cash"
+          aria-selected="false"
+          data-i18n="tab-btn-cash"
+          data-tab="cash"
+          id="btn-tab-cash"
+          role="tab"
+        >
+          <span class="tab-num">07</span>Cash
+        </button>
+        <button
+          aria-controls="tab-compare"
+          aria-selected="false"
+          data-i18n="tab-btn-compare"
+          data-tab="compare"
+          id="btn-tab-compare"
+          role="tab"
+        >
+          <span class="tab-num">08</span>Compare
+        </button>
+        <button
+          aria-controls="tab-events"
+          aria-selected="false"
+          data-i18n="tab-btn-events"
+          data-tab="events"
+          id="btn-tab-events"
+          role="tab"
+        >
+          <span class="tab-num">09</span>Events
+        </button>
+        <button
+          aria-controls="tab-data"
+          aria-selected="false"
+          data-i18n="tab-btn-data"
+          data-tab="data"
+          id="btn-tab-data"
+          role="tab"
+        >
+          <span class="tab-num">10</span>Data
+        </button>
+        <button
+          aria-controls="tab-news"
+          aria-selected="false"
+          data-i18n="tab-btn-news"
+          data-tab="news"
+          id="btn-tab-news"
+          role="tab"
+        >
+          <span class="tab-num">11</span>News & Social
+        </button>
+      </nav>
+      <!-- ============== OVERVIEW ============== -->
+      <section
+        aria-labelledby="btn-tab-overview"
+        class="tab-panel active"
+        id="tab-overview"
+        role="tabpanel"
+      >
+        <div class="chapter">
+          <div class="num" data-i18n="ch01-num">Ch. 01 — Overview</div>
+          <div>
+            <h2 data-i18n="ch01-h2">The shape of <em>thirteen years</em>.</h2>
+            <p class="lede" data-i18n="ch01-lede">
+              Three lines tell the macro story: revenue, net result, and equity.
+              Read them together and the inflection points appear — 2014, 2018,
+              2021, 2022 — each one a financial fork in the road.
+            </p>
+          </div>
+        </div>
+        <!-- Story launcher -->
+        <div class="card" id="storyLaunchCard">
+          <div class="story-launch">
+            <div class="launch-text">
+              <p class="launch-quote" data-i18n="auto-txt-p-4">
+                From <em>−€119M</em> to <em>+€41M</em>.<br />Thirteen fiscal
+                years, told in one chart.
+              </p>
+              <span class="launch-cite" data-i18n="ch01-story-cite"
+                >A guided tour · Ten chapters · Press play</span
+              >
+            </div>
+            <button
+              class="btn-start-story"
+              data-i18n="ch01-story-play"
+              id="btnStartStory"
+            >
+              Play the story
+            </button>
+          </div>
+          <div class="story-body hidden" id="storyCard">
+            <div class="story-content-wrap" id="storyContentWrap">
+              <div class="story-header">
+                <div class="story-season" id="storySeason"></div>
+                <div class="story-title" id="storyTitle"></div>
+              </div>
+              <p class="story-narrative" id="storyNarrative"></p>
+            </div>
+            <div class="story-footer">
+              <div class="story-controls">
+                <button class="story-btn" id="btnPrevStory">← Prev</button>
+                <span class="story-counter" id="storyCounter"></span>
+                <button class="story-btn primary" id="btnNextStory">
+                  Next →
+                </button>
+                <button
+                  class="story-btn exit"
+                  data-i18n="auto-txt-button-7"
+                  id="btnExitStory"
+                >
+                  Exit
+                </button>
+              </div>
+              <div class="story-track" id="storyTrack">
+                <div class="story-fill" id="storyFill"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="ch01-hero-h3">The 13-year story in one chart</h3>
+            <span class="tag" data-i18n="ch01-hero-tag">Hero · 3 series</span>
+          </div>
+          <p class="desc" data-i18n="ch01-hero-desc">
+            Operating revenue, net result and shareholders' equity — the three
+            lines that tell the macro story of Sporting SAD's transformation.
+          </p>
+          <div class="chart-box tall">
+            <canvas
+              id="chartHero"
+              role="img"
+              data-i18n="aria-chart-hero"
+              aria-label="Macro financial evolution chart showing revenue, net result, and equity"
+            ></canvas>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head">
+              <h3 data-i18n="ch01-netresult-h3">Net Result by Season</h3>
+              <span class="tag" data-i18n="ch01-netresult-tag">P&amp;L</span>
+            </div>
+            <p class="desc" data-i18n="ch01-netresult-desc">
+              Volatile but trending positive. 4 consecutive profitable years
+              (21/22–24/25).
+            </p>
+            <div class="chart-box">
+              <canvas
+                id="chartNetResult"
+                role="img"
+                data-i18n="aria-chart-net-result"
+                aria-label="Net result by season chart"
+              ></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <h3 data-i18n="ch01-equity-h3">Equity Evolution</h3>
+              <span class="tag" data-i18n="ch01-equity-tag">Balance sheet</span>
+            </div>
+            <p class="desc" data-i18n="ch01-equity-desc">
+              From -€119M (insolvent in substance) to +€41M, with two
+              debt-to-equity conversions along the way.
+            </p>
+            <div class="chart-box">
+              <canvas
+                id="chartEquity"
+                role="img"
+                data-i18n="aria-chart-equity"
+                aria-label="Equity evolution chart"
+              ></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="narrative">
+          <h4 data-i18n="ch01-narrative-h4">What you're looking at</h4>
+          <p data-i18n="ch01-narrative-p1">
+            In 2013, Sporting SAD was technically insolvent — negative equity of
+            €119M, current liabilities at 7× current assets, cash of just €1.3M,
+            and no European football. By 2025, the club has back-to-back league
+            titles, a €474M squad market value, equity of +€41M, and just
+            secured a €225M 28-year private bond at 5.75% with investment-grade
+            ratings.
+          </p>
+          <p data-i18n="ch01-narrative-p2">
+            The path was not linear. It runs through a 2014 capital
+            restructuring (issuing convertible bonds), a 2018 staff-attack at
+            Alcochete that triggered a wave of player exits, a COVID year with
+            empty stadiums, and finally a 2022–2023 sequence of two
+            convertible-bond conversions (€135M total) that flipped the balance
+            sheet positive.
+          </p>
+        </div>
+      </section>
+      <!-- ============== REVENUE & PROFITABILITY ============== -->
+      <section
+        aria-labelledby="btn-tab-revenue"
+        class="tab-panel"
+        id="tab-revenue"
+        role="tabpanel"
+      >
+        <div class="chapter">
+          <div class="num" data-i18n="ch02-num">Ch. 02 — Revenue</div>
+          <div>
+            <h2 data-i18n="ch02-h2">
+              The recurring engine, <em>finally</em> firing.
+            </h2>
+            <p class="lede" data-i18n="ch02-lede">
+              Revenue tripled in five seasons. Personnel cost growth held below
+              it. The ratio that haunted Sporting for a decade is, for the first
+              time, healthy.
+            </p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="ch02-rev-h3">Operating Revenue Evolution</h3>
+            <span class="tag" data-i18n="ch02-rev-tag">Excl. transfers</span>
+          </div>
+          <p class="desc" data-i18n="ch02-rev-desc">
+            Revenue (excluding player transfers) — the recurring engine of the
+            business. Note the structural step-change from 2021/22 onward.
+          </p>
+          <div class="chart-box tall">
+            <canvas
+              id="chartRevenue"
+              role="img"
+              data-i18n="aria-chart-revenue"
+              aria-label="Operating revenue evolution chart"
+            ></canvas>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="ch02-streams-h3">Revenue Streams Breakdown</h3>
+            <span class="tag" data-i18n="ch02-streams-tag">3 categories</span>
+          </div>
+          <p class="desc" data-i18n="ch02-streams-desc">
+            Where does the money actually come from? Four streams covering 100%
+            of operating revenue: broadcast &amp; competition prize money (TV +
+            UEFA), matchday (ticket office &amp; season tickets), commercial
+            (sponsorships, merchandising), and a small residual of other
+            operating income (player loans, subsidies, national competition
+            fees). The dominance of broadcast/UEFA in big European seasons is
+            unmistakable.
+          </p>
+          <div class="chart-box tall">
+            <canvas
+              id="chartRevStreams"
+              role="img"
+              data-i18n="aria-chart-rev-streams"
+              aria-label="Revenue streams breakdown chart"
+            ></canvas>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head">
+              <h3 data-i18n="ch02-payroll-h3">Revenue vs Personnel Costs</h3>
+              <span class="tag" data-i18n="ch02-payroll-tag">Wage ratio</span>
+            </div>
+            <p class="desc" data-i18n="ch02-payroll-desc">
+              For most of the decade, payroll absorbed 70–95% of recurring
+              revenue. The 24/25 ratio (59%) is the healthiest in the dataset.
+            </p>
+            <div class="chart-box">
+              <canvas
+                id="chartRevVsPayroll"
+                role="img"
+                data-i18n="aria-chart-rev-vs-payroll"
+                aria-label="Revenue vs personnel costs chart"
+              ></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <h3 data-i18n="ch02-opresult-h3">
+                Operating Result — Recurring vs Players
+              </h3>
+              <span class="tag" data-i18n="ch02-opresult-tag">Stacked</span>
+            </div>
+            <p class="desc" data-i18n="ch02-opresult-desc">
+              Recurring operations rarely break even on their own. Player
+              trading carries the P&amp;L every year.
+            </p>
+            <div class="chart-box">
+              <canvas
+                id="chartOpResult"
+                role="img"
+                data-i18n="aria-chart-op-result"
+                aria-label="Operating result chart"
+              ></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="narrative">
+          <h4 data-i18n="ch02-narrative-h4">The recurring-business problem</h4>
+          <p data-i18n="ch02-narrative-p1">
+            Sporting's recurring operations (revenue minus payroll, supplies and
+            ordinary D&amp;A, before player trading) have been negative in 11 of
+            the 13 seasons. Only 2014/15 (post-restructuring downsize) and
+            2021/22 (Champions League return + first full post-COVID stadium)
+            produced positive recurring operating results. The model relies on
+            player trading — which the club is exceptionally good at — to fund
+            the rest.
+          </p>
+          <p data-i18n="ch02-narrative-p2">
+            The encouraging news: revenue has more than doubled in 5 years (€64M
+            in 20/21 → €148M in 24/25, a 2.3× increase), driven primarily by
+            Champions League fixtures from 2021/22 onward and growing commercial
+            income. Personnel cost growth has been more disciplined (€62M → €88M
+            over the same period), so the gap is finally closing.
+          </p>
+        </div>
+      </section>
+      <!-- ============== HEALTH CHECK ============== -->
+      <section
+        aria-labelledby="btn-tab-healthcheck"
+        class="tab-panel"
+        id="tab-healthcheck"
+        role="tabpanel"
+      >
+        <div class="chapter">
+          <div class="num" data-i18n="ch03-num">Ch. 03 — Health Check</div>
+          <div>
+            <h2 data-i18n="ch03-h2">An <em>annual check-up</em>, no jargon.</h2>
+            <p class="lede" data-i18n="ch03-lede">
+              Four questions, four charts. Each one shows whether the answer was
+              healthy, concerning, or alarming — and how the trend is moving.
+            </p>
+          </div>
+        </div>
+        <!-- VITAL SIGNS — moved here from above tabs -->
+        <div class="health-bar">
+          <div class="hb-sub" data-i18n="ch03-hb-sub">Vital signs</div>
+          <div class="hb-title" data-i18n="auto-txt-div-8" id="healthBarTitle">
+            Club Financial Health — select a season
+          </div>
+          <div class="season-selector" id="seasonSelector"></div>
+          <div class="health-signals" id="healthSignals"></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="ch03-brief-h3">
+              Sporting's annual financial check-up
+            </h3>
+            <span class="tag" data-i18n="ch03-brief-tag">2024/25 brief</span>
+          </div>
+          <p class="desc" data-i18n="ch03-brief-desc">
+            No jargon. Each chart asks one question and shows you whether the
+            answer has been healthy, concerning, or alarming — and how the trend
+            is moving.
+          </p>
+          <div class="narrative">
+            <h4 data-i18n="ch03-brief-h4">
+              The short version (2024/25) — almost all green for the first time
+            </h4>
+            <p data-i18n="ch03-brief-p">
+              Revenue has tripled in five years. The wage bill is the smallest
+              share of income in 13 years. Net debt is — for the first time —
+              below one year's revenue. Equity is positive for the third year
+              running. The one honest caveat: Sporting still relies on selling
+              players for nearly 44% of its total income. That's not a crisis —
+              it's the model. Alcochete academy players cost €0 to produce and
+              sell for tens of millions. But it means a bad transfer window
+              still hurts.
+            </p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head">
+              <h3 data-i18n="ch03-wage-h3">Wage bill burden</h3>
+              <span class="tag" data-i18n="ch03-wage-tag"
+                >Lower = healthier</span
+              >
+            </div>
+            <p class="desc" data-i18n="ch03-wage-desc">
+              What share of revenue goes straight to player &amp; staff wages?
+            </p>
+            <div class="zone-legend" data-i18n="auto-txt-div-9">
+              <span><span class="zone-dot g"></span> Below 60% — healthy</span>
+              <span><span class="zone-dot a"></span> 60–70% — watch this</span>
+              <span><span class="zone-dot r"></span> Above 70% — problem</span>
+            </div>
+            <div class="chart-box">
+              <canvas
+                id="chartPayrollBurden"
+                role="img"
+                data-i18n="aria-chart-payroll-burden"
+                aria-label="Personnel costs as percentage of recurring revenue chart"
+              ></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <h3 data-i18n="ch03-rel-h3">Transfer reliance</h3>
+              <span class="tag" data-i18n="ch03-rel-tag"
+                >Lower = self-sufficient</span
+              >
+            </div>
+            <p class="desc" data-i18n="ch03-rel-desc">
+              How much does Sporting depend on selling players to stay afloat?
+            </p>
+            <div class="zone-legend" data-i18n="auto-txt-div-10">
+              <span
+                ><span class="zone-dot g"></span> Below 35% — diversified</span
+              >
+              <span><span class="zone-dot a"></span> 35–50% — reliant</span>
+              <span
+                ><span class="zone-dot r"></span> Above 50% — high risk</span
+              >
+            </div>
+            <div class="chart-box">
+              <canvas
+                id="chartTransferReliance"
+                role="img"
+                data-i18n="aria-chart-transfer-reliance"
+                aria-label="Transfer reliance chart"
+              ></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head">
+              <h3 data-i18n="ch03-debt-h3">Debt load</h3>
+              <span class="tag" data-i18n="ch03-debt-tag"
+                >Net debt ÷ revenue</span
+              >
+            </div>
+            <p class="desc" data-i18n="auto-txt-p-11">
+              Net debt compared to a full year of revenue — the classic “can you
+              afford what you owe?” question.
+            </p>
+            <div class="zone-legend" data-i18n="auto-txt-div-12">
+              <span
+                ><span class="zone-dot g"></span> Below 1× — manageable</span
+              >
+              <span><span class="zone-dot a"></span> 1–2× — elevated</span>
+              <span><span class="zone-dot r"></span> Above 2× — heavy</span>
+            </div>
+            <div class="chart-box">
+              <canvas
+                id="chartDebtLoad"
+                role="img"
+                data-i18n="aria-chart-debt-load"
+                aria-label="Debt load chart"
+              ></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <h3 data-i18n="ch03-liq-h3">Short-term liquidity</h3>
+              <span class="tag" data-i18n="ch03-liq-tag">Current ratio</span>
+            </div>
+            <p class="desc" data-i18n="ch03-liq-desc">
+              Can the club cover its bills due in the next 12 months? A ratio
+              below 1.0 means short-term obligations exceed short-term assets.
+            </p>
+            <div class="zone-legend" data-i18n="auto-txt-div-13">
+              <span
+                ><span class="zone-dot g"></span> Above 1.0 — can cover
+                bills</span
+              >
+              <span><span class="zone-dot a"></span> 0.5–1.0 — tight</span>
+              <span
+                ><span class="zone-dot r"></span> Below 0.5 — very
+                stretched</span
+              >
+            </div>
+            <div class="chart-box">
+              <canvas
+                id="chartCurrentRatio"
+                role="img"
+                data-i18n="aria-chart-current-ratio"
+                aria-label="Current liquidity ratio chart"
+              ></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="narrative">
+          <h4 data-i18n="ch03-narrative-h4">
+            Why selling players isn't a flaw — it's the engine
+          </h4>
+          <p data-i18n="ch03-narrative-p">
+            Every year that Sporting's matchday and TV revenue doesn't cover
+            wages, the gap is filled by the transfer market. That's been true in
+            11 of the last 13 seasons. But here's the twist: Alcochete academy
+            graduates — Manuel Ugarte, Nuno Mendes, João Palhinha, Gonçalo
+            Inácio — were developed internally at near-zero acquisition cost.
+            Selling a player for €60M who cost nothing to produce is 100%
+            margin. As long as Alcochete keeps producing elite talent, this
+            model works. The question is whether commercial and matchday revenue
+            can keep growing fast enough that Sporting needs to rely on it less.
+          </p>
+        </div>
+      </section>
+      <!-- ============== DEBT & BALANCE SHEET ============== -->
+      <section
+        aria-labelledby="btn-tab-debt"
+        class="tab-panel"
+        id="tab-debt"
+        role="tabpanel"
+      >
+        <div class="chapter">
+          <div class="num" data-i18n="ch04-num">
+            Ch. 04 — Debt &amp; Balance
+          </div>
+          <div>
+            <h2 data-i18n="ch04-h2">
+              From insolvent to <em>investment-grade</em>.
+            </h2>
+            <p class="lede" data-i18n="ch04-lede">
+              Total borrowings barely moved across the decade. What changed is
+              the asset base around them — and a €135M debt-to-equity conversion
+              that flipped the balance sheet positive.
+            </p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="ch04-debt-h3">Total Debt &amp; Cash Position</h3>
+            <span class="tag" data-i18n="ch04-debt-tag">Stacked + cash</span>
+          </div>
+          <p class="desc" data-i18n="ch04-debt-desc">
+            Borrowings (current + non-current) versus cash on hand. Total debt
+            has stayed stable around €130–160M while the asset base has tripled.
+          </p>
+          <div class="chart-box tall">
+            <canvas
+              id="chartDebt"
+              role="img"
+              data-i18n="aria-chart-debt"
+              aria-label="Total debt and cash position chart"
+            ></canvas>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head">
+              <h3 data-i18n="ch04-assets-h3">
+                Total Assets vs Total Liabilities
+              </h3>
+              <span class="tag" data-i18n="ch04-assets-tag"
+                >Equity = the gap</span
+              >
+            </div>
+            <p class="desc" data-i18n="ch04-assets-desc">
+              Equity = the gap between the two stacked bars. The crossover
+              happened in 2022/23 after the first VMOC conversion.
+            </p>
+            <div class="chart-box">
+              <canvas
+                id="chartAssetsLiab"
+                role="img"
+                data-i18n="aria-chart-assets-liab"
+                aria-label="Total assets vs total liabilities chart"
+              ></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <h3 data-i18n="ch04-maturity-h3">Debt Maturity Profile</h3>
+              <span class="tag" data-i18n="ch04-maturity-tag"
+                >Long-term share</span
+              >
+            </div>
+            <p class="desc" data-i18n="ch04-maturity-desc">
+              Current vs non-current borrowings. The 2025 USPP bond pushed
+              nearly all debt out beyond one year.
+            </p>
+            <div class="chart-box">
+              <canvas
+                id="chartDebtMaturity"
+                role="img"
+                data-i18n="aria-chart-debt-maturity"
+                aria-label="Debt maturity profile chart"
+              ></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="narrative">
+          <h4 data-i18n="ch04-narrative-h4">
+            From insolvent to investment-grade in 12 years
+          </h4>
+          <p data-i18n="ch04-narrative-p1">
+            In 2013, Sporting had €157M of borrowings against €1.3M of cash — a
+            textbook liquidity crisis. The November 2014 capital restructuring
+            (a fresh capital increase plus issuance of mandatorily-convertible
+            bonds — VMOCs) was the lifeline that allowed the club to restructure
+            short-term debt into long-term obligations.
+          </p>
+          <p data-i18n="ch04-narrative-p2">
+            Two conversion events were transformational: in August 2022, €83.6M
+            of VMOCs converted into share capital; in December 2023 a further
+            €51.4M followed. The combined €135M flipped equity from -€16M to
+            +€21M and reduced financial expenses meaningfully.
+          </p>
+          <p data-i18n="ch04-narrative-p3">
+            The October 2025 milestone: a €225M 28-year USPP (US Private
+            Placement) bond at 5.75% — Sporting's first investment-grade rating
+            from Fitch and DBRS. This refinanced legacy debt at lower cost and
+            longer duration, and is likely the single biggest financial event of
+            the period.
+          </p>
+        </div>
+      </section>
+      <!-- ============== BONDS ============== -->
+      <section
+        aria-labelledby="btn-tab-bonds"
+        class="tab-panel"
+        id="tab-bonds"
+        role="tabpanel"
+      >
+        <div class="chapter">
+          <div class="num" data-i18n="ch05-num">
+            Ch. 05 — Financing Instruments
+          </div>
+          <div>
+            <h2 data-i18n="auto-txt-h2-14">
+              The instruments that <em>saved the club</em>.
+            </h2>
+            <p class="lede" data-i18n="ch05-lede">
+              Three instruments, one decade of recovery. The VMOCs of 2014
+              bought time — converting €135M of debt into equity. Lion Finance
+              securitizations (2019–2025) monetised TV rights to restructure the
+              bank debt. The USPP of 2025 closed the chapter, locking in 28
+              years of investment-grade financing.
+            </p>
+          </div>
+        </div>
+        <!-- VMOC narrative -->
+        <div class="narrative">
+          <h4 data-i18n="auto-txt-h4-15">What is a VMOC?</h4>
+          <p data-i18n="auto-txt-p-16">
+            VMOC stands for
+            <em>Valores Mobiliários Obrigatoriamente Convertíveis</em> —
+            mandatorily convertible bonds. Unlike regular bonds, VMOCs do not
+            pay back cash at maturity: they convert into shares. Sporting issued
+            them in November 2014 as part of a capital restructuring designed to
+            push short-term bank debt out by several years and give the club
+            breathing room. Crucially, because conversion into equity was
+            guaranteed, the VMOCs sat closer to equity than debt in economic
+            terms — but were still classified as borrowings on the balance sheet
+            until the conversion dates arrived.
+          </p>
+          <p data-i18n="auto-txt-p-17">
+            The two conversion events — €83.6M in August 2022 and €51.4M in
+            December 2023 — did not involve any cash leaving the club. Debt
+            simply became share capital. The €135M that had sat on the
+            liabilities side of the balance sheet for eight years disappeared,
+            and equity crossed zero for the first time since 2017.
+          </p>
+        </div>
+        <!-- VMOC cost breakdown -->
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="auto-txt-h3-18">
+              Annual financing cost — across all instruments
+            </h3>
+            <span class="tag" data-i18n="auto-txt-span-19"
+              >Net financial result · P&amp;L</span
+            >
+          </div>
+          <p class="desc" data-i18n="auto-txt-p-20">
+            The net financial result line from the income statement each year —
+            interest paid across every debt instrument (VMOCs, securitization,
+            public bonds, bank loans) minus any financial income. VMOCs were the
+            dominant driver from 2014 to 2022, which is why the cost drops so
+            sharply once they convert. This is <em>not</em> an isolated VMOC
+            figure — it is the total annual financing cost of the club.
+          </p>
+          <div id="vmocCostKpis"></div>
+          <div id="vmocCostTable"></div>
+        </div>
+        <!-- Lion Finance narrative -->
+        <div class="narrative narrative--spaced">
+          <h4 data-i18n="auto-txt-h4-21">
+            What is a securitization (titularização)?
+          </h4>
+          <p data-i18n="auto-txt-p-22">
+            A securitization is a form of asset-backed financing: instead of
+            borrowing money outright, the club assigns future revenue streams —
+            in this case, TV broadcast payments due from NOS Lusomundo
+            Audiovisuais — to a special purpose vehicle (Sagasta Finance STC,
+            S.A.). That SPV then issues bonds backed by those receivables to
+            institutional investors, and passes the cash on to Sporting. As NOS
+            pays its instalments over the coming seasons, the money flows
+            through the SPV to the bondholders. Sporting receives a large
+            upfront lump sum; bondholders receive a stream of secured payments;
+            and NOS keeps paying as normal.
+          </p>
+          <p data-i18n="auto-txt-p-23">
+            The technique let Sporting monetise future TV income immediately —
+            without selling players or issuing new shares — and at rates
+            competitive with bank loans. Lion Finance No. 1 (2019) was the
+            original vehicle; Lion Finance No. 2 (2023) refinanced and expanded
+            it, ultimately being repaid in full using USPP proceeds in October
+            2025.
+          </p>
+        </div>
+        <!-- Lion Finance cards -->
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="auto-txt-h3-24">Lion Finance — key facts</h3>
+            <span class="tag" data-i18n="auto-txt-span-25"
+              >Sagasta Finance STC</span
+            >
+          </div>
+          <p class="desc" data-i18n="auto-txt-p-26">
+            Two sequential securitizations of the same NOS TV-rights contract,
+            managed through the SPV Sagasta Finance STC, S.A. Click the tabs to
+            compare.
+          </p>
+          <div id="lionFinanceCards"></div>
+        </div>
+        <!-- USPP narrative + key terms -->
+        <div class="narrative narrative--spaced">
+          <h4 data-i18n="auto-txt-h4-27">What is a USPP bond?</h4>
+          <p data-i18n="auto-txt-p-28">
+            USPP stands for US Private Placement — a form of long-term debt sold
+            directly to institutional investors (primarily US insurance
+            companies and pension funds) rather than issued on a public
+            exchange. USPP bonds typically carry longer maturities than bank
+            loans or public bonds, and require the issuer to obtain a credit
+            rating. For Sporting, the October 2025 USPP was transformational:
+            €225M raised over 28 years at 5.75%, refinancing all legacy
+            short-term facilities in a single transaction.
+          </p>
+          <p data-i18n="auto-txt-p-29">
+            The ratings from Fitch (BBB−) and DBRS (BBB low) — both investment
+            grade — make Sporting the first Portuguese football club to reach
+            this threshold. Investment grade matters because it unlocks a class
+            of institutional investors who are prohibited by mandate from
+            holding sub-investment-grade debt, and because it signals to the
+            market that the club's financials are structurally sound, not just
+            cyclically good.
+          </p>
+        </div>
+        <!-- USPP key terms card -->
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="auto-txt-h3-30">USPP bond — key terms</h3>
+            <span class="tag" data-i18n="auto-txt-span-31">Oct 2025</span>
+          </div>
+          <p class="desc" data-i18n="auto-txt-p-32">
+            The defining financial transaction of the post-recovery era. Every
+            term below is a milestone for Portuguese football.
+          </p>
+          <div id="usppTerms"></div>
+        </div>
+      </section>
+      <!-- ============== SQUAD & TRANSFERS ============== -->
+      <section
+        aria-labelledby="btn-tab-squad"
+        class="tab-panel"
+        id="tab-squad"
+        role="tabpanel"
+      >
+        <div class="chapter">
+          <div class="num" data-i18n="ch06-num">
+            Ch. 06 — Squad &amp; Transfers
+          </div>
+          <div>
+            <h2 data-i18n="ch06-h2">
+              Alcochete, the <em>perpetual cash machine</em>.
+            </h2>
+            <p class="lede" data-i18n="ch06-lede">
+              Alcochete graduates — and smart recruitment — have generated over
+              €75M in five of the last nine seasons. The squad's market value
+              has tripled since 2012/13, despite hundreds of millions in player
+              sales along the way.
+            </p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="ch06-squad-h3">Squad Book Value Evolution</h3>
+            <span class="tag" data-i18n="ch06-squad-tag">Book vs market</span>
+          </div>
+          <p class="desc" data-i18n="ch06-squad-desc">
+            Book value (intangible asset on balance sheet — acquisition cost
+            less amortization) vs market value (Transfermarkt estimate). Market
+            value far exceeds book because home-grown academy players are
+            recognised at zero acquisition cost on the balance sheet.
+          </p>
+          <div class="chart-box tall">
+            <canvas
+              id="chartSquadBook"
+              role="img"
+              data-i18n="aria-chart-squad-book"
+              aria-label="Squad book value evolution chart"
+            ></canvas>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head">
+              <h3 data-i18n="ch06-income-h3">Player Transfer Income</h3>
+              <span class="tag" data-i18n="ch06-income-tag">Sales</span>
+            </div>
+            <p class="desc" data-i18n="ch06-income-desc">
+              Player sales — the financial engine that funded the recovery. Five
+              seasons over €75M.
+            </p>
+            <div class="chart-box">
+              <canvas
+                id="chartTransfers"
+                role="img"
+                data-i18n="aria-chart-transfers"
+                aria-label="Player transfer income chart"
+              ></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <h3 data-i18n="ch06-net-h3">Net Player Trading Result</h3>
+              <span class="tag" data-i18n="ch06-net-tag"
+                >After amortization</span
+              >
+            </div>
+            <p class="desc" data-i18n="ch06-net-desc">
+              Sales income minus acquisitions, amortization and impairments.
+              Profitable in 11 of 13 seasons.
+            </p>
+            <div class="chart-box">
+              <canvas
+                id="chartNetTrading"
+                role="img"
+                data-i18n="aria-chart-net-trading"
+                aria-label="Net player trading result chart"
+              ></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="ch06-ledger-h3">Detailed Transfer Ledger</h3>
+            <span class="tag" data-i18n="ch06-ledger-tag"
+              >Season breakdown</span
+            >
+          </div>
+          <p class="desc" data-i18n="ch06-ledger-desc">
+            Detailed view of permanent and temporary player acquisitions and
+            sales for each season. All figures represent primary transfer fees
+            in millions of Euros.
+          </p>
+          <div class="tl-season-nav" id="tlSeasonNav"></div>
+          <div class="tl-window-nav" id="tlWindowNav"></div>
+          <div id="tlBody"></div>
+        </div>
+        <div class="narrative">
+          <h4 data-i18n="ch06-narrative-h4">The transfer-trading machine</h4>
+          <p data-i18n="ch06-narrative-p1">
+            Sporting's youth academy (Alcochete) and scouting model is the most
+            reliable cash generator on the income statement. The academy
+            produces players at near-zero acquisition cost — Cristiano Ronaldo
+            (2003, ~€18M to Man United), João Mário (2016, €40M to Inter),
+            Manuel Ugarte (2023, €60M to PSG) and Nuno Mendes (2022, €38M to
+            PSG) were all Alcochete graduates. Smart recruitment amplifies the
+            model: Bruno Fernandes arrived from Italy and left for €55M (2020);
+            Viktor Gyökeres was bought from Coventry for ~€20M and sold to
+            Arsenal for €65.8M (2025).
+          </p>
+          <p data-i18n="auto-txt-p-33">
+            Since 2016/17 the club has generated between €34M and €144M in
+            transfer income every season. The 2023/24 season set the all-time
+            record at €144M. The 2025/26 H1 alone already reached €110M,
+            anchored by the Gyökeres deal.
+          </p>
+          <p data-i18n="ch06-narrative-p3">
+            The squad's market value (Transfermarkt, Dec 2025) stands at €474M —
+            3× the €151.9M estimate from 2012/13, despite the club having sold
+            hundreds of millions in talent over the same period. The
+            market-to-book gap is wide because Alcochete graduates carry zero
+            acquisition cost on the balance sheet.
+          </p>
+        </div>
+      </section>
+      <!-- ============== CASH FLOW ============== -->
+      <section
+        aria-labelledby="btn-tab-cash"
+        class="tab-panel"
+        id="tab-cash"
+        role="tabpanel"
+      >
+        <div class="chapter">
+          <div class="num" data-i18n="ch07-num">
+            Ch. 07 — Cash &amp; Liquidity
+          </div>
+          <div>
+            <h2 data-i18n="ch07-h2">Tight rope, <em>every year</em>.</h2>
+            <p class="lede" data-i18n="ch07-lede">
+              Operating cash flow has been negative in 12 of 13 seasons — player
+              sales are the structural offset that keeps the club solvent. The
+              USPP bond restructures the debt profile and funds the stadium; it
+              does not directly fix operating cash generation.
+            </p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="ch07-cf-h3">Cash Flow by Activity</h3>
+            <span class="tag" data-i18n="ch07-cf-tag">3 streams</span>
+          </div>
+          <p class="desc" data-i18n="ch07-cf-desc">
+            Operating activities (typically negative), investing activities
+            (player sales drive positive flow), financing activities (debt
+            issuance &amp; repayment).
+          </p>
+          <div class="chart-box tall">
+            <canvas
+              id="chartCashFlow"
+              role="img"
+              data-i18n="aria-chart-cash-flow"
+              aria-label="Cash flow by activity chart"
+            ></canvas>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head">
+              <h3 data-i18n="ch07-cash-h3">Cash Position at Year-End</h3>
+              <span class="tag" data-i18n="ch07-cash-tag">30 Jun snapshot</span>
+            </div>
+            <p class="desc" data-i18n="ch07-cash-desc">
+              Cash on hand at 30 June each year. Generally low — the club
+              operates with thin liquidity buffers.
+            </p>
+            <div class="chart-box">
+              <canvas
+                id="chartCash"
+                role="img"
+                data-i18n="aria-chart-cash"
+                aria-label="Cash position at year-end chart"
+              ></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <h3 data-i18n="ch07-net-h3">Annual Net Result</h3>
+              <span class="tag" data-i18n="ch10-annual-tag">13 seasons</span>
+            </div>
+            <p class="desc" data-i18n="ch07-net-desc">
+              Full-year net result at 30 June each season. The two large spikes
+              in 2022/23 and 2023/24 are driven by the VMOC conversion
+              accounting gains (€83.6M and €51.4M respectively) — not recurring
+              operating profit.
+            </p>
+            <div class="chart-box">
+              <canvas
+                id="chartAnnualNet"
+                role="img"
+                data-i18n="aria-chart-annual-net"
+                aria-label="Annual net change in cash chart"
+              ></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="narrative">
+          <h4 data-i18n="ch07-narrative-h4">Liquidity is structurally tight</h4>
+          <p data-i18n="ch07-narrative-p1">
+            Sporting SAD has run negative cash from operating activities in 12
+            of the 13 seasons in the dataset. The sole exception is 2014/15
+            (+€29.2M), where the capital restructuring year produced unusually
+            large inflows. In every other season — including 2023/24 at −€92.2M,
+            the worst on record — wages, supplies and player-acquisition
+            instalment payments absorb more cash than the business generates
+            before transfers. Player sales (investing activities) are the
+            structural offset that prevents the cash position from collapsing.
+          </p>
+          <p data-i18n="ch07-narrative-p2">
+            Year-end cash has never exceeded €15.6M and fell below €4M in 5 of
+            13 seasons — including as low as €1.3M in 2012/13. The USPP bond
+            (€225M, October 2025) refinances short-term facilities and extends
+            the debt maturity profile; its primary purpose is the Estádio
+            Alvalade transformation, not curing operating cash generation. At
+            5.75% on €225M, the annual coupon (~€12.9M) will increase financing
+            outflows from 2025/26 onward.
+          </p>
+        </div>
+      </section>
+      <!-- ============== COMPARE SEASONS ============== -->
+      <section
+        aria-labelledby="btn-tab-compare"
+        class="tab-panel"
+        id="tab-compare"
+        role="tabpanel"
+      >
+        <div class="chapter">
+          <div class="num" data-i18n="ch08-num">Ch. 08 — Compare</div>
+          <div>
+            <h2 data-i18n="ch08-h2">Two seasons, <em>side by side</em>.</h2>
+            <p class="lede" data-i18n="ch08-lede">
+              Pick any two years and see exactly how every key metric shifted.
+              The defaults compare the dataset's first season with its most
+              recent.
+            </p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3 data-i18n="ch08-cmp-h3">Compare any two seasons</h3>
+            <span class="tag" data-i18n="ch08-cmp-tag">Interactive</span>
+          </div>
+          <p class="desc" data-i18n="ch08-cmp-desc">
+            Pick two seasons and see exactly how every key metric shifted — how
+            far the club has come, or how one turning point changed everything.
+          </p>
+          <div class="cmp-selectors">
+            <div class="cmp-season-pick">
+              <label data-i18n="ch08-season-a">Season A</label>
+              <select id="compareSeasonA"></select>
+            </div>
+            <div class="cmp-vs" data-i18n="ch08-vs">vs</div>
+            <div class="cmp-season-pick">
+              <label data-i18n="ch08-season-b">Season B</label>
+              <select id="compareSeasonB"></select>
+            </div>
+          </div>
+          <p class="cmp-narrative" id="cmpNarrative"></p>
+          <div class="chart-box chart-box--short">
+            <canvas
+              id="compareBarChart"
+              role="img"
+              data-i18n="aria-chart-compare"
+              aria-label="Metric comparison chart between selected seasons"
+            ></canvas>
+          </div>
+          <div class="cmp-col-headers" data-i18n="auto-txt-div-34">
+            <span class="cmp-col-label" id="cmpHeadA"></span>
+            <span></span>
+            <span class="cmp-col-label" id="cmpHeadB"></span>
+          </div>
+          <div id="comparisonGrid"></div>
+        </div>
+      </section>
+      <!-- ============== KEY EVENTS ============== -->
+      <section
+        aria-labelledby="btn-tab-events"
+        class="tab-panel"
+        id="tab-events"
+        role="tabpanel"
+      >
+        <div class="chapter">
+          <div class="num" data-i18n="ch09-num">Ch. 09 — Key Events</div>
+          <div>
+            <h2 data-i18n="ch09-h2">
+              Inflection points, <em>2014 → 2025</em>.
+            </h2>
+            <p class="lede" data-i18n="ch09-lede">
+              The events that shaped the trajectory — some on the pitch, most
+              off it. Each card pairs the sporting moment with what it did to
+              the numbers.
+            </p>
+          </div>
+        </div>
+        <div class="event-legend" data-i18n="auto-txt-div-35">
+          <button class="el-filter active" data-filter="all">All</button>
+          <button class="el-filter win" data-filter="win">
+            Win / milestone
+          </button>
+          <button class="el-filter crisis" data-filter="crisis">Crisis</button>
+          <button class="el-filter restructure" data-filter="restructure">
+            Restructuring
+          </button>
+        </div>
+        <div class="events" id="eventsList">
+          <div class="event restructure">
+            <div class="event-header" data-i18n="auto-txt-div-36">
+              <span class="event-date">Nov 2014</span
+              ><span class="event-badge">Restructuring</span>
+            </div>
+            <div class="title" data-i18n="auto-txt-div-37">
+              Capital restructuring &amp; first VMOCs
+            </div>
+            <div class="body" data-i18n="auto-txt-div-38">
+              Bruno de Carvalho's AGM authorizes a major capital increase and
+              the issuance of Mandatorily-Convertible Bonds (VMOCs),
+              restructuring short-term debt into longer-dated obligations.
+            </div>
+            <div class="impact" data-i18n="auto-txt-div-39">
+              <span class="pitch"
+                ><strong>On the pitch —</strong> Stability returned — Sporting
+                could plan ahead and invest in the squad again.</span
+              >
+              <span class="numbers"
+                ><strong>In the numbers —</strong> Equity flipped positive
+                (+€7M) for the first time; short-term debt load nearly
+                halved.</span
+              >
+            </div>
+          </div>
+          <div class="event win">
+            <div class="event-header" data-i18n="auto-txt-div-40">
+              <span class="event-date">Jun 2017</span
+              ><span class="event-badge">Milestone</span>
+            </div>
+            <div class="title" data-i18n="auto-txt-div-41">
+              €30.5M net profit — pre-attack peak
+            </div>
+            <div class="body" data-i18n="auto-txt-div-42">
+              Powered by player sales (João Mário €40M to Inter, Slimani €30.5M
+              to Leicester, and others) and Champions League qualification, the
+              SAD posts the largest net result of the era so far.
+            </div>
+            <div class="impact" data-i18n="auto-txt-div-43">
+              <span class="pitch"
+                ><strong>On the pitch —</strong> Champions League group stage
+                reached; Jorge Jesus's era producing the best football in a
+                decade.</span
+              >
+              <span class="numbers"
+                ><strong>In the numbers —</strong> €93M in transfer income — a
+                new record at the time; equity at its best since 2014.</span
+              >
+            </div>
+          </div>
+          <div class="event crisis">
+            <div class="event-header" data-i18n="auto-txt-div-44">
+              <span class="event-date">15 May 2018</span
+              ><span class="event-badge">Crisis</span>
+            </div>
+            <div class="title" data-i18n="auto-txt-div-45">
+              Alcochete attack
+            </div>
+            <div class="body" data-i18n="auto-txt-div-46">
+              A group of organized supporters attacks the training ground.
+              Players activate just-cause termination clauses; key sales
+              (Patrício, William Carvalho, Gelson Martins) follow. Bruno de
+              Carvalho is impeached.
+            </div>
+            <div class="impact" data-i18n="auto-txt-div-47">
+              <span class="pitch"
+                ><strong>On the pitch —</strong> The best squad in years was
+                dismantled overnight. Sporting finished 3rd the following
+                season.</span
+              >
+              <span class="numbers"
+                ><strong>In the numbers —</strong> Forced to sell at distressed
+                prices; equity crashed back to -€13M; financial result hit -€10M
+                from rising debt costs.</span
+              >
+            </div>
+          </div>
+          <div class="event restructure">
+            <div class="event-header" data-i18n="auto-txt-div-48">
+              <span class="event-date">2019</span
+              ><span class="event-badge">Restructuring</span>
+            </div>
+            <div class="title" data-i18n="auto-txt-div-49">
+              €65M securitization
+            </div>
+            <div class="body" data-i18n="auto-txt-div-50">
+              Sporting refinances player-receivable cash flows through a
+              securitization vehicle, easing short-term liquidity pressure —
+              while Rúben Amorim is identified as the new coach.
+            </div>
+            <div class="impact" data-i18n="auto-txt-div-51">
+              <span class="pitch"
+                ><strong>On the pitch —</strong> Freed up budget to bring in
+                Rúben Amorim mid-season in 2019/20 — the hire that changed
+                everything.</span
+              >
+              <span class="numbers"
+                ><strong>In the numbers —</strong> Non-current (long-term)
+                liabilities jumped from €110M to €184M as short-term debt was
+                pushed out; pressure eased.</span
+              >
+            </div>
+          </div>
+          <div class="event crisis">
+            <div class="event-header" data-i18n="auto-txt-div-52">
+              <span class="event-date">Mar–Jun 2020/21</span
+              ><span class="event-badge">Crisis</span>
+            </div>
+            <div class="title" data-i18n="auto-txt-div-53">
+              COVID-19 stadium ban
+            </div>
+            <div class="body" data-i18n="auto-txt-div-54">
+              Empty stadiums, suspended ticketing, broadcasting deal
+              renegotiations. The 20/21 season is played with no fans in the
+              stands.
+            </div>
+            <div class="impact" data-i18n="auto-txt-div-55">
+              <span class="pitch"
+                ><strong>On the pitch —</strong> Sporting won the Liga anyway —
+                first title in 19 years — in front of empty seats on 11 May
+                2021.</span
+              >
+              <span class="numbers"
+                ><strong>In the numbers —</strong> Revenue fell -16% vs prior
+                year; worst net result in the dataset (-€33M); equity hit rock
+                bottom at -€41M.</span
+              >
+            </div>
+          </div>
+          <div class="event win">
+            <div class="event-header" data-i18n="auto-txt-div-56">
+              <span class="event-date">11 May 2021</span
+              ><span class="event-badge">Milestone</span>
+            </div>
+            <div class="title" data-i18n="auto-txt-div-57">
+              First Liga title in 19 years
+            </div>
+            <div class="body" data-i18n="auto-txt-div-58">
+              Rúben Amorim's squad ends the longest title drought in club
+              history. The win comes despite the pandemic-affected season — in
+              an empty Alvalade.
+            </div>
+            <div class="impact" data-i18n="auto-txt-div-59">
+              <span class="pitch"
+                ><strong>On the pitch —</strong> The drought is over. Amorim
+                becomes a legend. The squad's togetherness carries through two
+                more titles.</span
+              >
+              <span class="numbers"
+                ><strong>In the numbers —</strong> The full financial effect
+                came in 21/22 — when fans returned and Champions League revenue
+                flooded in (+€58M revenue jump in one year).</span
+              >
+            </div>
+          </div>
+          <div class="event restructure">
+            <div class="event-header" data-i18n="auto-txt-div-60">
+              <span class="event-date">Aug 2022</span
+              ><span class="event-badge">Restructuring</span>
+            </div>
+            <div class="title" data-i18n="auto-txt-div-61">
+              First VMOC conversion (€83.6M)
+            </div>
+            <div class="body" data-i18n="auto-txt-div-62">
+              €83,571,872 of the mandatorily-convertible bonds issued in 2014
+              are converted into share capital — wiping the equivalent debt from
+              the balance sheet.
+            </div>
+            <div class="impact" data-i18n="auto-txt-div-63">
+              <span class="pitch"
+                ><strong>On the pitch —</strong> Financial stability gave
+                Frederico Varandas the runway to keep building the project —
+                Ugarte signed, Gyökeres arrived the next year.</span
+              >
+              <span class="numbers"
+                ><strong>In the numbers —</strong> €83.6M of debt simply
+                disappeared; equity crossed zero for the first time since 2017
+                (+€8.9M); financial expenses dropped and the balance sheet
+                started to look like a normal business.</span
+              >
+            </div>
+          </div>
+          <div class="event restructure">
+            <div class="event-header" data-i18n="auto-txt-div-64">
+              <span class="event-date">Dec 2023</span
+              ><span class="event-badge">Restructuring</span>
+            </div>
+            <div class="title" data-i18n="auto-txt-div-65">
+              Second VMOC conversion (€51.4M)
+            </div>
+            <div class="body" data-i18n="auto-txt-div-66">
+              A further €51,416,952 of VMOCs convert into equity. Combined with
+              the August 2022 conversion, €135M of debt has been permanently
+              erased.
+            </div>
+            <div class="impact" data-i18n="auto-txt-div-67">
+              <span class="pitch"
+                ><strong>On the pitch —</strong> Back in Champions League
+                regularly; squad value at €365M and rising.</span
+              >
+              <span class="numbers"
+                ><strong>In the numbers —</strong> The second conversion brought
+                total debt erased to €135M; equity grew from +€8.9M to +€21M,
+                with financial expenses structurally reduced. The balance sheet
+                reinforced for the long term.</span
+              >
+            </div>
+          </div>
+          <div class="event win">
+            <div class="event-header" data-i18n="auto-txt-div-68">
+              <span class="event-date">May 2024</span
+              ><span class="event-badge">Milestone</span>
+            </div>
+            <div class="title" data-i18n="auto-txt-div-69">
+              Second Liga title in 4 years
+            </div>
+            <div class="body" data-i18n="auto-txt-div-70">
+              Rúben Amorim wins his second league before leaving for Manchester
+              United in November 2024.
+            </div>
+            <div class="impact" data-i18n="auto-txt-div-71">
+              <span class="pitch"
+                ><strong>On the pitch —</strong> Back-to-back domestic
+                dominance. Ugarte (€60M to PSG) and others sold; Gyökeres
+                already scoring at will.</span
+              >
+              <span class="numbers"
+                ><strong>In the numbers —</strong> Record €144M in transfer
+                income — the highest single-season figure in the dataset; equity
+                grew to €21M.</span
+              >
+            </div>
+          </div>
+          <div class="event win">
+            <div class="event-header" data-i18n="auto-txt-div-72">
+              <span class="event-date">May 2025</span
+              ><span class="event-badge">Milestone</span>
+            </div>
+            <div class="title" data-i18n="auto-txt-div-73">
+              Back-to-back Liga + Taça de Portugal
+            </div>
+            <div class="body" data-i18n="auto-txt-div-74">
+              Sporting wins both major domestic trophies under new coach Rui
+              Borges. Gyökeres (€65.8M to Arsenal) departs in the summer.
+            </div>
+            <div class="impact" data-i18n="auto-txt-div-75">
+              <span class="pitch"
+                ><strong>On the pitch —</strong> Three Liga titles in five
+                years. Rui Borges's transition is seamless. Squad market value
+                hits €511M.</span
+              >
+              <span class="numbers"
+                ><strong>In the numbers —</strong> Revenue reaches €148M — 130%
+                up on 5 years prior; wage bill at 59%, the healthiest ratio in
+                13 years; equity +€41M.</span
+              >
+            </div>
+          </div>
+          <div class="event restructure">
+            <div class="event-header" data-i18n="auto-txt-div-76">
+              <span class="event-date">Oct 2025</span
+              ><span class="event-badge">Restructuring</span>
+            </div>
+            <div class="title" data-i18n="auto-txt-div-77">
+              €225M USPP bond, investment grade &amp; Sporting Entertainment
+            </div>
+            <div class="body" data-i18n="auto-txt-div-78">
+              A landmark month. Sporting becomes the first Portuguese football
+              club rated investment grade by both Fitch and DBRS — securing a
+              €225M 28-year private placement at 5.75% that refinances all
+              legacy short-term debt. Simultaneously, Sporting Entertainment is
+              created as a commercial subsidiary, triggering the club's
+              first-ever consolidated financial statements.
+            </div>
+            <div class="impact" data-i18n="auto-txt-div-79">
+              <span class="pitch"
+                ><strong>On the pitch —</strong> The rating is a bigger
+                structural advantage than most trophies — Benfica and Porto
+                don't have it. The subsidiary unlocks new commercial revenue
+                streams.</span
+              >
+              <span class="numbers"
+                ><strong>In the numbers —</strong> Nearly all debt pushed out to
+                28+ years at lower cost. First consolidated H1 shows working
+                capital of €100M and a record H1 net result of €32M.</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- ============== RAW DATA ============== -->
+      <section
+        aria-labelledby="btn-tab-data"
+        class="tab-panel"
+        id="tab-data"
+        role="tabpanel"
+      >
+        <div class="chapter">
+          <div class="num" data-i18n="ch10-num">Ch. 10 — Raw Data</div>
+          <div>
+            <h2 data-i18n="ch10-h2">The numbers, <em>in full</em>.</h2>
+            <p class="lede" data-i18n="ch10-lede">
+              Every metric across thirteen seasons. Negative cells in red
+              indicate losses or negative balances. Source PDFs: Sporting SAD
+              annual reports filed with the CMVM.
+            </p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head" style="align-items: center;">
+            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+              <h3 data-i18n="ch10-annual-h3">
+                Annual data — all metrics in EUR thousands
+              </h3>
+              <span class="tag" data-i18n="ch10-annual-tag">13 seasons</span>
+            </div>
+            <button id="btnDownloadLedger" class="story-btn" style="padding: 6px 12px; font-size: 11px;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px; vertical-align:middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Download CSV
+            </button>
+          </div>
+          <p class="desc" data-i18n="ch10-annual-desc">
+            Negative cells in red indicate losses or negative balances. Source
+            PDFs: Sporting SAD annual reports (CMVM).
+          </p>
+          <p class="scroll-hint" data-i18n="ch10-scroll-hint">
+            Scroll horizontally to see all 13 seasons
+          </p>
+          <div class="table-wrap">
+            <div class="scroll-x" id="dataTable"></div>
+          </div>
+        </div>
+        <div class="card card--spaced">
+          <div class="card-head">
+            <h3 data-i18n="ch10-ledger-h3">Full Transfer Details Ledger</h3>
+            <span class="tag" id="transfersTableSeasonTag">2025/26</span>
+          </div>
+          <p class="desc" data-i18n="ch10-ledger-desc">
+            A consolidated, interactive table displaying the full details of all
+            player arrivals and departures. Use the season filter to explore
+            prior years.
+          </p>
+          <div class="ledger-controls">
+            <div class="ledger-control-group">
+              <label
+                class="ledger-label"
+                data-i18n="ch10-tf-season-label"
+                for="tfSeasonSelect"
+                >Season:</label
+              >
+              <select class="ledger-select" id="tfSeasonSelect"></select>
+            </div>
+            <div class="ledger-control-group">
+              <label
+                class="ledger-label"
+                data-i18n="ch10-tf-window-label"
+                for="tfWindowSelect"
+                >Window:</label
+              >
+              <select class="ledger-select" id="tfWindowSelect">
+                <option data-i18n="ch10-tf-window-all" value="all">
+                  All Windows
+                </option>
+                <option data-i18n="ch10-tf-window-summer" value="summer">
+                  Summer Window
+                </option>
+                <option data-i18n="ch10-tf-window-winter" value="winter">
+                  Winter Window
+                </option>
+              </select>
+            </div>
+            <div class="ledger-control-group">
+              <label
+                class="ledger-label"
+                data-i18n="ch10-tf-type-label"
+                for="tfTypeSelect"
+                >Type:</label
+              >
+              <select class="ledger-select" id="tfTypeSelect">
+                <option data-i18n="ch10-tf-type-all" value="all">
+                  All Transfers
+                </option>
+                <option data-i18n="ch10-tf-type-in" value="in">
+                  Arrivals (Purchases/Loans In)
+                </option>
+                <option data-i18n="ch10-tf-type-out" value="out">
+                  Departures (Sales/Loans Out/Terminations)
+                </option>
+              </select>
+            </div>
+            <div class="ledger-control-group ledger-control-group--grow">
+              <input
+                class="ledger-input"
+                id="tfSearchInput"
+                placeholder="Search player, club, or notes..."
+                type="text"
+              />
+            </div>
+          </div>
+          <div class="scroll-x">
+            <table class="ledger" id="transfersDetailTable">
+              <thead>
+                <tr>
+                  <th data-i18n="ch10-tf-col-player">Player</th>
+                  <th data-i18n="ch10-tf-col-season" class="align-center">
+                    Season
+                  </th>
+                  <th data-i18n="ch10-tf-col-window" class="align-center">
+                    Window
+                  </th>
+                  <th data-i18n="ch10-tf-col-type">Type</th>
+                  <th data-i18n="ch10-tf-col-club">Club</th>
+                  <th data-i18n="ch10-tf-col-fee" class="align-right">Fee</th>
+                  <th data-i18n="ch10-tf-col-rights" class="align-center">
+                    Rights
+                  </th>
+                  <th data-i18n="ch10-tf-col-bonus" class="align-right">
+                    Bonus
+                  </th>
+                  <th data-i18n="ch10-tf-col-comm" class="align-right">
+                    Comm.
+                  </th>
+                  <th data-i18n="ch10-tf-col-notes">Notes &amp; Details</th>
+                </tr>
+              </thead>
+              <tbody id="transfersDetailTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============== NEWS & SOCIAL ============== -->
+      <section
+        aria-labelledby="btn-tab-news"
+        class="tab-panel"
+        id="tab-news"
+        role="tabpanel"
+      >
+        <div class="chapter">
+          <div class="num">Ch. 11 — News & Social</div>
+          <div>
+            <h2>Live <em>Updates</em>.</h2>
+            <p class="lede">
+              The latest financial and corporate news regarding Sporting CP, aggregated live from Portuguese media.
+            </p>
+          </div>
+        </div>
+
+        <div class="social-hub anim-up">
+          <h3>Official Channels & Media</h3>
+          <div class="social-grid">
+            <button id="btnJornalModal" class="social-btn jornal">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              <span>Jornal Sporting</span>
+            </button>
+            <a href="https://www.linkedin.com/company/sporting-clube-de-portugal/" target="_blank" class="social-btn linkedin">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+              <span>LinkedIn</span>
+            </a>
+            <a href="https://twitter.com/SportingCP" target="_blank" class="social-btn twitter">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+              <span>Twitter / X</span>
+            </a>
+            <a href="https://www.instagram.com/sportingcp/" target="_blank" class="social-btn instagram">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              <span>Instagram</span>
+            </a>
+            <a href="https://www.youtube.com/user/SportingCP" target="_blank" class="social-btn youtube">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+              <span>YouTube</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="disclaimer-banner anim-up">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="disclaimer-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <div>
+            <strong>Market Speculation Disclaimer</strong>
+            <p>The news feed below is aggregated automatically from external sources (Google News / Portuguese Media). Financial rumors, transfer speculation, and media reports do not represent the official financial standing of Sporting Clube de Portugal SAD until formally filed with the CMVM.</p>
+          </div>
+        </div>
+
+        <div id="newsFeed" class="news-grid anim-up">
+          <div class="news-loading">Loading live updates...</div>
+        </div>
+      </section>
+
+    </div>
+    <script src="/src/main.js" type="module"></script>
+    <footer class="site-footer">
+      <div class="wrap">
+        <img
+          alt="Sporting Clube de Portugal"
+          class="footer-logo"
+          src="assets/LOGO.svg"
+        />
+        <div class="footer-credit" data-i18n="auto-txt-div-80">
+          <strong>Sporting Clube de Portugal — Futebol, SAD.</strong>
+          Built from the SAD's official annual and semester reports filed with
+          the CMVM. Figures in EUR thousands; some 2023/24 numbers restated per
+          the 2024/25 report. Compiled for editorial reference.
+        </div>
+        <div class="footer-meta" data-i18n="auto-txt-div-81">
+          Dossier · 2012/13 → 2025/26 H1<br />
+          Period ended 31 Dec 2025<br />
+          Euronext Lisbon · SCP
+        </div>
+      </div>
+    </footer>
+    <button
+      class="scroll-to-top"
+      id="scrollToTopBtn"
+      data-i18n="scroll-to-top-btn"
+      aria-label="Scroll to top"
+      title="Scroll to top"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="12" y1="19" x2="12" y2="5"></line>
+        <polyline points="5 12 12 5 19 12"></polyline>
+      </svg>
+    </button>
+
+    <!-- Jornal Reader Modal -->
+    <div id="jornalModal" class="modal-overlay hidden">
+      <div class="modal-container">
+        <button id="btnCloseJornal" class="modal-close" aria-label="Close Reader">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+        <div class="modal-content-wrapper">
+          <!-- The ISSUU iframe will be injected here by JS to avoid loading it on initial page load -->
+          <div id="jornalIframeContainer" class="jornal-iframe-container"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
