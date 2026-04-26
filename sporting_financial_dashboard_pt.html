@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sporting CP — Evolução Financeira (2012/13 → 2025/26)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<style>
+  :root {
+    --green: #006b3f;
+    --green-dark: #004d2c;
+    --green-light: #2e9e6c;
+    --gold: #c8a951;
+    --bg: #f6f7f8;
+    --surface: #ffffff;
+    --ink: #18221d;
+    --muted: #5a6a62;
+    --border: #e3e7e4;
+    --pos: #2e8a55;
+    --neg: #c6404f;
+    --warn: #d99c2b;
+    --info: #3a72b8;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 14px rgba(0,0,0,0.04);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  header.hero {
+    background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 60%, var(--green-light) 100%);
+    color: #fff;
+    padding: 32px 28px 28px;
+    box-shadow: var(--shadow);
+  }
+  header.hero .wrap { max-width: 1280px; margin: 0 auto; }
+  header.hero h1 {
+    margin: 0 0 6px;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  header.hero .sub {
+    font-size: 15px;
+    opacity: 0.9;
+    margin: 0 0 14px;
+  }
+  header.hero .meta {
+    font-size: 12.5px;
+    opacity: 0.78;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+  header.hero .meta span { display: inline-flex; gap: 6px; align-items: center; }
+  header.hero .meta strong { font-weight: 600; }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px 28px 60px;
+  }
+
+  /* KPI cards */
+  .kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .kpi .label {
+    font-size: 11.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+  }
+  .kpi .value {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 4px 0 2px;
+    font-variant-numeric: tabular-nums;
+  }
+  .kpi .change {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .kpi .change.pos { color: var(--pos); }
+  .kpi .change.neg { color: var(--neg); }
+
+  /* Tabs */
+  nav.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    border-bottom: 1px solid var(--border);
+    margin: 8px 0 22px;
+    background: var(--surface);
+    border-radius: 10px 10px 0 0;
+    padding: 4px;
+    box-shadow: var(--shadow);
+  }
+  nav.tabs button {
+    border: none;
+    background: transparent;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--muted);
+    border-radius: 7px;
+    transition: all 0.18s ease;
+    font-family: inherit;
+  }
+  nav.tabs button:hover {
+    background: rgba(0,107,63,0.06);
+    color: var(--green);
+  }
+  nav.tabs button.active {
+    background: var(--green);
+    color: #fff;
+  }
+
+  section.tab-panel { display: none; }
+  section.tab-panel.active { display: block; }
+
+  /* Cards / chart panels */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .card h3 {
+    margin: 0 0 4px;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .card .desc {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 0 0 14px;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 900px) {
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+  .chart-box {
+    position: relative;
+    height: 340px;
+  }
+  .chart-box.tall { height: 420px; }
+
+  /* Narrative commentary */
+  .narrative {
+    background: linear-gradient(180deg, #fbfdfb 0%, #f4f8f5 100%);
+    border-left: 4px solid var(--green);
+    padding: 14px 18px;
+    border-radius: 6px;
+    margin: 16px 0;
+    font-size: 14px;
+  }
+  .narrative h4 {
+    margin: 0 0 6px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--green-dark);
+  }
+  .narrative p { margin: 6px 0; }
+
+  /* Event timeline */
+  .events {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+    margin: 14px 0;
+  }
+  .event {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    border-left: 4px solid var(--gold);
+  }
+  .event.crisis { border-left-color: var(--neg); }
+  .event.win { border-left-color: var(--pos); }
+  .event.restructure { border-left-color: var(--info); }
+  .event .when {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+  .event .title { font-weight: 700; font-size: 14px; margin: 2px 0 4px; }
+  .event .body { font-size: 12.5px; color: var(--muted); }
+
+  /* Data table */
+  table.data {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    font-variant-numeric: tabular-nums;
+  }
+  table.data th, table.data td {
+    padding: 7px 10px;
+    text-align: right;
+    border-bottom: 1px solid var(--border);
+  }
+  table.data th:first-child, table.data td:first-child {
+    text-align: left;
+  }
+  table.data thead th {
+    background: #fafbfa;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    border-bottom: 2px solid var(--border);
+    position: sticky; top: 0;
+  }
+  table.data td.pos { color: var(--pos); font-weight: 600; }
+  table.data td.neg { color: var(--neg); font-weight: 600; }
+
+  .scroll-x { overflow-x: auto; }
+
+  footer {
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+    padding: 30px 20px 10px;
+  }
+  footer a { color: var(--green); text-decoration: none; }
+
+  .legend-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #f0f4f1;
+    color: var(--ink);
+    padding: 3px 9px;
+    border-radius: 99px;
+    font-size: 11.5px;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+  .legend-pill .swatch {
+    width: 9px; height: 9px; border-radius: 99px;
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Sporting Clube de Portugal — Evolução Financeira</h1>
+    <p class="sub">13 anos de percurso: dos -€119M de capital próprio aos €474M de plantel e às obrigações com rating de investimento. Dados anuais dos relatórios oficiais da Sporting SAD.</p>
+    <div class="meta">
+      <span><strong>Período:</strong> 2012/13 → 2025/26 1.º Sem.</span>
+      <span><strong>Moeda:</strong> milhares de euros (k€)</span>
+      <span><strong>Ano fiscal:</strong> 1 julho → 30 junho</span>
+      <span><strong>Fonte:</strong> Relatórios &amp; Contas anuais e semestrais da Sporting SAD</span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- HEADLINE KPIs -->
+  <div class="kpis" id="kpiRow"></div>
+
+  <!-- TABS -->
+  <nav class="tabs" role="tablist">
+    <button class="active" data-tab="overview">Visão Geral</button>
+    <button data-tab="revenue">Receitas &amp; Resultados</button>
+    <button data-tab="debt">Dívida &amp; Balanço</button>
+    <button data-tab="squad">Plantel &amp; Transferências</button>
+    <button data-tab="cash">Fluxos de Caixa &amp; Liquidez</button>
+    <button data-tab="events">Eventos-Chave</button>
+    <button data-tab="data">Dados Brutos</button>
+  </nav>
+
+  <!-- ============== OVERVIEW ============== -->
+  <section class="tab-panel active" id="tab-overview">
+    <div class="card">
+      <h3>A história de 13 anos num só gráfico</h3>
+      <p class="desc">Receitas operacionais, resultado líquido e capital próprio — as três linhas que contam a história macro da transformação da Sporting SAD.</p>
+      <div class="chart-box tall"><canvas id="chartHero"></canvas></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Resultado Líquido por Época</h3>
+        <p class="desc">Volátil, mas com tendência positiva. 4 anos consecutivos no positivo (21/22–24/25).</p>
+        <div class="chart-box"><canvas id="chartNetResult"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Evolução do Capital Próprio</h3>
+        <p class="desc">De -€119M (em rutura técnica) para +€41M, com duas conversões de dívida em capital pelo caminho.</p>
+        <div class="chart-box"><canvas id="chartEquity"></canvas></div>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <h4>O que está a ver</h4>
+      <p>Em 2013, a Sporting SAD estava em rutura técnica — capital próprio negativo de €119M, passivo corrente 7× superior ao ativo corrente, caixa de apenas €1,3M e sem futebol europeu. Em 2025, o Clube tem dois títulos consecutivos da Liga, um valor de mercado do plantel de €474M, capital próprio de +€41M, e acabou de colocar uma obrigação privada de €225M a 28 anos com cupão de 5,75% e rating de investimento.</p>
+      <p>O caminho não foi linear. Passou pela reestruturação financeira de 2014 (emissão de VMOC), pelo ataque a Alcochete em maio de 2018 que desencadeou uma vaga de saídas de jogadores, pelo ano da COVID com estádios vazios e, por fim, pela sequência 2022–2023 de duas conversões de VMOC (€131M no total) que viraram o balanço para positivo.</p>
+    </div>
+  </section>
+
+  <!-- ============== REVENUE & PROFITABILITY ============== -->
+  <section class="tab-panel" id="tab-revenue">
+    <div class="card">
+      <h3>Evolução das Receitas Operacionais</h3>
+      <p class="desc">Receitas (excluindo transações de jogadores) — o motor recorrente do negócio. Note-se a mudança estrutural a partir de 2021/22.</p>
+      <div class="chart-box tall"><canvas id="chartRevenue"></canvas></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Receitas vs Custos com Pessoal</h3>
+        <p class="desc">Durante a maior parte da década, os salários absorveram 70–95% das receitas recorrentes. O rácio de 24/25 (59%) é o mais saudável do período analisado.</p>
+        <div class="chart-box"><canvas id="chartRevVsPayroll"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Resultado Operacional — Recorrente vs Jogadores</h3>
+        <p class="desc">As operações recorrentes raramente se autofinanciam. O trading de jogadores sustenta a demonstração de resultados todos os anos.</p>
+        <div class="chart-box"><canvas id="chartOpResult"></canvas></div>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <h4>O problema do negócio recorrente</h4>
+      <p>As operações recorrentes da Sporting SAD (receitas menos pessoal, fornecimentos e amortizações ordinárias, antes do trading de jogadores) foram negativas em 11 das 13 épocas analisadas. Apenas 2014/15 (redução pós-reestruturação) e 2021/22 (regresso à Liga dos Campeões + primeiro estádio cheio pós-COVID) geraram resultado operacional recorrente positivo. O modelo depende do trading de jogadores — em que o Clube é excepcionalmente competente — para financiar o resto.</p>
+      <p>A boa notícia: as receitas praticamente triplicaram em 5 anos (€64M em 20/21 → €148M em 24/25), impulsionadas pela Liga dos Campeões, contratos comerciais e os bicampeonatos consecutivos. Os custos com pessoal cresceram de forma mais disciplinada (€62M → €88M no mesmo período), pelo que o gap está finalmente a fechar.</p>
+    </div>
+  </section>
+
+  <!-- ============== DEBT & BALANCE SHEET ============== -->
+  <section class="tab-panel" id="tab-debt">
+    <div class="card">
+      <h3>Dívida Total &amp; Posição de Caixa</h3>
+      <p class="desc">Empréstimos (correntes + não correntes) versus caixa disponível. A dívida total manteve-se estável entre €130–160M enquanto o ativo triplicou.</p>
+      <div class="chart-box tall"><canvas id="chartDebt"></canvas></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Ativo Total vs Passivo Total</h3>
+        <p class="desc">Capital próprio = a diferença entre as duas barras. O cruzamento aconteceu em 2022/23 após a primeira conversão de VMOC.</p>
+        <div class="chart-box"><canvas id="chartAssetsLiab"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Perfil de Maturidade da Dívida</h3>
+        <p class="desc">Empréstimos correntes vs não correntes. A obrigação USPP de 2025 empurrou quase toda a dívida para além de 1 ano.</p>
+        <div class="chart-box"><canvas id="chartDebtMaturity"></canvas></div>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <h4>De rutura técnica a rating de investimento em 12 anos</h4>
+      <p>Em 2013, a Sporting SAD tinha €157M de empréstimos contra €1,3M de caixa — uma crise de liquidez de manual. A reestruturação financeira de novembro de 2014 (aumento de capital e emissão de Valores Mobiliários Obrigatoriamente Convertíveis — VMOC) foi a tábua de salvação que permitiu reestruturar dívida de curto prazo em obrigações de longo prazo.</p>
+      <p>Duas conversões foram transformacionais: em agosto de 2022, €80M de VMOC foram convertidos em capital social; em 2023, seguiram-se mais €51M. Os €131M combinados fizeram o capital próprio passar de -€16M para +€21M e reduziram materialmente os encargos financeiros.</p>
+      <p>O marco de outubro de 2025: uma obrigação USPP (US Private Placement) de €225M a 28 anos com cupão de 5,75% — o primeiro rating de investimento da Sporting SAD pela Fitch e DBRS. Refinanciou dívida legada a menor custo e maior maturidade, sendo provavelmente o maior evento financeiro do período.</p>
+    </div>
+  </section>
+
+  <!-- ============== SQUAD & TRANSFERS ============== -->
+  <section class="tab-panel" id="tab-squad">
+    <div class="card">
+      <h3>Evolução do Valor do Plantel</h3>
+      <p class="desc">Valor contabilístico (ativo intangível em balanço, i.e. custo de aquisição menos amortização) vs valor de mercado (Transfermarkt). O valor de mercado é muito superior ao contabilístico porque os jogadores formados na academia entram a custo zero.</p>
+      <div class="chart-box tall"><canvas id="chartSquadBook"></canvas></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Receita de Vendas de Jogadores</h3>
+        <p class="desc">Vendas de jogadores — o motor financeiro que sustentou a recuperação. Cinco épocas acima dos €75M.</p>
+        <div class="chart-box"><canvas id="chartTransfers"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Resultado Líquido do Trading de Jogadores</h3>
+        <p class="desc">Receita de vendas menos aquisições, amortizações e imparidades. Positivo em 11 das 13 épocas.</p>
+        <div class="chart-box"><canvas id="chartNetTrading"></canvas></div>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <h4>A máquina de trading de jogadores</h4>
+      <p>A academia de Alcochete e o modelo de scouting são o gerador de caixa mais fiável da demonstração de resultados da Sporting SAD. De Cristiano Ronaldo (2003) a João Mário (2016, €40M para o Inter), Bruno Fernandes (2020, €55M para o Manchester United), Manuel Ugarte (2023, €60M para o PSG) e Viktor Gyökeres (2025, €65,8M para o Arsenal), o Clube produziu de forma consistente €30–145M por ano em vendas de jogadores.</p>
+      <p>A época 23/24 estabeleceu um novo recorde: €144M de receita de transferências, o valor mais alto do período analisado. Só no 1.º semestre de 25/26 já foram gerados €110M com vendas, ancorados pelo negócio do Gyökeres.</p>
+      <p>O valor de mercado do plantel (Transfermarkt, dez. 2025) atingiu €474M — um múltiplo de 25× face a 2012/13.</p>
+    </div>
+  </section>
+
+  <!-- ============== CASH FLOW ============== -->
+  <section class="tab-panel" id="tab-cash">
+    <div class="card">
+      <h3>Fluxos de Caixa por Atividade</h3>
+      <p class="desc">Atividades operacionais (tipicamente negativas), de investimento (positivas pelas vendas de jogadores) e de financiamento (emissão e amortização de dívida).</p>
+      <div class="chart-box tall"><canvas id="chartCashFlow"></canvas></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Posição de Caixa no Fecho do Ano</h3>
+        <p class="desc">Caixa disponível a 30 de junho de cada ano. Geralmente baixa — o Clube opera com almofadas de liquidez reduzidas.</p>
+        <div class="chart-box"><canvas id="chartCash"></canvas></div>
+      </div>
+      <div class="card">
+        <h3>Resultado Líquido do 1.º Semestre (Dez.)</h3>
+        <p class="desc">Resultado líquido do 1.º semestre — um indicador antecipado útil para o ano completo. Dezembro de 2023 foi o recorde histórico semestral.</p>
+        <div class="chart-box"><canvas id="chartH1Net"></canvas></div>
+      </div>
+    </div>
+
+    <div class="narrative">
+      <h4>A liquidez é estruturalmente apertada</h4>
+      <p>A Sporting SAD apresentou fluxos de caixa operacionais negativos em todos os anos do período analisado. A razão: apesar do crescimento das receitas, os pagamentos de pessoal, fornecimentos e calendarização das aquisições de jogadores absorvem a maior parte da caixa operacional. As atividades de investimento — sobretudo recebimentos de vendas de jogadores — são o contrabalanço que evita o colapso da posição de caixa.</p>
+      <p>A caixa no fecho do ano situou-se tipicamente abaixo de €15M, por vezes abaixo de €4M. A obrigação USPP de 25/26 (€225M, outubro de 2025) foi calendarizada em parte para fornecer liquidez estrutural, refinanciar linhas legadas de curto prazo e repor o fundo de maneio.</p>
+    </div>
+  </section>
+
+  <!-- ============== KEY EVENTS ============== -->
+  <section class="tab-panel" id="tab-events">
+    <div class="card">
+      <h3>Pontos de inflexão (2014 → 2025)</h3>
+      <p class="desc">Os eventos que moldaram a trajetória financeira.</p>
+      <div class="events">
+        <div class="event restructure">
+          <div class="when">Novembro 2014</div>
+          <div class="title">Reestruturação financeira &amp; emissão de VMOC</div>
+          <div class="body">A primeira Assembleia Geral de Bruno de Carvalho autoriza um aumento de capital e a emissão de Valores Mobiliários Obrigatoriamente Convertíveis (VMOC), reestruturando dívida de curto prazo em obrigações convertíveis de prazo mais longo. O capital próprio fica positivo (+€7M) pela primeira vez.</div>
+        </div>
+        <div class="event win">
+          <div class="when">Junho 2017</div>
+          <div class="title">€30,5M de resultado líquido — pico pré-Alcochete</div>
+          <div class="body">Impulsionada por vendas de jogadores (Slimani, Adrien Silva, entre outros) e pelo apuramento à Liga dos Campeões, a SAD regista o maior resultado líquido do período até essa data.</div>
+        </div>
+        <div class="event crisis">
+          <div class="when">15 Maio 2018</div>
+          <div class="title">Ataque a Alcochete</div>
+          <div class="body">Um grupo de adeptos organizados ataca a Academia. Vários jogadores accionam a rescisão por justa causa; seguem-se vendas-chave (Patrício, William Carvalho, Gelson Martins). Bruno de Carvalho é destituído. O capital próprio volta a ficar negativo.</div>
+        </div>
+        <div class="event restructure">
+          <div class="when">2019</div>
+          <div class="title">Titularização de €65M</div>
+          <div class="body">A Sporting SAD refinancia os recebíveis associados a transferências de jogadores através de um veículo de titularização, aliviando a pressão de liquidez de curto prazo.</div>
+        </div>
+        <div class="event crisis">
+          <div class="when">Março 2020 → Junho 2021</div>
+          <div class="title">Estádios fechados (COVID-19)</div>
+          <div class="body">Estádios vazios, bilheteira suspensa, renegociação de contratos de direitos televisivos. O resultado líquido de 20/21 (-€33M) é o pior do período; o capital próprio cai para -€41M.</div>
+        </div>
+        <div class="event win">
+          <div class="when">11 Maio 2021</div>
+          <div class="title">Primeiro título da Liga em 19 anos</div>
+          <div class="body">A equipa de Rúben Amorim põe fim ao maior jejum de títulos da história do Clube, numa época marcada pela pandemia.</div>
+        </div>
+        <div class="event restructure">
+          <div class="when">Agosto 2022</div>
+          <div class="title">1.ª conversão de VMOC (€80M)</div>
+          <div class="body">€80M de obrigações obrigatoriamente convertíveis são convertidos em capital social. O capital próprio recupera; os encargos financeiros descem.</div>
+        </div>
+        <div class="event restructure">
+          <div class="when">2023</div>
+          <div class="title">2.ª conversão de VMOC (€51M)</div>
+          <div class="body">Mais €51M de VMOC são convertidos. O capital próprio volta a ficar positivo (+€8,9M) pela primeira vez desde 2017.</div>
+        </div>
+        <div class="event win">
+          <div class="when">Maio 2024</div>
+          <div class="title">2.º título da Liga em 4 anos</div>
+          <div class="body">Rúben Amorim conquista o seu 2.º campeonato antes de rumar ao Manchester United. 23/24 termina com €12M de resultado líquido e €144M de receita de transferências.</div>
+        </div>
+        <div class="event win">
+          <div class="when">Maio 2025</div>
+          <div class="title">Bicampeonato + Taça de Portugal</div>
+          <div class="body">A Sporting SAD conquista os dois principais troféus domésticos sob o comando do novo treinador Rui Borges. Resultado líquido: €20M. Valor de mercado do plantel atinge €474M.</div>
+        </div>
+        <div class="event restructure">
+          <div class="when">Outubro 2025</div>
+          <div class="title">Obrigação USPP de €225M — rating de investimento</div>
+          <div class="body">A Sporting SAD torna-se o primeiro Clube português a receber rating de investimento (Fitch, DBRS). Colocação privada a 28 anos com cupão de 5,75%. Refinancia dívida legada a menor custo e maior maturidade.</div>
+        </div>
+        <div class="event restructure">
+          <div class="when">Outubro 2025</div>
+          <div class="title">Criação da subsidiária Sporting Entertainment</div>
+          <div class="body">Primeira vez que a Sporting SAD apresenta demonstrações financeiras consolidadas (1.º semestre 25/26). A nova estrutura societária separa as atividades de entretenimento / comerciais.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== RAW DATA ============== -->
+  <section class="tab-panel" id="tab-data">
+    <div class="card">
+      <h3>Dados anuais — métricas em milhares de euros</h3>
+      <p class="desc">Células a vermelho indicam prejuízos ou saldos negativos. PDFs de origem: Relatórios &amp; Contas anuais da Sporting SAD (CMVM).</p>
+      <div class="scroll-x" id="dataTable"></div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  Construído a partir dos Relatórios &amp; Contas anuais e semestrais oficiais da Sporting SAD.
+  Dados atualizados ao 1.º semestre 25/26 (período encerrado a 31 dez. 2025).
+  Valores em milhares de euros salvo indicação em contrário. Alguns valores de 23/24 reexpressos no relatório de 24/25.
+</footer>
+
+<script>
+// =============================================================
+// EMBEDDED DATASET
+// =============================================================
+const DATASET = {
+  "currency": "EUR thousands",
+  "company": "Sporting Clube de Portugal - Futebol, SAD",
+  "ticker": "SCP (Euronext Lisbon)",
+  "fiscal_year_end": "30 June",
+  "annual_data": [
+    {
+      "season": "12-13",
+      "label": "2012/13",
+      "year_end": "2013-06-30",
+      "revenue_operating": 32001,
+      "personnel_costs": -41652,
+      "external_supplies": -17014,
+      "da_excl_squad": -1069,
+      "operating_result_excl_players": -34211,
+      "squad_amortization_impairment": -19363,
+      "player_transfer_income": 16896,
+      "player_transfer_cost": 0,
+      "operating_result_players": -2467,
+      "operating_result_total": -36678,
+      "financial_result": -6898,
+      "net_result": -43816,
+      "total_assets": 139464,
+      "non_current_assets": 119087,
+      "current_assets": 20377,
+      "equity": -119409,
+      "non_current_liabilities": 115073,
+      "current_liabilities": 143800,
+      "squad_book_value": 28242,
+      "borrowings_nc": 56458,
+      "borrowings_c": 101398,
+      "cash": 1256,
+      "cf_operating": -47883,
+      "cf_investing": -4813,
+      "cf_financing": 53888,
+      "source": "13-14 Anual.pdf comparative",
+      "squad_market_value": null
+    },
+    {
+      "season": "13-14",
+      "label": "2013/14",
+      "year_end": "2014-06-30",
+      "revenue_operating": 35344,
+      "personnel_costs": -25008,
+      "external_supplies": -12768,
+      "da_excl_squad": -1062,
+      "operating_result_excl_players": -6617,
+      "squad_amortization_impairment": -8029,
+      "player_transfer_income": 18909,
+      "player_transfer_cost": 0,
+      "operating_result_players": 10880,
+      "operating_result_total": 4263,
+      "financial_result": -3775,
+      "net_result": 368,
+      "total_assets": 146752,
+      "non_current_assets": 121675,
+      "current_assets": 25077,
+      "equity": -118030,
+      "non_current_liabilities": 82905,
+      "current_liabilities": 181877,
+      "squad_book_value": 24726,
+      "borrowings_nc": 31680,
+      "borrowings_c": 149057,
+      "cash": 1942,
+      "cf_operating": -16510,
+      "cf_investing": -2378,
+      "cf_financing": 19574,
+      "source": "13-14 Anual.pdf",
+      "squad_market_value": null
+    },
+    {
+      "season": "14-15",
+      "label": "2014/15",
+      "year_end": "2015-06-30",
+      "revenue_operating": 58382,
+      "personnel_costs": -25140,
+      "external_supplies": -14147,
+      "da_excl_squad": -3590,
+      "operating_result_excl_players": 6277,
+      "squad_amortization_impairment": -10816,
+      "player_transfer_income": 28002,
+      "player_transfer_cost": 0,
+      "operating_result_players": 17186,
+      "operating_result_total": 23463,
+      "financial_result": -1113,
+      "net_result": 19333,
+      "total_assets": 235542,
+      "non_current_assets": 191440,
+      "current_assets": 44102,
+      "equity": 7043,
+      "non_current_liabilities": 133086,
+      "current_liabilities": 95413,
+      "squad_book_value": 19314,
+      "borrowings_nc": 80344,
+      "borrowings_c": 49709,
+      "cash": 10595,
+      "cf_operating": 29184,
+      "cf_investing": 66674,
+      "cf_financing": -87205,
+      "source": "15-16 Anual.pdf comparative; financial restructuring completed Nov 2014",
+      "squad_market_value": 180000
+    },
+    {
+      "season": "15-16",
+      "label": "2015/16",
+      "year_end": "2016-06-30",
+      "revenue_operating": 68750,
+      "personnel_costs": -48865,
+      "external_supplies": -17342,
+      "da_excl_squad": -4378,
+      "operating_result_excl_players": -9744,
+      "squad_amortization_impairment": -9332,
+      "player_transfer_income": 7716,
+      "player_transfer_cost": 0,
+      "operating_result_players": -1616,
+      "operating_result_total": -26351,
+      "financial_result": -5760,
+      "net_result": -31905,
+      "total_assets": 224339,
+      "non_current_assets": 197065,
+      "current_assets": 27274,
+      "equity": -24954,
+      "non_current_liabilities": 142776,
+      "current_liabilities": 106517,
+      "squad_book_value": 32070,
+      "borrowings_nc": 88119,
+      "borrowings_c": 43936,
+      "cash": 3324,
+      "cf_operating": -16372,
+      "cf_investing": 7259,
+      "cf_financing": 1842,
+      "source": "15-16 Anual.pdf",
+      "squad_market_value": 195000
+    },
+    {
+      "season": "16-17",
+      "label": "2016/17",
+      "year_end": "2017-06-30",
+      "revenue_operating": 80001,
+      "personnel_costs": -63998,
+      "external_supplies": -18120,
+      "da_excl_squad": -4739,
+      "operating_result_excl_players": -16925,
+      "squad_amortization_impairment": -18359,
+      "player_transfer_income": 92997,
+      "player_transfer_cost": -15089,
+      "operating_result_players": 59549,
+      "operating_result_total": 42624,
+      "financial_result": -7427,
+      "net_result": 30537,
+      "total_assets": 316497,
+      "non_current_assets": 225285,
+      "current_assets": 91212,
+      "equity": 5618,
+      "non_current_liabilities": 120351,
+      "current_liabilities": 190528,
+      "squad_book_value": 59544,
+      "borrowings_nc": 36265,
+      "borrowings_c": 91106,
+      "cash": 6306,
+      "cf_operating": -5574,
+      "cf_investing": 26564,
+      "cf_financing": -18008,
+      "source": "16-17 Anual.pdf",
+      "squad_market_value": 255000
+    },
+    {
+      "season": "17-18",
+      "label": "2017/18",
+      "year_end": "2018-06-30",
+      "revenue_operating": 91741,
+      "personnel_costs": -73864,
+      "external_supplies": -22491,
+      "da_excl_squad": -4998,
+      "operating_result_excl_players": -18671,
+      "squad_amortization_impairment": -27992,
+      "player_transfer_income": 34368,
+      "player_transfer_cost": -2896,
+      "operating_result_players": 3480,
+      "operating_result_total": -15191,
+      "financial_result": -7074,
+      "net_result": -19902,
+      "total_assets": 269226,
+      "non_current_assets": 240183,
+      "current_assets": 29043,
+      "equity": -13324,
+      "non_current_liabilities": 109210,
+      "current_liabilities": 173339,
+      "squad_book_value": 81193,
+      "borrowings_nc": 36488,
+      "borrowings_c": 74755,
+      "cash": 1783,
+      "cf_operating": -5819,
+      "cf_investing": 27964,
+      "cf_financing": -26668,
+      "source": "17-18 Anual.pdf; year of Alcochete attack",
+      "squad_market_value": 260000
+    },
+    {
+      "season": "18-19",
+      "label": "2018/19",
+      "year_end": "2019-06-30",
+      "revenue_operating": 75837,
+      "personnel_costs": -68901,
+      "external_supplies": -23892,
+      "da_excl_squad": -5038,
+      "operating_result_excl_players": -29073,
+      "squad_amortization_impairment": -30901,
+      "player_transfer_income": 75793,
+      "player_transfer_cost": -11758,
+      "operating_result_players": 33134,
+      "operating_result_total": 4061,
+      "financial_result": -10405,
+      "net_result": -7877,
+      "total_assets": 301201,
+      "non_current_assets": 255357,
+      "current_assets": 45844,
+      "equity": -23604,
+      "non_current_liabilities": 183938,
+      "current_liabilities": 140867,
+      "squad_book_value": 89212,
+      "borrowings_nc": 109472,
+      "borrowings_c": 40287,
+      "cash": 3538,
+      "cf_operating": -28109,
+      "cf_investing": -726,
+      "cf_financing": 30590,
+      "source": "19-20 Anual.pdf comparative; \u20ac65M securitization completed; Cristiano Piccini, William Carvalho, Rui Patr\u00edcio, Gelson Martins sales",
+      "squad_market_value": 215000
+    },
+    {
+      "season": "19-20",
+      "label": "2019/20",
+      "year_end": "2020-06-30",
+      "revenue_operating": 68527,
+      "personnel_costs": -60542,
+      "external_supplies": -24089,
+      "da_excl_squad": -5424,
+      "operating_result_excl_players": -38903,
+      "squad_amortization_impairment": -22713,
+      "player_transfer_income": 106946,
+      "player_transfer_cost": -18113,
+      "operating_result_players": 66120,
+      "operating_result_total": 27217,
+      "financial_result": -15401,
+      "net_result": 12521,
+      "total_assets": 288727,
+      "non_current_assets": 222816,
+      "current_assets": 65911,
+      "equity": -9897,
+      "non_current_liabilities": 152322,
+      "current_liabilities": 146302,
+      "squad_book_value": 70060,
+      "borrowings_nc": 88801,
+      "borrowings_c": 37857,
+      "cash": 15416,
+      "cf_operating": -53531,
+      "cf_investing": 98613,
+      "cf_financing": -33204,
+      "source": "19-20 Anual.pdf; COVID-19 impact, Bruno Fernandes sale",
+      "squad_market_value": 180000
+    },
+    {
+      "season": "20-21",
+      "label": "2020/21",
+      "year_end": "2021-06-30",
+      "revenue_operating": 64446,
+      "personnel_costs": -61991,
+      "external_supplies": -19735,
+      "da_excl_squad": -5074,
+      "operating_result_excl_players": -27492,
+      "squad_amortization_impairment": -24559,
+      "player_transfer_income": 35765,
+      "player_transfer_cost": -8209,
+      "operating_result_players": 2997,
+      "operating_result_total": -24495,
+      "financial_result": -9926,
+      "net_result": -32955,
+      "total_assets": 269177,
+      "non_current_assets": 220963,
+      "current_assets": 48214,
+      "equity": -41412,
+      "non_current_liabilities": 107190,
+      "current_liabilities": 203399,
+      "squad_book_value": 70136,
+      "borrowings_nc": 39269,
+      "borrowings_c": 90199,
+      "cash": 9642,
+      "cf_operating": -744,
+      "cf_investing": 299,
+      "cf_financing": -5329,
+      "source": "20-21 Anual.pdf; Liga title (after 19 years), pandemic-affected revenues",
+      "squad_market_value": 255000
+    },
+    {
+      "season": "21-22",
+      "label": "2021/22",
+      "year_end": "2022-06-30",
+      "revenue_operating": 122659,
+      "personnel_costs": -67087,
+      "external_supplies": -29905,
+      "da_excl_squad": -5343,
+      "operating_result_excl_players": 11951,
+      "squad_amortization_impairment": -25999,
+      "player_transfer_income": 59254,
+      "player_transfer_cost": -9501,
+      "operating_result_players": 23754,
+      "operating_result_total": 35705,
+      "financial_result": -10654,
+      "net_result": 25005,
+      "total_assets": 320083,
+      "non_current_assets": 257233,
+      "current_assets": 62850,
+      "equity": -16303,
+      "non_current_liabilities": 181064,
+      "current_liabilities": 155322,
+      "squad_book_value": 94190,
+      "borrowings_nc": 101822,
+      "borrowings_c": 56645,
+      "cash": 4886,
+      "cf_operating": -55491,
+      "cf_investing": 313,
+      "cf_financing": 50422,
+      "source": "21-22 Anual.pdf; first season with full Champions League fans post-COVID",
+      "squad_market_value": 335000
+    },
+    {
+      "season": "22-23",
+      "label": "2022/23",
+      "year_end": "2023-06-30",
+      "revenue_operating": 125136,
+      "personnel_costs": -76457,
+      "external_supplies": -35889,
+      "da_excl_squad": -5409,
+      "operating_result_excl_players": -5908,
+      "squad_amortization_impairment": -38608,
+      "player_transfer_income": 96877,
+      "player_transfer_cost": -11857,
+      "operating_result_players": 46412,
+      "operating_result_total": 40504,
+      "financial_result": -14877,
+      "net_result": 25206,
+      "total_assets": 317916,
+      "non_current_assets": 249568,
+      "current_assets": 68348,
+      "equity": 8900,
+      "non_current_liabilities": 162296,
+      "current_liabilities": 146720,
+      "squad_book_value": 99075,
+      "borrowings_nc": 78243,
+      "borrowings_c": 60010,
+      "cash": 8633,
+      "cf_operating": -41804,
+      "cf_investing": 58430,
+      "cf_financing": -12879,
+      "source": "22-23 Anual.pdf; first VMOC conversion (\u20ac80M to share capital), Manuel Ugarte sale",
+      "squad_market_value": 365000
+    },
+    {
+      "season": "23-24",
+      "label": "2023/24",
+      "year_end": "2024-06-30",
+      "revenue_operating": 102444,
+      "personnel_costs": -90312,
+      "external_supplies": -41866,
+      "da_excl_squad": -5531,
+      "operating_result_excl_players": -44663,
+      "squad_amortization_impairment": -40681,
+      "player_transfer_income": 144207,
+      "player_transfer_cost": -44320,
+      "operating_result_players": 59206,
+      "operating_result_total": 14543,
+      "financial_result": -2134,
+      "net_result": 12079,
+      "total_assets": 374400,
+      "non_current_assets": 281120,
+      "current_assets": 93280,
+      "equity": 20979,
+      "non_current_liabilities": 177244,
+      "current_liabilities": 176177,
+      "squad_book_value": 108442,
+      "borrowings_nc": 108531,
+      "borrowings_c": 41733,
+      "cash": 7008,
+      "cf_operating": -92169,
+      "cf_investing": 49792,
+      "cf_financing": 40751,
+      "source": "23-24 Anual.pdf; Liga title, 2nd VMOC conversion, Pedro Gon\u00e7alves/Edwards/Ousmane Diomande sale processes",
+      "squad_market_value": 385000
+    },
+    {
+      "season": "24-25",
+      "label": "2024/25",
+      "year_end": "2025-06-30",
+      "revenue_operating": 148149,
+      "personnel_costs": -87736,
+      "external_supplies": -48196,
+      "da_excl_squad": -7235,
+      "operating_result_excl_players": -6565,
+      "squad_amortization_impairment": -50218,
+      "player_transfer_income": 116830,
+      "player_transfer_cost": -14615,
+      "operating_result_players": 51997,
+      "operating_result_total": 45432,
+      "financial_result": -25246,
+      "net_result": 20023,
+      "total_assets": 420747,
+      "non_current_assets": 317838,
+      "current_assets": 102909,
+      "equity": 40928,
+      "non_current_liabilities": 214748,
+      "current_liabilities": 165071,
+      "squad_book_value": 137700,
+      "borrowings_nc": 123577,
+      "borrowings_c": 25347,
+      "cash": 15581,
+      "cf_operating": -30411,
+      "cf_investing": 28073,
+      "cf_financing": 10911,
+      "source": "24-25 Anual.pdf; back-to-back Liga title + Ta\u00e7a de Portugal, 'Future is Coming 24-34' strategic plan launch",
+      "squad_market_value": 511000
+    }
+  ],
+  "h1_2526": {
+    "season": "25-26 H1",
+    "label": "2025/26 H1",
+    "period_end": "2025-12-31",
+    "net_result": 32000,
+    "revenue_total": 166900,
+    "revenue_operating_excl_players": 95800,
+    "squad_market_value": 474000,
+    "squad_investment_period": 98900,
+    "player_sales_period": 110200,
+    "total_liabilities": 592000,
+    "working_capital": 100000,
+    "highlights": "USPP \u20ac225M private bond placement (28-year, 5.75%, investment-grade Fitch+DBRS); Gy\u00f6keres sale \u20ac65.8M; UEFA Champions League round of 16; Sporting Entertainment subsidiary created",
+    "source": "25-26 Semester1.pdf (consolidated, first time consolidated financial statements published)"
+  },
+  "h1_net_results": [
+    {
+      "period": "Dez. '18",
+      "net_result": 6500
+    },
+    {
+      "period": "Dez. '19",
+      "net_result": 2800
+    },
+    {
+      "period": "Dez. '20",
+      "net_result": -6900
+    },
+    {
+      "period": "Dez. '21",
+      "net_result": 9500
+    },
+    {
+      "period": "Dez. '22",
+      "net_result": 47500
+    },
+    {
+      "period": "Dez. '23",
+      "net_result": 58300
+    },
+    {
+      "period": "Dez. '24",
+      "net_result": 15000
+    },
+    {
+      "period": "Dez. '25",
+      "net_result": 32000
+    }
+  ],
+  "notes": [
+    "All values in thousands of EUR unless otherwise noted",
+    "Fiscal year runs 1 July - 30 June. Season 'X-Y' = fiscal year ending 30 June 'Y'",
+    "12-13 to 23-24 are individual SAD financial statements (IFRS)",
+    "24-25 is the latest individual SAD financial statements",
+    "25-26 H1 is the first time Sporting SAD published consolidated financial statements (after creating Sporting Entertainment subsidiary in October 2025)",
+    "Major events: Nov 2014 financial restructuring (capital increase, VMOCs); May 2018 Alcochete attack; Aug 2022 first VMOC conversion (\u20ac80M); 2023 second VMOC conversion (\u20ac51M); Oct 2025 USPP \u20ac225M bond",
+    "Squad market values for 14/15-23/24 are estimated from Fig.14 of the 24/25 annual report (Transfermarkt time series). 24/25 (511M) and 25/26 H1 (474M) are explicitly labeled in the SAD reports."
+  ]
+};
+
+// =============================================================
+// HELPERS
+// =============================================================
+const fmtEur = (v, opts={}) => {
+  if (v === null || v === undefined) return '—';
+  const sign = v < 0 ? '-' : '';
+  const abs = Math.abs(v);
+  if (opts.compact && abs >= 1000) return sign + '€' + (abs/1000).toFixed(1) + 'M';
+  return sign + '€' + abs.toLocaleString('pt-PT') + 'k';
+};
+const fmtMillions = (v) => {
+  if (v === null || v === undefined) return '—';
+  return ((v < 0 ? '-' : '') + '€' + Math.abs(v/1000).toFixed(1) + 'M');
+};
+const fmtPct = (v) => (v === null || v === undefined) ? '—' : (v*100).toFixed(0) + '%';
+
+const COLORS = {
+  green: '#006b3f',
+  greenLight: '#2e9e6c',
+  greenSoft: 'rgba(0,107,63,0.15)',
+  gold: '#c8a951',
+  goldSoft: 'rgba(200,169,81,0.4)',
+  pos: '#2e8a55',
+  neg: '#c6404f',
+  negSoft: 'rgba(198,64,79,0.7)',
+  posSoft: 'rgba(46,138,85,0.7)',
+  warn: '#d99c2b',
+  info: '#3a72b8',
+  infoSoft: 'rgba(58,114,184,0.7)',
+  ink: '#18221d',
+  muted: '#5a6a62',
+};
+
+const annual = DATASET.annual_data;
+const labels = annual.map(d => d.label);
+const eventAnnotations = {
+  'restructure14': { x: '2014/15', label: 'Reestruturação 2014', color: COLORS.info },
+  'alcochete': { x: '2017/18', label: 'Alcochete 2018', color: COLORS.neg },
+  'covid': { x: '2020/21', label: 'COVID', color: COLORS.warn },
+  'vmoc1': { x: '2022/23', label: 'Conversão VMOC €80M', color: COLORS.green },
+  'vmoc2': { x: '2023/24', label: 'Conversão VMOC €51M', color: COLORS.green },
+  'uspp': { x: '2024/25', label: 'USPP €225M (out. 2025)', color: COLORS.green },
+};
+
+function eventBoxes(eventKeys) {
+  // Build chart.js annotation plugin config from eventAnnotations[]
+  const annos = {};
+  eventKeys.forEach((k, i) => {
+    const e = eventAnnotations[k];
+    if (!e) return;
+    annos['e_' + k] = {
+      type: 'line',
+      xMin: e.x,
+      xMax: e.x,
+      borderColor: e.color,
+      borderWidth: 1.5,
+      borderDash: [4, 4],
+      label: {
+        display: true,
+        content: e.label,
+        position: 'start',
+        backgroundColor: e.color,
+        color: '#fff',
+        font: { size: 10, weight: '600' },
+        padding: 4,
+        rotation: -90,
+        yAdjust: 0,
+      },
+    };
+  });
+  return annos;
+}
+
+const baseOpts = {
+  responsive: true,
+  maintainAspectRatio: false,
+  interaction: { mode: 'index', intersect: false },
+  plugins: {
+    legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11.5 } } },
+    tooltip: {
+      callbacks: {
+        label: (ctx) => `${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+      },
+    },
+  },
+  scales: {
+    x: {
+      ticks: { font: { size: 11 }, color: COLORS.muted },
+      grid: { display: false },
+    },
+    y: {
+      ticks: {
+        font: { size: 11 }, color: COLORS.muted,
+        callback: (v) => '€' + (v/1000).toFixed(0) + 'M',
+      },
+      grid: { color: 'rgba(0,0,0,0.05)' },
+      beginAtZero: true,
+    },
+  },
+};
+
+// =============================================================
+// HEADLINE KPI CARDS
+// =============================================================
+const last = annual[annual.length - 1];
+const first = annual[0];
+const kpis = [
+  { label: 'Receitas (24/25)', value: fmtMillions(last.revenue_operating),
+    change: `+${(((last.revenue_operating - annual[annual.length-5].revenue_operating)/annual[annual.length-5].revenue_operating)*100).toFixed(0)}% vs há 5 anos`,
+    cls: 'pos' },
+  { label: 'Resultado líquido (24/25)', value: fmtMillions(last.net_result),
+    change: '4.º ano positivo consecutivo', cls: 'pos' },
+  { label: 'Capital próprio (24/25)', value: fmtMillions(last.equity),
+    change: 'vs ' + fmtMillions(first.equity) + ' em 12/13', cls: 'pos' },
+  { label: 'Valor mercado plantel (dez. 25)', value: fmtMillions(DATASET.h1_2526.squad_market_value),
+    change: '~25× o valor contabilístico de 12/13', cls: 'pos' },
+  { label: 'Dívida total (24/25)', value: fmtMillions(last.borrowings_nc + last.borrowings_c),
+    change: 'vs ' + fmtMillions(first.borrowings_nc + first.borrowings_c) + ' em 12/13', cls: '' },
+  { label: 'Resultado líquido 1.ºS 25/26', value: fmtMillions(DATASET.h1_2526.net_result),
+    change: 'Após venda Gyökeres por €65,8M', cls: 'pos' },
+];
+document.getElementById('kpiRow').innerHTML = kpis.map(k =>
+  `<div class="kpi"><div class="label">${k.label}</div>
+   <div class="value">${k.value}</div>
+   <div class="change ${k.cls}">${k.change}</div></div>`
+).join('');
+
+// =============================================================
+// TAB SWITCHING
+// =============================================================
+const renderedCharts = new Set();
+document.querySelectorAll('nav.tabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('nav.tabs button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('section.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const tab = btn.dataset.tab;
+    document.getElementById('tab-' + tab).classList.add('active');
+    // Lazy-render charts in this tab
+    if (TAB_CHARTS[tab]) {
+      TAB_CHARTS[tab].forEach(fn => {
+        if (!renderedCharts.has(fn.name)) {
+          fn();
+          renderedCharts.add(fn.name);
+        }
+      });
+    }
+  });
+});
+
+// =============================================================
+// CHART BUILDERS
+// =============================================================
+
+function chartHero() {
+  new Chart(document.getElementById('chartHero'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Receitas operacionais',
+          data: annual.map(d => d.revenue_operating),
+          borderColor: COLORS.green,
+          backgroundColor: COLORS.greenSoft,
+          tension: 0.25,
+          borderWidth: 2.5,
+          pointRadius: 3,
+          fill: false,
+          yAxisID: 'y',
+        },
+        {
+          label: 'Resultado líquido',
+          data: annual.map(d => d.net_result),
+          borderColor: COLORS.gold,
+          backgroundColor: COLORS.goldSoft,
+          tension: 0.25,
+          borderWidth: 2.5,
+          pointRadius: 3,
+          fill: false,
+          yAxisID: 'y',
+        },
+        {
+          label: 'Capital próprio',
+          data: annual.map(d => d.equity),
+          borderColor: COLORS.info,
+          backgroundColor: 'rgba(58,114,184,0.1)',
+          tension: 0.25,
+          borderWidth: 2.5,
+          pointRadius: 3,
+          fill: false,
+          yAxisID: 'y',
+        },
+      ],
+    },
+    options: {
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        annotation: { annotations: eventBoxes(['restructure14','alcochete','covid','vmoc1','uspp']) },
+      },
+      scales: {
+        ...baseOpts.scales,
+        y: { ...baseOpts.scales.y, beginAtZero: false,
+          title: { display: true, text: 'EUR (milhões)' } },
+      },
+    },
+  });
+}
+
+function chartNetResult() {
+  new Chart(document.getElementById('chartNetResult'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Resultado líquido',
+        data: annual.map(d => d.net_result),
+        backgroundColor: annual.map(d => d.net_result >= 0 ? COLORS.posSoft : COLORS.negSoft),
+        borderColor: annual.map(d => d.net_result >= 0 ? COLORS.pos : COLORS.neg),
+        borderWidth: 1,
+      }],
+    },
+    options: { ...baseOpts, scales: { ...baseOpts.scales, y: { ...baseOpts.scales.y, beginAtZero: false } } },
+  });
+}
+
+function chartEquity() {
+  new Chart(document.getElementById('chartEquity'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Capital próprio',
+        data: annual.map(d => d.equity),
+        backgroundColor: annual.map(d => d.equity >= 0 ? COLORS.posSoft : COLORS.negSoft),
+        borderColor: annual.map(d => d.equity >= 0 ? COLORS.pos : COLORS.neg),
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        annotation: { annotations: eventBoxes(['restructure14','vmoc1','vmoc2']) },
+      },
+      scales: { ...baseOpts.scales, y: { ...baseOpts.scales.y, beginAtZero: false } },
+    },
+  });
+}
+
+// REVENUE TAB
+function chartRevenue() {
+  new Chart(document.getElementById('chartRevenue'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Receitas operacionais',
+          data: annual.map(d => d.revenue_operating),
+          backgroundColor: COLORS.green,
+          borderRadius: 3,
+        },
+        {
+          type: 'line',
+          label: 'Custos com pessoal (abs.)',
+          data: annual.map(d => Math.abs(d.personnel_costs)),
+          borderColor: COLORS.neg,
+          backgroundColor: 'transparent',
+          borderWidth: 2.5,
+          tension: 0.2,
+          pointRadius: 3,
+        },
+      ],
+    },
+    options: baseOpts,
+  });
+}
+
+function chartRevVsPayroll() {
+  // Payroll-to-revenue ratio
+  const ratios = annual.map(d => Math.abs(d.personnel_costs) / d.revenue_operating);
+  new Chart(document.getElementById('chartRevVsPayroll'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Custos com pessoal / receitas',
+        data: ratios.map(r => r * 100),
+        backgroundColor: ratios.map(r => r > 0.7 ? COLORS.negSoft : (r > 0.5 ? COLORS.warn : COLORS.posSoft)),
+        borderColor: ratios.map(r => r > 0.7 ? COLORS.neg : (r > 0.5 ? COLORS.warn : COLORS.pos)),
+        borderWidth: 1,
+      }],
+    },
+    options: {
+      ...baseOpts,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: (ctx) => `Rácio: ${ctx.parsed.y.toFixed(0)}%` } },
+      },
+      scales: {
+        ...baseOpts.scales,
+        y: { ...baseOpts.scales.y,
+          ticks: { ...baseOpts.scales.y.ticks, callback: (v) => v + '%' },
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+}
+
+function chartOpResult() {
+  new Chart(document.getElementById('chartOpResult'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Recorrente (excl. jogadores)',
+          data: annual.map(d => d.operating_result_excl_players),
+          backgroundColor: COLORS.negSoft,
+          borderColor: COLORS.neg,
+          borderWidth: 1,
+          stack: 's1',
+        },
+        {
+          label: 'Trading de jogadores',
+          data: annual.map(d => d.operating_result_players),
+          backgroundColor: COLORS.posSoft,
+          borderColor: COLORS.pos,
+          borderWidth: 1,
+          stack: 's1',
+        },
+      ],
+    },
+    options: { ...baseOpts, scales: { ...baseOpts.scales, x: { ...baseOpts.scales.x, stacked: true }, y: { ...baseOpts.scales.y, stacked: true, beginAtZero: false } } },
+  });
+}
+
+// DEBT TAB
+function chartDebt() {
+  new Chart(document.getElementById('chartDebt'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Empréstimos não correntes',
+          data: annual.map(d => d.borrowings_nc),
+          backgroundColor: COLORS.green,
+          stack: 's1',
+        },
+        {
+          label: 'Empréstimos correntes',
+          data: annual.map(d => d.borrowings_c),
+          backgroundColor: COLORS.greenLight,
+          stack: 's1',
+        },
+        {
+          type: 'line',
+          label: 'Caixa &amp; equivalentes',
+          data: annual.map(d => d.cash),
+          borderColor: COLORS.gold,
+          backgroundColor: COLORS.goldSoft,
+          borderWidth: 2.5,
+          tension: 0.2,
+          pointRadius: 3,
+          fill: false,
+        },
+      ],
+    },
+    options: {
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        annotation: { annotations: eventBoxes(['restructure14','vmoc1','uspp']) },
+      },
+      scales: { ...baseOpts.scales, x: { ...baseOpts.scales.x, stacked: true }, y: { ...baseOpts.scales.y, stacked: true, beginAtZero: true } },
+    },
+  });
+}
+
+function chartAssetsLiab() {
+  new Chart(document.getElementById('chartAssetsLiab'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Ativo total',
+          data: annual.map(d => d.total_assets),
+          backgroundColor: COLORS.green,
+          borderRadius: 3,
+        },
+        {
+          label: 'Passivo total',
+          data: annual.map(d => d.non_current_liabilities + d.current_liabilities),
+          backgroundColor: COLORS.negSoft,
+          borderRadius: 3,
+        },
+      ],
+    },
+    options: baseOpts,
+  });
+}
+
+function chartDebtMaturity() {
+  const ncShare = annual.map(d => d.borrowings_nc / (d.borrowings_nc + d.borrowings_c));
+  new Chart(document.getElementById('chartDebtMaturity'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Quota da dívida não corrente',
+        data: ncShare.map(v => v * 100),
+        borderColor: COLORS.green,
+        backgroundColor: COLORS.greenSoft,
+        borderWidth: 2.5,
+        tension: 0.25,
+        pointRadius: 4,
+        fill: true,
+      }],
+    },
+    options: {
+      ...baseOpts,
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: (ctx) => `Não corrente: ${ctx.parsed.y.toFixed(0)}%` } } },
+      scales: {
+        ...baseOpts.scales,
+        y: { ...baseOpts.scales.y,
+          ticks: { ...baseOpts.scales.y.ticks, callback: (v) => v + '%' },
+          beginAtZero: true, max: 100 },
+      },
+    },
+  });
+}
+
+// SQUAD TAB
+function chartSquadBook() {
+  new Chart(document.getElementById('chartSquadBook'), {
+    type: 'bar',
+    data: {
+      labels: [...labels, '25/26 1.ºS'],
+      datasets: [
+        {
+          label: 'Valor contabilístico (balanço)',
+          data: [...annual.map(d => d.squad_book_value), null],
+          backgroundColor: COLORS.green,
+          borderRadius: 3,
+          order: 2,
+        },
+        {
+          type: 'line',
+          label: 'Valor de mercado (Transfermarkt)',
+          data: [...annual.map(d => d.squad_market_value), DATASET.h1_2526.squad_market_value],
+          borderColor: COLORS.gold,
+          backgroundColor: 'rgba(200,169,81,0.18)',
+          borderWidth: 2.8,
+          tension: 0.25,
+          pointRadius: 4,
+          pointBackgroundColor: COLORS.gold,
+          pointBorderColor: '#fff',
+          pointBorderWidth: 1.5,
+          spanGaps: true,
+          fill: false,
+          order: 1,
+        },
+      ],
+    },
+    options: {
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              if (ctx.parsed.y === null || ctx.parsed.y === undefined) return null;
+              return ctx.dataset.label + ': ' + fmtMillions(ctx.parsed.y);
+            },
+          },
+        },
+      },
+    },
+  });
+}
+
+function chartTransfers() {
+  new Chart(document.getElementById('chartTransfers'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Receita de vendas de jogadores',
+        data: annual.map(d => d.player_transfer_income),
+        backgroundColor: COLORS.posSoft,
+        borderColor: COLORS.pos,
+        borderWidth: 1,
+      }],
+    },
+    options: { ...baseOpts, plugins: { ...baseOpts.plugins, legend: { display: false } } },
+  });
+}
+
+function chartNetTrading() {
+  // Net trading = transfer income + transfer cost + squad amort/impairment
+  const netTrading = annual.map(d => d.player_transfer_income + d.player_transfer_cost + d.squad_amortization_impairment);
+  new Chart(document.getElementById('chartNetTrading'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Resultado líquido do trading de jogadores',
+        data: netTrading,
+        backgroundColor: netTrading.map(v => v >= 0 ? COLORS.posSoft : COLORS.negSoft),
+        borderColor: netTrading.map(v => v >= 0 ? COLORS.pos : COLORS.neg),
+        borderWidth: 1,
+      }],
+    },
+    options: { ...baseOpts, scales: { ...baseOpts.scales, y: { ...baseOpts.scales.y, beginAtZero: false } } },
+  });
+}
+
+// CASH FLOW TAB
+function chartCashFlow() {
+  new Chart(document.getElementById('chartCashFlow'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Operacionais',
+          data: annual.map(d => d.cf_operating),
+          backgroundColor: COLORS.negSoft,
+        },
+        {
+          label: 'Investimento (incl. vendas de jogadores)',
+          data: annual.map(d => d.cf_investing),
+          backgroundColor: COLORS.posSoft,
+        },
+        {
+          label: 'Financiamento',
+          data: annual.map(d => d.cf_financing),
+          backgroundColor: COLORS.infoSoft,
+        },
+      ],
+    },
+    options: { ...baseOpts, scales: { ...baseOpts.scales, y: { ...baseOpts.scales.y, beginAtZero: false } } },
+  });
+}
+
+function chartCash() {
+  new Chart(document.getElementById('chartCash'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Caixa &amp; equivalentes',
+        data: annual.map(d => d.cash),
+        borderColor: COLORS.gold,
+        backgroundColor: COLORS.goldSoft,
+        borderWidth: 2.5,
+        tension: 0.25,
+        pointRadius: 4,
+        fill: true,
+      }],
+    },
+    options: { ...baseOpts, plugins: { ...baseOpts.plugins, legend: { display: false } } },
+  });
+}
+
+function chartH1Net() {
+  const h1 = DATASET.h1_net_results;
+  new Chart(document.getElementById('chartH1Net'), {
+    type: 'bar',
+    data: {
+      labels: h1.map(d => d.period),
+      datasets: [{
+        label: 'Resultado líquido 1.ºS',
+        data: h1.map(d => d.net_result),
+        backgroundColor: h1.map(d => d.net_result >= 0 ? COLORS.posSoft : COLORS.negSoft),
+        borderColor: h1.map(d => d.net_result >= 0 ? COLORS.pos : COLORS.neg),
+        borderWidth: 1,
+      }],
+    },
+    options: { ...baseOpts, plugins: { ...baseOpts.plugins, legend: { display: false } }, scales: { ...baseOpts.scales, y: { ...baseOpts.scales.y, beginAtZero: false } } },
+  });
+}
+
+// =============================================================
+// DATA TABLE
+// =============================================================
+function renderTable() {
+  const fields = [
+    { key: 'revenue_operating', label: 'Receitas Op.' },
+    { key: 'personnel_costs', label: 'Pessoal' },
+    { key: 'operating_result_total', label: 'Resultado Op.' },
+    { key: 'net_result', label: 'Resultado Líq.' },
+    { key: 'total_assets', label: 'Ativo Total' },
+    { key: 'equity', label: 'Capital Próprio' },
+    { key: 'borrowings_nc', label: 'Dív. NC' },
+    { key: 'borrowings_c', label: 'Dív. C' },
+    { key: 'cash', label: 'Caixa' },
+    { key: 'squad_book_value', label: 'Plantel VC' },
+    { key: 'cf_operating', label: 'FC Op.' },
+    { key: 'cf_investing', label: 'FC Inv.' },
+    { key: 'cf_financing', label: 'FC Fin.' },
+  ];
+  let html = '<table class="data"><thead><tr><th>Época</th>';
+  fields.forEach(f => html += `<th>${f.label}</th>`);
+  html += '</tr></thead><tbody>';
+  annual.forEach(d => {
+    html += `<tr><td>${d.label}</td>`;
+    fields.forEach(f => {
+      const v = d[f.key];
+      const cls = v < 0 ? 'neg' : (v > 0 ? '' : '');
+      html += `<td class="${cls}">${fmtMillions(v)}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  document.getElementById('dataTable').innerHTML = html;
+}
+
+// =============================================================
+// CHART REGISTRATION (lazy load by tab)
+// =============================================================
+const TAB_CHARTS = {
+  overview: [chartHero, chartNetResult, chartEquity],
+  revenue: [chartRevenue, chartRevVsPayroll, chartOpResult],
+  debt: [chartDebt, chartAssetsLiab, chartDebtMaturity],
+  squad: [chartSquadBook, chartTransfers, chartNetTrading],
+  cash: [chartCashFlow, chartCash, chartH1Net],
+  events: [],
+  data: [renderTable],
+};
+
+// Render initial tab (overview)
+TAB_CHARTS.overview.forEach(fn => { fn(); renderedCharts.add(fn.name); });
+
+</script>
+</body>
+</html>
