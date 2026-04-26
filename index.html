@@ -313,7 +313,6 @@
     color: #fff;
     border-color: var(--green);
   }
-  .health-signals { transition: opacity 0.15s ease; }
   .health-signals.fading { opacity: 0; }
 
   /* ── Story Mode ── */
@@ -525,6 +524,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    transition: opacity 0.15s ease;
   }
   .health-signal {
     display: flex;
@@ -576,6 +576,43 @@
   .zone-dot.g { background: var(--pos); }
   .zone-dot.a { background: var(--warn); }
   .zone-dot.r { background: var(--neg); }
+
+  /* ── Compare enhancements ── */
+  .cmp-narrative {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--ink);
+    background: linear-gradient(180deg, #fbfdfb 0%, #f4f8f5 100%);
+    border-left: 4px solid var(--green);
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin: 0 0 20px;
+    display: none;
+  }
+  .cmp-group { margin-bottom: 24px; }
+  .cmp-group-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .cmp-group-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+  }
+  .cmp-abs-delta {
+    font-size: 10.5px;
+    font-weight: 600;
+    margin-top: 5px;
+  }
+  .cmp-abs-delta.pos { color: var(--pos); }
+  .cmp-abs-delta.neg { color: var(--neg); }
+  .cmp-abs-delta.neu { color: var(--muted); }
 </style>
 </head>
 <body>
@@ -670,7 +707,7 @@
     <div class="narrative">
       <h4>What you're looking at</h4>
       <p>In 2013, Sporting SAD was technically insolvent — negative equity of €119M, current liabilities at 7× current assets, cash of just €1.3M, and no European football. By 2025, the club has back-to-back league titles, a €474M squad market value, equity of +€41M, and just secured a €225M 28-year private bond at 5.75% with investment-grade ratings.</p>
-      <p>The path was not linear. It runs through a 2014 capital restructuring (issuing convertible bonds), a 2018 staff-attack at Alcochete that triggered a wave of player exits, a COVID year with empty stadiums, and finally a 2022–2023 sequence of two convertible-bond conversions (€131M total) that flipped the balance sheet positive.</p>
+      <p>The path was not linear. It runs through a 2014 capital restructuring (issuing convertible bonds), a 2018 staff-attack at Alcochete that triggered a wave of player exits, a COVID year with empty stadiums, and finally a 2022–2023 sequence of two convertible-bond conversions (€135M total) that flipped the balance sheet positive.</p>
     </div>
   </section>
 
@@ -789,7 +826,7 @@
     <div class="narrative">
       <h4>From insolvent to investment-grade in 12 years</h4>
       <p>In 2013, Sporting had €157M of borrowings against €1.3M of cash — a textbook liquidity crisis. The November 2014 capital restructuring (a fresh capital increase plus issuance of mandatorily-convertible bonds — VMOCs) was the lifeline that allowed the club to restructure short-term debt into long-term obligations.</p>
-      <p>Two conversion events were transformational: in August 2022, €80M of VMOCs converted into share capital; in 2023 a further €51M followed. The combined €131M flipped equity from -€16M to +€21M and reduced financial expenses meaningfully.</p>
+      <p>Two conversion events were transformational: in August 2022, €83.6M of VMOCs converted into share capital; in December 2023 a further €51.4M followed. The combined €135M flipped equity from -€16M to +€21M and reduced financial expenses meaningfully.</p>
       <p>The October 2025 milestone: a €225M 28-year USPP (US Private Placement) bond at 5.75% — Sporting's first investment-grade rating from Fitch and DBRS. This refinanced legacy debt at lower cost and longer duration, and is likely the single biggest financial event of the period.</p>
     </div>
   </section>
@@ -870,12 +907,18 @@
         </div>
       </div>
 
+      <p class="cmp-narrative" id="cmpNarrative"></p>
+
+      <div class="chart-box" style="height:240px;margin-bottom:24px;">
+        <canvas id="compareBarChart"></canvas>
+      </div>
+
       <div class="cmp-col-headers">
         <span class="cmp-col-label" id="cmpHeadA"></span>
         <span></span>
         <span class="cmp-col-label" id="cmpHeadB"></span>
       </div>
-      <div class="cmp-grid" id="comparisonGrid"></div>
+      <div id="comparisonGrid"></div>
     </div>
   </section>
 
@@ -941,17 +984,17 @@
         </div>
         <div class="event restructure">
           <div class="when">August 2022</div>
-          <div class="title">First VMOC conversion (€80M)</div>
-          <div class="body">€80M of the mandatorily-convertible bonds issued in 2014 are converted into share capital — wiping the equivalent debt from the balance sheet.</div>
+          <div class="title">First VMOC conversion (€83.6M)</div>
+          <div class="body">€83,571,872 of the mandatorily-convertible bonds issued in 2014 are converted into share capital — wiping the equivalent debt from the balance sheet.</div>
           <div class="impact">
             <span class="pitch">⚽ <strong>On the pitch:</strong> Financial stability gave Frederico Varandas the runway to keep building the project — Ugarte signed, Gyökeres arrived the next year.</span>
-            <span class="numbers">📊 <strong>In the numbers:</strong> €80M of debt simply disappeared; financial expenses dropped; the balance sheet started to look like a normal business.</span>
+            <span class="numbers">📊 <strong>In the numbers:</strong> €83.6M of debt simply disappeared; financial expenses dropped; the balance sheet started to look like a normal business.</span>
           </div>
         </div>
         <div class="event restructure">
-          <div class="when">2023</div>
-          <div class="title">Second VMOC conversion (€51M)</div>
-          <div class="body">A further €51M of VMOCs convert into equity. Combined with the 2022 conversion, €131M of debt has been permanently erased.</div>
+          <div class="when">December 2023</div>
+          <div class="title">Second VMOC conversion (€51.4M)</div>
+          <div class="body">A further €51,416,952 of VMOCs convert into equity. Combined with the August 2022 conversion, €135M of debt has been permanently erased.</div>
           <div class="impact">
             <span class="pitch">⚽ <strong>On the pitch:</strong> Back in Champions League regularly; squad value at €365M and rising.</span>
             <span class="numbers">📊 <strong>In the numbers:</strong> Equity flips positive (+€8.9M) for the first time since 2017 — crossing the zero line is a big psychological and regulatory milestone.</span>
@@ -1373,7 +1416,7 @@ const DATASET = {
       "cf_operating": -41804,
       "cf_investing": 58430,
       "cf_financing": -12879,
-      "source": "22-23 Anual.pdf; first VMOC conversion (\u20ac80M to share capital), Manuel Ugarte sale",
+      "source": "22-23 Anual.pdf; first VMOC conversion (\u20ac83,571,872 to share capital, Aug 2022), Manuel Ugarte sale",
       "squad_market_value": 365000
     },
     {
@@ -1405,7 +1448,7 @@ const DATASET = {
       "cf_operating": -92169,
       "cf_investing": 49792,
       "cf_financing": 40751,
-      "source": "23-24 Anual.pdf; Liga title, 2nd VMOC conversion, Pedro Gon\u00e7alves/Edwards/Ousmane Diomande sale processes",
+      "source": "23-24 Anual.pdf; Liga title, 2nd VMOC conversion (\u20ac51,416,952 to share capital, Dec 2023), Pedro Gon\u00e7alves/Edwards/Ousmane Diomande sale processes",
       "squad_market_value": 385000
     },
     {
@@ -1496,7 +1539,7 @@ const DATASET = {
     "12-13 to 23-24 are individual SAD financial statements (IFRS)",
     "24-25 is the latest individual SAD financial statements",
     "25-26 H1 is the first time Sporting SAD published consolidated financial statements (after creating Sporting Entertainment subsidiary in October 2025)",
-    "Major events: Nov 2014 financial restructuring (capital increase, VMOCs); May 2018 Alcochete attack; Aug 2022 first VMOC conversion (\u20ac80M); 2023 second VMOC conversion (\u20ac51M); Oct 2025 USPP \u20ac225M bond",
+    "Major events: Nov 2014 financial restructuring (capital increase, VMOCs); May 2018 Alcochete attack; Aug 2022 first VMOC conversion (\u20ac83,571,872); Dec 2023 second VMOC conversion (\u20ac51,416,952); Oct 2025 USPP \u20ac225M bond",
     "Squad market values for 14/15-23/24 are estimated from Fig.14 of the 24/25 annual report (Transfermarkt time series). 24/25 (511M) and 25/26 H1 (474M) are explicitly labeled in the SAD reports."
   ]
 };
@@ -1548,7 +1591,7 @@ const STORY_STEPS = [
   {
     season: '2022/23',
     title: 'The debt disappears',
-    narrative: '€80M of the 2014 convertible bonds converted into share capital — debt erased at a stroke. Equity crossed zero for the first time since 2017. Manuel Ugarte sold to PSG for €60M. Financial expenses fell sharply. For the first time, Sporting\'s balance sheet looked like a club that could sustain itself.',
+    narrative: '€83.6M of the 2014 convertible bonds converted into share capital — debt erased at a stroke. Equity crossed zero for the first time since 2017. Manuel Ugarte sold to PSG for €60M. Financial expenses fell sharply. For the first time, Sporting\'s balance sheet looked like a club that could sustain itself.',
   },
   {
     season: '2024/25',
@@ -1560,26 +1603,25 @@ const STORY_STEPS = [
 // =============================================================
 // NOTABLE PLAYER SALES (for transfer chart labels)
 // =============================================================
-// yOffset = how many k€ above the bar top to float the label
 // Stagger adjacent seasons to avoid horizontal overlap
 const SALE_LABELS = [
-  { season: '2016/17', income:  92997, yOffset: 13000, record: false,
+  { season: '2016/17', income:  92997, record: false,
     content: ['João Mário €40M', 'Islam Slimani €30.5M'] },
-   { season: '2017/18', income:  34368, yOffset: 30000, record: false,
+  { season: '2017/18', income:  34368, record: false,
     content: ['Adrien Silva €20.5M'] },
-  { season: '2018/19', income:  75793, yOffset: 30000, record: false,
+  { season: '2018/19', income:  75793, record: false,
     content: ['Gelson Martins €22.5M'] },
-  { season: '2019/20', income: 106946, yOffset: 11000, record: false,
+  { season: '2019/20', income: 106946, record: false,
     content: ['Bruno Fernandes €55M','Raphinha €21M'] },
-  { season: '2020/21', income: 35765, yOffset: 11000, record: false,
+  { season: '2020/21', income: 35765, record: false,
     content: ['Marcus Wendel €20.3M'] },
-  { season: '2021/22', income: 59254, yOffset: 11000, record: false,
+  { season: '2021/22', income: 59254, record: false,
     content: ['Nuno Mendes €45M'] },
-  { season: '2022/23', income:  96877, yOffset: 28000, record: false,
+  { season: '2022/23', income:  96877, record: false,
     content: ['Matheus Nunes €45M','Rafael Leão €20.2M', 'João Palhinha €21M'] },
-  { season: '2023/24', income: 144207, yOffset: 10000, record: true,
+  { season: '2023/24', income: 144207, record: true,
     content: ['★ Record — €144M', 'Manuel Ugarte €60M', 'Pedro Porro €43M'] },
-  { season: '2024/25', income: 116830, yOffset: 13000, record: false,
+  { season: '2024/25', income: 116830, record: false,
     content: ['Geovanny Quenda €50.8M', 'Dário Essugo €22.2M'] },
 ];
 
@@ -1622,9 +1664,9 @@ const eventAnnotations = {
   'restructure14': { x: '2014/15', label: '2014 Capital Restructuring', color: COLORS.info },
   'alcochete': { x: '2017/18', label: '2018 Alcochete', color: COLORS.neg },
   'covid': { x: '2020/21', label: 'COVID', color: COLORS.warn },
-  'vmoc1': { x: '2022/23', label: '€80M VMOC conversion', color: COLORS.green },
-  'vmoc2': { x: '2023/24', label: '€51M VMOC conversion', color: COLORS.green },
-  'uspp': { x: '2024/25', label: 'Oct 2025 USPP €225M', color: COLORS.green },
+  'vmoc1': { x: '2022/23', label: '€83.6M VMOC conversion', color: COLORS.green },
+  'vmoc2': { x: '2023/24', label: '€51.4M VMOC conversion', color: COLORS.green },
+  //'uspp': { x: '2025/26', label: 'Oct 2025 USPP €225M', color: COLORS.green },
 };
 
 function eventBoxes(eventKeys) {
@@ -1737,7 +1779,8 @@ document.querySelectorAll('nav.tabs button').forEach(btn => {
 // CHART BUILDERS
 // =============================================================
 
-let heroChart = null; // stored for story mode highlighting
+let heroChart    = null; // stored for story mode highlighting
+let compareChart = null; // stored so it can be destroyed on re-render
 
 function chartHero() {
   heroChart = new Chart(document.getElementById('chartHero'), {
@@ -1784,7 +1827,7 @@ function chartHero() {
       ...baseOpts,
       plugins: {
         ...baseOpts.plugins,
-        annotation: { annotations: eventBoxes(['restructure14','alcochete','covid','vmoc1','uspp']) },
+        annotation: { annotations: eventBoxes(['restructure14','alcochete','covid','vmoc1','vmoc2','uspp']) },
       },
       scales: {
         ...baseOpts.scales,
@@ -1961,7 +2004,7 @@ function chartDebt() {
       ...baseOpts,
       plugins: {
         ...baseOpts.plugins,
-        annotation: { annotations: eventBoxes(['restructure14','vmoc1','uspp']) },
+        annotation: { annotations: eventBoxes(['restructure14','vmoc1','vmoc2','uspp']) },
       },
       scales: { ...baseOpts.scales, x: { ...baseOpts.scales.x, stacked: true }, y: { ...baseOpts.scales.y, stacked: true, beginAtZero: true } },
     },
@@ -2154,7 +2197,7 @@ function chartCash() {
     data: {
       labels,
       datasets: [{
-        label: 'Cash &amp; equivalents',
+        label: 'Cash & equivalents',
         data: annual.map(d => d.cash),
         borderColor: COLORS.gold,
         backgroundColor: COLORS.goldSoft,
@@ -2212,7 +2255,7 @@ function renderTable() {
     html += `<tr><td>${d.label}</td>`;
     fields.forEach(f => {
       const v = d[f.key];
-      const cls = v < 0 ? 'neg' : (v > 0 ? '' : '');
+      const cls = v < 0 ? 'neg' : '';
       html += `<td class="${cls}">${fmtMillions(v)}</td>`;
     });
     html += '</tr>';
@@ -2639,37 +2682,156 @@ function renderComparison() {
   document.getElementById('cmpHeadA').textContent = a.label;
   document.getElementById('cmpHeadB').textContent = b.label;
 
-  const metrics = [
-    { icon: '💰', label: 'Operating Revenue',
-      a: a.revenue_operating,        b: b.revenue_operating,        fmt: fmtMillions, better: 'high' },
-    { icon: '📈', label: 'Net Result',
-      a: a.net_result,               b: b.net_result,               fmt: fmtMillions, better: 'high' },
-    { icon: '🏦', label: "Shareholders' Equity",
-      a: a.equity,                   b: b.equity,                   fmt: fmtMillions, better: 'high' },
-    { icon: '💼', label: 'Wage Bill',
-      a: Math.abs(a.personnel_costs) / a.revenue_operating * 100,
-      b: Math.abs(b.personnel_costs) / b.revenue_operating * 100,
-      fmt: v => v.toFixed(0) + '% of revenue',                                        better: 'low'  },
-    { icon: '💳', label: 'Net Debt / Revenue',
-      a: (a.borrowings_nc + a.borrowings_c - a.cash) / a.revenue_operating,
-      b: (b.borrowings_nc + b.borrowings_c - b.cash) / b.revenue_operating,
-      fmt: v => v.toFixed(1) + '×',                                                   better: 'low'  },
-    { icon: '⚽', label: 'Transfer Income',
-      a: a.player_transfer_income,   b: b.player_transfer_income,   fmt: fmtMillions, better: 'high' },
-    { icon: '🏧', label: 'Cash on Hand',
-      a: a.cash,                     b: b.cash,                     fmt: fmtMillions, better: 'high' },
-    { icon: '🏟️', label: 'Squad Book Value',
-      a: a.squad_book_value,         b: b.squad_book_value,         fmt: fmtMillions, better: 'high' },
+  const netDebtA = a.borrowings_nc + a.borrowings_c - a.cash;
+  const netDebtB = b.borrowings_nc + b.borrowings_c - b.cash;
+
+  // ── Auto-narrative ──────────────────────────────────────────
+  const revGrowth   = (b.revenue_operating - a.revenue_operating) / Math.abs(a.revenue_operating) * 100;
+  const wageBillA   = (Math.abs(a.personnel_costs) / a.revenue_operating * 100).toFixed(0);
+  const wageBillB   = (Math.abs(b.personnel_costs) / b.revenue_operating * 100).toFixed(0);
+  const equityFlip  = a.equity < 0 && b.equity >= 0;
+  const parts = [];
+  parts.push(`Revenue ${revGrowth >= 0 ? 'grew' : 'fell'} ${Math.abs(revGrowth).toFixed(0)}% — from ${fmtMillions(a.revenue_operating)} to ${fmtMillions(b.revenue_operating)}.`);
+  if (equityFlip) {
+    parts.push(`Equity crossed zero (${fmtMillions(a.equity)} → ${fmtMillions(b.equity)}), a structural milestone.`);
+  } else {
+    parts.push(`Equity moved from ${fmtMillions(a.equity)} to ${fmtMillions(b.equity)}.`);
+  }
+  parts.push(`Wage bill: ${wageBillA}% → ${wageBillB}% of revenue. Net debt: ${fmtMillions(netDebtA)} → ${fmtMillions(netDebtB)}.`);
+  const narEl = document.getElementById('cmpNarrative');
+  narEl.textContent = parts.join(' ');
+  narEl.style.display = 'block';
+
+  // ── Mini grouped bar chart ──────────────────────────────────
+  const barKeys = [
+    { label: 'Revenue',    a: a.revenue_operating,      b: b.revenue_operating },
+    { label: 'Transfers',  a: a.player_transfer_income, b: b.player_transfer_income },
+    { label: 'Net result', a: a.net_result,              b: b.net_result },
+    { label: 'Equity',     a: a.equity,                  b: b.equity },
+    { label: 'Net debt',   a: netDebtA,                  b: netDebtB },
+    { label: 'Cash',       a: a.cash,                    b: b.cash },
+  ];
+  if (compareChart) { compareChart.destroy(); compareChart = null; }
+  compareChart = new Chart(document.getElementById('compareBarChart'), {
+    type: 'bar',
+    data: {
+      labels: barKeys.map(k => k.label),
+      datasets: [
+        {
+          label: a.label,
+          data: barKeys.map(k => k.a),
+          backgroundColor: 'rgba(0,107,63,0.75)',
+          borderColor: COLORS.green,
+          borderWidth: 1,
+          borderRadius: 3,
+        },
+        {
+          label: b.label,
+          data: barKeys.map(k => k.b),
+          backgroundColor: 'rgba(200,169,81,0.75)',
+          borderColor: COLORS.gold,
+          borderWidth: 1,
+          borderRadius: 3,
+        },
+      ],
+    },
+    options: {
+      ...baseOpts,
+      scales: {
+        ...baseOpts.scales,
+        y: { ...baseOpts.scales.y, beginAtZero: false },
+      },
+    },
+  });
+
+  // ── Grouped metric cards ─────────────────────────────────────
+  const groups = [
+    {
+      title: '📊 Profitability & P&L',
+      metrics: [
+        { icon: '💰', label: 'Operating Revenue',
+          a: a.revenue_operating, b: b.revenue_operating,
+          fmt: fmtMillions, better: 'high', monetary: true },
+        { icon: '📈', label: 'Net Result',
+          a: a.net_result, b: b.net_result,
+          fmt: fmtMillions, better: 'high', monetary: true },
+        { icon: '⚙️', label: 'Recurring Op. Result',
+          a: a.operating_result_excl_players, b: b.operating_result_excl_players,
+          fmt: fmtMillions, better: 'high', monetary: true },
+        { icon: '💸', label: 'Financial Result',
+          a: a.financial_result, b: b.financial_result,
+          fmt: fmtMillions, better: 'high', monetary: true },
+      ],
+    },
+    {
+      title: '🏦 Balance Sheet',
+      metrics: [
+        { icon: '⚖️', label: "Shareholders' Equity",
+          a: a.equity, b: b.equity,
+          fmt: fmtMillions, better: 'high', monetary: true },
+        { icon: '📊', label: 'Total Assets',
+          a: a.total_assets, b: b.total_assets,
+          fmt: fmtMillions, better: 'high', monetary: true },
+        { icon: '💳', label: 'Net Debt',
+          a: netDebtA, b: netDebtB,
+          fmt: fmtMillions, better: 'low', monetary: true },
+        { icon: '🏧', label: 'Cash on Hand',
+          a: a.cash, b: b.cash,
+          fmt: fmtMillions, better: 'high', monetary: true },
+      ],
+    },
+    {
+      title: '📐 Efficiency Ratios',
+      metrics: [
+        { icon: '💼', label: 'Wage Bill',
+          a: Math.abs(a.personnel_costs) / a.revenue_operating * 100,
+          b: Math.abs(b.personnel_costs) / b.revenue_operating * 100,
+          fmt: v => v.toFixed(0) + '% of revenue', better: 'low', monetary: false },
+        { icon: '🔗', label: 'Net Debt / Revenue',
+          a: netDebtA / a.revenue_operating,
+          b: netDebtB / b.revenue_operating,
+          fmt: v => v.toFixed(1) + '×', better: 'low', monetary: false },
+        { icon: '🔄', label: 'Transfer Reliance',
+          a: a.player_transfer_income / (a.revenue_operating + a.player_transfer_income) * 100,
+          b: b.player_transfer_income / (b.revenue_operating + b.player_transfer_income) * 100,
+          fmt: v => v.toFixed(0) + '% of total income', better: 'low', monetary: false },
+        { icon: '⚡', label: 'Current Ratio',
+          a: a.current_assets / a.current_liabilities,
+          b: b.current_assets / b.current_liabilities,
+          fmt: v => v.toFixed(2) + '×', better: 'high', monetary: false },
+      ],
+    },
+    {
+      title: '⚽ Squad & Transfers',
+      metrics: [
+        { icon: '💵', label: 'Transfer Income',
+          a: a.player_transfer_income, b: b.player_transfer_income,
+          fmt: fmtMillions, better: 'high', monetary: true },
+        { icon: '🏆', label: 'Net Player Trading',
+          a: a.player_transfer_income + a.player_transfer_cost + a.squad_amortization_impairment,
+          b: b.player_transfer_income + b.player_transfer_cost + b.squad_amortization_impairment,
+          fmt: fmtMillions, better: 'high', monetary: true },
+        { icon: '📋', label: 'Squad Book Value',
+          a: a.squad_book_value, b: b.squad_book_value,
+          fmt: fmtMillions, better: 'high', monetary: true },
+        { icon: '📉', label: 'Squad Amortization',
+          a: a.squad_amortization_impairment, b: b.squad_amortization_impairment,
+          fmt: fmtMillions, better: 'high', monetary: true },
+      ],
+    },
   ];
 
-  document.getElementById('comparisonGrid').innerHTML = metrics.map(m => {
+  const renderCard = m => {
     const improved = m.better === 'high' ? m.b > m.a : m.b < m.a;
     const same     = m.a === m.b;
     const pct      = m.a !== 0 ? ((m.b - m.a) / Math.abs(m.a)) * 100 : null;
+    const absDelta = m.b - m.a;
     const arrow    = same ? '—' : improved ? '▲' : '▼';
     const pctStr   = pct !== null ? (pct >= 0 ? '+' : '') + pct.toFixed(0) + '%' : '';
     const cls      = same ? 'neu' : improved ? 'pos' : 'neg';
-
+    const absStr   = m.monetary
+      ? `${absDelta >= 0 ? '+' : ''}${fmtMillions(absDelta)} absolute change`
+      : null;
     return `<div class="cmp-card">
       <div class="cmp-icon">${m.icon}</div>
       <div class="cmp-label">${m.label}</div>
@@ -2678,8 +2840,16 @@ function renderComparison() {
         <div class="cmp-delta ${cls}">${arrow} ${pctStr}</div>
         <div class="cmp-val b">${m.fmt(m.b)}</div>
       </div>
+      ${absStr ? `<div class="cmp-abs-delta ${cls}">${absStr}</div>` : ''}
     </div>`;
-  }).join('');
+  };
+
+  document.getElementById('comparisonGrid').innerHTML = groups.map(g =>
+    `<div class="cmp-group">
+      <div class="cmp-group-title">${g.title}</div>
+      <div class="cmp-group-grid">${g.metrics.map(renderCard).join('')}</div>
+    </div>`
+  ).join('');
 }
 
 // =============================================================
