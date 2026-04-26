@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/svg+xml" href="assets/LOGO.svg" />
 <title>Sporting CP — Financial Evolution Dashboard (2012/13 → 2025/26)</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
@@ -961,8 +962,41 @@
   .cmp-abs-delta.pos { color: var(--pos); }
   .cmp-abs-delta.neg { color: var(--neg); }
   .cmp-abs-delta.neu { color: var(--muted); }
+  /* Footer */
+  footer.site-footer {
+    border-top: 1px solid var(--rule);
+    margin-top: 80px;
+    padding: 56px 0 80px;
+    background: var(--paper);
+  }
+  footer.site-footer .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  footer.site-footer .footer-logo {
+    width: 96px;
+    height: auto;
+    flex-shrink: 0;
+  }
+  footer.site-footer .footer-meta {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    line-height: 1.7;
+    text-align: right;
+  }
+  footer.site-footer .footer-meta strong {
+    display: block;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.08em;
+  }
 </style>
-</head>
 <body>
 
 <div class="topbar">
@@ -976,7 +1010,7 @@
   <div class="wrap">
     <div class="lead">
       <div class="badge-row">
-        <img class="club-badge" src="assets/sporting-crest.png" alt="Sporting Clube de Portugal crest"/>
+        <img class="club-badge" src="assets/LOGO.svg" alt="Sporting Clube de Portugal crest"/>
       </div>
       <p class="eyebrow">A Financial Dossier · 2012 → 2026</p>
       <h1>From insolvency to <em>investment&nbsp;grade</em>.</h1>
@@ -3302,5 +3336,17 @@ renderHealthBar();
 TAB_CHARTS.overview.forEach(fn => { fn(); renderedCharts.add(fn.name); });
 
 </script>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <img class="footer-logo" src="assets/LOGO.svg" alt="Sporting Clube de Portugal"/>
+    <div class="footer-meta">
+      <strong>Sporting Clube de Portugal SAD</strong>
+      Financial dossier · 2012/13 → 2025/26 H1<br/>
+      Source: SAD annual reports · CMVM filings<br/>
+      Compiled for editorial reference
+    </div>
+  </div>
+</footer>
 </body>
 </html>
