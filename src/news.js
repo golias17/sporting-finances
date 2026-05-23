@@ -37,7 +37,7 @@ export async function initNewsFeed() {
         const t = item.title.toLowerCase();
         if (t.includes('equipa b') || t.includes('futsal') || t.includes('andebol') || t.includes('hóquei') || t.includes('sub-')) return false;
         if (t.includes('rui patrício') || t.includes('bruno de carvalho') || t.includes('jorge jesus') || t.includes('bas dost')) return false;
-        if (t.includes('benfica') || t.includes('porto') || t.includes('fcp') || t.includes('slb')) return false;
+        if (t.includes('benfica') || t.includes('porto') || t.includes('fcp') || t.includes('slb') || t.includes('braga')) return false;
         return true;
       });
 
