@@ -15,7 +15,10 @@ export const state = {
   },
   TRANSFER_LEDGER: null,
   startSeasonIndex: 0,
-  endSeasonIndex: 12,
+  // Set to Infinity so slice() always covers the full dataset by default.
+  // main.js updates this to (dataset.length - 1) once data has loaded so the
+  // global filter UI reflects the real last index.
+  endSeasonIndex: Infinity,
   renderedCharts: new Set(),
   VALID_TABS: [
     "overview",

@@ -18,26 +18,8 @@ export {
   generateAccessibleTable
 };
 
-// =============================================================
-// HELPERS & CONSTANTS FOR CHARTS
-// =============================================================
-
-state.COLORS = {
-  green: "#0a5d3a",
-  greenLight: "#2e9e6c",
-  greenSoft: "rgba(10,93,58,0.15)",
-  gold: "#c8a951",
-  goldSoft: "rgba(200,169,81,0.4)",
-  pos: "#2e8a55",
-  neg: "#c6404f",
-  negSoft: "rgba(198,64,79,0.7)",
-  posSoft: "rgba(46,138,85,0.7)",
-  warn: "#d99c2b",
-  info: "#3a72b8",
-  infoSoft: "rgba(58,114,184,0.7)",
-  ink: "#18221d",
-  muted: "#5a6a62",
-};
+// state.COLORS and state.baseOpts are initialised by initChartDefaults() in
+// chartUtils.js, called once during app boot. Do not assign them here.
 
 export function mkChart(id, config) {
   if (chartRegistry.has(id)) chartRegistry.get(id).destroy();

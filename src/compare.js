@@ -3,14 +3,26 @@ import { fmtMillions, mkChart } from "./charts.js";
 
 // SEASON COMPARISON
 // =============================================================
+
+// Track whether change listeners have been wired up (they must only be attached once).
+let comparisonListenersAttached = false;
+
 export function initComparison() {
   const selA = document.getElementById("compareSeasonA");
   const selB = document.getElementById("compareSeasonB");
-  if (selA.options.length > 0) {
-    renderComparison();
-    return;
-  } // already built
-  state.annual.forEach((d, i) => {
+
+  // Always use the full dataset so any two seasons can be compared regardless of
+  // whatever the global date-range filter is currently set to.
+  const data = state.fullAnnual;
+
+  // Preserve the previously selected seasons (by label) across rebuilds so that
+  // a global-filter change doesn't silently reset the user's choice.
+  const prevLabelA = selA.options[selA.selectedIndex]?.textContent ?? null;
+  const prevLabelB = selB.options[selB.selectedIndex]?.textContent ?? null;
+
+  // Always rebuild the option lists so indices stay valid.
+  [selA, selB].forEach((sel) => (sel.innerHTML = ""));
+  data.forEach((d, i) => {
     [selA, selB].forEach((sel) => {
       const opt = document.createElement("option");
       opt.value = i;
@@ -18,18 +30,29 @@ export function initComparison() {
       sel.appendChild(opt);
     });
   });
-  selA.value = 0; // default: 2012/13
-  selB.value = state.annual.length - 1; // default: 2024/25
-  selA.addEventListener("change", renderComparison);
-  selB.addEventListener("change", renderComparison);
+
+  // Restore previous selection by label, or fall back to sensible defaults.
+  const idxOf = (label) => data.findIndex((d) => d.label === label);
+  const restoreA = prevLabelA ? idxOf(prevLabelA) : -1;
+  const restoreB = prevLabelB ? idxOf(prevLabelB) : -1;
+  selA.value = restoreA >= 0 ? restoreA : 0;
+  selB.value = restoreB >= 0 ? restoreB : data.length - 1;
+
+  // Attach change listeners exactly once.
+  if (!comparisonListenersAttached) {
+    selA.addEventListener("change", renderComparison);
+    selB.addEventListener("change", renderComparison);
+    comparisonListenersAttached = true;
+  }
+
   renderComparison();
 }
 
 export function renderComparison() {
   const idxA = parseInt(document.getElementById("compareSeasonA").value);
   const idxB = parseInt(document.getElementById("compareSeasonB").value);
-  const a = state.annual[idxA];
-  const b = state.annual[idxB];
+  const a = state.fullAnnual[idxA];
+  const b = state.fullAnnual[idxB];
   const baseOpts = state.baseOpts;
 
   document.getElementById("cmpHeadA").textContent = a.label;

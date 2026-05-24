@@ -12,28 +12,81 @@ export const fmtMillions = (v) => {
 export const fmtPct = (v) =>
   v === null || v === undefined ? "—" : (v * 100).toFixed(0) + "%";
 
-state.COLORS = {
-  green: "#0a5d3a",
-  greenLight: "#2e9e6c",
-  greenSoft: "rgba(10,93,58,0.15)",
-  gold: "#c8a951",
-  goldSoft: "rgba(200,169,81,0.4)",
-  pos: "#2e8a55",
-  neg: "#c6404f",
-  negSoft: "rgba(198,64,79,0.7)",
-  posSoft: "rgba(46,138,85,0.7)",
-  warn: "#d99c2b",
-  info: "#3a72b8",
-  infoSoft: "rgba(58,114,184,0.7)",
-  ink: "#18221d",
-  muted: "#5a6a62",
-};
-
 export const ZONE_COLORS = {
   red: "rgba(198,64,79,0.07)",
   amber: "rgba(217,156,43,0.08)",
   green: "rgba(46,138,85,0.06)",
 };
+
+/**
+ * Initialise state.COLORS and state.baseOpts.
+ * Must be called once during app boot (inside setupApp), after the DOM is ready,
+ * so that the order of ES module evaluation no longer affects correctness.
+ *
+ * IMPORTANT: we mutate the existing objects in-place with Object.assign so that
+ * any module that captured `const baseOpts = state.baseOpts` at import time still
+ * holds a live, populated reference — reassigning state.baseOpts would leave those
+ * references pointing at the old empty {}.
+ */
+export function initChartDefaults() {
+  Object.assign(state.COLORS, {
+    green: "#0a5d3a",
+    greenLight: "#2e9e6c",
+    greenSoft: "rgba(10,93,58,0.15)",
+    gold: "#c8a951",
+    goldSoft: "rgba(200,169,81,0.4)",
+    pos: "#2e8a55",
+    neg: "#c6404f",
+    negSoft: "rgba(198,64,79,0.7)",
+    posSoft: "rgba(46,138,85,0.7)",
+    warn: "#d99c2b",
+    info: "#3a72b8",
+    infoSoft: "rgba(58,114,184,0.7)",
+    ink: "#18221d",
+    muted: "#5a6a62",
+  });
+
+  Object.assign(state.baseOpts, {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: "index", intersect: false },
+    plugins: {
+      legend: {
+        position: "bottom",
+        labels: { boxWidth: 12, font: { size: 11.5 } },
+      },
+      tooltip: {
+        backgroundColor: "rgba(250, 248, 243, 0.95)",
+        titleColor: "#14181a",
+        bodyColor: "#2c3437",
+        borderColor: "#e6e1d4",
+        borderWidth: 1,
+        padding: 10,
+        cornerRadius: 6,
+        titleFont: { family: "Inter", size: 12, weight: "bold" },
+        bodyFont: { family: "Inter", size: 12 },
+        callbacks: {
+          label: (ctx) => `${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+        },
+      },
+    },
+    scales: {
+      x: {
+        ticks: { font: { size: 11 }, color: state.COLORS.muted },
+        grid: { display: false },
+      },
+      y: {
+        ticks: {
+          font: { size: 11 },
+          color: state.COLORS.muted,
+          callback: (v) => "€" + (v / 1000).toFixed(0) + "M",
+        },
+        grid: { color: "rgba(0,0,0,0.05)" },
+        beginAtZero: true,
+      },
+    },
+  });
+}
 
 export function getEventAnnotations() {
   return {
@@ -80,8 +133,10 @@ export function eventBoxes(eventKeys) {
       xMax: e.x,
       borderColor: e.color,
       borderWidth: 1.5,
-      z: -1, borderDash: [4, 4], label: {
-                display: false,
+      z: -1,
+      borderDash: [4, 4],
+      label: {
+        display: false,
         content: e.label,
         position: "start",
         backgroundColor: e.color,
@@ -96,47 +151,8 @@ export function eventBoxes(eventKeys) {
   return annos;
 }
 
-state.baseOpts = {
-  responsive: true,
-  maintainAspectRatio: false,
-  interaction: { mode: "index", intersect: false },
-  plugins: {
-    legend: {
-      position: "bottom",
-      labels: { boxWidth: 12, font: { size: 11.5 } },
-    },
-    tooltip: {
-      backgroundColor: "rgba(250, 248, 243, 0.95)",
-      titleColor: "#14181a",
-      bodyColor: "#2c3437",
-      borderColor: "#e6e1d4",
-      borderWidth: 1,
-      padding: 10,
-      cornerRadius: 6,
-      titleFont: { family: "Inter", size: 12, weight: "bold" },
-      bodyFont: { family: "Inter", size: 12 },
-      callbacks: {
-        label: (ctx) => `${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
-      },
-    },
-  },
-  scales: {
-    x: {
-      ticks: { font: { size: 11 }, color: state.COLORS.muted },
-      grid: { display: false },
-    },
-    y: {
-      ticks: {
-        font: { size: 11 },
-        color: state.COLORS.muted,
-        callback: (v) => "€" + (v / 1000).toFixed(0) + "M",
-      },
-      grid: { color: "rgba(0,0,0,0.05)" },
-      beginAtZero: true,
-    },
-  },
-};
-
+// Convenience re-export so callers that spread baseOpts get a live reference.
+// This must be accessed after initChartDefaults() has run.
 export const baseOpts = state.baseOpts;
 
 // Registry of all Chart instances keyed by canvas ID.
@@ -157,7 +173,9 @@ export function generateAccessibleTable(canvasId, config) {
   const { data } = config;
   if (!data || !data.labels || !data.datasets) return;
 
-  const thead = `<thead><tr><th>Year</th>${data.datasets.map((ds) => `<th>${ds.label || "Value"}</th>`).join("")}</tr></thead>`;
+  // "Year" column header is localised to match the app language.
+  const yearHeader = state.isPt ? "Época" : "Year";
+  const thead = `<thead><tr><th>${yearHeader}</th>${data.datasets.map((ds) => `<th>${ds.label || "Value"}</th>`).join("")}</tr></thead>`;
   const tbody = `<tbody>${data.labels
     .map(
       (lbl, i) =>

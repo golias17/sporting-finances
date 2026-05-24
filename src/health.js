@@ -1,11 +1,15 @@
 import { state } from "./state.js";
-import { renderKpis } from "./main.js";
-import { fmtMillions } from "./charts.js";
+import { renderKpis } from "./kpi.js";
+import { fmtMillions } from "./chartUtils.js";
 
 import { calculateHealthSignals } from "./metrics.js";
 
 // Keep track of sparkline chart instances to destroy them before re-rendering
 const sparklineRegistry = {};
+
+// AbortController for the season selector click listener — replaced each time
+// initHealthBar is called so we never accumulate duplicate listeners.
+let selectorAbortController = null;
 
 // HEALTH BAR  (season-interactive)
 // =============================================================
@@ -17,13 +21,21 @@ export function initHealthBar() {
         `<button class="season-pill" data-idx="${i}" aria-pressed="false">${a.label}</button>`,
     )
     .join("");
-  if (!selector.dataset.listenerAttached) {
-    selector.addEventListener("click", (e) => {
+
+  // Tear down the previous listener before attaching a fresh one
+  if (selectorAbortController) {
+    selectorAbortController.abort();
+  }
+  selectorAbortController = new AbortController();
+  selector.addEventListener(
+    "click",
+    (e) => {
       const btn = e.target.closest(".season-pill");
       if (btn) renderHealthBar(parseInt(btn.dataset.idx));
-    });
-    selector.dataset.listenerAttached = "true";
-  }
+    },
+    { signal: selectorAbortController.signal },
+  );
+
   // Default to latest season on first initialization
   if (state.healthBarIdx === null) {
     state.setHealthBarIdx(state.annual.length - 1);

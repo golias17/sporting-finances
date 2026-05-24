@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['assets/LOGO.svg'],
+      includeAssets: ['assets/LOGO.svg', 'assets/icon-192.png', 'assets/icon-512.png'],
       manifest: {
         name: 'Sporting Finances',
         short_name: 'SCP Finance',
@@ -15,15 +15,21 @@ export default defineConfig({
         display: 'standalone',
         icons: [
           {
-            src: 'assets/LOGO.svg', // Normally you'd want PNGs here, but SVG is supported in some contexts. We'll stick to SVG.
-            sizes: '192x192 512x512',
-            type: 'image/svg+xml',
+            src: 'assets/icon-192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'any'
+          },
+          {
+            src: 'assets/icon-512.png',
+            sizes: '512x512',
+            type: 'image/png',
             purpose: 'any maskable'
           }
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,json}']
+        globPatterns: ['**/*.{js,css,html,svg,png,json}']
       }
     })
   ],

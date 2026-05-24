@@ -1,8 +1,242 @@
 import { describe, it, expect } from 'vitest';
-import { renderTransferLedger } from '../src/transfers.js'; // To ensure we can load the module without crashing
+import { calculateKpis, calculateHealthSignals, ordinal } from '../src/metrics.js';
+import { fmtMillions } from '../src/chartUtils.js';
 
-describe('Data Formatting', () => {
-  it('loads module successfully', () => {
-    expect(typeof renderTransferLedger).toBe('function');
+// ---------------------------------------------------------------------------
+// Minimal mock state factory
+// ---------------------------------------------------------------------------
+
+function makeState(overrides = {}) {
+  const defaultSeason = {
+    label: '2012/13',
+    revenue_operating: 30000,
+    net_result: -5000,
+    equity: -119000,
+    squad_market_value: 50000,
+    borrowings_nc: 100000,
+    borrowings_c: 20000,
+    cash: 1300,
+    personnel_costs: -18000,
+    player_transfer_income: 10000,
+    player_transfer_cost: -5000,
+    squad_amortization_impairment: -8000,
+    squad_book_value: 60000,
+    operating_result_excl_players: -3000,
+    current_assets: 5000,
+    current_liabilities: 35000,
+    total_assets: 200000,
+    financial_result: -6000,
+  };
+
+  const seasons = overrides.seasons ?? [defaultSeason];
+  return {
+    isPt: overrides.isPt ?? false,
+    healthBarIdx: null,
+    DATASET: { annual_data: seasons },
+    get annual() { return seasons; },
+    get fullAnnual() { return seasons; },
+    ...overrides,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// ordinal()
+// ---------------------------------------------------------------------------
+
+describe('ordinal()', () => {
+  it('formats 1 as 1st', () => expect(ordinal(1)).toBe('1st'));
+  it('formats 2 as 2nd', () => expect(ordinal(2)).toBe('2nd'));
+  it('formats 3 as 3rd', () => expect(ordinal(3)).toBe('3rd'));
+  it('formats 4 as 4th', () => expect(ordinal(4)).toBe('4th'));
+  it('formats 11 as 11th', () => expect(ordinal(11)).toBe('11th'));
+  it('formats 12 as 12th', () => expect(ordinal(12)).toBe('12th'));
+  it('formats 21 as 21st', () => expect(ordinal(21)).toBe('21st'));
+});
+
+// ---------------------------------------------------------------------------
+// fmtMillions()
+// ---------------------------------------------------------------------------
+
+describe('fmtMillions()', () => {
+  it('formats positive thousands correctly', () => {
+    expect(fmtMillions(100000)).toBe('€100.0M');
+  });
+  it('formats negative values with minus sign', () => {
+    expect(fmtMillions(-50000)).toBe('€−50.0M');
+  });
+  it('returns em-dash for null', () => {
+    expect(fmtMillions(null)).toBe('—');
+  });
+  it('returns em-dash for undefined', () => {
+    expect(fmtMillions(undefined)).toBe('—');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// calculateKpis()
+// ---------------------------------------------------------------------------
+
+describe('calculateKpis()', () => {
+  it('returns an array of KPI objects', () => {
+    const state = makeState();
+    const kpis = calculateKpis(state, 0, fmtMillions);
+    expect(Array.isArray(kpis)).toBe(true);
+    expect(kpis.length).toBeGreaterThan(0);
+  });
+
+  it('marks net result as "neg" when the year is a loss', () => {
+    const state = makeState(); // net_result: -5000
+    const kpis = calculateKpis(state, 0, fmtMillions);
+    const netKpi = kpis.find(k => k.label.toLowerCase().includes('net result') || k.label.toLowerCase().includes('resultado'));
+    expect(netKpi).toBeDefined();
+    expect(netKpi.cls).toBe('neg');
+  });
+
+  it('marks net result as "pos" when the year is profitable', () => {
+    const season = { ...makeState().annual[0], net_result: 12000 };
+    const state = makeState({ seasons: [season] });
+    const kpis = calculateKpis(state, 0, fmtMillions);
+    const netKpi = kpis.find(k => k.label.toLowerCase().includes('net result') || k.label.toLowerCase().includes('resultado'));
+    expect(netKpi.cls).toBe('pos');
+  });
+
+  it('handles revGrowth gracefully when fewer than 5 seasons exist', () => {
+    const state = makeState(); // only 1 season
+    const kpis = calculateKpis(state, 0, fmtMillions);
+    const revKpi = kpis[0];
+    // change should contain a "less than 5" message (not crash)
+    expect(typeof revKpi.change).toBe('string');
+    expect(revKpi.change.length).toBeGreaterThan(0);
+  });
+
+  it('calculates 5-year revenue growth when sufficient data exists', () => {
+    const seasons = Array.from({ length: 6 }, (_, i) => ({
+      ...makeState().annual[0],
+      label: `201${i}/1${i + 1}`,
+      revenue_operating: 30000 + i * 5000, // growing
+    }));
+    const state = makeState({ seasons });
+    const kpis = calculateKpis(state, 5, fmtMillions);
+    const revKpi = kpis[0];
+    expect(revKpi.cls).toBe('pos'); // revenue grew
+    expect(revKpi.change).toContain('%');
+  });
+
+  it('counts consecutive profitable years correctly', () => {
+    const seasons = [
+      { ...makeState().annual[0], net_result: -1000 },
+      { ...makeState().annual[0], net_result: 5000, label: '2013/14' },
+      { ...makeState().annual[0], net_result: 8000, label: '2014/15' },
+      { ...makeState().annual[0], net_result: 3000, label: '2015/16' },
+    ];
+    const state = makeState({ seasons });
+    const kpis = calculateKpis(state, 3, fmtMillions); // idx=3, 3rd consecutive profit
+    const netKpi = kpis[1];
+    expect(netKpi.change).toContain('3');
+  });
+
+  it('returns PT labels when isPt is true', () => {
+    const state = makeState({ isPt: true });
+    const kpis = calculateKpis(state, 0, fmtMillions);
+    // At least one label should contain Portuguese text
+    const hasPt = kpis.some(k =>
+      k.label.includes('Receita') ||
+      k.label.includes('resultado') ||
+      k.label.includes('capital') ||
+      k.label.includes('Dívida') ||
+      k.label.includes('Último')
+    );
+    expect(hasPt).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// calculateHealthSignals()
+// ---------------------------------------------------------------------------
+
+describe('calculateHealthSignals()', () => {
+  it('returns 8 signals', () => {
+    const state = makeState();
+    const signals = calculateHealthSignals(state, 0, fmtMillions);
+    expect(signals.length).toBe(8);
+  });
+
+  it('marks payroll as "red" when wage bill exceeds 70% of revenue', () => {
+    const season = {
+      ...makeState().annual[0],
+      personnel_costs: -25000, // 83% of 30000
+      revenue_operating: 30000,
+    };
+    const state = makeState({ seasons: [season] });
+    const signals = calculateHealthSignals(state, 0, fmtMillions);
+    const wageSig = signals.find(s => s.id === 'sigWage');
+    expect(wageSig.status).toBe('red');
+  });
+
+  it('marks payroll as "green" when wage bill is below 60% of revenue', () => {
+    const season = {
+      ...makeState().annual[0],
+      personnel_costs: -15000, // 50%
+      revenue_operating: 30000,
+    };
+    const state = makeState({ seasons: [season] });
+    const signals = calculateHealthSignals(state, 0, fmtMillions);
+    const wageSig = signals.find(s => s.id === 'sigWage');
+    expect(wageSig.status).toBe('green');
+  });
+
+  it('marks equity as "green" when equity is strongly positive', () => {
+    const season = { ...makeState().annual[0], equity: 50000 };
+    const state = makeState({ seasons: [season] });
+    const signals = calculateHealthSignals(state, 0, fmtMillions);
+    const equitySig = signals.find(s => s.id === 'sigEquity');
+    expect(equitySig.status).toBe('green');
+  });
+
+  it('marks equity as "red" when equity is negative', () => {
+    const state = makeState(); // equity: -119000
+    const signals = calculateHealthSignals(state, 0, fmtMillions);
+    const equitySig = signals.find(s => s.id === 'sigEquity');
+    expect(equitySig.status).toBe('red');
+  });
+
+  it('marks current ratio as "green" when >= 1.0', () => {
+    const season = {
+      ...makeState().annual[0],
+      current_assets: 40000,
+      current_liabilities: 30000,
+    };
+    const state = makeState({ seasons: [season] });
+    const signals = calculateHealthSignals(state, 0, fmtMillions);
+    const crSig = signals.find(s => s.id === 'sigCurrentRatio');
+    expect(crSig.status).toBe('green');
+  });
+
+  it('marks current ratio as "red" when < 0.5', () => {
+    const state = makeState(); // current_assets: 5000, current_liabilities: 35000 → 0.14×
+    const signals = calculateHealthSignals(state, 0, fmtMillions);
+    const crSig = signals.find(s => s.id === 'sigCurrentRatio');
+    expect(crSig.status).toBe('red');
+  });
+
+  it('marks revenue growth as null/amber when fewer than 5 seasons', () => {
+    const state = makeState(); // 1 season only
+    const signals = calculateHealthSignals(state, 0, fmtMillions);
+    const revSig = signals.find(s => s.id === 'sigRevGrowth');
+    expect(revSig.status).toBe('amber'); // null case → amber
+  });
+
+  it('all signals have required fields', () => {
+    const state = makeState();
+    const signals = calculateHealthSignals(state, 0, fmtMillions);
+    signals.forEach(s => {
+      expect(s).toHaveProperty('id');
+      expect(s).toHaveProperty('label');
+      expect(s).toHaveProperty('value');
+      expect(s).toHaveProperty('status');
+      expect(s).toHaveProperty('note');
+      expect(s).toHaveProperty('history');
+      expect(['green', 'amber', 'red']).toContain(s.status);
+    });
   });
 });

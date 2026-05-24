@@ -36,6 +36,8 @@ import {
   chartRegistry,
   fmtMillions,
 } from "./charts.js";
+import { initChartDefaults } from "./chartUtils.js";
+import { renderKpis } from "./kpi.js";
 
 async function initApp() {
   try {
@@ -43,6 +45,9 @@ async function initApp() {
     state.DATASET = await finRes.json();
     const trRes = await fetch("./data/transfers.json");
     state.TRANSFER_LEDGER = await trRes.json();
+
+    // Pin endSeasonIndex to the real last index so the filter UI is correct.
+    state.setEndSeasonIndex(state.DATASET.annual_data.length - 1);
 
     // Once data is loaded, populate KPIs and setup UI
     setupApp();
@@ -56,28 +61,9 @@ async function initApp() {
   }
 }
 
-import { calculateKpis } from "./metrics.js";
-
-export function renderKpis(idx) {
-  if (idx === undefined || idx === null) {
-    idx = state.healthBarIdx !== null ? state.healthBarIdx : state.annual.length - 1;
-  }
-  
-  const kpis = calculateKpis(state, idx, fmtMillions);
-
-  document.getElementById("kpiRow").innerHTML = kpis
-    .map(
-      (k) =>
-        `<div class="kpi" tabindex="0" role="group" aria-label="${k.label}: ${k.value}. ${k.change}">
-           <div class="label" aria-hidden="true">${k.label}</div>
-           <div class="value" aria-hidden="true">${k.value}</div>
-           <div class="change ${k.cls || "neutral"}" aria-hidden="true">${k.change}</div>
-         </div>`,
-    )
-    .join("");
-}
-
 function setupApp() {
+  // Initialise colour palette and chart base options before any chart is built.
+  initChartDefaults();
   initGlobalFilters();
   renderKpis();
   initStoryMode();
