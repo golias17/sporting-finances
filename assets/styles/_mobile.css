@@ -47,6 +47,11 @@
   body {
     padding-bottom: 80px;
   }
+  
+  /* Move scroll-to-top button above the mobile nav */
+  .scroll-to-top {
+    bottom: 90px;
+  }
 }
 
 

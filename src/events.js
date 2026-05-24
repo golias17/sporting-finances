@@ -26,7 +26,7 @@ export function initEventFilter() {
     eventLegend.addEventListener("click", (e) => {
       const filterBtn = e.target.closest(".el-filter");
       if (!filterBtn) return;
-      state.activeEventFilter = filterBtn.dataset.filter;
+      state.setActiveEventFilter(filterBtn.dataset.filter);
       syncEventsFilter();
     });
   }

@@ -779,7 +779,7 @@ body.dark .card:hover {
     background-color 0.3s,
     border-color 0.3s,
     color 0.3s;
-  z-index: 99;
+  z-index: 999;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);

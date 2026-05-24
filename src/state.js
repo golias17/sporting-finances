@@ -33,4 +33,27 @@ export const state = {
   TAB_CHARTS: {},
   COLORS: {},
   baseOpts: {},
+
+  // Setters
+  setStartSeasonIndex(idx) {
+    this.startSeasonIndex = idx;
+  },
+  setEndSeasonIndex(idx) {
+    this.endSeasonIndex = idx;
+  },
+  setHealthBarIdx(idx) {
+    this.healthBarIdx = idx;
+  },
+  setStoryIndex(idx) {
+    this.storyIndex = idx;
+  },
+  setActiveEventFilter(filter) {
+    this.activeEventFilter = filter;
+  },
+  setTlActiveSeason(season) {
+    this.tlActiveSeason = season;
+  },
+  setTlActiveWindow(window) {
+    this.tlActiveWindow = window;
+  }
 };

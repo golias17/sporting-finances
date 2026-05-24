@@ -56,186 +56,14 @@ async function initApp() {
   }
 }
 
-function ordinal(n) {
-  const s = ["th", "st", "nd", "rd"];
-  const v = n % 100;
-  return n + (s[(v - 20) % 10] || s[v] || s[0]);
-}
+import { calculateKpis } from "./metrics.js";
 
 export function renderKpis(idx) {
   if (idx === undefined || idx === null) {
-    idx =
-      state.healthBarIdx !== null
-        ? state.healthBarIdx
-        : state.annual.length - 1;
+    idx = state.healthBarIdx !== null ? state.healthBarIdx : state.annual.length - 1;
   }
-  const isLatest = idx === state.annual.length - 1;
-  const curr = state.annual[idx];
-  const first = state.annual[0];
-  const firstShort = first.label.slice(2);
-
-  // Revenue growth vs ~5 years prior
-  const compIdx = idx - 4;
-  const comp = compIdx >= 0 ? state.annual[compIdx] : null;
-  const revGrowthPct = comp
-    ? (
-        ((curr.revenue_operating - comp.revenue_operating) /
-          comp.revenue_operating) *
-        100
-      ).toFixed(0)
-    : null;
-
-  // Consecutive profitable years (counting backwards from idx)
-  let consecutiveProfitable = 0;
-  for (let i = idx; i >= 0; i--) {
-    if (state.annual[i].net_result > 0) consecutiveProfitable++;
-    else break;
-  }
-
-  // Squad market value — use H1 data for the latest season only
-  let sqMv, sqMvLabel;
-  if (isLatest) {
-    const h1 = state.DATASET.h1_2526;
-    let h1PeriodLabel;
-    if (state.isPt) {
-      const monthsPt = {
-        Jan: "Jan",
-        Feb: "Fev",
-        Mar: "Mar",
-        Apr: "Abr",
-        May: "Mai",
-        Jun: "Jun",
-        Jul: "Jul",
-        Aug: "Ago",
-        Sep: "Set",
-        Oct: "Out",
-        Nov: "Nov",
-        Dec: "Dez",
-      };
-      const rawLabel = new Date(h1.period_end).toLocaleDateString("en-GB", {
-        month: "short",
-        year: "2-digit",
-      });
-      const [m, y] = rawLabel.split(" ");
-      h1PeriodLabel = `${monthsPt[m] || m} ${y}`;
-    } else {
-      h1PeriodLabel = new Date(h1.period_end).toLocaleDateString("en-GB", {
-        month: "short",
-        year: "2-digit",
-      });
-    }
-    sqMv = h1.squad_market_value;
-    sqMvLabel = state.isPt
-      ? `Valor de mercado do plantel (${h1PeriodLabel})`
-      : `Squad market value (${h1PeriodLabel})`;
-  } else {
-    sqMv = curr.squad_market_value;
-    sqMvLabel = state.isPt
-      ? `Valor de mercado do plantel (${curr.label})`
-      : `Squad market value (${curr.label})`;
-  }
-  const sqMvMultiple = (sqMv / first.squad_market_value).toFixed(1);
-
-  const kpis = [
-    {
-      label: state.isPt
-        ? `${isLatest ? "Última receita" : "Receita"} (${curr.label})`
-        : `${isLatest ? "Latest revenue" : "Revenue"} (${curr.label})`,
-      value: fmtMillions(curr.revenue_operating),
-      change:
-        revGrowthPct !== null
-          ? state.isPt
-            ? `${Number(revGrowthPct) >= 0 ? "+" : ""}${revGrowthPct}% vs há 5 anos`
-            : `${Number(revGrowthPct) >= 0 ? "+" : ""}${revGrowthPct}% vs 5y ago`
-          : state.isPt
-            ? "Menos de 5 épocas de dados"
-            : "Less than 5 seasons of data",
-      cls:
-        revGrowthPct !== null && Number(revGrowthPct) >= 0
-          ? "pos"
-          : revGrowthPct !== null
-            ? "neg"
-            : "",
-    },
-    {
-      label: state.isPt
-        ? `${isLatest ? "Último resultado líquido" : "Resultado líquido"} (${curr.label})`
-        : `${isLatest ? "Latest net result" : "Net result"} (${curr.label})`,
-      value: fmtMillions(curr.net_result),
-      change:
-        consecutiveProfitable > 1
-          ? state.isPt
-            ? `${consecutiveProfitable}º ano consecutivo com lucros`
-            : `${ordinal(consecutiveProfitable)} profitable year in a row`
-          : consecutiveProfitable === 1
-            ? state.isPt
-              ? "Ano com lucros"
-              : "Profitable year"
-            : state.isPt
-              ? "Ano de prejuízo"
-              : "Loss-making year",
-      cls: curr.net_result > 0 ? "pos" : "neg",
-    },
-    {
-      label: state.isPt
-        ? `${isLatest ? "Últimos capitais próprios" : "Capitais próprios"} (${curr.label})`
-        : `${isLatest ? "Latest equity" : "Equity"} (${curr.label})`,
-      value: fmtMillions(curr.equity),
-      change: state.isPt
-        ? `vs ${fmtMillions(first.equity)} em ${firstShort}`
-        : `vs ${fmtMillions(first.equity)} in ${firstShort}`,
-      cls:
-        curr.equity > first.equity
-          ? "pos"
-          : curr.equity < first.equity
-            ? "neg"
-            : "",
-    },
-    {
-      label: sqMvLabel,
-      value: fmtMillions(sqMv),
-      change: state.isPt
-        ? `${sqMvMultiple}× o valor de mercado de ${firstShort} (${fmtMillions(first.squad_market_value)})`
-        : `${sqMvMultiple}× the ${firstShort} market value (${fmtMillions(first.squad_market_value)})`,
-      cls: sqMv > first.squad_market_value ? "pos" : "",
-    },
-    {
-      label: state.isPt
-        ? `Dívida total (${curr.label})`
-        : `Total debt (${curr.label})`,
-      value: fmtMillions(curr.borrowings_nc + curr.borrowings_c),
-      change: state.isPt
-        ? `vs ${fmtMillions(first.borrowings_nc + first.borrowings_c)} em ${firstShort}`
-        : `vs ${fmtMillions(first.borrowings_nc + first.borrowings_c)} in ${firstShort}`,
-      cls: "",
-    },
-  ];
-
-  // 6th card: H1 net result for latest season, cash on hand for historical
-  if (isLatest) {
-    const h1 = state.DATASET.h1_2526;
-    kpis.push({
-      label: state.isPt
-        ? `Result. líquido 1º Sem. ${h1.label}`
-        : `H1 ${h1.label} net result`,
-      value: fmtMillions(h1.net_result),
-      change: state.isPt
-        ? "Após a venda de Gyökeres por 65,8 M€"
-        : "After Gyökeres €65.8M sale",
-      cls: "pos",
-    });
-  } else {
-    kpis.push({
-      label: state.isPt
-        ? `Saldo de caixa (${curr.label})`
-        : `Cash on hand (${curr.label})`,
-      value: fmtMillions(curr.cash),
-      change: state.isPt
-        ? `vs ${fmtMillions(first.cash)} em ${firstShort}`
-        : `vs ${fmtMillions(first.cash)} in ${firstShort}`,
-      cls: curr.cash > first.cash ? "pos" : "neg",
-    });
-  }
+  
+  const kpis = calculateKpis(state, idx, fmtMillions);
 
   document.getElementById("kpiRow").innerHTML = kpis
     .map(
@@ -631,8 +459,8 @@ function initGlobalFilters() {
   };
 
   const onChange = () => {
-    state.startSeasonIndex = parseInt(startSelect.value, 10);
-    state.endSeasonIndex = parseInt(endSelect.value, 10);
+    state.setStartSeasonIndex(parseInt(startSelect.value, 10));
+    state.setEndSeasonIndex(parseInt(endSelect.value, 10));
     renderOptions();
     
     // Clear all charts and force re-render of active tab

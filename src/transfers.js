@@ -24,7 +24,7 @@ export function renderTransferLedger() {
 
   nav.querySelectorAll(".season-pill").forEach((btn) => {
     btn.addEventListener("click", () => {
-      state.tlActiveSeason = btn.dataset.tlSeason;
+      state.setTlActiveSeason(btn.dataset.tlSeason);
       renderTransferLedger();
     });
   });
@@ -53,7 +53,7 @@ export function renderTransferLedger() {
 
     winNav.querySelectorAll("button").forEach((btn) => {
       btn.addEventListener("click", () => {
-        state.tlActiveWindow = btn.dataset.tlWindow;
+        state.setTlActiveWindow(btn.dataset.tlWindow);
         renderTransferLedger();
       });
     });

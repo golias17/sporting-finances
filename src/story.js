@@ -126,7 +126,7 @@ const STORY_STEPS = [
 ];
 
 export function startStory() {
-  state.storyIndex = 0;
+  state.setStoryIndex(0);
   document.getElementById("storyCard").classList.remove("hidden");
   document.getElementById("btnStartStory").classList.add("hidden");
   document.removeEventListener("keydown", storyKeyHandler);
@@ -237,13 +237,13 @@ export function nextStory() {
     exitStory();
     return;
   }
-  state.storyIndex++;
+  state.setStoryIndex(state.storyIndex + 1);
   updateStoryStep();
 }
 
 export function prevStory() {
   if (state.storyIndex > 0) {
-    state.storyIndex--;
+    state.setStoryIndex(state.storyIndex - 1);
     updateStoryStep();
   }
 }
@@ -268,7 +268,7 @@ export function initStoryMode() {
         steps.length - 1,
         Math.max(0, Math.floor(ratio * steps.length)),
       );
-      state.storyIndex = newIndex;
+      state.setStoryIndex(newIndex);
       updateStoryStep();
     });
   }

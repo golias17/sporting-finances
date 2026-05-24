@@ -1,15 +1,26 @@
 import { state } from "./state.js";
+import {
+  fmtMillions,
+  fmtPct,
+  ZONE_COLORS,
+  eventBoxes,
+  baseOpts,
+  chartRegistry,
+  generateAccessibleTable
+} from "./chartUtils.js";
+export {
+  fmtMillions,
+  fmtPct,
+  ZONE_COLORS,
+  eventBoxes,
+  baseOpts,
+  chartRegistry,
+  generateAccessibleTable
+};
 
 // =============================================================
 // HELPERS & CONSTANTS FOR CHARTS
 // =============================================================
-
-export const fmtMillions = (v) => {
-  if (v === null || v === undefined) return "—";
-  return "€" + (v < 0 ? "−" : "") + Math.abs(v / 1000).toFixed(1) + "M";
-};
-export const fmtPct = (v) =>
-  v === null || v === undefined ? "—" : (v * 100).toFixed(0) + "%";
 
 state.COLORS = {
   green: "#0a5d3a",
@@ -27,155 +38,6 @@ state.COLORS = {
   ink: "#18221d",
   muted: "#5a6a62",
 };
-
-const ZONE_COLORS = {
-  red: "rgba(198,64,79,0.07)",
-  amber: "rgba(217,156,43,0.08)",
-  green: "rgba(46,138,85,0.06)",
-};
-
-function getEventAnnotations() {
-  return {
-    restructure14: {
-      x: "2014/15",
-      label: state.isPt ? "Reestruturação 2014" : "2014 Capital Restructuring",
-      color: state.COLORS.info,
-    },
-    alcochete: {
-      x: "2017/18",
-      label: state.isPt ? "Alcochete 2018" : "2018 Alcochete",
-      color: state.COLORS.neg,
-    },
-    covid: { x: "2020/21", label: "COVID", color: state.COLORS.warn },
-    vmoc1: {
-      x: "2022/23",
-      label: state.isPt ? "Conversão VMOC €83,6M" : "€83.6M VMOC conversion",
-      color: state.COLORS.green,
-    },
-    vmoc2: {
-      x: "2023/24",
-      label: state.isPt ? "Conversão VMOC €51,4M" : "€51.4M VMOC conversion",
-      color: state.COLORS.green,
-    },
-    uspp: {
-      x: "2024/25",
-      label: state.isPt
-        ? "→ Out 2025: USPP de €225M"
-        : "→ Oct 2025: €225M USPP",
-      color: state.COLORS.green,
-    },
-  };
-}
-
-export function eventBoxes(eventKeys) {
-  const annos = {};
-  const eventAnnotations = getEventAnnotations();
-  eventKeys.forEach((k) => {
-    const e = eventAnnotations[k];
-    if (!e) return;
-    annos["e_" + k] = {
-      type: "line",
-      xMin: e.x,
-      xMax: e.x,
-      borderColor: e.color,
-      borderWidth: 1.5,
-      z: -1, borderDash: [4, 4], label: {
-                display: false,
-        content: e.label,
-        position: "start",
-        backgroundColor: e.color,
-        color: "#fff",
-        font: { size: 10, weight: "600" },
-        padding: 4,
-        rotation: -90,
-        yAdjust: 0,
-      },
-    };
-  });
-  return annos;
-}
-
-state.baseOpts = {
-  responsive: true,
-  maintainAspectRatio: false,
-  interaction: { mode: "index", intersect: false },
-  plugins: {
-    legend: {
-      position: "bottom",
-      labels: { boxWidth: 12, font: { size: 11.5 } },
-    },
-    tooltip: {
-      backgroundColor: "rgba(250, 248, 243, 0.95)",
-      titleColor: "#14181a",
-      bodyColor: "#2c3437",
-      borderColor: "#e6e1d4",
-      borderWidth: 1,
-      padding: 10,
-      cornerRadius: 6,
-      titleFont: { family: "Inter", size: 12, weight: "bold" },
-      bodyFont: { family: "Inter", size: 12 },
-      callbacks: {
-        label: (ctx) => `${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
-      },
-    },
-  },
-  scales: {
-    x: {
-      ticks: { font: { size: 11 }, color: state.COLORS.muted },
-      grid: { display: false },
-    },
-    y: {
-      ticks: {
-        font: { size: 11 },
-        color: state.COLORS.muted,
-        callback: (v) => "€" + (v / 1000).toFixed(0) + "M",
-      },
-      grid: { color: "rgba(0,0,0,0.05)" },
-      beginAtZero: true,
-    },
-  },
-};
-
-const baseOpts = state.baseOpts;
-
-// Registry of all Chart instances keyed by canvas ID.
-export const chartRegistry = new Map();
-
-function generateAccessibleTable(canvasId, config) {
-  const canvas = document.getElementById(canvasId);
-  if (!canvas) return;
-  const tableId = canvasId + "-a11y-table";
-  let table = document.getElementById(tableId);
-  if (!table) {
-    table = document.createElement("table");
-    table.id = tableId;
-    table.className = "sr-only";
-    canvas.parentNode.insertBefore(table, canvas.nextSibling);
-  }
-  
-  const labels = config.data.labels || [];
-  const datasets = config.data.datasets || [];
-  
-  let html = `<caption>Data for ${canvas.getAttribute("aria-label") || canvasId}</caption>`;
-  html += `<thead><tr><th scope="col">Category</th>`;
-  datasets.forEach(ds => {
-    html += `<th scope="col">${ds.label || "Value"}</th>`;
-  });
-  html += `</tr></thead><tbody>`;
-  
-  labels.forEach((label, i) => {
-    html += `<tr><th scope="row">${label}</th>`;
-    datasets.forEach(ds => {
-      let val = ds.data[i];
-      if (val === undefined || val === null) val = "—";
-      else if (typeof val === 'number') val = val.toFixed(2);
-      html += `<td>${val}</td>`;
-    });
-    html += `</tr>`;
-  });
-  html += `</tbody>`;
-  table.innerHTML = html;
-}
 
 export function mkChart(id, config) {
   if (chartRegistry.has(id)) chartRegistry.get(id).destroy();
