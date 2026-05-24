@@ -43,7 +43,6 @@ async function initApp() {
     state.DATASET = await finRes.json();
     const trRes = await fetch("./data/transfers.json");
     state.TRANSFER_LEDGER = await trRes.json();
-    state.annual = state.DATASET.annual_data;
 
     // Once data is loaded, populate KPIs and setup UI
     setupApp();
@@ -251,6 +250,7 @@ export function renderKpis(idx) {
 }
 
 function setupApp() {
+  initGlobalFilters();
   renderKpis();
   initStoryMode();
   initEventFilter();
@@ -599,3 +599,75 @@ function initJornalModal() {
 
 // Start application
 initApp();
+
+
+function initGlobalFilters() {
+  const startSelect = document.getElementById('globalStartSeason');
+  const endSelect = document.getElementById('globalEndSeason');
+  if (!startSelect || !endSelect) return;
+
+  const seasons = state.fullAnnual.map(d => d.label);
+  
+  const renderOptions = () => {
+    startSelect.innerHTML = '';
+    endSelect.innerHTML = '';
+    seasons.forEach((season, index) => {
+      // Start Select
+      const optStart = document.createElement('option');
+      optStart.value = index;
+      optStart.textContent = season;
+      if (index === state.startSeasonIndex) optStart.selected = true;
+      if (index > state.endSeasonIndex) optStart.disabled = true;
+      startSelect.appendChild(optStart);
+
+      // End Select
+      const optEnd = document.createElement('option');
+      optEnd.value = index;
+      optEnd.textContent = season;
+      if (index === state.endSeasonIndex) optEnd.selected = true;
+      if (index < state.startSeasonIndex) optEnd.disabled = true;
+      endSelect.appendChild(optEnd);
+    });
+  };
+
+  const onChange = () => {
+    state.startSeasonIndex = parseInt(startSelect.value, 10);
+    state.endSeasonIndex = parseInt(endSelect.value, 10);
+    renderOptions();
+    
+    // Clear all charts and force re-render of active tab
+    state.renderedCharts.clear();
+    const activeTab = document.querySelector('.tabs button.active');
+    if (activeTab) {
+      activateTab(activeTab.dataset.tab);
+    }
+    updateActivePreset();
+  };
+
+  const presets = document.querySelectorAll('#eraPresets .season-pill');
+  
+  const updateActivePreset = () => {
+    presets.forEach(btn => {
+      const s = parseInt(btn.dataset.start, 10);
+      const e = btn.dataset.end === 'latest' ? seasons.length - 1 : parseInt(btn.dataset.end, 10);
+      const isActive = (state.startSeasonIndex === s && state.endSeasonIndex === e);
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+  };
+
+  presets.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const s = parseInt(btn.dataset.start, 10);
+      const e = btn.dataset.end === 'latest' ? seasons.length - 1 : parseInt(btn.dataset.end, 10);
+      startSelect.value = s;
+      endSelect.value = e;
+      onChange();
+    });
+  });
+
+  startSelect.addEventListener('change', onChange);
+  endSelect.addEventListener('change', onChange);
+  renderOptions();
+  updateActivePreset();
+}

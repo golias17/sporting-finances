@@ -6,8 +6,16 @@ export const state = {
   storyIndex: 0,
   activeEventFilter: "all",
   DATASET: null,
-  annual: null,
+  get annual() {
+    if (!this.DATASET) return null;
+    return this.DATASET.annual_data.slice(this.startSeasonIndex, this.endSeasonIndex + 1);
+  },
+  get fullAnnual() {
+    return this.DATASET ? this.DATASET.annual_data : null;
+  },
   TRANSFER_LEDGER: null,
+  startSeasonIndex: 0,
+  endSeasonIndex: 12,
   renderedCharts: new Set(),
   VALID_TABS: [
     "overview",

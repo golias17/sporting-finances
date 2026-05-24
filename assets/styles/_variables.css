@@ -1,0 +1,37 @@
+:root {
+  --green: #0a5d3a;
+  --green-dark: #053b25;
+  --green-light: #2e9e6c;
+  --green-tint: #eef5f0;
+  --gold: #b08923;
+  --gold-soft: #d4b15a;
+  --bg: #f4f1ea;
+  --paper: rgba(250, 248, 243, 0.85);
+  --surface: rgba(255, 255, 255, 0.9);
+  --ink: #14181a;
+  --ink-2: #2c3437;
+  --muted: #6a716e;
+  --muted-2: #9aa09c;
+  --rule: rgba(0, 0, 0, 0.05);
+  --rule-2: rgba(0, 0, 0, 0.08);
+  --pos: #2e8a55;
+  --neg: #b8403a;
+  --warn: #c98c1f;
+  --info: #2c5b8a;
+  --serif: "Playfair Display", "Times New Roman", Georgia, serif;
+  --sans: "Outfit", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+}
+
+body.dark {
+  --bg: #121513;
+  --paper: rgba(24, 29, 26, 0.85);
+  --surface: rgba(30, 30, 30, 0.85);
+  --ink: #eaeaea;
+  --ink-2: #cccccc;
+  --muted: #8c938f;
+  --muted-2: #5a615e;
+  --rule: rgba(255, 255, 255, 0.05);
+  --rule-2: rgba(255, 255, 255, 0.08);
+  --green-tint: #142e20;
+}

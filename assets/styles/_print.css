@@ -1,0 +1,125 @@
+/* ── Print styles ── */
+@media print {
+  .topbar,
+  nav.tabs,
+  .btn-start-story,
+  .story-controls,
+  .season-selector,
+  footer.site-footer {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+  .tab-panel {
+    display: block !important;
+  }
+  .card,
+  .narrative,
+  .health-bar {
+    break-inside: avoid;
+  }
+  .chart-box {
+    height: 260px;
+  }
+  header.hero {
+    padding: 24px 16px;
+  }
+  .container {
+    padding: 0 16px 40px;
+  }
+}
+
+/* =============================================================
+   NEW EXTRACTED STYLES FOR ACCESSIBILITY & UTILITIES
+   ============================================================= */
+
+/* VMOC legend bar colors */
+.vtl-bar--info {
+  background: var(--info);
+}
+.vtl-bar--gold {
+  background: var(--gold);
+}
+.vtl-bar--green {
+  background: var(--green);
+}
+
+/* Text transform utility */
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+/* Text weight utility */
+.text-bold {
+  font-weight: 700;
+}
+
+/* Dynamic global colors */
+.neg {
+  color: var(--neg) !important;
+}
+.pos {
+  color: var(--pos) !important;
+}
+
+/* Layout detail wrapper */
+.tl-details {
+  min-width: 0;
+}
+
+/* Table empty cell wrapper */
+.ledger-empty-cell {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--muted);
+}
+
+.ledger-empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 420px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.ledger-empty-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--rule);
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+body.dark .ledger-empty-icon-wrapper {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ledger-empty-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.ledger-empty-title {
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 8px 0;
+}
+
+.ledger-empty-sub {
+  font-family: var(--sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+  margin: 0;
+}

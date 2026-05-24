@@ -1,0 +1,63 @@
+/* ── Mobile UI Overhaul (Bottom Navigation) ── */
+@media (max-width: 768px) {
+  nav.tabs {
+    box-sizing: border-box;
+    position: fixed;
+    top: auto !important;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    z-index: 9999;
+    background-color: var(--surface);
+    border: none;
+    border-top: 1px solid var(--rule);
+    border-radius: 0;
+    margin: 0;
+    padding: 10px 10px;
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+  }
+  
+  nav.tabs button {
+    flex-direction: column;
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    align-items: center;
+    justify-content: center;
+    border: none !important;
+    border-radius: 8px;
+    margin-right: 5px;
+    flex-shrink: 0;
+  }
+  
+  nav.tabs button .tab-num {
+    margin-right: 0;
+    margin-bottom: 4px;
+    font-size: 0.65rem;
+  }
+  
+  nav.tabs button.active {
+    background-color: var(--hover);
+  }
+  
+  /* Add padding to body so bottom content isn't hidden by the nav */
+  body {
+    padding-bottom: 80px;
+  }
+}
+
+
+/* ── Mobile UI - Sticky first column for data table ── */
+@media (max-width: 768px) {
+  table.data th:first-child,
+  table.data td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background-color: var(--surface);
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  }
+}

@@ -141,10 +141,47 @@ const baseOpts = state.baseOpts;
 // Registry of all Chart instances keyed by canvas ID.
 export const chartRegistry = new Map();
 
+function generateAccessibleTable(canvasId, config) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const tableId = canvasId + "-a11y-table";
+  let table = document.getElementById(tableId);
+  if (!table) {
+    table = document.createElement("table");
+    table.id = tableId;
+    table.className = "sr-only";
+    canvas.parentNode.insertBefore(table, canvas.nextSibling);
+  }
+  
+  const labels = config.data.labels || [];
+  const datasets = config.data.datasets || [];
+  
+  let html = `<caption>Data for ${canvas.getAttribute("aria-label") || canvasId}</caption>`;
+  html += `<thead><tr><th scope="col">Category</th>`;
+  datasets.forEach(ds => {
+    html += `<th scope="col">${ds.label || "Value"}</th>`;
+  });
+  html += `</tr></thead><tbody>`;
+  
+  labels.forEach((label, i) => {
+    html += `<tr><th scope="row">${label}</th>`;
+    datasets.forEach(ds => {
+      let val = ds.data[i];
+      if (val === undefined || val === null) val = "—";
+      else if (typeof val === 'number') val = val.toFixed(2);
+      html += `<td>${val}</td>`;
+    });
+    html += `</tr>`;
+  });
+  html += `</tbody>`;
+  table.innerHTML = html;
+}
+
 export function mkChart(id, config) {
   if (chartRegistry.has(id)) chartRegistry.get(id).destroy();
   const chart = new Chart(document.getElementById(id), config);
   chartRegistry.set(id, chart);
+  generateAccessibleTable(id, config);
   return chart;
 }
 

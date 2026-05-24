@@ -154,7 +154,7 @@ export function renderVmocCost() {
 
   let html =
     legend +
-    `<table class="vmoc-cost"><thead><tr><th>${state.isPt ? "Época" : "Season"}</th><th>${state.isPt ? "Período" : "Period"}</th><th>${state.isPt ? "Custo de finan. líquido" : "Net financing cost"}</th><th>${state.isPt ? "Escala" : "Scale"}</th><th>${state.isPt ? "Composição deste valor" : "What's inside this number"}</th></tr></thead><tbody>`;
+    `<div class="scroll-x"><table class="vmoc-cost"><thead><tr><th>${state.isPt ? "Época" : "Season"}</th><th>${state.isPt ? "Período" : "Period"}</th><th>${state.isPt ? "Custo de finan. líquido" : "Net financing cost"}</th><th>${state.isPt ? "Escala" : "Scale"}</th><th>${state.isPt ? "Composição deste valor" : "What's inside this number"}</th></tr></thead><tbody>`;
   rows.forEach((r) => {
     const d = state.annual.find((d) => d.label === r.season);
     if (!d) return;
@@ -183,7 +183,7 @@ export function renderVmocCost() {
     <td></td>
     <td>${state.isPt ? `Média de ${fmtMillions(vmocAvg)}/ano · todos os instrumentos combinados` : `Avg ${fmtMillions(vmocAvg)}/yr · all instruments combined`}</td>
   </tr>`;
-  html += "</tbody></table>";
+  html += "</tbody></table></div>";
   document.getElementById("vmocCostTable").innerHTML = html;
 }
 

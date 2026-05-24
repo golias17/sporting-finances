@@ -47,7 +47,7 @@
     <link href="assets/styles.css" rel="stylesheet" />
   </head>
   <body>
-    <div class="topbar">
+    <nav class="topbar">
       <div class="wrap">
         <span data-i18n="topbar-update"
           ><span class="dot"></span>Last update · 25/26 H1</span
@@ -79,7 +79,7 @@
           <span data-i18n="auto-txt-span-1">Dark Mode</span>
         </button>
       </div>
-    </div>
+    </nav>
     <header class="hero">
       <div class="wrap">
         <div class="lead">
@@ -120,6 +120,26 @@
       </div>
     </header>
     <div class="container">
+      <!-- GLOBAL FILTERS -->
+      <div class="global-filters" style="margin: 0 0 20px 0; display: flex; flex-wrap: wrap; align-items: center; gap: 20px; background: var(--surface); padding: 15px 20px; border-radius: 8px; border: 1px solid var(--rule);">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px;">
+          <span style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-dim);" data-i18n="filter-era">Explore Era:</span>
+          <select id="globalStartSeason" style="max-width: 100%; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--rule); background: var(--bg); color: var(--text); font-family: inherit; font-size: 0.9rem; cursor: pointer;">
+            <!-- Populated by JS -->
+          </select>
+          <span style="color: var(--text-dim); font-size: 0.9rem;">to</span>
+          <select id="globalEndSeason" style="max-width: 100%; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--rule); background: var(--bg); color: var(--text); font-family: inherit; font-size: 0.9rem; cursor: pointer;">
+            <!-- Populated by JS -->
+          </select>
+        </div>
+        <div class="gf-presets" id="eraPresets" style="display: flex; flex-wrap: wrap; gap: 8px; margin-left: auto;">
+          <button class="season-pill" data-start="0" data-end="latest" data-i18n="era-all">All Time</button>
+          <button class="season-pill" data-start="0" data-end="5" data-i18n="era-restruct">Restructuring</button>
+          <button class="season-pill" data-start="6" data-end="latest" data-i18n="era-varandas">Varandas Era</button>
+          <button class="season-pill" data-start="8" data-end="12" data-i18n="era-amorim">Amorim Era</button>
+        </div>
+      </div>
+
       <!-- HEADLINE KPIs -->
       <div class="kpi-strip">
         <div class="kpis" id="kpiRow"></div>

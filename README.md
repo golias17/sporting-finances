@@ -54,7 +54,16 @@ The project was recently modernized into a robust, decoupled ES Module architect
 │   ├── events.js               # Logic for filtering timeline Key Events
 │   └── news.js                 # RSS parser and renderer for the News Feed tab
 └── assets/
-    ├── styles.css              # Central styling sheet (dark/light tokens)
+    ├── styles/                 # Modular CSS architecture
+    │   ├── _variables.css      # Design tokens, colors, fonts
+    │   ├── _base.css           # Resets and global styles
+    │   ├── _components.css     # Buttons, cards, tooltips, tabs
+    │   ├── _layout.css         # Structural grids and containers
+    │   ├── _sections.css       # View-specific panel styling
+    │   ├── _animations.css     # Cinematic scroll keyframes
+    │   ├── _print.css          # Print-friendly queries
+    │   └── _mobile.css         # Bottom nav and mobile overrides
+    ├── styles.css              # Main entrypoint, @imports all modules
     └── LOGO.svg                # Sporting CP visual emblem
 ```
 

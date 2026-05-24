@@ -4,6 +4,10 @@
 // For entries with inner HTML (em, strong, etc.) use innerHTML: true
 
 export const TRANSLATIONS = {
+  "era-all": { en: "All Time", pt: "Sempre" },
+  "era-restruct": { en: "Restructuring", pt: "Reestruturação" },
+  "era-varandas": { en: "Varandas Era", pt: "Era Varandas" },
+  "era-amorim": { en: "Amorim Era", pt: "Era Amorim" },
   "auto-txt-button-5": { en: "← Prev", pt: "← Ant" },
   "auto-txt-button-6": { en: "Next →", pt: "Próx →" },
   "auto-txt-button-7": { en: "Exit", pt: "Sair" },
