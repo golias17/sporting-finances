@@ -123,11 +123,11 @@
       <!-- GLOBAL FILTERS -->
       <div class="global-filters" style="margin: 0 0 20px 0; display: flex; flex-wrap: wrap; align-items: center; gap: 20px; background: var(--surface); padding: 15px 20px; border-radius: 8px; border: 1px solid var(--rule);">
         <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px;">
-          <span style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-dim);" data-i18n="filter-era">Explore Era:</span>
+          <label for="globalStartSeason" style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-dim);" data-i18n="filter-era">Explore Era:</label>
           <select id="globalStartSeason" style="max-width: 100%; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--rule); background: var(--bg); color: var(--text); font-family: inherit; font-size: 0.9rem; cursor: pointer;">
             <!-- Populated by JS -->
           </select>
-          <span style="color: var(--text-dim); font-size: 0.9rem;">to</span>
+          <label for="globalEndSeason" style="color: var(--text-dim); font-size: 0.9rem;" data-i18n="filter-to">to</label>
           <select id="globalEndSeason" style="max-width: 100%; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--rule); background: var(--bg); color: var(--text); font-family: inherit; font-size: 0.9rem; cursor: pointer;">
             <!-- Populated by JS -->
           </select>
@@ -1219,12 +1219,12 @@
           </p>
           <div class="cmp-selectors">
             <div class="cmp-season-pick">
-              <label data-i18n="ch08-season-a">Season A</label>
+              <label for="compareSeasonA" data-i18n="ch08-season-a">Season A</label>
               <select id="compareSeasonA"></select>
             </div>
             <div class="cmp-vs" data-i18n="ch08-vs">vs</div>
             <div class="cmp-season-pick">
-              <label data-i18n="ch08-season-b">Season B</label>
+              <label for="compareSeasonB" data-i18n="ch08-season-b">Season B</label>
               <select id="compareSeasonB"></select>
             </div>
           </div>
@@ -1667,6 +1667,7 @@
               </select>
             </div>
             <div class="ledger-control-group ledger-control-group--grow">
+              <label for="tfSearchInput" class="sr-only" data-i18n="ch10-tf-search-label">Search transfers</label>
               <input
                 class="ledger-input"
                 id="tfSearchInput"

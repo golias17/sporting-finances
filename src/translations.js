@@ -1033,6 +1033,9 @@ export const TRANSLATIONS = {
     pt: "Voltar ao topo",
     isAria: true,
   },
+  "filter-era": { en: "Explore Era:", pt: "Explorar Era:" },
+  "filter-to": { en: "to", pt: "até" },
+  "ch10-tf-search-label": { en: "Search transfers", pt: "Pesquisar transferências" },
 };
 
 /**
