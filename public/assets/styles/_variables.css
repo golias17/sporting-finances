@@ -34,4 +34,7 @@ body.dark {
   --rule: rgba(255, 255, 255, 0.05);
   --rule-2: rgba(255, 255, 255, 0.08);
   --green-tint: #142e20;
+  --pos: #3de080;
+  --neg: #ff6b6b;
+  --warn: #ffb300;
 }

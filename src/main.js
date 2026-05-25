@@ -342,6 +342,22 @@ function updateChartTheme() {
   const isDark = document.body.classList.contains("dark");
   state.COLORS.ink = isDark ? "#eaeaea" : "#18221d";
   state.COLORS.muted = isDark ? "#8c938f" : "#5a6a62";
+  state.COLORS.chartBg = isDark ? "#121513" : "#ffffff";
+
+  // Dynamic brand and status colors for charts/sparklines in dark mode
+  state.COLORS.green = isDark ? "#2e9e6c" : "#0a5d3a";
+  state.COLORS.greenLight = isDark ? "#3de080" : "#2e9e6c";
+  state.COLORS.greenSoft = isDark ? "rgba(46, 158, 105, 0.2)" : "rgba(10,93,58,0.15)";
+  state.COLORS.gold = isDark ? "#ffd54f" : "#c8a951";
+  state.COLORS.goldSoft = isDark ? "rgba(255, 213, 79, 0.25)" : "rgba(200,169,81,0.4)";
+  state.COLORS.pos = isDark ? "#3de080" : "#2e8a55";
+  state.COLORS.posSoft = isDark ? "rgba(61, 224, 128, 0.35)" : "rgba(46, 138, 85, 0.7)";
+  state.COLORS.neg = isDark ? "#ff6b6b" : "#c6404f";
+  state.COLORS.negSoft = isDark ? "rgba(255, 107, 107, 0.35)" : "rgba(198, 64, 79, 0.7)";
+  state.COLORS.warn = isDark ? "#ffb300" : "#d99c2b";
+  state.COLORS.info = isDark ? "#52a3ff" : "#3a72b8";
+  state.COLORS.infoSoft = isDark ? "rgba(82, 163, 255, 0.35)" : "rgba(58,114,184,0.7)";
+
   state.baseOpts.scales.x.ticks.color = state.COLORS.muted;
   state.baseOpts.scales.y.ticks.color = state.COLORS.muted;
   if (state.baseOpts.scales.y.grid) {

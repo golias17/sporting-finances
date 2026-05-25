@@ -4,6 +4,32 @@ import annotationPlugin from "chartjs-plugin-annotation";
 
 Chart.register(annotationPlugin);
 
+// Premium line shadow glow plugin for dark mode
+const lineShadowPlugin = {
+  id: "lineShadow",
+  beforeDatasetDraw(chart, args) {
+    if (args.meta.type === "line") {
+      const ctx = chart.ctx;
+      ctx.save();
+      const isDark = document.body.classList.contains("dark");
+      if (isDark) {
+        const dataset = chart.data.datasets[args.index];
+        ctx.shadowColor = dataset.borderColor || "rgba(255, 255, 255, 0.5)";
+        ctx.shadowBlur = 8;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 3;
+      }
+    }
+  },
+  afterDatasetDraw(chart, args) {
+    if (args.meta.type === "line") {
+      chart.ctx.restore();
+    }
+  },
+};
+
+Chart.register(lineShadowPlugin);
+
 import {
   fmtMillions,
   fmtPct,
@@ -61,9 +87,13 @@ export function chartHero() {
           data: state.annual.map((d) => d.revenue_operating),
           borderColor: state.COLORS.green,
           backgroundColor: state.COLORS.greenSoft,
-          tension: 0.25,
-          borderWidth: 2.5,
-          pointRadius: 3,
+          tension: 0.35,
+          borderWidth: 3,
+          pointRadius: 4,
+          pointBackgroundColor: state.COLORS.chartBg,
+          pointBorderWidth: 2,
+          pointHoverRadius: 7,
+          pointHoverBorderWidth: 3,
           fill: false,
           yAxisID: "y",
         },
@@ -72,9 +102,13 @@ export function chartHero() {
           data: state.annual.map((d) => d.net_result),
           borderColor: state.COLORS.gold,
           backgroundColor: state.COLORS.goldSoft,
-          tension: 0.25,
-          borderWidth: 2.5,
-          pointRadius: 3,
+          tension: 0.35,
+          borderWidth: 3,
+          pointRadius: 4,
+          pointBackgroundColor: state.COLORS.chartBg,
+          pointBorderWidth: 2,
+          pointHoverRadius: 7,
+          pointHoverBorderWidth: 3,
           fill: false,
           yAxisID: "y",
         },
@@ -83,9 +117,13 @@ export function chartHero() {
           data: state.annual.map((d) => d.equity),
           borderColor: state.COLORS.info,
           backgroundColor: "rgba(58,114,184,0.1)",
-          tension: 0.25,
-          borderWidth: 2.5,
-          pointRadius: 3,
+          tension: 0.35,
+          borderWidth: 3,
+          pointRadius: 4,
+          pointBackgroundColor: state.COLORS.chartBg,
+          pointBorderWidth: 2,
+          pointHoverRadius: 7,
+          pointHoverBorderWidth: 3,
           fill: false,
           yAxisID: "y",
         },
@@ -206,9 +244,13 @@ export function chartRevenue() {
           data: state.annual.map((d) => Math.abs(d.personnel_costs)),
           borderColor: state.COLORS.neg,
           backgroundColor: "transparent",
-          borderWidth: 2.5,
-          tension: 0.2,
-          pointRadius: 3,
+          borderWidth: 3,
+          tension: 0.35,
+          pointRadius: 4,
+          pointBackgroundColor: state.COLORS.chartBg,
+          pointBorderWidth: 2,
+          pointHoverRadius: 7,
+          pointHoverBorderWidth: 3,
           order: 0,
         },
       ],
