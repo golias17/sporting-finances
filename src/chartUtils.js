@@ -172,16 +172,26 @@ export function generateAccessibleTable(canvasId, config) {
   }
 
   // Create table toggle button for sighted screen reader accessibility
+  // It is placed OUTSIDE the chart-box container (in the card) directly after it to prevent layout collisions.
   const btnId = canvasId + "-table-toggle";
   let toggleBtn = document.getElementById(btnId);
   if (!toggleBtn) {
     toggleBtn = document.createElement("button");
     toggleBtn.id = btnId;
     toggleBtn.className = "table-toggle-btn";
-    canvas.parentNode.insertBefore(toggleBtn, wrapper);
+    
+    const container = canvas.parentNode;
+    if (container && container.classList && container.classList.contains("chart-box")) {
+      container.parentNode.insertBefore(toggleBtn, container.nextSibling);
+    } else {
+      canvas.parentNode.insertBefore(toggleBtn, canvas.nextSibling);
+    }
   }
 
   const isHidden = wrapper.classList.contains("sr-only");
+  // Synchronize canvas visibility with table visibility (canvas is hidden if table is shown)
+  canvas.classList.toggle("hidden", !isHidden);
+
   toggleBtn.setAttribute("aria-controls", tableId + "-wrap");
   toggleBtn.setAttribute("aria-expanded", isHidden ? "false" : "true");
 
@@ -197,6 +207,7 @@ export function generateAccessibleTable(canvasId, config) {
 
   toggleBtn.onclick = () => {
     const hidden = wrapper.classList.toggle("sr-only");
+    canvas.classList.toggle("hidden", !hidden);
     toggleBtn.setAttribute("aria-expanded", hidden ? "false" : "true");
     toggleBtn.innerHTML = tableIcon + `<span>${getBtnText(hidden)}</span>`;
   };

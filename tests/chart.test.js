@@ -156,6 +156,9 @@ describe('Chart.js and Annotation Plugin integration', () => {
     expect(wrapper).toBeDefined();
     expect(wrapper.classList.contains('sr-only')).toBe(true);
     
+    const canvas = document.getElementById('chartHero');
+    expect(canvas.classList.contains('hidden')).toBe(false);
+    
     const btn = document.getElementById('chartHero-table-toggle');
     expect(btn).toBeDefined();
     expect(btn.textContent).toBe('View raw table data');
@@ -163,11 +166,13 @@ describe('Chart.js and Annotation Plugin integration', () => {
     
     btn.click();
     expect(wrapper.classList.contains('sr-only')).toBe(false);
+    expect(canvas.classList.contains('hidden')).toBe(true);
     expect(btn.textContent).toBe('Hide table data');
     expect(btn.getAttribute('aria-expanded')).toBe('true');
     
     btn.click();
     expect(wrapper.classList.contains('sr-only')).toBe(true);
+    expect(canvas.classList.contains('hidden')).toBe(false);
     expect(btn.textContent).toBe('View raw table data');
     expect(btn.getAttribute('aria-expanded')).toBe('false');
     

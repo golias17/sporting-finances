@@ -1001,3 +1001,16 @@ body.dark .glass-tooltip-footer {
   border-color: rgba(255, 255, 255, 0.08);
   color: #eaeaea;
 }
+
+/* Restrict raw table wrappers inside fixed-height chart boxes */
+.chart-box .table-wrap {
+  height: 100%;
+  overflow: auto;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+body.dark .chart-box .table-wrap {
+  background: var(--paper);
+}
