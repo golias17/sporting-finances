@@ -673,6 +673,10 @@ export function chartNetTrading() {
     },
     options: {
       ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        legend: { display: false },
+      },
       scales: {
         ...baseOpts.scales,
         y: { ...baseOpts.scales.y, beginAtZero: false },
