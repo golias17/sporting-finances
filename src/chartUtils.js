@@ -56,18 +56,8 @@ export function initChartDefaults() {
         labels: { boxWidth: 12, font: { size: 11.5 } },
       },
       tooltip: {
-        backgroundColor: "rgba(250, 248, 243, 0.95)",
-        titleColor: "#14181a",
-        bodyColor: "#2c3437",
-        borderColor: "#e6e1d4",
-        borderWidth: 1,
-        padding: 10,
-        cornerRadius: 6,
-        titleFont: { family: "Inter", size: 12, weight: "bold" },
-        bodyFont: { family: "Inter", size: 12 },
-        callbacks: {
-          label: (ctx) => `${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
-        },
+        enabled: false,
+        external: externalTooltipHandler,
       },
     },
     scales: {
@@ -170,6 +160,24 @@ export function generateAccessibleTable(canvasId, config) {
     canvas.parentNode.insertBefore(table, canvas.nextSibling);
   }
 
+  // Create table toggle button for sighted screen reader accessibility
+  const btnId = canvasId + "-table-toggle";
+  let toggleBtn = document.getElementById(btnId);
+  if (!toggleBtn) {
+    toggleBtn = document.createElement("button");
+    toggleBtn.id = btnId;
+    toggleBtn.className = "table-toggle-btn";
+    canvas.parentNode.insertBefore(toggleBtn, table);
+  }
+
+  toggleBtn.textContent = state.isPt ? "Ver dados em tabela" : "View raw table data";
+  toggleBtn.onclick = () => {
+    const isHidden = table.classList.toggle("sr-only");
+    toggleBtn.textContent = isHidden
+      ? (state.isPt ? "Ver dados em tabela" : "View raw table data")
+      : (state.isPt ? "Ocultar tabela" : "Hide table data");
+  };
+
   const { data } = config;
   if (!data || !data.labels || !data.datasets) return;
 
@@ -196,3 +204,82 @@ export function generateAccessibleTable(canvasId, config) {
 
   table.innerHTML = `<caption>Data table for chart ${canvasId}</caption>${thead}${tbody}`;
 }
+
+export function externalTooltipHandler(context) {
+  const { chart, tooltip } = context;
+  let tooltipEl = document.getElementById("chartjs-tooltip");
+
+  if (!tooltipEl) {
+    tooltipEl = document.createElement("div");
+    tooltipEl.id = "chartjs-tooltip";
+    tooltipEl.className = "glass-tooltip hidden";
+    document.body.appendChild(tooltipEl);
+  }
+
+  if (tooltip.opacity === 0) {
+    tooltipEl.classList.add("hidden");
+    return;
+  }
+
+  if (tooltip.body) {
+    const titleLines = tooltip.title || [];
+    const titleHtml = titleLines
+      .map((t) => `<div class="glass-tooltip-title">${t}</div>`)
+      .join("");
+
+    let bodyHtml = '<div class="glass-tooltip-body">';
+    tooltip.body.forEach((bodyItem, i) => {
+      const colors = tooltip.labelColors[i] || {};
+      const color = colors.backgroundColor || colors.borderColor || "#ccc";
+      
+      bodyItem.lines.forEach((line) => {
+        let label = line;
+        let value = "";
+        const colonIdx = line.indexOf(":");
+        if (colonIdx !== -1) {
+          label = line.slice(0, colonIdx).trim();
+          value = line.slice(colonIdx + 1).trim();
+        }
+
+        if (value) {
+          bodyHtml += `
+            <div class="glass-tooltip-row">
+              <span class="glass-tooltip-color" style="background-color: ${color}"></span>
+              <span class="glass-tooltip-text">${label}: <strong>${value}</strong></span>
+            </div>
+          `;
+        } else {
+          bodyHtml += `
+            <div class="glass-tooltip-row">
+              <span class="glass-tooltip-color" style="background-color: ${color}"></span>
+              <span class="glass-tooltip-text"><strong>${label}</strong></span>
+            </div>
+          `;
+        }
+      });
+    });
+    bodyHtml += "</div>";
+
+    if (tooltip.footer && tooltip.footer.length > 0) {
+      let footerHtml = '<div class="glass-tooltip-footer">';
+      tooltip.footer.forEach((ft) => {
+        footerHtml += `<div class="glass-tooltip-footer-line">${ft}</div>`;
+      });
+      footerHtml += '</div>';
+      bodyHtml += footerHtml;
+    }
+
+    tooltipEl.innerHTML = titleHtml + bodyHtml;
+  }
+
+  const canvasRect = chart.canvas.getBoundingClientRect();
+  tooltipEl.classList.remove("hidden");
+  
+  // Position tooltip relative to page scroll and viewport coordinates of the canvas
+  const tooltipX = canvasRect.left + window.pageXOffset + tooltip.caretX;
+  const tooltipY = canvasRect.top + window.pageYOffset + tooltip.caretY;
+  
+  tooltipEl.style.left = tooltipX + "px";
+  tooltipEl.style.top = (tooltipY - 12) + "px";
+}
+

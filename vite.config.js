@@ -4,7 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig({
   plugins: [
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       // includeAssets is not needed — globPatterns below already captures all
       // svg, png, and json files from the dist output, including icons and LOGO.
       manifest: {

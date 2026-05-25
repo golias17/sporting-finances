@@ -827,3 +827,177 @@ body.dark .scroll-to-top {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* 7. Skeleton Placeholders */
+.skeleton-card {
+  position: relative;
+  overflow: hidden;
+  height: 104px; /* Matches default KPI card height */
+}
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--rule) 25%,
+    var(--rule-2) 50%,
+    var(--rule) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-pulse 1.6s infinite linear;
+  border-radius: 4px;
+}
+.skeleton-label {
+  width: 50%;
+  height: 10px;
+  margin-bottom: 12px;
+}
+.skeleton-value {
+  width: 75%;
+  height: 28px;
+  margin-bottom: 10px;
+}
+.skeleton-change {
+  width: 40%;
+  height: 14px;
+  border-radius: 12px;
+}
+@keyframes skeleton-pulse {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Page boot global loading overlay blocker on body */
+body.app-loading .chart-box {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+}
+body.app-loading .chart-box::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(
+    90deg,
+    var(--surface) 25%,
+    var(--rule) 50%,
+    var(--surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-pulse 1.6s infinite linear;
+}
+body.app-loading .chart-box * {
+  visibility: hidden;
+}
+
+/* 8. PWA Update Prompt Toast */
+.pwa-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  background: var(--surface);
+  border: 1px solid var(--rule-2);
+  border-radius: 10px;
+  padding: 14px 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+  transform: translateY(100px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  max-width: 320px;
+}
+body.dark .pwa-toast {
+  background: rgba(24, 34, 29, 0.85);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+.pwa-toast.visible {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+.toast-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--ink);
+  font-weight: 500;
+}
+.toast-btn {
+  align-self: flex-start;
+  background: var(--green);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.toast-btn:hover {
+  background: var(--green-light);
+  transform: translateY(-1px);
+}
+
+/* 9. Accessible Table Toggle Button */
+.table-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 12px 0 0;
+  transition: all 0.2s ease;
+}
+.table-toggle-btn:hover {
+  background: var(--green-tint);
+  border-color: var(--green);
+  color: var(--green);
+}
+body.dark .table-toggle-btn:hover {
+  background: rgba(46, 204, 113, 0.08);
+  border-color: var(--green-light);
+  color: var(--green-light);
+}
+
+/* 10. Custom HTML Tooltip Dark Mode supports */
+body.dark .glass-tooltip {
+  background: rgba(24, 34, 29, 0.95);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+body.dark .glass-tooltip-title {
+  color: #eaeaea;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+body.dark .glass-tooltip-body {
+  color: #cccccc;
+}
+.glass-tooltip-footer {
+  margin-top: 6px;
+  border-top: 1px solid var(--rule);
+  padding-top: 6px;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink);
+}
+body.dark .glass-tooltip-footer {
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #eaeaea;
+}

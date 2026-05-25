@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { state } from '../src/state.js';
-import { initChartDefaults } from '../src/chartUtils.js';
+import { initChartDefaults, generateAccessibleTable, externalTooltipHandler } from '../src/chartUtils.js';
 import { chartHero, chartNetResult, chartEquity, chartRevenue } from '../src/charts.js';
 import { chartRegistry } from '../src/chartUtils.js';
 
@@ -133,5 +133,120 @@ describe('Chart.js and Annotation Plugin integration', () => {
     } finally {
       console.error = origError;
     }
+  });
+
+  it('generateAccessibleTable creates a table and a toggle button that toggles accessibility classes', () => {
+    const config = {
+      data: {
+        labels: ['2012/13', '2013/14'],
+        datasets: [
+          { label: 'Revenue', data: [100, 120] }
+        ]
+      }
+    };
+    
+    generateAccessibleTable('chartHero', config);
+    
+    const table = document.querySelector('table');
+    expect(table).toBeDefined();
+    expect(table.caption.textContent).toBe('Data table for chart chartHero');
+    
+    const btn = document.getElementById('chartHero-table-toggle');
+    expect(btn).toBeDefined();
+    expect(btn.textContent).toBe('View raw table data');
+    
+    expect(table.classList.contains('sr-only')).toBe(true);
+    
+    btn.click();
+    expect(table.classList.contains('sr-only')).toBe(false);
+    expect(btn.textContent).toBe('Hide table data');
+    
+    btn.click();
+    expect(table.classList.contains('sr-only')).toBe(true);
+    expect(btn.textContent).toBe('View raw table data');
+    
+    state.isPt = true;
+    generateAccessibleTable('chartHero', config);
+    expect(btn.textContent).toBe('Ver dados em tabela');
+    
+    btn.click();
+    expect(btn.textContent).toBe('Ocultar tabela');
+    
+    state.isPt = false;
+  });
+
+  it('externalTooltipHandler creates, positions and formats the custom HTML tooltip', () => {
+    const canvas = document.getElementById('chartHero');
+    canvas.getBoundingClientRect = () => ({
+      left: 100,
+      top: 200,
+      width: 400,
+      height: 300,
+      right: 500,
+      bottom: 500,
+    });
+    
+    const mockChart = {
+      canvas: canvas,
+    };
+    
+    const mockTooltip = {
+      opacity: 1,
+      title: ['Year 2023/24'],
+      body: [
+        { lines: ['Receitas: 125.0M€'] },
+        { lines: ['Custos: 98.0M€'] },
+      ],
+      labelColors: [
+        { backgroundColor: 'green', borderColor: 'darkgreen' },
+        { backgroundColor: 'red', borderColor: 'darkred' },
+      ],
+      footer: ['Total Profit: 27.0M€'],
+      caretX: 50,
+      caretY: 80,
+    };
+    
+    const context = {
+      chart: mockChart,
+      tooltip: mockTooltip,
+    };
+    
+    externalTooltipHandler(context);
+    
+    const tooltipEl = document.getElementById('chartjs-tooltip');
+    expect(tooltipEl).toBeDefined();
+    expect(tooltipEl.classList.contains('hidden')).toBe(false);
+    
+    const titleEl = tooltipEl.querySelector('.glass-tooltip-title');
+    expect(titleEl.textContent).toBe('Year 2023/24');
+    
+    const rows = tooltipEl.querySelectorAll('.glass-tooltip-row');
+    expect(rows.length).toBe(2);
+    
+    const colorSpan1 = rows[0].querySelector('.glass-tooltip-color');
+    expect(colorSpan1.style.backgroundColor).toBe('green');
+    const textSpan1 = rows[0].querySelector('.glass-tooltip-text');
+    expect(textSpan1.innerHTML).toContain('Receitas: <strong>125.0M€</strong>');
+    
+    const colorSpan2 = rows[1].querySelector('.glass-tooltip-color');
+    expect(colorSpan2.style.backgroundColor).toBe('red');
+    const textSpan2 = rows[1].querySelector('.glass-tooltip-text');
+    expect(textSpan2.innerHTML).toContain('Custos: <strong>98.0M€</strong>');
+    
+    const footerEl = tooltipEl.querySelector('.glass-tooltip-footer');
+    expect(footerEl).toBeDefined();
+    expect(footerEl.querySelector('.glass-tooltip-footer-line').textContent).toBe('Total Profit: 27.0M€');
+    
+    const expectedX = 100 + window.pageXOffset + 50;
+    const expectedY = 200 + window.pageYOffset + 80;
+    
+    expect(tooltipEl.style.left).toBe(expectedX + 'px');
+    expect(tooltipEl.style.top).toBe((expectedY - 12) + 'px');
+    
+    externalTooltipHandler({
+      chart: mockChart,
+      tooltip: { opacity: 0 }
+    });
+    expect(tooltipEl.classList.contains('hidden')).toBe(true);
   });
 });
