@@ -27,9 +27,21 @@ export {
 // chartUtils.js, called once during app boot. Do not assign them here.
 
 export function mkChart(id, config) {
-  if (chartRegistry.has(id)) chartRegistry.get(id).destroy();
-  const chart = new Chart(document.getElementById(id), config);
-  chartRegistry.set(id, chart);
+  config.plugins = config.plugins || [];
+  if (!config.plugins.includes(annotationPlugin)) {
+    config.plugins.push(annotationPlugin);
+  }
+
+  let chart = chartRegistry.get(id);
+  if (chart) {
+    chart.config.data = config.data;
+    chart.config.options = config.options;
+    chart.update();
+  } else {
+    chart = new Chart(document.getElementById(id), config);
+    chartRegistry.set(id, chart);
+  }
+
   generateAccessibleTable(id, config);
   return chart;
 }
