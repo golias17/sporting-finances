@@ -396,19 +396,21 @@ nav.tabs button.active .tab-num {
 
 section.tab-panel {
   display: none;
-  animation: fadeIn 0.14s ease-out;
+  animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 section.tab-panel.active {
   display: block;
 }
 @keyframes fadeIn {
-  from {
+  0% {
     opacity: 0;
-    transform: translateY(3px);
+    filter: blur(8px);
+    transform: scale(0.985) translateY(12px);
   }
-  to {
+  100% {
     opacity: 1;
-    transform: translateY(0);
+    filter: blur(0);
+    transform: scale(1) translateY(0);
   }
 }
 

@@ -1827,9 +1827,10 @@ table.ledger .badge.winter {
   display: flex;
   align-items: center;
   justify-content: center;
+  perspective: 1500px; /* Enable cinematic 3D perspective depth */
   opacity: 1;
   visibility: visible;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
 .modal-overlay.hidden {
@@ -1838,7 +1839,7 @@ table.ledger .badge.winter {
   pointer-events: none;
 }
 
-/* Modal Container */
+/* 3D Newspaper Hinge Transition */
 .modal-container {
   position: relative;
   width: 90vw;
@@ -1846,16 +1847,20 @@ table.ledger .badge.winter {
   height: 90vh;
   background: #008057; /* Jornal typically uses Sporting green background */
   border-radius: 12px;
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transform: scale(1);
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+  transform-origin: left center; /* Hinge open from the left edge like a book */
+  transform: rotateY(0deg) scale(1) translateZ(0);
+  opacity: 1;
+  transition: transform 0.65s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
 }
 
 .modal-overlay.hidden .modal-container {
-  transform: scale(0.95);
+  transform: rotateY(-90deg) scale(0.85) translateZ(-150px);
+  opacity: 0;
 }
 
 /* Close Button */

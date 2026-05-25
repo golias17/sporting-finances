@@ -210,20 +210,25 @@ function setupApp() {
     });
   }
 
-  // Restore saved language preference
-  const savedLang = localStorage.getItem("lang");
-  if (savedLang && savedLang !== document.documentElement.lang) {
-    state.isPt = savedLang === "pt";
-    document.documentElement.lang = savedLang;
-    document
-      .querySelectorAll(".lang-link")
-      .forEach((l) =>
-        l.classList.toggle("active", l.dataset.lang === savedLang),
-      );
+  // Restore saved language preference or auto-detect browser language
+  let activeLang = localStorage.getItem("lang");
+  if (!activeLang && typeof navigator !== "undefined") {
+    const browserLang = navigator.language || navigator.userLanguage || "en";
+    activeLang = browserLang.startsWith("pt") ? "pt" : "en";
+  } else if (!activeLang) {
+    activeLang = "en";
   }
 
-  // Apply translations for saved/initial language
-  applyTranslations(state.isPt ? "pt" : "en");
+  state.isPt = activeLang === "pt";
+  document.documentElement.lang = activeLang;
+  document
+    .querySelectorAll(".lang-link")
+    .forEach((l) =>
+      l.classList.toggle("active", l.dataset.lang === activeLang),
+    );
+
+  // Apply translations for active language
+  applyTranslations(activeLang);
 
   // Initial tab activation
   const initialTab = location.hash.replace("#", "") || "overview";
