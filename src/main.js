@@ -36,7 +36,7 @@ import {
   chartRegistry,
   fmtMillions,
 } from "./charts.js";
-import { initChartDefaults } from "./chartUtils.js";
+import { initChartDefaults, ZONE_COLORS } from "./chartUtils.js";
 import { renderKpis } from "./kpi.js";
 
 async function initApp() {
@@ -358,11 +358,19 @@ function updateChartTheme() {
   state.COLORS.info = isDark ? "#52a3ff" : "#3a72b8";
   state.COLORS.infoSoft = isDark ? "rgba(82, 163, 255, 0.35)" : "rgba(58,114,184,0.7)";
 
+  // Dynamic connection line color for health ratios
+  state.COLORS.lineBorder = isDark ? "rgba(255, 255, 255, 0.3)" : "rgba(0, 0, 0, 0.12)";
+
+  // Dynamic zone backgrounds for health ratios
+  ZONE_COLORS.red = isDark ? "rgba(255, 107, 107, 0.15)" : "rgba(198,64,79,0.07)";
+  ZONE_COLORS.amber = isDark ? "rgba(255, 179, 0, 0.15)" : "rgba(217,156,43,0.08)";
+  ZONE_COLORS.green = isDark ? "rgba(61, 224, 128, 0.08)" : "rgba(46,138,85,0.06)";
+
   state.baseOpts.scales.x.ticks.color = state.COLORS.muted;
   state.baseOpts.scales.y.ticks.color = state.COLORS.muted;
   if (state.baseOpts.scales.y.grid) {
     state.baseOpts.scales.y.grid.color = isDark
-      ? "rgba(255,255,255,0.08)"
+      ? "rgba(255,255,255,0.12)"
       : "rgba(0,0,0,0.05)";
   }
   if (state.baseOpts.plugins && state.baseOpts.plugins.tooltip) {

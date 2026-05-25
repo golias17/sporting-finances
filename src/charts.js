@@ -791,7 +791,7 @@ export function chartPayrollBurden() {
           label: state.isPt
             ? "Custos com pessoal em % da receita"
             : "Wage bill as % of revenue",
-          data: ratios, borderColor: "rgba(0,0,0,0.12)",
+          data: ratios, borderColor: state.COLORS.lineBorder,
           backgroundColor: "transparent",
           borderWidth: 2.5,
           tension: 0.25,
@@ -901,7 +901,7 @@ export function chartTransferReliance() {
           label: state.isPt
             ? "Receitas de passes em % das receitas totais"
             : "Transfer income as % of total revenue",
-          data: reliance, borderColor: "rgba(0,0,0,0.12)",
+          data: reliance, borderColor: state.COLORS.lineBorder,
           backgroundColor: "transparent",
           borderWidth: 2.5,
           tension: 0.25,
@@ -1011,7 +1011,7 @@ export function chartDebtLoad() {
           label: state.isPt
             ? "Dívida líquida / receita anual"
             : "Net debt / annual revenue",
-          data: netDebtRatio, borderColor: "rgba(0,0,0,0.12)",
+          data: netDebtRatio, borderColor: state.COLORS.lineBorder,
           backgroundColor: "transparent",
           borderWidth: 2.5,
           tension: 0.25,
@@ -1129,7 +1129,7 @@ export function chartCurrentRatio() {
           label: state.isPt
             ? "Ativo de curto prazo / Passivo de curto prazo"
             : "Short-term assets / short-term liabilities",
-          data: ratios, borderColor: "rgba(0,0,0,0.12)",
+          data: ratios, borderColor: state.COLORS.lineBorder,
           backgroundColor: "transparent",
           borderWidth: 2.5,
           tension: 0.25,
