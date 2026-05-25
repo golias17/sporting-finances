@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { calculateKpis, calculateHealthSignals, ordinal } from '../src/metrics.js';
-import { fmtMillions } from '../src/chartUtils.js';
+import { fmtMillions, fmtPct, getEventAnnotations, eventBoxes } from '../src/chartUtils.js';
+import { state } from '../src/state.js';
 
 // ---------------------------------------------------------------------------
 // Minimal mock state factory
@@ -69,6 +70,73 @@ describe('fmtMillions()', () => {
   });
   it('returns em-dash for undefined', () => {
     expect(fmtMillions(undefined)).toBe('—');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// fmtPct()
+// ---------------------------------------------------------------------------
+
+describe('fmtPct()', () => {
+  it('formats decimals to percentages', () => {
+    expect(fmtPct(0.72)).toBe('72%');
+    expect(fmtPct(1.2)).toBe('120%');
+    expect(fmtPct(0)).toBe('0%');
+  });
+  it('returns em-dash for null', () => {
+    expect(fmtPct(null)).toBe('—');
+  });
+  it('returns em-dash for undefined', () => {
+    expect(fmtPct(undefined)).toBe('—');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// getEventAnnotations() & eventBoxes()
+// ---------------------------------------------------------------------------
+
+describe('Event Annotations Utilities', () => {
+  it('getEventAnnotations returns correct translations based on state.isPt', () => {
+    state.COLORS.info = '#3a72b8';
+    state.COLORS.neg = '#c6404f';
+    state.COLORS.warn = '#d99c2b';
+    state.COLORS.green = '#0a5d3a';
+
+    // Test English
+    state.isPt = false;
+    let annos = getEventAnnotations();
+    expect(annos.restructure14.label).toBe('2014 Capital Restructuring');
+    expect(annos.alcochete.label).toBe('2018 Alcochete');
+    
+    // Test Portuguese
+    state.isPt = true;
+    annos = getEventAnnotations();
+    expect(annos.restructure14.label).toBe('Reestruturação 2014');
+    expect(annos.alcochete.label).toBe('Alcochete 2018');
+
+    // Restore state
+    state.isPt = false;
+  });
+
+  it('eventBoxes builds correct annotation object structure', () => {
+    state.COLORS.info = '#3a72b8';
+    state.COLORS.neg = '#c6404f';
+    state.COLORS.warn = '#d99c2b';
+    state.COLORS.green = '#0a5d3a';
+    state.isPt = false;
+
+    const annos = eventBoxes(['restructure14', 'covid']);
+    expect(annos.e_restructure14).toBeDefined();
+    expect(annos.e_restructure14.type).toBe('line');
+    expect(annos.e_restructure14.xMin).toBe('2014/15');
+    expect(annos.e_restructure14.borderColor).toBe('#3a72b8');
+    expect(annos.e_restructure14.label.content).toBe('2014 Capital Restructuring');
+    expect(annos.e_restructure14.label.display).toBe(true);
+
+    expect(annos.e_covid).toBeDefined();
+    expect(annos.e_covid.xMin).toBe('2020/21');
+    expect(annos.e_covid.borderColor).toBe('#d99c2b');
+    expect(annos.e_covid.label.content).toBe('COVID');
   });
 });
 

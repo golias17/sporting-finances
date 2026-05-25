@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { state } from '../src/state.js';
 import { initChartDefaults } from '../src/chartUtils.js';
-import { chartHero } from '../src/charts.js';
+import { chartHero, chartNetResult, chartEquity, chartRevenue } from '../src/charts.js';
 import { chartRegistry } from '../src/chartUtils.js';
 
 describe('Chart.js and Annotation Plugin integration', () => {
@@ -27,6 +27,7 @@ describe('Chart.js and Annotation Plugin integration', () => {
       strokeText: () => {},
       measureText: () => ({ width: 0, height: 0 }),
       setTransform: () => {},
+      resetTransform: () => {},
       drawImage: () => {},
       save: () => {},
       restore: () => {},
@@ -45,8 +46,13 @@ describe('Chart.js and Annotation Plugin integration', () => {
       return mockContext;
     };
 
-    // Create a mock canvas element on the DOM
-    document.body.innerHTML = '<canvas id="chartHero"></canvas>';
+    // Create mock canvas elements on the DOM
+    document.body.innerHTML = `
+      <canvas id="chartHero"></canvas>
+      <canvas id="chartNetResult"></canvas>
+      <canvas id="chartEquity"></canvas>
+      <canvas id="chartRevenue"></canvas>
+    `;
     
     // Mock the annual data dataset
     state.DATASET = {
@@ -102,6 +108,29 @@ describe('Chart.js and Annotation Plugin integration', () => {
       expect(restructuringAnno.xMax).toBe('2014/15');
     } finally {
       console.warn = origWarn;
+      console.error = origError;
+    }
+  });
+
+  it('builds chartNetResult, chartEquity, and chartRevenue without crashing', () => {
+    const errors = [];
+    const origError = console.error;
+    console.error = (...args) => errors.push(args.join(' '));
+
+    try {
+      chartNetResult();
+      chartEquity();
+      chartRevenue();
+
+      const netChart = chartRegistry.get("chartNetResult");
+      const eqChart = chartRegistry.get("chartEquity");
+      const revChart = chartRegistry.get("chartRevenue");
+
+      expect(netChart).toBeDefined();
+      expect(eqChart).toBeDefined();
+      expect(revChart).toBeDefined();
+      expect(errors.length).toBe(0);
+    } finally {
       console.error = origError;
     }
   });
