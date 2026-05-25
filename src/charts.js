@@ -1,4 +1,9 @@
 import { state } from "./state.js";
+import Chart from "chart.js/auto";
+import annotationPlugin from "chartjs-plugin-annotation";
+
+Chart.register(annotationPlugin);
+
 import {
   fmtMillions,
   fmtPct,

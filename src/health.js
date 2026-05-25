@@ -1,6 +1,7 @@
 import { state } from "./state.js";
 import { renderKpis } from "./kpi.js";
 import { fmtMillions } from "./chartUtils.js";
+import Chart from "chart.js/auto";
 
 import { calculateHealthSignals } from "./metrics.js";
 

@@ -54,9 +54,13 @@ async function initApp() {
     initJornalModal();
   } catch (e) {
     console.error("Failed to load application data", e);
-    document.body.innerHTML = `<div style="padding: 2rem; color: #ff4444; font-family: sans-serif; text-align: center;">
+    document.body.innerHTML = `<div style="padding: 2rem; color: #ff4444; font-family: sans-serif; text-align: center; max-width: 800px; margin: 0 auto;">
       <h2>Failed to load application data.</h2>
       <p>Please ensure you are running the application through a local web server, not opening the HTML file directly.</p>
+      <div style="margin-top: 2rem; padding: 1rem; background: rgba(255,0,0,0.05); border: 1px dashed #ff4444; border-radius: 4px; text-align: left; font-family: monospace; overflow-x: auto; white-space: pre-wrap;">
+Error Details:
+${e.stack || e.message || e}
+      </div>
     </div>`;
   }
 }
