@@ -141,6 +141,10 @@ export function chartNetResult() {
     },
     options: {
       ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        legend: { display: false },
+      },
       scales: {
         ...baseOpts.scales,
         y: { ...baseOpts.scales.y, beginAtZero: false },
@@ -170,6 +174,10 @@ export function chartEquity() {
     },
     options: {
       ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        legend: { display: false },
+      },
       scales: {
         ...baseOpts.scales,
         y: { ...baseOpts.scales.y, beginAtZero: false },
