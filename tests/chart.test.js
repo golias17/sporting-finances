@@ -140,7 +140,7 @@ describe('Chart.js and Annotation Plugin integration', () => {
       data: {
         labels: ['2012/13', '2013/14'],
         datasets: [
-          { label: 'Revenue', data: [100, 120] }
+          { label: 'Revenue', data: [100000, 120000] }
         ]
       }
     };
@@ -149,21 +149,27 @@ describe('Chart.js and Annotation Plugin integration', () => {
     
     const table = document.querySelector('table');
     expect(table).toBeDefined();
+    expect(table.className).toBe('data');
     expect(table.caption.textContent).toBe('Data table for chart chartHero');
+    
+    const wrapper = document.getElementById('chartHero-a11y-table-wrap');
+    expect(wrapper).toBeDefined();
+    expect(wrapper.classList.contains('sr-only')).toBe(true);
     
     const btn = document.getElementById('chartHero-table-toggle');
     expect(btn).toBeDefined();
     expect(btn.textContent).toBe('View raw table data');
-    
-    expect(table.classList.contains('sr-only')).toBe(true);
+    expect(btn.getAttribute('aria-expanded')).toBe('false');
     
     btn.click();
-    expect(table.classList.contains('sr-only')).toBe(false);
+    expect(wrapper.classList.contains('sr-only')).toBe(false);
     expect(btn.textContent).toBe('Hide table data');
+    expect(btn.getAttribute('aria-expanded')).toBe('true');
     
     btn.click();
-    expect(table.classList.contains('sr-only')).toBe(true);
+    expect(wrapper.classList.contains('sr-only')).toBe(true);
     expect(btn.textContent).toBe('View raw table data');
+    expect(btn.getAttribute('aria-expanded')).toBe('false');
     
     state.isPt = true;
     generateAccessibleTable('chartHero', config);
