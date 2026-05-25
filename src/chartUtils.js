@@ -136,7 +136,7 @@ export function eventBoxes(eventKeys) {
       z: -1,
       borderDash: [4, 4],
       label: {
-        display: false,
+        display: true,
         content: e.label,
         position: "start",
         backgroundColor: e.color,
