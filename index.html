@@ -26,8 +26,10 @@
       name="twitter:description"
       content="From −€119M to +€41M. Thirteen fiscal years of Sporting SAD finances, told through interactive charts and data."
     />
-    <meta property="og:image" content="home_screenshot.png" />
-    <meta name="twitter:image" content="home_screenshot.png" />
+    <meta property="og:image" content="https://golias17.github.io/sporting-finances/home_screenshot.png" />
+    <meta name="twitter:image" content="https://golias17.github.io/sporting-finances/home_screenshot.png" />
+    <link rel="canonical" href="https://golias17.github.io/sporting-finances/" />
+    <meta property="og:url" content="https://golias17.github.io/sporting-finances/" />
     <link href="assets/LOGO.svg" rel="icon" type="image/svg+xml" />
     <title data-i18n="auto-txt-title-0">
       Sporting CP — Financial Evolution Dashboard (2012/13 → 2025/26)
@@ -54,6 +56,7 @@
         </div>
         <button
           aria-pressed="false"
+          aria-label="Toggle dark mode"
           class="theme-toggle-btn"
           id="themeToggleBtn"
         >
@@ -67,6 +70,7 @@
             stroke-width="2"
             viewBox="0 0 24 24"
             width="12"
+            aria-hidden="true"
           >
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
           </svg>
@@ -366,9 +370,9 @@
             </div>
             <div class="story-footer">
               <div class="story-controls">
-                <button class="story-btn" id="btnPrevStory">← Prev</button>
+                <button class="story-btn" id="btnPrevStory" data-i18n="story-prev">← Prev</button>
                 <span class="story-counter" id="storyCounter"></span>
-                <button class="story-btn primary" id="btnNextStory">
+                <button class="story-btn primary" id="btnNextStory" data-i18n="story-next">
                   Next →
                 </button>
                 <button
@@ -1667,12 +1671,13 @@
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 class="icon-small"
+                aria-hidden="true"
               >
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                 <polyline points="7 10 12 15 17 10"></polyline>
                 <line x1="12" y1="15" x2="12" y2="3"></line>
               </svg>
-              Download CSV
+              <span data-i18n="ch10-download-csv">Download CSV</span>
             </button>
           </div>
           <p class="desc" data-i18n="ch10-annual-desc">
@@ -1756,6 +1761,7 @@
                 id="tfSearchInput"
                 placeholder="Search player, club, or notes..."
                 type="text"
+                data-i18n="ch10-tf-search-placeholder"
               />
             </div>
           </div>
@@ -1799,18 +1805,18 @@
         role="tabpanel"
       >
         <div class="chapter">
-          <div class="num">Ch. 11 — News & Social</div>
+          <div class="num" data-i18n="ch11-num">Ch. 11 — News & Social</div>
           <div>
-            <h2>Live <em>Updates</em>.</h2>
-            <p class="lede">
+            <h2 data-i18n="ch11-h2">Live <em>Updates</em>.</h2>
+            <p class="lede" data-i18n="ch11-lede">
               The latest financial and corporate news regarding Sporting CP,
               aggregated live from Portuguese media.
             </p>
           </div>
         </div>
 
-        <div class="social-hub anim-up">
-          <h3>Official Channels & Media</h3>
+        <div class="social-hub reveal">
+          <h3 data-i18n="ch11-social-h3">Official Channels & Media</h3>
           <div class="social-grid">
             <button id="btnJornalModal" class="social-btn jornal">
               <svg
@@ -1820,17 +1826,19 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
+                aria-hidden="true"
               >
                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                 <path
                   d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
                 ></path>
               </svg>
-              <span>Jornal Sporting</span>
+              <span data-i18n="ch11-jornal-btn">Jornal Sporting</span>
             </button>
             <a
               href="https://www.linkedin.com/company/sporting-clube-de-portugal/"
               target="_blank"
+              rel="noopener noreferrer"
               class="social-btn linkedin"
             >
               <svg
@@ -1840,6 +1848,7 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
+                aria-hidden="true"
               >
                 <path
                   d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
@@ -1847,11 +1856,12 @@
                 <rect x="2" y="9" width="4" height="12"></rect>
                 <circle cx="4" cy="4" r="2"></circle>
               </svg>
-              <span>LinkedIn</span>
+              <span data-i18n="ch11-linkedin-btn">LinkedIn</span>
             </a>
             <a
               href="https://twitter.com/SportingCP"
               target="_blank"
+              rel="noopener noreferrer"
               class="social-btn twitter"
             >
               <svg
@@ -1861,16 +1871,18 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
+                aria-hidden="true"
               >
                 <path
                   d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"
                 ></path>
               </svg>
-              <span>Twitter / X</span>
+              <span data-i18n="ch11-twitter-btn">Twitter / X</span>
             </a>
             <a
               href="https://www.instagram.com/sportingcp/"
               target="_blank"
+              rel="noopener noreferrer"
               class="social-btn instagram"
             >
               <svg
@@ -1880,6 +1892,7 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
+                aria-hidden="true"
               >
                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                 <path
@@ -1887,11 +1900,12 @@
                 ></path>
                 <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
               </svg>
-              <span>Instagram</span>
+              <span data-i18n="ch11-instagram-btn">Instagram</span>
             </a>
             <a
               href="https://www.youtube.com/user/SportingCP"
               target="_blank"
+              rel="noopener noreferrer"
               class="social-btn youtube"
             >
               <svg
@@ -1901,6 +1915,7 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
+                aria-hidden="true"
               >
                 <path
                   d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"
@@ -1909,12 +1924,12 @@
                   points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"
                 ></polygon>
               </svg>
-              <span>YouTube</span>
+              <span data-i18n="ch11-youtube-btn">YouTube</span>
             </a>
           </div>
         </div>
 
-        <div class="disclaimer-banner anim-up">
+        <div class="disclaimer-banner reveal">
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -1923,6 +1938,7 @@
             stroke-linecap="round"
             stroke-linejoin="round"
             class="disclaimer-icon"
+            aria-hidden="true"
           >
             <path
               d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
@@ -1930,13 +1946,13 @@
             <line x1="12" y1="9" x2="12" y2="13"></line>
             <line x1="12" y1="17" x2="12.01" y2="17"></line>
           </svg>
-          <div>
-            <strong>Market Speculation Disclaimer</strong>
-            <p>
-              The news feed below is aggregated automatically from external
-              sources (Google News / Portuguese Media). Financial rumors,
-              transfer speculation, and media reports do not represent the
-              official financial standing of Sporting Clube de Portugal SAD
+          <div class="disclaimer-text">
+            <p data-i18n="ch11-disclaimer-p">
+              <strong>Important Notice:</strong> None of the external news feed
+              items, media articles, or social channel updates linked here are
+              official, audited, or legally binding. They do not constitute
+              financial advice or verified SAD communications. Official SAD and
+              financial disclosures must be treated as the sole source of truth
               until formally filed with the CMVM.
             </p>
           </div>
@@ -1981,6 +1997,7 @@
         stroke="currentColor"
         stroke-linecap="round"
         stroke-linejoin="round"
+        aria-hidden="true"
       >
         <line x1="12" y1="19" x2="12" y2="5"></line>
         <polyline points="5 12 12 5 19 12"></polyline>

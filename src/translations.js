@@ -1039,6 +1039,68 @@ export const TRANSLATIONS = {
     en: "Search transfers",
     pt: "Pesquisar transferências",
   },
+  "story-prev": {
+    en: "← Prev",
+    pt: "← Ant",
+  },
+  "story-next": {
+    en: "Next →",
+    pt: "Próx →",
+  },
+  "ch10-download-csv": {
+    en: "Download CSV",
+    pt: "Descarregar CSV",
+  },
+  "ch10-tf-search-placeholder": {
+    en: "Search player, club, or notes...",
+    pt: "Pesquisar jogador, clube ou notas...",
+  },
+  "ch11-num": {
+    en: "Ch. 11 — News & Social",
+    pt: "Cap. 11 — Notícias e Redes Sociais",
+  },
+  "ch11-h2": {
+    en: "Live <em>Updates</em>.",
+    pt: "<em>Atualizações</em> em direto.",
+    innerHTML: true,
+  },
+  "ch11-lede": {
+    en: "The latest financial and corporate news regarding Sporting CP, aggregated live from Portuguese media.",
+    pt: "As últimas notícias financeiras e corporativas do Sporting CP, agregadas em direto dos meios de comunicação portugueses.",
+  },
+  "ch11-social-h3": {
+    en: "Official Channels & Media",
+    pt: "Canais Oficiais e Imprensa",
+  },
+  "ch11-jornal-btn": {
+    en: "Jornal Sporting",
+    pt: "Jornal Sporting",
+  },
+  "ch11-linkedin-btn": {
+    en: "LinkedIn",
+    pt: "LinkedIn",
+  },
+  "ch11-twitter-btn": {
+    en: "Twitter / X",
+    pt: "Twitter / X",
+  },
+  "ch11-instagram-btn": {
+    en: "Instagram",
+    pt: "Instagram",
+  },
+  "ch11-youtube-btn": {
+    en: "YouTube",
+    pt: "YouTube",
+  },
+  "ch11-disclaimer-p": {
+    en: "<strong>Important Notice:</strong> None of the external news feed items, media articles, or social channel updates linked here are official, audited, or legally binding. They do not constitute financial advice or verified SAD communications. Official SAD and financial disclosures must be treated as the sole source of truth until formally filed with the CMVM.",
+    pt: "<strong>Aviso Importante:</strong> Nenhuma das notícias externas, artigos de imprensa ou atualizações de redes sociais aqui associados são oficiais, auditados ou legalmente vinculativos. Não constituem aconselhamento financeiro ou comunicações oficiais da SAD. As divulgações oficiais e financeiras da SAD devem ser consideradas a única fonte de verdade até serem formalmente comunicadas à CMVM.",
+    innerHTML: true,
+  },
+  "ch11-loading": {
+    en: "Loading live updates...",
+    pt: "A carregar atualizações...",
+  },
 };
 
 /**

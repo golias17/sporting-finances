@@ -92,8 +92,8 @@ body {
 }
 .kpi {
   padding: 20px 22px;
-  background: var(--surface) !important;
-  border: 1px solid var(--rule) !important;
+  background: var(--surface);
+  border: 1px solid var(--rule);
   border-radius: 12px;
   position: relative;
   backdrop-filter: blur(12px);
@@ -102,20 +102,20 @@ body {
     transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
     box-shadow 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
     border-color 0.3s ease,
-    background-color 0.3s ease !important;
+    background-color 0.3s ease;
 }
 .kpi:hover {
-  transform: translateY(-4px) !important;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05) !important;
-  border-color: var(--green) !important;
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+  border-color: var(--green);
 }
 body.dark .kpi {
-  background: rgba(24, 34, 29, 0.5) !important;
-  border-color: rgba(255, 255, 255, 0.06) !important;
+  background: rgba(24, 34, 29, 0.5);
+  border-color: rgba(255, 255, 255, 0.06);
 }
 body.dark .kpi:hover {
-  border-color: rgba(0, 230, 118, 0.18) !important;
-  box-shadow: 0 10px 26px rgba(0, 230, 118, 0.04) !important;
+  border-color: rgba(0, 230, 118, 0.18);
+  box-shadow: 0 10px 26px rgba(0, 230, 118, 0.04);
 }
 .kpi .label {
   font-family: var(--mono);
@@ -188,20 +188,29 @@ body.dark .kpi .change.neutral {
 /* ── Cards / chart panels ── */
 .card {
   background: var(--surface);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--rule);
   border-radius: 8px;
   padding: 22px 24px 20px;
   margin-bottom: 16px;
   position: relative;
+  transition:
+    transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+    border-color 0.3s ease;
 }
 .card:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+}
+body.dark .card {
+  background: rgba(24, 34, 29, 0.6);
+  border-color: rgba(255, 255, 255, 0.07);
 }
 body.dark .card:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  border-color: rgba(0, 230, 118, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 230, 118, 0.04);
 }
 .card-head {
   display: flex;
@@ -715,28 +724,7 @@ nav.tabs button {
 }
 /* Legacy active background removed for unified pill indicator */
 
-/* 3. Glassmorphic Card Enhancements & Hover Effects */
-.card {
-  background: var(--surface);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  transition:
-    transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
-    box-shadow 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
-    border-color 0.3s ease;
-}
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
-}
-body.dark .card {
-  background: rgba(24, 34, 29, 0.6);
-  border-color: rgba(255, 255, 255, 0.07);
-}
-body.dark .card:hover {
-  border-color: rgba(0, 230, 118, 0.15);
-  box-shadow: 0 10px 30px rgba(0, 230, 118, 0.04);
-}
+/* 3. Glassmorphic Card Enhancements & Hover Effects (Consolidated to main card rules above) */
 
 /* 4. Theme Button Switch Rotation & Scale */
 #themeToggleBtn svg {
