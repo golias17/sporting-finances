@@ -616,7 +616,9 @@ function showUpdateToast(onConfirm) {
   });
 }
 
-// Register service worker if supported and not in test mode
+// Register service worker if supported and not in test mode.
+// Note: "virtual:pwa-register" is a virtual module injected dynamically at build-time
+// by vite-plugin-pwa. We bypass it in tests (Vitest) to avoid resolution errors.
 if (
   typeof window !== "undefined" &&
   "serviceWorker" in navigator &&
