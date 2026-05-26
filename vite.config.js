@@ -63,7 +63,10 @@ export default defineConfig({
     viteCompression({ algorithm: "gzip", ext: ".gz" }),
   ],
   build: {
-    target: "es2020",
+    // es2022 matches the ecmaVersion in eslint.config.mjs and removes the need
+    // for the browserslist field in package.json (which was targeting a much
+    // wider audience and could conflict with this setting).
+    target: "es2022",
   },
   test: {
     environment: "jsdom",

@@ -41,6 +41,14 @@ describe("transfers.js", () => {
     state.tlActiveSeason = "2025/26";
     state.tlActiveWindow = "All";
 
+    // Reset transfer detail table filter state
+    state.tfActiveSeason = "2025/26";
+    state.tfActiveType = "all";
+    state.tfActiveWindow = "all";
+    state.tfQuery = "";
+    state.tfSortCol = null;
+    state.tfSortDir = "asc";
+
     state.TRANSFER_LEDGER = [
       {
         season: "2025/26",

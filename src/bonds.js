@@ -99,10 +99,13 @@ export function renderVmocCost() {
   ];
 
   const vmocRows = rows.filter((r) => r.period === "vmoc");
+  // Use fullAnnual so VMOC era totals are always computed across all seasons
+  // regardless of any active date-range filter.
   const vmocTotal = vmocRows.reduce(
     (s, r) =>
       s +
-      (state.annual.find((d) => d.label === r.season)?.financial_result ?? 0),
+      (state.fullAnnual.find((d) => d.label === r.season)?.financial_result ??
+        0),
     0,
   );
   const vmocAvg = vmocTotal / vmocRows.length;
@@ -124,7 +127,7 @@ export function renderVmocCost() {
 
   // KPI strip
   const postConvResult =
-    state.annual.find((d) => d.label === "2023/24")?.financial_result ?? 0;
+    state.fullAnnual.find((d) => d.label === "2023/24")?.financial_result ?? 0;
   document.getElementById("vmocCostKpis").innerHTML = `
     <div class="vmoc-kpi-strip">
       <div class="vmoc-kpi-item">
@@ -152,6 +155,18 @@ export function renderVmocCost() {
       <span><span class="vtl-bar vtl-bar--green"></span> ${state.isPt ? "Era USPP" : "USPP era"}</span>
     </div>`;
 
+  // Compute the peak absolute financing cost dynamically so the bar scale stays
+  // correct even if data changes in the future.
+  const peakFinancingCost = Math.max(
+    1,
+    ...rows.map((r) => {
+      const d = state.fullAnnual.find((fd) => fd.label === r.season);
+      return d ? Math.abs(d.financial_result) : 0;
+    }),
+  );
+  // Format as a positive cost figure (e.g. "€25.2M") for the tooltip label.
+  const peakFmtLabel = fmtMillions(peakFinancingCost);
+
   let html =
     legend +
     `<div class="scroll-x"><table class="vmoc-cost"><thead><tr><th>${state.isPt ? "Época" : "Season"}</th><th>${state.isPt ? "Período" : "Period"}</th><th>${state.isPt ? "Custo de finan. líquido" : "Net financing cost"}</th><th>${state.isPt ? "Escala" : "Scale"}</th><th>${state.isPt ? "Composição deste valor" : "What's inside this number"}</th></tr></thead><tbody>`;
@@ -160,7 +175,10 @@ export function renderVmocCost() {
     if (!d) return;
     const val = d.financial_result;
     const cls = periodClass[r.period];
-    const pct = Math.min(100, Math.max(0, (Math.abs(val) / 25246) * 100));
+    const pct = Math.min(
+      100,
+      Math.max(0, (Math.abs(val) / peakFinancingCost) * 100),
+    );
     html += `<tr class="${cls}">
       <td>${r.season}</td>
       <td>${periodLabel[r.period]}</td>
@@ -170,7 +188,7 @@ export function renderVmocCost() {
         </div>
       </td>
       <td>
-        <div class="cost-bar-container" title="${state.isPt ? "Proporcional ao custo máximo de 25,2M€" : "Proportional to peak cost of €25.2M"}">
+        <div class="cost-bar-container" title="${state.isPt ? `Proporcional ao custo máximo de ${peakFmtLabel}` : `Proportional to peak cost of ${peakFmtLabel}`}">
           <div class="cost-bar ${r.period === "pre" ? "pre" : "period-" + r.period}" style="width: ${pct.toFixed(1)}%"></div>
         </div>
       </td>
@@ -388,7 +406,7 @@ export function renderLionFinance() {
       ${row(state.isPt ? "Origem do reembolso" : "Source of repayment", state.isPt ? "Fundos obtidos com o USPP" : "USPP proceeds", state.isPt ? "Obrigações USPP emitidas a 22 Out 2025 — LF Nº 2 reembolsada no dia seguinte" : "USPP bond closed Oct 22, 2025 — repaid LF No. 2 the following day", "accent")}
     </div>`;
 
-  const activeTab = state.activeLionTab || "both";
+  const activeTab = state.activeLionTab;
   const switcher = `
     <div class="lf-switcher">
       <button class="lf-switch-btn${activeTab === "both" ? " active" : ""}" data-view="both">
@@ -411,11 +429,22 @@ export function renderLionFinance() {
   if (container) {
     container.innerHTML = `${switcher}<div class="${gridClass}">${no1}${no2}</div>`;
 
+    // Toggle CSS classes without rebuilding the whole DOM on every click.
     container.querySelectorAll(".lf-switch-btn").forEach((btn) => {
       btn.addEventListener("click", (e) => {
         const view = e.currentTarget.getAttribute("data-view");
-        state.activeLionTab = view;
-        renderLionFinance();
+        state.setActiveLionTab(view);
+        // Update active button
+        container.querySelectorAll(".lf-switch-btn").forEach((b) =>
+          b.classList.toggle("active", b.getAttribute("data-view") === view),
+        );
+        // Update grid visibility class
+        const grid = container.querySelector(".lf-grid");
+        if (grid) {
+          grid.className = "lf-grid";
+          if (view === "no1") grid.classList.add("show-no1");
+          if (view === "no2") grid.classList.add("show-no2");
+        }
       });
     });
   }

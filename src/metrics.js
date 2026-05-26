@@ -4,7 +4,7 @@ export function ordinal(n) {
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
 
-function getLatestH1Data(dataset) {
+export function getLatestH1Data(dataset) {
   if (!dataset) return null;
   const h1Key = Object.keys(dataset).find((k) => k.startsWith("h1_"));
   return h1Key ? dataset[h1Key] : null;
@@ -14,6 +14,7 @@ export function calculateKpis(state, idx, fmtMillions) {
   const isLatest = idx === state.annual.length - 1;
   const curr = state.annual[idx];
   const first = state.annual[0];
+  // slice(2) converts "2012/13" → "12/13" for compact axis labels
   const firstShort = first.label.slice(2);
 
   // Revenue growth vs ~5 years prior
@@ -189,15 +190,23 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
   const histStartIdx = Math.max(0, idx - 4);
   const histData = state.annual.slice(histStartIdx, idx + 1);
 
-  const payrollRatio = Math.abs(d.personnel_costs) / d.revenue_operating;
+  const payrollRatio =
+    d.revenue_operating !== 0
+      ? Math.abs(d.personnel_costs) / d.revenue_operating
+      : null;
   const netDebt = d.borrowings_nc + d.borrowings_c - d.cash;
-  const netDebtRatio = netDebt / d.revenue_operating;
+  const netDebtRatio =
+    d.revenue_operating !== 0 ? netDebt / d.revenue_operating : null;
   const transferReliance =
-    d.player_transfer_income / (d.revenue_operating + d.player_transfer_income);
+    d.revenue_operating + d.player_transfer_income !== 0
+      ? d.player_transfer_income /
+        (d.revenue_operating + d.player_transfer_income)
+      : null;
   const revenueGrowth5y = prev5
     ? (d.revenue_operating - prev5.revenue_operating) / prev5.revenue_operating
     : null;
-  const currentRatio = d.current_assets / d.current_liabilities;
+  const currentRatio =
+    d.current_liabilities !== 0 ? d.current_assets / d.current_liabilities : null;
   const recurringOpProfit = d.operating_result_excl_players;
 
   const payrollNotes = {
@@ -270,19 +279,33 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
       icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`,
       label: state.isPt ? "Custos com pessoal" : "Wage bill",
       value:
-        (payrollRatio * 100).toFixed(0) +
-        "% " +
-        (state.isPt ? "da receita" : "of revenue"),
+        payrollRatio !== null
+          ? (payrollRatio * 100).toFixed(0) +
+            "% " +
+            (state.isPt ? "da receita" : "of revenue")
+          : "—",
       status:
-        payrollRatio < 0.6 ? "green" : payrollRatio < 0.7 ? "amber" : "red",
+        payrollRatio === null
+          ? "amber"
+          : payrollRatio < 0.6
+            ? "green"
+            : payrollRatio < 0.7
+              ? "amber"
+              : "red",
       note:
-        payrollRatio < 0.6
-          ? payrollNotes.low
-          : payrollRatio < 0.7
-            ? payrollNotes.mid
-            : payrollNotes.high,
-      history: histData.map(
-        (y) => Math.abs(y.personnel_costs) / y.revenue_operating,
+        payrollRatio === null
+          ? state.isPt
+            ? "Sem receita registada"
+            : "No revenue recorded"
+          : payrollRatio < 0.6
+            ? payrollNotes.low
+            : payrollRatio < 0.7
+              ? payrollNotes.mid
+              : payrollNotes.high,
+      history: histData.map((y) =>
+        y.revenue_operating !== 0
+          ? Math.abs(y.personnel_costs) / y.revenue_operating
+          : null,
       ),
     },
     {
@@ -290,27 +313,41 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
       icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>`,
       label: state.isPt ? "Dívida líquida / receita" : "Net debt vs revenue",
       value:
-        netDebtRatio.toFixed(1) + "× " + (state.isPt ? "receita" : "revenue"),
-      status: netDebtRatio < 1 ? "green" : netDebtRatio < 2 ? "amber" : "red",
+        netDebtRatio !== null
+          ? netDebtRatio.toFixed(1) + "× " + (state.isPt ? "receita" : "revenue")
+          : "—",
+      status:
+        netDebtRatio === null
+          ? "amber"
+          : netDebtRatio < 1
+            ? "green"
+            : netDebtRatio < 2
+              ? "amber"
+              : "red",
       note:
-        netDebtRatio < 1
+        netDebtRatio === null
           ? state.isPt
-            ? "Controlável"
-            : "Manageable"
-          : netDebtRatio < 2
+            ? "Sem receita registada"
+            : "No revenue recorded"
+          : netDebtRatio < 1
             ? state.isPt
-              ? "Elevada — atenção"
-              : "Elevated — watch it"
-            : netDebtRatio < 4
+              ? "Controlável"
+              : "Manageable"
+            : netDebtRatio < 2
               ? state.isPt
-                ? "Endividamento pesado"
-                : "Heavy debt load"
-              : state.isPt
-                ? "Muito elevada — crise"
-                : "Very high — crisis territory",
-      history: histData.map(
-        (y) =>
-          (y.borrowings_nc + y.borrowings_c - y.cash) / y.revenue_operating,
+                ? "Elevada — atenção"
+                : "Elevated — watch it"
+              : netDebtRatio < 4
+                ? state.isPt
+                  ? "Endividamento pesado"
+                  : "Heavy debt load"
+                : state.isPt
+                  ? "Muito elevada — crise"
+                  : "Very high — crisis territory",
+      history: histData.map((y) =>
+        y.revenue_operating !== 0
+          ? (y.borrowings_nc + y.borrowings_c - y.cash) / y.revenue_operating
+          : null,
       ),
     },
     {
@@ -318,31 +355,40 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
       icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>`,
       label: state.isPt ? "Dependência de passes" : "Transfer reliance",
       value:
-        (transferReliance * 100).toFixed(0) +
-        "% " +
-        (state.isPt ? "do rendimento total" : "of total income"),
+        transferReliance !== null
+          ? (transferReliance * 100).toFixed(0) +
+            "% " +
+            (state.isPt ? "do rendimento total" : "of total income")
+          : "—",
       status:
-        transferReliance < 0.35
-          ? "green"
-          : transferReliance < 0.5
-            ? "amber"
-            : "red",
+        transferReliance === null
+          ? "amber"
+          : transferReliance < 0.35
+            ? "green"
+            : transferReliance < 0.5
+              ? "amber"
+              : "red",
       note:
-        transferReliance < 0.35
+        transferReliance === null
           ? state.isPt
-            ? "Rendimentos diversificados"
-            : "Diversified income"
-          : transferReliance < 0.5
+            ? "Sem receita registada"
+            : "No revenue recorded"
+          : transferReliance < 0.35
             ? state.isPt
-              ? "Dependente de venda de jogadores"
-              : "Reliant on player sales"
-            : state.isPt
-              ? "Altamente dependente de transferências"
-              : "Very dependent on transfers",
-      history: histData.map(
-        (y) =>
-          y.player_transfer_income /
-          (y.revenue_operating + y.player_transfer_income),
+              ? "Rendimentos diversificados"
+              : "Diversified income"
+            : transferReliance < 0.5
+              ? state.isPt
+                ? "Dependente de venda de jogadores"
+                : "Reliant on player sales"
+              : state.isPt
+                ? "Altamente dependente de transferências"
+                : "Very dependent on transfers",
+      history: histData.map((y) =>
+        y.revenue_operating + y.player_transfer_income !== 0
+          ? y.player_transfer_income /
+            (y.revenue_operating + y.player_transfer_income)
+          : null,
       ),
     },
     {
@@ -403,22 +449,36 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
       id: "sigCurrentRatio",
       icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`,
       label: state.isPt ? "Rácio de Solvência" : "Current Ratio",
-      value: currentRatio.toFixed(2) + "×",
+      value: currentRatio !== null ? currentRatio.toFixed(2) + "×" : "—",
       status:
-        currentRatio >= 1.0 ? "green" : currentRatio >= 0.5 ? "amber" : "red",
+        currentRatio === null
+          ? "amber"
+          : currentRatio >= 1.0
+            ? "green"
+            : currentRatio >= 0.5
+              ? "amber"
+              : "red",
       note:
-        currentRatio >= 1.0
+        currentRatio === null
           ? state.isPt
-            ? "Cobre passivos correntes"
-            : "Covers short-term liabilities"
-          : currentRatio >= 0.5
+            ? "Sem passivo corrente registado"
+            : "No current liabilities recorded"
+          : currentRatio >= 1.0
             ? state.isPt
-              ? "Atenção à liquidez"
-              : "Watch short-term liquidity"
-            : state.isPt
-              ? "Risco de liquidez alto"
-              : "High short-term liquidity risk",
-      history: histData.map((y) => y.current_assets / y.current_liabilities),
+              ? "Cobre passivos correntes"
+              : "Covers short-term liabilities"
+            : currentRatio >= 0.5
+              ? state.isPt
+                ? "Atenção à liquidez"
+                : "Watch short-term liquidity"
+              : state.isPt
+                ? "Risco de liquidez alto"
+                : "High short-term liquidity risk",
+      history: histData.map((y) =>
+        y.current_liabilities !== 0
+          ? y.current_assets / y.current_liabilities
+          : null,
+      ),
     },
   ];
 }

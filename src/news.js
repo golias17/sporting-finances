@@ -102,11 +102,14 @@ export async function initNewsFeed() {
     renderNewsItems(container, dataItems);
   } catch (error) {
     console.error("Failed to load news feed:", error);
-    container.innerHTML = `
-      <div class="news-loading" style="color: var(--neg);">
-        Error: ${error.message}
-      </div>
-    `;
+    // Use textContent (not innerHTML) so a malformed error.message string cannot
+    // inject markup into the DOM.
+    const errDiv = document.createElement("div");
+    errDiv.className = "news-loading";
+    errDiv.style.color = "var(--neg)";
+    errDiv.textContent = `Error: ${error.message}`;
+    container.innerHTML = "";
+    container.appendChild(errDiv);
   }
 }
 
@@ -146,14 +149,17 @@ function renderNewsItems(container, dataItems) {
   // Process all items to extract sourceName cleanly
   const processedItems = filteredItems.map((item) => {
     let sourceName = item.category === "OFFICIAL" ? "Sporting CP" : "Notícias";
-    if (item.title && item.title.includes(" - ")) {
-      const parts = item.title.split(" - ");
+    // Derive title locally — never mutate the original API item object before
+    // spreading it, as that would corrupt the cached copy in sessionStorage.
+    let title = item.title ?? "";
+    if (title.includes(" - ")) {
+      const parts = title.split(" - ");
       sourceName = parts.pop();
-      item.title = parts.join(" - ");
+      title = parts.join(" - ");
     } else if (item.author) {
       sourceName = item.author;
     }
-    return { ...item, sourceName };
+    return { ...item, title, sourceName };
   });
 
   // Cluster news from the same topic
@@ -268,7 +274,7 @@ function renderNewsItems(container, dataItems) {
       pill.className = "source-pill";
       pill.href = sourceItem.link;
       pill.target = "_blank";
-      // Removed noopener noreferrer to allow Google News redirects
+      pill.rel = "noopener noreferrer";
       pill.textContent = sourceItem.sourceName;
       sourcesContainer.appendChild(pill);
     });

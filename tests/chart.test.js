@@ -421,8 +421,8 @@ describe("Chart.js and Annotation Plugin integration", () => {
       footerEl.querySelector(".glass-tooltip-footer-line").textContent,
     ).toBe("Total Profit: 27.0M€");
 
-    const expectedX = 100 + window.pageXOffset + 50;
-    const expectedY = 200 + window.pageYOffset + 80;
+    const expectedX = 100 + window.scrollX + 50;
+    const expectedY = 200 + window.scrollY + 80;
 
     expect(tooltipEl.style.left).toBe(expectedX + "px");
     expect(tooltipEl.style.top).toBe(expectedY - 12 + "px");

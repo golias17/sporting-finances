@@ -145,7 +145,7 @@ export function exitStory() {
   }
 }
 
-export function storyKeyHandler(e) {
+function storyKeyHandler(e) {
   if (e.key === "ArrowRight") {
     e.preventDefault();
     nextStory();

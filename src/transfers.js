@@ -213,12 +213,10 @@ export function renderTlBody(container) {
 
 // TRANSFERS DETAIL TABLE (Raw Data Tab)
 // =============================================================
-let tfActiveSeason = "2025/26";
-let tfActiveType = "all";
-let tfActiveWindow = "all";
-let tfQuery = "";
-let tfSortCol = null;
-let tfSortDir = "asc";
+
+// AbortController lets us safely re-initialise the detail table (e.g. on
+// language toggle) without accumulating duplicate event listeners.
+let detailTableAbortController = null;
 
 export function initTransfersDetailTable() {
   const seasonSelect = document.getElementById("tfSeasonSelect");
@@ -227,43 +225,58 @@ export function initTransfersDetailTable() {
   const searchInput = document.getElementById("tfSearchInput");
   if (!seasonSelect) return;
 
-  if (seasonSelect.dataset.tfInitialized) {
-    renderTransfersDetailTable();
-    return;
-  }
-  seasonSelect.dataset.tfInitialized = "true";
+  // Abort previous listeners before wiring new ones
+  if (detailTableAbortController) detailTableAbortController.abort();
+  detailTableAbortController = new AbortController();
+  const { signal } = detailTableAbortController;
 
   // Populate season dropdown
-  const allSeasonsOption = `<option value="all" data-i18n="ch10-tf-season-all"${tfActiveSeason === "all" ? " selected" : ""}>${state.isPt ? "Todas as Épocas" : "All Seasons"}</option>`;
+  const allSeasonsOption = `<option value="all" data-i18n="ch10-tf-season-all"${state.tfActiveSeason === "all" ? " selected" : ""}>${state.isPt ? "Todas as Épocas" : "All Seasons"}</option>`;
   seasonSelect.innerHTML =
     allSeasonsOption +
     state.TRANSFER_LEDGER.map(
       (s) =>
-        `<option value="${s.season}"${s.season === tfActiveSeason ? " selected" : ""}>${s.season}</option>`,
+        `<option value="${s.season}"${s.season === state.tfActiveSeason ? " selected" : ""}>${s.season}</option>`,
     ).join("");
 
   // Add listeners
-  seasonSelect.addEventListener("change", (e) => {
-    tfActiveSeason = e.target.value;
-    renderTransfersDetailTable();
-  });
+  seasonSelect.addEventListener(
+    "change",
+    (e) => {
+      state.setTfActiveSeason(e.target.value);
+      renderTransfersDetailTable();
+    },
+    { signal },
+  );
 
   if (windowSelect) {
-    windowSelect.addEventListener("change", (e) => {
-      tfActiveWindow = e.target.value;
-      renderTransfersDetailTable();
-    });
+    windowSelect.addEventListener(
+      "change",
+      (e) => {
+        state.setTfActiveWindow(e.target.value);
+        renderTransfersDetailTable();
+      },
+      { signal },
+    );
   }
 
-  typeSelect.addEventListener("change", (e) => {
-    tfActiveType = e.target.value;
-    renderTransfersDetailTable();
-  });
+  typeSelect.addEventListener(
+    "change",
+    (e) => {
+      state.setTfActiveType(e.target.value);
+      renderTransfersDetailTable();
+    },
+    { signal },
+  );
 
-  searchInput.addEventListener("input", (e) => {
-    tfQuery = e.target.value.toLowerCase();
-    renderTransfersDetailTable();
-  });
+  searchInput.addEventListener(
+    "input",
+    (e) => {
+      state.setTfQuery(e.target.value.toLowerCase());
+      renderTransfersDetailTable();
+    },
+    { signal },
+  );
 
   // Attach sorting click listeners to table headers
   const headers = document.querySelectorAll("#transfersDetailTable th");
@@ -282,20 +295,22 @@ export function initTransfersDetailTable() {
 
   headers.forEach((th, index) => {
     th.classList.add("sortable-header");
-    th.addEventListener("click", () => {
-      const key = sortKeys[index];
-      if (tfSortCol === key) {
-        tfSortDir = tfSortDir === "asc" ? "desc" : "asc";
-      } else {
-        tfSortCol = key;
-        if (["fee", "bonus", "commission"].includes(key)) {
-          tfSortDir = "desc";
+    th.addEventListener(
+      "click",
+      () => {
+        const key = sortKeys[index];
+        if (state.tfSortCol === key) {
+          state.setTfSortDir(state.tfSortDir === "asc" ? "desc" : "asc");
         } else {
-          tfSortDir = "asc";
+          state.setTfSortCol(key);
+          state.setTfSortDir(
+            ["fee", "bonus", "commission"].includes(key) ? "desc" : "asc",
+          );
         }
-      }
-      renderTransfersDetailTable();
-    });
+        renderTransfersDetailTable();
+      },
+      { signal },
+    );
   });
 
   renderTransfersDetailTable();
@@ -308,11 +323,11 @@ export function renderTransfersDetailTable() {
   // Update transfersTableSeasonTag text content
   const tag = document.getElementById("transfersTableSeasonTag");
   if (tag) {
-    if (tfActiveSeason === "all") {
+    if (state.tfActiveSeason === "all") {
       tag.textContent = state.isPt ? "Todas as Épocas" : "All Seasons";
       tag.setAttribute("data-i18n", "ch10-tf-season-all");
     } else {
-      tag.textContent = tfActiveSeason;
+      tag.textContent = state.tfActiveSeason;
       tag.removeAttribute("data-i18n");
     }
   }
@@ -320,9 +335,9 @@ export function renderTransfersDetailTable() {
   // Build rows from purchases and sales
   let rows = [];
 
-  if (tfActiveSeason === "all") {
+  if (state.tfActiveSeason === "all") {
     state.TRANSFER_LEDGER.forEach((seasonObj) => {
-      if (tfActiveType === "all" || tfActiveType === "in") {
+      if (state.tfActiveType === "all" || state.tfActiveType === "in") {
         seasonObj.purchases.forEach((p) => {
           rows.push({
             ...p,
@@ -333,7 +348,7 @@ export function renderTransfersDetailTable() {
           });
         });
       }
-      if (tfActiveType === "all" || tfActiveType === "out") {
+      if (state.tfActiveType === "all" || state.tfActiveType === "out") {
         seasonObj.sales.forEach((s) => {
           rows.push({
             ...s,
@@ -346,12 +361,14 @@ export function renderTransfersDetailTable() {
       }
     });
   } else {
-    const s = state.TRANSFER_LEDGER.find((x) => x.season === tfActiveSeason);
+    const s = state.TRANSFER_LEDGER.find(
+      (x) => x.season === state.tfActiveSeason,
+    );
     if (!s) {
       container.innerHTML = `<tr><td colspan="10" class="ledger-empty-cell">${state.isPt ? "Época não encontrada" : "Season not found"}</td></tr>`;
       return;
     }
-    if (tfActiveType === "all" || tfActiveType === "in") {
+    if (state.tfActiveType === "all" || state.tfActiveType === "in") {
       s.purchases.forEach((p) => {
         rows.push({
           ...p,
@@ -362,7 +379,7 @@ export function renderTransfersDetailTable() {
         });
       });
     }
-    if (tfActiveType === "all" || tfActiveType === "out") {
+    if (state.tfActiveType === "all" || state.tfActiveType === "out") {
       s.sales.forEach((p) => {
         rows.push({
           ...p,
@@ -376,36 +393,36 @@ export function renderTransfersDetailTable() {
   }
 
   // Filter based on window
-  if (tfActiveWindow !== "all") {
-    rows = rows.filter((r) => r.window === tfActiveWindow);
+  if (state.tfActiveWindow !== "all") {
+    rows = rows.filter((r) => r.window === state.tfActiveWindow);
   }
 
   // Filter based on search query
-  if (tfQuery) {
+  if (state.tfQuery) {
     rows = rows.filter(
       (r) =>
-        r.player.toLowerCase().includes(tfQuery) ||
-        (r.club && r.club.toLowerCase().includes(tfQuery)) ||
-        (r.note && r.note.toLowerCase().includes(tfQuery)),
+        r.player.toLowerCase().includes(state.tfQuery) ||
+        (r.club && r.club.toLowerCase().includes(state.tfQuery)) ||
+        (r.note && r.note.toLowerCase().includes(state.tfQuery)),
     );
   }
 
   // Sort rows if tfSortCol is set
-  if (tfSortCol) {
+  if (state.tfSortCol) {
     rows.sort((a, b) => {
-      let valA = a[tfSortCol];
-      let valB = b[tfSortCol];
+      let valA = a[state.tfSortCol];
+      let valB = b[state.tfSortCol];
 
       if (valA === undefined || valA === null) valA = "";
       if (valB === undefined || valB === null) valB = "";
 
-      if (["fee", "bonus", "commission"].includes(tfSortCol)) {
+      if (["fee", "bonus", "commission"].includes(state.tfSortCol)) {
         const numA = typeof valA === "number" ? valA : 0;
         const numB = typeof valB === "number" ? valB : 0;
-        return tfSortDir === "asc" ? numA - numB : numB - numA;
+        return state.tfSortDir === "asc" ? numA - numB : numB - numA;
       }
 
-      if (tfSortCol === "rights") {
+      if (state.tfSortCol === "rights") {
         const parseRights = (r) => {
           if (!r) return 100;
           const match = r.match(/(\d+(?:\.\d+)?)/);
@@ -413,13 +430,13 @@ export function renderTransfersDetailTable() {
         };
         const numA = parseRights(valA);
         const numB = parseRights(valB);
-        return tfSortDir === "asc" ? numA - numB : numB - numA;
+        return state.tfSortDir === "asc" ? numA - numB : numB - numA;
       }
 
       const strA = String(valA).toLowerCase();
       const strB = String(valB).toLowerCase();
-      if (strA < strB) return tfSortDir === "asc" ? -1 : 1;
-      if (strA > strB) return tfSortDir === "asc" ? 1 : -1;
+      if (strA < strB) return state.tfSortDir === "asc" ? -1 : 1;
+      if (strA > strB) return state.tfSortDir === "asc" ? 1 : -1;
       return 0;
     });
   }
@@ -445,10 +462,10 @@ export function renderTransfersDetailTable() {
     if (existingIndicator) {
       existingIndicator.remove();
     }
-    if (tfSortCol === key) {
+    if (state.tfSortCol === key) {
       const indicator = document.createElement("span");
       indicator.className = "sort-indicator";
-      indicator.innerHTML = tfSortDir === "asc" ? " ▲" : " ▼";
+      indicator.innerHTML = state.tfSortDir === "asc" ? " ▲" : " ▼";
       th.appendChild(indicator);
       th.classList.add("sorted");
     } else {

@@ -23,9 +23,58 @@ describe("health.js", () => {
 
     state.DATASET = {
       annual_data: [
-        { label: "2010/11", financial_result: 10, total_revenue: 100, revenue_operating: 100, current_assets: 50, current_liabilities: 20, equity: 10, personnel_costs: 50, net_debt: 20 },
-        { label: "2011/12", financial_result: -10, total_revenue: 90, revenue_operating: 90, current_assets: 40, current_liabilities: 60, equity: -10, personnel_costs: 60, net_debt: 50 },
-        { label: "2012/13", financial_result: 20, total_revenue: 120, revenue_operating: 120, current_assets: 80, current_liabilities: 40, equity: 50, personnel_costs: 70, net_debt: 30 }
+        {
+          label: "2010/11",
+          financial_result: 10,
+          total_revenue: 100,
+          revenue_operating: 100,
+          current_assets: 50,
+          current_liabilities: 20,
+          equity: 10,
+          personnel_costs: -50,
+          net_result: 8,
+          // Fields required by calculateHealthSignals / calculateKpis:
+          borrowings_nc: 15,
+          borrowings_c: 5,
+          cash: 10,
+          player_transfer_income: 20,
+          operating_result_excl_players: 5,
+          squad_market_value: 50000,
+        },
+        {
+          label: "2011/12",
+          financial_result: -10,
+          total_revenue: 90,
+          revenue_operating: 90,
+          current_assets: 40,
+          current_liabilities: 60,
+          equity: -10,
+          personnel_costs: -60,
+          net_result: -15,
+          borrowings_nc: 30,
+          borrowings_c: 10,
+          cash: 5,
+          player_transfer_income: 30,
+          operating_result_excl_players: -8,
+          squad_market_value: 40000,
+        },
+        {
+          label: "2012/13",
+          financial_result: 20,
+          total_revenue: 120,
+          revenue_operating: 120,
+          current_assets: 80,
+          current_liabilities: 40,
+          equity: 50,
+          personnel_costs: -70,
+          net_result: 12,
+          borrowings_nc: 20,
+          borrowings_c: 5,
+          cash: 15,
+          player_transfer_income: 25,
+          operating_result_excl_players: 10,
+          squad_market_value: 60000,
+        },
       ]
     };
     state.healthBarIdx = null;

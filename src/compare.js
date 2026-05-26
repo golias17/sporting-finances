@@ -4,8 +4,10 @@ import { fmtMillions, mkChart } from "./charts.js";
 // SEASON COMPARISON
 // =============================================================
 
-// Track whether change listeners have been wired up (they must only be attached once).
-let comparisonListenersAttached = false;
+// AbortController for the change listeners — replaced each time initComparison
+// is called so we never accumulate duplicate listeners on rebuilt DOM elements.
+// This mirrors the pattern used in health.js.
+let comparisonAbortController = null;
 
 export function initComparison() {
   const selA = document.getElementById("compareSeasonA");
@@ -38,12 +40,15 @@ export function initComparison() {
   selA.value = restoreA >= 0 ? restoreA : 0;
   selB.value = restoreB >= 0 ? restoreB : data.length - 1;
 
-  // Attach change listeners exactly once.
-  if (!comparisonListenersAttached) {
-    selA.addEventListener("change", renderComparison);
-    selB.addEventListener("change", renderComparison);
-    comparisonListenersAttached = true;
+  // Tear down previous listeners before attaching fresh ones so that re-calls
+  // (e.g. after a global date-range change) never accumulate duplicates.
+  if (comparisonAbortController) {
+    comparisonAbortController.abort();
   }
+  comparisonAbortController = new AbortController();
+  const { signal } = comparisonAbortController;
+  selA.addEventListener("change", renderComparison, { signal });
+  selB.addEventListener("change", renderComparison, { signal });
 
   renderComparison();
 }
@@ -63,23 +68,27 @@ export function renderComparison() {
 
   // Auto-narrative
   const revGrowth =
-    ((b.revenue_operating - a.revenue_operating) /
-      Math.abs(a.revenue_operating)) *
-    100;
-  const wageBillA = (
-    (Math.abs(a.personnel_costs) / a.revenue_operating) *
-    100
-  ).toFixed(0);
-  const wageBillB = (
-    (Math.abs(b.personnel_costs) / b.revenue_operating) *
-    100
-  ).toFixed(0);
+    Number.isFinite(a.revenue_operating) && a.revenue_operating !== 0
+      ? ((b.revenue_operating - a.revenue_operating) /
+          Math.abs(a.revenue_operating)) *
+        100
+      : null;
+  const wageBillA =
+    Number.isFinite(a.revenue_operating) && a.revenue_operating !== 0
+      ? ((Math.abs(a.personnel_costs) / a.revenue_operating) * 100).toFixed(0)
+      : null;
+  const wageBillB =
+    Number.isFinite(b.revenue_operating) && b.revenue_operating !== 0
+      ? ((Math.abs(b.personnel_costs) / b.revenue_operating) * 100).toFixed(0)
+      : null;
   const equityFlip = a.equity < 0 && b.equity >= 0;
   const parts = [];
 
   if (state.isPt) {
     parts.push(
-      `A receita ${revGrowth >= 0 ? "cresceu" : "caiu"} ${Math.abs(revGrowth).toFixed(0)}% — de ${fmtMillions(a.revenue_operating)} para ${fmtMillions(b.revenue_operating)}.`,
+      revGrowth !== null
+        ? `A receita ${revGrowth >= 0 ? "cresceu" : "caiu"} ${Math.abs(revGrowth).toFixed(0)}% — de ${fmtMillions(a.revenue_operating)} para ${fmtMillions(b.revenue_operating)}.`
+        : `A receita passou de ${fmtMillions(a.revenue_operating)} para ${fmtMillions(b.revenue_operating)}.`,
     );
     if (equityFlip) {
       parts.push(
@@ -91,11 +100,15 @@ export function renderComparison() {
       );
     }
     parts.push(
-      `Custos com pessoal: de ${wageBillA}% para ${wageBillB}% da receita. Dívida líquida: de ${fmtMillions(netDebtA)} para ${fmtMillions(netDebtB)}.`,
+      wageBillA !== null && wageBillB !== null
+        ? `Custos com pessoal: de ${wageBillA}% para ${wageBillB}% da receita. Dívida líquida: de ${fmtMillions(netDebtA)} para ${fmtMillions(netDebtB)}.`
+        : `Dívida líquida: de ${fmtMillions(netDebtA)} para ${fmtMillions(netDebtB)}.`,
     );
   } else {
     parts.push(
-      `Revenue ${revGrowth >= 0 ? "grew" : "fell"} ${Math.abs(revGrowth).toFixed(0)}% — from ${fmtMillions(a.revenue_operating)} to ${fmtMillions(b.revenue_operating)}.`,
+      revGrowth !== null
+        ? `Revenue ${revGrowth >= 0 ? "grew" : "fell"} ${Math.abs(revGrowth).toFixed(0)}% — from ${fmtMillions(a.revenue_operating)} to ${fmtMillions(b.revenue_operating)}.`
+        : `Revenue moved from ${fmtMillions(a.revenue_operating)} to ${fmtMillions(b.revenue_operating)}.`,
     );
     if (equityFlip) {
       parts.push(
@@ -107,7 +120,9 @@ export function renderComparison() {
       );
     }
     parts.push(
-      `Wage bill: ${wageBillA}% → ${wageBillB}% of revenue. Net debt: ${fmtMillions(netDebtA)} → ${fmtMillions(netDebtB)}.`,
+      wageBillA !== null && wageBillB !== null
+        ? `Wage bill: ${wageBillA}% → ${wageBillB}% of revenue. Net debt: ${fmtMillions(netDebtA)} → ${fmtMillions(netDebtB)}.`
+        : `Net debt: ${fmtMillions(netDebtA)} → ${fmtMillions(netDebtB)}.`,
     );
   }
 
@@ -171,6 +186,11 @@ export function renderComparison() {
       },
     },
   });
+
+  // Safe division helper — returns null instead of ±Infinity / NaN when the
+  // denominator is zero or non-finite.
+  const safeDiv = (n, d) =>
+    Number.isFinite(d) && d !== 0 ? n / d : null;
 
   // Grouped metric cards
   const groups = [
@@ -266,46 +286,50 @@ export function renderComparison() {
         {
           icon: "💼",
           label: state.isPt ? "Custos com Pessoal" : "Wage Bill",
-          a: (Math.abs(a.personnel_costs) / a.revenue_operating) * 100,
-          b: (Math.abs(b.personnel_costs) / b.revenue_operating) * 100,
+          a: safeDiv(Math.abs(a.personnel_costs) * 100, a.revenue_operating),
+          b: safeDiv(Math.abs(b.personnel_costs) * 100, b.revenue_operating),
           fmt: (v) =>
-            v.toFixed(0) + "% " + (state.isPt ? "da receita" : "of revenue"),
+            v === null
+              ? "—"
+              : v.toFixed(0) + "% " + (state.isPt ? "da receita" : "of revenue"),
           better: "low",
           monetary: false,
         },
         {
           icon: "🔗",
           label: state.isPt ? "Dívida Líquida / Receita" : "Net Debt / Revenue",
-          a: netDebtA / a.revenue_operating,
-          b: netDebtB / b.revenue_operating,
-          fmt: (v) => v.toFixed(1) + "×",
+          a: safeDiv(netDebtA, a.revenue_operating),
+          b: safeDiv(netDebtB, b.revenue_operating),
+          fmt: (v) => (v === null ? "—" : v.toFixed(1) + "×"),
           better: "low",
           monetary: false,
         },
         {
           icon: "🔄",
           label: state.isPt ? "Dependência de Passes" : "Transfer Reliance",
-          a:
-            (a.player_transfer_income /
-              (a.revenue_operating + a.player_transfer_income)) *
-            100,
-          b:
-            (b.player_transfer_income /
-              (b.revenue_operating + b.player_transfer_income)) *
-            100,
+          a: safeDiv(
+            a.player_transfer_income * 100,
+            a.revenue_operating + a.player_transfer_income,
+          ),
+          b: safeDiv(
+            b.player_transfer_income * 100,
+            b.revenue_operating + b.player_transfer_income,
+          ),
           fmt: (v) =>
-            v.toFixed(0) +
-            "% " +
-            (state.isPt ? "do rendimento total" : "of total income"),
+            v === null
+              ? "—"
+              : v.toFixed(0) +
+                "% " +
+                (state.isPt ? "do rendimento total" : "of total income"),
           better: "low",
           monetary: false,
         },
         {
           icon: "⚡",
           label: state.isPt ? "Rácio de Solvência" : "Current Ratio",
-          a: a.current_assets / a.current_liabilities,
-          b: b.current_assets / b.current_liabilities,
-          fmt: (v) => v.toFixed(2) + "×",
+          a: safeDiv(a.current_assets, a.current_liabilities),
+          b: safeDiv(b.current_assets, b.current_liabilities),
+          fmt: (v) => (v === null ? "—" : v.toFixed(2) + "×"),
           better: "high",
           monetary: false,
         },
@@ -363,17 +387,22 @@ export function renderComparison() {
   ];
 
   const renderCard = (m) => {
-    const improved = m.better === "high" ? m.b > m.a : m.b < m.a;
-    const same = m.a === m.b;
-    const pct = m.a !== 0 ? ((m.b - m.a) / Math.abs(m.a)) * 100 : null;
-    const absDelta = m.b - m.a;
-    const arrow = same ? "—" : improved ? "▲" : "▼";
+    const hasValues =
+      m.a !== null && m.b !== null && Number.isFinite(m.a) && Number.isFinite(m.b);
+    const improved =
+      hasValues && (m.better === "high" ? m.b > m.a : m.b < m.a);
+    const same = hasValues && m.a === m.b;
+    const pct =
+      hasValues && m.a !== 0 ? ((m.b - m.a) / Math.abs(m.a)) * 100 : null;
+    const absDelta = hasValues ? m.b - m.a : null;
+    const arrow = !hasValues ? "" : same ? "—" : improved ? "▲" : "▼";
     const pctStr =
       pct !== null ? (pct >= 0 ? "+" : "") + pct.toFixed(0) + "%" : "";
-    const cls = same ? "neu" : improved ? "pos" : "neg";
-    const absStr = m.monetary
-      ? `${absDelta >= 0 ? "+" : ""}${fmtMillions(absDelta)} ${state.isPt ? "variação absoluta" : "absolute change"}`
-      : null;
+    const cls = !hasValues ? "neu" : same ? "neu" : improved ? "pos" : "neg";
+    const absStr =
+      m.monetary && absDelta !== null
+        ? `${absDelta >= 0 ? "+" : ""}${fmtMillions(absDelta)} ${state.isPt ? "variação absoluta" : "absolute change"}`
+        : null;
     return `<div class="cmp-card">
       <div class="cmp-icon">${m.icon}</div>
       <div class="cmp-label">${m.label}</div>

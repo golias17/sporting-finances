@@ -259,34 +259,31 @@ export function translateNote(str) {
     { rx: /belonging to/gi, rep: "pertencente a" },
     { rx: /deducted for/gi, rep: "deduzidos de" },
     { rx: /third-party/gi, rep: "terceiros" },
+    // Specific multi-word phrases safe to translate in isolation
+    { rx: /\bin H1\b/gi, rep: "no 1º Semestre" },
+    { rx: /\bin winter\b/gi, rep: "no inverno" },
+    { rx: /\bin summer\b/gi, rep: "no verão" },
+    { rx: /\blater sold to\b/gi, rep: "vendido mais tarde ao" },
+    { rx: /\bsold to\b/gi, rep: "vendido ao" },
+    { rx: /\bwith option\b/gi, rep: "com opção" },
+    { rx: /\boptions\b/gi, rep: "opções" },
+    { rx: /\boption\b/gi, rep: "opção" },
+    { rx: /\bcosts incl\b/gi, rep: "custos incl" },
+    { rx: /\bcosts include\b/gi, rep: "custos incluem" },
+    { rx: /\bat purchase date\b/gi, rep: "na data de compra" },
+    { rx: /\bat SCP\b/gi, rep: "no SCP" },
+    { rx: /\buntil\b/gi, rep: "até" },
+    { rx: /\bclause set\b/gi, rep: "cláusula fixada" },
   ];
 
   replacements.forEach((r) => {
     s = s.replace(r.rx, r.rep);
   });
 
-  // A few cleanups for general English words that might slip through
-  s = s
-    .replace(/\bin H1\b/gi, "no 1º Semestre")
-    .replace(/\bin winter\b/gi, "no inverno")
-    .replace(/\bin summer\b/gi, "no verão")
-    .replace(/\blater sold to\b/gi, "vendido mais tarde ao")
-    .replace(/\bsold to\b/gi, "vendido ao")
-    .replace(/\bwith option\b/gi, "com opção")
-    .replace(/\boptions\b/gi, "opções")
-    .replace(/\boption\b/gi, "opção")
-    .replace(/\bcosts incl\b/gi, "custos incl")
-    .replace(/\bcosts include\b/gi, "custos incluem")
-    .replace(/\bCosts include\b/gi, "Custos incluem")
-    .replace(/\bfrom\b/gi, "de")
-    .replace(/\bfor\b/gi, "por")
-    .replace(/\band\b/g, "e")
-    .replace(/\bto\b/g, "para")
-    .replace(/\bat purchase date\b/gi, "na data de compra")
-    .replace(/\bat SCP\b/gi, "no SCP")
-    .replace(/\buntil\b/gi, "até")
-    .replace(/\bclause set\b/gi, "cláusula fixada")
-    .replace(/\bbuy\b/gi, "compra");
+  // NOTE: Do NOT add catch-all single-word replacements here (e.g. "from" → "de",
+  // "for" → "por", "and" → "e", "to" → "para"). They break any note text that
+  // wasn't in directMaps by mangling club names, player names, and clause wording
+  // in unpredictable ways. Add specific phrases to the replacements array above instead.
 
   return s;
 }

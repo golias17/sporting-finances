@@ -6,7 +6,7 @@ describe("state.js", () => {
     // Reset state before each test
     state.DATASET = null;
     state.startSeasonIndex = 0;
-    state.endSeasonIndex = Infinity;
+    state.endSeasonIndex = null;
     state.healthBarIdx = null;
     state.storyIndex = 0;
     state.activeEventFilter = "all";
@@ -24,6 +24,13 @@ describe("state.js", () => {
     state.DATASET = { annual_data: mockData };
     expect(state.fullAnnual).toEqual(mockData);
     expect(state.annual).toEqual(mockData);
+  });
+
+  it("should treat null endSeasonIndex as the last season", () => {
+    const mockData = ["a", "b", "c"];
+    state.DATASET = { annual_data: mockData };
+    state.endSeasonIndex = null;
+    expect(state.annual).toEqual(["a", "b", "c"]);
   });
 
   it("should return sliced DATASET.annual_data based on start and end indices", () => {

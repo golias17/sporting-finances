@@ -1,4 +1,5 @@
 import { state } from "./state.js";
+import { getLatestH1Data } from "./metrics.js";
 import Chart from "chart.js/auto";
 import annotationPlugin from "chartjs-plugin-annotation";
 
@@ -589,7 +590,7 @@ export function chartSquadBook() {
             : "Squad market value (Transfermarkt)",
           data: [
             ...state.annual.map((d) => d.squad_market_value),
-            state.DATASET.h1_2526.squad_market_value,
+            getLatestH1Data(state.DATASET)?.squad_market_value ?? null,
           ],
           borderColor: state.COLORS.gold,
           backgroundColor: "rgba(200,169,81,0.18)",

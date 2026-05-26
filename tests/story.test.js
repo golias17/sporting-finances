@@ -6,7 +6,6 @@ import {
   nextStory,
   prevStory,
   initStoryMode,
-  storyKeyHandler
 } from "../src/story.js";
 
 
@@ -81,19 +80,24 @@ describe("story.js", () => {
   });
 
   it("should handle keyboard navigation", () => {
-    startStory();
-    
-    const rightEvent = new window.KeyboardEvent("keydown", { key: "ArrowRight" });
-    storyKeyHandler(rightEvent);
+    startStory(); // attaches the keydown listener
+
+    document.dispatchEvent(
+      new window.KeyboardEvent("keydown", { key: "ArrowRight" }),
+    );
     expect(state.storyIndex).toBe(1);
 
-    const leftEvent = new window.KeyboardEvent("keydown", { key: "ArrowLeft" });
-    storyKeyHandler(leftEvent);
+    document.dispatchEvent(
+      new window.KeyboardEvent("keydown", { key: "ArrowLeft" }),
+    );
     expect(state.storyIndex).toBe(0);
 
-    const escEvent = new window.KeyboardEvent("keydown", { key: "Escape" });
-    storyKeyHandler(escEvent);
-    expect(document.getElementById("storyCard").classList.contains("hidden")).toBe(true);
+    document.dispatchEvent(
+      new window.KeyboardEvent("keydown", { key: "Escape" }),
+    );
+    expect(
+      document.getElementById("storyCard").classList.contains("hidden"),
+    ).toBe(true);
   });
 
   it("should handle clicks on the story track to jump to steps", () => {

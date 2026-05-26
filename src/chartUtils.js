@@ -275,7 +275,10 @@ export function generateAccessibleTable(canvasId, config) {
     )
     .join("")}</tbody>`;
 
-  table.innerHTML = `<caption>Data table for chart ${canvasId}</caption>${thead}${tbody}`;
+  const captionText = state.isPt
+    ? `Tabela de dados do gráfico ${canvasId}`
+    : `Data table for chart ${canvasId}`;
+  table.innerHTML = `<caption>${captionText}</caption>${thead}${tbody}`;
 }
 
 export function externalTooltipHandler(context) {
@@ -349,8 +352,8 @@ export function externalTooltipHandler(context) {
   tooltipEl.classList.remove("hidden");
 
   // Position tooltip relative to page scroll and viewport coordinates of the canvas
-  const tooltipX = canvasRect.left + window.pageXOffset + tooltip.caretX;
-  const tooltipY = canvasRect.top + window.pageYOffset + tooltip.caretY;
+  const tooltipX = canvasRect.left + window.scrollX + tooltip.caretX;
+  const tooltipY = canvasRect.top + window.scrollY + tooltip.caretY;
 
   tooltipEl.style.left = tooltipX + "px";
   tooltipEl.style.top = tooltipY - 12 + "px";
