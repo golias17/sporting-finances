@@ -331,4 +331,81 @@ describe("calculateHealthSignals()", () => {
       expect(["green", "amber", "red"]).toContain(s.status);
     });
   });
+
+  it("checks Portuguese translations and all threshold notes", () => {
+    const season = {
+      ...makeState().annual[0],
+      operating_result_excl_players: -3000, // amber
+      current_assets: 20000,
+      current_liabilities: 30000, // 0.66 amber
+      cash: 10000, // amber
+    };
+    const state = makeState({ seasons: [season], isPt: true });
+    const signals = calculateHealthSignals(state, 0, fmtMillions);
+    
+    const opProfit = signals.find(s => s.id === "sigOpProfit");
+    expect(opProfit.status).toBe("amber");
+    expect(opProfit.note).toBe("Pequeno défice estrutural");
+
+    const cashSig = signals.find(s => s.id === "sigCash");
+    expect(cashSig.status).toBe("amber");
+    expect(cashSig.note).toBe("Reduzido — risco mensal");
+    
+    const crSig = signals.find(s => s.id === "sigCurrentRatio");
+    expect(crSig.status).toBe("amber");
+    expect(crSig.note).toBe("Atenção à liquidez");
+  });
+
+  it("checks deeply negative notes", () => {
+    const season = {
+      ...makeState().annual[0],
+      operating_result_excl_players: -10000, // red
+      current_assets: 10000,
+      current_liabilities: 50000, // 0.20 red
+      cash: 2000, // red
+    };
+    const state = makeState({ seasons: [season], isPt: false });
+    const signals = calculateHealthSignals(state, 0, fmtMillions);
+    
+    const opProfit = signals.find(s => s.id === "sigOpProfit");
+    expect(opProfit.status).toBe("red");
+    expect(opProfit.note).toBe("Deep structural deficit");
+
+    const cashSig = signals.find(s => s.id === "sigCash");
+    expect(cashSig.status).toBe("red");
+    expect(cashSig.note).toBe("Critically low");
+    
+    const crSig = signals.find(s => s.id === "sigCurrentRatio");
+    expect(crSig.status).toBe("red");
+    expect(crSig.note).toBe("High short-term liquidity risk");
+  });
+});
+
+describe("calculateKpis()", () => {
+  it("should calculate base KPIs correctly", () => {
+    const state = makeState();
+    const kpis = calculateKpis(state, 0, fmtMillions);
+    expect(kpis.length).toBe(6);
+    expect(kpis[0].label).toMatch(/revenue/i);
+    expect(kpis[1].label).toMatch(/net result/i);
+  });
+
+  it("should use H1 data if available and looking at the latest season", () => {
+    const state = makeState();
+    state.DATASET = {
+      annual_data: state.annual,
+      h1_25: {
+        label: "25/26",
+        period_end: "2025-12-31",
+        net_result: 15000,
+        squad_market_value: 65000
+      }
+    };
+    const kpis = calculateKpis(state, 0, fmtMillions);
+    // H1 data replaces Cash with H1 net result and updates squad market value
+    expect(kpis.length).toBe(6);
+    const h1Kpi = kpis.find(k => k.label.includes("H1"));
+    expect(h1Kpi).toBeDefined();
+    expect(h1Kpi.value).toBe(fmtMillions(15000));
+  });
 });
