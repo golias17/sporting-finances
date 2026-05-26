@@ -151,20 +151,20 @@ export const chartRegistry = new Map();
 export function generateAccessibleTable(canvasId, config) {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
-  
+
   const tableId = canvasId + "-a11y-table";
   let table = document.getElementById(tableId);
   let wrapper = null;
-  
+
   if (!table) {
     wrapper = document.createElement("div");
     wrapper.id = tableId + "-wrap";
     wrapper.className = "table-wrap scroll-x sr-only";
-    
+
     table = document.createElement("table");
     table.id = tableId;
     table.className = "data";
-    
+
     wrapper.appendChild(table);
     canvas.parentNode.insertBefore(wrapper, canvas.nextSibling);
   } else {
@@ -179,9 +179,13 @@ export function generateAccessibleTable(canvasId, config) {
     toggleBtn = document.createElement("button");
     toggleBtn.id = btnId;
     toggleBtn.className = "table-toggle-btn";
-    
+
     const container = canvas.parentNode;
-    if (container && container.classList && container.classList.contains("chart-box")) {
+    if (
+      container &&
+      container.classList &&
+      container.classList.contains("chart-box")
+    ) {
       container.parentNode.insertBefore(toggleBtn, container.nextSibling);
     } else {
       canvas.parentNode.insertBefore(toggleBtn, canvas.nextSibling);
@@ -197,8 +201,12 @@ export function generateAccessibleTable(canvasId, config) {
 
   const getBtnText = (hidden) => {
     return hidden
-      ? (state.isPt ? "Ver dados em tabela" : "View raw table data")
-      : (state.isPt ? "Ocultar tabela" : "Hide table data");
+      ? state.isPt
+        ? "Ver dados em tabela"
+        : "View raw table data"
+      : state.isPt
+        ? "Ocultar tabela"
+        : "Hide table data";
   };
 
   const tableIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; display: inline-block; vertical-align: middle; transition: transform 0.2s ease;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line></svg>`;
@@ -216,11 +224,12 @@ export function generateAccessibleTable(canvasId, config) {
   if (!data || !data.labels || !data.datasets) return;
 
   // Determine if this is a percentage or ratio chart based on canvas ID or y-axis config
-  const isPctChart = canvasId.toLowerCase().includes("ratio") || 
-                     canvasId.toLowerCase().includes("pct") || 
-                     canvasId.toLowerCase().includes("health") ||
-                     (config.options?.scales?.y?.ticks?.callback && 
-                      config.options.scales.y.ticks.callback(50).toString().includes("%"));
+  const isPctChart =
+    canvasId.toLowerCase().includes("ratio") ||
+    canvasId.toLowerCase().includes("pct") ||
+    canvasId.toLowerCase().includes("health") ||
+    (config.options?.scales?.y?.ticks?.callback &&
+      config.options.scales.y.ticks.callback(50).toString().includes("%"));
 
   const formatter = (v) => {
     if (v === null || v === undefined) return "—";
@@ -238,10 +247,15 @@ export function generateAccessibleTable(canvasId, config) {
 
   const cellClass = (v) => {
     if (typeof v === "number" && v < 0) return ' class="neg"';
-    if (typeof v === "number" && v > 0 && (canvasId.toLowerCase().includes("netresult") || canvasId.toLowerCase().includes("profit"))) {
+    if (
+      typeof v === "number" &&
+      v > 0 &&
+      (canvasId.toLowerCase().includes("netresult") ||
+        canvasId.toLowerCase().includes("profit"))
+    ) {
       return ' class="pos"';
     }
-    return '';
+    return "";
   };
 
   // "Year" column header is localised to match the app language.
@@ -290,7 +304,7 @@ export function externalTooltipHandler(context) {
     tooltip.body.forEach((bodyItem, i) => {
       const colors = tooltip.labelColors[i] || {};
       const color = colors.backgroundColor || colors.borderColor || "#ccc";
-      
+
       bodyItem.lines.forEach((line) => {
         let label = line;
         let value = "";
@@ -324,7 +338,7 @@ export function externalTooltipHandler(context) {
       tooltip.footer.forEach((ft) => {
         footerHtml += `<div class="glass-tooltip-footer-line">${ft}</div>`;
       });
-      footerHtml += '</div>';
+      footerHtml += "</div>";
       bodyHtml += footerHtml;
     }
 
@@ -333,12 +347,11 @@ export function externalTooltipHandler(context) {
 
   const canvasRect = chart.canvas.getBoundingClientRect();
   tooltipEl.classList.remove("hidden");
-  
+
   // Position tooltip relative to page scroll and viewport coordinates of the canvas
   const tooltipX = canvasRect.left + window.pageXOffset + tooltip.caretX;
   const tooltipY = canvasRect.top + window.pageYOffset + tooltip.caretY;
-  
-  tooltipEl.style.left = tooltipX + "px";
-  tooltipEl.style.top = (tooltipY - 12) + "px";
-}
 
+  tooltipEl.style.left = tooltipX + "px";
+  tooltipEl.style.top = tooltipY - 12 + "px";
+}

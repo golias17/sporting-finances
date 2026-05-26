@@ -6,7 +6,7 @@ export function ordinal(n) {
 
 function getLatestH1Data(dataset) {
   if (!dataset) return null;
-  const h1Key = Object.keys(dataset).find(k => k.startsWith('h1_'));
+  const h1Key = Object.keys(dataset).find((k) => k.startsWith("h1_"));
   return h1Key ? dataset[h1Key] : null;
 }
 
@@ -20,7 +20,11 @@ export function calculateKpis(state, idx, fmtMillions) {
   const compIdx = idx - 4;
   const comp = compIdx >= 0 ? state.annual[compIdx] : null;
   const revGrowthPct = comp
-    ? (((curr.revenue_operating - comp.revenue_operating) / comp.revenue_operating) * 100).toFixed(0)
+    ? (
+        ((curr.revenue_operating - comp.revenue_operating) /
+          comp.revenue_operating) *
+        100
+      ).toFixed(0)
     : null;
 
   // Consecutive profitable years
@@ -33,80 +37,144 @@ export function calculateKpis(state, idx, fmtMillions) {
   // Squad market value
   let sqMv, sqMvLabel;
   const h1Data = getLatestH1Data(state.DATASET);
-  
+
   if (isLatest && h1Data) {
     let h1PeriodLabel;
     if (state.isPt) {
       const monthsPt = {
-        Jan: "Jan", Feb: "Fev", Mar: "Mar", Apr: "Abr", May: "Mai", Jun: "Jun",
-        Jul: "Jul", Aug: "Ago", Sep: "Set", Oct: "Out", Nov: "Nov", Dec: "Dez"
+        Jan: "Jan",
+        Feb: "Fev",
+        Mar: "Mar",
+        Apr: "Abr",
+        May: "Mai",
+        Jun: "Jun",
+        Jul: "Jul",
+        Aug: "Ago",
+        Sep: "Set",
+        Oct: "Out",
+        Nov: "Nov",
+        Dec: "Dez",
       };
-      const rawLabel = new Date(h1Data.period_end).toLocaleDateString("en-GB", { month: "short", year: "2-digit" });
+      const rawLabel = new Date(h1Data.period_end).toLocaleDateString("en-GB", {
+        month: "short",
+        year: "2-digit",
+      });
       const [m, y] = rawLabel.split(" ");
       h1PeriodLabel = `${monthsPt[m] || m} ${y}`;
     } else {
-      h1PeriodLabel = new Date(h1Data.period_end).toLocaleDateString("en-GB", { month: "short", year: "2-digit" });
+      h1PeriodLabel = new Date(h1Data.period_end).toLocaleDateString("en-GB", {
+        month: "short",
+        year: "2-digit",
+      });
     }
     sqMv = h1Data.squad_market_value;
-    sqMvLabel = state.isPt ? `Valor de mercado do plantel (${h1PeriodLabel})` : `Squad market value (${h1PeriodLabel})`;
+    sqMvLabel = state.isPt
+      ? `Valor de mercado do plantel (${h1PeriodLabel})`
+      : `Squad market value (${h1PeriodLabel})`;
   } else {
     sqMv = curr.squad_market_value;
-    sqMvLabel = state.isPt ? `Valor de mercado do plantel (${curr.label})` : `Squad market value (${curr.label})`;
+    sqMvLabel = state.isPt
+      ? `Valor de mercado do plantel (${curr.label})`
+      : `Squad market value (${curr.label})`;
   }
-  
+
   const sqMvMultiple = (sqMv / first.squad_market_value).toFixed(1);
 
   const kpis = [
     {
-      label: state.isPt ? `${isLatest ? "Última receita" : "Receita"} (${curr.label})` : `${isLatest ? "Latest revenue" : "Revenue"} (${curr.label})`,
+      label: state.isPt
+        ? `${isLatest ? "Última receita" : "Receita"} (${curr.label})`
+        : `${isLatest ? "Latest revenue" : "Revenue"} (${curr.label})`,
       value: fmtMillions(curr.revenue_operating),
-      change: revGrowthPct !== null
-        ? state.isPt ? `${Number(revGrowthPct) >= 0 ? "+" : ""}${revGrowthPct}% vs há 5 anos` : `${Number(revGrowthPct) >= 0 ? "+" : ""}${revGrowthPct}% vs 5y ago`
-        : state.isPt ? "Menos de 5 épocas de dados" : "Less than 5 seasons of data",
-      cls: revGrowthPct !== null && Number(revGrowthPct) >= 0 ? "pos" : revGrowthPct !== null ? "neg" : "",
+      change:
+        revGrowthPct !== null
+          ? state.isPt
+            ? `${Number(revGrowthPct) >= 0 ? "+" : ""}${revGrowthPct}% vs há 5 anos`
+            : `${Number(revGrowthPct) >= 0 ? "+" : ""}${revGrowthPct}% vs 5y ago`
+          : state.isPt
+            ? "Menos de 5 épocas de dados"
+            : "Less than 5 seasons of data",
+      cls:
+        revGrowthPct !== null && Number(revGrowthPct) >= 0
+          ? "pos"
+          : revGrowthPct !== null
+            ? "neg"
+            : "",
     },
     {
-      label: state.isPt ? `${isLatest ? "Último resultado líquido" : "Resultado líquido"} (${curr.label})` : `${isLatest ? "Latest net result" : "Net result"} (${curr.label})`,
+      label: state.isPt
+        ? `${isLatest ? "Último resultado líquido" : "Resultado líquido"} (${curr.label})`
+        : `${isLatest ? "Latest net result" : "Net result"} (${curr.label})`,
       value: fmtMillions(curr.net_result),
-      change: consecutiveProfitable > 1
-        ? state.isPt ? `${consecutiveProfitable}º ano consecutivo com lucros` : `${ordinal(consecutiveProfitable)} profitable year in a row`
-        : consecutiveProfitable === 1
-          ? state.isPt ? "Ano com lucros" : "Profitable year"
-          : state.isPt ? "Ano de prejuízo" : "Loss-making year",
+      change:
+        consecutiveProfitable > 1
+          ? state.isPt
+            ? `${consecutiveProfitable}º ano consecutivo com lucros`
+            : `${ordinal(consecutiveProfitable)} profitable year in a row`
+          : consecutiveProfitable === 1
+            ? state.isPt
+              ? "Ano com lucros"
+              : "Profitable year"
+            : state.isPt
+              ? "Ano de prejuízo"
+              : "Loss-making year",
       cls: curr.net_result > 0 ? "pos" : "neg",
     },
     {
-      label: state.isPt ? `${isLatest ? "Últimos capitais próprios" : "Capitais próprios"} (${curr.label})` : `${isLatest ? "Latest equity" : "Equity"} (${curr.label})`,
+      label: state.isPt
+        ? `${isLatest ? "Últimos capitais próprios" : "Capitais próprios"} (${curr.label})`
+        : `${isLatest ? "Latest equity" : "Equity"} (${curr.label})`,
       value: fmtMillions(curr.equity),
-      change: state.isPt ? `vs ${fmtMillions(first.equity)} em ${firstShort}` : `vs ${fmtMillions(first.equity)} in ${firstShort}`,
-      cls: curr.equity > first.equity ? "pos" : curr.equity < first.equity ? "neg" : "",
+      change: state.isPt
+        ? `vs ${fmtMillions(first.equity)} em ${firstShort}`
+        : `vs ${fmtMillions(first.equity)} in ${firstShort}`,
+      cls:
+        curr.equity > first.equity
+          ? "pos"
+          : curr.equity < first.equity
+            ? "neg"
+            : "",
     },
     {
       label: sqMvLabel,
       value: fmtMillions(sqMv),
-      change: state.isPt ? `${sqMvMultiple}× o valor de mercado de ${firstShort} (${fmtMillions(first.squad_market_value)})` : `${sqMvMultiple}× the ${firstShort} market value (${fmtMillions(first.squad_market_value)})`,
+      change: state.isPt
+        ? `${sqMvMultiple}× o valor de mercado de ${firstShort} (${fmtMillions(first.squad_market_value)})`
+        : `${sqMvMultiple}× the ${firstShort} market value (${fmtMillions(first.squad_market_value)})`,
       cls: sqMv > first.squad_market_value ? "pos" : "",
     },
     {
-      label: state.isPt ? `Dívida total (${curr.label})` : `Total debt (${curr.label})`,
+      label: state.isPt
+        ? `Dívida total (${curr.label})`
+        : `Total debt (${curr.label})`,
       value: fmtMillions(curr.borrowings_nc + curr.borrowings_c),
-      change: state.isPt ? `vs ${fmtMillions(first.borrowings_nc + first.borrowings_c)} em ${firstShort}` : `vs ${fmtMillions(first.borrowings_nc + first.borrowings_c)} in ${firstShort}`,
+      change: state.isPt
+        ? `vs ${fmtMillions(first.borrowings_nc + first.borrowings_c)} em ${firstShort}`
+        : `vs ${fmtMillions(first.borrowings_nc + first.borrowings_c)} in ${firstShort}`,
       cls: "",
     },
   ];
 
   if (isLatest && h1Data) {
     kpis.push({
-      label: state.isPt ? `Result. líquido 1º Sem. ${h1Data.label}` : `H1 ${h1Data.label} net result`,
+      label: state.isPt
+        ? `Result. líquido 1º Sem. ${h1Data.label}`
+        : `H1 ${h1Data.label} net result`,
       value: fmtMillions(h1Data.net_result),
-      change: state.isPt ? "Após a venda de Gyökeres por 65,8 M€" : "After Gyökeres €65.8M sale",
+      change: state.isPt
+        ? "Após a venda de Gyökeres por 65,8 M€"
+        : "After Gyökeres €65.8M sale",
       cls: "pos",
     });
   } else {
     kpis.push({
-      label: state.isPt ? `Saldo de caixa (${curr.label})` : `Cash on hand (${curr.label})`,
+      label: state.isPt
+        ? `Saldo de caixa (${curr.label})`
+        : `Cash on hand (${curr.label})`,
       value: fmtMillions(curr.cash),
-      change: state.isPt ? `vs ${fmtMillions(first.cash)} em ${firstShort}` : `vs ${fmtMillions(first.cash)} in ${firstShort}`,
+      change: state.isPt
+        ? `vs ${fmtMillions(first.cash)} em ${firstShort}`
+        : `vs ${fmtMillions(first.cash)} in ${firstShort}`,
       cls: curr.cash > first.cash ? "pos" : "neg",
     });
   }
@@ -124,63 +192,158 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
   const payrollRatio = Math.abs(d.personnel_costs) / d.revenue_operating;
   const netDebt = d.borrowings_nc + d.borrowings_c - d.cash;
   const netDebtRatio = netDebt / d.revenue_operating;
-  const transferReliance = d.player_transfer_income / (d.revenue_operating + d.player_transfer_income);
-  const revenueGrowth5y = prev5 ? (d.revenue_operating - prev5.revenue_operating) / prev5.revenue_operating : null;
+  const transferReliance =
+    d.player_transfer_income / (d.revenue_operating + d.player_transfer_income);
+  const revenueGrowth5y = prev5
+    ? (d.revenue_operating - prev5.revenue_operating) / prev5.revenue_operating
+    : null;
   const currentRatio = d.current_assets / d.current_liabilities;
   const recurringOpProfit = d.operating_result_excl_players;
 
   const payrollNotes = {
-    low: payrollRatio < 0.5 ? (state.isPt ? "Excecionalmente baixo" : "Exceptionally lean") : (state.isPt ? "Nível saudável" : "Healthy level"),
+    low:
+      payrollRatio < 0.5
+        ? state.isPt
+          ? "Excecionalmente baixo"
+          : "Exceptionally lean"
+        : state.isPt
+          ? "Nível saudável"
+          : "Healthy level",
     mid: state.isPt ? "Atenção recomendada" : "Worth watching",
-    high: state.isPt ? "Encargo salarial problemático" : "Wage burden is a problem",
+    high: state.isPt
+      ? "Encargo salarial problemático"
+      : "Wage burden is a problem",
   };
-  
-  const equityNote = d.equity > 20000 
-    ? (state.isPt ? "Capital próprio positivo e sólido" : "Solid positive equity")
-    : d.equity > 0 
-      ? (state.isPt ? "Tornou-se positivo recentemente" : "Just turned positive")
-      : d.equity > -20000 
-        ? (state.isPt ? "Ligeiramente negativo" : "Mildly negative")
-        : d.equity > -50000 
-          ? (state.isPt ? "Muito negativo" : "Deeply negative")
-          : (state.isPt ? "Insolvência técnica" : "Technically insolvent");
+
+  const equityNote =
+    d.equity > 20000
+      ? state.isPt
+        ? "Capital próprio positivo e sólido"
+        : "Solid positive equity"
+      : d.equity > 0
+        ? state.isPt
+          ? "Tornou-se positivo recentemente"
+          : "Just turned positive"
+        : d.equity > -20000
+          ? state.isPt
+            ? "Ligeiramente negativo"
+            : "Mildly negative"
+          : d.equity > -50000
+            ? state.isPt
+              ? "Muito negativo"
+              : "Deeply negative"
+            : state.isPt
+              ? "Insolvência técnica"
+              : "Technically insolvent";
 
   return [
     {
       id: "sigRevGrowth",
       icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg>`,
       label: state.isPt ? "Receitas (cresc. 5 anos)" : "Revenue (5yr growth)",
-      value: revenueGrowth5y !== null ? (revenueGrowth5y >= 0 ? "+" : "") + (revenueGrowth5y * 100).toFixed(0) + "%" : "—",
-      status: revenueGrowth5y === null ? "amber" : revenueGrowth5y > 0.5 ? "green" : revenueGrowth5y > 0 ? "amber" : "red",
-      note: revenueGrowth5y !== null ? (state.isPt ? `face a ${state.annual[idx - 5].label}` : `vs ${state.annual[idx - 5].label}`) : (state.isPt ? "Menos de 5 épocas de dados" : "Less than 5 seasons of data"),
+      value:
+        revenueGrowth5y !== null
+          ? (revenueGrowth5y >= 0 ? "+" : "") +
+            (revenueGrowth5y * 100).toFixed(0) +
+            "%"
+          : "—",
+      status:
+        revenueGrowth5y === null
+          ? "amber"
+          : revenueGrowth5y > 0.5
+            ? "green"
+            : revenueGrowth5y > 0
+              ? "amber"
+              : "red",
+      note:
+        revenueGrowth5y !== null
+          ? state.isPt
+            ? `face a ${state.annual[idx - 5].label}`
+            : `vs ${state.annual[idx - 5].label}`
+          : state.isPt
+            ? "Menos de 5 épocas de dados"
+            : "Less than 5 seasons of data",
       history: histData.map((y) => y.revenue_operating),
     },
     {
       id: "sigWage",
       icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>`,
       label: state.isPt ? "Custos com pessoal" : "Wage bill",
-      value: (payrollRatio * 100).toFixed(0) + "% " + (state.isPt ? "da receita" : "of revenue"),
-      status: payrollRatio < 0.6 ? "green" : payrollRatio < 0.7 ? "amber" : "red",
-      note: payrollRatio < 0.6 ? payrollNotes.low : payrollRatio < 0.7 ? payrollNotes.mid : payrollNotes.high,
-      history: histData.map((y) => Math.abs(y.personnel_costs) / y.revenue_operating),
+      value:
+        (payrollRatio * 100).toFixed(0) +
+        "% " +
+        (state.isPt ? "da receita" : "of revenue"),
+      status:
+        payrollRatio < 0.6 ? "green" : payrollRatio < 0.7 ? "amber" : "red",
+      note:
+        payrollRatio < 0.6
+          ? payrollNotes.low
+          : payrollRatio < 0.7
+            ? payrollNotes.mid
+            : payrollNotes.high,
+      history: histData.map(
+        (y) => Math.abs(y.personnel_costs) / y.revenue_operating,
+      ),
     },
     {
       id: "sigDebt",
       icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>`,
       label: state.isPt ? "Dívida líquida / receita" : "Net debt vs revenue",
-      value: netDebtRatio.toFixed(1) + "× " + (state.isPt ? "receita" : "revenue"),
+      value:
+        netDebtRatio.toFixed(1) + "× " + (state.isPt ? "receita" : "revenue"),
       status: netDebtRatio < 1 ? "green" : netDebtRatio < 2 ? "amber" : "red",
-      note: netDebtRatio < 1 ? (state.isPt ? "Controlável" : "Manageable") : netDebtRatio < 2 ? (state.isPt ? "Elevada — atenção" : "Elevated — watch it") : netDebtRatio < 4 ? (state.isPt ? "Endividamento pesado" : "Heavy debt load") : (state.isPt ? "Muito elevada — crise" : "Very high — crisis territory"),
-      history: histData.map((y) => (y.borrowings_nc + y.borrowings_c - y.cash) / y.revenue_operating),
+      note:
+        netDebtRatio < 1
+          ? state.isPt
+            ? "Controlável"
+            : "Manageable"
+          : netDebtRatio < 2
+            ? state.isPt
+              ? "Elevada — atenção"
+              : "Elevated — watch it"
+            : netDebtRatio < 4
+              ? state.isPt
+                ? "Endividamento pesado"
+                : "Heavy debt load"
+              : state.isPt
+                ? "Muito elevada — crise"
+                : "Very high — crisis territory",
+      history: histData.map(
+        (y) =>
+          (y.borrowings_nc + y.borrowings_c - y.cash) / y.revenue_operating,
+      ),
     },
     {
       id: "sigTransfer",
       icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>`,
       label: state.isPt ? "Dependência de passes" : "Transfer reliance",
-      value: (transferReliance * 100).toFixed(0) + "% " + (state.isPt ? "do rendimento total" : "of total income"),
-      status: transferReliance < 0.35 ? "green" : transferReliance < 0.5 ? "amber" : "red",
-      note: transferReliance < 0.35 ? (state.isPt ? "Rendimentos diversificados" : "Diversified income") : transferReliance < 0.5 ? (state.isPt ? "Dependente de venda de jogadores" : "Reliant on player sales") : (state.isPt ? "Altamente dependente de transferências" : "Very dependent on transfers"),
-      history: histData.map((y) => y.player_transfer_income / (y.revenue_operating + y.player_transfer_income)),
+      value:
+        (transferReliance * 100).toFixed(0) +
+        "% " +
+        (state.isPt ? "do rendimento total" : "of total income"),
+      status:
+        transferReliance < 0.35
+          ? "green"
+          : transferReliance < 0.5
+            ? "amber"
+            : "red",
+      note:
+        transferReliance < 0.35
+          ? state.isPt
+            ? "Rendimentos diversificados"
+            : "Diversified income"
+          : transferReliance < 0.5
+            ? state.isPt
+              ? "Dependente de venda de jogadores"
+              : "Reliant on player sales"
+            : state.isPt
+              ? "Altamente dependente de transferências"
+              : "Very dependent on transfers",
+      history: histData.map(
+        (y) =>
+          y.player_transfer_income /
+          (y.revenue_operating + y.player_transfer_income),
+      ),
     },
     {
       id: "sigEquity",
@@ -197,7 +360,18 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
       label: state.isPt ? "Saldo de caixa" : "Cash on hand",
       value: fmtMillions(d.cash),
       status: d.cash > 20000 ? "green" : d.cash > 5000 ? "amber" : "red",
-      note: d.cash > 20000 ? (state.isPt ? "Margem confortável" : "Comfortable buffer") : d.cash > 5000 ? (state.isPt ? "Reduzido — risco mensal" : "Thin — one bad month matters") : (state.isPt ? "Criticamente baixo" : "Critically low"),
+      note:
+        d.cash > 20000
+          ? state.isPt
+            ? "Margem confortável"
+            : "Comfortable buffer"
+          : d.cash > 5000
+            ? state.isPt
+              ? "Reduzido — risco mensal"
+              : "Thin — one bad month matters"
+            : state.isPt
+              ? "Criticamente baixo"
+              : "Critically low",
       history: histData.map((y) => y.cash),
     },
     {
@@ -205,8 +379,24 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
       icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>`,
       label: state.isPt ? "Resultado Oper. Recorrente" : "Recurring Op. Profit",
       value: fmtMillions(recurringOpProfit),
-      status: recurringOpProfit > 0 ? "green" : recurringOpProfit > -5000 ? "amber" : "red",
-      note: recurringOpProfit > 0 ? (state.isPt ? "Lucro na atividade base" : "Profitable without transfers") : recurringOpProfit > -5000 ? (state.isPt ? "Pequeno défice estrutural" : "Small structural deficit") : (state.isPt ? "Défice estrutural acentuado" : "Deep structural deficit"),
+      status:
+        recurringOpProfit > 0
+          ? "green"
+          : recurringOpProfit > -5000
+            ? "amber"
+            : "red",
+      note:
+        recurringOpProfit > 0
+          ? state.isPt
+            ? "Lucro na atividade base"
+            : "Profitable without transfers"
+          : recurringOpProfit > -5000
+            ? state.isPt
+              ? "Pequeno défice estrutural"
+              : "Small structural deficit"
+            : state.isPt
+              ? "Défice estrutural acentuado"
+              : "Deep structural deficit",
       history: histData.map((y) => y.operating_result_excl_players),
     },
     {
@@ -214,8 +404,20 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
       icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`,
       label: state.isPt ? "Rácio de Solvência" : "Current Ratio",
       value: currentRatio.toFixed(2) + "×",
-      status: currentRatio >= 1.0 ? "green" : currentRatio >= 0.5 ? "amber" : "red",
-      note: currentRatio >= 1.0 ? (state.isPt ? "Cobre passivos correntes" : "Covers short-term liabilities") : currentRatio >= 0.5 ? (state.isPt ? "Atenção à liquidez" : "Watch short-term liquidity") : (state.isPt ? "Risco de liquidez alto" : "High short-term liquidity risk"),
+      status:
+        currentRatio >= 1.0 ? "green" : currentRatio >= 0.5 ? "amber" : "red",
+      note:
+        currentRatio >= 1.0
+          ? state.isPt
+            ? "Cobre passivos correntes"
+            : "Covers short-term liabilities"
+          : currentRatio >= 0.5
+            ? state.isPt
+              ? "Atenção à liquidez"
+              : "Watch short-term liquidity"
+            : state.isPt
+              ? "Risco de liquidez alto"
+              : "High short-term liquidity risk",
       history: histData.map((y) => y.current_assets / y.current_liabilities),
     },
   ];

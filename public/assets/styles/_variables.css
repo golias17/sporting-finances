@@ -19,7 +19,9 @@
   --warn: #c98c1f;
   --info: #2c5b8a;
   --serif: "Playfair Display", "Times New Roman", Georgia, serif;
-  --sans: "Outfit", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --sans:
+    "Outfit", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial,
+    sans-serif;
   --mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
 }
 

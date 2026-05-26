@@ -8,7 +8,10 @@ export const state = {
   DATASET: null,
   get annual() {
     if (!this.DATASET) return null;
-    return this.DATASET.annual_data.slice(this.startSeasonIndex, this.endSeasonIndex + 1);
+    return this.DATASET.annual_data.slice(
+      this.startSeasonIndex,
+      this.endSeasonIndex + 1,
+    );
   },
   get fullAnnual() {
     return this.DATASET ? this.DATASET.annual_data : null;
@@ -58,5 +61,5 @@ export const state = {
   },
   setTlActiveWindow(window) {
     this.tlActiveWindow = window;
-  }
+  },
 };

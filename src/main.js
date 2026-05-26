@@ -5,11 +5,7 @@ import { renderVmocCost, renderLionFinance, renderUsppTerms } from "./bonds.js";
 import { renderTransferLedger, initTransfersDetailTable } from "./transfers.js";
 import { renderTable, initDataExport } from "./data-table.js";
 import { initNewsFeed } from "./news.js";
-import {
-  exitStory,
-  updateStoryStep,
-  initStoryMode,
-} from "./story.js";
+import { exitStory, updateStoryStep, initStoryMode } from "./story.js";
 import { initComparison } from "./compare.js";
 import { syncEventsFilter, initEventFilter } from "./events.js";
 import {
@@ -347,24 +343,42 @@ function updateChartTheme() {
   // Dynamic brand and status colors for charts/sparklines in dark mode
   state.COLORS.green = isDark ? "#2e9e6c" : "#0a5d3a";
   state.COLORS.greenLight = isDark ? "#3de080" : "#2e9e6c";
-  state.COLORS.greenSoft = isDark ? "rgba(46, 158, 105, 0.2)" : "rgba(10,93,58,0.15)";
+  state.COLORS.greenSoft = isDark
+    ? "rgba(46, 158, 105, 0.2)"
+    : "rgba(10,93,58,0.15)";
   state.COLORS.gold = isDark ? "#ffd54f" : "#c8a951";
-  state.COLORS.goldSoft = isDark ? "rgba(255, 213, 79, 0.25)" : "rgba(200,169,81,0.4)";
+  state.COLORS.goldSoft = isDark
+    ? "rgba(255, 213, 79, 0.25)"
+    : "rgba(200,169,81,0.4)";
   state.COLORS.pos = isDark ? "#3de080" : "#2e8a55";
-  state.COLORS.posSoft = isDark ? "rgba(61, 224, 128, 0.35)" : "rgba(46, 138, 85, 0.7)";
+  state.COLORS.posSoft = isDark
+    ? "rgba(61, 224, 128, 0.35)"
+    : "rgba(46, 138, 85, 0.7)";
   state.COLORS.neg = isDark ? "#ff6b6b" : "#c6404f";
-  state.COLORS.negSoft = isDark ? "rgba(255, 107, 107, 0.35)" : "rgba(198, 64, 79, 0.7)";
+  state.COLORS.negSoft = isDark
+    ? "rgba(255, 107, 107, 0.35)"
+    : "rgba(198, 64, 79, 0.7)";
   state.COLORS.warn = isDark ? "#ffb300" : "#d99c2b";
   state.COLORS.info = isDark ? "#52a3ff" : "#3a72b8";
-  state.COLORS.infoSoft = isDark ? "rgba(82, 163, 255, 0.35)" : "rgba(58,114,184,0.7)";
+  state.COLORS.infoSoft = isDark
+    ? "rgba(82, 163, 255, 0.35)"
+    : "rgba(58,114,184,0.7)";
 
   // Dynamic connection line color for health ratios
-  state.COLORS.lineBorder = isDark ? "rgba(255, 255, 255, 0.3)" : "rgba(0, 0, 0, 0.12)";
+  state.COLORS.lineBorder = isDark
+    ? "rgba(255, 255, 255, 0.3)"
+    : "rgba(0, 0, 0, 0.12)";
 
   // Dynamic zone backgrounds for health ratios
-  ZONE_COLORS.red = isDark ? "rgba(255, 107, 107, 0.15)" : "rgba(198,64,79,0.07)";
-  ZONE_COLORS.amber = isDark ? "rgba(255, 179, 0, 0.15)" : "rgba(217,156,43,0.08)";
-  ZONE_COLORS.green = isDark ? "rgba(61, 224, 128, 0.08)" : "rgba(46,138,85,0.06)";
+  ZONE_COLORS.red = isDark
+    ? "rgba(255, 107, 107, 0.15)"
+    : "rgba(198,64,79,0.07)";
+  ZONE_COLORS.amber = isDark
+    ? "rgba(255, 179, 0, 0.15)"
+    : "rgba(217,156,43,0.08)";
+  ZONE_COLORS.green = isDark
+    ? "rgba(61, 224, 128, 0.08)"
+    : "rgba(46,138,85,0.06)";
 
   state.baseOpts.scales.x.ticks.color = state.COLORS.muted;
   state.baseOpts.scales.y.ticks.color = state.COLORS.muted;
@@ -393,11 +407,11 @@ function initScrollAnimations() {
         }
       });
     },
-    { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+    { threshold: 0.1, rootMargin: "0px 0px -50px 0px" },
   );
 
   const targets = document.querySelectorAll(
-    ".card, .kpi, .health-bar, .event, .cmp-card, .lf-card, .hb-title, .disclaimer-banner, .social-hub, .news-grid"
+    ".card, .kpi, .health-bar, .event, .cmp-card, .lf-card, .hb-title, .disclaimer-banner, .social-hub, .news-grid",
   );
   targets.forEach((el) => {
     el.classList.add("anim-up");
@@ -411,10 +425,11 @@ function initJornalModal() {
   const btnClose = document.getElementById("btnCloseJornal");
   const modal = document.getElementById("jornalModal");
   const container = document.getElementById("jornalIframeContainer");
-  
+
   if (!btnOpen || !btnClose || !modal || !container) return;
 
-  const iframeSrc = "https://e.issuu.com/embed.html?backgroundColor=%23008057&backgroundColorFullscreen=%23008057&d=jornal_sporting_n._4077&hideIssuuLogo=true&hideShareButton=true&showOtherPublicationsAsSuggestions=true&u=sporting-digitalpaper";
+  const iframeSrc =
+    "https://e.issuu.com/embed.html?backgroundColor=%23008057&backgroundColorFullscreen=%23008057&d=jornal_sporting_n._4077&hideIssuuLogo=true&hideShareButton=true&showOtherPublicationsAsSuggestions=true&u=sporting-digitalpaper";
 
   function openModal() {
     // Inject iframe only on first open
@@ -432,12 +447,12 @@ function initJornalModal() {
 
   btnOpen.addEventListener("click", openModal);
   btnClose.addEventListener("click", closeModal);
-  
+
   // Close on outside click
   modal.addEventListener("click", (e) => {
     if (e.target === modal) closeModal();
   });
-  
+
   // Close on escape key
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && !modal.classList.contains("hidden")) {
@@ -449,20 +464,19 @@ function initJornalModal() {
 // Start application
 initApp();
 
-
 function initGlobalFilters() {
-  const startSelect = document.getElementById('globalStartSeason');
-  const endSelect = document.getElementById('globalEndSeason');
+  const startSelect = document.getElementById("globalStartSeason");
+  const endSelect = document.getElementById("globalEndSeason");
   if (!startSelect || !endSelect) return;
 
-  const seasons = state.fullAnnual.map(d => d.label);
-  
+  const seasons = state.fullAnnual.map((d) => d.label);
+
   const renderOptions = () => {
-    startSelect.innerHTML = '';
-    endSelect.innerHTML = '';
+    startSelect.innerHTML = "";
+    endSelect.innerHTML = "";
     seasons.forEach((season, index) => {
       // Start Select
-      const optStart = document.createElement('option');
+      const optStart = document.createElement("option");
       optStart.value = index;
       optStart.textContent = season;
       if (index === state.startSeasonIndex) optStart.selected = true;
@@ -470,7 +484,7 @@ function initGlobalFilters() {
       startSelect.appendChild(optStart);
 
       // End Select
-      const optEnd = document.createElement('option');
+      const optEnd = document.createElement("option");
       optEnd.value = index;
       optEnd.textContent = season;
       if (index === state.endSeasonIndex) optEnd.selected = true;
@@ -483,40 +497,47 @@ function initGlobalFilters() {
     state.setStartSeasonIndex(parseInt(startSelect.value, 10));
     state.setEndSeasonIndex(parseInt(endSelect.value, 10));
     renderOptions();
-    
+
     // Clear all charts and force re-render of active tab
     state.renderedCharts.clear();
-    const activeTab = document.querySelector('.tabs button.active');
+    const activeTab = document.querySelector(".tabs button.active");
     if (activeTab) {
       activateTab(activeTab.dataset.tab);
     }
     updateActivePreset();
   };
 
-  const presets = document.querySelectorAll('#eraPresets .season-pill');
-  
+  const presets = document.querySelectorAll("#eraPresets .season-pill");
+
   const updateActivePreset = () => {
-    presets.forEach(btn => {
+    presets.forEach((btn) => {
       const s = parseInt(btn.dataset.start, 10);
-      const e = btn.dataset.end === 'latest' ? seasons.length - 1 : parseInt(btn.dataset.end, 10);
-      const isActive = (state.startSeasonIndex === s && state.endSeasonIndex === e);
-      btn.classList.toggle('active', isActive);
-      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      const e =
+        btn.dataset.end === "latest"
+          ? seasons.length - 1
+          : parseInt(btn.dataset.end, 10);
+      const isActive =
+        state.startSeasonIndex === s && state.endSeasonIndex === e;
+      btn.classList.toggle("active", isActive);
+      btn.setAttribute("aria-pressed", isActive ? "true" : "false");
     });
   };
 
-  presets.forEach(btn => {
-    btn.addEventListener('click', () => {
+  presets.forEach((btn) => {
+    btn.addEventListener("click", () => {
       const s = parseInt(btn.dataset.start, 10);
-      const e = btn.dataset.end === 'latest' ? seasons.length - 1 : parseInt(btn.dataset.end, 10);
+      const e =
+        btn.dataset.end === "latest"
+          ? seasons.length - 1
+          : parseInt(btn.dataset.end, 10);
       startSelect.value = s;
       endSelect.value = e;
       onChange();
     });
   });
 
-  startSelect.addEventListener('change', onChange);
-  endSelect.addEventListener('change', onChange);
+  startSelect.addEventListener("change", onChange);
+  endSelect.addEventListener("change", onChange);
   renderOptions();
   updateActivePreset();
 }

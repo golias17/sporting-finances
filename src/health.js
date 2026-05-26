@@ -90,7 +90,9 @@ export function renderHealthBar(idx) {
 
     // Recompute labels for sparkline x-axis (mirrors histData in metrics.js)
     const histStartIdx = Math.max(0, idx - 4);
-    const histLabels = state.annual.slice(histStartIdx, idx + 1).map((y) => y.label);
+    const histLabels = state.annual
+      .slice(histStartIdx, idx + 1)
+      .map((y) => y.label);
 
     // Render sparklines
     signals.forEach((s) => {

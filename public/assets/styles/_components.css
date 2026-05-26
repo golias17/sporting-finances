@@ -64,7 +64,6 @@ body {
   font-feature-settings: "ss01", "cv11";
 }
 
-
 /* ── Headline KPI strip — premium glassmorphic cards ── */
 .kpi-strip {
   background: transparent;
@@ -185,7 +184,6 @@ body.dark .kpi .change.neutral {
   font-size: 8px;
   margin-right: 3px;
 }
-
 
 /* ── Cards / chart panels ── */
 .card {
@@ -482,7 +480,6 @@ body.dark .event:hover {
   }
 }
 
-
 /* ── Event legend / interactive filters ── */
 .event-legend {
   display: flex;
@@ -606,7 +603,6 @@ table.data td.neg {
   color: var(--neg);
 }
 
-
 /* ── Health bar ── */
 .health-bar {
   background: var(--surface);
@@ -667,7 +663,6 @@ table.data td.neg {
 .health-signals.fading {
   opacity: 0;
 }
-
 
 /* ─────────────────────────────────────────────────────────────
    LAYOUT & DESIGN EVOLUTION UPGRADES (Chapter 5 & Beyond)
@@ -870,8 +865,12 @@ body.dark .skeleton-shimmer {
   border-radius: 12px;
 }
 @keyframes skeleton-pulse {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 /* Page boot global loading overlay blocker on body */
@@ -885,7 +884,10 @@ body.app-loading .chart-box {
 body.app-loading .chart-box::after {
   content: "";
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: linear-gradient(
     90deg,
     var(--surface) 25%,

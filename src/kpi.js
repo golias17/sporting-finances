@@ -4,7 +4,10 @@ import { fmtMillions } from "./chartUtils.js";
 
 export function renderKpis(idx) {
   if (idx === undefined || idx === null) {
-    idx = state.healthBarIdx !== null ? state.healthBarIdx : state.annual.length - 1;
+    idx =
+      state.healthBarIdx !== null
+        ? state.healthBarIdx
+        : state.annual.length - 1;
   }
 
   const kpis = calculateKpis(state, idx, fmtMillions);

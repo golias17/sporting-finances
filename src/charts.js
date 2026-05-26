@@ -37,7 +37,7 @@ import {
   eventBoxes,
   baseOpts,
   chartRegistry,
-  generateAccessibleTable
+  generateAccessibleTable,
 } from "./chartUtils.js";
 export {
   fmtMillions,
@@ -46,7 +46,7 @@ export {
   eventBoxes,
   baseOpts,
   chartRegistry,
-  generateAccessibleTable
+  generateAccessibleTable,
 };
 
 // state.COLORS and state.baseOpts are initialised by initChartDefaults() in
@@ -133,7 +133,9 @@ export function chartHero() {
       ...baseOpts,
       plugins: {
         ...baseOpts.plugins,
-        annotation: { drawTime: 'beforeDatasetsDraw', annotations: eventBoxes([
+        annotation: {
+          drawTime: "beforeDatasetsDraw",
+          annotations: eventBoxes([
             "restructure14",
             "alcochete",
             "covid",
@@ -805,7 +807,8 @@ export function chartPayrollBurden() {
           label: state.isPt
             ? "Custos com pessoal em % da receita"
             : "Wage bill as % of revenue",
-          data: ratios, borderColor: state.COLORS.lineBorder,
+          data: ratios,
+          borderColor: state.COLORS.lineBorder,
           backgroundColor: "transparent",
           borderWidth: 2.5,
           tension: 0.25,
@@ -835,7 +838,9 @@ export function chartPayrollBurden() {
               `${state.isPt ? "Custos com pessoal" : "Wage bill"}: ${ctx.parsed.y.toFixed(0)}% ${state.isPt ? "da receita" : "of revenue"}`,
           },
         },
-        annotation: { drawTime: 'beforeDatasetsDraw', annotations: {
+        annotation: {
+          drawTime: "beforeDatasetsDraw",
+          annotations: {
             redBg: {
               type: "box",
               yMin: 70,
@@ -875,7 +880,8 @@ export function chartPayrollBurden() {
               yMax: 70,
               borderColor: state.COLORS.neg,
               borderWidth: 1.5,
-              z: -1, borderDash: [4, 4],
+              z: -1,
+              borderDash: [4, 4],
             },
             line60: {
               type: "line",
@@ -883,7 +889,8 @@ export function chartPayrollBurden() {
               yMax: 60,
               borderColor: state.COLORS.warn,
               borderWidth: 1.5,
-              z: -1, borderDash: [4, 4],
+              z: -1,
+              borderDash: [4, 4],
             },
           },
         },
@@ -915,7 +922,8 @@ export function chartTransferReliance() {
           label: state.isPt
             ? "Receitas de passes em % das receitas totais"
             : "Transfer income as % of total revenue",
-          data: reliance, borderColor: state.COLORS.lineBorder,
+          data: reliance,
+          borderColor: state.COLORS.lineBorder,
           backgroundColor: "transparent",
           borderWidth: 2.5,
           tension: 0.25,
@@ -945,7 +953,9 @@ export function chartTransferReliance() {
               `${state.isPt ? "Dependência de passes" : "Transfer reliance"}: ${ctx.parsed.y.toFixed(0)}%`,
           },
         },
-        annotation: { drawTime: 'beforeDatasetsDraw', annotations: {
+        annotation: {
+          drawTime: "beforeDatasetsDraw",
+          annotations: {
             redBg: {
               type: "box",
               yMin: 50,
@@ -985,7 +995,8 @@ export function chartTransferReliance() {
               yMax: 50,
               borderColor: state.COLORS.neg,
               borderWidth: 1.5,
-              z: -1, borderDash: [4, 4],
+              z: -1,
+              borderDash: [4, 4],
             },
             line35: {
               type: "line",
@@ -993,7 +1004,8 @@ export function chartTransferReliance() {
               yMax: 35,
               borderColor: state.COLORS.warn,
               borderWidth: 1.5,
-              z: -1, borderDash: [4, 4],
+              z: -1,
+              borderDash: [4, 4],
             },
           },
         },
@@ -1025,7 +1037,8 @@ export function chartDebtLoad() {
           label: state.isPt
             ? "Dívida líquida / receita anual"
             : "Net debt / annual revenue",
-          data: netDebtRatio, borderColor: state.COLORS.lineBorder,
+          data: netDebtRatio,
+          borderColor: state.COLORS.lineBorder,
           backgroundColor: "transparent",
           borderWidth: 2.5,
           tension: 0.25,
@@ -1055,7 +1068,9 @@ export function chartDebtLoad() {
               `${state.isPt ? "Dívida líquida" : "Net debt"}: ${ctx.parsed.y.toFixed(1)}× ${state.isPt ? "receita anual" : "annual revenue"}`,
           },
         },
-        annotation: { drawTime: 'beforeDatasetsDraw', annotations: {
+        annotation: {
+          drawTime: "beforeDatasetsDraw",
+          annotations: {
             redBg: {
               type: "box",
               yMin: 2,
@@ -1102,7 +1117,8 @@ export function chartDebtLoad() {
               yMax: 2,
               borderColor: state.COLORS.neg,
               borderWidth: 1.5,
-              z: -1, borderDash: [4, 4],
+              z: -1,
+              borderDash: [4, 4],
             },
             line1: {
               type: "line",
@@ -1110,7 +1126,8 @@ export function chartDebtLoad() {
               yMax: 1,
               borderColor: state.COLORS.warn,
               borderWidth: 1.5,
-              z: -1, borderDash: [4, 4],
+              z: -1,
+              borderDash: [4, 4],
             },
           },
         },
@@ -1143,7 +1160,8 @@ export function chartCurrentRatio() {
           label: state.isPt
             ? "Ativo de curto prazo / Passivo de curto prazo"
             : "Short-term assets / short-term liabilities",
-          data: ratios, borderColor: state.COLORS.lineBorder,
+          data: ratios,
+          borderColor: state.COLORS.lineBorder,
           backgroundColor: "transparent",
           borderWidth: 2.5,
           tension: 0.25,
@@ -1173,7 +1191,9 @@ export function chartCurrentRatio() {
               `${state.isPt ? "Rácio de solvência" : "Current ratio"}: ${ctx.parsed.y.toFixed(2)}×`,
           },
         },
-        annotation: { drawTime: 'beforeDatasetsDraw', annotations: {
+        annotation: {
+          drawTime: "beforeDatasetsDraw",
+          annotations: {
             redBg: {
               type: "box",
               yMin: 0,
@@ -1216,19 +1236,21 @@ export function chartCurrentRatio() {
             },
             line05: {
               type: "line",
-              yMin: 0.5, 
-              yMax: 0.5, 
-              borderColor: state.COLORS.neg, 
-              borderWidth: 1.5, 
-              z: -1, borderDash: [4, 4]
-            }, 
-              line1: { 
-                type: "line", 
-                yMin: 1.0,
-                yMax: 1.0,
-                borderColor: state.COLORS.warn,
-                borderWidth: 1.5,
-                z: -1, borderDash: [4, 4],
+              yMin: 0.5,
+              yMax: 0.5,
+              borderColor: state.COLORS.neg,
+              borderWidth: 1.5,
+              z: -1,
+              borderDash: [4, 4],
+            },
+            line1: {
+              type: "line",
+              yMin: 1.0,
+              yMax: 1.0,
+              borderColor: state.COLORS.warn,
+              borderWidth: 1.5,
+              z: -1,
+              borderDash: [4, 4],
             },
           },
         },

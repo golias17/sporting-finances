@@ -170,7 +170,6 @@
   transition: width 0.35s ease;
 }
 
-
 /* ── Transfer highlight cards ── */
 .transfer-highlights {
   display: flex;
@@ -223,7 +222,6 @@ body.dark .tc.record .tc-amount {
   color: var(--ink-2);
   line-height: 1.55;
 }
-
 
 /* ── Season Comparison ── */
 .cmp-selectors {
@@ -548,7 +546,6 @@ body.dark .health-signal.red:hover {
   );
 }
 
-
 /* ── Health Check tab ── */
 .check-intro {
   font-size: 14.5px;
@@ -587,7 +584,6 @@ body.dark .health-signal.red:hover {
 .zone-dot.r {
   background: var(--neg);
 }
-
 
 /* ── Compare enhancements ── */
 .cmp-narrative {
@@ -638,7 +634,6 @@ body.dark .health-signal.red:hover {
 .cmp-abs-delta.neu {
   color: var(--muted);
 }
-
 
 /* ── Transfer Ledger ── */
 .tl-season-nav {
@@ -902,7 +897,6 @@ footer.site-footer .footer-meta {
   }
 }
 
-
 /* ── USPP key-terms grid ── */
 .uspp-grid {
   display: grid;
@@ -1038,7 +1032,6 @@ body.dark .rating-badge.investment-grade {
   color: var(--muted);
   line-height: 1.55;
 }
-
 
 /* ── Lion Finance comparison switcher and grid ── */
 .lf-switcher {
@@ -1185,7 +1178,6 @@ body.dark .lf-card:hover {
   flex-direction: column;
   align-items: flex-end;
 }
-
 
 /* ── VMOC cost KPI strip ── */
 .vmoc-kpi-strip {
@@ -1579,7 +1571,6 @@ table.ledger .badge.winter {
   border: 1px solid rgba(44, 91, 138, 0.2);
 }
 
-
 /* ── Ch 11. News & Social ── */
 .disclaimer-banner {
   display: flex;
@@ -1656,29 +1647,59 @@ table.ledger .badge.winter {
   overflow: hidden;
 }
 .social-btn::before {
-  content: '';
+  content: "";
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 0;
 }
 /* Brand Hover Colors */
-.social-btn.jornal::before { background: linear-gradient(135deg, rgba(0,128,87,0.15), rgba(0,128,87,0.02)); }
-.social-btn.linkedin::before { background: linear-gradient(135deg, rgba(0,119,181,0.1), rgba(0,119,181,0.02)); }
-.social-btn.twitter::before { background: linear-gradient(135deg, rgba(0,0,0,0.08), rgba(0,0,0,0.01)); }
-.social-btn.instagram::before { background: linear-gradient(135deg, rgba(225,48,108,0.1), rgba(253,29,29,0.05)); }
-.social-btn.youtube::before { background: linear-gradient(135deg, rgba(255,0,0,0.1), rgba(255,0,0,0.02)); }
+.social-btn.jornal::before {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 128, 87, 0.15),
+    rgba(0, 128, 87, 0.02)
+  );
+}
+.social-btn.linkedin::before {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 119, 181, 0.1),
+    rgba(0, 119, 181, 0.02)
+  );
+}
+.social-btn.twitter::before {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.01));
+}
+.social-btn.instagram::before {
+  background: linear-gradient(
+    135deg,
+    rgba(225, 48, 108, 0.1),
+    rgba(253, 29, 29, 0.05)
+  );
+}
+.social-btn.youtube::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 0, 0, 0.1),
+    rgba(255, 0, 0, 0.02)
+  );
+}
 
 .social-btn:hover {
   transform: translateY(-4px);
   border-color: var(--green);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
 }
 .social-btn:hover::before {
   opacity: 1;
 }
-.social-btn svg, .social-btn span {
+.social-btn svg,
+.social-btn span {
   position: relative;
   z-index: 1;
 }
@@ -1720,7 +1741,7 @@ table.ledger .badge.winter {
 }
 .news-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
   border-color: var(--green);
 }
 .hero-card {
@@ -1743,11 +1764,12 @@ table.ledger .badge.winter {
   font-weight: 400;
   line-height: 1.2;
 }
-.hero-card .news-source, .hero-card .news-date {
-  color: rgba(255,255,255,0.8);
+.hero-card .news-source,
+.hero-card .news-date {
+  color: rgba(255, 255, 255, 0.8);
 }
 .hero-card:hover {
-  box-shadow: 0 16px 32px rgba(0,68,56,0.2);
+  box-shadow: 0 16px 32px rgba(0, 68, 56, 0.2);
 }
 .news-badge {
   position: absolute;
@@ -1763,18 +1785,41 @@ table.ledger .badge.winter {
   z-index: 2;
 }
 
-
 /* News Card Category Accents */
-.news-card.category-finance { border-top: 3px solid var(--gold); }
-.news-card.category-market { border-top: 3px solid var(--green); }
-.news-card.category-corporate { border-top: 3px solid var(--muted); }
+.news-card.category-finance {
+  border-top: 3px solid var(--gold);
+}
+.news-card.category-market {
+  border-top: 3px solid var(--green);
+}
+.news-card.category-corporate {
+  border-top: 3px solid var(--muted);
+}
 
-.badge-finance { background: rgba(200, 169, 81, 0.15); color: var(--gold); }
-.hero-card .badge-finance { background: rgba(0,0,0,0.2); color: var(--gold); }
-.badge-market { background: rgba(0, 68, 56, 0.1); color: var(--green); }
-.hero-card .badge-market { background: rgba(0,0,0,0.2); color: var(--green); }
-.badge-corporate { background: var(--bg); color: var(--muted); }
-.hero-card .badge-corporate { background: rgba(0,0,0,0.2); color: var(--muted); }
+.badge-finance {
+  background: rgba(200, 169, 81, 0.15);
+  color: var(--gold);
+}
+.hero-card .badge-finance {
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--gold);
+}
+.badge-market {
+  background: rgba(0, 68, 56, 0.1);
+  color: var(--green);
+}
+.hero-card .badge-market {
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--green);
+}
+.badge-corporate {
+  background: var(--bg);
+  color: var(--muted);
+}
+.hero-card .badge-corporate {
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--muted);
+}
 
 .news-source {
   font-family: var(--mono);
@@ -1838,11 +1883,11 @@ table.ledger .badge.winter {
 }
 
 .hero-card .news-sources-list {
-  border-top-color: rgba(255,255,255,0.2);
+  border-top-color: rgba(255, 255, 255, 0.2);
 }
 .hero-card .source-pill {
-  background: rgba(0,0,0,0.2);
-  border-color: rgba(255,255,255,0.2);
+  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.2);
   color: #ffffff;
 }
 .hero-card .source-pill:hover {
@@ -1867,7 +1912,9 @@ table.ledger .badge.winter {
   perspective: 1500px; /* Enable cinematic 3D perspective depth */
   opacity: 1;
   visibility: visible;
-  transition: opacity 0.4s ease, visibility 0.4s ease;
+  transition:
+    opacity 0.4s ease,
+    visibility 0.4s ease;
 }
 
 .modal-overlay.hidden {
@@ -1892,7 +1939,9 @@ table.ledger .badge.winter {
   transform-origin: left center; /* Hinge open from the left edge like a book */
   transform: rotateY(0deg) scale(1) translateZ(0);
   opacity: 1;
-  transition: transform 0.65s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
+  transition:
+    transform 0.65s cubic-bezier(0.25, 1, 0.5, 1),
+    opacity 0.5s ease;
 }
 
 .modal-overlay.hidden .modal-container {
@@ -1963,4 +2012,3 @@ table.ledger .badge.winter {
   white-space: nowrap;
   border-width: 0;
 }
-
