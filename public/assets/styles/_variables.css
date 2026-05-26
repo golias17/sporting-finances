@@ -5,7 +5,8 @@
   --green-tint: #eef5f0;
   --gold: #b08923;
   --gold-soft: #d4b15a;
-  --bg: #f6f8f7;
+  --bg: #f5f8f6;
+  --bg-gradient: linear-gradient(135deg, #f8faf9 0%, #edf1ef 100%);
   --paper: rgba(255, 255, 255, 0.85);
   --surface: rgba(255, 255, 255, 0.95);
   --ink: #111814;
@@ -27,6 +28,7 @@
 
 body.dark {
   --bg: #121513;
+  --bg-gradient: linear-gradient(135deg, #121614 0%, #0d100e 100%);
   --paper: rgba(24, 29, 26, 0.85);
   --surface: rgba(30, 30, 30, 0.85);
   --ink: #eaeaea;

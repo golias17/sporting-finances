@@ -56,9 +56,11 @@ body {
 }
 body {
   font-family: var(--sans);
-  background: var(--bg);
+  background: var(--bg-gradient, var(--bg));
+  background-attachment: fixed;
   color: var(--ink);
   line-height: 1.55;
+  min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-feature-settings: "ss01", "cv11";
@@ -187,22 +189,27 @@ body.dark .kpi .change.neutral {
 
 /* ── Cards / chart panels ── */
 .card {
-  background: var(--surface);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--rule);
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.93);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(10, 93, 58, 0.05);
+  border-radius: 12px;
   padding: 22px 24px 20px;
   margin-bottom: 16px;
   position: relative;
+  box-shadow: 0 4px 20px rgba(10, 93, 58, 0.015), 0 1px 3px rgba(0, 0, 0, 0.01);
   transition:
     transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
     box-shadow 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
     border-color 0.3s ease;
 }
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.02);
+  transform: translateY(-5px);
+  border-color: rgba(10, 93, 58, 0.14);
+  box-shadow: 
+    0 16px 36px rgba(10, 93, 58, 0.05), 
+    0 4px 12px rgba(10, 93, 58, 0.02),
+    inset 0 0 0 1px rgba(10, 93, 58, 0.02);
 }
 body.dark .card {
   background: rgba(24, 34, 29, 0.6);
