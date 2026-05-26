@@ -28,8 +28,7 @@ import {
   chartNetTrading,
   chartCashFlow,
   chartCash,
-  chartAnnualNet,
-  chartRegistry,
+  chartAnnualNet
 } from "./charts.js";
 import { initChartDefaults, ZONE_COLORS } from "./chartUtils.js";
 import { renderKpis } from "./kpi.js";

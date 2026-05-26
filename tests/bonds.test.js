@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { state } from "../src/state.js";
 import { renderVmocCost, renderUsppTerms, renderLionFinance } from "../src/bonds.js";
 

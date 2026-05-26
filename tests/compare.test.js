@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { state } from "../src/state.js";
-import { initComparison, renderComparison } from "../src/compare.js";
+import { initComparison } from "../src/compare.js";
 
 describe("compare.js", () => {
   beforeEach(() => {

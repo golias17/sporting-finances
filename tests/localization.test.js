@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { translateNote } from "../src/localization.js";
 import { applyTranslations } from "../src/translations.js";
 

@@ -8,7 +8,7 @@ import {
   initStoryMode,
   storyKeyHandler
 } from "../src/story.js";
-import { chartRegistry } from "../src/charts.js";
+
 
 // Mock charts.js
 vi.mock("../src/charts.js", () => ({

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { state } from "../src/state.js";
-import { renderTransferLedger, initTransfersDetailTable, renderTransfersDetailTable } from "../src/transfers.js";
+import { renderTransferLedger, initTransfersDetailTable } from "../src/transfers.js";
 
 describe("transfers.js", () => {
   beforeEach(() => {

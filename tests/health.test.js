@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { state } from "../src/state.js";
-import { initHealthBar, renderHealthBar } from "../src/health.js";
-import { calculateHealthSignals } from "../src/metrics.js";
+import { initHealthBar } from "../src/health.js";
 
 // Mock Chart to avoid jsdom canvas issues
 vi.mock("chart.js/auto", () => {
