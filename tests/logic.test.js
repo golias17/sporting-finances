@@ -342,16 +342,16 @@ describe("calculateHealthSignals()", () => {
     };
     const state = makeState({ seasons: [season], isPt: true });
     const signals = calculateHealthSignals(state, 0, fmtMillions);
-    
-    const opProfit = signals.find(s => s.id === "sigOpProfit");
+
+    const opProfit = signals.find((s) => s.id === "sigOpProfit");
     expect(opProfit.status).toBe("amber");
     expect(opProfit.note).toBe("Pequeno défice estrutural");
 
-    const cashSig = signals.find(s => s.id === "sigCash");
+    const cashSig = signals.find((s) => s.id === "sigCash");
     expect(cashSig.status).toBe("amber");
     expect(cashSig.note).toBe("Reduzido — risco mensal");
-    
-    const crSig = signals.find(s => s.id === "sigCurrentRatio");
+
+    const crSig = signals.find((s) => s.id === "sigCurrentRatio");
     expect(crSig.status).toBe("amber");
     expect(crSig.note).toBe("Atenção à liquidez");
   });
@@ -366,16 +366,16 @@ describe("calculateHealthSignals()", () => {
     };
     const state = makeState({ seasons: [season], isPt: false });
     const signals = calculateHealthSignals(state, 0, fmtMillions);
-    
-    const opProfit = signals.find(s => s.id === "sigOpProfit");
+
+    const opProfit = signals.find((s) => s.id === "sigOpProfit");
     expect(opProfit.status).toBe("red");
     expect(opProfit.note).toBe("Deep structural deficit");
 
-    const cashSig = signals.find(s => s.id === "sigCash");
+    const cashSig = signals.find((s) => s.id === "sigCash");
     expect(cashSig.status).toBe("red");
     expect(cashSig.note).toBe("Critically low");
-    
-    const crSig = signals.find(s => s.id === "sigCurrentRatio");
+
+    const crSig = signals.find((s) => s.id === "sigCurrentRatio");
     expect(crSig.status).toBe("red");
     expect(crSig.note).toBe("High short-term liquidity risk");
   });
@@ -398,13 +398,13 @@ describe("calculateKpis()", () => {
         label: "25/26",
         period_end: "2025-12-31",
         net_result: 15000,
-        squad_market_value: 65000
-      }
+        squad_market_value: 65000,
+      },
     };
     const kpis = calculateKpis(state, 0, fmtMillions);
     // H1 data replaces Cash with H1 net result and updates squad market value
     expect(kpis.length).toBe(6);
-    const h1Kpi = kpis.find(k => k.label.includes("H1"));
+    const h1Kpi = kpis.find((k) => k.label.includes("H1"));
     expect(h1Kpi).toBeDefined();
     expect(h1Kpi.value).toBe(fmtMillions(15000));
   });

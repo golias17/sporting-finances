@@ -8,7 +8,7 @@ vi.mock("chart.js/auto", () => {
     default: class Chart {
       constructor() {}
       destroy() {}
-    }
+    },
   };
 });
 
@@ -75,7 +75,7 @@ describe("health.js", () => {
           operating_result_excl_players: 10,
           squad_market_value: 60000,
         },
-      ]
+      ],
     };
     state.healthBarIdx = null;
     state.isPt = false;
@@ -93,7 +93,7 @@ describe("health.js", () => {
     const pills = document.querySelectorAll(".season-pill");
     expect(pills.length).toBe(3);
     expect(pills[2].textContent).toBe("2012/13");
-    
+
     // By default selects latest
     expect(state.healthBarIdx).toBe(2);
     expect(pills[2].classList.contains("active")).toBe(true);
@@ -108,7 +108,7 @@ describe("health.js", () => {
 
     const signals = document.querySelectorAll(".health-signal");
     expect(signals.length).toBeGreaterThan(0);
-    
+
     const sig = signals[0];
     // With our mock data, we should have generated some signals based on metrics.js
     expect(sig.classList.contains("health-signal")).toBe(true);
@@ -125,11 +125,11 @@ describe("health.js", () => {
   it("should respond to click events on season pills", () => {
     initHealthBar();
     vi.runAllTimers();
-    
+
     const pills = document.querySelectorAll(".season-pill");
     pills[0].click(); // click on 2010/11
     vi.runAllTimers();
-    
+
     expect(state.healthBarIdx).toBe(0);
     expect(pills[0].classList.contains("active")).toBe(true);
     expect(pills[2].classList.contains("active")).toBe(false);

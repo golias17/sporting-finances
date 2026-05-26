@@ -28,14 +28,12 @@ import {
   chartNetTrading,
   chartCashFlow,
   chartCash,
-  chartAnnualNet
+  chartAnnualNet,
 } from "./charts.js";
 import { initChartDefaults, ZONE_COLORS } from "./chartUtils.js";
 import { renderKpis } from "./kpi.js";
 import { initGlobalFilters } from "./globalFilters.js";
 import { initPWA } from "./pwa.js";
-
-
 
 // =============================================================
 // JORNAL MODAL
@@ -80,16 +78,24 @@ function initJornalModal() {
   btnClose.addEventListener("click", closeModal, { signal });
 
   // Close on outside click
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) closeModal();
-  }, { signal });
+  modal.addEventListener(
+    "click",
+    (e) => {
+      if (e.target === modal) closeModal();
+    },
+    { signal },
+  );
 
   // Close on escape key
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !modal.classList.contains("hidden")) {
-      closeModal();
-    }
-  }, { signal });
+  document.addEventListener(
+    "keydown",
+    (e) => {
+      if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+        closeModal();
+      }
+    },
+    { signal },
+  );
 }
 
 // =============================================================

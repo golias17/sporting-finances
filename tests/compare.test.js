@@ -38,13 +38,13 @@ describe("compare.js", () => {
           borrowings_nc: 40000,
           borrowings_c: 5000,
           cash: 15000,
-        }
-      ]
+        },
+      ],
     };
     state.startSeasonIndex = 0;
     state.endSeasonIndex = 1;
     state.baseOpts = { scales: { y: {} } };
-    
+
     // Mock Chart.js which is used inside mkChart internally called by compare.js
     vi.mock("../src/charts.js", async (importOriginal) => {
       const actual = await importOriginal();
@@ -62,13 +62,13 @@ describe("compare.js", () => {
 
   it("should initialize the comparison selects with all seasons", () => {
     initComparison();
-    
+
     const selA = document.getElementById("compareSeasonA");
     const selB = document.getElementById("compareSeasonB");
-    
+
     expect(selA.options.length).toBe(2);
     expect(selB.options.length).toBe(2);
-    
+
     expect(selA.options[0].textContent).toBe("2012/13");
     expect(selA.options[1].textContent).toBe("2024/25");
 
@@ -79,7 +79,7 @@ describe("compare.js", () => {
 
   it("should render comparison narrative correctly in English", () => {
     initComparison(); // also calls renderComparison
-    
+
     const narrative = document.getElementById("cmpNarrative").innerHTML;
     expect(narrative).toContain("Revenue grew 100% — from €30.0M to €60.0M");
     expect(narrative).toContain("Equity crossed zero");
@@ -89,10 +89,14 @@ describe("compare.js", () => {
   it("should render comparison narrative correctly in Portuguese", () => {
     state.isPt = true;
     initComparison();
-    
+
     const narrative = document.getElementById("cmpNarrative").innerHTML;
-    expect(narrative).toContain("A receita cresceu 100% — de €30.0M para €60.0M");
+    expect(narrative).toContain(
+      "A receita cresceu 100% — de €30.0M para €60.0M",
+    );
     expect(narrative).toContain("O capital próprio passou a ser positivo");
-    expect(narrative).toContain("Custos com pessoal: de 50% para 33% da receita.");
+    expect(narrative).toContain(
+      "Custos com pessoal: de 50% para 33% da receita.",
+    );
   });
 });

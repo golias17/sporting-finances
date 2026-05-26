@@ -33,8 +33,8 @@ describe("data-table.js", () => {
           cf_operating: 1000,
           cf_investing: -500,
           cf_financing: -200,
-        }
-      ]
+        },
+      ],
     };
     state.startSeasonIndex = 0;
     state.endSeasonIndex = Infinity;
@@ -56,10 +56,10 @@ describe("data-table.js", () => {
 
   it("should render a table inside #dataTable with the correct headers and formatted data", () => {
     renderTable();
-    
+
     const container = document.getElementById("dataTable");
     const table = container.querySelector("table");
-    
+
     expect(table).not.toBeNull();
     expect(table.classList.contains("data")).toBe(true);
 
@@ -94,9 +94,9 @@ describe("data-table.js", () => {
     const container = document.getElementById("dataTable");
     const table = container.querySelector("table");
     const headers = table.querySelectorAll("th");
-    
+
     expect(headers[0].textContent).toBe("Métrica");
-    
+
     const firstRowLabel = table.querySelector("tbody tr td").textContent;
     expect(firstRowLabel).toBe("Receita Operacional"); // Portuguese label
   });
@@ -104,10 +104,10 @@ describe("data-table.js", () => {
   it("should generate a CSV download on export button click", () => {
     // Setup a mock anchor element click interceptor
     const clickSpy = vi.spyOn(window.HTMLAnchorElement.prototype, "click");
-    
+
     initDataExport();
     document.getElementById("btnDownloadLedger").click();
-    
+
     expect(global.URL.createObjectURL).toHaveBeenCalled();
     expect(clickSpy).toHaveBeenCalled();
   });

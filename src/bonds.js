@@ -435,9 +435,11 @@ export function renderLionFinance() {
         const view = e.currentTarget.getAttribute("data-view");
         state.setActiveLionTab(view);
         // Update active button
-        container.querySelectorAll(".lf-switch-btn").forEach((b) =>
-          b.classList.toggle("active", b.getAttribute("data-view") === view),
-        );
+        container
+          .querySelectorAll(".lf-switch-btn")
+          .forEach((b) =>
+            b.classList.toggle("active", b.getAttribute("data-view") === view),
+          );
         // Update grid visibility class
         const grid = container.querySelector(".lf-grid");
         if (grid) {

@@ -6,8 +6,8 @@ import { state } from "../src/state.js";
 vi.mock("../src/metrics.js", () => ({
   calculateKpis: vi.fn(() => [
     { label: "Revenue", value: "€50M", change: "+10%", cls: "pos" },
-    { label: "Debt", value: "€10M", change: "-5%", cls: "neg" }
-  ])
+    { label: "Debt", value: "€10M", change: "-5%", cls: "neg" },
+  ]),
 }));
 
 describe("kpi.js", () => {

@@ -24,9 +24,9 @@ describe("events.js", () => {
 
   it("should initialize event filters and handle click events", () => {
     initEventFilter();
-    
+
     const buttons = document.querySelectorAll(".event-legend .el-filter");
-    
+
     // Click 'on-pitch' filter
     buttons[1].click();
     expect(state.activeEventFilter).toBe("on-pitch");
@@ -35,7 +35,7 @@ describe("events.js", () => {
 
     const event1 = document.querySelector("#eventsList .event.on-pitch");
     const event2 = document.querySelector("#eventsList .event.off-pitch");
-    
+
     expect(event1.classList.contains("hidden")).toBe(false);
     expect(event2.classList.contains("hidden")).toBe(true);
   });

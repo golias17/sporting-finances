@@ -161,17 +161,33 @@ header.hero::before {
   left: -50%;
   width: 200%;
   height: 200%;
-  background-image: 
-    radial-gradient(circle at 50% 50%, rgba(10, 93, 58, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 80% 20%, rgba(176, 137, 35, 0.06) 0%, transparent 35%);
+  background-image:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(10, 93, 58, 0.08) 0%,
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(176, 137, 35, 0.06) 0%,
+      transparent 35%
+    );
   animation: meshFloat 20s ease-in-out infinite alternate;
   pointer-events: none;
   z-index: 0;
 }
 body.dark header.hero::before {
-  background-image: 
-    radial-gradient(circle at 50% 50%, rgba(46, 158, 108, 0.15) 0%, transparent 40%),
-    radial-gradient(circle at 80% 20%, rgba(176, 137, 35, 0.12) 0%, transparent 35%);
+  background-image:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(46, 158, 108, 0.15) 0%,
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(176, 137, 35, 0.12) 0%,
+      transparent 35%
+    );
 }
 header.hero::after {
   content: "";
@@ -579,4 +595,3 @@ section.tab-panel.active {
   height: 1px;
   background: var(--rule);
 }
-

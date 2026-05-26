@@ -1,6 +1,10 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { state } from "../src/state.js";
-import { renderVmocCost, renderUsppTerms, renderLionFinance } from "../src/bonds.js";
+import {
+  renderVmocCost,
+  renderUsppTerms,
+  renderLionFinance,
+} from "../src/bonds.js";
 
 describe("bonds.js", () => {
   beforeEach(() => {
@@ -16,8 +20,8 @@ describe("bonds.js", () => {
       annual_data: [
         { label: "2014/15", financial_result: -10000 },
         { label: "2015/16", financial_result: -12000 },
-        { label: "2023/24", financial_result: -5000 }
-      ]
+        { label: "2023/24", financial_result: -5000 },
+      ],
     };
   });
 
@@ -39,7 +43,7 @@ describe("bonds.js", () => {
   describe("renderUsppTerms", () => {
     it("should render USPP terms in a grid", () => {
       renderUsppTerms();
-      
+
       const terms = document.getElementById("usppTerms");
       expect(terms.innerHTML).toContain("USPP Bond");
       expect(terms.innerHTML).toContain("BBB−");
@@ -49,7 +53,7 @@ describe("bonds.js", () => {
     it("should render localized USPP terms when state.isPt is true", () => {
       state.isPt = true;
       renderUsppTerms();
-      
+
       const terms = document.getElementById("usppTerms");
       expect(terms.innerHTML).toContain("Transformação do Estádio Alvalade");
     });
@@ -58,7 +62,7 @@ describe("bonds.js", () => {
   describe("renderLionFinance", () => {
     it("should render Lion Finance cards and switcher", () => {
       renderLionFinance();
-      
+
       const cards = document.getElementById("lionFinanceCards");
       expect(cards.innerHTML).toContain("Lion Finance No. 1");
       expect(cards.innerHTML).toContain("Lion Finance No. 2");
@@ -67,12 +71,12 @@ describe("bonds.js", () => {
 
     it("should switch tabs when clicked", () => {
       renderLionFinance();
-      
+
       const btnNo1 = document.querySelector('[data-view="no1"]');
       btnNo1.click();
-      
+
       expect(state.activeLionTab).toBe("no1");
-      
+
       const cards = document.getElementById("lionFinanceCards");
       expect(cards.innerHTML).toContain("show-no1");
     });

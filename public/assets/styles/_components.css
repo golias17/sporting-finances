@@ -107,7 +107,9 @@ body {
 }
 .kpi:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.02);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.04),
+    0 4px 12px rgba(0, 0, 0, 0.02);
   border-color: rgba(10, 93, 58, 0.3);
 }
 body.dark .kpi {
@@ -196,7 +198,9 @@ body.dark .kpi .change.neutral {
   padding: 22px 24px 20px;
   margin-bottom: 16px;
   position: relative;
-  box-shadow: 0 4px 20px rgba(10, 93, 58, 0.015), 0 1px 3px rgba(0, 0, 0, 0.01);
+  box-shadow:
+    0 4px 20px rgba(10, 93, 58, 0.015),
+    0 1px 3px rgba(0, 0, 0, 0.01);
   transition:
     transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
     box-shadow 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
@@ -205,8 +209,8 @@ body.dark .kpi .change.neutral {
 .card:hover {
   transform: translateY(-5px);
   border-color: rgba(46, 158, 108, 0.4);
-  box-shadow: 
-    0 16px 36px rgba(46, 158, 108, 0.1), 
+  box-shadow:
+    0 16px 36px rgba(46, 158, 108, 0.1),
     0 4px 12px rgba(46, 158, 108, 0.03);
 }
 body.dark .card {

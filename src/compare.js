@@ -189,8 +189,7 @@ export function renderComparison() {
 
   // Safe division helper — returns null instead of ±Infinity / NaN when the
   // denominator is zero or non-finite.
-  const safeDiv = (n, d) =>
-    Number.isFinite(d) && d !== 0 ? n / d : null;
+  const safeDiv = (n, d) => (Number.isFinite(d) && d !== 0 ? n / d : null);
 
   // Grouped metric cards
   const groups = [
@@ -291,7 +290,9 @@ export function renderComparison() {
           fmt: (v) =>
             v === null
               ? "—"
-              : v.toFixed(0) + "% " + (state.isPt ? "da receita" : "of revenue"),
+              : v.toFixed(0) +
+                "% " +
+                (state.isPt ? "da receita" : "of revenue"),
           better: "low",
           monetary: false,
         },
@@ -388,9 +389,11 @@ export function renderComparison() {
 
   const renderCard = (m) => {
     const hasValues =
-      m.a !== null && m.b !== null && Number.isFinite(m.a) && Number.isFinite(m.b);
-    const improved =
-      hasValues && (m.better === "high" ? m.b > m.a : m.b < m.a);
+      m.a !== null &&
+      m.b !== null &&
+      Number.isFinite(m.a) &&
+      Number.isFinite(m.b);
+    const improved = hasValues && (m.better === "high" ? m.b > m.a : m.b < m.a);
     const same = hasValues && m.a === m.b;
     const pct =
       hasValues && m.a !== 0 ? ((m.b - m.a) / Math.abs(m.a)) * 100 : null;

@@ -206,7 +206,9 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
     ? (d.revenue_operating - prev5.revenue_operating) / prev5.revenue_operating
     : null;
   const currentRatio =
-    d.current_liabilities !== 0 ? d.current_assets / d.current_liabilities : null;
+    d.current_liabilities !== 0
+      ? d.current_assets / d.current_liabilities
+      : null;
   const recurringOpProfit = d.operating_result_excl_players;
 
   const payrollNotes = {
@@ -314,7 +316,9 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
       label: state.isPt ? "Dívida líquida / receita" : "Net debt vs revenue",
       value:
         netDebtRatio !== null
-          ? netDebtRatio.toFixed(1) + "× " + (state.isPt ? "receita" : "revenue")
+          ? netDebtRatio.toFixed(1) +
+            "× " +
+            (state.isPt ? "receita" : "revenue")
           : "—",
       status:
         netDebtRatio === null

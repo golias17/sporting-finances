@@ -103,10 +103,22 @@ export const state = {
   tfQuery: "",
   tfSortCol: null,
   tfSortDir: "asc",
-  setTfActiveSeason(v) { this.tfActiveSeason = v; },
-  setTfActiveType(v) { this.tfActiveType = v; },
-  setTfActiveWindow(v) { this.tfActiveWindow = v; },
-  setTfQuery(v) { this.tfQuery = v; },
-  setTfSortCol(v) { this.tfSortCol = v; },
-  setTfSortDir(v) { this.tfSortDir = v; },
+  setTfActiveSeason(v) {
+    this.tfActiveSeason = v;
+  },
+  setTfActiveType(v) {
+    this.tfActiveType = v;
+  },
+  setTfActiveWindow(v) {
+    this.tfActiveWindow = v;
+  },
+  setTfQuery(v) {
+    this.tfQuery = v;
+  },
+  setTfSortCol(v) {
+    this.tfSortCol = v;
+  },
+  setTfSortDir(v) {
+    this.tfSortDir = v;
+  },
 };

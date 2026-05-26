@@ -8,7 +8,6 @@ import {
   initStoryMode,
 } from "../src/story.js";
 
-
 // Mock charts.js
 vi.mock("../src/charts.js", () => ({
   chartRegistry: {
@@ -35,7 +34,7 @@ describe("story.js", () => {
 
     state.isPt = false;
     state.storyIndex = 0;
-    
+
     vi.useFakeTimers();
   });
 
@@ -49,7 +48,9 @@ describe("story.js", () => {
     initStoryMode();
     // Start story
     document.getElementById("btnStartStory").click();
-    expect(document.getElementById("storyCard").classList.contains("hidden")).toBe(false);
+    expect(
+      document.getElementById("storyCard").classList.contains("hidden"),
+    ).toBe(false);
   });
 
   it("should navigate through story steps", () => {
@@ -70,13 +71,17 @@ describe("story.js", () => {
     // 11 steps total
     state.storyIndex = 10;
     nextStory();
-    expect(document.getElementById("storyCard").classList.contains("hidden")).toBe(true);
+    expect(
+      document.getElementById("storyCard").classList.contains("hidden"),
+    ).toBe(true);
   });
 
   it("should exit story mode", () => {
     startStory();
     exitStory();
-    expect(document.getElementById("storyCard").classList.contains("hidden")).toBe(true);
+    expect(
+      document.getElementById("storyCard").classList.contains("hidden"),
+    ).toBe(true);
   });
 
   it("should handle keyboard navigation", () => {
@@ -103,7 +108,7 @@ describe("story.js", () => {
   it("should handle clicks on the story track to jump to steps", () => {
     initStoryMode();
     const track = document.getElementById("storyTrack");
-    
+
     // Mock getBoundingClientRect
     track.getBoundingClientRect = () => ({
       left: 0,

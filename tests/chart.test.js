@@ -236,7 +236,7 @@ describe("Chart.js and Annotation Plugin integration", () => {
       h1_2526: {
         squad_market_value: 125000,
         cash: 20000,
-      }
+      },
     };
     state.setEndSeasonIndex(state.DATASET.annual_data.length - 1);
     initChartDefaults();
