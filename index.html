@@ -26,6 +26,8 @@
       name="twitter:description"
       content="From −€119M to +€41M. Thirteen fiscal years of Sporting SAD finances, told through interactive charts and data."
     />
+    <meta property="og:image" content="home_screenshot.png" />
+    <meta name="twitter:image" content="home_screenshot.png" />
     <link href="assets/LOGO.svg" rel="icon" type="image/svg+xml" />
     <title data-i18n="auto-txt-title-0">
       Sporting CP — Financial Evolution Dashboard (2012/13 → 2025/26)
@@ -51,7 +53,7 @@
           <a class="lang-link" data-lang="pt" href="index_pt.html">PT</a>
         </div>
         <button
-          aria-label="Toggle light/dark mode"
+          aria-pressed="false"
           class="theme-toggle-btn"
           id="themeToggleBtn"
         >
@@ -111,7 +113,7 @@
         </aside>
       </div>
     </header>
-    <div class="container">
+    <main class="container">
       <!-- GLOBAL FILTERS -->
       <div class="global-filters">
         <div class="filter-controls">
@@ -170,32 +172,32 @@
       <!-- HEADLINE KPIs -->
       <div class="kpi-strip">
         <div class="kpis" id="kpiRow">
-          <div class="kpi skeleton-card">
+          <div class="kpi skeleton-card" aria-hidden="true">
             <div class="skeleton-shimmer skeleton-label"></div>
             <div class="skeleton-shimmer skeleton-value"></div>
             <div class="skeleton-shimmer skeleton-change"></div>
           </div>
-          <div class="kpi skeleton-card">
+          <div class="kpi skeleton-card" aria-hidden="true">
             <div class="skeleton-shimmer skeleton-label"></div>
             <div class="skeleton-shimmer skeleton-value"></div>
             <div class="skeleton-shimmer skeleton-change"></div>
           </div>
-          <div class="kpi skeleton-card">
+          <div class="kpi skeleton-card" aria-hidden="true">
             <div class="skeleton-shimmer skeleton-label"></div>
             <div class="skeleton-shimmer skeleton-value"></div>
             <div class="skeleton-shimmer skeleton-change"></div>
           </div>
-          <div class="kpi skeleton-card">
+          <div class="kpi skeleton-card" aria-hidden="true">
             <div class="skeleton-shimmer skeleton-label"></div>
             <div class="skeleton-shimmer skeleton-value"></div>
             <div class="skeleton-shimmer skeleton-change"></div>
           </div>
-          <div class="kpi skeleton-card">
+          <div class="kpi skeleton-card" aria-hidden="true">
             <div class="skeleton-shimmer skeleton-label"></div>
             <div class="skeleton-shimmer skeleton-value"></div>
             <div class="skeleton-shimmer skeleton-change"></div>
           </div>
-          <div class="kpi skeleton-card">
+          <div class="kpi skeleton-card" aria-hidden="true">
             <div class="skeleton-shimmer skeleton-label"></div>
             <div class="skeleton-shimmer skeleton-value"></div>
             <div class="skeleton-shimmer skeleton-change"></div>
@@ -1944,7 +1946,7 @@
           <div class="news-loading">Loading live updates...</div>
         </div>
       </section>
-    </div>
+    </main>
     <script src="/src/main.js" type="module"></script>
     <footer class="site-footer">
       <div class="wrap">

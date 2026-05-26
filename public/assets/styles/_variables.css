@@ -11,7 +11,7 @@
   --ink: #14181a;
   --ink-2: #2c3437;
   --muted: #6a716e;
-  --muted-2: #9aa09c;
+  --muted-2: #737976;
   --rule: rgba(0, 0, 0, 0.05);
   --rule-2: rgba(0, 0, 0, 0.08);
   --pos: #2e8a55;
@@ -32,7 +32,7 @@ body.dark {
   --ink: #eaeaea;
   --ink-2: #cccccc;
   --muted: #8c938f;
-  --muted-2: #5a615e;
+  --muted-2: #7a827e;
   --rule: rgba(255, 255, 255, 0.05);
   --rule-2: rgba(255, 255, 255, 0.08);
   --green-tint: #142e20;

@@ -551,24 +551,3 @@ section.tab-panel.active {
   background: var(--rule);
 }
 
-.legend-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--paper);
-  border: 1px solid var(--rule);
-  color: var(--ink);
-  padding: 3px 9px;
-  border-radius: 99px;
-  font-family: var(--mono);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-weight: 500;
-  margin-right: 6px;
-}
-.legend-pill .swatch {
-  width: 8px;
-  height: 8px;
-  border-radius: 99px;
-}

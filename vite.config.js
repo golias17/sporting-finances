@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
+import viteCompression from "vite-plugin-compression";
 
 export default defineConfig({
   plugins: [
@@ -58,7 +59,12 @@ export default defineConfig({
         globPatterns: ["**/*.{js,css,html,svg,png,json}"],
       },
     }),
+    viteCompression({ algorithm: "brotliCompress", ext: ".br" }),
+    viteCompression({ algorithm: "gzip", ext: ".gz" }),
   ],
+  build: {
+    target: "es2020",
+  },
   test: {
     environment: "jsdom",
   },
