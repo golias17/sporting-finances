@@ -1,16 +1,15 @@
-/* ── Custom HTML Chart Tooltips ── */
 .glass-tooltip {
   background: var(--paper);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--rule);
+  border: 1px solid rgba(46, 158, 108, 0.25);
   border-radius: 8px;
   padding: 10px 14px;
   pointer-events: none;
   position: absolute;
   transform: translate(-50%, 0);
   transition: all 0.1s ease;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(46, 158, 108, 0.08);
   z-index: 100;
   opacity: 1;
 }
