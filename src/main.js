@@ -230,14 +230,14 @@ function setupApp() {
   // Apply translations for active language
   applyTranslations(activeLang);
 
+  // Initial chart theme setup on load
+  updateChartTheme();
+
   // Initial tab activation
   const initialTab = location.hash.replace("#", "") || "overview";
   activateTab(initialTab, false);
 
   window.addEventListener("resize", () => updateTabIndicator());
-
-  // Initial chart theme setup on load
-  updateChartTheme();
 
   // Floating Scroll to Top button logic
   const scrollToTopBtn = document.getElementById("scrollToTopBtn");
