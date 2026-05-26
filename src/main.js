@@ -137,10 +137,8 @@ function setupApp() {
       // Update all static HTML strings
       applyTranslations(lang);
 
-      // Clear all cached charts so they rebuild with new language
+      // Clear rendered set so charts re-run fn() and update gracefully when tabs are visited
       state.renderedCharts.clear();
-      chartRegistry.forEach((chart) => chart.destroy());
-      chartRegistry.clear();
 
       // Re-render the currently active tab
       const activeTabBtn = document.querySelector("nav.tabs button.active");
@@ -193,10 +191,6 @@ function setupApp() {
         const tab = activeTabBtn.dataset.tab;
         if (state.TAB_CHARTS[tab]) {
           state.TAB_CHARTS[tab].forEach((fn) => {
-            if (chartRegistry.has(fn.name)) {
-              chartRegistry.get(fn.name).destroy();
-              chartRegistry.delete(fn.name);
-            }
             fn();
             state.renderedCharts.add(fn.name);
           });
