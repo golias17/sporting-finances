@@ -104,7 +104,7 @@ describe("transfers.js", () => {
       
       const searchInput = document.getElementById("tfSearchInput");
       searchInput.value = "Player B";
-      searchInput.dispatchEvent(new Event("input"));
+      searchInput.dispatchEvent(new window.Event("input"));
       
       const rows = document.querySelectorAll("#transfersDetailTableBody tr");
       expect(rows.length).toBe(1);

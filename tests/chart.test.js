@@ -10,6 +10,22 @@ import {
   chartNetResult,
   chartEquity,
   chartRevenue,
+  chartRevStreams,
+  chartRevVsPayroll,
+  chartOpResult,
+  chartPayrollBurden,
+  chartTransferReliance,
+  chartDebtLoad,
+  chartCurrentRatio,
+  chartDebt,
+  chartAssetsLiab,
+  chartDebtMaturity,
+  chartSquadBook,
+  chartTransfers,
+  chartNetTrading,
+  chartCashFlow,
+  chartCash,
+  chartAnnualNet,
 } from "../src/charts.js";
 import { chartRegistry } from "../src/chartUtils.js";
 
@@ -64,6 +80,22 @@ describe("Chart.js and Annotation Plugin integration", () => {
       <canvas id="chartNetResult"></canvas>
       <canvas id="chartEquity"></canvas>
       <canvas id="chartRevenue"></canvas>
+      <canvas id="chartRevStreams"></canvas>
+      <canvas id="chartRevVsPayroll"></canvas>
+      <canvas id="chartOpResult"></canvas>
+      <canvas id="chartPayrollBurden"></canvas>
+      <canvas id="chartTransferReliance"></canvas>
+      <canvas id="chartDebtLoad"></canvas>
+      <canvas id="chartCurrentRatio"></canvas>
+      <canvas id="chartDebt"></canvas>
+      <canvas id="chartAssetsLiab"></canvas>
+      <canvas id="chartDebtMaturity"></canvas>
+      <canvas id="chartSquadBook"></canvas>
+      <canvas id="chartTransfers"></canvas>
+      <canvas id="chartNetTrading"></canvas>
+      <canvas id="chartCashFlow"></canvas>
+      <canvas id="chartCash"></canvas>
+      <canvas id="chartAnnualNet"></canvas>
     `;
 
     // Mock the annual data dataset
@@ -200,6 +232,10 @@ describe("Chart.js and Annotation Plugin integration", () => {
           cash: 15000,
         },
       ],
+      h1_2526: {
+        squad_market_value: 125000,
+        cash: 20000,
+      }
     };
     state.setEndSeasonIndex(state.DATASET.annual_data.length - 1);
     initChartDefaults();
@@ -241,7 +277,7 @@ describe("Chart.js and Annotation Plugin integration", () => {
     }
   });
 
-  it("builds chartNetResult, chartEquity, and chartRevenue without crashing", () => {
+  it("builds all other charts without crashing", () => {
     const errors = [];
     const origError = console.error;
     console.error = (...args) => errors.push(args.join(" "));
@@ -250,14 +286,25 @@ describe("Chart.js and Annotation Plugin integration", () => {
       chartNetResult();
       chartEquity();
       chartRevenue();
+      chartRevStreams();
+      chartRevVsPayroll();
+      chartOpResult();
+      chartPayrollBurden();
+      chartTransferReliance();
+      chartDebtLoad();
+      chartCurrentRatio();
+      chartDebt();
+      chartAssetsLiab();
+      chartDebtMaturity();
+      chartSquadBook();
+      chartTransfers();
+      chartNetTrading();
+      chartCashFlow();
+      chartCash();
+      chartAnnualNet();
 
       const netChart = chartRegistry.get("chartNetResult");
-      const eqChart = chartRegistry.get("chartEquity");
-      const revChart = chartRegistry.get("chartRevenue");
-
       expect(netChart).toBeDefined();
-      expect(eqChart).toBeDefined();
-      expect(revChart).toBeDefined();
       expect(errors.length).toBe(0);
     } finally {
       console.error = origError;

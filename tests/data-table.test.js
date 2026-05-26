@@ -103,7 +103,7 @@ describe("data-table.js", () => {
 
   it("should generate a CSV download on export button click", () => {
     // Setup a mock anchor element click interceptor
-    const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, "click");
+    const clickSpy = vi.spyOn(window.HTMLAnchorElement.prototype, "click");
     
     initDataExport();
     document.getElementById("btnDownloadLedger").click();
