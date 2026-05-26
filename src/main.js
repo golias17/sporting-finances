@@ -394,19 +394,19 @@ function initScrollAnimations() {
     (entries, obs) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add("in-view");
+          entry.target.classList.add("visible");
           obs.unobserve(entry.target);
         }
       });
     },
-    { threshold: 0.1, rootMargin: "0px 0px -50px 0px" },
+    { threshold: 0.1, rootMargin: "0px 0px -30px 0px" },
   );
 
   const targets = document.querySelectorAll(
-    ".card, .kpi, .health-bar, .event, .cmp-card, .lf-card, .hb-title, .disclaimer-banner, .social-hub, .news-grid",
+    ".card, .kpi, .health-bar, .event, .cmp-card, .lf-card, .hb-title, .narrative, .chart-box",
   );
   targets.forEach((el) => {
-    el.classList.add("anim-up");
+    el.classList.add("reveal");
     observer.observe(el);
   });
 }

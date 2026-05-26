@@ -157,6 +157,25 @@ header.hero {
 header.hero::before {
   content: "";
   position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(46, 158, 108, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(176, 137, 35, 0.04) 0%, transparent 35%);
+  animation: meshFloat 20s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+body.dark header.hero::before {
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(46, 158, 108, 0.15) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(176, 137, 35, 0.12) 0%, transparent 35%);
+}
+header.hero::after {
+  content: "";
+  position: absolute;
   inset: 0;
   background-image: radial-gradient(
     circle at 1px 1px,
@@ -166,6 +185,7 @@ header.hero::before {
   background-size: 18px 18px;
   opacity: 0.5;
   pointer-events: none;
+  z-index: 0;
 }
 header.hero .wrap {
   max-width: 1280px;
@@ -175,6 +195,7 @@ header.hero .wrap {
   grid-template-columns: 1fr auto;
   gap: 40px;
   align-items: end;
+  z-index: 1;
 }
 @media (max-width: 800px) {
   header.hero .wrap {
@@ -326,10 +347,10 @@ nav.tabs {
   padding: 6px;
   position: sticky;
   top: 16px;
-  background: var(--paper);
+  background: rgba(250, 248, 243, 0.7);
   z-index: 20;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border-radius: 99px;
   width: 100%;
   max-width: 100%;
