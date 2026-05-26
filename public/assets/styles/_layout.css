@@ -162,8 +162,8 @@ header.hero::before {
   width: 200%;
   height: 200%;
   background-image: 
-    radial-gradient(circle at 50% 50%, rgba(46, 158, 108, 0.05) 0%, transparent 40%),
-    radial-gradient(circle at 80% 20%, rgba(176, 137, 35, 0.04) 0%, transparent 35%);
+    radial-gradient(circle at 50% 50%, rgba(10, 93, 58, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(176, 137, 35, 0.06) 0%, transparent 35%);
   animation: meshFloat 20s ease-in-out infinite alternate;
   pointer-events: none;
   z-index: 0;

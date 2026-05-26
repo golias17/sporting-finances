@@ -32,88 +32,10 @@ import {
 } from "./charts.js";
 import { initChartDefaults, ZONE_COLORS } from "./chartUtils.js";
 import { renderKpis } from "./kpi.js";
+import { initGlobalFilters } from "./globalFilters.js";
+import { initPWA } from "./pwa.js";
 
-// =============================================================
-// GLOBAL SEASON FILTER
-// =============================================================
 
-function initGlobalFilters() {
-  const startSelect = document.getElementById("globalStartSeason");
-  const endSelect = document.getElementById("globalEndSeason");
-  if (!startSelect || !endSelect) return;
-
-  const seasons = state.fullAnnual.map((d) => d.label);
-
-  const renderOptions = () => {
-    startSelect.innerHTML = "";
-    endSelect.innerHTML = "";
-    seasons.forEach((season, index) => {
-      // Start Select
-      const optStart = document.createElement("option");
-      optStart.value = index;
-      optStart.textContent = season;
-      if (index === state.startSeasonIndex) optStart.selected = true;
-      if (index > state.endSeasonIndex) optStart.disabled = true;
-      startSelect.appendChild(optStart);
-
-      // End Select
-      const optEnd = document.createElement("option");
-      optEnd.value = index;
-      optEnd.textContent = season;
-      if (index === state.endSeasonIndex) optEnd.selected = true;
-      if (index < state.startSeasonIndex) optEnd.disabled = true;
-      endSelect.appendChild(optEnd);
-    });
-  };
-
-  const onChange = () => {
-    state.setStartSeasonIndex(parseInt(startSelect.value, 10));
-    state.setEndSeasonIndex(parseInt(endSelect.value, 10));
-    renderOptions();
-
-    // Clear all charts and force re-render of active tab
-    state.renderedCharts.clear();
-    const activeTab = document.querySelector(".tabs button.active");
-    if (activeTab) {
-      activateTab(activeTab.dataset.tab);
-    }
-    updateActivePreset();
-  };
-
-  const presets = document.querySelectorAll("#eraPresets .season-pill");
-
-  const updateActivePreset = () => {
-    presets.forEach((btn) => {
-      const s = parseInt(btn.dataset.start, 10);
-      const e =
-        btn.dataset.end === "latest"
-          ? seasons.length - 1
-          : parseInt(btn.dataset.end, 10);
-      const isActive =
-        state.startSeasonIndex === s && state.endSeasonIndex === e;
-      btn.classList.toggle("active", isActive);
-      btn.setAttribute("aria-pressed", isActive ? "true" : "false");
-    });
-  };
-
-  presets.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const s = parseInt(btn.dataset.start, 10);
-      const e =
-        btn.dataset.end === "latest"
-          ? seasons.length - 1
-          : parseInt(btn.dataset.end, 10);
-      startSelect.value = s;
-      endSelect.value = e;
-      onChange();
-    });
-  });
-
-  startSelect.addEventListener("change", onChange);
-  endSelect.addEventListener("change", onChange);
-  renderOptions();
-  updateActivePreset();
-}
 
 // =============================================================
 // JORNAL MODAL
@@ -329,6 +251,7 @@ export function activateTab(tab, pushHash = true) {
     const isActive = b.dataset.tab === tab;
     b.classList.toggle("active", isActive);
     b.setAttribute("aria-selected", isActive ? "true" : "false");
+    b.setAttribute("tabindex", isActive ? "0" : "-1");
     if (isActive) activeBtn = b;
   });
   updateTabIndicator(activeBtn);
@@ -362,7 +285,14 @@ export function activateTab(tab, pushHash = true) {
 function setupApp() {
   // Initialise colour palette and chart base options before any chart is built.
   initChartDefaults();
-  initGlobalFilters();
+  initGlobalFilters(() => {
+    // Clear all charts and force re-render of active tab
+    state.renderedCharts.clear();
+    const activeTab = document.querySelector(".tabs button.active");
+    if (activeTab) {
+      activateTab(activeTab.dataset.tab);
+    }
+  });
   renderKpis();
   initStoryMode();
   initEventFilter();
@@ -581,61 +511,5 @@ async function initApp() {
 // Start application
 initApp();
 
-// -------------------------------------------------------------
-// PWA SERVICE WORKER PROMPT & TOAST
-// -------------------------------------------------------------
-
-function showUpdateToast(onConfirm) {
-  let toast = document.getElementById("pwa-update-toast");
-  if (!toast) {
-    toast = document.createElement("div");
-    toast.id = "pwa-update-toast";
-    toast.className = "pwa-toast";
-    document.body.appendChild(toast);
-  }
-
-  const isPt = state.isPt;
-  const msg = isPt
-    ? "Nova versão disponível! Atualize para obter as últimas novidades."
-    : "New version available! Refresh to get the latest features.";
-  const btnTxt = isPt ? "Atualizar" : "Update";
-
-  toast.innerHTML = `
-    <div class="toast-body">
-      <span>${msg}</span>
-      <button id="pwa-update-btn" class="toast-btn">${btnTxt}</button>
-    </div>
-  `;
-
-  // Entrance slide animation
-  setTimeout(() => toast.classList.add("visible"), 100);
-
-  document.getElementById("pwa-update-btn").addEventListener("click", () => {
-    toast.classList.remove("visible");
-    onConfirm();
-  });
-}
-
-// Register service worker if supported and not in test mode.
-// Note: "virtual:pwa-register" is a virtual module injected dynamically at build-time
-// by vite-plugin-pwa. We bypass it in tests (Vitest) to avoid resolution errors.
-if (
-  typeof window !== "undefined" &&
-  "serviceWorker" in navigator &&
-  import.meta.env.MODE !== "test"
-) {
-  import("virtual:pwa-register")
-    .then(({ registerSW }) => {
-      const updateSW = registerSW({
-        onNeedRefresh() {
-          showUpdateToast(() => updateSW(true));
-        },
-        onOfflineReady() {
-          console.log("App ready to work offline.");
-        },
-      });
-    })
-    .catch((err) => {
-      console.error("Failed to load virtual:pwa-register", err);
-    });
-}
+// Initialize PWA service worker and updates notification
+initPWA();

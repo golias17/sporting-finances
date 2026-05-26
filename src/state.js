@@ -53,7 +53,6 @@ export const state = {
     {
       get(target, key, receiver) {
         if (typeof key === "string" && !(key in target)) {
-          // eslint-disable-next-line no-console
           console.warn(
             `[state] COLORS.${key} accessed before initChartDefaults() was called`,
           );

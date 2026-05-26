@@ -1,0 +1,58 @@
+import { state } from "./state.js";
+
+export function showUpdateToast(onConfirm) {
+  let toast = document.getElementById("pwa-update-toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "pwa-update-toast";
+    toast.className = "pwa-toast";
+    document.body.appendChild(toast);
+  }
+
+  const isPt = state.isPt;
+  const msg = isPt
+    ? "Nova versão disponível! Atualize para obter as últimas novidades."
+    : "New version available! Refresh to get the latest features.";
+  const btnTxt = isPt ? "Atualizar" : "Update";
+
+  toast.innerHTML = `
+    <div class="toast-body">
+      <span>${msg}</span>
+      <button id="pwa-update-btn" class="toast-btn">${btnTxt}</button>
+    </div>
+  `;
+
+  // Entrance slide animation
+  setTimeout(() => toast.classList.add("visible"), 100);
+
+  document.getElementById("pwa-update-btn").addEventListener("click", () => {
+    toast.classList.remove("visible");
+    onConfirm();
+  });
+}
+
+export function initPWA() {
+  // Register service worker if supported and not in test mode.
+  // Note: "virtual:pwa-register" is a virtual module injected dynamically at build-time
+  // by vite-plugin-pwa. We bypass it in tests (Vitest) to avoid resolution errors.
+  if (
+    typeof window !== "undefined" &&
+    "serviceWorker" in navigator &&
+    import.meta.env.MODE !== "test"
+  ) {
+    import("virtual:pwa-register")
+      .then(({ registerSW }) => {
+        const updateSW = registerSW({
+          onNeedRefresh() {
+            showUpdateToast(() => updateSW(true));
+          },
+          onOfflineReady() {
+            console.info("App ready to work offline.");
+          },
+        });
+      })
+      .catch((err) => {
+        console.error("Failed to load virtual:pwa-register", err);
+      });
+  }
+}

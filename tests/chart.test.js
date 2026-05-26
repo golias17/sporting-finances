@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { describe, it, expect, beforeAll } from "vitest";
 import { state } from "../src/state.js";
 import {

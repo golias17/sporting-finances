@@ -24,3 +24,14 @@ footer.site-footer {
     box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
     transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* Elegant focus rings for keyboard navigation */
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 2px solid var(--green-light);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px rgba(46, 158, 108, 0.25);
+}
+

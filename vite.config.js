@@ -1,6 +1,11 @@
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import viteCompression from "vite-plugin-compression";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [
@@ -62,6 +67,19 @@ export default defineConfig({
     }),
     viteCompression({ algorithm: "brotliCompress", ext: ".br" }),
     viteCompression({ algorithm: "gzip", ext: ".gz" }),
+    {
+      name: "generate-pt-html",
+      writeBundle() {
+        const distDir = path.resolve(__dirname, "dist");
+        const indexPath = path.join(distDir, "index.html");
+        const ptPath = path.join(distDir, "index_pt.html");
+        if (fs.existsSync(indexPath)) {
+          let html = fs.readFileSync(indexPath, "utf-8");
+          html = html.replace('<html lang="en">', '<html lang="pt">');
+          fs.writeFileSync(ptPath, html);
+        }
+      },
+    },
   ],
   build: {
     // es2022 matches the ecmaVersion in eslint.config.mjs and removes the need
