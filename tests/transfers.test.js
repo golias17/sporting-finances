@@ -119,5 +119,39 @@ describe("transfers.js", () => {
       expect(rows[0].textContent).toContain("Player B");
     });
 
+    it("should sort the table columns when headers are clicked", () => {
+      initTransfersDetailTable();
+
+      const headers = document.querySelectorAll("#transfersDetailTable th");
+      const playerHeader = headers[0]; // Player column
+
+      // Click to sort by player
+      playerHeader.click();
+      expect(state.tfSortCol).toBe("player");
+      expect(state.tfSortDir).toBe("asc");
+
+      // Verify the sort-indicator was added
+      const indicator = playerHeader.querySelector(".sort-indicator");
+      expect(indicator).not.toBeNull();
+      expect(indicator.textContent).toContain("▲");
+
+      // Click again to toggle direction
+      playerHeader.click();
+      expect(state.tfSortDir).toBe("desc");
+      expect(playerHeader.querySelector(".sort-indicator").textContent).toContain("▼");
+    });
+
+    it("should render empty state message when search has zero matches", () => {
+      initTransfersDetailTable();
+
+      const searchInput = document.getElementById("tfSearchInput");
+      searchInput.value = "NonExistentPlayerXYZ";
+      searchInput.dispatchEvent(new window.Event("input"));
+
+      const rows = document.querySelectorAll("#transfersDetailTableBody tr");
+      expect(rows.length).toBe(1);
+      expect(rows[0].textContent).toContain("No results found");
+    });
+
   });
 });
