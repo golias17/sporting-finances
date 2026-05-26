@@ -113,22 +113,57 @@
     </header>
     <div class="container">
       <!-- GLOBAL FILTERS -->
-      <div class="global-filters" style="margin: 0 0 20px 0; display: flex; flex-wrap: wrap; align-items: center; gap: 20px; background: var(--surface); padding: 15px 20px; border-radius: 8px; border: 1px solid var(--rule);">
-        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px;">
-          <label for="globalStartSeason" style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-dim);" data-i18n="filter-era">Explore Era:</label>
-          <select id="globalStartSeason" style="max-width: 100%; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--rule); background: var(--bg); color: var(--text); font-family: inherit; font-size: 0.9rem; cursor: pointer;">
+      <div class="global-filters">
+        <div class="filter-controls">
+          <label
+            for="globalStartSeason"
+            class="filter-label"
+            data-i18n="filter-era"
+            >Explore Era:</label
+          >
+          <select id="globalStartSeason" class="filter-select">
             <!-- Populated by JS -->
           </select>
-          <label for="globalEndSeason" style="color: var(--text-dim); font-size: 0.9rem;" data-i18n="filter-to">to</label>
-          <select id="globalEndSeason" style="max-width: 100%; padding: 6px 12px; border-radius: 6px; border: 1px solid var(--rule); background: var(--bg); color: var(--text); font-family: inherit; font-size: 0.9rem; cursor: pointer;">
+          <label for="globalEndSeason" class="filter-to" data-i18n="filter-to"
+            >to</label
+          >
+          <select id="globalEndSeason" class="filter-select">
             <!-- Populated by JS -->
           </select>
         </div>
-        <div class="gf-presets" id="eraPresets" style="display: flex; flex-wrap: wrap; gap: 8px; margin-left: auto;">
-          <button class="season-pill" data-start="0" data-end="latest" data-i18n="era-all">All Time</button>
-          <button class="season-pill" data-start="0" data-end="5" data-i18n="era-restruct">Restructuring</button>
-          <button class="season-pill" data-start="6" data-end="latest" data-i18n="era-varandas">Varandas Era</button>
-          <button class="season-pill" data-start="8" data-end="12" data-i18n="era-amorim">Amorim Era</button>
+        <div class="gf-presets" id="eraPresets">
+          <button
+            class="season-pill"
+            data-start="0"
+            data-end="latest"
+            data-i18n="era-all"
+          >
+            All Time
+          </button>
+          <button
+            class="season-pill"
+            data-start="0"
+            data-end="5"
+            data-i18n="era-restruct"
+          >
+            Restructuring
+          </button>
+          <button
+            class="season-pill"
+            data-start="6"
+            data-end="latest"
+            data-i18n="era-varandas"
+          >
+            Varandas Era
+          </button>
+          <button
+            class="season-pill"
+            data-start="8"
+            data-end="12"
+            data-i18n="era-amorim"
+          >
+            Amorim Era
+          </button>
         </div>
       </div>
 
@@ -1242,12 +1277,16 @@
           </p>
           <div class="cmp-selectors">
             <div class="cmp-season-pick">
-              <label for="compareSeasonA" data-i18n="ch08-season-a">Season A</label>
+              <label for="compareSeasonA" data-i18n="ch08-season-a"
+                >Season A</label
+              >
               <select id="compareSeasonA"></select>
             </div>
             <div class="cmp-vs" data-i18n="ch08-vs">vs</div>
             <div class="cmp-season-pick">
-              <label for="compareSeasonB" data-i18n="ch08-season-b">Season B</label>
+              <label for="compareSeasonB" data-i18n="ch08-season-b"
+                >Season B</label
+              >
               <select id="compareSeasonB"></select>
             </div>
           </div>
@@ -1608,15 +1647,29 @@
           </div>
         </div>
         <div class="card">
-          <div class="card-head" style="align-items: center;">
-            <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <div class="card-head card-head-center">
+            <div class="card-actions-row">
               <h3 data-i18n="ch10-annual-h3">
                 Annual data — all metrics in EUR thousands
               </h3>
               <span class="tag" data-i18n="ch10-annual-tag">13 seasons</span>
             </div>
-            <button id="btnDownloadLedger" class="story-btn" style="padding: 6px 12px; font-size: 11px;">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px; vertical-align:middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <button id="btnDownloadLedger" class="story-btn btn-small">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="icon-small"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
               Download CSV
             </button>
           </div>
@@ -1690,7 +1743,12 @@
               </select>
             </div>
             <div class="ledger-control-group ledger-control-group--grow">
-              <label for="tfSearchInput" class="sr-only" data-i18n="ch10-tf-search-label">Search transfers</label>
+              <label
+                for="tfSearchInput"
+                class="sr-only"
+                data-i18n="ch10-tf-search-label"
+                >Search transfers</label
+              >
               <input
                 class="ledger-input"
                 id="tfSearchInput"
@@ -1743,7 +1801,8 @@
           <div>
             <h2>Live <em>Updates</em>.</h2>
             <p class="lede">
-              The latest financial and corporate news regarding Sporting CP, aggregated live from Portuguese media.
+              The latest financial and corporate news regarding Sporting CP,
+              aggregated live from Portuguese media.
             </p>
           </div>
         </div>
@@ -1752,33 +1811,132 @@
           <h3>Official Channels & Media</h3>
           <div class="social-grid">
             <button id="btnJornalModal" class="social-btn jornal">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path
+                  d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"
+                ></path>
+              </svg>
               <span>Jornal Sporting</span>
             </button>
-            <a href="https://www.linkedin.com/company/sporting-clube-de-portugal/" target="_blank" class="social-btn linkedin">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+            <a
+              href="https://www.linkedin.com/company/sporting-clube-de-portugal/"
+              target="_blank"
+              class="social-btn linkedin"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"
+                ></path>
+                <rect x="2" y="9" width="4" height="12"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+              </svg>
               <span>LinkedIn</span>
             </a>
-            <a href="https://twitter.com/SportingCP" target="_blank" class="social-btn twitter">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+            <a
+              href="https://twitter.com/SportingCP"
+              target="_blank"
+              class="social-btn twitter"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"
+                ></path>
+              </svg>
               <span>Twitter / X</span>
             </a>
-            <a href="https://www.instagram.com/sportingcp/" target="_blank" class="social-btn instagram">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            <a
+              href="https://www.instagram.com/sportingcp/"
+              target="_blank"
+              class="social-btn instagram"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path
+                  d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
+                ></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
               <span>Instagram</span>
             </a>
-            <a href="https://www.youtube.com/user/SportingCP" target="_blank" class="social-btn youtube">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+            <a
+              href="https://www.youtube.com/user/SportingCP"
+              target="_blank"
+              class="social-btn youtube"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33 2.78 2.78 0 0 0 1.94 2c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.33 29 29 0 0 0-.46-5.33z"
+                ></path>
+                <polygon
+                  points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"
+                ></polygon>
+              </svg>
               <span>YouTube</span>
             </a>
           </div>
         </div>
 
         <div class="disclaimer-banner anim-up">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="disclaimer-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="disclaimer-icon"
+          >
+            <path
+              d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+            ></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
           <div>
             <strong>Market Speculation Disclaimer</strong>
-            <p>The news feed below is aggregated automatically from external sources (Google News / Portuguese Media). Financial rumors, transfer speculation, and media reports do not represent the official financial standing of Sporting Clube de Portugal SAD until formally filed with the CMVM.</p>
+            <p>
+              The news feed below is aggregated automatically from external
+              sources (Google News / Portuguese Media). Financial rumors,
+              transfer speculation, and media reports do not represent the
+              official financial standing of Sporting Clube de Portugal SAD
+              until formally filed with the CMVM.
+            </p>
           </div>
         </div>
 
@@ -1786,7 +1944,6 @@
           <div class="news-loading">Loading live updates...</div>
         </div>
       </section>
-
     </div>
     <script src="/src/main.js" type="module"></script>
     <footer class="site-footer">
@@ -1831,8 +1988,22 @@
     <!-- Jornal Reader Modal -->
     <div id="jornalModal" class="modal-overlay hidden">
       <div class="modal-container">
-        <button id="btnCloseJornal" class="modal-close" aria-label="Close Reader">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        <button
+          id="btnCloseJornal"
+          class="modal-close"
+          aria-label="Close Reader"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
         </button>
         <div class="modal-content-wrapper">
           <!-- The ISSUU iframe will be injected here by JS to avoid loading it on initial page load -->

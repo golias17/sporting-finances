@@ -30,7 +30,6 @@ import {
   chartCash,
   chartAnnualNet,
   chartRegistry,
-  fmtMillions,
 } from "./charts.js";
 import { initChartDefaults, ZONE_COLORS } from "./chartUtils.js";
 import { renderKpis } from "./kpi.js";

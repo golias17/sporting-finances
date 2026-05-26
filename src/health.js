@@ -67,9 +67,10 @@ export function renderHealthBar(idx) {
   const signals = calculateHealthSignals(state, idx, fmtMillions);
 
   const el = document.getElementById("healthSignals");
-  el.classList.add("fading");
+  const isSameYear = el.dataset.renderedIdx === String(idx);
+  el.dataset.renderedIdx = idx;
 
-  setTimeout(() => {
+  const renderContent = () => {
     el.innerHTML = signals
       .map(
         (s) =>
@@ -141,7 +142,14 @@ export function renderHealthBar(idx) {
     });
 
     el.classList.remove("fading");
-  }, 120);
+  };
+
+  if (isSameYear) {
+    renderContent();
+  } else {
+    el.classList.add("fading");
+    setTimeout(renderContent, 120);
+  }
 
   // Keep headline KPIs in sync with the selected season
   renderKpis(idx);

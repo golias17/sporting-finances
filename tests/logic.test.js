@@ -1,7 +1,16 @@
-import { describe, it, expect } from 'vitest';
-import { calculateKpis, calculateHealthSignals, ordinal } from '../src/metrics.js';
-import { fmtMillions, fmtPct, getEventAnnotations, eventBoxes } from '../src/chartUtils.js';
-import { state } from '../src/state.js';
+import { describe, it, expect } from "vitest";
+import {
+  calculateKpis,
+  calculateHealthSignals,
+  ordinal,
+} from "../src/metrics.js";
+import {
+  fmtMillions,
+  fmtPct,
+  getEventAnnotations,
+  eventBoxes,
+} from "../src/chartUtils.js";
+import { state } from "../src/state.js";
 
 // ---------------------------------------------------------------------------
 // Minimal mock state factory
@@ -9,7 +18,7 @@ import { state } from '../src/state.js';
 
 function makeState(overrides = {}) {
   const defaultSeason = {
-    label: '2012/13',
+    label: "2012/13",
     revenue_operating: 30000,
     net_result: -5000,
     equity: -119000,
@@ -34,8 +43,12 @@ function makeState(overrides = {}) {
     isPt: overrides.isPt ?? false,
     healthBarIdx: null,
     DATASET: { annual_data: seasons },
-    get annual() { return seasons; },
-    get fullAnnual() { return seasons; },
+    get annual() {
+      return seasons;
+    },
+    get fullAnnual() {
+      return seasons;
+    },
     ...overrides,
   };
 }
@@ -44,32 +57,32 @@ function makeState(overrides = {}) {
 // ordinal()
 // ---------------------------------------------------------------------------
 
-describe('ordinal()', () => {
-  it('formats 1 as 1st', () => expect(ordinal(1)).toBe('1st'));
-  it('formats 2 as 2nd', () => expect(ordinal(2)).toBe('2nd'));
-  it('formats 3 as 3rd', () => expect(ordinal(3)).toBe('3rd'));
-  it('formats 4 as 4th', () => expect(ordinal(4)).toBe('4th'));
-  it('formats 11 as 11th', () => expect(ordinal(11)).toBe('11th'));
-  it('formats 12 as 12th', () => expect(ordinal(12)).toBe('12th'));
-  it('formats 21 as 21st', () => expect(ordinal(21)).toBe('21st'));
+describe("ordinal()", () => {
+  it("formats 1 as 1st", () => expect(ordinal(1)).toBe("1st"));
+  it("formats 2 as 2nd", () => expect(ordinal(2)).toBe("2nd"));
+  it("formats 3 as 3rd", () => expect(ordinal(3)).toBe("3rd"));
+  it("formats 4 as 4th", () => expect(ordinal(4)).toBe("4th"));
+  it("formats 11 as 11th", () => expect(ordinal(11)).toBe("11th"));
+  it("formats 12 as 12th", () => expect(ordinal(12)).toBe("12th"));
+  it("formats 21 as 21st", () => expect(ordinal(21)).toBe("21st"));
 });
 
 // ---------------------------------------------------------------------------
 // fmtMillions()
 // ---------------------------------------------------------------------------
 
-describe('fmtMillions()', () => {
-  it('formats positive thousands correctly', () => {
-    expect(fmtMillions(100000)).toBe('€100.0M');
+describe("fmtMillions()", () => {
+  it("formats positive thousands correctly", () => {
+    expect(fmtMillions(100000)).toBe("€100.0M");
   });
-  it('formats negative values with minus sign', () => {
-    expect(fmtMillions(-50000)).toBe('€−50.0M');
+  it("formats negative values with minus sign", () => {
+    expect(fmtMillions(-50000)).toBe("€−50.0M");
   });
-  it('returns em-dash for null', () => {
-    expect(fmtMillions(null)).toBe('—');
+  it("returns em-dash for null", () => {
+    expect(fmtMillions(null)).toBe("—");
   });
-  it('returns em-dash for undefined', () => {
-    expect(fmtMillions(undefined)).toBe('—');
+  it("returns em-dash for undefined", () => {
+    expect(fmtMillions(undefined)).toBe("—");
   });
 });
 
@@ -77,17 +90,17 @@ describe('fmtMillions()', () => {
 // fmtPct()
 // ---------------------------------------------------------------------------
 
-describe('fmtPct()', () => {
-  it('formats decimals to percentages', () => {
-    expect(fmtPct(0.72)).toBe('72%');
-    expect(fmtPct(1.2)).toBe('120%');
-    expect(fmtPct(0)).toBe('0%');
+describe("fmtPct()", () => {
+  it("formats decimals to percentages", () => {
+    expect(fmtPct(0.72)).toBe("72%");
+    expect(fmtPct(1.2)).toBe("120%");
+    expect(fmtPct(0)).toBe("0%");
   });
-  it('returns em-dash for null', () => {
-    expect(fmtPct(null)).toBe('—');
+  it("returns em-dash for null", () => {
+    expect(fmtPct(null)).toBe("—");
   });
-  it('returns em-dash for undefined', () => {
-    expect(fmtPct(undefined)).toBe('—');
+  it("returns em-dash for undefined", () => {
+    expect(fmtPct(undefined)).toBe("—");
   });
 });
 
@@ -95,48 +108,50 @@ describe('fmtPct()', () => {
 // getEventAnnotations() & eventBoxes()
 // ---------------------------------------------------------------------------
 
-describe('Event Annotations Utilities', () => {
-  it('getEventAnnotations returns correct translations based on state.isPt', () => {
-    state.COLORS.info = '#3a72b8';
-    state.COLORS.neg = '#c6404f';
-    state.COLORS.warn = '#d99c2b';
-    state.COLORS.green = '#0a5d3a';
+describe("Event Annotations Utilities", () => {
+  it("getEventAnnotations returns correct translations based on state.isPt", () => {
+    state.COLORS.info = "#3a72b8";
+    state.COLORS.neg = "#c6404f";
+    state.COLORS.warn = "#d99c2b";
+    state.COLORS.green = "#0a5d3a";
 
     // Test English
     state.isPt = false;
     let annos = getEventAnnotations();
-    expect(annos.restructure14.label).toBe('2014 Capital Restructuring');
-    expect(annos.alcochete.label).toBe('2018 Alcochete');
-    
+    expect(annos.restructure14.label).toBe("2014 Capital Restructuring");
+    expect(annos.alcochete.label).toBe("2018 Alcochete");
+
     // Test Portuguese
     state.isPt = true;
     annos = getEventAnnotations();
-    expect(annos.restructure14.label).toBe('Reestruturação 2014');
-    expect(annos.alcochete.label).toBe('Alcochete 2018');
+    expect(annos.restructure14.label).toBe("Reestruturação 2014");
+    expect(annos.alcochete.label).toBe("Alcochete 2018");
 
     // Restore state
     state.isPt = false;
   });
 
-  it('eventBoxes builds correct annotation object structure', () => {
-    state.COLORS.info = '#3a72b8';
-    state.COLORS.neg = '#c6404f';
-    state.COLORS.warn = '#d99c2b';
-    state.COLORS.green = '#0a5d3a';
+  it("eventBoxes builds correct annotation object structure", () => {
+    state.COLORS.info = "#3a72b8";
+    state.COLORS.neg = "#c6404f";
+    state.COLORS.warn = "#d99c2b";
+    state.COLORS.green = "#0a5d3a";
     state.isPt = false;
 
-    const annos = eventBoxes(['restructure14', 'covid']);
+    const annos = eventBoxes(["restructure14", "covid"]);
     expect(annos.e_restructure14).toBeDefined();
-    expect(annos.e_restructure14.type).toBe('line');
-    expect(annos.e_restructure14.xMin).toBe('2014/15');
-    expect(annos.e_restructure14.borderColor).toBe('#3a72b8');
-    expect(annos.e_restructure14.label.content).toBe('2014 Capital Restructuring');
+    expect(annos.e_restructure14.type).toBe("line");
+    expect(annos.e_restructure14.xMin).toBe("2014/15");
+    expect(annos.e_restructure14.borderColor).toBe("#3a72b8");
+    expect(annos.e_restructure14.label.content).toBe(
+      "2014 Capital Restructuring",
+    );
     expect(annos.e_restructure14.label.display).toBe(true);
 
     expect(annos.e_covid).toBeDefined();
-    expect(annos.e_covid.xMin).toBe('2020/21');
-    expect(annos.e_covid.borderColor).toBe('#d99c2b');
-    expect(annos.e_covid.label.content).toBe('COVID');
+    expect(annos.e_covid.xMin).toBe("2020/21");
+    expect(annos.e_covid.borderColor).toBe("#d99c2b");
+    expect(annos.e_covid.label.content).toBe("COVID");
   });
 });
 
@@ -144,8 +159,8 @@ describe('Event Annotations Utilities', () => {
 // calculateKpis()
 // ---------------------------------------------------------------------------
 
-describe('calculateKpis()', () => {
-  it('returns an array of KPI objects', () => {
+describe("calculateKpis()", () => {
+  it("returns an array of KPI objects", () => {
     const state = makeState();
     const kpis = calculateKpis(state, 0, fmtMillions);
     expect(Array.isArray(kpis)).toBe(true);
@@ -155,29 +170,37 @@ describe('calculateKpis()', () => {
   it('marks net result as "neg" when the year is a loss', () => {
     const state = makeState(); // net_result: -5000
     const kpis = calculateKpis(state, 0, fmtMillions);
-    const netKpi = kpis.find(k => k.label.toLowerCase().includes('net result') || k.label.toLowerCase().includes('resultado'));
+    const netKpi = kpis.find(
+      (k) =>
+        k.label.toLowerCase().includes("net result") ||
+        k.label.toLowerCase().includes("resultado"),
+    );
     expect(netKpi).toBeDefined();
-    expect(netKpi.cls).toBe('neg');
+    expect(netKpi.cls).toBe("neg");
   });
 
   it('marks net result as "pos" when the year is profitable', () => {
     const season = { ...makeState().annual[0], net_result: 12000 };
     const state = makeState({ seasons: [season] });
     const kpis = calculateKpis(state, 0, fmtMillions);
-    const netKpi = kpis.find(k => k.label.toLowerCase().includes('net result') || k.label.toLowerCase().includes('resultado'));
-    expect(netKpi.cls).toBe('pos');
+    const netKpi = kpis.find(
+      (k) =>
+        k.label.toLowerCase().includes("net result") ||
+        k.label.toLowerCase().includes("resultado"),
+    );
+    expect(netKpi.cls).toBe("pos");
   });
 
-  it('handles revGrowth gracefully when fewer than 5 seasons exist', () => {
+  it("handles revGrowth gracefully when fewer than 5 seasons exist", () => {
     const state = makeState(); // only 1 season
     const kpis = calculateKpis(state, 0, fmtMillions);
     const revKpi = kpis[0];
     // change should contain a "less than 5" message (not crash)
-    expect(typeof revKpi.change).toBe('string');
+    expect(typeof revKpi.change).toBe("string");
     expect(revKpi.change.length).toBeGreaterThan(0);
   });
 
-  it('calculates 5-year revenue growth when sufficient data exists', () => {
+  it("calculates 5-year revenue growth when sufficient data exists", () => {
     const seasons = Array.from({ length: 6 }, (_, i) => ({
       ...makeState().annual[0],
       label: `201${i}/1${i + 1}`,
@@ -186,33 +209,34 @@ describe('calculateKpis()', () => {
     const state = makeState({ seasons });
     const kpis = calculateKpis(state, 5, fmtMillions);
     const revKpi = kpis[0];
-    expect(revKpi.cls).toBe('pos'); // revenue grew
-    expect(revKpi.change).toContain('%');
+    expect(revKpi.cls).toBe("pos"); // revenue grew
+    expect(revKpi.change).toContain("%");
   });
 
-  it('counts consecutive profitable years correctly', () => {
+  it("counts consecutive profitable years correctly", () => {
     const seasons = [
       { ...makeState().annual[0], net_result: -1000 },
-      { ...makeState().annual[0], net_result: 5000, label: '2013/14' },
-      { ...makeState().annual[0], net_result: 8000, label: '2014/15' },
-      { ...makeState().annual[0], net_result: 3000, label: '2015/16' },
+      { ...makeState().annual[0], net_result: 5000, label: "2013/14" },
+      { ...makeState().annual[0], net_result: 8000, label: "2014/15" },
+      { ...makeState().annual[0], net_result: 3000, label: "2015/16" },
     ];
     const state = makeState({ seasons });
     const kpis = calculateKpis(state, 3, fmtMillions); // idx=3, 3rd consecutive profit
     const netKpi = kpis[1];
-    expect(netKpi.change).toContain('3');
+    expect(netKpi.change).toContain("3");
   });
 
-  it('returns PT labels when isPt is true', () => {
+  it("returns PT labels when isPt is true", () => {
     const state = makeState({ isPt: true });
     const kpis = calculateKpis(state, 0, fmtMillions);
     // At least one label should contain Portuguese text
-    const hasPt = kpis.some(k =>
-      k.label.includes('Receita') ||
-      k.label.includes('resultado') ||
-      k.label.includes('capital') ||
-      k.label.includes('Dívida') ||
-      k.label.includes('Último')
+    const hasPt = kpis.some(
+      (k) =>
+        k.label.includes("Receita") ||
+        k.label.includes("resultado") ||
+        k.label.includes("capital") ||
+        k.label.includes("Dívida") ||
+        k.label.includes("Último"),
     );
     expect(hasPt).toBe(true);
   });
@@ -222,8 +246,8 @@ describe('calculateKpis()', () => {
 // calculateHealthSignals()
 // ---------------------------------------------------------------------------
 
-describe('calculateHealthSignals()', () => {
-  it('returns 8 signals', () => {
+describe("calculateHealthSignals()", () => {
+  it("returns 8 signals", () => {
     const state = makeState();
     const signals = calculateHealthSignals(state, 0, fmtMillions);
     expect(signals.length).toBe(8);
@@ -237,8 +261,8 @@ describe('calculateHealthSignals()', () => {
     };
     const state = makeState({ seasons: [season] });
     const signals = calculateHealthSignals(state, 0, fmtMillions);
-    const wageSig = signals.find(s => s.id === 'sigWage');
-    expect(wageSig.status).toBe('red');
+    const wageSig = signals.find((s) => s.id === "sigWage");
+    expect(wageSig.status).toBe("red");
   });
 
   it('marks payroll as "green" when wage bill is below 60% of revenue', () => {
@@ -249,23 +273,23 @@ describe('calculateHealthSignals()', () => {
     };
     const state = makeState({ seasons: [season] });
     const signals = calculateHealthSignals(state, 0, fmtMillions);
-    const wageSig = signals.find(s => s.id === 'sigWage');
-    expect(wageSig.status).toBe('green');
+    const wageSig = signals.find((s) => s.id === "sigWage");
+    expect(wageSig.status).toBe("green");
   });
 
   it('marks equity as "green" when equity is strongly positive', () => {
     const season = { ...makeState().annual[0], equity: 50000 };
     const state = makeState({ seasons: [season] });
     const signals = calculateHealthSignals(state, 0, fmtMillions);
-    const equitySig = signals.find(s => s.id === 'sigEquity');
-    expect(equitySig.status).toBe('green');
+    const equitySig = signals.find((s) => s.id === "sigEquity");
+    expect(equitySig.status).toBe("green");
   });
 
   it('marks equity as "red" when equity is negative', () => {
     const state = makeState(); // equity: -119000
     const signals = calculateHealthSignals(state, 0, fmtMillions);
-    const equitySig = signals.find(s => s.id === 'sigEquity');
-    expect(equitySig.status).toBe('red');
+    const equitySig = signals.find((s) => s.id === "sigEquity");
+    expect(equitySig.status).toBe("red");
   });
 
   it('marks current ratio as "green" when >= 1.0', () => {
@@ -276,35 +300,35 @@ describe('calculateHealthSignals()', () => {
     };
     const state = makeState({ seasons: [season] });
     const signals = calculateHealthSignals(state, 0, fmtMillions);
-    const crSig = signals.find(s => s.id === 'sigCurrentRatio');
-    expect(crSig.status).toBe('green');
+    const crSig = signals.find((s) => s.id === "sigCurrentRatio");
+    expect(crSig.status).toBe("green");
   });
 
   it('marks current ratio as "red" when < 0.5', () => {
     const state = makeState(); // current_assets: 5000, current_liabilities: 35000 → 0.14×
     const signals = calculateHealthSignals(state, 0, fmtMillions);
-    const crSig = signals.find(s => s.id === 'sigCurrentRatio');
-    expect(crSig.status).toBe('red');
+    const crSig = signals.find((s) => s.id === "sigCurrentRatio");
+    expect(crSig.status).toBe("red");
   });
 
-  it('marks revenue growth as null/amber when fewer than 5 seasons', () => {
+  it("marks revenue growth as null/amber when fewer than 5 seasons", () => {
     const state = makeState(); // 1 season only
     const signals = calculateHealthSignals(state, 0, fmtMillions);
-    const revSig = signals.find(s => s.id === 'sigRevGrowth');
-    expect(revSig.status).toBe('amber'); // null case → amber
+    const revSig = signals.find((s) => s.id === "sigRevGrowth");
+    expect(revSig.status).toBe("amber"); // null case → amber
   });
 
-  it('all signals have required fields', () => {
+  it("all signals have required fields", () => {
     const state = makeState();
     const signals = calculateHealthSignals(state, 0, fmtMillions);
-    signals.forEach(s => {
-      expect(s).toHaveProperty('id');
-      expect(s).toHaveProperty('label');
-      expect(s).toHaveProperty('value');
-      expect(s).toHaveProperty('status');
-      expect(s).toHaveProperty('note');
-      expect(s).toHaveProperty('history');
-      expect(['green', 'amber', 'red']).toContain(s.status);
+    signals.forEach((s) => {
+      expect(s).toHaveProperty("id");
+      expect(s).toHaveProperty("label");
+      expect(s).toHaveProperty("value");
+      expect(s).toHaveProperty("status");
+      expect(s).toHaveProperty("note");
+      expect(s).toHaveProperty("history");
+      expect(["green", "amber", "red"]).toContain(s.status);
     });
   });
 });
