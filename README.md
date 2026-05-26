@@ -24,7 +24,8 @@ This dashboard aggregates, visualizes, and contextualizes annual and semi-annual
   - _Squad & Transfers_: Historical player sales, squad book value (balance sheet) vs. market value (Transfermarkt), and a granular season-by-season transfer ledger.
 - **Interactive Season Comparison Tool**: Pick any two fiscal years to run a side-by-side metric comparison complete with auto-generated change narrative and bar charts.
 - **Full Data Table**: Financial statement style table displaying all metrics in a scrollable view.
-- **Premium Theme Selector**: Easily switch between Light and Dark modes. The Chart.js canvas elements automatically adjust grid and label colors on toggling.
+- **Premium Theme Selector**: Easily switch between Light and Dark modes. The Chart.js canvas elements automatically adjust grid and label colors. The light mode features customized green-tinted ambient glows and visual gradients.
+- **Automated Multilingual SEO**: Pre-renders `index_pt.html` with default Portuguese lang tags at build-time to support search index indexing.
 
 ---
 
@@ -44,6 +45,8 @@ The project was recently modernized into a robust, decoupled ES Module architect
 │   ├── state.js                # Centralized global application state store
 │   ├── localization.js         # Language detection and robust Portuguese translation engine (t() helper)
 │   ├── translations.js         # Centralized dictionary containing ~300 Portuguese/English text pairs
+│   ├── globalFilters.js        # Decoupled global season dropdowns and preset controls
+│   ├── pwa.js                  # PWA Service Worker prompt triggers and offline setup
 │   ├── charts.js               # Chart.js initializers, positive/negative color helpers, config
 │   ├── health.js               # Logic for the Season Health-Check matrix tab
 │   ├── bonds.js                # Logic for the Debt Instruments (VMOCs, Bonds, Securitization) tab
@@ -99,7 +102,23 @@ To generate minified, static assets ready for deployment to GitHub Pages or Verc
 npm run build
 ```
 
-This will output a lightweight `dist/` directory.
+This will output a lightweight `dist/` directory containing both the default `index.html` (English default) and `index_pt.html` (Portuguese default) files.
+
+### 4. Running Tests
+
+To run the Vitest unit/integration test suite:
+
+```bash
+npm run test
+```
+
+### 5. Running Linter
+
+To inspect the codebase for code quality issues using ESLint:
+
+```bash
+npm run lint
+```
 
 ---
 
