@@ -409,6 +409,24 @@ function initScrollAnimations() {
     el.classList.add("reveal");
     observer.observe(el);
   });
+
+  // Wire up .anim-up elements (e.g. the news feed container) which use
+  // the "in-view" class instead of "visible".
+  const animUpObserver = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view");
+          obs.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.05 },
+  );
+
+  document.querySelectorAll(".anim-up").forEach((el) => {
+    animUpObserver.observe(el);
+  });
 }
 
 // Jornal Modal Logic
