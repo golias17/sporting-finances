@@ -5,21 +5,18 @@ import annotationPlugin from "chartjs-plugin-annotation";
 
 Chart.register(annotationPlugin);
 
-// Premium line shadow glow plugin for dark mode
+// Premium line shadow glow plugin for all themes
 const lineShadowPlugin = {
   id: "lineShadow",
   beforeDatasetDraw(chart, args) {
     if (args.meta.type === "line") {
       const ctx = chart.ctx;
       ctx.save();
-      const isDark = document.body.classList.contains("dark");
-      if (isDark) {
-        const dataset = chart.data.datasets[args.index];
-        ctx.shadowColor = dataset.borderColor || "rgba(255, 255, 255, 0.5)";
-        ctx.shadowBlur = 8;
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 3;
-      }
+      const dataset = chart.data.datasets[args.index];
+      ctx.shadowColor = dataset.borderColor || "rgba(255, 255, 255, 0.5)";
+      ctx.shadowBlur = 8;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 3;
     }
   },
   afterDatasetDraw(chart, args) {
