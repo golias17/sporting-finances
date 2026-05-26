@@ -1023,3 +1023,37 @@ body.dark .glass-tooltip-footer {
 body.dark .chart-box .table-wrap {
   background: var(--paper);
 }
+
+/* Sleek custom scrollbars for any scrollable panels/tables */
+.table-wrap::-webkit-scrollbar,
+.chart-box .table-wrap::-webkit-scrollbar,
+.custom-scroll::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.table-wrap::-webkit-scrollbar-track,
+.chart-box .table-wrap::-webkit-scrollbar-track,
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.table-wrap::-webkit-scrollbar-thumb,
+.chart-box .table-wrap::-webkit-scrollbar-thumb,
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+}
+body.dark .table-wrap::-webkit-scrollbar-thumb,
+body.dark .chart-box .table-wrap::-webkit-scrollbar-thumb,
+body.dark .custom-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+.table-wrap::-webkit-scrollbar-thumb:hover,
+.chart-box .table-wrap::-webkit-scrollbar-thumb:hover,
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--green);
+}
+body.dark .table-wrap::-webkit-scrollbar-thumb:hover,
+body.dark .chart-box .table-wrap::-webkit-scrollbar-thumb:hover,
+body.dark .custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--pos);
+}
