@@ -1988,35 +1988,46 @@
   },
   {
     "season": "2025/26",
-    "income": 107920,
-    "cost": -72514,
-    "note": "Combined Summer 2025 and Winter 2026 transfer windows. Includes the high-profile sale of Viktor Gyökeres to Arsenal for €55.76M (net share) and key acquisitions such as Luis Suárez, Fotios Ioannidis, and Luís Guilherme.",
+    "note": "Afonso Moreira e Henrique Arreiol vendidos. Venda recorde de Viktor Gyökeres. secure BBB- rating.",
     "purchases": [
       {
-        "player": "Luis Suárez",
+        "player": "Luís Suarez",
         "club": "UD Almería SAD",
         "fee": 22.157,
         "rights": "100%",
         "bonus": 5.263,
         "commission": 1.25,
         "window": "summer",
-        "note": "UD Almería retains a 10% future capital gain sell-on clause. €80M release clause."
+        "note": "Almería retains 20% of future capital gain."
       },
       {
         "player": "Fotios Ioannidis",
         "club": "Panathinaikos FC",
-        "fee": 22,
+        "fee": 22.0,
         "rights": "100%",
-        "bonus": 3,
+        "bonus": 3.0,
         "window": "summer",
-        "note": "Panathinaikos retains a 25% future sell-on clause. €100M release clause."
+        "note": "Panathinaikos retains 25% of future capital gain."
       },
       {
-        "player": "Francisco Trincão (buyout)",
-        "club": "FC Barcelona",
-        "fee": 2.25,
+        "player": "Georgios Vagiannidis",
+        "club": "Panathinaikos FC",
+        "fee": 12.0,
+        "rights": "100%",
+        "bonus": 2.5,
+        "commission": 0.3,
         "window": "summer",
-        "note": "Acquired remaining 40% sell-on rights from Barcelona, eliminating contingent liability."
+        "note": "Panathinaikos retains 15% of future capital gain."
+      },
+      {
+        "player": "Rui Silva",
+        "club": "Real Betis Balompié",
+        "fee": 4.0,
+        "rights": "100%",
+        "bonus": 0.25,
+        "commission": 0.3,
+        "window": "summer",
+        "note": "Future Lda retains 10% future sell-on."
       },
       {
         "player": "Geny Catamo (buyout)",
@@ -2027,47 +2038,38 @@
         "note": "Acquired remaining economic rights (40% from Amora & Black Bulls). Amora/Black Bulls retain 10% of future capital gain."
       },
       {
-        "player": "Georgios Vagiannidis",
-        "club": "Panathinaikos FC",
-        "fee": 1.2,
+        "player": "Paulo Cardoso",
+        "club": "CF Estrela SAD",
+        "fee": 0.7,
         "rights": "100%",
-        "bonus": 2.5,
-        "commission": 0.3,
         "window": "summer",
-        "note": "Panathinaikos retains 15% of future capital gain."
+        "note": "Estrela retains 10% of future capital gain."
       },
       {
         "player": "Ricardo Mangas",
         "club": "FC Spartak Moscow",
-        "fee": 0.79,
+        "fee": 0.32,
         "rights": "100%",
+        "bonus": 0.79,
         "window": "summer",
         "note": "Spartak Moscow retains 20% of future capital gain."
       },
       {
         "player": "Kauã Oliveira",
-        "club": "FC Barra",
-        "fee": 0.45,
+        "club": "FC Ibrachina",
+        "fee": 0.3,
         "rights": "100%",
         "window": "summer",
-        "note": "FC Barra retains 30% of future capital gain (reducible to 20%)."
-      },
-      {
-        "player": "Paulo Cardoso",
-        "club": "Club Alianza Lima",
-        "fee": 0.45,
-        "rights": "100%",
-        "window": "summer",
-        "note": "Alianza Lima retains 40% of future capital gain (reducible to 10%)."
+        "note": "Ibrachina retains 30% of future capital gain."
       },
       {
         "player": "Victor Mendoza",
         "club": "Club Alianza Lima",
-        "fee": 0.45,
+        "fee": 0,
         "rights": "100%",
-        "commission": 0.005,
+        "bonus": 0.45,
         "window": "summer",
-        "note": "Alianza Lima retains 40% of future capital gain (reducible to 10%)."
+        "note": "Alianza Lima retains 10% of future capital gain."
       },
       {
         "player": "Afonso Marques",
@@ -2084,25 +2086,15 @@
         "club": "Free agent",
         "fee": 0,
         "rights": "100%",
-        "commission": 0.104,
         "window": "summer",
         "note": "Free transfer. €60M release clause. Gestifute maintenance."
       },
       {
-        "player": "Rui Silva",
-        "club": "Real Betis Balompié",
-        "fee": 0,
-        "rights": "100%",
-        "commission": 0.25,
-        "window": "summer",
-        "note": "Free transfer. €45M release clause. Future Lda retains 10% future sell-on."
-      },
-      {
         "player": "Luís Guilherme",
         "club": "West Ham United FC",
-        "fee": 14,
+        "fee": 14.0,
         "rights": "100%",
-        "bonus": 3,
+        "bonus": 3.0,
         "commission": 0.16,
         "window": "winter",
         "note": "Winter signing. West Ham retains 15% of future capital gain."
@@ -2160,26 +2152,28 @@
       {
         "player": "Conrad Harder",
         "club": "RB Leipzig",
-        "fee": 24,
-        "bonus": 6,
+        "fee": 24.0,
+        "bonus": 6.0,
         "window": "summer",
         "note": "Leipzig retains a 15% future sell-on clause."
       },
       {
-        "player": "Franco Israel",
-        "club": "Olympique de Marseille",
-        "fee": 10.26,
-        "window": "summer",
-        "note": "Marseille signing. SCP retains 25% of future sale."
-      },
-      {
         "player": "Marcus Edwards",
         "club": "Burnley FC",
-        "fee": 10,
+        "fee": 10.0,
         "bonus": 1.5,
         "commission": 0.104,
         "window": "summer",
         "note": "Burnley signing. SCP retains 10% of future capital gain."
+      },
+      {
+        "player": "Franco Israel",
+        "club": "Torino FC",
+        "fee": 4.09,
+        "bonus": 0.51,
+        "commission": 0.17,
+        "window": "summer",
+        "note": "SCP retains 25% of future sale."
       },
       {
         "player": "Vladan Kovačević",
@@ -2190,10 +2184,26 @@
         "note": "Norwich signing. SCP retains 20% of future capital gain."
       },
       {
+        "player": "Afonso Moreira",
+        "club": "Olympique Lyonnais",
+        "fee": 2.0,
+        "commission": 0.198,
+        "window": "summer",
+        "note": "SCP retains 20% of future sale."
+      },
+      {
+        "player": "Henrique Arreiol",
+        "club": "Legia Warszawa",
+        "fee": 0.5,
+        "bonus": 0.25,
+        "commission": 0.024,
+        "window": "summer",
+        "note": "SCP retains 40% of future sale."
+      },
+      {
         "player": "Pedro Sanca",
         "club": "Gil Vicente FC",
-        "fee": 2,
-        "commission": 0.198,
+        "fee": 0,
         "window": "summer",
         "note": "Gil Vicente signing. SCP retains 25% of future sale."
       },
