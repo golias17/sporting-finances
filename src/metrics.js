@@ -1,3 +1,5 @@
+import { HEALTH_THRESHOLDS } from "./healthThresholds.js";
+
 export function ordinal(n) {
   const s = ["th", "st", "nd", "rd"];
   const v = n % 100;
@@ -289,9 +291,9 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
       status:
         payrollRatio === null
           ? "amber"
-          : payrollRatio < 0.6
+          : payrollRatio < HEALTH_THRESHOLDS.payrollRatio.warn
             ? "green"
-            : payrollRatio < 0.7
+            : payrollRatio < HEALTH_THRESHOLDS.payrollRatio.danger
               ? "amber"
               : "red",
       note:
@@ -299,9 +301,9 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
           ? state.isPt
             ? "Sem receita registada"
             : "No revenue recorded"
-          : payrollRatio < 0.6
+          : payrollRatio < HEALTH_THRESHOLDS.payrollRatio.warn
             ? payrollNotes.low
-            : payrollRatio < 0.7
+            : payrollRatio < HEALTH_THRESHOLDS.payrollRatio.danger
               ? payrollNotes.mid
               : payrollNotes.high,
       history: histData.map((y) =>
@@ -323,9 +325,9 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
       status:
         netDebtRatio === null
           ? "amber"
-          : netDebtRatio < 1
+          : netDebtRatio < HEALTH_THRESHOLDS.netDebtRatio.warn
             ? "green"
-            : netDebtRatio < 2
+            : netDebtRatio < HEALTH_THRESHOLDS.netDebtRatio.danger
               ? "amber"
               : "red",
       note:
@@ -333,11 +335,11 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
           ? state.isPt
             ? "Sem receita registada"
             : "No revenue recorded"
-          : netDebtRatio < 1
+          : netDebtRatio < HEALTH_THRESHOLDS.netDebtRatio.warn
             ? state.isPt
               ? "Controlável"
               : "Manageable"
-            : netDebtRatio < 2
+            : netDebtRatio < HEALTH_THRESHOLDS.netDebtRatio.danger
               ? state.isPt
                 ? "Elevada — atenção"
                 : "Elevated — watch it"
@@ -367,9 +369,9 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
       status:
         transferReliance === null
           ? "amber"
-          : transferReliance < 0.35
+          : transferReliance < HEALTH_THRESHOLDS.transferReliance.warn
             ? "green"
-            : transferReliance < 0.5
+            : transferReliance < HEALTH_THRESHOLDS.transferReliance.danger
               ? "amber"
               : "red",
       note:
@@ -377,11 +379,11 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
           ? state.isPt
             ? "Sem receita registada"
             : "No revenue recorded"
-          : transferReliance < 0.35
+          : transferReliance < HEALTH_THRESHOLDS.transferReliance.warn
             ? state.isPt
               ? "Rendimentos diversificados"
               : "Diversified income"
-            : transferReliance < 0.5
+            : transferReliance < HEALTH_THRESHOLDS.transferReliance.danger
               ? state.isPt
                 ? "Dependente de venda de jogadores"
                 : "Reliant on player sales"
@@ -457,9 +459,9 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
       status:
         currentRatio === null
           ? "amber"
-          : currentRatio >= 1.0
+          : currentRatio >= HEALTH_THRESHOLDS.currentRatio.warn
             ? "green"
-            : currentRatio >= 0.5
+            : currentRatio >= HEALTH_THRESHOLDS.currentRatio.danger
               ? "amber"
               : "red",
       note:
@@ -467,11 +469,11 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
           ? state.isPt
             ? "Sem passivo corrente registado"
             : "No current liabilities recorded"
-          : currentRatio >= 1.0
+          : currentRatio >= HEALTH_THRESHOLDS.currentRatio.warn
             ? state.isPt
               ? "Cobre passivos correntes"
               : "Covers short-term liabilities"
-            : currentRatio >= 0.5
+            : currentRatio >= HEALTH_THRESHOLDS.currentRatio.danger
               ? state.isPt
                 ? "Atenção à liquidez"
                 : "Watch short-term liquidity"

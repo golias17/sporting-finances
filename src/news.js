@@ -2,14 +2,19 @@ const CACHE_KEY = "sportingNews_v1";
 const CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
 
 /**
- * Return cached news items if they are still fresh, otherwise return null.
+ * Return cached news items, or null if there's nothing cached.
+ * By default only returns items within CACHE_TTL_MS; pass allowStale=true
+ * to get whatever is cached regardless of age. This lets initNewsFeed fall
+ * back to a stale cache instead of a hard error page when the sole upstream
+ * dependency (rss2json's free tier, 500 req/day) is rate-limited or down —
+ * outdated news is still more useful to a reader than no news at all.
  */
-function getCachedItems() {
+function getCachedItems(allowStale = false) {
   try {
     const raw = sessionStorage.getItem(CACHE_KEY);
     if (!raw) return null;
     const { ts, items } = JSON.parse(raw);
-    if (Date.now() - ts > CACHE_TTL_MS) return null;
+    if (!allowStale && Date.now() - ts > CACHE_TTL_MS) return null;
     return items;
   } catch {
     return null;
@@ -63,6 +68,22 @@ export async function initNewsFeed() {
       }),
     );
 
+    // rss2json returns HTTP 200 even when it can't serve the request (e.g.
+    // free-tier quota exhausted) — the failure shows up as status: "error"
+    // in the body, not as a rejected fetch. Surface that in the console so
+    // "no news showed up" is traceable to a quota issue rather than looking
+    // like a silent bug.
+    const quotaOrUpstreamErrors = responses
+      .filter((r) => r && r.status === "error")
+      .map((r) => r.message)
+      .filter(Boolean);
+    if (quotaOrUpstreamErrors.length > 0) {
+      console.warn(
+        "[news] rss2json reported errors on one or more queries (likely free-tier quota):",
+        quotaOrUpstreamErrors,
+      );
+    }
+
     // Tag each item with a category based on the query it came from.
     // All names use consistent camelCase.
     const finItems1 = (responses[0].items || []).map((i) => ({
@@ -102,6 +123,16 @@ export async function initNewsFeed() {
     renderNewsItems(container, dataItems);
   } catch (error) {
     console.error("Failed to load news feed:", error);
+
+    // Degrade gracefully: a stale cached feed is more useful to a reader
+    // than a bare error, so fall back to it (regardless of TTL) before
+    // giving up entirely.
+    const stale = getCachedItems(true);
+    if (stale && stale.length > 0) {
+      renderNewsItems(container, stale, { stale: true });
+      return;
+    }
+
     // Use textContent (not innerHTML) so a malformed error.message string cannot
     // inject markup into the DOM.
     const errDiv = document.createElement("div");
@@ -113,8 +144,18 @@ export async function initNewsFeed() {
   }
 }
 
-function renderNewsItems(container, dataItems) {
+function renderNewsItems(container, dataItems, { stale = false } = {}) {
   container.innerHTML = ""; // Clear loading text
+
+  if (stale) {
+    const notice = document.createElement("div");
+    notice.className = "news-stale-notice";
+    notice.textContent =
+      document.documentElement.lang === "pt"
+        ? "Não foi possível atualizar as notícias agora — a mostrar os últimos resultados guardados."
+        : "Couldn't refresh news right now — showing the last saved results.";
+    container.appendChild(notice);
+  }
 
   // Filter out irrelevant sports noise (e.g. youth teams, B team, futsal, generic match scores)
   // and historic re-index glitches (e.g. Rui Patrício, Bruno de Carvalho, Jesus).

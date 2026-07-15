@@ -9,9 +9,6 @@ export const fmtMillions = (v) => {
   return "€" + (v < 0 ? "−" : "") + Math.abs(v / 1000).toFixed(1) + "M";
 };
 
-export const fmtPct = (v) =>
-  v === null || v === undefined ? "—" : (v * 100).toFixed(0) + "%";
-
 export const ZONE_COLORS = {
   red: "rgba(198,64,79,0.07)",
   amber: "rgba(217,156,43,0.08)",

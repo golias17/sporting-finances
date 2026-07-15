@@ -62,7 +62,8 @@ export function renderTransferLedger() {
   renderTlBody(body);
 }
 
-export function renderTlBody(container) {
+// Not exported — only called internally from renderTransferLedger().
+function renderTlBody(container) {
   const s = state.TRANSFER_LEDGER.find(
     (x) => x.season === state.tlActiveSeason,
   );
@@ -316,7 +317,9 @@ export function initTransfersDetailTable() {
   renderTransfersDetailTable();
 }
 
-export function renderTransfersDetailTable() {
+// Not exported — only called internally from initTransfersDetailTable()'s
+// listeners and from within this function's own re-render calls.
+function renderTransfersDetailTable() {
   const container = document.getElementById("transfersDetailTableBody");
   if (!container) return;
 

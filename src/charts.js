@@ -1,5 +1,6 @@
 import { state } from "./state.js";
 import { getLatestH1Data } from "./metrics.js";
+import { HEALTH_THRESHOLDS } from "./healthThresholds.js";
 import Chart from "chart.js/auto";
 import annotationPlugin from "chartjs-plugin-annotation";
 
@@ -45,7 +46,6 @@ Chart.register(canvasBackgroundPlugin);
 
 import {
   fmtMillions,
-  fmtPct,
   ZONE_COLORS,
   eventBoxes,
   baseOpts,
@@ -53,16 +53,15 @@ import {
   generateAccessibleTable,
   addChartDownloadButton,
 } from "./chartUtils.js";
-export {
-  fmtMillions,
-  fmtPct,
-  ZONE_COLORS,
-  eventBoxes,
-  baseOpts,
-  chartRegistry,
-  generateAccessibleTable,
-  addChartDownloadButton,
-};
+// Only fmtMillions and chartRegistry are actually consumed via this
+// re-export path (bonds.js/compare.js/data-table.js import fmtMillions
+// from "./charts.js"; story.js imports chartRegistry the same way).
+// ZONE_COLORS, eventBoxes, baseOpts, generateAccessibleTable and
+// addChartDownloadButton are still imported above for internal use in this
+// file, but nothing imports them *from* charts.js — everywhere else that
+// needs them imports directly from chartUtils.js — so re-exporting them
+// here was dead surface area.
+export { fmtMillions, chartRegistry };
 
 // state.COLORS and state.baseOpts are initialised by initChartDefaults() in
 // chartUtils.js, called once during app boot. Do not assign them here.
@@ -89,6 +88,155 @@ export function mkChart(id, config) {
 }
 
 // =============================================================
+// SHARED CHART-BUILDING HELPERS
+//
+// Extracted because the same handful of shapes (a "premium" styled line
+// dataset, a bar chart colored green/red by sign, and a threshold-based
+// health-ratio line chart with red/amber/green zone annotations) were
+// being retyped near-identically across many of the builders below. Each
+// helper only assembles the repeated shape — the specific numbers, labels
+// and thresholds for each chart still live at its own call site so they
+// stay easy to find and change.
+// =============================================================
+
+/**
+ * Season labels for the x-axis, shared by every chart in this file (each
+ * one previously re-typed `state.annual.map((d) => d.label)` itself).
+ */
+function seasonLabels() {
+  return state.annual.map((d) => d.label);
+}
+
+/**
+ * The recurring "premium" line-dataset style used by chartHero, the cash
+ * line in chartDebt, chartCash, chartDebtMaturity and the squad market
+ * value line in chartSquadBook: a thick tensioned line with themed points.
+ * `pointBorderColor` is only included when explicitly passed — most of
+ * these datasets never set it (leaving Chart.js' own default), so the
+ * helper omits the key by default rather than guessing a value, to avoid
+ * changing any chart's rendered look during this refactor.
+ * Extra Chart.js dataset keys (e.g. `type: "line"`, `order`, `yAxisID`)
+ * can be passed through via `extra`.
+ */
+function styledLineDataset({
+  label,
+  data,
+  color,
+  bg,
+  fill = false,
+  spanGaps = false,
+  pointBorderColor,
+  extra = {},
+}) {
+  return {
+    label,
+    data,
+    borderColor: color,
+    backgroundColor: bg,
+    tension: 0.35,
+    borderWidth: 3,
+    pointRadius: 4,
+    pointBackgroundColor: state.COLORS.chartBg,
+    ...(pointBorderColor ? { pointBorderColor } : {}),
+    pointBorderWidth: 2,
+    pointHoverRadius: 7,
+    pointHoverBorderWidth: 3,
+    fill,
+    spanGaps,
+    ...extra,
+  };
+}
+
+/**
+ * Builds a single-series bar chart colored green/red by whether each value
+ * is positive or negative — the pattern shared by chartNetResult,
+ * chartEquity, chartNetTrading and chartAnnualNet.
+ */
+function posNegBarChart(id, { labelText, data, borderRadius }) {
+  mkChart(id, {
+    type: "bar",
+    data: {
+      labels: seasonLabels(),
+      datasets: [
+        {
+          label: labelText,
+          data,
+          backgroundColor: data.map((v) =>
+            v >= 0 ? state.COLORS.posSoft : state.COLORS.negSoft,
+          ),
+          borderColor: data.map((v) =>
+            v >= 0 ? state.COLORS.pos : state.COLORS.neg,
+          ),
+          borderWidth: 1,
+          ...(borderRadius ? { borderRadius } : {}),
+        },
+      ],
+    },
+    options: {
+      ...baseOpts,
+      plugins: { ...baseOpts.plugins, legend: { display: false } },
+      scales: {
+        ...baseOpts.scales,
+        y: { ...baseOpts.scales.y, beginAtZero: false },
+      },
+    },
+  });
+}
+
+/**
+ * Picks green/amber/red for a health-ratio point based on two thresholds.
+ * By default a higher value is worse (payroll burden, transfer reliance,
+ * net debt load); pass `invert: true` for ratios where a *lower* value is
+ * worse (current ratio).
+ */
+function zoneColor(value, low, high, invert = false) {
+  if (invert) {
+    return value < low
+      ? state.COLORS.neg
+      : value < high
+        ? state.COLORS.warn
+        : state.COLORS.pos;
+  }
+  return value > high
+    ? state.COLORS.neg
+    : value > low
+      ? state.COLORS.warn
+      : state.COLORS.pos;
+}
+
+/**
+ * Assembles the red/amber/green background-box + dashed threshold-line
+ * annotation set shared by the four health-ratio line charts. `zones` and
+ * `lines` carry each chart's own numbers/colors/labels — this just removes
+ * the repeated ~10-line object-literal shape for each box/line.
+ */
+function zoneAnnotations({ zones, lines }) {
+  const annotations = {};
+  zones.forEach((z) => {
+    annotations[z.key] = {
+      type: "box",
+      yMin: z.min,
+      yMax: z.max,
+      backgroundColor: z.color,
+      borderWidth: 0,
+      label: z.label || { display: false, padding: 6 },
+    };
+  });
+  lines.forEach((l) => {
+    annotations[l.key] = {
+      type: "line",
+      yMin: l.value,
+      yMax: l.value,
+      borderColor: l.color,
+      borderWidth: 1.5,
+      z: -1,
+      borderDash: [4, 4],
+    };
+  });
+  return annotations;
+}
+
+// =============================================================
 // INDIVIDUAL CHART BUILDERS
 // =============================================================
 
@@ -96,53 +244,29 @@ export function chartHero() {
   mkChart("chartHero", {
     type: "line",
     data: {
-      labels: state.annual.map((d) => d.label),
+      labels: seasonLabels(),
       datasets: [
-        {
+        styledLineDataset({
           label: state.isPt ? "Receitas operacionais" : "Operating revenue",
           data: state.annual.map((d) => d.revenue_operating),
-          borderColor: state.COLORS.green,
-          backgroundColor: state.COLORS.greenSoft,
-          tension: 0.35,
-          borderWidth: 3,
-          pointRadius: 4,
-          pointBackgroundColor: state.COLORS.chartBg,
-          pointBorderWidth: 2,
-          pointHoverRadius: 7,
-          pointHoverBorderWidth: 3,
-          fill: false,
-          yAxisID: "y",
-        },
-        {
+          color: state.COLORS.green,
+          bg: state.COLORS.greenSoft,
+          extra: { yAxisID: "y" },
+        }),
+        styledLineDataset({
           label: state.isPt ? "Resultado líquido" : "Net result",
           data: state.annual.map((d) => d.net_result),
-          borderColor: state.COLORS.gold,
-          backgroundColor: state.COLORS.goldSoft,
-          tension: 0.35,
-          borderWidth: 3,
-          pointRadius: 4,
-          pointBackgroundColor: state.COLORS.chartBg,
-          pointBorderWidth: 2,
-          pointHoverRadius: 7,
-          pointHoverBorderWidth: 3,
-          fill: false,
-          yAxisID: "y",
-        },
-        {
+          color: state.COLORS.gold,
+          bg: state.COLORS.goldSoft,
+          extra: { yAxisID: "y" },
+        }),
+        styledLineDataset({
           label: state.isPt ? "Capital próprio" : "Shareholders' equity",
           data: state.annual.map((d) => d.equity),
-          borderColor: state.COLORS.info,
-          backgroundColor: "rgba(58,114,184,0.1)",
-          tension: 0.35,
-          borderWidth: 3,
-          pointRadius: 4,
-          pointBackgroundColor: state.COLORS.chartBg,
-          pointBorderWidth: 2,
-          pointHoverRadius: 7,
-          pointHoverBorderWidth: 3,
-          fill: false,
-          yAxisID: "y",
-        },
+          color: state.COLORS.info,
+          bg: "rgba(58,114,184,0.1)",
+          extra: { yAxisID: "y" },
+        }),
       ],
     },
     options: {
@@ -177,68 +301,16 @@ export function chartHero() {
 }
 
 export function chartNetResult() {
-  mkChart("chartNetResult", {
-    type: "bar",
-    data: {
-      labels: state.annual.map((d) => d.label),
-      datasets: [
-        {
-          label: state.isPt ? "Resultado líquido" : "Net result",
-          data: state.annual.map((d) => d.net_result),
-          backgroundColor: state.annual.map((d) =>
-            d.net_result >= 0 ? state.COLORS.posSoft : state.COLORS.negSoft,
-          ),
-          borderColor: state.annual.map((d) =>
-            d.net_result >= 0 ? state.COLORS.pos : state.COLORS.neg,
-          ),
-          borderWidth: 1,
-        },
-      ],
-    },
-    options: {
-      ...baseOpts,
-      plugins: {
-        ...baseOpts.plugins,
-        legend: { display: false },
-      },
-      scales: {
-        ...baseOpts.scales,
-        y: { ...baseOpts.scales.y, beginAtZero: false },
-      },
-    },
+  posNegBarChart("chartNetResult", {
+    labelText: state.isPt ? "Resultado líquido" : "Net result",
+    data: state.annual.map((d) => d.net_result),
   });
 }
 
 export function chartEquity() {
-  mkChart("chartEquity", {
-    type: "bar",
-    data: {
-      labels: state.annual.map((d) => d.label),
-      datasets: [
-        {
-          label: state.isPt ? "Capital próprio" : "Shareholders' equity",
-          data: state.annual.map((d) => d.equity),
-          backgroundColor: state.annual.map((d) =>
-            d.equity >= 0 ? state.COLORS.posSoft : state.COLORS.negSoft,
-          ),
-          borderColor: state.annual.map((d) =>
-            d.equity >= 0 ? state.COLORS.pos : state.COLORS.neg,
-          ),
-          borderWidth: 1,
-        },
-      ],
-    },
-    options: {
-      ...baseOpts,
-      plugins: {
-        ...baseOpts.plugins,
-        legend: { display: false },
-      },
-      scales: {
-        ...baseOpts.scales,
-        y: { ...baseOpts.scales.y, beginAtZero: false },
-      },
-    },
+  posNegBarChart("chartEquity", {
+    labelText: state.isPt ? "Capital próprio" : "Shareholders' equity",
+    data: state.annual.map((d) => d.equity),
   });
 }
 
@@ -247,7 +319,7 @@ export function chartRevenue() {
   mkChart("chartRevenue", {
     type: "bar",
     data: {
-      labels: state.annual.map((d) => d.label),
+      labels: seasonLabels(),
       datasets: [
         {
           label: state.isPt ? "Receitas operacionais" : "Operating revenue",
@@ -291,7 +363,7 @@ export function chartRevStreams() {
   mkChart("chartRevStreams", {
     type: "bar",
     data: {
-      labels: state.annual.map((d) => d.label),
+      labels: seasonLabels(),
       datasets: [
         {
           label: state.isPt ? "TV & Competições" : "TV & Competitions",
@@ -362,7 +434,7 @@ export function chartRevVsPayroll() {
   mkChart("chartRevVsPayroll", {
     type: "bar",
     data: {
-      labels: state.annual.map((d) => d.label),
+      labels: seasonLabels(),
       datasets: [
         {
           label: state.isPt
@@ -415,7 +487,7 @@ export function chartOpResult() {
   mkChart("chartOpResult", {
     type: "bar",
     data: {
-      labels: state.annual.map((d) => d.label),
+      labels: seasonLabels(),
       datasets: [
         {
           label: state.isPt
@@ -453,7 +525,7 @@ export function chartDebt() {
   mkChart("chartDebt", {
     type: "bar",
     data: {
-      labels: state.annual.map((d) => d.label),
+      labels: seasonLabels(),
       datasets: [
         {
           label: state.isPt
@@ -473,24 +545,15 @@ export function chartDebt() {
           stack: "s1",
           order: 1,
         },
-        {
-          type: "line",
+        styledLineDataset({
           label: state.isPt
             ? "Caixa e equivalentes"
             : "Cash on hands; equivalents",
           data: state.annual.map((d) => d.cash),
-          borderColor: state.COLORS.gold,
-          backgroundColor: state.COLORS.goldSoft,
-          borderWidth: 3,
-          tension: 0.35,
-          pointRadius: 4,
-          pointBackgroundColor: state.COLORS.chartBg,
-          pointBorderWidth: 2,
-          pointHoverRadius: 7,
-          pointHoverBorderWidth: 3,
-          fill: false,
-          order: 0,
-        },
+          color: state.COLORS.gold,
+          bg: state.COLORS.goldSoft,
+          extra: { type: "line", order: 0 },
+        }),
       ],
     },
     options: {
@@ -508,7 +571,7 @@ export function chartAssetsLiab() {
   mkChart("chartAssetsLiab", {
     type: "bar",
     data: {
-      labels: state.annual.map((d) => d.label),
+      labels: seasonLabels(),
       datasets: [
         {
           label: state.isPt ? "Ativo total" : "Total assets",
@@ -537,24 +600,17 @@ export function chartDebtMaturity() {
   mkChart("chartDebtMaturity", {
     type: "line",
     data: {
-      labels: state.annual.map((d) => d.label),
+      labels: seasonLabels(),
       datasets: [
-        {
+        styledLineDataset({
           label: state.isPt
             ? "Percentagem de dívida a longo prazo"
             : "Long-term share of debt",
           data: ncShare.map((v) => v * 100),
-          borderColor: state.COLORS.green,
-          backgroundColor: state.COLORS.greenSoft,
-          borderWidth: 3,
-          tension: 0.35,
-          pointRadius: 4,
-          pointBackgroundColor: state.COLORS.chartBg,
-          pointBorderWidth: 2,
-          pointHoverRadius: 7,
-          pointHoverBorderWidth: 3,
+          color: state.COLORS.green,
+          bg: state.COLORS.greenSoft,
           fill: true,
-        },
+        }),
       ],
     },
     options: {
@@ -584,43 +640,50 @@ export function chartDebtMaturity() {
 
 // SQUAD TAB
 export function chartSquadBook() {
+  // Append an extra "H1" data point (with a matching label) only when a
+  // latest-H1 snapshot actually exists in the dataset. Previously the extra
+  // data point was always appended to both datasets without a matching
+  // labels entry — Chart.js rendered it fine (categorical axes tolerate
+  // data.length > labels.length), but generateAccessibleTable() in
+  // chartUtils.js zips rows from data.labels, so the H1 point was silently
+  // dropped from the screen-reader/data-table view. Keeping labels and data
+  // the same length fixes that and gives the H1 point a real axis label
+  // instead of a blank trailing category.
+  const h1Data = getLatestH1Data(state.DATASET);
+  const labels = seasonLabels();
+  const bookValues = state.annual.map((d) => d.squad_book_value);
+  const marketValues = state.annual.map((d) => d.squad_market_value);
+  if (h1Data) {
+    labels.push(h1Data.label ?? (state.isPt ? "1º Semestre" : "H1"));
+    bookValues.push(null);
+    marketValues.push(h1Data.squad_market_value ?? null);
+  }
+
   mkChart("chartSquadBook", {
     type: "bar",
     data: {
-      labels: state.annual.map((d) => d.label),
+      labels,
       datasets: [
         {
           label: state.isPt
             ? "Valor contabilístico do plantel (balanço)"
             : "Squad book value (balance sheet)",
-          data: [...state.annual.map((d) => d.squad_book_value), null],
+          data: bookValues,
           backgroundColor: state.COLORS.green,
           borderRadius: 3,
           order: 2,
         },
-        {
-          type: "line",
+        styledLineDataset({
           label: state.isPt
             ? "Valor de mercado do plantel (Transfermarkt)"
             : "Squad market value (Transfermarkt)",
-          data: [
-            ...state.annual.map((d) => d.squad_market_value),
-            getLatestH1Data(state.DATASET)?.squad_market_value ?? null,
-          ],
-          borderColor: state.COLORS.gold,
-          backgroundColor: "rgba(200,169,81,0.18)",
-          borderWidth: 3,
-          tension: 0.35,
-          pointRadius: 4,
-          pointBackgroundColor: state.COLORS.chartBg,
-          pointBorderColor: state.COLORS.gold,
-          pointBorderWidth: 2,
-          pointHoverRadius: 7,
-          pointHoverBorderWidth: 3,
+          data: marketValues,
+          color: state.COLORS.gold,
+          bg: "rgba(200,169,81,0.18)",
           spanGaps: true,
-          fill: false,
-          order: 1,
-        },
+          pointBorderColor: state.COLORS.gold,
+          extra: { type: "line", order: 1 },
+        }),
       ],
     },
     options: {
@@ -646,7 +709,7 @@ export function chartTransfers() {
   mkChart("chartTransfers", {
     type: "bar",
     data: {
-      labels: state.annual.map((d) => d.label),
+      labels: seasonLabels(),
       datasets: [
         {
           label: state.isPt
@@ -679,37 +742,11 @@ export function chartNetTrading() {
       d.player_transfer_cost +
       d.squad_amortization_impairment,
   );
-  mkChart("chartNetTrading", {
-    type: "bar",
-    data: {
-      labels: state.annual.map((d) => d.label),
-      datasets: [
-        {
-          label: state.isPt
-            ? "Resultado líquido de trading de jogadores"
-            : "Net player trading result",
-          data: netTrading,
-          backgroundColor: netTrading.map((v) =>
-            v >= 0 ? state.COLORS.posSoft : state.COLORS.negSoft,
-          ),
-          borderColor: netTrading.map((v) =>
-            v >= 0 ? state.COLORS.pos : state.COLORS.neg,
-          ),
-          borderWidth: 1,
-        },
-      ],
-    },
-    options: {
-      ...baseOpts,
-      plugins: {
-        ...baseOpts.plugins,
-        legend: { display: false },
-      },
-      scales: {
-        ...baseOpts.scales,
-        y: { ...baseOpts.scales.y, beginAtZero: false },
-      },
-    },
+  posNegBarChart("chartNetTrading", {
+    labelText: state.isPt
+      ? "Resultado líquido de trading de jogadores"
+      : "Net player trading result",
+    data: netTrading,
   });
 }
 
@@ -718,7 +755,7 @@ export function chartCashFlow() {
   mkChart("chartCashFlow", {
     type: "bar",
     data: {
-      labels: state.annual.map((d) => d.label),
+      labels: seasonLabels(),
       datasets: [
         {
           label: state.isPt ? "Operacional" : "Operating",
@@ -753,22 +790,15 @@ export function chartCash() {
   mkChart("chartCash", {
     type: "line",
     data: {
-      labels: state.annual.map((d) => d.label),
+      labels: seasonLabels(),
       datasets: [
-        {
+        styledLineDataset({
           label: state.isPt ? "Caixa e equivalentes" : "Cash & equivalents",
           data: state.annual.map((d) => d.cash),
-          borderColor: state.COLORS.gold,
-          backgroundColor: state.COLORS.goldSoft,
-          borderWidth: 3,
-          tension: 0.35,
-          pointRadius: 4,
-          pointBackgroundColor: state.COLORS.chartBg,
-          pointBorderWidth: 2,
-          pointHoverRadius: 7,
-          pointHoverBorderWidth: 3,
+          color: state.COLORS.gold,
+          bg: state.COLORS.goldSoft,
           fill: true,
-        },
+        }),
       ],
     },
     options: {
@@ -779,33 +809,10 @@ export function chartCash() {
 }
 
 export function chartAnnualNet() {
-  mkChart("chartAnnualNet", {
-    type: "bar",
-    data: {
-      labels: state.annual.map((d) => d.label),
-      datasets: [
-        {
-          label: state.isPt ? "Resultado líquido" : "Net result",
-          data: state.annual.map((d) => d.net_result),
-          backgroundColor: state.annual.map((d) =>
-            d.net_result >= 0 ? state.COLORS.posSoft : state.COLORS.negSoft,
-          ),
-          borderColor: state.annual.map((d) =>
-            d.net_result >= 0 ? state.COLORS.pos : state.COLORS.neg,
-          ),
-          borderWidth: 1,
-          borderRadius: 3,
-        },
-      ],
-    },
-    options: {
-      ...baseOpts,
-      plugins: { ...baseOpts.plugins, legend: { display: false } },
-      scales: {
-        ...baseOpts.scales,
-        y: { ...baseOpts.scales.y, beginAtZero: false },
-      },
-    },
+  posNegBarChart("chartAnnualNet", {
+    labelText: state.isPt ? "Resultado líquido" : "Net result",
+    data: state.annual.map((d) => d.net_result),
+    borderRadius: 3,
   });
 }
 
@@ -814,10 +821,16 @@ export function chartPayrollBurden() {
   const ratios = state.annual.map(
     (d) => (Math.abs(d.personnel_costs) / d.revenue_operating) * 100,
   );
+  // HEALTH_THRESHOLDS stores payrollRatio as a fraction (0.6 = 60%) to match
+  // metrics.js's calculateHealthSignals(), which uses the same cutoffs for
+  // the health-check card right next to this chart — scale to the 0-100
+  // percentage this chart displays.
+  const warnPct = HEALTH_THRESHOLDS.payrollRatio.warn * 100;
+  const dangerPct = HEALTH_THRESHOLDS.payrollRatio.danger * 100;
   mkChart("chartPayrollBurden", {
     type: "line",
     data: {
-      labels: state.annual.map((d) => d.label),
+      labels: seasonLabels(),
       datasets: [
         {
           label: state.isPt
@@ -830,11 +843,7 @@ export function chartPayrollBurden() {
           tension: 0.25,
           pointRadius: 5,
           pointBackgroundColor: ratios.map((r) =>
-            r > 70
-              ? state.COLORS.neg
-              : r > 60
-                ? state.COLORS.warn
-                : state.COLORS.pos,
+            zoneColor(r, warnPct, dangerPct),
           ),
           pointBorderColor: "#fff",
           pointBorderWidth: 1.5,
@@ -856,59 +865,22 @@ export function chartPayrollBurden() {
         },
         annotation: {
           drawTime: "beforeDatasetsDraw",
-          annotations: {
-            redBg: {
-              type: "box",
-              yMin: 70,
-              yMax: 135,
-              backgroundColor: ZONE_COLORS.red,
-              borderWidth: 0,
-              label: {
-                display: false,
-                padding: 6,
+          annotations: zoneAnnotations({
+            zones: [
+              { key: "redBg", min: dangerPct, max: 135, color: ZONE_COLORS.red },
+              {
+                key: "amberBg",
+                min: warnPct,
+                max: dangerPct,
+                color: ZONE_COLORS.amber,
               },
-            },
-            amberBg: {
-              type: "box",
-              yMin: 60,
-              yMax: 70,
-              backgroundColor: ZONE_COLORS.amber,
-              borderWidth: 0,
-              label: {
-                display: false,
-                padding: 6,
-              },
-            },
-            greenBg: {
-              type: "box",
-              yMin: 0,
-              yMax: 60,
-              backgroundColor: ZONE_COLORS.green,
-              borderWidth: 0,
-              label: {
-                display: false,
-                padding: 6,
-              },
-            },
-            line70: {
-              type: "line",
-              yMin: 70,
-              yMax: 70,
-              borderColor: state.COLORS.neg,
-              borderWidth: 1.5,
-              z: -1,
-              borderDash: [4, 4],
-            },
-            line60: {
-              type: "line",
-              yMin: 60,
-              yMax: 60,
-              borderColor: state.COLORS.warn,
-              borderWidth: 1.5,
-              z: -1,
-              borderDash: [4, 4],
-            },
-          },
+              { key: "greenBg", min: 0, max: warnPct, color: ZONE_COLORS.green },
+            ],
+            lines: [
+              { key: "line70", value: dangerPct, color: state.COLORS.neg },
+              { key: "line60", value: warnPct, color: state.COLORS.warn },
+            ],
+          }),
         },
       },
       scales: {
@@ -929,10 +901,14 @@ export function chartTransferReliance() {
     const total = d.revenue_operating + d.player_transfer_income;
     return (d.player_transfer_income / total) * 100;
   });
+  // Same fraction-to-percentage scaling rationale as chartPayrollBurden —
+  // HEALTH_THRESHOLDS.transferReliance is shared with metrics.js.
+  const warnPct = HEALTH_THRESHOLDS.transferReliance.warn * 100;
+  const dangerPct = HEALTH_THRESHOLDS.transferReliance.danger * 100;
   mkChart("chartTransferReliance", {
     type: "line",
     data: {
-      labels: state.annual.map((d) => d.label),
+      labels: seasonLabels(),
       datasets: [
         {
           label: state.isPt
@@ -945,11 +921,7 @@ export function chartTransferReliance() {
           tension: 0.25,
           pointRadius: 5,
           pointBackgroundColor: reliance.map((r) =>
-            r > 50
-              ? state.COLORS.neg
-              : r > 35
-                ? state.COLORS.warn
-                : state.COLORS.pos,
+            zoneColor(r, warnPct, dangerPct),
           ),
           pointBorderColor: "#fff",
           pointBorderWidth: 1.5,
@@ -971,59 +943,22 @@ export function chartTransferReliance() {
         },
         annotation: {
           drawTime: "beforeDatasetsDraw",
-          annotations: {
-            redBg: {
-              type: "box",
-              yMin: 50,
-              yMax: 90,
-              backgroundColor: ZONE_COLORS.red,
-              borderWidth: 0,
-              label: {
-                display: false,
-                padding: 6,
+          annotations: zoneAnnotations({
+            zones: [
+              { key: "redBg", min: dangerPct, max: 90, color: ZONE_COLORS.red },
+              {
+                key: "amberBg",
+                min: warnPct,
+                max: dangerPct,
+                color: ZONE_COLORS.amber,
               },
-            },
-            amberBg: {
-              type: "box",
-              yMin: 35,
-              yMax: 50,
-              backgroundColor: ZONE_COLORS.amber,
-              borderWidth: 0,
-              label: {
-                display: false,
-                padding: 6,
-              },
-            },
-            greenBg: {
-              type: "box",
-              yMin: 0,
-              yMax: 35,
-              backgroundColor: ZONE_COLORS.green,
-              borderWidth: 0,
-              label: {
-                display: false,
-                padding: 6,
-              },
-            },
-            line50: {
-              type: "line",
-              yMin: 50,
-              yMax: 50,
-              borderColor: state.COLORS.neg,
-              borderWidth: 1.5,
-              z: -1,
-              borderDash: [4, 4],
-            },
-            line35: {
-              type: "line",
-              yMin: 35,
-              yMax: 35,
-              borderColor: state.COLORS.warn,
-              borderWidth: 1.5,
-              z: -1,
-              borderDash: [4, 4],
-            },
-          },
+              { key: "greenBg", min: 0, max: warnPct, color: ZONE_COLORS.green },
+            ],
+            lines: [
+              { key: "line50", value: dangerPct, color: state.COLORS.neg },
+              { key: "line35", value: warnPct, color: state.COLORS.warn },
+            ],
+          }),
         },
       },
       scales: {
@@ -1044,10 +979,25 @@ export function chartDebtLoad() {
     const netDebt = d.borrowings_nc + d.borrowings_c - d.cash;
     return netDebt / d.revenue_operating;
   });
+  // HEALTH_THRESHOLDS.netDebtRatio is already in "× revenue" multiples, the
+  // same unit this chart displays — no scaling needed, unlike the two
+  // percentage-based charts above.
+  const { warn, danger } = HEALTH_THRESHOLDS.netDebtRatio;
+  const amberLabel = {
+    display: false,
+    content: state.isPt
+      ? `Alerta (${warn.toFixed(1)}-${danger.toFixed(1)}x)`
+      : `Caution (${warn.toFixed(1)}-${danger.toFixed(1)}x)`,
+    position: { x: "start", y: "center" },
+    xAdjust: 10,
+    color: state.COLORS.warn,
+    font: { family: "Inter", size: 10, weight: "bold" },
+    padding: 6,
+  };
   mkChart("chartDebtLoad", {
     type: "line",
     data: {
-      labels: state.annual.map((d) => d.label),
+      labels: seasonLabels(),
       datasets: [
         {
           label: state.isPt
@@ -1060,11 +1010,7 @@ export function chartDebtLoad() {
           tension: 0.25,
           pointRadius: 5,
           pointBackgroundColor: netDebtRatio.map((r) =>
-            r > 2
-              ? state.COLORS.neg
-              : r > 1
-                ? state.COLORS.warn
-                : state.COLORS.pos,
+            zoneColor(r, warn, danger),
           ),
           pointBorderColor: "#fff",
           pointBorderWidth: 1.5,
@@ -1086,66 +1032,23 @@ export function chartDebtLoad() {
         },
         annotation: {
           drawTime: "beforeDatasetsDraw",
-          annotations: {
-            redBg: {
-              type: "box",
-              yMin: 2,
-              yMax: 14,
-              backgroundColor: ZONE_COLORS.red,
-              borderWidth: 0,
-              label: {
-                display: false,
-                padding: 6,
+          annotations: zoneAnnotations({
+            zones: [
+              { key: "redBg", min: danger, max: 14, color: ZONE_COLORS.red },
+              {
+                key: "amberBg",
+                min: warn,
+                max: danger,
+                color: ZONE_COLORS.amber,
+                label: amberLabel,
               },
-            },
-            amberBg: {
-              type: "box",
-              yMin: 1,
-              yMax: 2,
-              backgroundColor: ZONE_COLORS.amber,
-              borderWidth: 0,
-              label: {
-                display: false,
-                content: state.isPt
-                  ? "Alerta (1.0-2.0x)"
-                  : "Caution (1.0-2.0x)",
-                position: { x: "start", y: "center" },
-                xAdjust: 10,
-                color: state.COLORS.warn,
-                font: { family: "Inter", size: 10, weight: "bold" },
-                padding: 6,
-              },
-            },
-            greenBg: {
-              type: "box",
-              yMin: -2,
-              yMax: 1,
-              backgroundColor: ZONE_COLORS.green,
-              borderWidth: 0,
-              label: {
-                display: false,
-                padding: 6,
-              },
-            },
-            line2: {
-              type: "line",
-              yMin: 2,
-              yMax: 2,
-              borderColor: state.COLORS.neg,
-              borderWidth: 1.5,
-              z: -1,
-              borderDash: [4, 4],
-            },
-            line1: {
-              type: "line",
-              yMin: 1,
-              yMax: 1,
-              borderColor: state.COLORS.warn,
-              borderWidth: 1.5,
-              z: -1,
-              borderDash: [4, 4],
-            },
-          },
+              { key: "greenBg", min: -2, max: warn, color: ZONE_COLORS.green },
+            ],
+            lines: [
+              { key: "line2", value: danger, color: state.COLORS.neg },
+              { key: "line1", value: warn, color: state.COLORS.warn },
+            ],
+          }),
         },
       },
       scales: {
@@ -1167,10 +1070,24 @@ export function chartCurrentRatio() {
   const ratios = state.annual.map(
     (d) => d.current_assets / d.current_liabilities,
   );
+  // HEALTH_THRESHOLDS.currentRatio is inverted (lower is worse): `danger` is
+  // the low cutoff, `warn` is the high cutoff — same shape metrics.js uses.
+  const { danger, warn } = HEALTH_THRESHOLDS.currentRatio;
+  const amberLabel = {
+    display: false,
+    content: state.isPt
+      ? `Alerta (${danger.toFixed(1)}-${warn.toFixed(1)}x)`
+      : `Caution (${danger.toFixed(1)}-${warn.toFixed(1)}x)`,
+    position: { x: "start", y: "center" },
+    xAdjust: 10,
+    color: state.COLORS.warn,
+    font: { family: "Inter", size: 10, weight: "bold" },
+    padding: 6,
+  };
   mkChart("chartCurrentRatio", {
     type: "line",
     data: {
-      labels: state.annual.map((d) => d.label),
+      labels: seasonLabels(),
       datasets: [
         {
           label: state.isPt
@@ -1183,11 +1100,7 @@ export function chartCurrentRatio() {
           tension: 0.25,
           pointRadius: 5,
           pointBackgroundColor: ratios.map((r) =>
-            r < 0.5
-              ? state.COLORS.neg
-              : r < 1.0
-                ? state.COLORS.warn
-                : state.COLORS.pos,
+            zoneColor(r, danger, warn, true),
           ),
           pointBorderColor: "#fff",
           pointBorderWidth: 1.5,
@@ -1209,66 +1122,23 @@ export function chartCurrentRatio() {
         },
         annotation: {
           drawTime: "beforeDatasetsDraw",
-          annotations: {
-            redBg: {
-              type: "box",
-              yMin: 0,
-              yMax: 0.5,
-              backgroundColor: ZONE_COLORS.red,
-              borderWidth: 0,
-              label: {
-                display: false,
-                padding: 6,
+          annotations: zoneAnnotations({
+            zones: [
+              { key: "redBg", min: 0, max: danger, color: ZONE_COLORS.red },
+              {
+                key: "amberBg",
+                min: danger,
+                max: warn,
+                color: ZONE_COLORS.amber,
+                label: amberLabel,
               },
-            },
-            amberBg: {
-              type: "box",
-              yMin: 0.5,
-              yMax: 1.0,
-              backgroundColor: ZONE_COLORS.amber,
-              borderWidth: 0,
-              label: {
-                display: false,
-                content: state.isPt
-                  ? "Alerta (0.5-1.0x)"
-                  : "Caution (0.5-1.0x)",
-                position: { x: "start", y: "center" },
-                xAdjust: 10,
-                color: state.COLORS.warn,
-                font: { family: "Inter", size: 10, weight: "bold" },
-                padding: 6,
-              },
-            },
-            greenBg: {
-              type: "box",
-              yMin: 1.0,
-              yMax: 3.5,
-              backgroundColor: ZONE_COLORS.green,
-              borderWidth: 0,
-              label: {
-                display: false,
-                padding: 6,
-              },
-            },
-            line05: {
-              type: "line",
-              yMin: 0.5,
-              yMax: 0.5,
-              borderColor: state.COLORS.neg,
-              borderWidth: 1.5,
-              z: -1,
-              borderDash: [4, 4],
-            },
-            line1: {
-              type: "line",
-              yMin: 1.0,
-              yMax: 1.0,
-              borderColor: state.COLORS.warn,
-              borderWidth: 1.5,
-              z: -1,
-              borderDash: [4, 4],
-            },
-          },
+              { key: "greenBg", min: warn, max: 3.5, color: ZONE_COLORS.green },
+            ],
+            lines: [
+              { key: "line05", value: danger, color: state.COLORS.neg },
+              { key: "line1", value: warn, color: state.COLORS.warn },
+            ],
+          }),
         },
       },
       scales: {

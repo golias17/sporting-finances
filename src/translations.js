@@ -3,7 +3,9 @@
 // Each entry: { en: "...", pt: "..." }
 // For entries with inner HTML (em, strong, etc.) use innerHTML: true
 
-export const TRANSLATIONS = {
+// Not exported — only read internally by applyTranslations() below.
+// Nothing outside this file imports it.
+const TRANSLATIONS = {
   "era-all": { en: "All Time", pt: "Sempre" },
   "era-restruct": { en: "Restructuring", pt: "Reestruturação" },
   "era-varandas": { en: "Varandas Era", pt: "Era Varandas" },

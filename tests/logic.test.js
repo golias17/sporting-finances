@@ -6,7 +6,6 @@ import {
 } from "../src/metrics.js";
 import {
   fmtMillions,
-  fmtPct,
   getEventAnnotations,
   eventBoxes,
 } from "../src/chartUtils.js";
@@ -83,24 +82,6 @@ describe("fmtMillions()", () => {
   });
   it("returns em-dash for undefined", () => {
     expect(fmtMillions(undefined)).toBe("—");
-  });
-});
-
-// ---------------------------------------------------------------------------
-// fmtPct()
-// ---------------------------------------------------------------------------
-
-describe("fmtPct()", () => {
-  it("formats decimals to percentages", () => {
-    expect(fmtPct(0.72)).toBe("72%");
-    expect(fmtPct(1.2)).toBe("120%");
-    expect(fmtPct(0)).toBe("0%");
-  });
-  it("returns em-dash for null", () => {
-    expect(fmtPct(null)).toBe("—");
-  });
-  it("returns em-dash for undefined", () => {
-    expect(fmtPct(undefined)).toBe("—");
   });
 });
 

@@ -1,6 +1,7 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { state } from "./state.js";
+import { getLatestH1Data } from "./metrics.js";
 
 /**
  * Helper: Converts a relative image path to a Base64 data URL using a temporary canvas.
@@ -65,8 +66,65 @@ export async function generateCuratedPdf() {
     return `${sign}${Math.abs(val / 1000).toFixed(1)} M€`;
   };
 
-  const latestSeason =
-    data.find((d) => d.label === "2024/25") || data[data.length - 2] || {};
+  // Use the most recent *complete* season in annual_data (the in-progress
+  // H1 snapshot lives separately in state.DATASET.h1_* and isn't a full FY).
+  // Previously this searched for the literal label "2024/25" and fell back
+  // to data[data.length - 2] — once a real 2025/26 full-season entry lands
+  // in annual_data, that old logic would still find "2024/25" and pin the
+  // report to a stale season forever instead of picking up the new one.
+  const latestSeason = data[data.length - 1] || {};
+  const firstSeason = data[0] || {};
+  const h1Data = getLatestH1Data(state.DATASET);
+  // The dossier's date range subtitle covers the full annual history plus
+  // whatever in-progress H1 snapshot is available, computed instead of
+  // hardcoded so it doesn't need a manual edit every season.
+  const rangeEndLabel = h1Data?.label || latestSeason.label || "";
+
+  // Revenue growth vs ~5 seasons prior (mirrors the KPI calc in metrics.js)
+  // so the cover-page caption always reflects the live dataset.
+  const revCompIdx = data.length - 1 - 5;
+  const revCompSeason = revCompIdx >= 0 ? data[revCompIdx] : firstSeason;
+  const revGrowthPct =
+    revCompSeason && revCompSeason.revenue_operating
+      ? (
+          ((latestSeason.revenue_operating - revCompSeason.revenue_operating) /
+            Math.abs(revCompSeason.revenue_operating)) *
+          100
+        ).toFixed(0)
+      : null;
+  const revGrowthLabel = isPt
+    ? revGrowthPct !== null
+      ? `Crescimento sustentável de ${revGrowthPct}%`
+      : "Sem dados suficientes para calcular a tendência"
+    : revGrowthPct !== null
+      ? `Sustainable ${revGrowthPct}% growth trend`
+      : "Not enough seasons to compute a trend";
+
+  // Consecutive profitable seasons ending at the latest season.
+  let consecutiveProfitable = 0;
+  for (let i = data.length - 1; i >= 0; i--) {
+    if (data[i].net_result > 0) consecutiveProfitable++;
+    else break;
+  }
+  const netResultLabel = isPt
+    ? consecutiveProfitable > 1
+      ? `${consecutiveProfitable}º ano consecutivo com lucros`
+      : consecutiveProfitable === 1
+        ? "Ano com lucros"
+        : "Ano de prejuízo"
+    : consecutiveProfitable > 1
+      ? `${consecutiveProfitable} consecutive profitable years`
+      : consecutiveProfitable === 1
+        ? "Profitable year"
+        : "Loss-making year";
+
+  const equityLabel = isPt
+    ? latestSeason.equity > 0
+      ? "Balanço revertido a positivo"
+      : `Ainda negativo — défice de ${fmtM(latestSeason.equity)}`
+    : latestSeason.equity > 0
+      ? "Balance sheet restored to positive"
+      : `Still negative — deficit of ${fmtM(latestSeason.equity)}`;
 
   // Header Helper across Pages
   const addHeader = (pageNum) => {
@@ -92,8 +150,8 @@ export async function generateCuratedPdf() {
     doc.setTextColor(...mutedText);
     doc.text(
       isPt
-        ? "Relatório de Evolução Financeira · 2012/13 a 2025/26"
-        : "Financial Evolution Dossier · 2012/13 to 2025/26",
+        ? `Relatório de Evolução Financeira · ${firstSeason.label || "2012/13"} a ${rangeEndLabel}`
+        : `Financial Evolution Dossier · ${firstSeason.label || "2012/13"} to ${rangeEndLabel}`,
       textStartX,
       31,
     );
@@ -167,8 +225,8 @@ export async function generateCuratedPdf() {
   doc.setTextColor(...green);
   doc.text(
     isPt
-      ? "Indicadores Financeiros Chave (Consolidado 2024/25)"
-      : "Key Financial Indicators (Consolidated 2024/25)",
+      ? `Indicadores Financeiros Chave (Consolidado ${latestSeason.label || ""})`
+      : `Key Financial Indicators (Consolidated ${latestSeason.label || ""})`,
     15,
     112,
   );
@@ -206,7 +264,7 @@ export async function generateCuratedPdf() {
     kh,
     isPt ? "RECEITAS OPERACIONAIS RECORRENTES" : "RECURRING OPERATING REVENUE",
     fmtM(latestSeason.revenue_operating),
-    isPt ? "Crescimento sustentável de 136%" : "Sustainable 136% growth trend",
+    revGrowthLabel,
   );
   drawKpi(
     109,
@@ -215,9 +273,7 @@ export async function generateCuratedPdf() {
     kh,
     isPt ? "RESULTADO LÍQUIDO DO EXERCÍCIO" : "NET PROFIT / LOSS",
     fmtM(latestSeason.net_result),
-    isPt
-      ? "Tendência positiva de longo prazo"
-      : "Consistent long-term positive margins",
+    netResultLabel,
   );
   drawKpi(
     15,
@@ -226,14 +282,27 @@ export async function generateCuratedPdf() {
     kh,
     isPt ? "CAPITAIS PRÓPRIOS DO BALANÇO" : "SHAREHOLDERS' EQUITY",
     fmtM(latestSeason.equity),
-    isPt
-      ? "Balanço revertido a positivo"
-      : "Balance sheet restored to positive",
+    equityLabel,
   );
 
   const nd =
     latestSeason.borrowings_nc + latestSeason.borrowings_c - latestSeason.cash;
-  const ratioStr = (nd / latestSeason.revenue_operating).toFixed(2) + " x";
+  const ndRatio = nd / latestSeason.revenue_operating;
+  const ratioStr = ndRatio.toFixed(2) + " x";
+  // Same thresholds used by chartDebtLoad()/calculateHealthSignals() in the
+  // dashboard (green < 1x, amber < 2x, red >= 2x) so the PDF caption always
+  // agrees with what the app itself is showing for the same season.
+  const ndRatioLabel = isPt
+    ? ndRatio < 1
+      ? "Métrica de alavancagem saudável"
+      : ndRatio < 2
+        ? "Alavancagem elevada — a acompanhar"
+        : "Alavancagem em zona de risco"
+    : ndRatio < 1
+      ? "Leverage below safety threshold"
+      : ndRatio < 2
+        ? "Elevated leverage — worth watching"
+        : "Leverage in the risk zone";
   drawKpi(
     109,
     148,
@@ -241,9 +310,7 @@ export async function generateCuratedPdf() {
     kh,
     isPt ? "DÍVIDA LÍQUIDA / RECEITAS" : "NET DEBT / REVENUE RATIO",
     ratioStr,
-    isPt
-      ? "Métrica de alavancagem saudável"
-      : "Leverage below safety threshold",
+    ndRatioLabel,
   );
 
   // Editorial Analysis
@@ -251,9 +318,14 @@ export async function generateCuratedPdf() {
   doc.setFontSize(9);
   doc.setTextColor(...darkInk);
 
+  // Equity figures are interpolated from the actual first/latest seasons
+  // (rather than hardcoded "-119.4 M€ / +40.9 M€") so this paragraph stays
+  // accurate as new seasons of data are added.
+  const firstEquityStr = fmtM(firstSeason.equity);
+  const latestEquityStr = fmtM(latestSeason.equity);
   const notesP1 = isPt
-    ? "Análise de Turnaround:\nA inversão dos capitais próprios de −119.4 M€ para +40.9 M€ constitui o principal marco de segurança financeira. Esta variação foi viabilizada pelas sucessivas conversões de dívida em capital promovidas em parceria com os bancos credores, as quais extinguiram passivos passados sem consumo de tesouraria. Com as receitas comerciais em rota ascendente, a SAD apresenta uma capacidade acrescida de investimento no plantel e infraestruturas."
-    : "Turnaround Analysis:\nThe transition of shareholders' equity from negative 119.4 M€ to positive 40.9 M€ is the cornerstone of the club's financial recovery. This correction was achieved through negotiated debt conversions, which cleared liabilities without drawing down cash. Driven by growing commercial income, the SAD possesses solid cash generation capabilities, allowing it to invest independently in squad value and infrastructure development.";
+    ? `Análise de Turnaround:\nA inversão dos capitais próprios de ${firstEquityStr} para ${latestEquityStr} constitui o principal marco de segurança financeira. Esta variação foi viabilizada pelas sucessivas conversões de dívida em capital promovidas em parceria com os bancos credores, as quais extinguiram passivos passados sem consumo de tesouraria. Com as receitas comerciais em rota ascendente, a SAD apresenta uma capacidade acrescida de investimento no plantel e infraestruturas.`
+    : `Turnaround Analysis:\nThe transition of shareholders' equity from ${firstEquityStr} to ${latestEquityStr} is the cornerstone of the club's financial recovery. This correction was achieved through negotiated debt conversions, which cleared liabilities without drawing down cash. Driven by growing commercial income, the SAD possesses solid cash generation capabilities, allowing it to invest independently in squad value and infrastructure development.`;
 
   const splitNotesP1 = doc.splitTextToSize(notesP1, 180);
   doc.text(splitNotesP1, 15, 182);

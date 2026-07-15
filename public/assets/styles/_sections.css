@@ -1756,6 +1756,18 @@ table.ledger .badge.winter {
   text-align: center;
   padding: 40px;
 }
+.news-stale-notice {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--muted);
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 10px 16px;
+  margin-bottom: 4px;
+  background: rgba(200, 169, 81, 0.12);
+  border: 1px solid rgba(200, 169, 81, 0.35);
+  border-radius: 8px;
+}
 .news-card {
   background: var(--paper);
   border: 1px solid var(--rule);

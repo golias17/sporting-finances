@@ -53,7 +53,9 @@ export function initHealthBar() {
   renderHealthBar(state.healthBarIdx);
 }
 
-export function renderHealthBar(idx) {
+// Not exported — only called internally (initHealthBar and the season-pill
+// click handler). Nothing outside this file imports it.
+function renderHealthBar(idx) {
   if (idx === undefined) idx = state.healthBarIdx;
   state.setHealthBarIdx(idx);
 

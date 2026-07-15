@@ -339,7 +339,9 @@ function updateTabIndicator(activeBtn) {
 // TAB SWITCHING
 // =============================================================
 
-export function activateTab(tab, pushHash = true) {
+// Not exported — main.js is the app's entry point and nothing imports from
+// it (there's no main.test.js; it's exercised indirectly through the DOM).
+function activateTab(tab, pushHash = true) {
   if (!state.VALID_TABS.includes(tab)) tab = "overview";
   if (tab !== "overview") {
     exitStory();

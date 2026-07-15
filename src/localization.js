@@ -2,6 +2,23 @@
 // STATE & DOM DATA INITIALIZATION
 // =============================================================
 
+// translateNote() has no way to know if a brand-new English note (added to
+// transfers.json without a matching directMaps/replacements entry) actually
+// got translated — it just returns whatever the regex passes leave behind.
+// This set + warnUntranslatedOnce() surfaces that gap in the dev console
+// (once per distinct string, so repeated re-renders on filter/sort changes
+// don't spam it) instead of silently shipping an English note under the PT
+// locale. It's a stopgap, not a fix for the underlying fragility — see the
+// NOTE below about why catch-all replacements aren't the answer either.
+const warnedUntranslated = new Set();
+function warnUntranslatedOnce(str) {
+  if (warnedUntranslated.has(str)) return;
+  warnedUntranslated.add(str);
+  console.warn(
+    `[localization] translateNote(): no direct or pattern match found — likely showing untranslated English text under the PT locale:\n  "${str}"`,
+  );
+}
+
 export function translateNote(str) {
   if (!str) return str;
   let s = str;
@@ -284,6 +301,12 @@ export function translateNote(str) {
   // "for" → "por", "and" → "e", "to" → "para"). They break any note text that
   // wasn't in directMaps by mangling club names, player names, and clause wording
   // in unpredictable ways. Add specific phrases to the replacements array above instead.
+
+  // Nothing in directMaps or replacements touched this string at all — most
+  // likely a newly-added English note that nobody has translated yet.
+  if (s === str) {
+    warnUntranslatedOnce(str);
+  }
 
   return s;
 }
