@@ -1,10 +1,11 @@
 /* eslint-disable no-console */
-import { describe, it, expect, beforeAll } from "vitest";
+import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { state } from "../src/state.js";
 import {
   initChartDefaults,
   generateAccessibleTable,
   externalTooltipHandler,
+  addChartDownloadButton,
 } from "../src/chartUtils.js";
 import {
   chartHero,
@@ -242,6 +243,13 @@ describe("Chart.js and Annotation Plugin integration", () => {
     initChartDefaults();
   });
 
+  afterAll(() => {
+    chartRegistry.forEach((chart) => {
+      chart.destroy();
+    });
+    chartRegistry.clear();
+  });
+
   it("builds chartHero without crashing and includes annotations", () => {
     // Intercept console warnings or errors
     const warnings = [];
@@ -433,5 +441,45 @@ describe("Chart.js and Annotation Plugin integration", () => {
       tooltip: { opacity: 0 },
     });
     expect(tooltipEl.classList.contains("hidden")).toBe(true);
+  });
+
+  it("addChartDownloadButton attaches a button to the card-head that triggers download on click", () => {
+    const canvas = document.getElementById("chartHero");
+    const card = document.createElement("div");
+    card.className = "card";
+    const cardHead = document.createElement("div");
+    cardHead.className = "card-head";
+    const tag = document.createElement("span");
+    tag.className = "tag";
+    cardHead.appendChild(tag);
+    card.appendChild(cardHead);
+    card.appendChild(canvas);
+    document.body.appendChild(card);
+
+    addChartDownloadButton("chartHero");
+
+    const btn = document.getElementById("chartHero-download-btn");
+    expect(btn).toBeDefined();
+    expect(btn.className).toBe("chart-download-btn");
+    expect(btn.title).toBe("Download chart as PNG image");
+
+    // Mock HTMLCanvasElement.toDataURL and HTMLAnchorElement.prototype.click
+    const origToDataURL = HTMLCanvasElement.prototype.toDataURL;
+    HTMLCanvasElement.prototype.toDataURL = () => "data:image/png;base64,mock";
+
+    let clicked = false;
+    const origClick = HTMLAnchorElement.prototype.click;
+    HTMLAnchorElement.prototype.click = function () {
+      clicked = true;
+      expect(this.download).toBe("chartHero.png");
+      expect(this.href).toBe("data:image/png;base64,mock");
+    };
+
+    btn.click();
+    expect(clicked).toBe(true);
+
+    // Restore mocks
+    HTMLCanvasElement.prototype.toDataURL = origToDataURL;
+    HTMLAnchorElement.prototype.click = origClick;
   });
 });

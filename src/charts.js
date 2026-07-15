@@ -28,6 +28,21 @@ const lineShadowPlugin = {
 
 Chart.register(lineShadowPlugin);
 
+// Custom background plugin to draw state.COLORS.chartBg under the chart on image export
+const canvasBackgroundPlugin = {
+  id: "canvasBackground",
+  beforeDraw(chart) {
+    const { ctx } = chart;
+    ctx.save();
+    ctx.globalCompositeOperation = "destination-over";
+    ctx.fillStyle = state.COLORS.chartBg || "#ffffff";
+    ctx.fillRect(0, 0, chart.width, chart.height);
+    ctx.restore();
+  },
+};
+
+Chart.register(canvasBackgroundPlugin);
+
 import {
   fmtMillions,
   fmtPct,
@@ -36,6 +51,7 @@ import {
   baseOpts,
   chartRegistry,
   generateAccessibleTable,
+  addChartDownloadButton,
 } from "./chartUtils.js";
 export {
   fmtMillions,
@@ -45,6 +61,7 @@ export {
   baseOpts,
   chartRegistry,
   generateAccessibleTable,
+  addChartDownloadButton,
 };
 
 // state.COLORS and state.baseOpts are initialised by initChartDefaults() in
@@ -67,6 +84,7 @@ export function mkChart(id, config) {
   }
 
   generateAccessibleTable(id, config);
+  addChartDownloadButton(id);
   return chart;
 }
 

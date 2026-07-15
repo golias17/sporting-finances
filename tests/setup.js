@@ -1,0 +1,52 @@
+import { beforeAll } from "vitest";
+
+beforeAll(() => {
+  // Ensure window.getComputedStyle is robustly mocked
+  if (typeof window !== "undefined") {
+    if (!window.getComputedStyle) {
+      window.getComputedStyle = (el) => ({
+        getPropertyValue: () => "",
+        width: el?.style?.width || "0px",
+        height: el?.style?.height || "0px",
+      });
+    } else {
+      const originalGetComputedStyle = window.getComputedStyle;
+      window.getComputedStyle = (el) => {
+        try {
+          return (
+            originalGetComputedStyle(el) || {
+              getPropertyValue: () => "",
+              width: el?.style?.width || "0px",
+              height: el?.style?.height || "0px",
+            }
+          );
+        } catch {
+          return {
+            getPropertyValue: () => "",
+            width: el?.style?.width || "0px",
+            height: el?.style?.height || "0px",
+          };
+        }
+      };
+    }
+  }
+
+  // Prevent defaultView from returning null on detached documents
+  if (typeof Document !== "undefined" && typeof window !== "undefined") {
+    Object.defineProperty(Document.prototype, "defaultView", {
+      get() {
+        return window;
+      },
+      configurable: true,
+    });
+  }
+
+  // Mock global ResizeObserver if not already present
+  if (typeof global !== "undefined" && !global.ResizeObserver) {
+    global.ResizeObserver = class {
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    };
+  }
+});

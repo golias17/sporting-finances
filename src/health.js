@@ -4,6 +4,7 @@ import { fmtMillions } from "./chartUtils.js";
 import Chart from "chart.js/auto";
 
 import { calculateHealthSignals } from "./metrics.js";
+import { syncStateToUrl } from "./urlSync.js";
 
 // Keep track of sparkline chart instances to destroy them before re-rendering
 const sparklineRegistry = {};
@@ -39,7 +40,15 @@ export function initHealthBar() {
 
   // Default to latest season on first initialization
   if (state.healthBarIdx === null) {
-    state.setHealthBarIdx(state.annual.length - 1);
+    let initialIdx = -1;
+    if (state.urlHealthSeason) {
+      initialIdx = state.annual.findIndex(
+        (a) => a.label === state.urlHealthSeason,
+      );
+    }
+    state.setHealthBarIdx(
+      initialIdx >= 0 ? initialIdx : state.annual.length - 1,
+    );
   }
   renderHealthBar(state.healthBarIdx);
 }
@@ -153,6 +162,8 @@ export function renderHealthBar(idx) {
 
   // Keep headline KPIs in sync with the selected season
   renderKpis(idx);
+
+  syncStateToUrl();
 }
 
 // =============================================================

@@ -358,3 +358,65 @@ export function externalTooltipHandler(context) {
   tooltipEl.style.left = tooltipX + "px";
   tooltipEl.style.top = tooltipY - 12 + "px";
 }
+
+export function addChartDownloadButton(canvasId) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+
+  const card = canvas.closest(".card");
+  if (!card) return;
+
+  const cardHead = card.querySelector(".card-head");
+  if (!cardHead) return;
+
+  const btnId = canvasId + "-download-btn";
+  if (document.getElementById(btnId)) {
+    // Update labels if already existing on language switches
+    const btn = document.getElementById(btnId);
+    btn.setAttribute(
+      "aria-label",
+      state.isPt
+        ? "Descarregar gráfico como imagem"
+        : "Download chart as image",
+    );
+    btn.title = state.isPt
+      ? "Descarregar gráfico como imagem PNG"
+      : "Download chart as PNG image";
+    return;
+  }
+
+  const btn = document.createElement("button");
+  btn.id = btnId;
+  btn.className = "chart-download-btn";
+  btn.setAttribute(
+    "aria-label",
+    state.isPt ? "Descarregar gráfico como imagem" : "Download chart as image",
+  );
+  btn.title = state.isPt
+    ? "Descarregar gráfico como imagem PNG"
+    : "Download chart as PNG image";
+
+  const downloadIcon = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; display: inline-block; vertical-align: middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>`;
+  btn.innerHTML = downloadIcon + `<span>PNG</span>`;
+
+  btn.onclick = () => {
+    const chart = chartRegistry.get(canvasId);
+    if (!chart) return;
+
+    const dataUrl = canvas.toDataURL("image/png");
+
+    const link = document.createElement("a");
+    link.href = dataUrl;
+    link.download = `${canvasId}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const tag = cardHead.querySelector(".tag");
+  if (tag) {
+    tag.parentNode.insertBefore(btn, tag.nextSibling);
+  } else {
+    cardHead.appendChild(btn);
+  }
+}

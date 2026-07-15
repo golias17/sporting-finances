@@ -5,9 +5,15 @@ import { renderVmocCost, renderLionFinance, renderUsppTerms } from "./bonds.js";
 import { renderTransferLedger, initTransfersDetailTable } from "./transfers.js";
 import { renderTable, initDataExport } from "./data-table.js";
 import { initNewsFeed } from "./news.js";
-import { exitStory, updateStoryStep, initStoryMode } from "./story.js";
+import {
+  startStory,
+  exitStory,
+  updateStoryStep,
+  initStoryMode,
+} from "./story.js";
 import { initComparison } from "./compare.js";
 import { syncEventsFilter, initEventFilter } from "./events.js";
+import { applyUrlParams, syncStateToUrl } from "./urlSync.js";
 import {
   chartHero,
   chartNetResult,
@@ -96,6 +102,92 @@ function initJornalModal() {
     },
     { signal },
   );
+}
+
+// IMAGE LIGHTBOX MODAL
+// =============================================================
+function initImageLightbox() {
+  const lightbox = document.getElementById("imageLightbox");
+  const lightboxImg = document.getElementById("lightboxImg");
+  const lightboxCaption = document.getElementById("lightboxCaption");
+  const btnClose = document.getElementById("closeLightboxBtn");
+  const toggleBtn = document.getElementById("lightboxToggleKitBtn");
+
+  if (!lightbox || !lightboxImg || !lightboxCaption || !btnClose || !toggleBtn)
+    return;
+
+  const targets = document.querySelectorAll(
+    ".stadium-panorama-img, .court-panorama-img, .academy-panorama-img, .museum-panorama-img, .kit-img",
+  );
+
+  let currentFrontSrc = null;
+  let currentBackSrc = null;
+  let currentFrontAlt = "";
+  let currentBackAlt = "";
+  let isShowingBack = false;
+
+  targets.forEach((img) => {
+    img.addEventListener("click", () => {
+      const src = img.src;
+      const alt = img.alt || "Sporting CP Asset";
+
+      // Reset
+      toggleBtn.classList.add("hidden");
+      currentFrontSrc = null;
+      currentBackSrc = null;
+      isShowingBack = false;
+
+      // Detect if image is inside a kit flip card
+      const kitInner = img.closest(".kit-card-inner");
+      if (kitInner) {
+        const frontImg = kitInner.querySelector(".kit-card-front img");
+        const backImg = kitInner.querySelector(".kit-card-back img");
+        if (frontImg && backImg) {
+          currentFrontSrc = frontImg.src;
+          currentBackSrc = backImg.src;
+          currentFrontAlt = frontImg.alt || "Kit Front";
+          currentBackAlt = backImg.alt || "Kit Back";
+          isShowingBack = src === currentBackSrc;
+          toggleBtn.classList.remove("hidden");
+        }
+      }
+
+      lightboxImg.src = src;
+      lightboxCaption.textContent = alt;
+      lightbox.classList.add("active");
+      document.body.style.overflow = "hidden";
+    });
+  });
+
+  toggleBtn.addEventListener("click", () => {
+    if (!currentFrontSrc || !currentBackSrc) return;
+    isShowingBack = !isShowingBack;
+    if (isShowingBack) {
+      lightboxImg.src = currentBackSrc;
+      lightboxCaption.textContent = currentBackAlt;
+    } else {
+      lightboxImg.src = currentFrontSrc;
+      lightboxCaption.textContent = currentFrontAlt;
+    }
+  });
+
+  function closeLightbox() {
+    lightbox.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+
+  btnClose.addEventListener("click", closeLightbox);
+  lightbox.addEventListener("click", (e) => {
+    if (e.target === lightbox || e.target.id === "imageLightbox") {
+      closeLightbox();
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && lightbox.classList.contains("active")) {
+      closeLightbox();
+    }
+  });
 }
 
 // =============================================================
@@ -266,7 +358,10 @@ export function activateTab(tab, pushHash = true) {
     .querySelectorAll("section.tab-panel")
     .forEach((p) => p.classList.remove("active"));
   document.getElementById("tab-" + tab).classList.add("active");
-  if (pushHash) history.replaceState(null, "", "#" + tab);
+  if (pushHash) {
+    history.replaceState(null, "", "#" + tab);
+    syncStateToUrl();
+  }
 
   if (state.TAB_CHARTS[tab]) {
     state.TAB_CHARTS[tab].forEach((fn) => {
@@ -328,6 +423,7 @@ function setupApp() {
     compare: [initComparison],
     events: [],
     data: [renderTable, initTransfersDetailTable],
+    club: [],
   };
 
   document.querySelectorAll("nav.tabs button").forEach((btn) => {
@@ -366,6 +462,7 @@ function setupApp() {
 
       // Update all static HTML strings
       applyTranslations(lang);
+      syncStateToUrl();
 
       // Clear rendered set so charts re-run fn() and update gracefully when tabs are visited
       state.renderedCharts.clear();
@@ -453,8 +550,12 @@ function setupApp() {
   updateChartTheme();
 
   // Initial tab activation
-  const initialTab = location.hash.replace("#", "") || "overview";
+  const initialTab = applyUrlParams();
   activateTab(initialTab, false);
+
+  if (initialTab === "overview" && state.urlStoryActive) {
+    startStory();
+  }
 
   window.addEventListener("resize", () => updateTabIndicator());
 
@@ -473,6 +574,19 @@ function setupApp() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   }
+
+  initPdfExport();
+}
+
+function initPdfExport() {
+  const btn = document.getElementById("pdfExportBtn");
+  if (!btn) return;
+
+  btn.addEventListener("click", () => {
+    import("./pdfGenerator.js").then((m) => {
+      m.generateCuratedPdf();
+    });
+  });
 }
 
 // =============================================================
@@ -492,6 +606,7 @@ async function initApp() {
     // Once data is loaded, populate KPIs and setup UI
     setupApp();
     initJornalModal();
+    initImageLightbox();
   } catch (e) {
     console.error("Failed to load application data", e);
     // Build the error UI programmatically so error text is set via textContent,

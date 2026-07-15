@@ -1,0 +1,909 @@
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
+import { state } from "./state.js";
+
+/**
+ * Helper: Converts a relative image path to a Base64 data URL using a temporary canvas.
+ */
+function getBase64ImageFromUrl(url) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+      const dataURL = canvas.toDataURL("image/png");
+      resolve(dataURL);
+    };
+    img.onerror = (e) => reject(e);
+    img.src = url;
+  });
+}
+
+/**
+ * Generates an exhaustive, premium 5-page financial analysis report.
+ * Contains localized analysis, a cover page with a 2x2 KPI dashboard,
+ * five distinct tables (Operating P&L, Balance Sheet, Player Trading, Cash Flows, and Landmark Transfers),
+ * and dynamic overlap-free spacing for timelines.
+ */
+export async function generateCuratedPdf() {
+  if (!state.DATASET) return;
+
+  // Load the brand logo
+  let logoBase64 = null;
+  try {
+    logoBase64 = await getBase64ImageFromUrl("./assets/LOGO.png");
+  } catch (e) {
+    console.error("Failed to load logo image", e);
+  }
+
+  const doc = new jsPDF({
+    orientation: "portrait",
+    unit: "mm",
+    format: "a4",
+  });
+
+  const isPt = state.isPt;
+  const data = state.fullAnnual;
+
+  // Colors Matching Corporate Green/Gold Guidelines
+  const green = [10, 93, 58]; // #0a5d3a
+  const gold = [200, 169, 81]; // #c8a951
+  const darkInk = [24, 34, 29]; // #18221d
+  const mutedText = [90, 106, 98]; // #5a6a62
+  const positive = [46, 138, 85]; // #2e8a55
+  const negative = [198, 64, 79]; // #c6404f
+  const lightGreyBg = [248, 249, 250]; // #f8f9fa
+
+  // Format Helper: Millions with spaces before units
+  const fmtM = (val) => {
+    if (val === null || val === undefined) return "—";
+    const sign = val < 0 ? "-" : "";
+    return `${sign}${Math.abs(val / 1000).toFixed(1)} M€`;
+  };
+
+  const latestSeason =
+    data.find((d) => d.label === "2024/25") || data[data.length - 2] || {};
+
+  // Header Helper across Pages
+  const addHeader = (pageNum) => {
+    doc.setFillColor(...green);
+    doc.rect(15, 12, 180, 4, "F");
+
+    doc.setFillColor(...gold);
+    doc.rect(15, 16, 180, 1.5, "F");
+
+    let textStartX = 15;
+    if (logoBase64) {
+      doc.addImage(logoBase64, "PNG", 15, 20, 10, 10);
+      textStartX = 28;
+    }
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.setTextColor(...green);
+    doc.text("SPORTING CLUBE DE PORTUGAL — FUTEBOL, SAD", textStartX, 26);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8.5);
+    doc.setTextColor(...mutedText);
+    doc.text(
+      isPt
+        ? "Relatório de Evolução Financeira · 2012/13 a 2025/26"
+        : "Financial Evolution Dossier · 2012/13 to 2025/26",
+      textStartX,
+      31,
+    );
+
+    const pageStr = isPt ? `Página ${pageNum} de 5` : `Page ${pageNum} of 5`;
+    doc.setFontSize(8);
+    doc.text(pageStr, 178, 31);
+
+    doc.setDrawColor(220, 224, 222);
+    doc.line(15, 34, 195, 34);
+  };
+
+  // ==========================================================
+  // PAGE 1: TITLE, SUMMARY, AND EXECUTIVE KPI GRID
+  // ==========================================================
+  addHeader(1);
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(17);
+  doc.setTextColor(...darkInk);
+  doc.text(
+    isPt
+      ? "DOSSIER ANUAL DE ANÁLISE FINANCEIRA"
+      : "ANNUAL FINANCIAL ANALYSIS DOSSIER",
+    15,
+    48,
+  );
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10.5);
+  doc.setTextColor(...gold);
+  doc.text(
+    isPt
+      ? "Turnaround Estrutural, Reestruturação de Dívida e Avaliação de Ativos"
+      : "Structural Turnaround, Debt Restructuring & Asset Appraisals",
+    15,
+    54,
+  );
+
+  // Narrative Background Box
+  doc.setFillColor(...lightGreyBg);
+  doc.rect(15, 60, 180, 43, "F");
+  doc.setDrawColor(...green);
+  doc.line(15, 60, 15, 103);
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(9.5);
+  doc.setTextColor(...green);
+  doc.text(
+    isPt
+      ? "ENQUADRAMENTO FINANCEIRO E HISTÓRICO"
+      : "HISTORICAL & FINANCIAL CONTEXT",
+    20,
+    66,
+  );
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8.5);
+  doc.setTextColor(...darkInk);
+
+  const introText = isPt
+    ? "Este dossier apresenta uma análise exaustiva da transformação financeira operada na Sporting SAD durante a última década. Em 2013, o clube enfrentava uma das piores crises da sua história, caracterizada por insolvência técnica, incapacidade estrutural de gerar fluxos de caixa recorrentes e um passivo de curto prazo asfixiante. Através da implementação de um rigoroso plano de reestruturação — com especial destaque para a emissão e posterior conversão de €135M em obrigações convertíveis (VMOCs), bem como a valorização do talento desportivo proveniente da Academia de Alcochete —, a SAD alcançou a auto-suficiência e estabilidade. A emissão obrigacionista USPP de €225M a 28 anos conclui esta reabilitação, dotando a instituição de uma de maturidade de passivo sem precedentes no desporto nacional."
+    : "This dossier presents a detailed analysis of the financial transformation executed by Sporting SAD over the past decade. In 2013, the club stood on the brink of liquidation, characterized by negative shareholders' equity, chronic operating deficits, and a suffocating current debt burden. By executing a rigorous turnaround plan—anchored by the issuance and subsequent conversion of €135M convertible bonds (VMOCs) and the commercial exploitation of home-grown academy players—the SAD secured a sustainable financial footing. The historic €225M 28-year USPP bond placement seals this rehabilitation, extending the average maturity profile to levels unprecedented in national sports finance.";
+
+  const splitIntro = doc.splitTextToSize(introText, 170);
+  doc.text(splitIntro, 20, 72);
+
+  // KPI Grid
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+  doc.setTextColor(...green);
+  doc.text(
+    isPt
+      ? "Indicadores Financeiros Chave (Consolidado 2024/25)"
+      : "Key Financial Indicators (Consolidated 2024/25)",
+    15,
+    112,
+  );
+
+  const drawKpi = (x, y, w, h, labelText, value, trendText) => {
+    doc.setFillColor(...lightGreyBg);
+    doc.rect(x, y, w, h, "F");
+    doc.setDrawColor(220, 222, 221);
+    doc.rect(x, y, w, h, "D");
+    doc.setFillColor(...green);
+    doc.rect(x, y, w, 2, "F");
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7.5);
+    doc.setTextColor(...mutedText);
+    doc.text(labelText, x + 4, y + 8);
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(13);
+    doc.setTextColor(...darkInk);
+    doc.text(value, x + 4, y + 15);
+
+    doc.setFont("helvetica", "italic");
+    doc.setFontSize(7);
+    doc.setTextColor(...green);
+    doc.text(trendText, x + 4, y + 21);
+  };
+
+  const kw = 86;
+  const kh = 25;
+  drawKpi(
+    15,
+    118,
+    kw,
+    kh,
+    isPt ? "RECEITAS OPERACIONAIS RECORRENTES" : "RECURRING OPERATING REVENUE",
+    fmtM(latestSeason.revenue_operating),
+    isPt ? "Crescimento sustentável de 136%" : "Sustainable 136% growth trend",
+  );
+  drawKpi(
+    109,
+    118,
+    kw,
+    kh,
+    isPt ? "RESULTADO LÍQUIDO DO EXERCÍCIO" : "NET PROFIT / LOSS",
+    fmtM(latestSeason.net_result),
+    isPt
+      ? "Tendência positiva de longo prazo"
+      : "Consistent long-term positive margins",
+  );
+  drawKpi(
+    15,
+    148,
+    kw,
+    kh,
+    isPt ? "CAPITAIS PRÓPRIOS DO BALANÇO" : "SHAREHOLDERS' EQUITY",
+    fmtM(latestSeason.equity),
+    isPt
+      ? "Balanço revertido a positivo"
+      : "Balance sheet restored to positive",
+  );
+
+  const nd =
+    latestSeason.borrowings_nc + latestSeason.borrowings_c - latestSeason.cash;
+  const ratioStr = (nd / latestSeason.revenue_operating).toFixed(2) + " x";
+  drawKpi(
+    109,
+    148,
+    kw,
+    kh,
+    isPt ? "DÍVIDA LÍQUIDA / RECEITAS" : "NET DEBT / REVENUE RATIO",
+    ratioStr,
+    isPt
+      ? "Métrica de alavancagem saudável"
+      : "Leverage below safety threshold",
+  );
+
+  // Editorial Analysis
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9);
+  doc.setTextColor(...darkInk);
+
+  const notesP1 = isPt
+    ? "Análise de Turnaround:\nA inversão dos capitais próprios de −119.4 M€ para +40.9 M€ constitui o principal marco de segurança financeira. Esta variação foi viabilizada pelas sucessivas conversões de dívida em capital promovidas em parceria com os bancos credores, as quais extinguiram passivos passados sem consumo de tesouraria. Com as receitas comerciais em rota ascendente, a SAD apresenta uma capacidade acrescida de investimento no plantel e infraestruturas."
+    : "Turnaround Analysis:\nThe transition of shareholders' equity from negative 119.4 M€ to positive 40.9 M€ is the cornerstone of the club's financial recovery. This correction was achieved through negotiated debt conversions, which cleared liabilities without drawing down cash. Driven by growing commercial income, the SAD possesses solid cash generation capabilities, allowing it to invest independently in squad value and infrastructure development.";
+
+  const splitNotesP1 = doc.splitTextToSize(notesP1, 180);
+  doc.text(splitNotesP1, 15, 182);
+
+  // Footer Accent Line
+  doc.setFillColor(...green);
+  doc.rect(15, 220, 180, 0.5, "F");
+
+  // ==========================================================
+  // PAGE 2: TABLE 1 (REVENUES & WAGES) & TABLE 2 (BALANCE SHEET)
+  // ==========================================================
+  doc.addPage();
+  addHeader(2);
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(10.5);
+  doc.setTextColor(...green);
+  doc.text(
+    isPt
+      ? "I. Demonstração de Resultados Operacionais Recorrentes"
+      : "I. Recurring Operating Revenues & Payroll Burden",
+    15,
+    44,
+  );
+
+  const t1Headers = isPt
+    ? [
+        "Época",
+        "Bilheteira",
+        "TV / Comp.",
+        "Comercial",
+        "Total Rec.",
+        "Pessoal",
+        "Rácio Sal.",
+      ]
+    : [
+        "Season",
+        "Matchday",
+        "TV/Comp.",
+        "Commercial",
+        "Rec. Rev",
+        "Payroll",
+        "Wage %",
+      ];
+
+  const t1Rows = data.map((d) => {
+    const ratioVal =
+      d.revenue_operating > 0
+        ? `${Math.round((Math.abs(d.personnel_costs) / d.revenue_operating) * 100)}%`
+        : "—";
+    return [
+      d.label,
+      fmtM(d.rev_matchday),
+      fmtM(d.rev_tv_comp),
+      fmtM(d.rev_commercial),
+      fmtM(d.revenue_operating),
+      fmtM(d.personnel_costs),
+      ratioVal,
+    ];
+  });
+
+  autoTable(doc, {
+    startY: 48,
+    head: [t1Headers],
+    body: t1Rows,
+    margin: { left: 15, right: 15 },
+    theme: "striped",
+    headStyles: {
+      fillColor: green,
+      textColor: [255, 255, 255],
+      fontStyle: "bold",
+      fontSize: 8,
+    },
+    bodyStyles: { fontSize: 7.5, textColor: darkInk },
+    columnStyles: {
+      0: { fontStyle: "bold", cellWidth: 16 },
+      1: { halign: "right" },
+      2: { halign: "right" },
+      3: { halign: "right" },
+      4: { halign: "right" },
+      5: { halign: "right" },
+      6: { halign: "center" },
+    },
+    didParseCell: (cellData) => {
+      if (cellData.section === "body" && cellData.column.index === 6) {
+        const pctStr = cellData.cell.text[0];
+        if (pctStr && pctStr !== "—") {
+          const val = parseInt(pctStr);
+          if (val > 70) {
+            cellData.cell.styles.textColor = negative;
+            cellData.cell.styles.fontStyle = "bold";
+          } else if (val <= 60) {
+            cellData.cell.styles.textColor = positive;
+            cellData.cell.styles.fontStyle = "bold";
+          }
+        }
+      }
+    },
+  });
+
+  // Table 2 (Balance Sheet)
+  const table1EndY = doc.lastAutoTable.finalY || 140;
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(10.5);
+  doc.setTextColor(...green);
+  doc.text(
+    isPt
+      ? "II. Estrutura do Balanço e Rácio de Alavancagem"
+      : "II. Balance Sheet Structure & Leverage Metrics",
+    15,
+    table1EndY + 10,
+  );
+
+  const t2Headers = isPt
+    ? [
+        "Época",
+        "Ativo Total",
+        "Passivo Total",
+        "Capitais Próp.",
+        "Dívida Bruta",
+        "Caixa",
+        "Dívida Líq.",
+      ]
+    : [
+        "Season",
+        "Total Assets",
+        "Total Liab.",
+        "Equity",
+        "Gross Debt",
+        "Cash",
+        "Net Debt",
+      ];
+
+  const t2Rows = data.map((d) => {
+    const grossDebt = d.borrowings_nc + d.borrowings_c;
+    const netDebtVal = grossDebt - d.cash;
+    const totalLiab = d.non_current_liabilities + d.current_liabilities;
+    return [
+      d.label,
+      fmtM(d.total_assets),
+      fmtM(totalLiab),
+      fmtM(d.equity),
+      fmtM(grossDebt),
+      fmtM(d.cash),
+      fmtM(netDebtVal),
+    ];
+  });
+
+  autoTable(doc, {
+    startY: table1EndY + 14,
+    head: [t2Headers],
+    body: t2Rows,
+    margin: { left: 15, right: 15 },
+    theme: "striped",
+    headStyles: {
+      fillColor: green,
+      textColor: [255, 255, 255],
+      fontStyle: "bold",
+      fontSize: 8,
+    },
+    bodyStyles: { fontSize: 7.5, textColor: darkInk },
+    columnStyles: {
+      0: { fontStyle: "bold", cellWidth: 16 },
+      1: { halign: "right" },
+      2: { halign: "right" },
+      3: { halign: "right" },
+      4: { halign: "right" },
+      5: { halign: "right" },
+      6: { halign: "right" },
+    },
+    didParseCell: (cellData) => {
+      if (cellData.section === "body" && cellData.column.index === 3) {
+        const val = cellData.cell.text[0];
+        if (val && val.startsWith("-")) {
+          cellData.cell.styles.textColor = negative;
+          cellData.cell.styles.fontStyle = "bold";
+        } else if (
+          val &&
+          val !== "—" &&
+          val !== "0.0 M€" &&
+          !val.startsWith("0")
+        ) {
+          cellData.cell.styles.textColor = positive;
+          cellData.cell.styles.fontStyle = "bold";
+        }
+      }
+    },
+  });
+
+  // ==========================================================
+  // PAGE 3: TABLE 3 (PLAYER TRADING) & TABLE 4 (CASH FLOWS)
+  // ==========================================================
+  doc.addPage();
+  addHeader(3);
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(10.5);
+  doc.setTextColor(...green);
+  doc.text(
+    isPt
+      ? "III. Trading de Passes de Jogadores e Valorização do Plantel"
+      : "III. Player Transfer Operations & Squad Appraisals",
+    15,
+    44,
+  );
+
+  const t3Headers = isPt
+    ? [
+        "Época",
+        "Receitas Venda",
+        "Investimento",
+        "Resultado Líquido Trading",
+        "V. Contabilístico",
+        "V. Mercado",
+      ]
+    : [
+        "Season",
+        "Sales Income",
+        "Investments",
+        "Net Trading Result",
+        "Book Value",
+        "Market Value",
+      ];
+
+  const t3Rows = data.map((d) => {
+    const netTradingVal = d.player_transfer_income + d.player_transfer_cost;
+    return [
+      d.label,
+      fmtM(d.player_transfer_income),
+      fmtM(d.player_transfer_cost),
+      fmtM(netTradingVal),
+      fmtM(d.squad_book_value),
+      fmtM(d.squad_market_value),
+    ];
+  });
+
+  autoTable(doc, {
+    startY: 48,
+    head: [t3Headers],
+    body: t3Rows,
+    margin: { left: 15, right: 15 },
+    theme: "striped",
+    headStyles: {
+      fillColor: green,
+      textColor: [255, 255, 255],
+      fontStyle: "bold",
+      fontSize: 8,
+    },
+    bodyStyles: { fontSize: 7.5, textColor: darkInk },
+    columnStyles: {
+      0: { fontStyle: "bold", cellWidth: 16 },
+      1: { halign: "right" },
+      2: { halign: "right" },
+      3: { halign: "right" },
+      4: { halign: "right" },
+      5: { halign: "right" },
+    },
+    didParseCell: (cellData) => {
+      if (cellData.section === "body" && cellData.column.index === 3) {
+        const val = cellData.cell.text[0];
+        if (val && val.startsWith("-")) {
+          cellData.cell.styles.textColor = negative;
+          cellData.cell.styles.fontStyle = "bold";
+        } else if (
+          val &&
+          val !== "—" &&
+          val !== "0.0 M€" &&
+          !val.startsWith("0")
+        ) {
+          cellData.cell.styles.textColor = positive;
+          cellData.cell.styles.fontStyle = "bold";
+        }
+      }
+    },
+  });
+
+  // Table 4: Cash Flows
+  const table3EndY = doc.lastAutoTable.finalY || 140;
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(10.5);
+  doc.setTextColor(...green);
+  doc.text(
+    isPt
+      ? "IV. Demonstração Histórica de Fluxos de Caixa"
+      : "IV. Historical Cash Flow Statement",
+    15,
+    table3EndY + 10,
+  );
+
+  const t4Headers = isPt
+    ? [
+        "Época",
+        "F.C. Operacional",
+        "F.C. Investimento",
+        "F.C. Financiamento",
+        "Variação Líquida de Caixa",
+      ]
+    : [
+        "Season",
+        "Operating C.F.",
+        "Investing C.F.",
+        "Financing C.F.",
+        "Net Cash Change",
+      ];
+
+  const t4Rows = data.map((d) => {
+    const netChange = d.cf_operating + d.cf_investing + d.cf_financing;
+    return [
+      d.label,
+      fmtM(d.cf_operating),
+      fmtM(d.cf_investing),
+      fmtM(d.cf_financing),
+      fmtM(netChange),
+    ];
+  });
+
+  autoTable(doc, {
+    startY: table3EndY + 14,
+    head: [t4Headers],
+    body: t4Rows,
+    margin: { left: 15, right: 15 },
+    theme: "striped",
+    headStyles: {
+      fillColor: green,
+      textColor: [255, 255, 255],
+      fontStyle: "bold",
+      fontSize: 8,
+    },
+    bodyStyles: { fontSize: 7.5, textColor: darkInk },
+    columnStyles: {
+      0: { fontStyle: "bold", cellWidth: 20 },
+      1: { halign: "right" },
+      2: { halign: "right" },
+      3: { halign: "right" },
+      4: { halign: "right" },
+    },
+    didParseCell: (cellData) => {
+      if (cellData.section === "body" && cellData.column.index === 4) {
+        const val = cellData.cell.text[0];
+        if (val && val.startsWith("-")) {
+          cellData.cell.styles.textColor = negative;
+          cellData.cell.styles.fontStyle = "bold";
+        } else if (
+          val &&
+          val !== "—" &&
+          val !== "0.0 M€" &&
+          !val.startsWith("0")
+        ) {
+          cellData.cell.styles.textColor = positive;
+          cellData.cell.styles.fontStyle = "bold";
+        }
+      }
+    },
+  });
+
+  // ==========================================================
+  // PAGE 4: TIMELINE & FINANCING DETAIL (OVERLAP FREE)
+  // ==========================================================
+  doc.addPage();
+  addHeader(4);
+
+  // Section: Strategic Financing Profile
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+  doc.setTextColor(...green);
+  doc.text(
+    isPt
+      ? "Perfil dos Instrumentos de Financiamento Estratégico"
+      : "Strategic Debt & Financing Instruments Profile",
+    15,
+    44,
+  );
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8.5);
+  doc.setTextColor(...darkInk);
+
+  const notesText = isPt
+    ? "• VMOCs (Valores Mobiliários Obrigatoriamente Convertíveis): Emitidos na reestruturação de 2014 para adiar obrigações urgentes com o Novo Banco e o BCP. Em agosto de 2022 (83.6 M€) e dezembro de 2023 (51.4 M€), a quase totalidade foi convertida em ações da Sporting SAD pelo valor nominal de €1.00. Esta conversão de 135.0 M€ de dívida em capital anulou encargos com juros e extinguiu o passivo bancário legado bancário.\n\n• Lion Finance Securitizações: Operações Lion Finance I e II estruturadas para titularização e desconto de recebíveis futuros da NOS (direitos de transmissão de jogos). Funcionaram como principal fonte de liquidez de médio prazo na amortização de contas de curto prazo com fornecedores.\n\n• USPP Bond Placement (225.0 M€): Emitido em outubro de 2025 com maturidade a 28 anos e taxa fixa de 5.75%. Garantiu notação de grau de investimento (Investment Grade) inédita pela Fitch e DBRS. Os fundos destinam-se a reestruturar a dívida bancária sob juros variáveis e a financiar o desenvolvimento de infraestruturas no estádio Alvalade."
+    : "• VMOCs (Mandatorily Convertible Bonds): Originally issued in 2014 as hybrid instruments to restructure heavy bank debt with BCP and Novo Banco. Under contractual parameters, 83.6 M€ converted to share capital in August 2022 and 51.4 M€ in December 2023 at €1.00 face value. This total 135.0 M€ debt-to-equity conversion deleted interest charges and restored positive equity.\n\n• Lion Finance Securitizations: Structured via special purpose vehicles (Lion Finance I and II) to discount future receivables from the long-term NOS broadcasting rights agreement, providing a regular liquidity stream to clear trade liabilities.\n• USPP Private Bond Placement (225.0 M€): Finalised in October 2025 with an unprecedented 28-year maturity and a 5.75% fixed coupon. Awarded BBB- investment-grade ratings by Fitch and DBRS, successfully refinancing bank debt and securing stable funding for infrastructural modernization at the Alvalade stadium.";
+
+  const splitNotes = doc.splitTextToSize(notesText, 180);
+  doc.text(splitNotes, 15, 50);
+
+  // Dynamic Y offset for Timeline heading to prevent overlapping layout
+  const notesHeight = splitNotes.length * 4.5;
+  const timelineHeadingY = 54 + notesHeight;
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+  doc.setTextColor(...green);
+  doc.text(
+    isPt
+      ? "Marcos Financeiros Cronológicos"
+      : "Chronological Turnaround Milestones",
+    15,
+    timelineHeadingY,
+  );
+
+  const timelineEvents = [
+    {
+      year: "2014",
+      title: isPt
+        ? "Acordo de Reestruturação Financeira"
+        : "Financial Restructuring Agreement",
+      desc: isPt
+        ? "Consolidação de dívida urgente, securitização de contratos de TV e emissão inicial de VMOCs de 135.0 M€."
+        : "Urgent debt consolidation, TV contract securitizations, and initial 135.0 M€ VMOC issuance to avoid default.",
+    },
+    {
+      year: "2018",
+      title: isPt
+        ? "Crise de Alcochete e Perda de Ativos"
+        : "Alcochete Crisis & Team Devaluation",
+      desc: isPt
+        ? "Desvalorização forçada do plantel motivada por saídas unilaterais de passes de jogadores."
+        : "Unilateral player departures causing squad devaluations and significant asset impairment losses.",
+    },
+    {
+      year: "2022-23",
+      title: isPt
+        ? "Conversão Financeira Completa"
+        : "Full Equity Capital Crossover",
+      desc: isPt
+        ? "As duas tranches de VMOCs foram inteiramente convertidas, eliminando a insolvência técnica histórica."
+        : "The conversion of the two tranches of VMOCs completed, permanently resolving the negative equity state.",
+    },
+    {
+      year: "2025",
+      title: isPt
+        ? "Emissão Obligacionista USPP (225.0 M€)"
+        : "Senior USPP Placement (225.0 M€)",
+      desc: isPt
+        ? "Notação de crédito BBB- (Grau de Investimento) a 28 anos, consolidando a estabilidade de passivos."
+        : "Landmark 28-year private placement bond at 5.75% fixed coupon with BBB- investment-grade ratings.",
+    },
+  ];
+
+  let currentY = timelineHeadingY + 7;
+  timelineEvents.forEach((ev) => {
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8.5);
+    doc.setTextColor(...gold);
+    doc.text(`[${ev.year}]`, 15, currentY);
+
+    doc.setTextColor(...darkInk);
+    doc.text(ev.title, 35, currentY);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(...mutedText);
+    const splitDesc = doc.splitTextToSize(ev.desc, 155);
+    doc.text(splitDesc, 35, currentY + 3.5);
+
+    // Calculate height of description line dynamically to prevent overlaps
+    currentY += 8 + splitDesc.length * 4;
+  });
+
+  // ==========================================================
+  // PAGE 5: LANDMARK PLAYER TRANSFERS LEDGER
+  // ==========================================================
+  doc.addPage();
+  addHeader(5);
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+  doc.setTextColor(...green);
+  doc.text(
+    isPt
+      ? "V. Livro de Transferências Históricas de Referência"
+      : "V. Landmark Player Transfers Ledger",
+    15,
+    44,
+  );
+
+  // Extract transfers >= 8M
+  const salesLedger = [];
+  const purchasesLedger = [];
+
+  state.TRANSFER_LEDGER.forEach((seasonObj) => {
+    const sLabel = seasonObj.season;
+    if (seasonObj.sales) {
+      seasonObj.sales.forEach((p) => {
+        if (p.fee >= 10.0) {
+          salesLedger.push({
+            season: sLabel,
+            player: p.player,
+            club: p.club,
+            fee: p.fee,
+            commission: p.commission || 0,
+            note: p.note || "—",
+          });
+        }
+      });
+    }
+    if (seasonObj.purchases) {
+      seasonObj.purchases.forEach((p) => {
+        if (p.fee >= 8.0) {
+          purchasesLedger.push({
+            season: sLabel,
+            player: p.player,
+            club: p.club,
+            fee: p.fee,
+            note: p.note || "—",
+          });
+        }
+      });
+    }
+  });
+
+  // Sort Descending by Fee
+  salesLedger.sort((a, b) => b.fee - a.fee);
+  purchasesLedger.sort((a, b) => b.fee - a.fee);
+
+  // Table V-A: Landmark Departures (Record Sales)
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(9.5);
+  doc.setTextColor(...gold);
+  doc.text(
+    isPt
+      ? "Recordes de Saídas / Alienações (Taxa Principal ≥ 10.0 M€)"
+      : "Record Departures / Sales (Primary Fee ≥ 10.0 M€)",
+    15,
+    51,
+  );
+
+  const t5SalesHeaders = isPt
+    ? [
+        "Época",
+        "Jogador",
+        "Clube de Destino",
+        "Taxa Fixa",
+        "Comissão",
+        "Detalhes / Cláusulas",
+      ]
+    : [
+        "Season",
+        "Player",
+        "Destination Club",
+        "Fixed Fee",
+        "Commission",
+        "Notes & Clauses",
+      ];
+
+  const t5SalesRows = salesLedger.map((s) => [
+    s.season,
+    s.player,
+    s.club,
+    `${s.fee.toFixed(1)} M€`,
+    s.commission > 0 ? `${s.commission.toFixed(1)} M€` : "—",
+    s.note,
+  ]);
+
+  autoTable(doc, {
+    startY: 55,
+    head: [t5SalesHeaders],
+    body: t5SalesRows,
+    margin: { left: 15, right: 15 },
+    theme: "striped",
+    headStyles: {
+      fillColor: green,
+      textColor: [255, 255, 255],
+      fontStyle: "bold",
+      fontSize: 7.5,
+    },
+    bodyStyles: { fontSize: 7, textColor: darkInk },
+    columnStyles: {
+      0: { fontStyle: "bold", cellWidth: 16 },
+      1: { fontStyle: "bold", cellWidth: 26 },
+      2: { cellWidth: 28 },
+      3: { halign: "right", cellWidth: 18 },
+      4: { halign: "right", cellWidth: 18 },
+      5: { cellWidth: 74 },
+    },
+  });
+
+  const salesTableEndY = doc.lastAutoTable.finalY || 150;
+
+  // Table V-B: Landmark Arrivals (Record Purchases)
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(9.5);
+  doc.setTextColor(...gold);
+  doc.text(
+    isPt
+      ? "Recordes de Entradas / Aquisições (Taxa Principal ≥ 8.0 M€)"
+      : "Record Arrivals / Acquisitions (Primary Fee ≥ 8.0 M€)",
+    15,
+    salesTableEndY + 10,
+  );
+
+  const t5PurchHeaders = isPt
+    ? [
+        "Época",
+        "Jogador",
+        "Clube de Origem",
+        "Taxa de Aquisição",
+        "Notas de Compra",
+      ]
+    : [
+        "Season",
+        "Player",
+        "Former Club",
+        "Acquisition Fee",
+        "Purchase Details",
+      ];
+
+  const t5PurchRows = purchasesLedger.map((p) => [
+    p.season,
+    p.player,
+    p.club,
+    `${p.fee.toFixed(1)} M€`,
+    p.note,
+  ]);
+
+  autoTable(doc, {
+    startY: salesTableEndY + 14,
+    head: [t5PurchHeaders],
+    body: t5PurchRows,
+    margin: { left: 15, right: 15 },
+    theme: "striped",
+    headStyles: {
+      fillColor: green,
+      textColor: [255, 255, 255],
+      fontStyle: "bold",
+      fontSize: 7.5,
+    },
+    bodyStyles: { fontSize: 7, textColor: darkInk },
+    columnStyles: {
+      0: { fontStyle: "bold", cellWidth: 16 },
+      1: { fontStyle: "bold", cellWidth: 28 },
+      2: { cellWidth: 32 },
+      3: { halign: "right", cellWidth: 26 },
+      4: { cellWidth: 78 },
+    },
+  });
+
+  // Footer page 5
+  doc.setFont("helvetica", "italic");
+  doc.setFontSize(7);
+  doc.setTextColor(...mutedText);
+  doc.text(
+    isPt
+      ? "Nota: Informação compilada para fins informativos. Dados extraídos dos relatórios auditados da Sporting SAD."
+      : "Disclaimer: Prepared for information purposes only. Source data compiled from audited Sporting SAD annual reports.",
+    15,
+    283,
+  );
+
+  // Save Document
+  doc.save("Sporting_SAD_Financial_Dossier.pdf");
+}

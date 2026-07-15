@@ -32,6 +32,11 @@ export default [
         registration: "readonly",
         global: "readonly",
         HTMLCanvasElement: "readonly",
+        Image: "readonly",
+        URLSearchParams: "readonly",
+        HTMLAnchorElement: "readonly",
+        Document: "readonly",
+        ResizeObserver: "readonly",
       },
     },
     rules: {

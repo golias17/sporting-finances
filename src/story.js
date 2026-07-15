@@ -1,5 +1,6 @@
 import { state } from "./state.js";
 import { chartRegistry } from "./charts.js";
+import { syncStateToUrl } from "./urlSync.js";
 
 const STORY_STEPS = [
   {
@@ -143,6 +144,7 @@ export function exitStory() {
     delete heroChart.options.plugins.annotation.annotations.storyHighlight;
     heroChart.update("none");
   }
+  syncStateToUrl();
 }
 
 function storyKeyHandler(e) {
@@ -229,6 +231,7 @@ export function updateStoryStep() {
     };
     heroChart.update("none");
   }
+  syncStateToUrl();
 }
 
 export function nextStory() {

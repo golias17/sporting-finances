@@ -63,6 +63,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,svg,png,json}"],
+        maximumFileSizeToCacheInBytes: 15 * 1024 * 1024, // 15 MiB to support high-res images
       },
     }),
     viteCompression({ algorithm: "brotliCompress", ext: ".br" }),
@@ -89,5 +90,6 @@ export default defineConfig({
   },
   test: {
     environment: "jsdom",
+    setupFiles: ["./tests/setup.js"],
   },
 });

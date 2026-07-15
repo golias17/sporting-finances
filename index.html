@@ -52,7 +52,7 @@
       property="og:url"
       content="https://golias17.github.io/sporting-finances/"
     />
-    <link href="assets/LOGO.svg" rel="icon" type="image/svg+xml" />
+    <link href="assets/LOGO.png" rel="icon" type="image/png" />
     <title data-i18n="auto-txt-title-0">
       Sporting CP — Financial Evolution Dashboard (2012/13 → 2025/26)
     </title>
@@ -76,6 +76,33 @@
           <span class="lang-sep">|</span>
           <a class="lang-link" data-lang="pt" href="index_pt.html">PT</a>
         </div>
+        <button
+          aria-label="Export Financial Dossier as PDF"
+          class="pdf-export-btn"
+          id="pdfExportBtn"
+        >
+          <svg
+            class="icon-inline"
+            fill="none"
+            height="12"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2.5"
+            viewBox="0 0 24 24"
+            width="12"
+            aria-hidden="true"
+          >
+            <path
+              d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+            ></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span data-i18n="topbar-export-pdf">Export PDF</span>
+        </button>
         <button
           aria-pressed="false"
           aria-label="Toggle dark mode"
@@ -107,7 +134,7 @@
             <img
               alt="Sporting Clube de Portugal crest"
               class="club-badge"
-              src="assets/LOGO.svg"
+              src="assets/LOGO.png"
             />
           </div>
           <p class="eyebrow" data-i18n="hero-eyebrow">
@@ -334,6 +361,16 @@
           <span class="tab-num">10</span>Data
         </button>
         <button
+          aria-controls="tab-club"
+          aria-selected="false"
+          data-i18n="tab-btn-club"
+          data-tab="club"
+          id="btn-tab-club"
+          role="tab"
+        >
+          <span class="tab-num">11</span>Club SAD
+        </button>
+        <button
           aria-controls="tab-news"
           aria-selected="false"
           data-i18n="tab-btn-news"
@@ -341,7 +378,7 @@
           id="btn-tab-news"
           role="tab"
         >
-          <span class="tab-num">11</span>News & Social
+          <span class="tab-num">12</span>News
         </button>
       </nav>
       <!-- ============== OVERVIEW ============== -->
@@ -1830,24 +1867,277 @@
       </section>
 
       <!-- ============== NEWS & SOCIAL ============== -->
+      <!-- ============== CLUB ASSETS ============== -->
       <section
-        aria-labelledby="btn-tab-news"
+        aria-labelledby="btn-tab-club"
         class="tab-panel"
-        id="tab-news"
+        id="tab-club"
         role="tabpanel"
       >
         <div class="chapter">
-          <div class="num" data-i18n="ch11-num">Ch. 11 — News & Social</div>
+          <div class="num" data-i18n="ch11-num">
+            Ch. 11 — Club Assets & Identity
+          </div>
           <div>
-            <h2 data-i18n="ch11-h2">Live <em>Updates</em>.</h2>
+            <h2 data-i18n="ch11-h2">
+              Visual symbols, <em>physical heritage</em>.
+            </h2>
             <p class="lede" data-i18n="ch11-lede">
-              The latest financial and corporate news regarding Sporting CP,
-              aggregated live from Portuguese media.
+              Sporting CP's identity is defined by its home and visual legacy.
+              Explore the kits, the stadium, the sports hall, and the museum
+              that connect the SAD to the fans.
             </p>
           </div>
         </div>
 
-        <div class="social-hub reveal">
+        <div class="club-grid anim-up">
+          <!-- CARD 1: KITS -->
+          <div class="card asset-card">
+            <div class="card-head">
+              <h3 data-i18n="ch11-card-kits-title">
+                Official Match Kits (2025/26)
+              </h3>
+              <span class="tag">Nike</span>
+            </div>
+            <p class="card-desc" data-i18n="ch11-card-kits-desc">
+              The legendary green-and-white horizontal hoops (Home), the modern
+              design (Away), and the half-green, half-white Stromp kit named in
+              honour of founder Francisco Stromp.
+            </p>
+            <div class="kit-showcase">
+              <!-- Home Flip Card -->
+              <div class="kit-card-container">
+                <div class="kit-card-inner">
+                  <div class="kit-card-front">
+                    <img
+                      src="https://lojaverde.sporting.pt/cdn/shop/files/IMG_06F_9_b2e1c87c-29d3-4088-acb2-0ca59d3a5a08.jpg?v=1783926957&width=1620"
+                      alt="Home Front"
+                      class="kit-img"
+                    />
+                    <span class="kit-label">Home Front</span>
+                  </div>
+                  <div class="kit-card-back">
+                    <img
+                      src="https://lojaverde.sporting.pt/cdn/shop/files/IMG_03F_8_dd697b98-f3b3-48f1-b5c4-c4c22ae8172a.jpg?v=1783926957&width=1946"
+                      alt="Home Back"
+                      class="kit-img"
+                    />
+                    <span class="kit-label">Home Back</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Away Flip Card -->
+              <div class="kit-card-container">
+                <div class="kit-card-inner">
+                  <div class="kit-card-front">
+                    <img
+                      src="https://lojaverde.sporting.pt/cdn/shop/files/StrikeFrente.jpg?v=1782742123&width=1946"
+                      alt="Away Front"
+                      class="kit-img"
+                    />
+                    <span class="kit-label">Away Front</span>
+                  </div>
+                  <div class="kit-card-back">
+                    <img
+                      src="https://lojaverde.sporting.pt/cdn/shop/files/StrikeCostas.jpg?v=1782742123&width=1946"
+                      alt="Away Back"
+                      class="kit-img"
+                    />
+                    <span class="kit-label">Away Back</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stromp (Unrevealed) -->
+              <div class="kit-card-container no-flip">
+                <div class="kit-item stromp">
+                  <div class="stromp-unrevealed-overlay">
+                    <span class="lock-icon">🔒</span>
+                    <span
+                      class="unrevealed-label"
+                      data-i18n="ch11-stromp-unrevealed"
+                      >Not Revealed</span
+                    >
+                  </div>
+                  <span class="kit-label">Stromp</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 2: STADIUM -->
+          <div class="card asset-card">
+            <div class="card-head">
+              <h3 data-i18n="ch11-card-stadium-title">Estádio José Alvalade</h3>
+              <span class="badge-pill">52,095 Seats</span>
+            </div>
+            <p class="card-desc" data-i18n="ch11-card-stadium-desc">
+              Inaugurated in 2003 and rated UEFA Category 4. Under the 2025
+              'Alvalade 2.0' modernization (partially funded by the USPP bond),
+              the club closed the stadium moat to add 2,000 extra seats, raising
+              capacity to 52,095. Upgrades include a Grassmax hybrid pitch, a
+              28-seat VIP Pitch Row, Loges equipped with individual tablet-TVs,
+              and the Deluxe Emerald Lounge, alongside the classic Gamebox
+              season tickets and Lion Seats.
+            </p>
+            <div class="stadium-seating-links">
+              <a
+                href="https://gamebox.sporting.pt/estadio"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="seating-link-btn"
+              >
+                <span data-i18n="ch11-stadium-gamebox"
+                  >Gamebox Season Tickets</span
+                >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="arrow-icon"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+              <a
+                href="https://seating.sporting.pt/lionseats"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="seating-link-btn"
+              >
+                <span data-i18n="ch11-stadium-lionseats"
+                  >Lion Seats (Premium VIP)</span
+                >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="arrow-icon"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+            </div>
+            <div class="stadium-image-box">
+              <img
+                src="assets/alvalade_stadium_panorama.jpg"
+                alt="Estádio José Alvalade"
+                class="stadium-panorama-img"
+              />
+            </div>
+          </div>
+
+          <!-- CARD 3: SPORTS HALL -->
+          <div class="card asset-card">
+            <div class="card-head">
+              <h3 data-i18n="ch11-card-hall-title">Pavilhão João Rocha</h3>
+              <span class="badge-pill">3,000 Capacity</span>
+            </div>
+            <p class="card-desc" data-i18n="ch11-card-hall-desc">
+              Located adjacent to the stadium, the 3,000-seat multi-sports arena
+              houses Sporting CP's historic indoor sports (Futsal, Handball,
+              Roller Hockey, and Basketball). Named after former president João
+              Rocha.
+            </p>
+            <div class="court-image-box">
+              <img
+                src="assets/pavilhao_joao_rocha.png"
+                alt="Pavilhão João Rocha"
+                class="court-panorama-img"
+              />
+            </div>
+          </div>
+
+          <!-- CARD 4: MUSEUM -->
+          <div class="card asset-card">
+            <div class="card-head">
+              <h3 data-i18n="ch11-card-museum-title">Museu Sporting</h3>
+              <span class="tag">16,000+ Trophies</span>
+            </div>
+            <p class="card-desc" data-i18n="ch11-card-museum-desc">
+              Housing over 16,000 historic trophies, the museum celebrates the
+              golden eras of European triumphs and national dominance,
+              showcasing the legacy of Lisbon's most decorated sports
+              institution.
+            </p>
+            <div class="museum-image-box">
+              <img
+                src="assets/museu_sporting.png"
+                alt="Museu Sporting"
+                class="museum-panorama-img"
+              />
+            </div>
+          </div>
+
+          <!-- CARD 5: ACADEMY -->
+          <div class="card asset-card">
+            <div class="card-head">
+              <h3 data-i18n="ch11-card-academy-title">
+                Academia Cristiano Ronaldo
+              </h3>
+              <span class="badge-pill">250,000 m²</span>
+            </div>
+            <p class="card-desc" data-i18n="ch11-card-academy-desc">
+              Located in Alcochete, it is the heart of Sporting CP's youth
+              academy. The first in Europe to receive ISO 9001:2008
+              certification, renamed in 2020 to honor alumnus Cristiano Ronaldo.
+            </p>
+            <div class="academy-image-box">
+              <img
+                src="assets/academia_cristiano_ronaldo.jpg"
+                alt="Academia Cristiano Ronaldo"
+                class="academy-panorama-img"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- ============== SPORTING EXPERIENCE ============== -->
+        <div class="card experience-card reveal" style="margin-top: 30px">
+          <div class="experience-content">
+            <div class="experience-text">
+              <h3 data-i18n="ch11-exp-title">
+                Sporting Experience — Tours & Tickets
+              </h3>
+              <p class="card-desc" data-i18n="ch11-exp-desc">
+                Discover the heart of Alvalade. Experience pitch-side views,
+                dressing rooms, the press room, and the Pavilhão João Rocha.
+                Visit the Museu Sporting to walk through 119 years of glory.
+              </p>
+              <a
+                href="https://sportingexperience.pt/pt"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="experience-btn"
+              >
+                <span data-i18n="ch11-exp-btn">Book Your Tour</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="arrow-icon"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="social-hub reveal" style="margin-top: 40px">
           <h3 data-i18n="ch11-social-h3">Official Channels & Media</h3>
           <div class="social-grid">
             <button id="btnJornalModal" class="social-btn jornal">
@@ -1961,7 +2251,7 @@
           </div>
         </div>
 
-        <div class="disclaimer-banner reveal">
+        <div class="disclaimer-banner reveal" style="margin-top: 30px">
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -1980,18 +2270,66 @@
           </svg>
           <div class="disclaimer-text">
             <p data-i18n="ch11-disclaimer-p">
+              <strong>Important Notice:</strong> None of the external media
+              channels or official resources linked here are legally binding
+              financial disclosures. For statutory financial metrics, refer only
+              to official SAD filings.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============== NEWS ============== -->
+      <section
+        aria-labelledby="btn-tab-news"
+        class="tab-panel"
+        id="tab-news"
+        role="tabpanel"
+      >
+        <div class="chapter">
+          <div class="num" data-i18n="ch12-num">Ch. 12 — News</div>
+          <div>
+            <h2 data-i18n="ch12-h2">Live <em>Updates</em>.</h2>
+            <p class="lede" data-i18n="ch12-lede">
+              The latest financial and corporate news regarding Sporting CP,
+              aggregated live from Portuguese media.
+            </p>
+          </div>
+        </div>
+
+        <div class="disclaimer-banner reveal">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="disclaimer-icon"
+            aria-hidden="true"
+          >
+            <path
+              d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+            ></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <div class="disclaimer-text">
+            <p data-i18n="ch12-disclaimer-p">
               <strong>Important Notice:</strong> None of the external news feed
-              items, media articles, or social channel updates linked here are
-              official, audited, or legally binding. They do not constitute
-              financial advice or verified SAD communications. Official SAD and
-              financial disclosures must be treated as the sole source of truth
-              until formally filed with the CMVM.
+              items or media articles linked here are official, audited, or
+              legally binding. They do not constitute financial advice or
+              verified SAD communications. Official SAD and financial
+              disclosures must be treated as the sole source of truth until
+              formally filed with the CMVM.
             </p>
           </div>
         </div>
 
         <div id="newsFeed" class="news-grid anim-up">
-          <div class="news-loading">Loading live updates...</div>
+          <div class="news-loading" data-i18n="ch12-loading">
+            Loading live updates...
+          </div>
         </div>
       </section>
     </main>
@@ -2001,7 +2339,7 @@
         <img
           alt="Sporting Clube de Portugal"
           class="footer-logo"
-          src="assets/LOGO.svg"
+          src="assets/LOGO.png"
         />
         <div class="footer-credit" data-i18n="auto-txt-div-80">
           <strong>Sporting Clube de Portugal — Futebol, SAD.</strong>
@@ -2035,6 +2373,24 @@
         <polyline points="5 12 12 5 19 12"></polyline>
       </svg>
     </button>
+
+    <!-- Lightbox Modal -->
+    <div id="imageLightbox" class="lightbox-modal">
+      <button
+        class="lightbox-close"
+        id="closeLightboxBtn"
+        aria-label="Close image"
+      >
+        &times;
+      </button>
+      <div class="lightbox-image-wrapper">
+        <img class="lightbox-content" id="lightboxImg" alt="Enlarged view" />
+        <button id="lightboxToggleKitBtn" class="lightbox-toggle-btn hidden">
+          <span>Flip Kit 🔄</span>
+        </button>
+      </div>
+      <div id="lightboxCaption" class="lightbox-caption"></div>
+    </div>
 
     <!-- Jornal Reader Modal -->
     <div id="jornalModal" class="modal-overlay hidden">

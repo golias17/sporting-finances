@@ -13,9 +13,6 @@
     background: #fff;
     color: #000;
   }
-  .tab-panel {
-    display: block !important;
-  }
   .card,
   .narrative,
   .health-bar {

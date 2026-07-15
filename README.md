@@ -14,9 +14,16 @@ This dashboard aggregates, visualizes, and contextualizes annual and semi-annual
 
 ## 📈 Key Features
 
-- **Dynamic Localization (i18n)**: Instantly switch between English and Portuguese! A dedicated localization engine automatically translates complex player transfer clauses, ledger notes, and performance add-on details in real-time.
+- **Dynamic Localization (i18n)**: Instantly switch between English and Portuguese! A dedicated localization engine translates complex player transfer clauses, ledger notes, and performance add-on details in real-time.
 - **Guided Financial Story Mode**: An interactive, step-by-step narrative highlighting major inflection points (the 2014 restructuring, the 2018 training-ground crisis, the 2021 championship season, and the VMOC conversions). You can click anywhere along the progress track to jump directly to chapters.
 - **Dynamic Health-Check Matrix**: Evaluates the club's financial stability season-by-season across six core metrics (Personnel Costs to Revenue, Net Debt to Revenue, Transfer Reliance, Shareholders' Equity, and Cash Reserves) with contextual status highlights.
+- **Club Assets & Identity (Tab 11)**: A dedicated overview displaying Sporting CP's physical and visual assets:
+  - _Stadium (Estádio José Alvalade)_: Real wide-angle panorama photo showcasing the UEFA Category 4 ground and its €225M USPP "Alvalade 2.0" upgrades (moat closure, capacity raise to 52,095 seats, hybrid Grassmax pitch, VIP Pitch Row, and premium Loges).
+  - _Sports Hall (Pavilhão João Rocha)_: Wide-angle view showing the home court of multi-sports indoor disciplines.
+  - _Museum (Museu Sporting)_: Real photo showcasing the legendary "Cinco Violinos" exhibit.
+  - _Academy (Academia Cristiano Ronaldo)_: Visual cards presenting the state-of-the-art Alcochete complex.
+- **3D Kit Hover-Flip Showcase**: Interactive, CSS-only 3D perspective flip cards for the official Home and Away match jerseys (featuring front and back images) and a locked indicator for the Stromp kit.
+- **Premium Image Lightbox Modal**: Clicking on any stadium, sports hall, academy, museum, or kit photo opens it in a full-screen, backdrop-blurred (`backdrop-filter: blur(8px)`) overlay. Features a contextual **Flip Kit 🔄** button that lets users swap between front and back jersey views inside the lightbox.
 - **Comprehensive Tab Views**: Detailed, dedicated charts built with Chart.js covering:
   - _Revenue & Wages_: Historical trends and stream breakdowns (TV, Matchday, Commercial).
   - _Debt & Liabilities_: Borrowings maturity and asset/liability comparisons.
@@ -25,7 +32,7 @@ This dashboard aggregates, visualizes, and contextualizes annual and semi-annual
 - **Interactive Season Comparison Tool**: Pick any two fiscal years to run a side-by-side metric comparison complete with auto-generated change narrative and bar charts.
 - **Full Data Table**: Financial statement style table displaying all metrics in a scrollable view.
 - **Premium Theme Selector**: Easily switch between Light and Dark modes. The Chart.js canvas elements automatically adjust grid and label colors. The light mode features customized green-tinted ambient glows and visual gradients.
-- **Automated Multilingual SEO**: Pre-renders `index_pt.html` with default Portuguese lang tags at build-time to support search index indexing.
+- **Automated Multilingual SEO**: Pre-renders `index_pt.html` with default Portuguese lang tags at build-time to support search engine indexing.
 
 ---
 
@@ -67,7 +74,7 @@ The project was recently modernized into a robust, decoupled ES Module architect
     │   ├── _print.css          # Print-friendly queries
     │   └── _mobile.css         # Bottom nav and mobile overrides
     ├── styles.css              # Main entrypoint, @imports all modules
-    └── LOGO.svg                # Sporting CP visual emblem
+    └── LOGO.png                # Sporting CP visual emblem
 ```
 
 ---

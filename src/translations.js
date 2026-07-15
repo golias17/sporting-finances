@@ -915,6 +915,10 @@ export const TRANSLATIONS = {
     pt: '<span class="tab-num">06</span>Plantel',
     innerHTML: true,
   },
+  "topbar-export-pdf": {
+    en: "Export PDF",
+    pt: "Exportar PDF",
+  },
   "topbar-listing": {
     en: "Sporting SAD · Euronext Lisbon",
     pt: "Sporting SAD · Euronext Lisboa",
@@ -1056,17 +1060,17 @@ export const TRANSLATIONS = {
     pt: "Pesquisar jogador, clube ou notas...",
   },
   "ch11-num": {
-    en: "Ch. 11 — News & Social",
-    pt: "Cap. 11 — Notícias e Redes Sociais",
+    en: "Ch. 11 — Club Assets & Identity",
+    pt: "Cap. 11 — Património e Identidade",
   },
   "ch11-h2": {
-    en: "Live <em>Updates</em>.",
-    pt: "<em>Atualizações</em> em direto.",
+    en: "Visual symbols, <em>physical heritage</em>.",
+    pt: "Símbolos visuais, <em>património físico</em>.",
     innerHTML: true,
   },
   "ch11-lede": {
-    en: "The latest financial and corporate news regarding Sporting CP, aggregated live from Portuguese media.",
-    pt: "As últimas notícias financeiras e corporativas do Sporting CP, agregadas em direto dos meios de comunicação portugueses.",
+    en: "Sporting CP's identity is defined by its home and visual legacy. Explore the kits, the stadium, the sports hall, and the museum that connect the SAD to the fans.",
+    pt: "A identidade do Sporting CP é definida pelo seu património físico e legado visual. Conheça os equipamentos, o estádio, o pavilhão e o museu que unem a SAD aos adeptos.",
   },
   "ch11-social-h3": {
     en: "Official Channels & Media",
@@ -1093,13 +1097,105 @@ export const TRANSLATIONS = {
     pt: "YouTube",
   },
   "ch11-disclaimer-p": {
-    en: "<strong>Important Notice:</strong> None of the external news feed items, media articles, or social channel updates linked here are official, audited, or legally binding. They do not constitute financial advice or verified SAD communications. Official SAD and financial disclosures must be treated as the sole source of truth until formally filed with the CMVM.",
-    pt: "<strong>Aviso Importante:</strong> Nenhuma das notícias externas, artigos de imprensa ou atualizações de redes sociais aqui associados são oficiais, auditados ou legalmente vinculativos. Não constituem aconselhamento financeiro ou comunicações oficiais da SAD. As divulgações oficiais e financeiras da SAD devem ser consideradas a única fonte de verdade até serem formalmente comunicadas à CMVM.",
+    en: "<strong>Important Notice:</strong> None of the external media channels or official resources linked here are legally binding financial disclosures. For statutory financial metrics, refer only to official SAD filings.",
+    pt: "<strong>Aviso Importante:</strong> Nenhum dos canais externos ou recursos oficiais aqui associados constituem divulgações financeiras legalmente vinculativas. Para métricas estatutárias, consulte apenas os relatórios oficiais da SAD.",
     innerHTML: true,
   },
-  "ch11-loading": {
+  "ch11-stromp-unrevealed": {
+    en: "Not Revealed",
+    pt: "Por Revelar",
+  },
+  "ch11-exp-title": {
+    en: "Sporting Experience — Tours & Tickets",
+    pt: "Sporting Experience — Visitas e Bilhetes",
+  },
+  "ch11-exp-desc": {
+    en: "Discover the heart of Alvalade. Experience pitch-side views, dressing rooms, the press room, and the Pavilhão João Rocha. Visit the Museu Sporting to walk through 119 years of glory.",
+    pt: "Descubra o coração de Alvalade. Viva a experiência de estar junto ao relvado, balneários, sala de imprensa e Pavilhão João Rocha. Visite o Museu Sporting e percorra 119 anos de glória.",
+  },
+  "ch11-exp-btn": {
+    en: "Book Your Tour",
+    pt: "Reservar Visita",
+  },
+  "tab-btn-news": {
+    en: '<span class="tab-num">12</span>News',
+    pt: '<span class="tab-num">12</span>Notícias',
+    innerHTML: true,
+  },
+  "tab-btn-club": {
+    en: '<span class="tab-num">11</span>Club SAD',
+    pt: '<span class="tab-num">11</span>Clube SAD',
+    innerHTML: true,
+  },
+  "ch12-num": {
+    en: "Ch. 12 — News",
+    pt: "Cap. 12 — Notícias",
+  },
+  "ch12-h2": {
+    en: "Live <em>Updates</em>.",
+    pt: "<em>Atualizações</em> em direto.",
+    innerHTML: true,
+  },
+  "ch12-lede": {
+    en: "The latest financial and corporate news regarding Sporting CP, aggregated live from Portuguese media.",
+    pt: "As últimas notícias financeiras e corporativas do Sporting CP, agregadas em direto dos meios de comunicação portugueses.",
+  },
+  "ch12-disclaimer-p": {
+    en: "<strong>Important Notice:</strong> None of the external news feed items or media articles linked here are official, audited, or legally binding. They do not constitute financial advice or verified SAD communications. Official SAD and financial disclosures must be treated as the sole source of truth until formally filed with the CMVM.",
+    pt: "<strong>Aviso Importante:</strong> Nenhuma das notícias externas ou artigos de imprensa aqui associados são oficiais, auditados ou legalmente vinculativos. Não constituem aconselhamento financeiro ou comunicações oficiais da SAD. As divulgações oficiais e financeiras da SAD devem ser consideradas a única fonte de verdade até serem formalmente comunicadas à CMVM.",
+    innerHTML: true,
+  },
+  "ch12-loading": {
     en: "Loading live updates...",
     pt: "A carregar atualizações...",
+  },
+  "ch11-card-kits-title": {
+    en: "Official Match Kits (2025/26)",
+    pt: "Equipamentos Oficiais (2025/26)",
+  },
+  "ch11-card-kits-desc": {
+    en: "The legendary green-and-white horizontal hoops (Home), the modern design (Away), and the half-green, half-white Stromp kit named in honour of founder Francisco Stromp.",
+    pt: "As lendárias listras horizontais verdes e brancas (Principal), o design moderno (Alternativo) e o equipamento bipartido Stromp, em homenagem ao fundador Francisco Stromp.",
+  },
+  "ch11-card-stadium-title": {
+    en: "Estádio José Alvalade",
+    pt: "Estádio José Alvalade",
+  },
+  "ch11-card-stadium-desc": {
+    en: "Inaugurated in 2003 and rated UEFA Category 4. Under the 2025 'Alvalade 2.0' modernization (partially funded by the USPP bond), the club closed the stadium moat to add 2,000 extra seats, raising capacity to 52,095. Upgrades include a Grassmax hybrid pitch, a 28-seat VIP Pitch Row, Loges equipped with individual tablet-TVs, and the Deluxe Emerald Lounge, alongside the classic Gamebox season tickets and Lion Seats.",
+    pt: "Inaugurado em 2003 e classificado como Categoria 4 da UEFA. Com a remodelação 'Alvalade 2.0' de 2025 (financiada no âmbito da emissão USPP), foi fechado o fosso para criar mais 2.000 lugares, subindo a lotação para 52.095 espectadores. Destaca-se o relvado híbrido Grassmax, a VIP Pitch Row com 28 lugares premium, Loges com ecrãs individuais e o Deluxe Emerald Lounge, além dos anuais Gamebox e Lion Seats.",
+  },
+  "ch11-stadium-gamebox": {
+    en: "Gamebox Season Tickets",
+    pt: "Lugar Anual Gamebox",
+  },
+  "ch11-stadium-lionseats": {
+    en: "Lion Seats (Premium VIP)",
+    pt: "Lion Seats (Premium VIP)",
+  },
+  "ch11-card-hall-title": {
+    en: "Pavilhão João Rocha",
+    pt: "Pavilhão João Rocha",
+  },
+  "ch11-card-hall-desc": {
+    en: "Located adjacent to the stadium, the 3,000-seat multi-sports arena houses Sporting CP's historic indoor sports (Futsal, Handball, Roller Hockey, and Basketball). Named after former president João Rocha.",
+    pt: "Localizado junto ao estádio, a arena multi-desportiva com 3.000 lugares acolhe as modalidades de pavilhão do Sporting CP (Futsal, Andebol, Hóquei em Patins e Basquetebol). Homenageia o antigo presidente João Rocha.",
+  },
+  "ch11-card-museum-title": {
+    en: "Museu Sporting",
+    pt: "Museu Sporting",
+  },
+  "ch11-card-museum-desc": {
+    en: "Housing over 16,000 historic trophies, the museum celebrates the golden eras of European triumphs and national dominance, showcasing the legacy of Lisbon's most decorated sports institution.",
+    pt: "Alojando mais de 16.000 troféus históricos, o museu celebra as eras de ouro dos triunfos europeus e o domínio nacional, exibindo o legado da instituição mais eclética e titulada de Lisboa.",
+  },
+  "ch11-card-academy-title": {
+    en: "Academia Cristiano Ronaldo",
+    pt: "Academia Cristiano Ronaldo",
+  },
+  "ch11-card-academy-desc": {
+    en: "Located in Alcochete over 250,000 m², it is the heart of Sporting CP's youth academy. The first in Europe to receive ISO 9001:2008 certification, and renamed in 2020 to honor Ballon d'Or winner Cristiano Ronaldo.",
+    pt: "Situada em Alcochete com 250.000 m², é o coração da formação leonina. Primeira academia na Europa a obter a certificação ISO 9001:2008, foi rebatizada em 2020 para homenagear o lendário Cristiano Ronaldo.",
   },
 };
 

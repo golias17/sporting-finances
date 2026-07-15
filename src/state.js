@@ -42,6 +42,7 @@ export const state = {
     "events",
     "data",
     "news",
+    "club",
   ],
   TAB_CHARTS: {},
   // Proxy emits a console.warn if a color key is read before initChartDefaults()

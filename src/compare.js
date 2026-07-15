@@ -1,5 +1,6 @@
 import { state } from "./state.js";
 import { fmtMillions, mkChart } from "./charts.js";
+import { syncStateToUrl } from "./urlSync.js";
 
 // SEASON COMPARISON
 // =============================================================
@@ -35,8 +36,16 @@ export function initComparison() {
 
   // Restore previous selection by label, or fall back to sensible defaults.
   const idxOf = (label) => data.findIndex((d) => d.label === label);
-  const restoreA = prevLabelA ? idxOf(prevLabelA) : -1;
-  const restoreB = prevLabelB ? idxOf(prevLabelB) : -1;
+  let restoreA = prevLabelA ? idxOf(prevLabelA) : -1;
+  let restoreB = prevLabelB ? idxOf(prevLabelB) : -1;
+
+  if (restoreA === -1 && state.urlCmpA) {
+    restoreA = idxOf(state.urlCmpA);
+  }
+  if (restoreB === -1 && state.urlCmpB) {
+    restoreB = idxOf(state.urlCmpB);
+  }
+
   selA.value = restoreA >= 0 ? restoreA : 0;
   selB.value = restoreB >= 0 ? restoreB : data.length - 1;
 
@@ -427,6 +436,8 @@ export function renderComparison() {
     </div>`,
     )
     .join("");
+
+  syncStateToUrl();
 }
 
 // =============================================================
