@@ -9,9 +9,12 @@ export const fmtMillions = (v) => {
   return "€" + (v < 0 ? "−" : "") + Math.abs(v / 1000).toFixed(1) + "M";
 };
 
+// Base colors here match the light-mode --neg/--warn/--pos CSS variables in
+// _variables.css (see initChartDefaults() below for why that alignment
+// matters), just at low opacity for use as chart zone backgrounds.
 export const ZONE_COLORS = {
-  red: "rgba(198,64,79,0.07)",
-  amber: "rgba(217,156,43,0.08)",
+  red: "rgba(184,64,58,0.07)",
+  amber: "rgba(201,140,31,0.08)",
   green: "rgba(46,138,85,0.06)",
 };
 
@@ -26,21 +29,29 @@ export const ZONE_COLORS = {
  * references pointing at the old empty {}.
  */
 export function initChartDefaults() {
+  // These light-mode defaults are the same colors as _variables.css's
+  // :root block (--green, --gold, --pos, --neg, --warn, --info, --ink,
+  // --muted). They used to be a separate, slightly-off palette (e.g. gold
+  // #c8a951 here vs --gold #b08923 in CSS) — chart lines and legends
+  // wouldn't quite match the color of the badges, buttons and text right
+  // next to them. Keep these two definitions in sync; see also
+  // updateChartTheme() in main.js, which applies the same values (plus the
+  // dark-mode variants) once the DOM/theme is known.
   Object.assign(state.COLORS, {
     green: "#0a5d3a",
     greenLight: "#2e9e6c",
     greenSoft: "rgba(10,93,58,0.15)",
-    gold: "#c8a951",
-    goldSoft: "rgba(200,169,81,0.4)",
+    gold: "#b08923",
+    goldSoft: "rgba(176,137,35,0.4)",
     pos: "#2e8a55",
-    neg: "#c6404f",
-    negSoft: "rgba(198,64,79,0.7)",
+    neg: "#b8403a",
+    negSoft: "rgba(184,64,58,0.7)",
     posSoft: "rgba(46,138,85,0.7)",
-    warn: "#d99c2b",
-    info: "#3a72b8",
-    infoSoft: "rgba(58,114,184,0.7)",
-    ink: "#18221d",
-    muted: "#5a6a62",
+    warn: "#c98c1f",
+    info: "#2c5b8a",
+    infoSoft: "rgba(44,91,138,0.7)",
+    ink: "#111814",
+    muted: "#6a716e",
   });
 
   Object.assign(state.baseOpts, {

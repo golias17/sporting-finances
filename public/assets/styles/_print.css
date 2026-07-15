@@ -90,7 +90,7 @@
   justify-content: center;
   width: 64px;
   height: 64px;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   background: var(--rule);
   color: var(--muted);
   margin-bottom: 16px;
@@ -107,7 +107,7 @@ body.dark .ledger-empty-icon-wrapper {
 
 .ledger-empty-title {
   font-family: var(--sans);
-  font-size: 16px;
+  font-size: var(--fs-xl);
   font-weight: 600;
   color: var(--ink);
   margin: 0 0 8px 0;
@@ -115,7 +115,7 @@ body.dark .ledger-empty-icon-wrapper {
 
 .ledger-empty-sub {
   font-family: var(--sans);
-  font-size: 13px;
+  font-size: var(--fs-md);
   line-height: 1.5;
   color: var(--muted);
   margin: 0;

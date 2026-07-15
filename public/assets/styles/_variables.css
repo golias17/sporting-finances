@@ -24,6 +24,38 @@
     "Outfit", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial,
     sans-serif;
   --mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+
+  /* Type scale — consolidates ~30 near-duplicate font-size values that had
+     drifted apart by half a pixel across many editing sessions (e.g. 9px/
+     9.5px/10px/10.5px/11px all used for the same "small mono label" role).
+     Values below are the modal (most-used) size per cluster; declarations
+     within 0.5px of a tier were folded into it. Distinct display sizes
+     (hero numbers, KPI figures) are left as one-off literals since they're
+     not part of the systematic scale. */
+  --fs-3xs: 8px;
+  --fs-2xs: 9px;
+  --fs-xs: 10px;
+  --fs-sm: 11px;
+  --fs-base: 12px;
+  --fs-md: 13px;
+  --fs-lg: 14px;
+  --fs-xl: 16px;
+  --fs-2xl: 18px;
+  --fs-3xl: 22px;
+
+  /* Radius scale — consolidates ~90 border-radius declarations that used
+     14 distinct values (1px–20px, plus 50px/99px pills and 50% circles)
+     with no shared tiers. Rare values within 1px of a tier were folded in. */
+  --radius-none: 0;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 10px;
+  --radius-2xl: 12px;
+  --radius-3xl: 20px;
+  --radius-pill: 99px;
+  --radius-round: 50%;
 }
 
 body.dark {

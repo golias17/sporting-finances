@@ -867,14 +867,24 @@ export function chartPayrollBurden() {
           drawTime: "beforeDatasetsDraw",
           annotations: zoneAnnotations({
             zones: [
-              { key: "redBg", min: dangerPct, max: 135, color: ZONE_COLORS.red },
+              {
+                key: "redBg",
+                min: dangerPct,
+                max: 135,
+                color: ZONE_COLORS.red,
+              },
               {
                 key: "amberBg",
                 min: warnPct,
                 max: dangerPct,
                 color: ZONE_COLORS.amber,
               },
-              { key: "greenBg", min: 0, max: warnPct, color: ZONE_COLORS.green },
+              {
+                key: "greenBg",
+                min: 0,
+                max: warnPct,
+                color: ZONE_COLORS.green,
+              },
             ],
             lines: [
               { key: "line70", value: dangerPct, color: state.COLORS.neg },
@@ -952,7 +962,12 @@ export function chartTransferReliance() {
                 max: dangerPct,
                 color: ZONE_COLORS.amber,
               },
-              { key: "greenBg", min: 0, max: warnPct, color: ZONE_COLORS.green },
+              {
+                key: "greenBg",
+                min: 0,
+                max: warnPct,
+                color: ZONE_COLORS.green,
+              },
             ],
             lines: [
               { key: "line50", value: dangerPct, color: state.COLORS.neg },

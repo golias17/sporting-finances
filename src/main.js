@@ -240,8 +240,20 @@ function updateThemeUI(isDark) {
 
 function updateChartTheme() {
   const isDark = document.body.classList.contains("dark");
-  state.COLORS.ink = isDark ? "#eaeaea" : "#18221d";
-  state.COLORS.muted = isDark ? "#8c938f" : "#5a6a62";
+  // Light-mode values here match _variables.css's :root block exactly
+  // (--ink, --muted, --gold, --neg, --warn, --info, --pos, --green) so
+  // chart colors agree with the rest of the UI — see the comment in
+  // chartUtils.js's initChartDefaults() for the same rationale.
+  //
+  // Dark-mode green/gold/info are intentionally brighter than their CSS
+  // variables (which don't currently define dark-mode overrides for those
+  // three): a chart line needs more contrast against a near-black canvas
+  // than a button or badge does against a translucent dark surface, so
+  // dimming these to match CSS would hurt legibility. Dark-mode ink/muted/
+  // pos/neg/warn do have CSS overrides (body.dark in _variables.css) and
+  // match those exactly.
+  state.COLORS.ink = isDark ? "#eaeaea" : "#111814";
+  state.COLORS.muted = isDark ? "#8c938f" : "#6a716e";
   state.COLORS.chartBg = isDark ? "#121513" : "#ffffff";
 
   // Dynamic brand and status colors for charts/sparklines in dark mode
@@ -250,23 +262,23 @@ function updateChartTheme() {
   state.COLORS.greenSoft = isDark
     ? "rgba(46, 158, 105, 0.2)"
     : "rgba(10,93,58,0.15)";
-  state.COLORS.gold = isDark ? "#ffd54f" : "#c8a951";
+  state.COLORS.gold = isDark ? "#ffd54f" : "#b08923";
   state.COLORS.goldSoft = isDark
     ? "rgba(255, 213, 79, 0.25)"
-    : "rgba(200,169,81,0.4)";
+    : "rgba(176,137,35,0.4)";
   state.COLORS.pos = isDark ? "#3de080" : "#2e8a55";
   state.COLORS.posSoft = isDark
     ? "rgba(61, 224, 128, 0.35)"
     : "rgba(46, 138, 85, 0.7)";
-  state.COLORS.neg = isDark ? "#ff6b6b" : "#c6404f";
+  state.COLORS.neg = isDark ? "#ff6b6b" : "#b8403a";
   state.COLORS.negSoft = isDark
     ? "rgba(255, 107, 107, 0.35)"
-    : "rgba(198, 64, 79, 0.7)";
-  state.COLORS.warn = isDark ? "#ffb300" : "#d99c2b";
-  state.COLORS.info = isDark ? "#52a3ff" : "#3a72b8";
+    : "rgba(184, 64, 58, 0.7)";
+  state.COLORS.warn = isDark ? "#ffb300" : "#c98c1f";
+  state.COLORS.info = isDark ? "#52a3ff" : "#2c5b8a";
   state.COLORS.infoSoft = isDark
     ? "rgba(82, 163, 255, 0.35)"
-    : "rgba(58,114,184,0.7)";
+    : "rgba(44,91,138,0.7)";
 
   // Dynamic connection line color for health ratios
   state.COLORS.lineBorder = isDark
@@ -276,10 +288,10 @@ function updateChartTheme() {
   // Dynamic zone backgrounds for health ratios
   ZONE_COLORS.red = isDark
     ? "rgba(255, 107, 107, 0.15)"
-    : "rgba(198,64,79,0.07)";
+    : "rgba(184,64,58,0.07)";
   ZONE_COLORS.amber = isDark
     ? "rgba(255, 179, 0, 0.15)"
-    : "rgba(217,156,43,0.08)";
+    : "rgba(201,140,31,0.08)";
   ZONE_COLORS.green = isDark
     ? "rgba(61, 224, 128, 0.08)"
     : "rgba(46,138,85,0.06)";
@@ -290,14 +302,6 @@ function updateChartTheme() {
     state.baseOpts.scales.y.grid.color = isDark
       ? "rgba(255,255,255,0.12)"
       : "rgba(0,0,0,0.05)";
-  }
-  if (state.baseOpts.plugins && state.baseOpts.plugins.tooltip) {
-    state.baseOpts.plugins.tooltip.backgroundColor = isDark
-      ? "rgba(24, 29, 26, 0.95)"
-      : "rgba(250, 248, 243, 0.95)";
-    state.baseOpts.plugins.tooltip.titleColor = isDark ? "#eaeaea" : "#14181a";
-    state.baseOpts.plugins.tooltip.bodyColor = isDark ? "#cccccc" : "#2c3437";
-    state.baseOpts.plugins.tooltip.borderColor = isDark ? "#2a332f" : "#e6e1d4";
   }
 }
 
