@@ -3,8 +3,10 @@ import { getLatestH1Data } from "./metrics.js";
 import { HEALTH_THRESHOLDS } from "./healthThresholds.js";
 import Chart from "chart.js/auto";
 import annotationPlugin from "chartjs-plugin-annotation";
+import zoomPlugin from "chartjs-plugin-zoom";
 
 Chart.register(annotationPlugin);
+Chart.register(zoomPlugin);
 
 // Premium line shadow glow plugin for all themes
 const lineShadowPlugin = {

@@ -31,6 +31,35 @@ export function showUpdateToast(onConfirm) {
   });
 }
 
+export function showOfflineReadyToast() {
+  let toast = document.getElementById("pwa-offline-toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "pwa-offline-toast";
+    toast.className = "pwa-toast";
+    document.body.appendChild(toast);
+  }
+
+  const isPt = state.isPt;
+  const msg = isPt
+    ? "Aplicação pronta para funcionar offline!"
+    : "App is ready to work offline!";
+  const btnTxt = isPt ? "Ok" : "Dismiss";
+
+  toast.innerHTML = `
+    <div class="toast-body">
+      <span>${msg}</span>
+      <button id="pwa-offline-btn" class="toast-btn">${btnTxt}</button>
+    </div>
+  `;
+
+  setTimeout(() => toast.classList.add("visible"), 100);
+
+  document.getElementById("pwa-offline-btn").addEventListener("click", () => {
+    toast.classList.remove("visible");
+  });
+}
+
 export function initPWA() {
   // Register service worker if supported and not in test mode.
   // Note: "virtual:pwa-register" is a virtual module injected dynamically at build-time
@@ -48,6 +77,7 @@ export function initPWA() {
           },
           onOfflineReady() {
             console.info("App ready to work offline.");
+            showOfflineReadyToast();
           },
         });
       })

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { state } from "../src/state.js";
-import { showUpdateToast, initPWA } from "../src/pwa.js";
+import { showUpdateToast, showOfflineReadyToast, initPWA } from "../src/pwa.js";
 
 describe("pwa.js", () => {
   beforeEach(() => {
@@ -48,6 +48,34 @@ describe("pwa.js", () => {
 
     const toast = document.getElementById("pwa-update-toast");
     expect(toast.classList.contains("visible")).toBe(false);
+  });
+
+  it("should show offline ready toast in English and dismiss it", () => {
+    state.isPt = false;
+    showOfflineReadyToast();
+
+    const toast = document.getElementById("pwa-offline-toast");
+    expect(toast).not.toBeNull();
+    expect(toast.innerHTML).toContain("App is ready to work offline!");
+
+    const btn = document.getElementById("pwa-offline-btn");
+    expect(btn).not.toBeNull();
+    expect(btn.textContent).toBe("Dismiss");
+
+    btn.click();
+    expect(toast.classList.contains("visible")).toBe(false);
+  });
+
+  it("should show offline ready toast in Portuguese", () => {
+    state.isPt = true;
+    showOfflineReadyToast();
+
+    const toast = document.getElementById("pwa-offline-toast");
+    expect(toast).not.toBeNull();
+    expect(toast.innerHTML).toContain("Aplicação pronta para funcionar offline!");
+
+    const btn = document.getElementById("pwa-offline-btn");
+    expect(btn.textContent).toBe("Ok");
   });
 
   it("initPWA does not register service worker in test environment", () => {

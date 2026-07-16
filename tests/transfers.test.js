@@ -206,5 +206,70 @@ describe("transfers.js", () => {
       expect(rows.length).toBe(1);
       expect(rows[0].textContent).toContain("No results found");
     });
+
+    it("should sort correctly by numeric columns and rights percentages", () => {
+      // Add custom items with varying numeric values
+      state.TRANSFER_LEDGER[0].purchases = [
+        {
+          player: "Player A",
+          fee: 10,
+          bonus: 2,
+          commission: 1,
+          window: "summer",
+          rights: "100%",
+        },
+        {
+          player: "Player C",
+          fee: 5,
+          bonus: 4,
+          commission: 0.5,
+          window: "summer",
+          rights: "80%",
+        },
+      ];
+      state.TRANSFER_LEDGER[0].sales = [
+        {
+          player: "Player B",
+          fee: 20,
+          bonus: 0,
+          commission: 0,
+          window: "winter",
+          rights: "50%",
+        },
+      ];
+
+      initTransfersDetailTable();
+      const headers = document.querySelectorAll("#transfersDetailTable th");
+
+      const feeHeader = headers[5]; // Fee column
+      const rightsHeader = headers[6]; // Rights column
+
+      // 1. Sort by fee (descending initially since it is numeric)
+      feeHeader.click();
+      expect(state.tfSortCol).toBe("fee");
+      expect(state.tfSortDir).toBe("desc");
+
+      let rows = document.querySelectorAll("#transfersDetailTableBody tr");
+      expect(rows[0].textContent).toContain("Player B"); // 20M
+      expect(rows[1].textContent).toContain("Player A"); // 10M
+      expect(rows[2].textContent).toContain("Player C"); // 5M
+
+      // Toggle fee to ascending
+      feeHeader.click();
+      expect(state.tfSortDir).toBe("asc");
+      rows = document.querySelectorAll("#transfersDetailTableBody tr");
+      expect(rows[0].textContent).toContain("Player C"); // 5M
+      expect(rows[1].textContent).toContain("Player A"); // 10M
+      expect(rows[2].textContent).toContain("Player B"); // 20M
+
+      // 2. Sort by rights percentage (custom parser)
+      rightsHeader.click();
+      expect(state.tfSortCol).toBe("rights");
+      expect(state.tfSortDir).toBe("asc");
+      rows = document.querySelectorAll("#transfersDetailTableBody tr");
+      expect(rows[0].textContent).toContain("Player B"); // 50%
+      expect(rows[1].textContent).toContain("Player C"); // 80%
+      expect(rows[2].textContent).toContain("Player A"); // 100%
+    });
   });
 });

@@ -59,6 +59,7 @@ export function initChartDefaults() {
   Object.assign(state.baseOpts, {
     responsive: true,
     maintainAspectRatio: false,
+    resizeDelay: 150,
     interaction: { mode: "index", intersect: false },
     plugins: {
       legend: {
@@ -68,6 +69,22 @@ export function initChartDefaults() {
       tooltip: {
         enabled: false,
         external: externalTooltipHandler,
+      },
+      zoom: {
+        pan: {
+          enabled: true,
+          mode: "x",
+        },
+        zoom: {
+          wheel: {
+            enabled: true,
+            modifierKey: "ctrl",
+          },
+          pinch: {
+            enabled: true,
+          },
+          mode: "x",
+        },
       },
     },
     scales: {

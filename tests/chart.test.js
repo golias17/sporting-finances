@@ -482,4 +482,99 @@ describe("Chart.js and Annotation Plugin integration", () => {
     HTMLCanvasElement.prototype.toDataURL = origToDataURL;
     HTMLAnchorElement.prototype.click = origClick;
   });
+
+  it("should format tooltips correctly via callbacks", () => {
+    chartRevStreams();
+    chartPayrollBurden();
+    chartSquadBook();
+    chartTransferReliance();
+    chartDebtLoad();
+    chartCurrentRatio();
+
+    // 1. chartRevStreams
+    const revStreamsChart = chartRegistry.get("chartRevStreams");
+    const revStreamsLabel =
+      revStreamsChart.config.options.plugins.tooltip.callbacks.label({
+        parsed: { y: 25000 },
+        dataset: { label: "TV" },
+      });
+    expect(revStreamsLabel).toContain("TV: €25.0M");
+
+    // 2. chartPayrollBurden
+    const pbChart = chartRegistry.get("chartPayrollBurden");
+    const pbLabel = pbChart.config.options.plugins.tooltip.callbacks.label({
+      parsed: { y: 65 },
+    });
+    expect(pbLabel).toContain("Wage bill: 65% of revenue");
+
+    // 3. chartSquadBook
+    const squadChart = chartRegistry.get("chartSquadBook");
+    const squadLabel =
+      squadChart.config.options.plugins.tooltip.callbacks.label({
+        parsed: { y: 120000 },
+        dataset: { label: "Valor contabilístico" },
+      });
+    expect(squadLabel).toBe("Valor contabilístico: €120.0M");
+    // test null y
+    const squadLabelNull =
+      squadChart.config.options.plugins.tooltip.callbacks.label({
+        parsed: { y: null },
+      });
+    expect(squadLabelNull).toBeNull();
+
+    // 4. chartTransferReliance
+    const trChart = chartRegistry.get("chartTransferReliance");
+    const trLabel = trChart.config.options.plugins.tooltip.callbacks.label({
+      parsed: { y: 80 },
+    });
+    expect(trLabel).toContain("Transfer reliance: 80%");
+
+    // 5. chartDebtLoad
+    const dlChart = chartRegistry.get("chartDebtLoad");
+    const dlLabel = dlChart.config.options.plugins.tooltip.callbacks.label({
+      parsed: { y: 1.5 },
+    });
+    expect(dlLabel).toContain("Net debt: 1.5× annual revenue");
+
+    // 6. chartCurrentRatio
+    const crChart = chartRegistry.get("chartCurrentRatio");
+    const crLabel = crChart.config.options.plugins.tooltip.callbacks.label({
+      parsed: { y: 0.85 },
+    });
+    expect(crLabel).toContain("Current ratio: 0.85×");
+  });
+
+  it("should format tooltips in Portuguese correctly", () => {
+    state.isPt = true;
+    chartPayrollBurden();
+    chartTransferReliance();
+    chartDebtLoad();
+    chartCurrentRatio();
+
+    const pbChart = chartRegistry.get("chartPayrollBurden");
+    const pbLabel = pbChart.config.options.plugins.tooltip.callbacks.label({
+      parsed: { y: 65 },
+    });
+    expect(pbLabel).toContain("Custos com pessoal: 65% da receita");
+
+    const trChart = chartRegistry.get("chartTransferReliance");
+    const trLabel = trChart.config.options.plugins.tooltip.callbacks.label({
+      parsed: { y: 80 },
+    });
+    expect(trLabel).toContain("Dependência de passes: 80%");
+
+    const dlChart = chartRegistry.get("chartDebtLoad");
+    const dlLabel = dlChart.config.options.plugins.tooltip.callbacks.label({
+      parsed: { y: 1.5 },
+    });
+    expect(dlLabel).toContain("Dívida líquida: 1.5× receita anual");
+
+    const crChart = chartRegistry.get("chartCurrentRatio");
+    const crLabel = crChart.config.options.plugins.tooltip.callbacks.label({
+      parsed: { y: 0.85 },
+    });
+    expect(crLabel).toContain("Rácio de solvência: 0.85×");
+
+    state.isPt = false; // restore
+  });
 });

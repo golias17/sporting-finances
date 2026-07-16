@@ -57,3 +57,23 @@ footer.site-footer {
 .skip-link:focus {
   top: 8px;
 }
+
+/* Premium custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--rule-2);
+  border-radius: var(--radius-pill);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-2);
+}
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule-2) var(--bg);
+}
