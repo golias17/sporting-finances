@@ -88,6 +88,36 @@ describe("news.js", () => {
     expect(container.innerHTML).toContain("No recent corporate updates found.");
   });
 
+  it("should decode XML and HTML entities in titles and source names", async () => {
+    global.fetch.mockResolvedValue({
+      json: () =>
+        Promise.resolve({
+          items: [
+            {
+              title:
+                "Sporting SAD &amp; CMVM decidem reestruturar &#39;VMOCs&#39; - Record &amp; Notícias",
+              pubDate: "2023-10-01 10:00:00",
+              link: "http://example.com/1",
+              author: "Record &amp; Notícias",
+            },
+          ],
+        }),
+    });
+
+    await initNewsFeed();
+
+    const container = document.getElementById("newsFeed");
+    const cards = container.querySelectorAll(".news-card");
+
+    expect(cards.length).toBe(1);
+
+    const titleText = cards[0].querySelector("h3").textContent;
+    expect(titleText).toBe("Sporting SAD & CMVM decidem reestruturar 'VMOCs'");
+
+    const sourcePill = cards[0].querySelector(".source-pill");
+    expect(sourcePill.textContent).toBe("Record & Notícias");
+  });
+
   it("should display error message on API failure", async () => {
     global.fetch.mockRejectedValue(new Error("API limit reached"));
 
@@ -126,5 +156,42 @@ describe("news.js", () => {
     const cards = container.querySelectorAll(".news-card");
     expect(cards.length).toBe(1);
     expect(cards[0].querySelector("h3").textContent).toBe("Cached Article");
+  });
+
+  it("should fallback to stale cache when fetch fails", async () => {
+    // Populate session storage with stale items (older than 30 minutes)
+    const staleData = [
+      {
+        title: "Stale Cached Article",
+        category: "FINANCE",
+        pubDate: "2023-10-01 10:00:00",
+        link: "http://example.com/stale",
+        sourceName: "O Jogo",
+      },
+    ];
+
+    sessionStorage.setItem(
+      "sportingNews_v1",
+      JSON.stringify({
+        ts: Date.now() - 40 * 60 * 1000, // 40 minutes old
+        items: staleData,
+      }),
+    );
+
+    // Mock fetch failure
+    global.fetch.mockRejectedValue(new Error("API Limit Reached"));
+
+    await initNewsFeed();
+
+    // Verify stale warning is rendered
+    const container = document.getElementById("newsFeed");
+    expect(container.innerHTML).toContain("Couldn't refresh news right now");
+
+    // Verify stale item is rendered
+    const cards = container.querySelectorAll(".news-card");
+    expect(cards.length).toBe(1);
+    expect(cards[0].querySelector("h3").textContent).toBe(
+      "Stale Cached Article",
+    );
   });
 });

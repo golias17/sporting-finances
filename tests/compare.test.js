@@ -2,6 +2,15 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { state } from "../src/state.js";
 import { initComparison } from "../src/compare.js";
 
+// Mock Chart.js which is used inside mkChart internally called by compare.js
+vi.mock("../src/charts.js", async (importOriginal) => {
+  const actual = await importOriginal();
+  return {
+    ...actual,
+    mkChart: vi.fn(),
+  };
+});
+
 describe("compare.js", () => {
   beforeEach(() => {
     document.body.innerHTML = `
@@ -44,15 +53,6 @@ describe("compare.js", () => {
     state.startSeasonIndex = 0;
     state.endSeasonIndex = 1;
     state.baseOpts = { scales: { y: {} } };
-
-    // Mock Chart.js which is used inside mkChart internally called by compare.js
-    vi.mock("../src/charts.js", async (importOriginal) => {
-      const actual = await importOriginal();
-      return {
-        ...actual,
-        mkChart: vi.fn(),
-      };
-    });
   });
 
   afterEach(() => {

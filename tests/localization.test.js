@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { translateNote } from "../src/localization.js";
 import { applyTranslations } from "../src/translations.js";
 
@@ -24,6 +24,31 @@ describe("localization.js", () => {
     const original = "Sold to Manchester United for €50.5M";
     const pt = translateNote(original);
     expect(pt).toBe("Vendido ao Manchester United por €50.5M");
+  });
+
+  it("should return early for falsy input", () => {
+    expect(translateNote(null)).toBe(null);
+    expect(translateNote("")).toBe("");
+  });
+
+  it("should warn console.warn once for untranslated strings", () => {
+    const spy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const untranslated = "A completely random untranslated note";
+
+    // Call first time
+    const res1 = translateNote(untranslated);
+    expect(res1).toBe(untranslated);
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith(
+      expect.stringContaining("no direct or pattern match found"),
+    );
+
+    // Call second time with the same string (should not warn again)
+    const res2 = translateNote(untranslated);
+    expect(res2).toBe(untranslated);
+    expect(spy).toHaveBeenCalledTimes(1);
+
+    spy.mockRestore();
   });
 });
 

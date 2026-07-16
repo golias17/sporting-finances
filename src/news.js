@@ -144,6 +144,19 @@ export async function initNewsFeed() {
   }
 }
 
+function decodeHtml(html) {
+  if (!html) return "";
+  // Strip HTML tags (e.g. <b>Text</b> -> Text)
+  const stripped = html.replace(/<\/?[^>]+(>|$)/g, "");
+  return stripped
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&apos;/g, "'");
+}
+
 function renderNewsItems(container, dataItems, { stale = false } = {}) {
   container.innerHTML = ""; // Clear loading text
 
@@ -192,7 +205,7 @@ function renderNewsItems(container, dataItems, { stale = false } = {}) {
     let sourceName = item.category === "OFFICIAL" ? "Sporting CP" : "Notícias";
     // Derive title locally — never mutate the original API item object before
     // spreading it, as that would corrupt the cached copy in sessionStorage.
-    let title = item.title ?? "";
+    let title = decodeHtml(item.title ?? "");
     if (title.includes(" - ")) {
       const parts = title.split(" - ");
       sourceName = parts.pop();
@@ -200,7 +213,11 @@ function renderNewsItems(container, dataItems, { stale = false } = {}) {
     } else if (item.author) {
       sourceName = item.author;
     }
-    return { ...item, title, sourceName };
+    return {
+      ...item,
+      title: title.trim(),
+      sourceName: decodeHtml(sourceName).trim(),
+    };
   });
 
   // Cluster news from the same topic

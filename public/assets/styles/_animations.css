@@ -27,3 +27,13 @@
     transform: translate(0, 0) scale(1);
   }
 }
+
+/* ── Shimmer Flow for Progress Tracks ── */
+@keyframes shimmerFlow {
+  0% {
+    background-position: 200% 0%;
+  }
+  100% {
+    background-position: -200% 0%;
+  }
+}

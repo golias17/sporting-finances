@@ -121,8 +121,9 @@ body {
 .kpi:hover {
   transform: translateY(-4px);
   box-shadow:
-    0 12px 32px rgba(0, 0, 0, 0.04),
-    0 4px 12px rgba(0, 0, 0, 0.02);
+    0 12px 32px rgba(10, 93, 58, 0.05),
+    0 4px 12px rgba(0, 0, 0, 0.02),
+    inset 0 0 0 1px rgba(10, 93, 58, 0.08);
   border-color: rgba(10, 93, 58, 0.3);
 }
 body.dark .kpi {
@@ -130,8 +131,10 @@ body.dark .kpi {
   border-color: rgba(255, 255, 255, 0.06);
 }
 body.dark .kpi:hover {
-  border-color: rgba(0, 230, 118, 0.18);
-  box-shadow: 0 10px 26px rgba(0, 230, 118, 0.04);
+  border-color: rgba(0, 230, 118, 0.25);
+  box-shadow:
+    0 10px 26px rgba(0, 230, 118, 0.06),
+    inset 0 0 0 1px rgba(0, 230, 118, 0.08);
 }
 /* Status border — same visual signature as the Health tab's .health-signal
    cards (colored bottom edge for the direction of change). Neutral KPIs
@@ -231,16 +234,19 @@ body.dark .kpi .change.neutral {
   transform: translateY(-5px);
   border-color: rgba(46, 158, 108, 0.4);
   box-shadow:
-    0 16px 36px rgba(46, 158, 108, 0.1),
-    0 4px 12px rgba(46, 158, 108, 0.03);
+    0 16px 36px rgba(46, 158, 108, 0.12),
+    0 4px 12px rgba(46, 158, 108, 0.03),
+    inset 0 0 0 1px rgba(46, 158, 108, 0.08);
 }
 body.dark .card {
   background: rgba(24, 34, 29, 0.6);
   border-color: rgba(255, 255, 255, 0.07);
 }
 body.dark .card:hover {
-  border-color: rgba(0, 230, 118, 0.15);
-  box-shadow: 0 10px 30px rgba(0, 230, 118, 0.04);
+  border-color: rgba(0, 230, 118, 0.25);
+  box-shadow:
+    0 10px 30px rgba(0, 230, 118, 0.08),
+    inset 0 0 0 1px rgba(0, 230, 118, 0.08);
 }
 .card-head {
   display: flex;

@@ -1,4 +1,5 @@
 import { beforeAll } from "vitest";
+import { initChartDefaults } from "../src/chartUtils.js";
 
 beforeAll(() => {
   // Ensure window.getComputedStyle is robustly mocked
@@ -49,4 +50,7 @@ beforeAll(() => {
       disconnect() {}
     };
   }
+
+  // Populate state.COLORS and state.baseOpts to prevent accessed-before-init warnings in tests
+  initChartDefaults();
 });

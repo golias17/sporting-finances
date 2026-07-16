@@ -52,6 +52,8 @@ export function initChartDefaults() {
     infoSoft: "rgba(44,91,138,0.7)",
     ink: "#111814",
     muted: "#6a716e",
+    chartBg: "#ffffff",
+    lineBorder: "rgba(0, 0, 0, 0.12)",
   });
 
   Object.assign(state.baseOpts, {
