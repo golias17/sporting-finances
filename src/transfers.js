@@ -7,6 +7,19 @@ function fmtNumStr(n) {
   });
 }
 
+// The detail table's search box re-renders up to ~340 rows (string-built
+// HTML, not a diff) on every keystroke — fine for a single character, but
+// typing a whole name fires that full rebuild once per letter for no
+// benefit, since only the final value after the user pauses actually
+// matters. Debouncing collapses a burst of keystrokes into one render.
+function debounce(fn, delayMs) {
+  let timer = null;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delayMs);
+  };
+}
+
 // TRANSFER LEDGER RENDERER
 // =============================================================
 export function renderTransferLedger() {
@@ -182,14 +195,14 @@ function renderTlBody(container) {
       <div class="tl-col">
         <div class="tl-col-head in">
           <span class="tl-label">${state.isPt ? "↓ Contratações (Valor Fixo)" : "↓ Bought (Primary Fees)"}</span>
-          <span class="tl-total">€${totalIn.toLocaleString("de-DE", { minimumFractionDigits: totalIn % 1 !== 0 ? 2 : 0 })}M</span>
+          <span class="tl-total">€${fmtNumStr(totalIn)}M</span>
         </div>
         ${purchases.length ? renderRows(purchases) : `<div class="tl-row"><div class="tl-club">${state.isPt ? "Sem contratações nesta janela" : "No purchases in this window"}</div></div>`}
       </div>
       <div class="tl-col">
         <div class="tl-col-head out">
           <span class="tl-label">${state.isPt ? "↑ Vendas (Valor Fixo)" : "↑ Sold (Primary Fees)"}</span>
-          <span class="tl-total">€${totalOut.toLocaleString("de-DE", { minimumFractionDigits: totalOut % 1 !== 0 ? 2 : 0 })}M</span>
+          <span class="tl-total">€${fmtNumStr(totalOut)}M</span>
         </div>
         ${sales.length ? renderRows(sales) : `<div class="tl-row"><div class="tl-club">${state.isPt ? "Sem vendas nesta janela" : "No sales in this window"}</div></div>`}
       </div>
@@ -197,15 +210,15 @@ function renderTlBody(container) {
     <div class="tl-summary">
       <div class="tl-sum-item">
         <span class="tl-sum-label">${state.isPt ? "Total investido (Valor Fixo)" : "Total spent (Primary Fees)"}</span>
-        <span class="tl-sum-val neg">−€${totalIn.toLocaleString("de-DE", { minimumFractionDigits: totalIn % 1 !== 0 ? 2 : 0 })}M</span>
+        <span class="tl-sum-val neg">−€${fmtNumStr(totalIn)}M</span>
       </div>
       <div class="tl-net-box">
         <div class="tl-sum-label">${state.isPt ? "Saldo de transferências" : "Net trading (Primary Fees)"}</div>
-        <div class="tl-sum-val ${netCls}">${netSign}€${Math.abs(net).toLocaleString("de-DE", { minimumFractionDigits: net % 1 !== 0 ? 2 : 0 })}M</div>
+        <div class="tl-sum-val ${netCls}">${netSign}€${fmtNumStr(Math.abs(net))}M</div>
       </div>
       <div class="tl-sum-item">
         <span class="tl-sum-label">${state.isPt ? "Total recebido (Valor Fixo)" : "Total received (Primary Fees)"}</span>
-        <span class="tl-sum-val pos">+€${totalOut.toLocaleString("de-DE", { minimumFractionDigits: totalOut % 1 !== 0 ? 2 : 0 })}M</span>
+        <span class="tl-sum-val pos">+€${fmtNumStr(totalOut)}M</span>
       </div>
     </div>`;
 }
@@ -270,11 +283,15 @@ export function initTransfersDetailTable() {
     { signal },
   );
 
+  // The query itself is set synchronously on every keystroke so state.tfQuery
+  // always reflects the actual input value — only the (expensive) re-render
+  // is debounced.
+  const debouncedRender = debounce(renderTransfersDetailTable, 180);
   searchInput.addEventListener(
     "input",
     (e) => {
       state.setTfQuery(e.target.value.toLowerCase());
-      renderTransfersDetailTable();
+      debouncedRender();
     },
     { signal },
   );

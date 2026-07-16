@@ -129,15 +129,43 @@ describe("transfers.js", () => {
     });
 
     it("should filter the detail table when search input changes", () => {
+      // The search box's re-render is debounced (see transfers.js) so typing
+      // a name doesn't rebuild the whole table on every keystroke — advance
+      // fake timers past the debounce delay to let it fire.
+      vi.useFakeTimers();
+      initTransfersDetailTable();
+
+      const searchInput = document.getElementById("tfSearchInput");
+      searchInput.value = "Player B";
+      searchInput.dispatchEvent(new window.Event("input"));
+      vi.runAllTimers();
+      vi.useRealTimers();
+
+      const rows = document.querySelectorAll("#transfersDetailTableBody tr");
+      expect(rows.length).toBe(1);
+      expect(rows[0].textContent).toContain("Player B");
+    });
+
+    it("updates state.tfQuery synchronously even though the re-render is debounced", () => {
+      vi.useFakeTimers();
       initTransfersDetailTable();
 
       const searchInput = document.getElementById("tfSearchInput");
       searchInput.value = "Player B";
       searchInput.dispatchEvent(new window.Event("input"));
 
-      const rows = document.querySelectorAll("#transfersDetailTableBody tr");
-      expect(rows.length).toBe(1);
-      expect(rows[0].textContent).toContain("Player B");
+      // No timers advanced yet — the query itself should already be set...
+      expect(state.tfQuery).toBe("player b");
+      // ...but the table hasn't re-rendered around it yet.
+      expect(
+        document.querySelectorAll("#transfersDetailTableBody tr").length,
+      ).toBeGreaterThan(1);
+
+      vi.runAllTimers();
+      vi.useRealTimers();
+      expect(
+        document.querySelectorAll("#transfersDetailTableBody tr").length,
+      ).toBe(1);
     });
 
     it("should sort the table columns when headers are clicked", () => {
@@ -165,11 +193,14 @@ describe("transfers.js", () => {
     });
 
     it("should render empty state message when search has zero matches", () => {
+      vi.useFakeTimers();
       initTransfersDetailTable();
 
       const searchInput = document.getElementById("tfSearchInput");
       searchInput.value = "NonExistentPlayerXYZ";
       searchInput.dispatchEvent(new window.Event("input"));
+      vi.runAllTimers();
+      vi.useRealTimers();
 
       const rows = document.querySelectorAll("#transfersDetailTableBody tr");
       expect(rows.length).toBe(1);

@@ -6,6 +6,7 @@
 // Not exported — only read internally by applyTranslations() below.
 // Nothing outside this file imports it.
 const TRANSLATIONS = {
+  "skip-link": { en: "Skip to content", pt: "Saltar para o conteúdo" },
   "era-all": { en: "All Time", pt: "Sempre" },
   "era-restruct": { en: "Restructuring", pt: "Reestruturação" },
   "era-varandas": { en: "Varandas Era", pt: "Era Varandas" },

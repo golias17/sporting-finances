@@ -1,5 +1,18 @@
 import { state } from "./state.js";
 
+// Narrowing/widening the era range re-renders every chart and table on the
+// active tab, but that's a silent visual change for screen-reader users —
+// nothing spoken announces that the numbers just moved. #a11yAnnouncer (an
+// aria-live="polite" region in index.html) picks this up automatically as
+// soon as its text changes. Exported for direct testing.
+export function announceEraChange(startLabel, endLabel) {
+  const el = document.getElementById("a11yAnnouncer");
+  if (!el || !startLabel || !endLabel) return;
+  el.textContent = state.isPt
+    ? `Período alterado para ${startLabel} a ${endLabel}`
+    : `Date range changed to ${startLabel} through ${endLabel}`;
+}
+
 export function initGlobalFilters(onFilterChange) {
   const startSelect = document.getElementById("globalStartSeason");
   const endSelect = document.getElementById("globalEndSeason");
@@ -42,6 +55,10 @@ export function initGlobalFilters(onFilterChange) {
     state.retargetHealthBarIdx(prevHealthLabel);
     renderOptions();
     updateActivePreset();
+    announceEraChange(
+      seasons[state.startSeasonIndex],
+      seasons[state.endSeasonIndex],
+    );
     if (typeof onFilterChange === "function") {
       onFilterChange();
     }

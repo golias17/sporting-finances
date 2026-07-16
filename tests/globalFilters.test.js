@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { state } from "../src/state.js";
-import { initGlobalFilters } from "../src/globalFilters.js";
+import { initGlobalFilters, announceEraChange } from "../src/globalFilters.js";
 
 describe("globalFilters.js", () => {
   beforeEach(() => {
@@ -15,9 +15,12 @@ describe("globalFilters.js", () => {
     };
     state.startSeasonIndex = 0;
     state.endSeasonIndex = 3;
+    state.isPt = false;
 
-    // Set up DOM
+    // Set up DOM — includes the aria-live announcer from index.html so
+    // onChange()'s call to announceEraChange() has somewhere to write.
     document.body.innerHTML = `
+      <div id="a11yAnnouncer" aria-live="polite"></div>
       <select id="globalStartSeason"></select>
       <select id="globalEndSeason"></select>
       <div id="eraPresets">
@@ -86,5 +89,38 @@ describe("globalFilters.js", () => {
     expect(presetLatest.classList.contains("active")).toBe(true);
     expect(presetLatest.getAttribute("aria-pressed")).toBe("true");
     expect(callback).toHaveBeenCalledTimes(1);
+  });
+
+  describe("announceEraChange()", () => {
+    it("writes a localized message into the aria-live announcer", () => {
+      state.isPt = false;
+      announceEraChange("2012/13", "2015/16");
+      expect(document.getElementById("a11yAnnouncer").textContent).toBe(
+        "Date range changed to 2012/13 through 2015/16",
+      );
+
+      state.isPt = true;
+      announceEraChange("2012/13", "2015/16");
+      expect(document.getElementById("a11yAnnouncer").textContent).toBe(
+        "Período alterado para 2012/13 a 2015/16",
+      );
+    });
+
+    it("is a no-op when the announcer element or a label is missing", () => {
+      document.getElementById("a11yAnnouncer").remove();
+      expect(() => announceEraChange("2012/13", "2015/16")).not.toThrow();
+    });
+  });
+
+  it("announces the new range whenever the era filter changes", () => {
+    initGlobalFilters();
+
+    const startSelect = document.getElementById("globalStartSeason");
+    startSelect.value = "1";
+    startSelect.dispatchEvent(new window.Event("change"));
+
+    expect(document.getElementById("a11yAnnouncer").textContent).toBe(
+      "Date range changed to 2013/14 through 2015/16",
+    );
   });
 });

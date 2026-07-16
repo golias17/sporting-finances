@@ -34,3 +34,26 @@ footer.site-footer {
   outline-offset: 3px;
   box-shadow: 0 0 0 4px rgba(46, 158, 108, 0.25);
 }
+
+/* Skip link: off-screen until keyboard-focused, then dropped into the
+   top-left corner above everything else so keyboard/screen-reader users
+   can jump past the topbar/hero/tab-bar straight to <main> instead of
+   tabbing through all of it on every page load. */
+.skip-link {
+  position: absolute;
+  top: -48px;
+  left: 8px;
+  z-index: 10000;
+  background: var(--green);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  font-family: var(--sans);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 8px;
+}

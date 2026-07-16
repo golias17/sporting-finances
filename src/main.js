@@ -313,6 +313,16 @@ function updateChartTheme() {
 // TAB INDICATOR
 // =============================================================
 
+// Collapses a burst of rapid-fire events (e.g. window resize) into a single
+// call `delayMs` after the last one, instead of running on every event.
+function debounce(fn, delayMs) {
+  let timer = null;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delayMs);
+  };
+}
+
 function updateTabIndicator(activeBtn) {
   const tabsContainer = document.querySelector("nav.tabs");
   if (!tabsContainer) return;
@@ -608,18 +618,34 @@ function setupApp() {
     startStory();
   }
 
-  window.addEventListener("resize", () => updateTabIndicator());
+  // updateTabIndicator() does forced-synchronous layout reads (offsetLeft/
+  // offsetWidth) plus a smooth-scroll call — resize can fire dozens of times
+  // a second while a window is actively being dragged, and only the value
+  // after it settles actually matters, so debounce rather than run on every
+  // single event.
+  window.addEventListener(
+    "resize",
+    debounce(() => updateTabIndicator(), 120),
+  );
 
   // Floating Scroll to Top button logic
   const scrollToTopBtn = document.getElementById("scrollToTopBtn");
   if (scrollToTopBtn) {
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 300) {
-        scrollToTopBtn.classList.add("visible");
-      } else {
-        scrollToTopBtn.classList.remove("visible");
-      }
-    });
+    // { passive: true } tells the browser this handler will never call
+    // preventDefault(), so it doesn't have to wait for it to finish before
+    // proceeding with the scroll — meaningful for a listener that fires on
+    // every scroll frame.
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (window.scrollY > 300) {
+          scrollToTopBtn.classList.add("visible");
+        } else {
+          scrollToTopBtn.classList.remove("visible");
+        }
+      },
+      { passive: true },
+    );
 
     scrollToTopBtn.addEventListener("click", () => {
       window.scrollTo({ top: 0, behavior: "smooth" });

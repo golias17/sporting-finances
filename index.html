@@ -65,6 +65,13 @@
     <link href="assets/styles.css" rel="stylesheet" />
   </head>
   <body class="app-loading">
+    <a class="skip-link" href="#main" data-i18n="skip-link">Skip to content</a>
+    <div
+      id="a11yAnnouncer"
+      class="sr-only"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
     <nav class="topbar">
       <div class="wrap">
         <span data-i18n="topbar-update"
@@ -154,7 +161,7 @@
         </div>
       </div>
     </header>
-    <main class="container">
+    <main class="container" id="main">
       <!-- TABS -->
       <nav aria-label="Dashboard sections" class="tabs" role="tablist">
         <button

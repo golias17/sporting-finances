@@ -14,6 +14,7 @@ export default [
         fetch: "readonly",
         Chart: "readonly",
         setTimeout: "readonly",
+        clearTimeout: "readonly",
         localStorage: "readonly",
         sessionStorage: "readonly",
         navigator: "readonly",
