@@ -41,8 +41,13 @@ export function syncStateToUrl() {
     params.delete("s2");
   }
 
-  // 4. Healthcheck season (only if healthcheck tab)
-  if (tab === "healthcheck" && state.healthBarIdx !== null) {
+  // 4. Selected season (healthcheck tab's own selector, and the Overview
+  // KPI-strip selector — both read/write the same state.healthBarIdx, so
+  // both need to persist it. Everywhere else this index isn't in play.
+  if (
+    (tab === "healthcheck" || tab === "overview") &&
+    state.healthBarIdx !== null
+  ) {
     const healthSeason = state.annual[state.healthBarIdx]?.label;
     if (healthSeason) {
       params.set("healthSeason", healthSeason);

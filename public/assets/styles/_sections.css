@@ -23,8 +23,13 @@
 }
 .story-launch .launch-quote em {
   font-style: italic;
-  color: var(--green);
   font-weight: 500;
+}
+.story-launch .launch-quote em.pos {
+  color: var(--green);
+}
+.story-launch .launch-quote em.neg {
+  color: var(--neg);
 }
 .story-launch .launch-cite {
   font-family: var(--mono);
@@ -61,6 +66,7 @@
 }
 .btn-start-story:hover {
   background: var(--green-dark);
+  color: #eef5f0;
 }
 .story-body {
   margin-top: 22px;

@@ -70,7 +70,9 @@
         <span data-i18n="topbar-update"
           ><span class="dot"></span>Last update · 25/26 H1</span
         >
-        <span data-i18n="topbar-listing">Sporting SAD · Euronext Lisbon</span>
+        <span class="topbar-listing" data-i18n="topbar-listing"
+          >Sporting SAD · Euronext Lisbon</span
+        >
         <div class="lang-switcher">
           <a class="lang-link active" data-lang="en" href="index.html">EN</a>
           <span class="lang-sep">|</span>
@@ -150,113 +152,9 @@
             Annual data drawn directly from official Sporting SAD reports.
           </p>
         </div>
-        <aside class="hero-stat">
-          <span class="stat-eyebrow" data-i18n="hero-stat-eyebrow"
-            >Shareholders' equity · 2012/13 → 2024/25</span
-          >
-          <div class="stat-row" data-i18n="auto-txt-div-3">
-            <span class="stat-from">−€119M</span>
-            <span class="stat-arrow">→</span>
-            <span class="stat-to">+€41M</span>
-          </div>
-          <span class="stat-foot" data-i18n="hero-stat-foot"
-            ><strong>Thirteen fiscal years.</strong> Annual data from Sporting
-            SAD reports filed with CMVM.</span
-          >
-        </aside>
       </div>
     </header>
     <main class="container">
-      <!-- GLOBAL FILTERS -->
-      <div class="global-filters">
-        <div class="filter-controls">
-          <label
-            for="globalStartSeason"
-            class="filter-label"
-            data-i18n="filter-era"
-            >Explore Era:</label
-          >
-          <select id="globalStartSeason" class="filter-select">
-            <!-- Populated by JS -->
-          </select>
-          <label for="globalEndSeason" class="filter-to" data-i18n="filter-to"
-            >to</label
-          >
-          <select id="globalEndSeason" class="filter-select">
-            <!-- Populated by JS -->
-          </select>
-        </div>
-        <div class="gf-presets" id="eraPresets">
-          <button
-            class="season-pill"
-            data-start="0"
-            data-end="latest"
-            data-i18n="era-all"
-          >
-            All Time
-          </button>
-          <button
-            class="season-pill"
-            data-start="0"
-            data-end="5"
-            data-i18n="era-restruct"
-          >
-            Restructuring
-          </button>
-          <button
-            class="season-pill"
-            data-start="6"
-            data-end="latest"
-            data-i18n="era-varandas"
-          >
-            Varandas Era
-          </button>
-          <button
-            class="season-pill"
-            data-start="8"
-            data-end="12"
-            data-i18n="era-amorim"
-          >
-            Amorim Era
-          </button>
-        </div>
-      </div>
-
-      <!-- HEADLINE KPIs -->
-      <div class="kpi-strip">
-        <div class="kpis" id="kpiRow">
-          <div class="kpi skeleton-card" aria-hidden="true">
-            <div class="skeleton-shimmer skeleton-label"></div>
-            <div class="skeleton-shimmer skeleton-value"></div>
-            <div class="skeleton-shimmer skeleton-change"></div>
-          </div>
-          <div class="kpi skeleton-card" aria-hidden="true">
-            <div class="skeleton-shimmer skeleton-label"></div>
-            <div class="skeleton-shimmer skeleton-value"></div>
-            <div class="skeleton-shimmer skeleton-change"></div>
-          </div>
-          <div class="kpi skeleton-card" aria-hidden="true">
-            <div class="skeleton-shimmer skeleton-label"></div>
-            <div class="skeleton-shimmer skeleton-value"></div>
-            <div class="skeleton-shimmer skeleton-change"></div>
-          </div>
-          <div class="kpi skeleton-card" aria-hidden="true">
-            <div class="skeleton-shimmer skeleton-label"></div>
-            <div class="skeleton-shimmer skeleton-value"></div>
-            <div class="skeleton-shimmer skeleton-change"></div>
-          </div>
-          <div class="kpi skeleton-card" aria-hidden="true">
-            <div class="skeleton-shimmer skeleton-label"></div>
-            <div class="skeleton-shimmer skeleton-value"></div>
-            <div class="skeleton-shimmer skeleton-change"></div>
-          </div>
-          <div class="kpi skeleton-card" aria-hidden="true">
-            <div class="skeleton-shimmer skeleton-label"></div>
-            <div class="skeleton-shimmer skeleton-value"></div>
-            <div class="skeleton-shimmer skeleton-change"></div>
-          </div>
-        </div>
-      </div>
       <!-- TABS -->
       <nav aria-label="Dashboard sections" class="tabs" role="tablist">
         <button
@@ -399,13 +297,70 @@
             </p>
           </div>
         </div>
+
+        <!-- GLOBAL FILTERS -->
+        <div class="global-filters">
+          <div class="filter-controls">
+            <label
+              for="globalStartSeason"
+              class="filter-label"
+              data-i18n="filter-era"
+              >Explore Era:</label
+            >
+            <select id="globalStartSeason" class="filter-select">
+              <!-- Populated by JS -->
+            </select>
+            <label for="globalEndSeason" class="filter-to" data-i18n="filter-to"
+              >to</label
+            >
+            <select id="globalEndSeason" class="filter-select">
+              <!-- Populated by JS -->
+            </select>
+          </div>
+          <div class="gf-presets" id="eraPresets">
+            <button
+              class="season-pill"
+              data-start="0"
+              data-end="latest"
+              data-i18n="era-all"
+            >
+              All Time
+            </button>
+            <button
+              class="season-pill"
+              data-start="0"
+              data-end="5"
+              data-i18n="era-restruct"
+            >
+              Restructuring
+            </button>
+            <button
+              class="season-pill"
+              data-start="6"
+              data-end="latest"
+              data-i18n="era-varandas"
+            >
+              Varandas Era
+            </button>
+            <button
+              class="season-pill"
+              data-start="8"
+              data-end="12"
+              data-i18n="era-amorim"
+            >
+              Amorim Era
+            </button>
+          </div>
+        </div>
+
         <!-- Story launcher -->
         <div class="card" id="storyLaunchCard">
           <div class="story-launch">
             <div class="launch-text">
               <p class="launch-quote" data-i18n="auto-txt-p-4">
-                From <em>−€119M</em> to <em>+€41M</em>.<br />Thirteen fiscal
-                years, told in one chart.
+                From <em class="neg">−€119M</em> to
+                <em class="pos">+€41M</em>.<br />Thirteen fiscal years, told in
+                one chart.
               </p>
               <span class="launch-cite" data-i18n="ch01-story-cite"
                 >A guided tour · Ten chapters · Press play</span
@@ -458,6 +413,48 @@
             </div>
           </div>
         </div>
+
+        <!-- HEADLINE KPIs -->
+        <div class="health-bar kpi-strip">
+          <div class="hb-sub" data-i18n="kpi-hb-sub">Headline KPIs</div>
+          <div class="hb-title" id="kpiBarTitle" data-i18n="kpi-hb-title">
+            Club Overview — 2012/13
+          </div>
+          <div class="season-selector" id="kpiSeasonSelector"></div>
+          <div class="kpis" id="kpiRow">
+            <div class="kpi skeleton-card" aria-hidden="true">
+              <div class="skeleton-shimmer skeleton-label"></div>
+              <div class="skeleton-shimmer skeleton-value"></div>
+              <div class="skeleton-shimmer skeleton-change"></div>
+            </div>
+            <div class="kpi skeleton-card" aria-hidden="true">
+              <div class="skeleton-shimmer skeleton-label"></div>
+              <div class="skeleton-shimmer skeleton-value"></div>
+              <div class="skeleton-shimmer skeleton-change"></div>
+            </div>
+            <div class="kpi skeleton-card" aria-hidden="true">
+              <div class="skeleton-shimmer skeleton-label"></div>
+              <div class="skeleton-shimmer skeleton-value"></div>
+              <div class="skeleton-shimmer skeleton-change"></div>
+            </div>
+            <div class="kpi skeleton-card" aria-hidden="true">
+              <div class="skeleton-shimmer skeleton-label"></div>
+              <div class="skeleton-shimmer skeleton-value"></div>
+              <div class="skeleton-shimmer skeleton-change"></div>
+            </div>
+            <div class="kpi skeleton-card" aria-hidden="true">
+              <div class="skeleton-shimmer skeleton-label"></div>
+              <div class="skeleton-shimmer skeleton-value"></div>
+              <div class="skeleton-shimmer skeleton-change"></div>
+            </div>
+            <div class="kpi skeleton-card" aria-hidden="true">
+              <div class="skeleton-shimmer skeleton-label"></div>
+              <div class="skeleton-shimmer skeleton-value"></div>
+              <div class="skeleton-shimmer skeleton-change"></div>
+            </div>
+          </div>
+        </div>
+
         <div class="card">
           <div class="card-head">
             <h3 data-i18n="ch01-hero-h3">The 13-year story in one chart</h3>

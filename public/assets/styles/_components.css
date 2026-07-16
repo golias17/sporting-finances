@@ -66,10 +66,14 @@ body {
 }
 
 /* ── Headline KPI strip — premium glassmorphic cards ── */
-.kpi-strip {
-  background: transparent;
-  margin: 0 0 36px;
-  padding: 0;
+/* .kpi-strip also carries .health-bar (see that rule further down) so the
+   season selector and the KPI cards sit inside one shared card, the same
+   "vital signs" bar treatment the Health tab uses for its own season
+   selector + signal cards. */
+.kpi-strip .season-selector {
+  margin-bottom: 20px;
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 .kpis {
   max-width: 1280px;
@@ -89,6 +93,15 @@ body {
   .kpis {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
+  }
+}
+@media (max-width: 460px) {
+  /* On the smallest phones even 2 columns leaves each card too narrow for
+     its label/value/note to read comfortably — go full-width single column
+     instead of cramming. */
+  .kpis {
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
 }
 .kpi {
@@ -120,6 +133,21 @@ body.dark .kpi:hover {
   border-color: rgba(0, 230, 118, 0.18);
   box-shadow: 0 10px 26px rgba(0, 230, 118, 0.04);
 }
+/* Status border — same visual signature as the Health tab's .health-signal
+   cards (colored bottom edge for the direction of change). Neutral KPIs
+   (no meaningful prior-year comparison) keep the plain default border. */
+.kpi.pos {
+  border-bottom: 3px solid var(--pos);
+}
+.kpi.neg {
+  border-bottom: 3px solid var(--neg);
+}
+.kpi.pos:hover {
+  box-shadow: 0 8px 24px rgba(10, 93, 58, 0.15);
+}
+.kpi.neg:hover {
+  box-shadow: 0 8px 24px rgba(184, 64, 58, 0.15);
+}
 .kpi .label {
   font-family: var(--mono);
   font-size: var(--fs-2xs);
@@ -127,6 +155,12 @@ body.dark .kpi:hover {
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-weight: 500;
+  line-height: 1.3;
+  /* Reserve space for 2 lines even when a label fits on one — otherwise
+     cards whose label happens to wrap (e.g. "Squad Market Value (2013/14)")
+     push their value/change down further than the rest of the row, so the
+     figures across a row of 6 cards start at inconsistent heights. */
+  min-height: 2.6em;
   margin-bottom: 10px;
 }
 .kpi .value {
@@ -139,43 +173,30 @@ body.dark .kpi:hover {
   color: var(--ink);
   line-height: 1.05;
 }
+/* Plain caption text, matching .health-signal .sig-note's style, rather
+   than a pill/badge — the card's own status border (above) now carries the
+   pos/neg signal, same division of labor as the Health tab's cards. */
 .kpi .change {
-  font-size: var(--fs-sm);
+  font-size: var(--fs-base);
   font-weight: 500;
-  line-height: 1.4;
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 8px;
-  border-radius: var(--radius-3xl);
-  background: rgba(106, 113, 110, 0.06);
-  border: 1px solid rgba(106, 113, 110, 0.12);
+  line-height: 1.45;
   color: var(--muted);
   font-family: var(--sans);
 }
 .kpi .change.pos {
-  color: #1e7a45 !important;
-  background: rgba(46, 138, 85, 0.06) !important;
-  border-color: rgba(46, 138, 85, 0.15) !important;
+  color: #1e7a45;
 }
 .kpi .change.neg {
-  color: #a8302a !important;
-  background: rgba(184, 64, 58, 0.06) !important;
-  border-color: rgba(184, 64, 58, 0.15) !important;
+  color: #a8302a;
 }
 body.dark .kpi .change.pos {
-  color: #3de080 !important;
-  background: rgba(46, 204, 113, 0.1) !important;
-  border-color: rgba(46, 204, 113, 0.2) !important;
+  color: #3de080;
 }
 body.dark .kpi .change.neg {
-  color: #ff6b6b !important;
-  background: rgba(255, 107, 107, 0.1) !important;
-  border-color: rgba(255, 107, 107, 0.2) !important;
+  color: #ff6b6b;
 }
 body.dark .kpi .change.neutral {
-  color: var(--muted) !important;
-  background: rgba(140, 147, 143, 0.1) !important;
-  border-color: rgba(140, 147, 143, 0.2) !important;
+  color: var(--muted);
 }
 .kpi .change.pos::before {
   content: "▲ ";

@@ -171,7 +171,11 @@ export function renderVmocCost() {
     legend +
     `<div class="scroll-x"><table class="vmoc-cost"><thead><tr><th>${state.isPt ? "Época" : "Season"}</th><th>${state.isPt ? "Período" : "Period"}</th><th>${state.isPt ? "Custo de finan. líquido" : "Net financing cost"}</th><th>${state.isPt ? "Escala" : "Scale"}</th><th>${state.isPt ? "Composição deste valor" : "What's inside this number"}</th></tr></thead><tbody>`;
   rows.forEach((r) => {
-    const d = state.annual.find((d) => d.label === r.season);
+    // Use fullAnnual (not state.annual) so every row in this table is always
+    // shown regardless of the active global era filter — this is a fixed
+    // historical breakdown, not something that should shrink when the user
+    // narrows the date range elsewhere.
+    const d = state.fullAnnual.find((d) => d.label === r.season);
     if (!d) return;
     const val = d.financial_result;
     const cls = periodClass[r.period];

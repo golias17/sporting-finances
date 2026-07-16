@@ -1,6 +1,10 @@
 import { state } from "./state.js";
 import { applyTranslations } from "./translations.js";
-import { initHealthBar } from "./health.js";
+import {
+  initHealthBar,
+  initKpiSeasonSelector,
+  refreshHealthBarIfStale,
+} from "./health.js";
 import { renderVmocCost, renderLionFinance, renderUsppTerms } from "./bonds.js";
 import { renderTransferLedger, initTransfersDetailTable } from "./transfers.js";
 import { renderTable, initDataExport } from "./data-table.js";
@@ -343,6 +347,16 @@ function updateTabIndicator(activeBtn) {
 // TAB SWITCHING
 // =============================================================
 
+// Scroll to the top of the page after switching tabs, but only on mobile —
+// on desktop the tab bar is already at the top of the viewport (or close
+// to it), so forcing a scroll there would just be disorienting.
+const MOBILE_BREAKPOINT = 768;
+function scrollToTopOnMobile() {
+  if (window.innerWidth <= MOBILE_BREAKPOINT) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
 // Not exported — main.js is the app's entry point and nothing imports from
 // it (there's no main.test.js; it's exercised indirectly through the DOM).
 function activateTab(tab, pushHash = true) {
@@ -363,7 +377,26 @@ function activateTab(tab, pushHash = true) {
   document
     .querySelectorAll("section.tab-panel")
     .forEach((p) => p.classList.remove("active"));
-  document.getElementById("tab-" + tab).classList.add("active");
+  const activePanel = document.getElementById("tab-" + tab);
+  activePanel.classList.add("active");
+
+  // The global era filter is a single shared control (its selects/pills have
+  // unique IDs, so it can't be duplicated per tab) — instead it's moved to
+  // sit right after the active tab's chapter intro, and hidden entirely on
+  // tabs where a date range doesn't apply or would be misleading (bonds has
+  // its own fixed historical breakdown, and compare/events/club/news aren't
+  // season-range driven).
+  const globalFilters = document.querySelector(".global-filters");
+  if (globalFilters) {
+    if (state.TABS_WITHOUT_GLOBAL_FILTER.has(tab)) {
+      globalFilters.classList.add("hidden");
+    } else {
+      const chapter = activePanel.querySelector(".chapter");
+      if (chapter) chapter.insertAdjacentElement("afterend", globalFilters);
+      globalFilters.classList.remove("hidden");
+    }
+  }
+
   if (pushHash) {
     history.replaceState(null, "", "#" + tab);
     syncStateToUrl();
@@ -382,6 +415,14 @@ function activateTab(tab, pushHash = true) {
 
   if (tab === "events") {
     syncEventsFilter();
+  }
+
+  // initHealthBar() above only ever fully runs once (gated by
+  // state.renderedCharts), so if the season was changed via the KPI-strip
+  // selector on Overview while this tab was hidden, catch its signals and
+  // sparklines up now that it's actually visible.
+  if (tab === "healthcheck") {
+    refreshHealthBarIfStale();
   }
 }
 
@@ -408,7 +449,7 @@ function setupApp() {
   initNewsFeed();
 
   state.TAB_CHARTS = {
-    overview: [chartHero, chartNetResult, chartEquity],
+    overview: [initKpiSeasonSelector, chartHero, chartNetResult, chartEquity],
     revenue: [chartRevenue, chartRevStreams, chartRevVsPayroll, chartOpResult],
     healthcheck: [
       initHealthBar,
@@ -433,7 +474,10 @@ function setupApp() {
   };
 
   document.querySelectorAll("nav.tabs button").forEach((btn) => {
-    btn.addEventListener("click", () => activateTab(btn.dataset.tab));
+    btn.addEventListener("click", () => {
+      activateTab(btn.dataset.tab);
+      scrollToTopOnMobile();
+    });
   });
 
   document.querySelector("nav.tabs").addEventListener("keydown", (e) => {
@@ -448,6 +492,7 @@ function setupApp() {
         : tabs[(idx - 1 + tabs.length) % tabs.length];
     next.focus();
     activateTab(next.dataset.tab);
+    scrollToTopOnMobile();
   });
 
   // Language switcher — intercept EN/PT links, no page reload

@@ -28,11 +28,6 @@ const TRANSLATIONS = {
     pt: '<span><span class="zone-dot g"></span> Acima de 1,0 — consegue cobrir contas</span> <span><span class="zone-dot a"></span> 0.5–1,0 — apertado</span> <span><span class="zone-dot r"></span> Abaixo de 0,5 — muito pressionado</span>',
     innerHTML: true,
   },
-  "auto-txt-div-3": {
-    en: '<span class="stat-from">−€119M</span> <span class="stat-arrow">→</span> <span class="stat-to">+€41M</span>',
-    pt: '<span class="stat-from">−€119M</span> <span class="stat-arrow">→</span> <span class="stat-to">+€41M</span>',
-    innerHTML: true,
-  },
   "auto-txt-div-34": {
     en: '<span class="cmp-col-label" id="cmpHeadA"></span> <span></span> <span class="cmp-col-label" id="cmpHeadB"></span>',
     pt: '<span class="cmp-col-label" id="cmpHeadA"></span> <span></span> <span class="cmp-col-label" id="cmpHeadB"></span>',
@@ -337,8 +332,8 @@ const TRANSLATIONS = {
     pt: "Desde 2016/17, a SAD gerou entre €34M e €144M em receitas de vendas por época. A época 2023/24 estabeleceu o recorde histórico com €144M. O primeiro semestre de 2025/26 já ultrapassou os €110M, ancorado na venda de Gyökeres.",
   },
   "auto-txt-p-4": {
-    en: "From <em>−€119M</em> to <em>+€41M</em>.<br/>Thirteen fiscal years, told in one chart.",
-    pt: "De <em>−€119M</em> a <em>+€41M</em>.<br/>Treze anos fiscais, contados num só gráfico.",
+    en: 'From <em class="neg">−€119M</em> to <em class="pos">+€41M</em>.<br/>Thirteen fiscal years, told in one chart.',
+    pt: 'De <em class="neg">−€119M</em> a <em class="pos">+€41M</em>.<br/>Treze anos fiscais, contados num só gráfico.',
     innerHTML: true,
   },
   "auto-txt-span-1": { en: "Dark Mode", pt: "Modo Escuro" },
@@ -854,15 +849,6 @@ const TRANSLATIONS = {
     pt: "Da insolvência ao <em>grau de&nbsp;investimento</em>.",
     innerHTML: true,
   },
-  "hero-stat-eyebrow": {
-    en: "Shareholders' equity · 2012/13 → 2024/25",
-    pt: "Capitais próprios · 2012/13 → 2024/25",
-  },
-  "hero-stat-foot": {
-    en: "<strong>Thirteen fiscal years.</strong> Annual data from Sporting SAD reports filed with CMVM.",
-    pt: "<strong>Treze exercícios fiscais.</strong> Dados anuais dos relatórios da Sporting SAD depositados na CMVM.",
-    innerHTML: true,
-  },
   "hero-sub": {
     en: "A 13-year journey at Sporting Clube de Portugal — through a capital restructuring, a training-ground attack, an empty-stadium league title, two bond conversions, and a €225M investment-grade placement. Annual data drawn directly from official Sporting SAD reports.",
     pt: "Uma jornada de 13 anos no Sporting Clube de Portugal — através de uma reestruturação de capital, um ataque à Academia, um título em estádio vazio, duas conversões de obrigações e uma emissão de €225M com grau de investimento. Dados anuais extraídos diretamente dos relatórios oficiais da Sporting SAD.",
@@ -1041,6 +1027,14 @@ const TRANSLATIONS = {
   },
   "filter-era": { en: "Explore Era:", pt: "Explorar Era:" },
   "filter-to": { en: "to", pt: "até" },
+  "kpi-hb-sub": {
+    en: "Headline KPIs",
+    pt: "KPIs Principais",
+  },
+  "kpi-hb-title": {
+    en: "Club Overview — 2012/13",
+    pt: "Visão Geral do Clube — 2012/13",
+  },
   "ch10-tf-search-label": {
     en: "Search transfers",
     pt: "Pesquisar transferências",

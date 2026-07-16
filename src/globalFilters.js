@@ -30,8 +30,16 @@ export function initGlobalFilters(onFilterChange) {
   };
 
   const onChange = () => {
+    // Capture the season healthBarIdx currently points at (if any) before
+    // the range changes underneath it — see retargetHealthBarIdx() in
+    // state.js for why this is necessary.
+    const prevHealthLabel =
+      state.healthBarIdx !== null && state.annual
+        ? state.annual[state.healthBarIdx]?.label
+        : null;
     state.setStartSeasonIndex(parseInt(startSelect.value, 10));
     state.setEndSeasonIndex(parseInt(endSelect.value, 10));
+    state.retargetHealthBarIdx(prevHealthLabel);
     renderOptions();
     updateActivePreset();
     if (typeof onFilterChange === "function") {

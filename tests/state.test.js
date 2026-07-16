@@ -44,6 +44,62 @@ describe("state.js", () => {
     expect(state.fullAnnual).toEqual(mockData);
   });
 
+  it("retargetHealthBarIdx keeps pointing at the same season if it's still in range", () => {
+    state.DATASET = {
+      annual_data: [
+        { label: "2020/21" },
+        { label: "2021/22" },
+        { label: "2022/23" },
+        { label: "2023/24" },
+        { label: "2024/25" },
+      ],
+    };
+    state.startSeasonIndex = 0;
+    state.endSeasonIndex = 4;
+    state.healthBarIdx = 2; // "2022/23"
+
+    state.retargetHealthBarIdx("2022/23");
+
+    expect(state.healthBarIdx).toBe(2);
+  });
+
+  it("retargetHealthBarIdx falls back to the new range's latest season when the old one is no longer in range", () => {
+    // Full dataset had "2025/26" as the latest season at index 13; narrowing
+    // the "Explore Era" filter to 2020/21-2024/25 leaves state.annual with
+    // only 5 seasons, so index 13 (or the old season label) no longer
+    // resolves. Before this fix, code paths that did state.annual[idx].label
+    // (health.js's updateKpiBarTitle, kpi.js's renderKpis) would throw,
+    // aborting the rest of Overview's chart re-render.
+    state.DATASET = {
+      annual_data: [
+        { label: "2020/21" },
+        { label: "2021/22" },
+        { label: "2022/23" },
+        { label: "2023/24" },
+        { label: "2024/25" },
+      ],
+    };
+    state.startSeasonIndex = 0;
+    state.endSeasonIndex = 4;
+    state.healthBarIdx = 13;
+
+    state.retargetHealthBarIdx("2025/26");
+
+    expect(state.healthBarIdx).toBe(4); // clamped to the new last index
+    expect(state.annual[state.healthBarIdx]).toBeDefined();
+  });
+
+  it("retargetHealthBarIdx is a no-op when healthBarIdx or the dataset isn't set yet", () => {
+    state.healthBarIdx = null;
+    state.retargetHealthBarIdx("2022/23");
+    expect(state.healthBarIdx).toBeNull();
+
+    state.DATASET = null;
+    state.healthBarIdx = 2;
+    state.retargetHealthBarIdx("2022/23");
+    expect(state.healthBarIdx).toBe(2); // unchanged — no annual to resolve against
+  });
+
   it("should update state variables using setters", () => {
     state.setHealthBarIdx(5);
     expect(state.healthBarIdx).toBe(5);

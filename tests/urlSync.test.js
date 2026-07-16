@@ -79,6 +79,41 @@ describe("urlSync.js", () => {
     expect(state.urlHealthSeason).toBe("2013/14");
   });
 
+  it("syncStateToUrl should persist healthSeason from the Overview KPI-strip selector, not just the Healthcheck tab's own one", () => {
+    // Both selectors read/write the same state.healthBarIdx (see
+    // globalFilters.js / health.js's initKpiSeasonSelector) — the URL sync
+    // used to only recognise the Healthcheck tab's selection, silently
+    // losing whatever season was picked via Overview's on a refresh.
+    document.body.innerHTML = `
+      <nav class="tabs">
+        <button class="active" data-tab="overview"></button>
+      </nav>
+    `;
+    state.healthBarIdx = 1; // "2013/14"
+
+    syncStateToUrl();
+
+    const callArgs = vi.mocked(history.replaceState).mock.calls[0];
+    const urlString = callArgs[2];
+    expect(urlString).toContain("tab=overview");
+    expect(urlString).toContain("healthSeason=2013%2F14");
+  });
+
+  it("syncStateToUrl should not persist healthSeason on tabs where it isn't in play", () => {
+    document.body.innerHTML = `
+      <nav class="tabs">
+        <button class="active" data-tab="revenue"></button>
+      </nav>
+    `;
+    state.healthBarIdx = 1;
+
+    syncStateToUrl();
+
+    const callArgs = vi.mocked(history.replaceState).mock.calls[0];
+    const urlString = callArgs[2];
+    expect(urlString).not.toContain("healthSeason");
+  });
+
   it("syncStateToUrl should push state elements back into URL parameters", () => {
     // Setup elements on document body to mimic DOM
     document.body.innerHTML = `

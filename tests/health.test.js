@@ -1,6 +1,10 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { state } from "../src/state.js";
-import { initHealthBar } from "../src/health.js";
+import {
+  initHealthBar,
+  initKpiSeasonSelector,
+  refreshHealthBarIfStale,
+} from "../src/health.js";
 
 // Mock Chart to avoid jsdom canvas issues
 vi.mock("chart.js/auto", () => {
@@ -15,10 +19,11 @@ vi.mock("chart.js/auto", () => {
 describe("health.js", () => {
   beforeEach(() => {
     document.body.innerHTML = `
-      <div id="seasonSelector"></div>
+      <div class="season-selector" id="seasonSelector"></div>
       <h3 id="healthBarTitle"></h3>
       <div id="healthSignals" data-rendered-idx="-1"></div>
       <div id="kpiRow"></div>
+      <div class="season-selector" id="kpiSeasonSelector"></div>
     `;
 
     state.DATASET = {
@@ -133,5 +138,165 @@ describe("health.js", () => {
     expect(state.healthBarIdx).toBe(0);
     expect(pills[0].classList.contains("active")).toBe(true);
     expect(pills[2].classList.contains("active")).toBe(false);
+  });
+
+  describe("initKpiSeasonSelector()", () => {
+    it("builds pills and defaults to the latest season without touching health signals", () => {
+      initKpiSeasonSelector();
+
+      const pills = document.querySelectorAll(
+        "#kpiSeasonSelector .season-pill",
+      );
+      expect(pills.length).toBe(3);
+      expect(state.healthBarIdx).toBe(2);
+      expect(pills[2].classList.contains("active")).toBe(true);
+
+      // The Health tab's own content should be untouched — it's hidden
+      // whenever Overview (where this selector lives) is active.
+      expect(document.getElementById("healthSignals").innerHTML).toBe("");
+    });
+
+    it("clicking a pill updates the shared index, both selectors, and the KPI row — but not health signals", () => {
+      initKpiSeasonSelector();
+
+      const kpiPills = document.querySelectorAll(
+        "#kpiSeasonSelector .season-pill",
+      );
+      kpiPills[0].click();
+
+      expect(state.healthBarIdx).toBe(0);
+      expect(kpiPills[0].classList.contains("active")).toBe(true);
+      expect(document.getElementById("kpiRow").innerHTML).not.toBe("");
+      expect(document.getElementById("healthSignals").innerHTML).toBe("");
+    });
+
+    it("keeps the Health tab's own selector in sync even while hidden", () => {
+      // Populate the Health tab's own pills first, as an earlier visit to
+      // that tab would have.
+      initHealthBar();
+      vi.runAllTimers();
+
+      initKpiSeasonSelector();
+      const kpiPills = document.querySelectorAll(
+        "#kpiSeasonSelector .season-pill",
+      );
+      kpiPills[0].click();
+
+      const healthPills = document.querySelectorAll(
+        "#seasonSelector .season-pill",
+      );
+      expect(healthPills[0].classList.contains("active")).toBe(true);
+      expect(healthPills[2].classList.contains("active")).toBe(false);
+    });
+
+    it("still selects the right season on the Health tab's FIRST ever visit, if the KPI selector was used first", () => {
+      // Simulates: land on Overview (default tab), change season via the
+      // KPI selector, THEN visit the Health tab for the first time this
+      // session — #seasonSelector has no pills yet at that point.
+      initKpiSeasonSelector();
+      const kpiPills = document.querySelectorAll(
+        "#kpiSeasonSelector .season-pill",
+      );
+      kpiPills[0].click(); // idx 0 — 2010/11
+
+      expect(
+        document.querySelectorAll("#seasonSelector .season-pill").length,
+      ).toBe(0);
+
+      // First-ever Health tab visit
+      initHealthBar();
+      vi.runAllTimers();
+
+      const healthPills = document.querySelectorAll(
+        "#seasonSelector .season-pill",
+      );
+      expect(healthPills[0].classList.contains("active")).toBe(true);
+      expect(healthPills[2].classList.contains("active")).toBe(false);
+      expect(document.getElementById("healthBarTitle").textContent).toContain(
+        "2010/11",
+      );
+    });
+  });
+
+  describe("updateActivePills() across multiple selectors", () => {
+    it("highlights the right pill in the Health tab's own selector even after the KPI selector already built its pills first", () => {
+      // Regression test: in the real index.html, #kpiSeasonSelector (inside
+      // tab-overview) sits BEFORE #seasonSelector (inside tab-healthcheck) in
+      // document order. updateActivePills() used to treat every .season-pill
+      // across both selectors as one flat, combined NodeList and compare by
+      // position in THAT list — so once both selectors had pills, the second
+      // selector's local index 0 landed at a combined index offset by the
+      // first selector's pill count, and idx never matched there. Rebuild
+      // the DOM in that exact order (unlike the other tests in this file,
+      // which happen to put #seasonSelector first and mask the bug).
+      document.body.innerHTML = `
+        <div class="season-selector" id="kpiSeasonSelector"></div>
+        <div id="kpiRow"></div>
+        <div class="season-selector" id="seasonSelector"></div>
+        <h3 id="healthBarTitle"></h3>
+        <div id="healthSignals" data-rendered-idx="-1"></div>
+      `;
+
+      // Overview tab loads first — builds the KPI selector's pills.
+      initKpiSeasonSelector();
+      // User then switches to the Health tab for the first time.
+      initHealthBar();
+      vi.runAllTimers();
+
+      const healthPills = document.querySelectorAll(
+        "#seasonSelector .season-pill",
+      );
+      const activeHealthPills = document.querySelectorAll(
+        "#seasonSelector .season-pill.active",
+      );
+      expect(activeHealthPills.length).toBe(1);
+      expect(
+        healthPills[healthPills.length - 1].classList.contains("active"),
+      ).toBe(true); // defaults to the latest season
+    });
+  });
+
+  describe("refreshHealthBarIfStale()", () => {
+    it("does nothing if the Health tab has never been rendered", async () => {
+      // health.js tracks "last rendered season" in module-level state, which
+      // would carry over from other tests in this file — reset the module
+      // so this genuinely exercises the fresh-page-load case.
+      vi.resetModules();
+      const fresh = await import("../src/health.js");
+      expect(() => fresh.refreshHealthBarIfStale()).not.toThrow();
+      expect(document.getElementById("healthSignals").innerHTML).toBe("");
+    });
+
+    it("re-renders health signals if the season changed while the tab was hidden", () => {
+      initHealthBar(); // renders for idx 2 (latest)
+      vi.runAllTimers();
+
+      initKpiSeasonSelector();
+      const kpiPills = document.querySelectorAll(
+        "#kpiSeasonSelector .season-pill",
+      );
+      kpiPills[0].click(); // idx 0 — health signals not touched yet
+
+      const titleBefore = document.getElementById("healthBarTitle").textContent;
+      expect(titleBefore).toContain("2012/13"); // stale — still shows old idx's season
+
+      refreshHealthBarIfStale();
+      vi.runAllTimers();
+
+      const titleAfter = document.getElementById("healthBarTitle").textContent;
+      expect(titleAfter).toContain("2010/11");
+    });
+
+    it("is a no-op if the season hasn't changed since the last render", () => {
+      initHealthBar();
+      vi.runAllTimers();
+      const signalsBefore = document.getElementById("healthSignals").innerHTML;
+
+      refreshHealthBarIfStale();
+
+      expect(document.getElementById("healthSignals").innerHTML).toBe(
+        signalsBefore,
+      );
+    });
   });
 });

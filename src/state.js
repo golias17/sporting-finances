@@ -45,6 +45,17 @@ export const state = {
     "club",
   ],
   TAB_CHARTS: {},
+  // Tabs where the global era filter is hidden: bonds (05) shows a fixed
+  // historical cost breakdown that shouldn't shrink with the date range,
+  // and compare (08) / events (09) / club (11) / news (12) aren't driven
+  // by a season range at all.
+  TABS_WITHOUT_GLOBAL_FILTER: new Set([
+    "bonds",
+    "compare",
+    "events",
+    "club",
+    "news",
+  ]),
   // Proxy emits a console.warn if a color key is read before initChartDefaults()
   // populates the object, surfacing ordering bugs at development time.
   // Object.assign(state.COLORS, {...}) in initChartDefaults() still works because
@@ -73,6 +84,27 @@ export const state = {
   },
   setHealthBarIdx(idx) {
     this.healthBarIdx = idx;
+  },
+  // healthBarIdx is an index into the currently-filtered state.annual, not
+  // the full dataset. Narrowing/widening the "Explore Era" range changes
+  // what that array contains, so a stale index either points at the wrong
+  // season or falls past the new end — the latter throws inside
+  // health.js/kpi.js (state.annual[idx].label) and used to abort the rest
+  // of Overview's chart re-render (chartHero, chartNetResult, chartEquity
+  // never ran). Call this right after the start/end season indices change
+  // to keep it valid: `prevLabel` is the season that was selected before
+  // the range changed, so if it's still in range we stay pointed at it,
+  // otherwise we fall back to the new range's latest season.
+  retargetHealthBarIdx(prevLabel) {
+    if (this.healthBarIdx === null || !this.annual) return;
+    if (prevLabel) {
+      const idx = this.annual.findIndex((d) => d.label === prevLabel);
+      if (idx >= 0) {
+        this.healthBarIdx = idx;
+        return;
+      }
+    }
+    this.healthBarIdx = this.annual.length - 1;
   },
   setStoryIndex(idx) {
     this.storyIndex = idx;

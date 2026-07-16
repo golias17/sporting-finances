@@ -122,9 +122,19 @@ export function getEventAnnotations() {
 export function eventBoxes(eventKeys) {
   const annos = {};
   const eventAnnotations = getEventAnnotations();
+  // Event markers have a fixed season (e.g. "2014/15") regardless of the
+  // active global era filter. The chart's x-axis only has categories for
+  // whatever state.annual currently covers, so a marker outside that range
+  // has nowhere valid to anchor to — the annotation plugin was clamping it
+  // to the nearest edge instead, making it look like it belonged to
+  // whichever season happened to be first/last. Drop it instead.
+  const visibleSeasons = state.annual
+    ? new Set(state.annual.map((d) => d.label))
+    : null;
   eventKeys.forEach((k) => {
     const e = eventAnnotations[k];
     if (!e) return;
+    if (visibleSeasons && !visibleSeasons.has(e.x)) return;
     annos["e_" + k] = {
       type: "line",
       xMin: e.x,

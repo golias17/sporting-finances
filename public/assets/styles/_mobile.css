@@ -43,6 +43,65 @@
     background-color: var(--hover);
   }
 
+  /* Top utility bar: .topbar .wrap had white-space:nowrap + overflow:hidden
+     with every child pinned to flex-shrink:0, so on narrow viewports (5
+     items: update note, listing note, lang switcher, PDF button, theme
+     toggle) content simply got clipped off-screen with no way to reach it.
+     Let it wrap onto multiple rows instead of silently losing content. */
+  .topbar {
+    padding: 8px 16px;
+  }
+  .topbar .wrap {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    overflow: visible;
+    white-space: normal;
+    row-gap: 6px;
+    column-gap: 12px;
+  }
+
+  /* Drop the exchange-listing note on mobile — decorative/secondary info
+     that isn't worth the space in an already-tight topbar row. */
+  .topbar-listing {
+    display: none;
+  }
+
+  /* Hero header: badge-row's ::after generates a long fixed brand string
+     ("Sporting Clube de Portugal SAD") right of the crest with no wrap
+     allowance, which could push the row wider than the viewport. Let it
+     wrap and drop the divider/indent that only makes sense on one line. */
+  header.hero {
+    padding: 36px 20px 32px;
+  }
+  .badge-row {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+  .badge-row::after {
+    border-left: 0;
+    padding-left: 0;
+    font-size: var(--fs-2xs);
+  }
+
+  /* Icon-only topbar buttons: drop the text labels so the two buttons take
+     up less of the already-tight topbar row, leaving just the icon. The
+     accessible name is preserved via each button's aria-label, so this is
+     purely a visual/space change, not a loss of information. */
+  .pdf-export-btn span,
+  .theme-toggle-btn span {
+    display: none;
+  }
+  .pdf-export-btn {
+    padding: 6px 8px;
+  }
+  .pdf-export-btn svg {
+    margin-right: 0;
+  }
+  .theme-toggle-btn {
+    padding: 6px 8px;
+    gap: 0;
+  }
+
   /* Add padding to body so bottom content isn't hidden by the nav */
   body {
     padding-bottom: 80px;
@@ -51,6 +110,58 @@
   /* Move scroll-to-top button above the mobile nav */
   .scroll-to-top {
     bottom: 90px;
+  }
+
+  /* PWA update toast: fixed at bottom:24px with a lower z-index than the
+     mobile bottom nav (1000 vs 9999), so on mobile the nav bar rendered on
+     top of it, hiding it entirely behind the tab bar. Move it above the
+     nav like the scroll-to-top button, and let it span the width with
+     margins instead of a fixed left offset + max-width so it doesn't risk
+     overflowing narrow phone screens. */
+  .pwa-toast {
+    left: 16px;
+    right: 16px;
+    bottom: 90px;
+    max-width: none;
+  }
+
+  /* Global era filter: .filter-controls + .gf-presets are two flex rows
+     that fit fine on desktop but crowd a phone width — the 2 season
+     dropdowns + "to" label plus 4 preset pills competing for ~340px of
+     space. Stack them and let the presets fill the width predictably
+     instead of wrapping into a ragged line. */
+  .global-filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    padding: 14px 16px;
+  }
+  .filter-controls {
+    width: 100%;
+  }
+  .filter-controls .filter-select {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .gf-presets {
+    margin-left: 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .gf-presets .season-pill {
+    text-align: center;
+  }
+
+  /* KPI cards: bump the label and change-note sizes up slightly for
+     legibility at phone viewing distance — they were sized for a 6-wide
+     desktop grid where cards have much more room to breathe. */
+  .kpi .label {
+    font-size: var(--fs-xs);
+    letter-spacing: 0.08em;
+  }
+  .kpi .change {
+    font-size: var(--fs-md);
   }
 
   /* Chart heights (.chart-box in _components.css, .chart-box--short in

@@ -33,10 +33,14 @@ describe("kpi.js", () => {
     expect(kpis[0].querySelector(".label").textContent).toBe("Revenue");
     expect(kpis[0].querySelector(".value").textContent).toBe("€50M");
     expect(kpis[0].querySelector(".change.pos").textContent).toBe("+10%");
+    // The card itself also carries the pos/neg class (not just the change
+    // pill) so CSS can give it a health-bar-style status border.
+    expect(kpis[0].classList.contains("pos")).toBe(true);
 
     expect(kpis[1].querySelector(".label").textContent).toBe("Debt");
     expect(kpis[1].querySelector(".value").textContent).toBe("€10M");
     expect(kpis[1].querySelector(".change.neg").textContent).toBe("-5%");
+    expect(kpis[1].classList.contains("neg")).toBe(true);
   });
 
   it("uses state.healthBarIdx if no index is passed", () => {
