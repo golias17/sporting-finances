@@ -109,6 +109,73 @@ describe("transfers.js", () => {
       expect(body).toContain("€10M");
       expect(body).toContain("€20M");
     });
+
+    it("should switch active season and re-render when a season pill is clicked", () => {
+      state.TRANSFER_LEDGER.push({
+        season: "2024/25",
+        note: "Older season",
+        purchases: [],
+        sales: [],
+      });
+
+      renderTransferLedger();
+      const pills = document.querySelectorAll("#tlSeasonNav .season-pill");
+      const olderPill = [...pills].find((p) => p.textContent === "2024/25");
+
+      olderPill.click();
+
+      expect(state.tlActiveSeason).toBe("2024/25");
+      const activePill = document.querySelector(
+        "#tlSeasonNav .season-pill.active",
+      );
+      expect(activePill.textContent).toBe("2024/25");
+    });
+
+    it("should switch active window and re-render when a window pill is clicked", () => {
+      renderTransferLedger();
+      const summerPill = document.querySelector(
+        '#tlWindowNav [data-tl-window="summer"]',
+      );
+
+      summerPill.click();
+
+      // renderTransferLedger() rebuilds #tlWindowNav's innerHTML on click, so
+      // the original summerPill node is now detached — re-query the fresh one.
+      const refreshedSummerPill = document.querySelector(
+        '#tlWindowNav [data-tl-window="summer"]',
+      );
+      expect(state.tlActiveWindow).toBe("summer");
+      expect(refreshedSummerPill.classList.contains("active")).toBe(true);
+
+      const body = document.getElementById("tlBody").innerHTML;
+      // Only the summer purchase (Player A) should remain; the winter sale
+      // (Player B) is filtered out.
+      expect(body).toContain("Player A");
+      expect(body).not.toContain("Player B");
+    });
+
+    it("should filter the ledger body by window and mark free transfers", () => {
+      state.TRANSFER_LEDGER[0].purchases.push({
+        player: "Player Free",
+        club: "Club Z",
+        fee: 0,
+        window: "winter",
+      });
+      state.tlActiveWindow = "winter";
+
+      renderTransferLedger();
+      const body = document.getElementById("tlBody").innerHTML;
+
+      expect(body).toContain("Player Free");
+      expect(body).toContain("Free");
+      expect(body).not.toContain("Player A"); // summer purchase filtered out
+    });
+
+    it("does nothing (no throw) when the active season is missing from the ledger", () => {
+      state.tlActiveSeason = "not-a-real-season";
+      expect(() => renderTransferLedger()).not.toThrow();
+      expect(document.getElementById("tlBody").innerHTML).toBe("");
+    });
   });
 
   describe("Detail Table (initTransfersDetailTable)", () => {
@@ -289,6 +356,108 @@ describe("transfers.js", () => {
       const rows = document.querySelectorAll("#transfersDetailTableBody tr");
       expect(rows.length).toBe(1);
       expect(rows[0].textContent).toContain("Player B"); // only winter sale
+    });
+
+    it("initTransfersDetailTable is a no-op when the season select is missing", () => {
+      document.getElementById("tfSeasonSelect").remove();
+      expect(() => initTransfersDetailTable()).not.toThrow();
+    });
+
+    it("re-renders when the season, window, and type dropdowns change", () => {
+      document.getElementById("tfWindowSelect").innerHTML = `
+        <option value="all">All</option>
+        <option value="winter">Winter</option>
+      `;
+      state.TRANSFER_LEDGER.push({
+        season: "2024/25",
+        note: "",
+        purchases: [{ player: "Old Signing", fee: 3, window: "summer" }],
+        sales: [],
+      });
+
+      initTransfersDetailTable();
+
+      const seasonSelect = document.getElementById("tfSeasonSelect");
+      seasonSelect.value = "2024/25";
+      seasonSelect.dispatchEvent(new window.Event("change"));
+      expect(state.tfActiveSeason).toBe("2024/25");
+      expect(
+        document.getElementById("transfersDetailTableBody").textContent,
+      ).toContain("Old Signing");
+
+      const windowSelect = document.getElementById("tfWindowSelect");
+      windowSelect.value = "winter";
+      windowSelect.dispatchEvent(new window.Event("change"));
+      expect(state.tfActiveWindow).toBe("winter");
+
+      const typeSelect = document.getElementById("tfTypeSelect");
+      typeSelect.value = "out";
+      typeSelect.dispatchEvent(new window.Event("change"));
+      expect(state.tfActiveType).toBe("out");
+    });
+
+    it("renders nothing when the table body container is missing", () => {
+      document.getElementById("transfersDetailTableBody").remove();
+      expect(() => initTransfersDetailTable()).not.toThrow();
+    });
+
+    it("shows the 'All Seasons' tag and pools rows from every season when tfActiveSeason is 'all'", () => {
+      state.TRANSFER_LEDGER.push({
+        season: "2024/25",
+        note: "",
+        purchases: [{ player: "Old Signing", fee: 3, window: "summer" }],
+        sales: [{ player: "Old Departure", fee: 7, window: "summer" }],
+      });
+      state.tfActiveSeason = "all";
+
+      initTransfersDetailTable();
+
+      const tag = document.getElementById("transfersTableSeasonTag");
+      expect(tag.textContent).toBe("All Seasons");
+
+      const body = document.getElementById("transfersDetailTableBody");
+      expect(body.textContent).toContain("Player A");
+      expect(body.textContent).toContain("Player B");
+      expect(body.textContent).toContain("Old Signing");
+      expect(body.textContent).toContain("Old Departure");
+    });
+
+    it("defaults missing sort values and 100% rights, and orders descending string columns", () => {
+      state.TRANSFER_LEDGER[0].purchases = [
+        { player: "Zeta", club: "Club X", fee: 10, window: "summer" }, // no `rights`, no `bonus`
+        { player: "Alpha", club: "Club Y", fee: 15, window: "summer", rights: "80%" },
+      ];
+      state.TRANSFER_LEDGER[0].sales = [];
+
+      initTransfersDetailTable();
+      const headers = document.querySelectorAll("#transfersDetailTable th");
+
+      // Sort by rights: "Zeta" has no rights (defaults to 100), "Alpha" has 80.
+      headers[6].click(); // Rights column, ascending
+      let rows = document.querySelectorAll("#transfersDetailTableBody tr");
+      expect(rows[0].textContent).toContain("Alpha"); // 80 < 100
+      expect(rows[1].textContent).toContain("Zeta");
+      expect(rows[0].querySelector(".mono-cell").textContent).toBe("80%");
+      expect(rows[1].querySelector(".mono-cell").textContent).toBe("100%");
+
+      // Sort by player descending (string comparison strA > strB path)
+      const playerHeader = headers[0];
+      playerHeader.click(); // asc
+      playerHeader.click(); // desc
+      rows = document.querySelectorAll("#transfersDetailTableBody tr");
+      expect(rows[0].textContent).toContain("Zeta");
+      expect(rows[1].textContent).toContain("Alpha");
+    });
+
+    it("shows 'Free' for zero-fee rows in the detail table", () => {
+      state.TRANSFER_LEDGER[0].purchases = [
+        { player: "Free Signing", club: "Club Z", fee: 0, window: "summer" },
+      ];
+      state.TRANSFER_LEDGER[0].sales = [];
+
+      initTransfersDetailTable();
+      const body = document.getElementById("transfersDetailTableBody");
+      expect(body.textContent).toContain("Free");
     });
 
     it("should handle identical values when sorting string columns", () => {

@@ -18,10 +18,14 @@ beforeAll(() => {
 
     try {
       delete globalThis.localStorage;
-    } catch (e) {}
+    } catch {
+      // Not configurable in this environment; defineProperty below will overwrite it.
+    }
     try {
       delete window.localStorage;
-    } catch (e) {}
+    } catch {
+      // Not configurable in this environment; defineProperty below will overwrite it.
+    }
 
     try {
       Object.defineProperty(window, "localStorage", {
@@ -34,7 +38,9 @@ beforeAll(() => {
         writable: true,
         configurable: true,
       });
-    } catch (e) {}
+    } catch {
+      // localStorage already defined as non-configurable; leave native impl in place.
+    }
 
     if (!window.getComputedStyle) {
       window.getComputedStyle = (el) => ({

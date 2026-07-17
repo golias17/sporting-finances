@@ -2,14 +2,22 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { state } from "../src/state.js";
 import { showUpdateToast, showOfflineReadyToast, initPWA } from "../src/pwa.js";
 
+// vi.hoisted lets the mock factory below reuse this same mock instance, so
+// individual tests can grab it (via the mocked module import) and override
+// its implementation just for one call.
+const { registerSWMock } = vi.hoisted(() => {
+  return {
+    registerSWMock: vi.fn().mockImplementation((opts) => {
+      if (opts) {
+        if (opts.onNeedRefresh) opts.onNeedRefresh();
+        if (opts.onOfflineReady) opts.onOfflineReady();
+      }
+      return vi.fn();
+    }),
+  };
+});
+
 vi.mock("virtual:pwa-register", () => {
-  const registerSWMock = vi.fn().mockImplementation((opts) => {
-    if (opts) {
-      if (opts.onNeedRefresh) opts.onNeedRefresh();
-      if (opts.onOfflineReady) opts.onOfflineReady();
-    }
-    return vi.fn();
-  });
   return {
     registerSW: registerSWMock,
   };
@@ -122,6 +130,61 @@ describe("pwa.js", () => {
       const offlineToast = document.getElementById("pwa-offline-toast");
       expect(updateToast).not.toBeNull();
       expect(offlineToast).not.toBeNull();
+    });
+
+    vi.unstubAllEnvs();
+  });
+
+  it("adds the 'visible' class to the update toast after the entrance delay", () => {
+    vi.useFakeTimers();
+    showUpdateToast(vi.fn());
+
+    const toast = document.getElementById("pwa-update-toast");
+    expect(toast.classList.contains("visible")).toBe(false);
+
+    vi.advanceTimersByTime(100);
+    expect(toast.classList.contains("visible")).toBe(true);
+
+    vi.useRealTimers();
+  });
+
+  it("adds the 'visible' class to the offline toast after the entrance delay", () => {
+    vi.useFakeTimers();
+    showOfflineReadyToast();
+
+    const toast = document.getElementById("pwa-offline-toast");
+    expect(toast.classList.contains("visible")).toBe(false);
+
+    vi.advanceTimersByTime(100);
+    expect(toast.classList.contains("visible")).toBe(true);
+
+    vi.useRealTimers();
+  });
+
+  it("logs an error if the dynamic pwa-register import chain rejects", async () => {
+    vi.stubEnv("MODE", "production");
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    // registerSW() throwing inside the .then() handler rejects that promise
+    // chain, exercising the same .catch(err => console.error(...)) path a
+    // real failed dynamic import would hit.
+    registerSWMock.mockImplementationOnce(() => {
+      throw new Error("network down");
+    });
+
+    const serviceWorkerMock = { register: vi.fn() };
+    Object.defineProperty(navigator, "serviceWorker", {
+      value: serviceWorkerMock,
+      configurable: true,
+    });
+
+    initPWA();
+
+    await vi.waitFor(() => {
+      expect(errorSpy).toHaveBeenCalledWith(
+        "Failed to load virtual:pwa-register",
+        expect.anything(),
+      );
     });
 
     vi.unstubAllEnvs();
