@@ -59,7 +59,6 @@ export function initChartDefaults() {
   Object.assign(state.baseOpts, {
     responsive: true,
     maintainAspectRatio: false,
-    resizeDelay: 150,
     interaction: { mode: "index", intersect: false },
     plugins: {
       legend: {
