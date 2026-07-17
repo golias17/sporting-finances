@@ -168,10 +168,10 @@ describe("app boot (main.js)", () => {
     await vi.waitFor(() => expect(state.isPt).toBe(true));
     await vi.waitFor(() => expect(document.documentElement.lang).toBe("pt"));
     expect(localStorage.getItem("lang")).toBe("pt");
-    // KPI strip re-rendered in Portuguese
+    // KPI strip re-rendered in Portuguese ("Última receita", "Dívida total")
     await vi.waitFor(() => {
       const kpiText = document.getElementById("kpiRow").textContent;
-      expect(kpiText).toMatch(/Receita|Resultado/);
+      expect(kpiText).toMatch(/receita|dívida/i);
     });
   });
 
