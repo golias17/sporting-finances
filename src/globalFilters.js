@@ -20,6 +20,23 @@ export function initGlobalFilters(onFilterChange) {
 
   const seasons = state.fullAnnual.map((d) => d.label);
 
+  // Restore an era range from the URL (?eraStart=…&eraEnd=…) exactly once,
+  // before the first render, so the initial charts already reflect the
+  // shared view. Labels that don't resolve — or an inverted range — are
+  // ignored rather than half-applied.
+  if (state.urlEraStart || state.urlEraEnd) {
+    const si = state.urlEraStart ? seasons.indexOf(state.urlEraStart) : 0;
+    const ei = state.urlEraEnd
+      ? seasons.indexOf(state.urlEraEnd)
+      : seasons.length - 1;
+    if (si >= 0 && ei >= 0 && si <= ei) {
+      state.setStartSeasonIndex(si);
+      state.setEndSeasonIndex(ei);
+    }
+    state.urlEraStart = null;
+    state.urlEraEnd = null;
+  }
+
   const renderOptions = () => {
     startSelect.innerHTML = "";
     endSelect.innerHTML = "";

@@ -12,6 +12,39 @@ export function getLatestH1Data(dataset) {
   return h1Key ? dataset[h1Key] : null;
 }
 
+// -----------------------------------------------------------------
+// Shared KPI primitives — consumed by calculateKpis() below AND by
+// pdfGenerator.js, so the dashboard and the exported PDF can never
+// disagree on how these headline numbers are derived.
+// -----------------------------------------------------------------
+
+/**
+ * Revenue growth of season `idx` vs `span` seasons prior, as a whole-percent
+ * string (e.g. "131"), or null when there isn't enough history.
+ */
+export function revenueGrowthPct(annual, idx, span = 5) {
+  const compIdx = idx - span;
+  const comp = compIdx >= 0 ? annual[compIdx] : null;
+  if (!comp || !comp.revenue_operating) return null;
+  return (
+    ((annual[idx].revenue_operating - comp.revenue_operating) /
+      Math.abs(comp.revenue_operating)) *
+    100
+  ).toFixed(0);
+}
+
+/**
+ * Number of consecutive profitable seasons ending at (and including) `idx`.
+ */
+export function consecutiveProfitableYears(annual, idx) {
+  let count = 0;
+  for (let i = idx; i >= 0; i--) {
+    if (annual[i].net_result > 0) count++;
+    else break;
+  }
+  return count;
+}
+
 export function calculateKpis(state, idx, fmtMillions) {
   const isLatest = idx === state.annual.length - 1;
   const curr = state.annual[idx];
@@ -19,26 +52,12 @@ export function calculateKpis(state, idx, fmtMillions) {
   // slice(2) converts "2012/13" → "12/13" for compact axis labels
   const firstShort = first.label.slice(2);
 
-  // Revenue growth vs 5 seasons prior — idx - 5, the same offset used by
-  // calculateHealthSignals() below and pdfGenerator.js, so every "5-year
-  // growth" figure in the app agrees. (This used to be idx - 4, which made
-  // the KPI strip and the health card disagree for the same season.)
-  const compIdx = idx - 5;
-  const comp = compIdx >= 0 ? state.annual[compIdx] : null;
-  const revGrowthPct = comp
-    ? (
-        ((curr.revenue_operating - comp.revenue_operating) /
-          comp.revenue_operating) *
-        100
-      ).toFixed(0)
-    : null;
+  // Revenue growth vs 5 seasons prior — the same shared helper (and offset)
+  // used by calculateHealthSignals() below and pdfGenerator.js, so every
+  // "5-year growth" figure in the app agrees.
+  const revGrowthPct = revenueGrowthPct(state.annual, idx);
 
-  // Consecutive profitable years
-  let consecutiveProfitable = 0;
-  for (let i = idx; i >= 0; i--) {
-    if (state.annual[i].net_result > 0) consecutiveProfitable++;
-    else break;
-  }
+  const consecutiveProfitable = consecutiveProfitableYears(state.annual, idx);
 
   // Squad market value
   let sqMv, sqMvLabel;

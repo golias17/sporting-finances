@@ -1,6 +1,25 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { initNewsFeed } from "../src/news.js";
 
+// Route fetch calls by URL: `staticFile` answers ./data/news.json (the
+// build-time file), `feedItems` answers the rss2json fallback queries.
+function mockFetchRoutes({ staticFile = null, feedItems = null } = {}) {
+  global.fetch.mockImplementation((url) => {
+    const u = String(url);
+    if (u.includes("data/news.json")) {
+      if (staticFile === null) return Promise.resolve({ ok: false });
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(staticFile),
+      });
+    }
+    if (feedItems === null) return Promise.reject(new Error("API failure"));
+    return Promise.resolve({
+      json: () => Promise.resolve({ items: feedItems }),
+    });
+  });
+}
+
 describe("news.js", () => {
   beforeEach(() => {
     document.body.innerHTML = `
@@ -18,28 +37,52 @@ describe("news.js", () => {
     vi.restoreAllMocks();
   });
 
-  it("should fetch news from rss2json and render clustered cards", async () => {
-    // Mock 5 responses for the 5 parallel fetch calls
-    global.fetch.mockResolvedValue({
-      json: () =>
-        Promise.resolve({
-          items: [
-            {
-              title:
-                "Sporting apresenta resultados financeiros positivos recorde",
-              pubDate: "2023-10-01 10:00:00",
-              link: "http://example.com/1",
-              author: "A Bola",
-            },
-            {
-              title:
-                "Sporting apresenta resultados financeiros positivos recorde na SAD", // Duplicate to test clustering
-              pubDate: "2023-10-01 11:00:00",
-              link: "http://example.com/2",
-              author: "Record",
-            },
-          ],
-        }),
+  it("should prefer the static build-time news.json when available", async () => {
+    mockFetchRoutes({
+      staticFile: {
+        generated_at: "2026-07-17T06:30:00Z",
+        items: [
+          {
+            title: "Sporting SAD apresenta contas anuais - A Bola",
+            pubDate: "2026-07-16 10:00:00",
+            link: "http://example.com/static",
+            author: "A Bola",
+            category: "FINANCE",
+          },
+        ],
+      },
+    });
+
+    await initNewsFeed();
+
+    const container = document.getElementById("newsFeed");
+    const cards = container.querySelectorAll(".news-card");
+    expect(cards.length).toBe(1);
+    expect(cards[0].querySelector("h3").textContent).toBe(
+      "Sporting SAD apresenta contas anuais",
+    );
+    // Only the static file was fetched — no rss2json calls.
+    const calledUrls = global.fetch.mock.calls.map((c) => String(c[0]));
+    expect(calledUrls.every((u) => u.includes("data/news.json"))).toBe(true);
+  });
+
+  it("should fetch news from rss2json and render clustered cards when no static file exists", async () => {
+    mockFetchRoutes({
+      feedItems: [
+        {
+          title: "Sporting apresenta resultados financeiros positivos recorde",
+          pubDate: "2023-10-01 10:00:00",
+          link: "http://example.com/1",
+          author: "A Bola",
+        },
+        {
+          title:
+            "Sporting apresenta resultados financeiros positivos recorde na SAD", // Duplicate to test clustering
+          pubDate: "2023-10-01 11:00:00",
+          link: "http://example.com/2",
+          author: "Record",
+        },
+      ],
     });
 
     await initNewsFeed();
@@ -63,24 +106,21 @@ describe("news.js", () => {
   });
 
   it("should filter out noise (e.g. equipa b, futsal)", async () => {
-    global.fetch.mockResolvedValue({
-      json: () =>
-        Promise.resolve({
-          items: [
-            {
-              title: "Sporting Futsal vence",
-              pubDate: "2023-10-01 10:00:00",
-              link: "http://example.com/1",
-              author: "A Bola",
-            },
-            {
-              title: "Equipa B do Sporting empata",
-              pubDate: "2023-10-01 10:00:00",
-              link: "http://example.com/1",
-              author: "A Bola",
-            },
-          ],
-        }),
+    mockFetchRoutes({
+      feedItems: [
+        {
+          title: "Sporting Futsal vence",
+          pubDate: "2023-10-01 10:00:00",
+          link: "http://example.com/1",
+          author: "A Bola",
+        },
+        {
+          title: "Equipa B do Sporting empata",
+          pubDate: "2023-10-01 10:00:00",
+          link: "http://example.com/1",
+          author: "A Bola",
+        },
+      ],
     });
 
     await initNewsFeed();
@@ -89,21 +129,18 @@ describe("news.js", () => {
   });
 
   it("should not drop articles whose source or title merely contains a filtered word as a substring", async () => {
-    global.fetch.mockResolvedValue({
-      json: () =>
-        Promise.resolve({
-          items: [
-            {
-              // "SAPO Desporto" contains "porto"; "aeroporto" too — neither is
-              // rival-club noise and both must survive the word-boundary filter.
-              title:
-                "Sporting SAD emite obrigações no aeroporto de Lisboa - SAPO Desporto",
-              pubDate: "2023-10-01 10:00:00",
-              link: "http://example.com/1",
-              author: "SAPO Desporto",
-            },
-          ],
-        }),
+    mockFetchRoutes({
+      feedItems: [
+        {
+          // "SAPO Desporto" contains "porto"; "aeroporto" too — neither is
+          // rival-club noise and both must survive the word-boundary filter.
+          title:
+            "Sporting SAD emite obrigações no aeroporto de Lisboa - SAPO Desporto",
+          pubDate: "2023-10-01 10:00:00",
+          link: "http://example.com/1",
+          author: "SAPO Desporto",
+        },
+      ],
     });
 
     await initNewsFeed();
@@ -116,18 +153,15 @@ describe("news.js", () => {
   });
 
   it("should still drop rival-club headlines matched as whole words", async () => {
-    global.fetch.mockResolvedValue({
-      json: () =>
-        Promise.resolve({
-          items: [
-            {
-              title: "FC Porto vence clássico frente ao Sporting - Record",
-              pubDate: "2023-10-01 10:00:00",
-              link: "http://example.com/1",
-              author: "Record",
-            },
-          ],
-        }),
+    mockFetchRoutes({
+      feedItems: [
+        {
+          title: "FC Porto vence clássico frente ao Sporting - Record",
+          pubDate: "2023-10-01 10:00:00",
+          link: "http://example.com/1",
+          author: "Record",
+        },
+      ],
     });
 
     await initNewsFeed();
@@ -136,19 +170,16 @@ describe("news.js", () => {
   });
 
   it("should decode XML and HTML entities in titles and source names", async () => {
-    global.fetch.mockResolvedValue({
-      json: () =>
-        Promise.resolve({
-          items: [
-            {
-              title:
-                "Sporting SAD &amp; CMVM decidem reestruturar &#39;VMOCs&#39; - Record &amp; Notícias",
-              pubDate: "2023-10-01 10:00:00",
-              link: "http://example.com/1",
-              author: "Record &amp; Notícias",
-            },
-          ],
-        }),
+    mockFetchRoutes({
+      feedItems: [
+        {
+          title:
+            "Sporting SAD &amp; CMVM decidem reestruturar &#39;VMOCs&#39; - Record &amp; Notícias",
+          pubDate: "2023-10-01 10:00:00",
+          link: "http://example.com/1",
+          author: "Record &amp; Notícias",
+        },
+      ],
     });
 
     await initNewsFeed();
@@ -166,7 +197,7 @@ describe("news.js", () => {
   });
 
   it("should display error message on API failure", async () => {
-    global.fetch.mockRejectedValue(new Error("API limit reached"));
+    mockFetchRoutes({}); // static file missing, feeds reject
 
     await initNewsFeed();
     const container = document.getElementById("newsFeed");
@@ -194,10 +225,13 @@ describe("news.js", () => {
       }),
     );
 
+    mockFetchRoutes({}); // static file missing
+
     await initNewsFeed();
 
-    // fetch should NOT have been called
-    expect(global.fetch).not.toHaveBeenCalled();
+    // Only the static-file probe hit the network — no rss2json calls.
+    const calledUrls = global.fetch.mock.calls.map((c) => String(c[0]));
+    expect(calledUrls.every((u) => u.includes("data/news.json"))).toBe(true);
 
     const container = document.getElementById("newsFeed");
     const cards = container.querySelectorAll(".news-card");
@@ -225,8 +259,7 @@ describe("news.js", () => {
       }),
     );
 
-    // Mock fetch failure
-    global.fetch.mockRejectedValue(new Error("API Limit Reached"));
+    mockFetchRoutes({}); // static file missing, feeds reject
 
     await initNewsFeed();
 

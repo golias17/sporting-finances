@@ -1,5 +1,12 @@
 import { state } from "./state.js";
-import { translateNote } from "./localization.js";
+
+// Every note in transfers.json carries a hand-written note_pt sibling — the
+// old runtime regex-translation pipeline (localization.js) is gone. If a
+// note is added without its translation, the schema test (dataSchema.test.js)
+// fails, and at runtime we fall back to the EN text.
+function localizedNote(row) {
+  return state.isPt ? row.note_pt || row.note : row.note;
+}
 function fmtNumStr(n) {
   if (n === null || n === undefined) return "—";
   return n.toLocaleString("de-DE", {
@@ -136,7 +143,7 @@ function renderTlBody(container) {
         <div class="tl-player">${p.player}</div>
         <div class="tl-club">${p.club ? p.club : "—"}</div>
         ${tags.length ? `<div class="tl-tags">${tags.join("")}</div>` : ""}
-        ${p.note ? `<div class="tl-obs">${state.isPt ? translateNote(p.note) : p.note}</div>` : ""}
+        ${p.note ? `<div class="tl-obs">${localizedNote(p)}</div>` : ""}
       </div>
       ${fmtFee(p.fee)}
     </div>`;
@@ -154,9 +161,7 @@ function renderTlBody(container) {
   // here and had silently drifted out of sync with the EN notes (it described
   // different transfers for several seasons) — keeping both languages in the
   // same data file makes that drift visible in any diff that touches a note.
-  const displayedNote = state.isPt
-    ? s.note_pt || translateNote(s.note)
-    : s.note;
+  const displayedNote = localizedNote(s);
 
   const note = displayedNote
     ? `<div class="tl-season-note">${displayedNote}</div>`
@@ -522,7 +527,7 @@ function renderTransfersDetailTable() {
         <td class="mono-cell align-center">${r.rights || "100%"}</td>
         <td class="num-cell align-right">${fmtValDetail(r.bonus)}</td>
         <td class="num-cell align-right">${fmtValDetail(r.commission)}</td>
-        <td class="notes-cell">${state.isPt ? translateNote(r.note) || "—" : r.note || "—"}</td>
+        <td class="notes-cell">${localizedNote(r) || "—"}</td>
       </tr>
     `;
     })

@@ -1,0 +1,41 @@
+name: Refresh news feed
+
+on:
+  schedule:
+    # Daily at 06:30 UTC — before most Portuguese-timezone visits.
+    - cron: "30 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Fetch latest news
+        run: node scripts/fetch-news.mjs
+
+      - name: Commit updated news.json
+        run: |
+          # git status --porcelain (not git diff) so the very first run — when
+          # news.json is a brand-new untracked file — is detected too.
+          if [ -z "$(git status --porcelain public/data/news.json)" ]; then
+            echo "No news changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/data/news.json
+          # No [skip ci]: the Pages deploy is chained to a successful CI run,
+          # so CI must run for the refreshed news to actually go live.
+          git commit -m "chore: refresh news.json"
+          git push

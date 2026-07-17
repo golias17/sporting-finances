@@ -1,7 +1,11 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { state } from "./state.js";
-import { getLatestH1Data } from "./metrics.js";
+import {
+  getLatestH1Data,
+  revenueGrowthPct,
+  consecutiveProfitableYears,
+} from "./metrics.js";
 
 /**
  * Helper: Converts a relative image path to a Base64 data URL using a temporary canvas.
@@ -80,18 +84,9 @@ export async function generateCuratedPdf() {
   // hardcoded so it doesn't need a manual edit every season.
   const rangeEndLabel = h1Data?.label || latestSeason.label || "";
 
-  // Revenue growth vs ~5 seasons prior (mirrors the KPI calc in metrics.js)
-  // so the cover-page caption always reflects the live dataset.
-  const revCompIdx = data.length - 1 - 5;
-  const revCompSeason = revCompIdx >= 0 ? data[revCompIdx] : firstSeason;
-  const revGrowthPct =
-    revCompSeason && revCompSeason.revenue_operating
-      ? (
-          ((latestSeason.revenue_operating - revCompSeason.revenue_operating) /
-            Math.abs(revCompSeason.revenue_operating)) *
-          100
-        ).toFixed(0)
-      : null;
+  // Same shared helper as the dashboard KPI strip (metrics.js), so the PDF
+  // cover caption can never disagree with the on-screen number.
+  const revGrowthPct = revenueGrowthPct(data, data.length - 1);
   const revGrowthLabel = isPt
     ? revGrowthPct !== null
       ? `Crescimento sustentável de ${revGrowthPct}%`
@@ -100,12 +95,12 @@ export async function generateCuratedPdf() {
       ? `Sustainable ${revGrowthPct}% growth trend`
       : "Not enough seasons to compute a trend";
 
-  // Consecutive profitable seasons ending at the latest season.
-  let consecutiveProfitable = 0;
-  for (let i = data.length - 1; i >= 0; i--) {
-    if (data[i].net_result > 0) consecutiveProfitable++;
-    else break;
-  }
+  // Consecutive profitable seasons ending at the latest season — shared
+  // helper, same reason as above.
+  const consecutiveProfitable = consecutiveProfitableYears(
+    data,
+    data.length - 1,
+  );
   const netResultLabel = isPt
     ? consecutiveProfitable > 1
       ? `${consecutiveProfitable}º ano consecutivo com lucros`

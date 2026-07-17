@@ -38,12 +38,25 @@ export default [
         HTMLAnchorElement: "readonly",
         Document: "readonly",
         ResizeObserver: "readonly",
+        Element: "readonly",
       },
     },
     rules: {
       "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
       "no-undef": "error",
       "no-console": ["warn", { allow: ["info", "warn", "error"] }],
+    },
+  },
+  {
+    // Node CLI scripts (build-time tooling) run outside the browser.
+    files: ["scripts/**"],
+    languageOptions: {
+      globals: {
+        process: "readonly",
+      },
+    },
+    rules: {
+      "no-console": "off",
     },
   },
   {

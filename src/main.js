@@ -457,7 +457,7 @@ function activateTab(tab, pushHash = true) {
 // APP SETUP
 // =============================================================
 
-function setupApp() {
+function setupApp(initialTab) {
   // Initialise colour palette and chart base options before any chart is built.
   initChartDefaults();
   initGlobalFilters(() => {
@@ -623,8 +623,10 @@ function setupApp() {
   // Initial chart theme setup on load
   updateChartTheme();
 
-  // Initial tab activation
-  const initialTab = applyUrlParams();
+  // Initial tab activation — initialTab was resolved by applyUrlParams() in
+  // initApp(), *before* translations were loaded, so a ?lang= deep link
+  // affects which translation file is fetched rather than being applied
+  // after the wrong one already loaded.
   activateTab(initialTab, false);
 
   if (initialTab === "overview" && state.urlStoryActive) {
@@ -687,6 +689,13 @@ function initPdfExport() {
 
 async function initApp() {
   try {
+    // Read URL params first: applyUrlParams() persists a ?lang= override to
+    // localStorage, which detectActiveLang() below picks up — so a shared
+    // PT link loads pt.json directly instead of applying the language after
+    // the wrong translation file was already fetched. It also stashes the
+    // era-filter range and other view state for setupApp to restore.
+    const initialTab = applyUrlParams();
+
     // The three startup fetches (financials, transfers, translations) are
     // independent of each other — load them in parallel instead of
     // serialising three network round-trips.
@@ -704,7 +713,7 @@ async function initApp() {
     state.setEndSeasonIndex(state.DATASET.annual_data.length - 1);
 
     // Once data is loaded, populate KPIs and setup UI
-    setupApp();
+    setupApp(initialTab);
     initJornalModal();
     initImageLightbox();
   } catch (e) {

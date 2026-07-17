@@ -39,6 +39,23 @@ export async function initNewsFeed() {
   const container = document.getElementById("newsFeed");
   if (!container) return;
 
+  // Preferred source: the static news.json generated daily at build time by
+  // scripts/fetch-news.mjs (via .github/workflows/news.yml). It loads
+  // instantly, hits no third-party quota, and is served from the same origin.
+  try {
+    const res = await fetch("./data/news.json");
+    if (res.ok) {
+      const data = await res.json();
+      if (Array.isArray(data.items) && data.items.length > 0) {
+        renderNewsItems(container, data.items);
+        return;
+      }
+    }
+  } catch {
+    // Fall through to the runtime rss2json path (e.g. local dev before the
+    // first scheduled fetch has ever committed a news.json).
+  }
+
   // Serve from cache when available to avoid burning rss2json free-tier quota
   // (500 req/day). Five queries per page load = cache is essential.
   const cached = getCachedItems();

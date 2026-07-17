@@ -15,7 +15,13 @@ let latestRequestId = 0;
  * @param {"en"|"pt"} lang
  */
 export async function loadTranslations(lang) {
-  if (loadedLang === lang) return TRANSLATIONS;
+  if (loadedLang === lang) {
+    // Already loaded — but still bump the token so any in-flight load of a
+    // *different* language (started by an earlier rapid toggle) is
+    // invalidated and can't overwrite the dictionary when it resolves.
+    ++latestRequestId;
+    return TRANSLATIONS;
+  }
   const requestId = ++latestRequestId;
   try {
     const res = await fetch(`./locales/${lang}.json`);

@@ -59,6 +59,24 @@ export function syncStateToUrl() {
     params.delete("healthSeason");
   }
 
+  // 5. Era filter range — persisted whenever it isn't the full range, so a
+  // shared URL reproduces the same narrowed view (healthSeason and the
+  // compare selections were already persisted; the era range wasn't).
+  const lastIdx = state.fullAnnual.length - 1;
+  const eraNarrowed =
+    state.startSeasonIndex > 0 ||
+    (state.endSeasonIndex !== null && state.endSeasonIndex < lastIdx);
+  const eraStartLabel = state.fullAnnual[state.startSeasonIndex]?.label;
+  const eraEndLabel =
+    state.fullAnnual[state.endSeasonIndex ?? lastIdx]?.label;
+  if (eraNarrowed && eraStartLabel && eraEndLabel) {
+    params.set("eraStart", eraStartLabel);
+    params.set("eraEnd", eraEndLabel);
+  } else {
+    params.delete("eraStart");
+    params.delete("eraEnd");
+  }
+
   // Preserve language parameter if present or sync state.isPt
   params.set("lang", state.isPt ? "pt" : "en");
 
@@ -114,6 +132,13 @@ export function applyUrlParams() {
   // 5. Healthcheck Season Restoration
   const healthSeason = params.get("healthSeason");
   if (healthSeason) state.urlHealthSeason = healthSeason;
+
+  // 6. Era Filter Restoration — stashed as labels; initGlobalFilters()
+  // resolves them to indices once the dataset has loaded.
+  const eraStart = params.get("eraStart");
+  const eraEnd = params.get("eraEnd");
+  if (eraStart) state.urlEraStart = eraStart;
+  if (eraEnd) state.urlEraEnd = eraEnd;
 
   return tab;
 }
