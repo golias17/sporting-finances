@@ -2,6 +2,19 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { state } from "../src/state.js";
 import { showUpdateToast, showOfflineReadyToast, initPWA } from "../src/pwa.js";
 
+vi.mock("virtual:pwa-register", () => {
+  const registerSWMock = vi.fn().mockImplementation((opts) => {
+    if (opts) {
+      if (opts.onNeedRefresh) opts.onNeedRefresh();
+      if (opts.onOfflineReady) opts.onOfflineReady();
+    }
+    return vi.fn();
+  });
+  return {
+    registerSW: registerSWMock,
+  };
+});
+
 describe("pwa.js", () => {
   beforeEach(() => {
     document.body.innerHTML = "";
@@ -91,5 +104,26 @@ describe("pwa.js", () => {
 
     // Since import.meta.env.MODE is 'test', registration is skipped
     expect(serviceWorkerMock.register).not.toHaveBeenCalled();
+  });
+
+  it("initPWA registers service worker in non-test mode and triggers callbacks", async () => {
+    vi.stubEnv("MODE", "production");
+
+    const serviceWorkerMock = { register: vi.fn() };
+    Object.defineProperty(navigator, "serviceWorker", {
+      value: serviceWorkerMock,
+      configurable: true,
+    });
+
+    initPWA();
+
+    await vi.waitFor(() => {
+      const updateToast = document.getElementById("pwa-update-toast");
+      const offlineToast = document.getElementById("pwa-offline-toast");
+      expect(updateToast).not.toBeNull();
+      expect(offlineToast).not.toBeNull();
+    });
+
+    vi.unstubAllEnvs();
   });
 });

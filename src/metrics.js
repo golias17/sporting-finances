@@ -188,11 +188,9 @@ export function calculateKpis(state, idx, fmtMillions) {
       value: fmtMillions(h1Data.net_result),
       // The caption comes from the dataset (kpi_note / kpi_note_pt on the h1
       // snapshot) so a new half-year entry brings its own context instead of
-      // inheriting a stale hardcoded transfer reference.
-      change:
-        (state.isPt ? h1Data.kpi_note_pt : h1Data.kpi_note) ||
-        h1Data.kpi_note ||
-        "",
+      // inheriting a stale hardcoded transfer reference. Falls back to the
+      // EN note when isPt is true but kpi_note_pt wasn't provided.
+      change: (state.isPt && h1Data.kpi_note_pt) || h1Data.kpi_note || "",
       cls: h1Data.net_result >= 0 ? "pos" : "neg",
     });
   } else {

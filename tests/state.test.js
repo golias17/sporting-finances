@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { state } from "../src/state.js";
 
 describe("state.js", () => {
@@ -115,5 +115,37 @@ describe("state.js", () => {
 
     state.setTlActiveWindow("Summer");
     expect(state.tlActiveWindow).toBe("Summer");
+
+    state.setTfActiveSeason("2023/24");
+    expect(state.tfActiveSeason).toBe("2023/24");
+
+    state.setTfActiveType("in");
+    expect(state.tfActiveType).toBe("in");
+
+    state.setTfActiveWindow("summer");
+    expect(state.tfActiveWindow).toBe("summer");
+
+    state.setTfQuery("testquery");
+    expect(state.tfQuery).toBe("testquery");
+
+    state.setTfSortCol("value");
+    expect(state.tfSortCol).toBe("value");
+
+    state.setTfSortDir("desc");
+    expect(state.tfSortDir).toBe("desc");
+  });
+
+  it("COLORS Proxy logs console.warn on first access before initialization", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    // Read an undefined key from COLORS
+    const val = state.COLORS.nonexistentKey;
+
+    expect(warnSpy).toHaveBeenCalledWith(
+      "[state] COLORS.nonexistentKey accessed before initChartDefaults() was called",
+    );
+    expect(val).toBeUndefined();
+
+    warnSpy.mockRestore();
   });
 });

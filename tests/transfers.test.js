@@ -271,5 +271,52 @@ describe("transfers.js", () => {
       expect(rows[1].textContent).toContain("Player C"); // 80%
       expect(rows[2].textContent).toContain("Player A"); // 100%
     });
+
+    it("should display error message when season is not found in ledger", () => {
+      state.tfActiveSeason = "invalid-season";
+      initTransfersDetailTable();
+      const body = document.getElementById("transfersDetailTableBody");
+      expect(body.textContent).toContain("Season not found");
+
+      state.isPt = true;
+      initTransfersDetailTable();
+      expect(body.textContent).toContain("Época não encontrada");
+    });
+
+    it("should filter transfer rows by winter/summer window", () => {
+      state.tfActiveWindow = "winter";
+      initTransfersDetailTable();
+      const rows = document.querySelectorAll("#transfersDetailTableBody tr");
+      expect(rows.length).toBe(1);
+      expect(rows[0].textContent).toContain("Player B"); // only winter sale
+    });
+
+    it("should handle identical values when sorting string columns", () => {
+      state.TRANSFER_LEDGER[0].purchases = [
+        {
+          player: "Player A",
+          club: "Club Y",
+          fee: 10,
+          window: "summer",
+        },
+        {
+          player: "Player A",
+          club: "Club X",
+          fee: 15,
+          window: "summer",
+        },
+      ];
+      state.TRANSFER_LEDGER[0].sales = [];
+      initTransfersDetailTable();
+
+      const headers = document.querySelectorAll("#transfersDetailTable th");
+      const playerHeader = headers[0]; // Player column
+
+      playerHeader.click();
+      expect(state.tfSortCol).toBe("player");
+
+      const rows = document.querySelectorAll("#transfersDetailTableBody tr");
+      expect(rows.length).toBe(2);
+    });
   });
 });

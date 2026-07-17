@@ -12,9 +12,14 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { state } from "../src/state.js";
+import * as pdfGen from "../src/pdfGenerator.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.resolve(__dirname, "../public");
+
+vi.mock("../src/pdfGenerator.js", () => ({
+  generateCuratedPdf: vi.fn(),
+}));
 
 vi.mock("../src/charts.js", () => {
   const chartFnNames = [
@@ -66,11 +71,12 @@ describe("app boot (main.js)", () => {
     document.body.classList.add("app-loading");
 
     // jsdom stubs for APIs main.js touches during boot.
-    window.matchMedia = vi.fn().mockReturnValue({
-      matches: false,
+    vi.stubGlobal("location", new URL("http://localhost/?tab=overview&story=3"));
+    window.matchMedia = vi.fn().mockImplementation((query) => ({
+      matches: query.includes("dark"),
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
-    });
+    }));
     window.scrollTo = vi.fn();
     Element.prototype.scrollTo = vi.fn();
     global.IntersectionObserver = class {
@@ -79,8 +85,9 @@ describe("app boot (main.js)", () => {
       disconnect() {}
     };
 
-    localStorage.clear();
-    localStorage.setItem("lang", "en"); // deterministic regardless of test-runner locale
+    window.localStorage.clear();
+    window.localStorage.setItem("lang", "en"); // deterministic regardless of test-runner locale
+    window.localStorage.setItem("theme", "dark");
 
     global.fetch = vi.fn((url) => {
       const u = String(url);
@@ -179,7 +186,47 @@ describe("app boot (main.js)", () => {
     const themeBtn = document.getElementById("themeToggleBtn");
     const wasDark = document.body.classList.contains("dark");
     themeBtn.click();
+    themeBtn.dispatchEvent(new window.Event("animationend"));
     expect(document.body.classList.contains("dark")).toBe(!wasDark);
     expect(localStorage.getItem("theme")).toBe(wasDark ? "light" : "dark");
+  });
+
+  it("triggers PDF export on button click", async () => {
+    const btn = document.getElementById("pdfExportBtn");
+    expect(btn).not.toBeNull();
+    btn.click();
+    await vi.waitFor(() => {
+      expect(pdfGen.generateCuratedPdf).toHaveBeenCalled();
+    });
+  });
+
+  it("handles window resize and recalculates tab indicator", () => {
+    vi.useFakeTimers();
+    window.dispatchEvent(new window.Event("resize"));
+    vi.advanceTimersByTime(150);
+    vi.useRealTimers();
+  });
+
+  it("toggles scrollToTopBtn visibility based on scroll position", () => {
+    const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+    expect(scrollToTopBtn).not.toBeNull();
+
+    // Scroll past 300
+    window.scrollY = 350;
+    window.dispatchEvent(new window.Event("scroll"));
+    expect(scrollToTopBtn.classList.contains("visible")).toBe(true);
+
+    // Scroll back under 300
+    window.scrollY = 100;
+    window.dispatchEvent(new window.Event("scroll"));
+    expect(scrollToTopBtn.classList.contains("visible")).toBe(false);
+  });
+
+  it("scrolls window to top when scrollToTopBtn is clicked", () => {
+    const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+    expect(scrollToTopBtn).not.toBeNull();
+
+    scrollToTopBtn.click();
+    expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
   });
 });

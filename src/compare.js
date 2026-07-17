@@ -66,8 +66,8 @@ export function initComparison() {
 // Not exported — only called internally (initComparison's own change
 // listeners and initial render). Nothing outside this file imports it.
 function renderComparison() {
-  const idxA = parseInt(document.getElementById("compareSeasonA").value);
-  const idxB = parseInt(document.getElementById("compareSeasonB").value);
+  const idxA = parseInt(document.getElementById("compareSeasonA").value, 10);
+  const idxB = parseInt(document.getElementById("compareSeasonB").value, 10);
   const a = state.fullAnnual[idxA];
   const b = state.fullAnnual[idxB];
   const baseOpts = state.baseOpts;

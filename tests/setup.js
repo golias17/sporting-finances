@@ -4,6 +4,38 @@ import { initChartDefaults } from "../src/chartUtils.js";
 beforeAll(() => {
   // Ensure window.getComputedStyle is robustly mocked
   if (typeof window !== "undefined") {
+    const mockStorage = (() => {
+      let store = {};
+      return {
+        getItem: (key) => store[key] || null,
+        setItem: (key, value) => { store[key] = String(value); },
+        removeItem: (key) => { delete store[key]; },
+        clear: () => { store = {}; },
+        key: (index) => Object.keys(store)[index] || null,
+        get length() { return Object.keys(store).length; }
+      };
+    })();
+
+    try {
+      delete globalThis.localStorage;
+    } catch (e) {}
+    try {
+      delete window.localStorage;
+    } catch (e) {}
+
+    try {
+      Object.defineProperty(window, "localStorage", {
+        value: mockStorage,
+        writable: true,
+        configurable: true,
+      });
+      Object.defineProperty(globalThis, "localStorage", {
+        value: mockStorage,
+        writable: true,
+        configurable: true,
+      });
+    } catch (e) {}
+
     if (!window.getComputedStyle) {
       window.getComputedStyle = (el) => ({
         getPropertyValue: () => "",

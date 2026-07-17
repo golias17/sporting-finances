@@ -350,9 +350,17 @@ function renderNewsItems(container, dataItems, { stale = false } = {}) {
     sourcesContainer.className = "news-sources-list";
 
     cluster.sources.forEach((sourceItem) => {
+      // Only ever link to http(s) URLs — the feed is external (Google News /
+      // rss2json, or the build-time news.json), so a malformed or tampered
+      // item could otherwise carry a "javascript:" URL that runs on click.
+      const link = sourceItem.link;
+      const isSafeUrl =
+        typeof link === "string" && /^https?:\/\//i.test(link);
+      if (!isSafeUrl) return;
+
       const pill = document.createElement("a");
       pill.className = "source-pill";
-      pill.href = sourceItem.link;
+      pill.href = link;
       pill.target = "_blank";
       pill.rel = "noopener noreferrer";
       pill.textContent = sourceItem.sourceName;

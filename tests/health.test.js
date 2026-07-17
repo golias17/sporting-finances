@@ -83,6 +83,7 @@ describe("health.js", () => {
       ],
     };
     state.healthBarIdx = null;
+    state.urlHealthSeason = null;
     state.isPt = false;
     vi.useFakeTimers();
   });
@@ -297,6 +298,23 @@ describe("health.js", () => {
       expect(document.getElementById("healthSignals").innerHTML).toBe(
         signalsBefore,
       );
+    });
+
+    it("should initialize health bar with custom urlHealthSeason", () => {
+      state.urlHealthSeason = "2011/12";
+      initHealthBar();
+      expect(state.healthBarIdx).toBe(1);
+    });
+
+    it("should trigger immediate render when clicking the same year twice", () => {
+      initHealthBar();
+      vi.runAllTimers();
+
+      const pills = document.querySelectorAll("#seasonSelector .season-pill");
+      // Since urlHealthSeason is null, default index is 2 (latest season).
+      // Clicking index 2 clicks the already active season.
+      pills[2].click();
+      expect(state.healthBarIdx).toBe(2);
     });
   });
 });

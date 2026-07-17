@@ -38,6 +38,14 @@ describe("bonds.js", () => {
       expect(table.innerHTML).toContain("VMOC active");
       expect(table.innerHTML).toContain("€−10.0M");
     });
+
+    it("should render VMOC cost localized when state.isPt is true", () => {
+      state.isPt = true;
+      renderVmocCost();
+
+      const table = document.getElementById("vmocCostTable");
+      expect(table.innerHTML).toContain("Acumulado · Era VMOC (2014/15–2021/22)");
+    });
   });
 
   describe("renderUsppTerms", () => {
@@ -69,6 +77,15 @@ describe("bonds.js", () => {
       expect(cards.innerHTML).toContain("Compare Both");
     });
 
+    it("should render localized Lion Finance cards when state.isPt is true", () => {
+      state.isPt = true;
+      renderLionFinance();
+
+      const cards = document.getElementById("lionFinanceCards");
+      expect(cards.innerHTML).toContain("Comparar Ambas");
+      expect(cards.innerHTML).toContain("Emitente");
+    });
+
     it("should switch tabs when clicked", () => {
       renderLionFinance();
 
@@ -79,6 +96,12 @@ describe("bonds.js", () => {
 
       const cards = document.getElementById("lionFinanceCards");
       expect(cards.innerHTML).toContain("show-no1");
+
+      const btnNo2 = document.querySelector('[data-view="no2"]');
+      btnNo2.click();
+
+      expect(state.activeLionTab).toBe("no2");
+      expect(cards.innerHTML).toContain("show-no2");
     });
   });
 });

@@ -170,4 +170,40 @@ describe("urlSync.js", () => {
     expect(urlString).toContain("s1=2012%2F13");
     expect(urlString).toContain("s2=2024%2F25");
   });
+
+  it("syncStateToUrl should persist story parameter when story card is visible", () => {
+    document.body.innerHTML = `
+      <nav class="tabs">
+        <button class="active" data-tab="overview"></button>
+      </nav>
+      <div id="storyCard"></div>
+    `;
+    state.storyIndex = 1;
+
+    syncStateToUrl();
+
+    const callArgs = vi.mocked(history.replaceState).mock.calls[0];
+    const urlString = callArgs[2];
+    expect(urlString).toContain("story=2");
+  });
+
+  it("syncStateToUrl should delete healthSeason if index points to invalid/missing season data", () => {
+    vi.stubGlobal("location", {
+      search: "?tab=overview&healthSeason=2013/14",
+      pathname: "/",
+      hash: "",
+    });
+    document.body.innerHTML = `
+      <nav class="tabs">
+        <button class="active" data-tab="overview"></button>
+      </nav>
+    `;
+    state.healthBarIdx = 999; // invalid/missing
+
+    syncStateToUrl();
+
+    const callArgs = vi.mocked(history.replaceState).mock.calls[0];
+    const urlString = callArgs[2];
+    expect(urlString).not.toContain("healthSeason");
+  });
 });

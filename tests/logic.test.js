@@ -350,6 +350,52 @@ describe("calculateHealthSignals()", () => {
     expect(crSig.status).toBe("red");
   });
 
+  it('handles current ratio when current_liabilities is 0 (null case)', () => {
+    const season = {
+      ...makeState().annual[0],
+      current_assets: 40000,
+      current_liabilities: 0,
+    };
+    const stateObj = makeState({ seasons: [season] });
+
+    // 1. English
+    stateObj.isPt = false;
+    let signals = calculateHealthSignals(stateObj, 0, fmtMillions);
+    let crSig = signals.find((s) => s.id === "sigCurrentRatio");
+    expect(crSig.status).toBe("amber");
+    expect(crSig.value).toBe("—");
+    expect(crSig.note).toBe("No current liabilities recorded");
+    expect(crSig.history).toEqual([null]);
+
+    // 2. Portuguese
+    stateObj.isPt = true;
+    signals = calculateHealthSignals(stateObj, 0, fmtMillions);
+    crSig = signals.find((s) => s.id === "sigCurrentRatio");
+    expect(crSig.note).toBe("Sem passivo corrente registado");
+  });
+
+  it('verifies note messages for current ratio in danger zone (< 0.5)', () => {
+    const season = {
+      ...makeState().annual[0],
+      current_assets: 10000,
+      current_liabilities: 40000, // 0.25x (danger zone)
+    };
+    const stateObj = makeState({ seasons: [season] });
+
+    // 1. English
+    stateObj.isPt = false;
+    let signals = calculateHealthSignals(stateObj, 0, fmtMillions);
+    let crSig = signals.find((s) => s.id === "sigCurrentRatio");
+    expect(crSig.status).toBe("red");
+    expect(crSig.note).toBe("High short-term liquidity risk");
+
+    // 2. Portuguese
+    stateObj.isPt = true;
+    signals = calculateHealthSignals(stateObj, 0, fmtMillions);
+    crSig = signals.find((s) => s.id === "sigCurrentRatio");
+    expect(crSig.note).toBe("Risco de liquidez alto");
+  });
+
   it("marks revenue growth as null/amber when fewer than 5 seasons", () => {
     const state = makeState(); // 1 season only
     const signals = calculateHealthSignals(state, 0, fmtMillions);

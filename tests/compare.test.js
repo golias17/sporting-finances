@@ -53,6 +53,8 @@ describe("compare.js", () => {
     state.startSeasonIndex = 0;
     state.endSeasonIndex = 1;
     state.baseOpts = { scales: { y: {} } };
+    state.urlCmpA = null;
+    state.urlCmpB = null;
   });
 
   afterEach(() => {
@@ -98,5 +100,35 @@ describe("compare.js", () => {
     expect(narrative).toContain(
       "Custos com pessoal: de 50% para 33% da receita.",
     );
+  });
+
+  it("should restore comparison values from URL stashed labels", () => {
+    state.urlCmpA = "2024/25";
+    state.urlCmpB = "2012/13";
+
+    initComparison();
+
+    const selA = document.getElementById("compareSeasonA");
+    const selB = document.getElementById("compareSeasonB");
+    expect(selA.value).toBe("1"); // Index of 2024/25
+    expect(selB.value).toBe("0"); // Index of 2012/13
+  });
+
+  it("should render comparison narrative when equity does not cross zero", () => {
+    // Both seasons have negative equity
+    state.DATASET.annual_data[0].equity = -100000;
+    state.DATASET.annual_data[1].equity = -50000;
+
+    // English
+    state.isPt = false;
+    initComparison();
+    let narrative = document.getElementById("cmpNarrative").innerHTML;
+    expect(narrative).toContain("Equity moved from €−100.0M to €−50.0M");
+
+    // Portuguese
+    state.isPt = true;
+    initComparison();
+    narrative = document.getElementById("cmpNarrative").innerHTML;
+    expect(narrative).toContain("O capital próprio passou de €−100.0M para €−50.0M");
   });
 });

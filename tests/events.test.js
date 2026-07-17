@@ -56,4 +56,21 @@ describe("events.js", () => {
     expect(event1.classList.contains("hidden")).toBe(false);
     expect(event2.classList.contains("hidden")).toBe(false);
   });
+
+  it("should handle missing event-legend DOM gracefully", () => {
+    document.body.innerHTML = `
+      <div id="eventsList">
+        <div class="event on-pitch">Event 1</div>
+      </div>
+    `;
+    expect(() => initEventFilter()).not.toThrow();
+    expect(() => syncEventsFilter()).not.toThrow();
+  });
+
+  it("should ignore clicks outside .el-filter inside .event-legend", () => {
+    initEventFilter();
+    const legend = document.querySelector(".event-legend");
+    legend.click();
+    expect(state.activeEventFilter).toBe("all");
+  });
 });

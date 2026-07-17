@@ -123,4 +123,33 @@ describe("globalFilters.js", () => {
       "Date range changed to 2013/14 through 2015/16",
     );
   });
+
+  it("should restore era filter index from URL parameters if valid", () => {
+    state.urlEraStart = "2013/14";
+    state.urlEraEnd = "2014/15";
+
+    initGlobalFilters();
+
+    expect(state.startSeasonIndex).toBe(1);
+    expect(state.endSeasonIndex).toBe(2);
+    expect(state.urlEraStart).toBeNull();
+    expect(state.urlEraEnd).toBeNull();
+  });
+
+  it("should ignore invalid/inverted era parameters from URL", () => {
+    state.startSeasonIndex = 0;
+    state.endSeasonIndex = 3;
+
+    state.urlEraStart = "invalid";
+    state.urlEraEnd = "2014/15";
+    initGlobalFilters();
+    expect(state.startSeasonIndex).toBe(0);
+    expect(state.endSeasonIndex).toBe(3);
+
+    state.urlEraStart = "2014/15";
+    state.urlEraEnd = "2013/14";
+    initGlobalFilters();
+    expect(state.startSeasonIndex).toBe(0);
+    expect(state.endSeasonIndex).toBe(3);
+  });
 });

@@ -408,7 +408,7 @@ export async function generateCuratedPdf() {
       if (cellData.section === "body" && cellData.column.index === 6) {
         const pctStr = cellData.cell.text[0];
         if (pctStr && pctStr !== "—") {
-          const val = parseInt(pctStr);
+          const val = parseInt(pctStr, 10);
           if (val > 70) {
             cellData.cell.styles.textColor = negative;
             cellData.cell.styles.fontStyle = "bold";

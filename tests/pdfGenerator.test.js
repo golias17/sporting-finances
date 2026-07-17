@@ -50,19 +50,38 @@ vi.mock("jspdf-autotable", () => {
 
 describe("pdfGenerator.js", () => {
   let originalImage;
+  let originalCreateElement;
 
   beforeEach(() => {
     // Mock global.Image to avoid hanging on relative file loading inside jsdom
     originalImage = global.Image;
     global.Image = class {
       constructor() {
+        this.width = 100;
+        this.height = 100;
         setTimeout(() => {
-          if (this.onerror) {
-            this.onerror(new Error("Mock image load fail"));
+          if (this.onload) {
+            this.onload();
           }
         }, 1);
       }
     };
+
+    // Mock document.createElement for canvas support in jsdom
+    originalCreateElement = document.createElement;
+    document.createElement = vi.fn().mockImplementation((tagName) => {
+      if (tagName === "canvas") {
+        return {
+          getContext: () => ({
+            drawImage: () => {},
+          }),
+          toDataURL: () => "data:image/png;base64,fake",
+          width: 0,
+          height: 0,
+        };
+      }
+      return originalCreateElement.call(document, tagName);
+    });
 
     // Populate minimal mock dataset
     state.DATASET = {
@@ -141,6 +160,7 @@ describe("pdfGenerator.js", () => {
   afterEach(() => {
     vi.clearAllMocks();
     global.Image = originalImage;
+    document.createElement = originalCreateElement;
   });
 
   it("should generate and save the PDF in English by default", async () => {

@@ -7,6 +7,7 @@ import {
   prevStory,
   initStoryMode,
 } from "../src/story.js";
+import { chartRegistry } from "../src/chartUtils.js";
 
 // story.js reads chartRegistry from chartUtils.js; in jsdom the registry is
 // simply empty, so the hero-chart highlight paths are safely skipped — no
@@ -129,5 +130,70 @@ describe("story.js", () => {
     track.dispatchEvent(clickEvent);
 
     expect(state.storyIndex).toBe(5);
+  });
+
+  it("should update story texts successfully even if storyContentWrap is missing", () => {
+    document.getElementById("storyContentWrap").remove();
+    startStory();
+    expect(document.getElementById("storyTitle").textContent).not.toBe("");
+  });
+
+  it("should add or delete story highlight annotations based on whether step season is in range", () => {
+    const mockChart = {
+      options: {
+        plugins: {
+          annotation: {
+            annotations: {}
+          }
+        }
+      },
+      update: vi.fn()
+    };
+    chartRegistry.set("chartHero", mockChart);
+
+    // 1. In range path (season of step 0 is '2012/13')
+    state.DATASET = {
+      annual_data: [{ label: "2012/13" }]
+    };
+    state.startSeasonIndex = 0;
+    state.endSeasonIndex = 0;
+    startStory(0);
+    expect(mockChart.options.plugins.annotation.annotations.storyHighlight).toBeDefined();
+    expect(mockChart.options.plugins.annotation.annotations.storyHighlight.xMin).toBe("2012/13");
+    expect(mockChart.update).toHaveBeenCalled();
+
+    // 2. Out of range path (season '2012/13' is not in state.annual)
+    state.DATASET = {
+      annual_data: [{ label: "2024/25" }]
+    };
+    startStory(0);
+    expect(mockChart.options.plugins.annotation.annotations.storyHighlight).toBeUndefined();
+
+    // Clean up
+    chartRegistry.delete("chartHero");
+  });
+
+  it("should remove story highlight annotation from chart when exiting story mode", () => {
+    const mockChart = {
+      options: {
+        plugins: {
+          annotation: {
+            annotations: {
+              storyHighlight: {}
+            }
+          }
+        }
+      },
+      update: vi.fn()
+    };
+    chartRegistry.set("chartHero", mockChart);
+
+    exitStory();
+
+    expect(mockChart.options.plugins.annotation.annotations.storyHighlight).toBeUndefined();
+    expect(mockChart.update).toHaveBeenCalled();
+
+    // Clean up
+    chartRegistry.delete("chartHero");
   });
 });

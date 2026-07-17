@@ -111,4 +111,9 @@ describe("data-table.js", () => {
     expect(global.URL.createObjectURL).toHaveBeenCalled();
     expect(clickSpy).toHaveBeenCalled();
   });
+
+  it("should do nothing on initDataExport if download button is missing", () => {
+    document.getElementById("btnDownloadLedger").remove();
+    expect(() => initDataExport()).not.toThrow();
+  });
 });

@@ -483,6 +483,52 @@ describe("Chart.js and Annotation Plugin integration", () => {
     HTMLAnchorElement.prototype.click = origClick;
   });
 
+  it("addChartDownloadButton updates labels on language changes if button already exists", () => {
+    // Setup elements
+    const canvas = document.getElementById("chartNetResult");
+    const card = document.createElement("div");
+    card.className = "card";
+    const cardHead = document.createElement("div");
+    cardHead.className = "card-head";
+    const tag = document.createElement("span");
+    tag.className = "tag";
+    cardHead.appendChild(tag);
+    card.appendChild(cardHead);
+    card.appendChild(canvas);
+    document.body.appendChild(card);
+
+    state.isPt = false;
+    addChartDownloadButton("chartNetResult");
+
+    const btn = document.getElementById("chartNetResult-download-btn");
+    expect(btn).not.toBeNull();
+    expect(btn.title).toBe("Download chart as PNG image");
+
+    // Call again with isPt = true
+    state.isPt = true;
+    addChartDownloadButton("chartNetResult");
+
+    expect(btn.title).toBe("Descarregar gráfico como imagem PNG");
+    state.isPt = false;
+  });
+
+  it("addChartDownloadButton appends to cardHead directly when tag element is missing", () => {
+    const canvas = document.getElementById("chartEquity");
+    const card = document.createElement("div");
+    card.className = "card";
+    const cardHead = document.createElement("div");
+    cardHead.className = "card-head";
+    card.appendChild(cardHead);
+    card.appendChild(canvas);
+    document.body.appendChild(card);
+
+    addChartDownloadButton("chartEquity");
+
+    const btn = document.getElementById("chartEquity-download-btn");
+    expect(btn).not.toBeNull();
+    expect(cardHead.contains(btn)).toBe(true);
+  });
+
   it("should format tooltips correctly via callbacks", () => {
     chartRevStreams();
     chartPayrollBurden();
