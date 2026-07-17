@@ -19,8 +19,23 @@ function warnUntranslatedOnce(str) {
   );
 }
 
+// Memoises translateNote() results. The regex pipeline below runs ~90
+// patterns per note, and the transfer detail table re-translates every
+// visible row's note on each filter/sort/search re-render — the set of
+// distinct notes is small and static, so caching makes repeat renders
+// near-free.
+const translatedNoteCache = new Map();
+
 export function translateNote(str) {
   if (!str) return str;
+  const cached = translatedNoteCache.get(str);
+  if (cached !== undefined) return cached;
+  const result = translateNoteUncached(str);
+  translatedNoteCache.set(str, result);
+  return result;
+}
+
+function translateNoteUncached(str) {
   let s = str;
   // Exact note translations or common phrases
   const directMaps = {

@@ -149,40 +149,13 @@ function renderTlBody(container) {
   const netCls = net >= 0 ? "pos" : "neg";
   const netSign = net >= 0 ? "+" : "";
 
-  // Localized season note dictionary
-  const seasonNotesPt = {
-    "2012/13":
-      "Era de reestruturação financeira. Compra de Marcos Rojo (vendido no ano seguinte por 20 M€). Proveitos importantes oriundos do mecanismo de solidariedade de João Moutinho e da venda de Ricky van Wolfswinkel.",
-    "2013/14":
-      "Segunda época de reestruturação. Venda de Bruma, Tiago Ilori e Elias Trindade, com investimento modesto. Todas as aquisições incluíram bónus contingentes não refletidos nos valores fixos.",
-    "2014/15":
-      "Época recorde de vendas à data. Venda de Marcos Rojo ao Manchester United por 20 M€ um ano após a contratação. Eric Dier e Cédric Soares também saíram para a Premier League.",
-    "2015/16":
-      "Investimento desportivo significativo sob o comando de Jorge Jesus. Venda de Teo Gutiérrez e Fredy Montero no inverno. Aquisições de peso como Alberto Aquilani e Bryan Ruiz.",
-    "2016/17":
-      "Ano de ouro nas transferências. Venda de João Mário ao Inter de Milão por 40 M€ e Islam Slimani ao Leicester City por 30,5 M€. Compra de Bas Dost (€11,8M) que viria a ser o melhor marcador da Liga.",
-    "2017/18":
-      "Vendas importantes de Adrien Silva (€24,2M) no verão e de Jonathan Silva no inverno. Plantel reforçado com Marcos Acuña, Bruno Fernandes e Jérémy Mathieu.",
-    "2018/19":
-      "Época pós-ataque a Alcochete. Muitas saídas por justa causa resolvidas por acordo posterior (Gelson Martins €22,5M, Rui Patrício €18M, William Carvalho €16M). Compra de Raphinha (€6,5M).",
-    "2019/20":
-      "Venda histórica de Bruno Fernandes ao Manchester United em janeiro de 2020 (€55M fixos + bónus). Saídas de Raphinha (€21M), Thierry Correia (€12M) e Bas Dost (€7M).",
-    "2020/21":
-      "Época do título nacional. Investimento no treinador Rúben Amorim na época anterior continuado com a contratação de Pedro Gonçalves (€6,5M) e Nuno Santos (€3,75M). Venda de Wendel (€20,3M) e Marcos Acuña (€11,25M).",
-    "2021/22":
-      "Regresso à Champions League. Venda de Nuno Mendes ao PSG (€40M após empréstimo de €7M). Compra definitiva de Pedro Porro (€8,5M) e contratação de Manuel Ugarte (€6,5M).",
-    "2022/23":
-      "Vendas massivas de Matheus Nunes ao Wolverhampton (€45M + €5M) e João Palhinha ao Fulham (€20M + €2M) no verão. Manuel Ugarte vendido no fim da época.",
-    "2023/24":
-      "Venda recorde de Manuel Ugarte ao PSG por €60M e Pedro Porro ao Tottenham por €40M (€5M taxa de empréstimo anterior). Grande investimento na contratação de Viktor Gyökeres (€20M + €4M).",
-    "2024/25":
-      "Venda recorde de Viktor Gyökeres ao Arsenal por €65,8M de valor fixo. Saídas adicionais de Morten Hjulmand (€24,3M) e Ousmane Diomande (€19,7M). Compra de Conrad Harder por €19M.",
-    "2025/26":
-      "Início da nova época pós-títulos. Venda de Geovany Quenda ao PSG por €41M. Contratação de Maximiliano Araújo por €13,6M.",
-  };
-
+  // PT season notes live in transfers.json as note_pt, right next to the EN
+  // note they translate. A hardcoded per-season PT dictionary used to live
+  // here and had silently drifted out of sync with the EN notes (it described
+  // different transfers for several seasons) — keeping both languages in the
+  // same data file makes that drift visible in any diff that touches a note.
   const displayedNote = state.isPt
-    ? seasonNotesPt[s.season] || translateNote(s.note)
+    ? s.note_pt || translateNote(s.note)
     : s.note;
 
   const note = displayedNote

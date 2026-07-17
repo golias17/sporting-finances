@@ -157,6 +157,38 @@ function decodeHtml(html) {
     .replace(/&apos;/g, "'");
 }
 
+// Noise filters for the news feed: youth/B-team/other-sport chatter, players
+// long gone from the club, and rival-club headlines. All patterns use word
+// boundaries — a naive substring check like includes("porto") also matched
+// "desporto" and "aeroporto" (and, worse, ran before the source suffix was
+// stripped, so every article from sources like "SAPO Desporto" was silently
+// dropped). Matching happens on the cleaned title only, after the
+// " - Source" suffix has been removed.
+const NOISE_PATTERNS = [
+  // Other squads / sports
+  /\bequipa b\b/,
+  /\bfutsal\b/,
+  /\bandebol\b/,
+  /\bhóquei\b/,
+  /\bsub-\d/,
+  // Historic re-index glitches (people no longer at the club)
+  /\brui patrício\b/,
+  /\bbruno de carvalho\b/,
+  /\bjorge jesus\b/,
+  /\bbas dost\b/,
+  // Rival clubs
+  /\bbenfica\b/,
+  /\bporto\b/,
+  /\bfcp\b/,
+  /\bslb\b/,
+  /\bbraga\b/,
+];
+
+function isNoise(title) {
+  const t = title.toLowerCase();
+  return NOISE_PATTERNS.some((rx) => rx.test(t));
+}
+
 function renderNewsItems(container, dataItems, { stale = false } = {}) {
   container.innerHTML = ""; // Clear loading text
 
@@ -170,38 +202,8 @@ function renderNewsItems(container, dataItems, { stale = false } = {}) {
     container.appendChild(notice);
   }
 
-  // Filter out irrelevant sports noise (e.g. youth teams, B team, futsal, generic match scores)
-  // and historic re-index glitches (e.g. Rui Patrício, Bruno de Carvalho, Jesus).
-  const filteredItems = dataItems.filter((item) => {
-    const t = item.title.toLowerCase();
-    if (
-      t.includes("equipa b") ||
-      t.includes("futsal") ||
-      t.includes("andebol") ||
-      t.includes("hóquei") ||
-      t.includes("sub-")
-    )
-      return false;
-    if (
-      t.includes("rui patrício") ||
-      t.includes("bruno de carvalho") ||
-      t.includes("jorge jesus") ||
-      t.includes("bas dost")
-    )
-      return false;
-    if (
-      t.includes("benfica") ||
-      t.includes("porto") ||
-      t.includes("fcp") ||
-      t.includes("slb") ||
-      t.includes("braga")
-    )
-      return false;
-    return true;
-  });
-
   // Process all items to extract sourceName cleanly
-  const processedItems = filteredItems.map((item) => {
+  const processedItems = dataItems.map((item) => {
     let sourceName = item.category === "OFFICIAL" ? "Sporting CP" : "Notícias";
     // Derive title locally — never mutate the original API item object before
     // spreading it, as that would corrupt the cached copy in sessionStorage.
@@ -220,6 +222,9 @@ function renderNewsItems(container, dataItems, { stale = false } = {}) {
     };
   });
 
+  // Drop noise only now that the " - Source" suffix is gone from the title.
+  const relevantItems = processedItems.filter((item) => !isNoise(item.title));
+
   // Cluster news from the same topic
   const storyClusters = [];
   const stopWords = new Set([
@@ -235,7 +240,7 @@ function renderNewsItems(container, dataItems, { stale = false } = {}) {
     "pela",
   ]);
 
-  for (const item of processedItems) {
+  for (const item of relevantItems) {
     const words = item.title
       .toLowerCase()
       .split(/[\s\W]+/)

@@ -3,17 +3,27 @@
 
 let TRANSLATIONS = {};
 let loadedLang = null;
+// Monotonic token identifying the most recent loadTranslations() call.
+// Guards against out-of-order fetch resolution: rapid EN→PT→EN toggles used
+// to leave whichever fetch happened to resolve *last* as the active
+// dictionary, regardless of which language the user actually ended on.
+let latestRequestId = 0;
 
 /**
  * Loads translations for a specific language asynchronously.
+ * Only the most recent call is allowed to commit its result.
  * @param {"en"|"pt"} lang
  */
 export async function loadTranslations(lang) {
   if (loadedLang === lang) return TRANSLATIONS;
+  const requestId = ++latestRequestId;
   try {
     const res = await fetch(`./locales/${lang}.json`);
-    TRANSLATIONS = await res.json();
-    loadedLang = lang;
+    const json = await res.json();
+    if (requestId === latestRequestId) {
+      TRANSLATIONS = json;
+      loadedLang = lang;
+    }
   } catch (e) {
     console.error(`[translations] Failed to load translations for ${lang}`, e);
   }

@@ -4,6 +4,7 @@
     "income": 21887,
     "cost": -16379,
     "note": "Financial restructuring era. Purchased Marcos Rojo (sold next year for €20M). Key incomings from João Moutinho solidarity payment and Ricky van Wolfswinkel sell.",
+    "note_pt": "Era de reestruturação financeira. Compra de Marcos Rojo (vendido no ano seguinte por €20M). Proveitos importantes do mecanismo de solidariedade de João Moutinho e venda de Ricky van Wolfswinkel.",
     "purchases": [
       {
         "player": "Marcos Rojo",
@@ -111,6 +112,7 @@
     "income": 19555,
     "cost": -13145,
     "note": "Second season of restructuring. Sold Bruma, Tiago Ilori and Elias Trindade while investing modestly. All purchases included contingent add-ons not reflected in fixed fees.",
+    "note_pt": "Segunda época de reestruturação. Venda de Bruma, Tiago Ilori e Elias Trindade, com investimento modesto. Todas as aquisições incluíram bónus contingentes não refletidos nos valores fixos.",
     "purchases": [
       {
         "player": "Simeon Slavchev",
@@ -212,6 +214,7 @@
     "income": 36000,
     "cost": -10017,
     "note": "Record sales season at the time. Marcos Rojo sold to Manchester United for €20M just one year after signing. Eric Dier and Cedric Soares also departed for the Premier League.",
+    "note_pt": "Época recorde de vendas à data. Venda de Marcos Rojo ao Manchester United por €20M um ano após a contratação. Eric Dier e Cédric Soares também saíram para a Premier League.",
     "purchases": [
       {
         "player": "Ryan Gauld",
@@ -316,6 +319,7 @@
     "income": 7716,
     "cost": -25510,
     "note": "Heavy investment cycle with Alan Ruiz and Teófilo Gutiérrez as marquee buys. Sales underwhelming — only Fredy Montero to China for €5M.",
+    "note_pt": "Ciclo de forte investimento com Alan Ruiz e Teófilo Gutiérrez como contratações sonantes. Vendas modestas — apenas Fredy Montero para a China por €5M.",
     "purchases": [
       {
         "player": "Alan Ruiz",
@@ -440,6 +444,7 @@
     "income": 92997,
     "cost": -54509,
     "note": "Record season at the time. €95.7M from player sales (João Mário €40M, Slimani €30.5M, Semedo €14M). Heavy squad investment with Bas Dost, Bruno Fernandes, Doumbia.",
+    "note_pt": "Época recorde à data. €95,7M em vendas de jogadores (João Mário €40M, Slimani €30,5M, Semedo €14M). Forte investimento no plantel com Bas Dost, Bruno Fernandes e Doumbia.",
     "purchases": [
       {
         "player": "Bas Dost",
@@ -614,6 +619,7 @@
     "income": 34368,
     "cost": -28999,
     "note": "Adrien Silva sold to Leicester for up to €29.5M (€20M fixed + €5M variables + €4.5M resign rights). Investment in Marcos Acuña, Raphinha and Wendel.",
+    "note_pt": "Venda de Adrien Silva ao Leicester por um valor até €29,5M (€20M fixos + €5M variáveis + €4,5M por renúncia de direitos). Investimento em Marcos Acuña, Raphinha e Wendel.",
     "purchases": [
       {
         "player": "Marcos Acuña",
@@ -751,6 +757,7 @@
     "income": 86534,
     "cost": -57155,
     "note": "Aftermath of the Alcochete attack — mass contract terminations (Gelson, Rui Patrício, William Carvalho). SCP reached agreements: Gelson €22.5M, Rui Patrício €18M, William Carvalho €16M+4M. Unified Summer and Winter.",
+    "note_pt": "Rescaldo do ataque a Alcochete — rescisões contratuais em massa (Gelson, Rui Patrício, William Carvalho). O SCP chegou a acordos: Gelson €22,5M, Rui Patrício €18M, William Carvalho €16M+4M. Janelas de Verão e Inverno unificadas.",
     "purchases": [
       {
         "player": "Luciano Vietto",
@@ -987,6 +994,7 @@
     "income": 72000,
     "cost": -20800,
     "note": "Bruno Fernandes sold to Manchester United in January for €55M+25M — a club-record at the time. Raphinha and Bas Dost also departed in summer. Light summer spending.",
+    "note_pt": "Venda de Bruno Fernandes ao Manchester United em janeiro por €55M+25M — recorde do clube à data. Raphinha e Bas Dost também saíram no verão. Investimento ligeiro no mercado de verão.",
     "purchases": [
       {
         "player": "Luís Neto",
@@ -1184,6 +1192,7 @@
     "income": 20000,
     "cost": -24400,
     "note": "Time of pandemic-affected revenues. Championship season won under Ruben Amorim. Pedro Gonçalves (Pote) was the marquee signing. João Mário returned on loan from Inter.",
+    "note_pt": "Época de receitas afetadas pela pandemia. Título de campeão conquistado sob o comando de Rúben Amorim. Pedro Gonçalves (Pote) foi a contratação de destaque. João Mário regressou por empréstimo do Inter.",
     "purchases": [
       {
         "player": "Pedro Gonçalves \"Pote\"",
@@ -1363,6 +1372,7 @@
     "income": 25100,
     "cost": -26000,
     "note": "First full season of financial recovery. Nuno Mendes sold to PSG as a loan (€7M fee, option to buy). Rodrigo Fernandes to Porto for €11M. Marcus Edwards and Ugarte signed.",
+    "note_pt": "Primeira época completa de recuperação financeira. Venda de Nuno Mendes ao PSG por empréstimo (taxa de €7M, com opção de compra). Rodrigo Fernandes para o Porto por €11M. Marcus Edwards e Ugarte contratados.",
     "purchases": [
       {
         "player": "Marco Cruz",
@@ -1602,6 +1612,7 @@
     "income": 117500,
     "cost": -45000,
     "note": "Highest-grossing sales season ever until 2023/24. Matheus Nunes €45M (Wolves), Nuno Mendes €38M (PSG), João Palhinha €20M (Fulham). Acquired Gyökeres, Hjulmand, Trincão and others in summer 2023.",
+    "note_pt": "Época de vendas com maior receita de sempre até 2023/24. Matheus Nunes €45M (Wolves), Nuno Mendes €38M (PSG), João Palhinha €20M (Fulham). Contratação de Gyökeres, Hjulmand, Trincão e outros no verão de 2023.",
     "purchases": [
       {
         "player": "Jeremiah St. Juste",
@@ -1908,6 +1919,7 @@
     "income": 144207,
     "cost": -51220,
     "note": "All-time record income season. Pedro Porro €45M (Tottenham), Manuel Ugarte €60M (PSG), Gyökeres, Hjulmand and Trincão brought in for a new era. Added winter acquisitions Koba, Pontelo, Mauro Couto.",
+    "note_pt": "Época de receitas recorde. Pedro Porro €45M (Tottenham), Manuel Ugarte €60M (PSG), entrada de Gyökeres, Hjulmand e Trincão para uma nova era. Adicionadas as contratações de inverno de Koba, Pontelo e Mauro Couto.",
     "purchases": [
       {
         "player": "Viktor Gyökeres",
@@ -2217,6 +2229,7 @@
     "income": 133280,
     "cost": -73185,
     "note": "Amorim departed to Manchester United. Added winter transactions: major arrivals Biel, Kochorashvili, and the block-buster sales of Geovany Quenda (€50.78M) and Dário Essugo (€22.27M) to Chelsea.",
+    "note_pt": "Saída de Amorim para o Manchester United. Adicionadas as transações de inverno: entradas importantes de Biel e Kochorashvili, e vendas recorde de Geovany Quenda (€50,78M) e Dário Essugo (€22,27M) para o Chelsea.",
     "purchases": [
       {
         "player": "Conrad Harder",
@@ -2495,7 +2508,8 @@
   },
   {
     "season": "2025/26",
-    "note": "Afonso Moreira e Henrique Arreiol vendidos. Venda recorde de Viktor Gyökeres. secure BBB- rating.",
+    "note": "Afonso Moreira and Henrique Arreiol sold. Record sale of Viktor Gyökeres. BBB− rating secured.",
+    "note_pt": "Afonso Moreira e Henrique Arreiol vendidos. Venda recorde de Viktor Gyökeres. Rating BBB− assegurado.",
     "purchases": [
       {
         "player": "Luís Suarez",

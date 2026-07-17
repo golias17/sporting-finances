@@ -19,8 +19,11 @@ export function calculateKpis(state, idx, fmtMillions) {
   // slice(2) converts "2012/13" → "12/13" for compact axis labels
   const firstShort = first.label.slice(2);
 
-  // Revenue growth vs ~5 years prior
-  const compIdx = idx - 4;
+  // Revenue growth vs 5 seasons prior — idx - 5, the same offset used by
+  // calculateHealthSignals() below and pdfGenerator.js, so every "5-year
+  // growth" figure in the app agrees. (This used to be idx - 4, which made
+  // the KPI strip and the health card disagree for the same season.)
+  const compIdx = idx - 5;
   const comp = compIdx >= 0 ? state.annual[compIdx] : null;
   const revGrowthPct = comp
     ? (
@@ -164,10 +167,14 @@ export function calculateKpis(state, idx, fmtMillions) {
         ? `Result. líquido 1º Sem. ${h1Data.label}`
         : `H1 ${h1Data.label} net result`,
       value: fmtMillions(h1Data.net_result),
-      change: state.isPt
-        ? "Após a venda de Gyökeres por 65,8 M€"
-        : "After Gyökeres €65.8M sale",
-      cls: "pos",
+      // The caption comes from the dataset (kpi_note / kpi_note_pt on the h1
+      // snapshot) so a new half-year entry brings its own context instead of
+      // inheriting a stale hardcoded transfer reference.
+      change:
+        (state.isPt ? h1Data.kpi_note_pt : h1Data.kpi_note) ||
+        h1Data.kpi_note ||
+        "",
+      cls: h1Data.net_result >= 0 ? "pos" : "neg",
     });
   } else {
     kpis.push({

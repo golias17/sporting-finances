@@ -433,6 +433,9 @@ export function chartRevVsPayroll() {
   const ratios = state.annual.map(
     (d) => Math.abs(d.personnel_costs) / d.revenue_operating,
   );
+  // Same canonical cutoffs as the health-check card and chartPayrollBurden —
+  // healthThresholds.js exists precisely so these can't drift apart.
+  const { warn, danger } = HEALTH_THRESHOLDS.payrollRatio;
   mkChart("chartRevVsPayroll", {
     type: "bar",
     data: {
@@ -444,16 +447,16 @@ export function chartRevVsPayroll() {
             : "Personnel cost / revenue",
           data: ratios.map((r) => r * 100),
           backgroundColor: ratios.map((r) =>
-            r > 0.7
+            r > danger
               ? state.COLORS.negSoft
-              : r > 0.6
+              : r > warn
                 ? state.COLORS.warn
                 : state.COLORS.posSoft,
           ),
           borderColor: ratios.map((r) =>
-            r > 0.7
+            r > danger
               ? state.COLORS.neg
-              : r > 0.6
+              : r > warn
                 ? state.COLORS.warn
                 : state.COLORS.pos,
           ),
@@ -708,6 +711,17 @@ export function chartSquadBook() {
 }
 
 export function chartTransfers() {
+  // Highlight the all-time record income season in gold. Computed from the
+  // full dataset (not the filtered range) so the record doesn't "move" when
+  // the user narrows the era filter — and so it updates itself the season a
+  // new record lands, instead of being pinned to a hardcoded label.
+  const recordLabel = state.fullAnnual.reduce(
+    (best, d) =>
+      best === null || d.player_transfer_income > best.player_transfer_income
+        ? d
+        : best,
+    null,
+  )?.label;
   mkChart("chartTransfers", {
     type: "bar",
     data: {
@@ -719,12 +733,12 @@ export function chartTransfers() {
             : "Player transfer income",
           data: state.annual.map((d) => d.player_transfer_income),
           backgroundColor: state.annual.map((d) =>
-            d.label === "2023/24"
+            d.label === recordLabel
               ? state.COLORS.goldSoft
               : state.COLORS.posSoft,
           ),
           borderColor: state.annual.map((d) =>
-            d.label === "2023/24" ? state.COLORS.gold : state.COLORS.pos,
+            d.label === recordLabel ? state.COLORS.gold : state.COLORS.pos,
           ),
           borderWidth: 1,
         },

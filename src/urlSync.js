@@ -1,4 +1,5 @@
 import { state } from "./state.js";
+import { STORY_STEPS } from "./storySteps.js";
 
 /**
  * Synchronizes the current global application state variables into URL query parameters.
@@ -98,8 +99,7 @@ export function applyUrlParams() {
   const storyParam = params.get("story");
   if (storyParam) {
     const idx = parseInt(storyParam, 10) - 1;
-    if (idx >= 0 && idx < 11) {
-      // 11 steps
+    if (idx >= 0 && idx < STORY_STEPS.length) {
       state.storyIndex = idx;
       state.urlStoryActive = true;
     }

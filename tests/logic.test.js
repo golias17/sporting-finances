@@ -438,6 +438,8 @@ describe("calculateKpis()", () => {
         period_end: "2025-12-31",
         net_result: 15000,
         squad_market_value: 65000,
+        kpi_note: "After a big sale",
+        kpi_note_pt: "Após uma grande venda",
       },
     };
     const kpis = calculateKpis(state, 0, fmtMillions);
@@ -446,5 +448,23 @@ describe("calculateKpis()", () => {
     const h1Kpi = kpis.find((k) => k.label.includes("H1"));
     expect(h1Kpi).toBeDefined();
     expect(h1Kpi.value).toBe(fmtMillions(15000));
+    // The caption is data-driven (kpi_note / kpi_note_pt on the h1 snapshot)
+    expect(h1Kpi.change).toBe("After a big sale");
+    expect(h1Kpi.cls).toBe("pos");
+  });
+
+  it("computes the 5-year revenue growth against idx - 5, matching calculateHealthSignals", () => {
+    const seasons = Array.from({ length: 7 }, (_, i) => ({
+      ...makeState().annual[0],
+      label: `201${i}/1${i + 1}`,
+      revenue_operating: 30000 + i * 5000,
+    }));
+    const state = makeState({ seasons });
+    const kpis = calculateKpis(state, 6, fmtMillions);
+    // idx 6 vs idx 1: (60000 - 35000) / 35000 = 71%
+    expect(kpis[0].change).toContain("71%");
+    const signals = calculateHealthSignals(state, 6, fmtMillions);
+    const revSignal = signals.find((s) => s.id === "sigRevGrowth");
+    expect(revSignal.value).toContain("71%");
   });
 });

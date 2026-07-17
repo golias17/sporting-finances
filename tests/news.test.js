@@ -88,6 +88,53 @@ describe("news.js", () => {
     expect(container.innerHTML).toContain("No recent corporate updates found.");
   });
 
+  it("should not drop articles whose source or title merely contains a filtered word as a substring", async () => {
+    global.fetch.mockResolvedValue({
+      json: () =>
+        Promise.resolve({
+          items: [
+            {
+              // "SAPO Desporto" contains "porto"; "aeroporto" too — neither is
+              // rival-club noise and both must survive the word-boundary filter.
+              title:
+                "Sporting SAD emite obrigações no aeroporto de Lisboa - SAPO Desporto",
+              pubDate: "2023-10-01 10:00:00",
+              link: "http://example.com/1",
+              author: "SAPO Desporto",
+            },
+          ],
+        }),
+    });
+
+    await initNewsFeed();
+    const container = document.getElementById("newsFeed");
+    const cards = container.querySelectorAll(".news-card");
+    expect(cards.length).toBe(1);
+    expect(cards[0].querySelector(".source-pill").textContent).toBe(
+      "SAPO Desporto",
+    );
+  });
+
+  it("should still drop rival-club headlines matched as whole words", async () => {
+    global.fetch.mockResolvedValue({
+      json: () =>
+        Promise.resolve({
+          items: [
+            {
+              title: "FC Porto vence clássico frente ao Sporting - Record",
+              pubDate: "2023-10-01 10:00:00",
+              link: "http://example.com/1",
+              author: "Record",
+            },
+          ],
+        }),
+    });
+
+    await initNewsFeed();
+    const container = document.getElementById("newsFeed");
+    expect(container.innerHTML).toContain("No recent corporate updates found.");
+  });
+
   it("should decode XML and HTML entities in titles and source names", async () => {
     global.fetch.mockResolvedValue({
       json: () =>

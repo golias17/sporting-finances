@@ -67,6 +67,18 @@ describe("story.js", () => {
     expect(state.storyIndex).toBe(0);
   });
 
+  it("should open at the requested step when startStory receives an index (deep link)", () => {
+    startStory(4);
+    vi.runAllTimers();
+    expect(state.storyIndex).toBe(4);
+  });
+
+  it("should clamp an out-of-range start index to the last step", () => {
+    startStory(999);
+    vi.runAllTimers();
+    expect(state.storyIndex).toBe(10); // last of the 11 steps
+  });
+
   it("should exit story mode when next is clicked on the last step", () => {
     // 11 steps total
     state.storyIndex = 10;

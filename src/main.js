@@ -46,6 +46,23 @@ import { initGlobalFilters } from "./globalFilters.js";
 import { initPWA } from "./pwa.js";
 
 // =============================================================
+// LANGUAGE DETECTION
+// =============================================================
+
+// Saved preference wins; otherwise fall back to the browser language.
+// Shared by initApp() (to load the right translation file before first
+// paint) and setupApp() (to set the UI language state) — previously the
+// same logic was duplicated verbatim in both.
+function detectActiveLang() {
+  let lang = localStorage.getItem("lang");
+  if (!lang && typeof navigator !== "undefined") {
+    const browserLang = navigator.language || navigator.userLanguage || "en";
+    lang = browserLang.startsWith("pt") ? "pt" : "en";
+  }
+  return lang || "en";
+}
+
+// =============================================================
 // JORNAL MODAL
 // =============================================================
 
@@ -590,13 +607,7 @@ function setupApp() {
   }
 
   // Restore saved language preference or auto-detect browser language
-  let activeLang = localStorage.getItem("lang");
-  if (!activeLang && typeof navigator !== "undefined") {
-    const browserLang = navigator.language || navigator.userLanguage || "en";
-    activeLang = browserLang.startsWith("pt") ? "pt" : "en";
-  } else if (!activeLang) {
-    activeLang = "en";
-  }
+  const activeLang = detectActiveLang();
 
   state.isPt = activeLang === "pt";
   document.documentElement.lang = activeLang;
@@ -617,7 +628,9 @@ function setupApp() {
   activateTab(initialTab, false);
 
   if (initialTab === "overview" && state.urlStoryActive) {
-    startStory();
+    // Pass the step applyUrlParams() restored — startStory() defaults to
+    // step 0, which used to discard the ?story=N deep link.
+    startStory(state.storyIndex);
   }
 
   // updateTabIndicator() does forced-synchronous layout reads (offsetLeft/
@@ -674,23 +687,21 @@ function initPdfExport() {
 
 async function initApp() {
   try {
-    const finRes = await fetch("./data/financials.json");
-    state.DATASET = await finRes.json();
-    const trRes = await fetch("./data/transfers.json");
-    state.TRANSFER_LEDGER = await trRes.json();
+    // The three startup fetches (financials, transfers, translations) are
+    // independent of each other — load them in parallel instead of
+    // serialising three network round-trips.
+    const [finRes, trRes] = await Promise.all([
+      fetch("./data/financials.json"),
+      fetch("./data/transfers.json"),
+      loadTranslations(detectActiveLang()),
+    ]);
+    [state.DATASET, state.TRANSFER_LEDGER] = await Promise.all([
+      finRes.json(),
+      trRes.json(),
+    ]);
 
     // Pin endSeasonIndex to the real last index so the filter UI is correct.
     state.setEndSeasonIndex(state.DATASET.annual_data.length - 1);
-
-    // Determine and load active language translations here
-    let activeLang = localStorage.getItem("lang");
-    if (!activeLang && typeof navigator !== "undefined") {
-      const browserLang = navigator.language || navigator.userLanguage || "en";
-      activeLang = browserLang.startsWith("pt") ? "pt" : "en";
-    } else if (!activeLang) {
-      activeLang = "en";
-    }
-    await loadTranslations(activeLang);
 
     // Once data is loaded, populate KPIs and setup UI
     setupApp();
