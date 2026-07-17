@@ -1,5 +1,5 @@
 import { state } from "./state.js";
-import { applyTranslations } from "./translations.js";
+import { applyTranslations, loadTranslations } from "./translations.js";
 import {
   initHealthBar,
   initKpiSeasonSelector,
@@ -505,9 +505,8 @@ function setupApp() {
     scrollToTopOnMobile();
   });
 
-  // Language switcher — intercept EN/PT links, no page reload
   document.querySelectorAll(".lang-link").forEach((link) => {
-    link.addEventListener("click", (e) => {
+    link.addEventListener("click", async (e) => {
       e.preventDefault();
       const lang = link.dataset.lang;
       if ((lang === "pt") === state.isPt) return; // already active
@@ -520,6 +519,9 @@ function setupApp() {
       document
         .querySelectorAll(".lang-link")
         .forEach((l) => l.classList.toggle("active", l.dataset.lang === lang));
+
+      // Load translations asynchronously first
+      await loadTranslations(lang);
 
       // Update all static HTML strings
       applyTranslations(lang);
@@ -679,6 +681,16 @@ async function initApp() {
 
     // Pin endSeasonIndex to the real last index so the filter UI is correct.
     state.setEndSeasonIndex(state.DATASET.annual_data.length - 1);
+
+    // Determine and load active language translations here
+    let activeLang = localStorage.getItem("lang");
+    if (!activeLang && typeof navigator !== "undefined") {
+      const browserLang = navigator.language || navigator.userLanguage || "en";
+      activeLang = browserLang.startsWith("pt") ? "pt" : "en";
+    } else if (!activeLang) {
+      activeLang = "en";
+    }
+    await loadTranslations(activeLang);
 
     // Once data is loaded, populate KPIs and setup UI
     setupApp();

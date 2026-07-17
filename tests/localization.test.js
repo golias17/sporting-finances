@@ -1,6 +1,35 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach, beforeAll, vi } from "vitest";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 import { translateNote } from "../src/localization.js";
-import { applyTranslations } from "../src/translations.js";
+import { applyTranslations, loadTranslations } from "../src/translations.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// Mock fetch to return local JSON files from public/locales
+beforeAll(() => {
+  global.fetch = vi.fn((url) => {
+    let filePath;
+    if (url.includes("en.json")) {
+      filePath = path.resolve(__dirname, "../public/locales/en.json");
+    } else if (url.includes("pt.json")) {
+      filePath = path.resolve(__dirname, "../public/locales/pt.json");
+    } else {
+      return Promise.reject(new Error("not found: " + url));
+    }
+
+    try {
+      const content = fs.readFileSync(filePath, "utf8");
+      return Promise.resolve({
+        json: () => Promise.resolve(JSON.parse(content)),
+        ok: true,
+      });
+    } catch (err) {
+      return Promise.reject(err);
+    }
+  });
+});
 
 describe("localization.js", () => {
   it("should translate direct map notes exactly", () => {
@@ -60,7 +89,8 @@ describe("translations.js", () => {
     `;
   });
 
-  it("should apply PT translations correctly to data-i18n elements", () => {
+  it("should apply PT translations correctly to data-i18n elements", async () => {
+    await loadTranslations("pt");
     applyTranslations("pt");
 
     const el = document.querySelector('[data-i18n="era-all"]');
@@ -71,7 +101,8 @@ describe("translations.js", () => {
     expect(none.textContent).toBe("");
   });
 
-  it("should apply EN translations correctly to data-i18n elements", () => {
+  it("should apply EN translations correctly to data-i18n elements", async () => {
+    await loadTranslations("en");
     applyTranslations("en");
 
     const el = document.querySelector('[data-i18n="era-all"]');
