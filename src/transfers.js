@@ -1,4 +1,5 @@
 import { state } from "./state.js";
+import { debounce } from "./utils.js";
 
 // Every note in transfers.json carries a hand-written note_pt sibling — the
 // old runtime regex-translation pipeline (localization.js) is gone. If a
@@ -12,19 +13,6 @@ function fmtNumStr(n) {
   return n.toLocaleString("de-DE", {
     minimumFractionDigits: n % 1 !== 0 ? 2 : 0,
   });
-}
-
-// The detail table's search box re-renders up to ~340 rows (string-built
-// HTML, not a diff) on every keystroke — fine for a single character, but
-// typing a whole name fires that full rebuild once per letter for no
-// benefit, since only the final value after the user pauses actually
-// matters. Debouncing collapses a burst of keystrokes into one render.
-function debounce(fn, delayMs) {
-  let timer = null;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn(...args), delayMs);
-  };
 }
 
 // TRANSFER LEDGER RENDERER

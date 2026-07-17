@@ -8,12 +8,9 @@ import {
   initStoryMode,
 } from "../src/story.js";
 
-// Mock charts.js
-vi.mock("../src/charts.js", () => ({
-  chartRegistry: {
-    get: vi.fn(),
-  },
-}));
+// story.js reads chartRegistry from chartUtils.js; in jsdom the registry is
+// simply empty, so the hero-chart highlight paths are safely skipped — no
+// module mock needed.
 
 describe("story.js", () => {
   beforeEach(() => {

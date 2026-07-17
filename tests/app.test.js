@@ -16,7 +16,7 @@ import { state } from "../src/state.js";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.resolve(__dirname, "../public");
 
-vi.mock("../src/charts.js", async () => {
+vi.mock("../src/charts.js", () => {
   const chartFnNames = [
     "chartHero",
     "chartNetResult",
@@ -39,12 +39,9 @@ vi.mock("../src/charts.js", async () => {
     "chartCash",
     "chartAnnualNet",
   ];
-  const { fmtMillions } = await import("../src/chartUtils.js");
   const mocks = Object.fromEntries(chartFnNames.map((n) => [n, vi.fn()]));
   return {
     ...mocks,
-    fmtMillions,
-    chartRegistry: new Map(),
     mkChart: vi.fn(),
   };
 });
@@ -131,7 +128,9 @@ describe("app boot (main.js)", () => {
   });
 
   it("switches tabs on click and hides the era filter where it doesn't apply", () => {
-    const bondsBtn = document.querySelector('nav.tabs button[data-tab="bonds"]');
+    const bondsBtn = document.querySelector(
+      'nav.tabs button[data-tab="bonds"]',
+    );
     bondsBtn.click();
     expect(
       document.getElementById("tab-bonds").classList.contains("active"),
@@ -157,9 +156,9 @@ describe("app boot (main.js)", () => {
     document.querySelector('nav.tabs button[data-tab="squad"]').click();
     const pills = document.querySelectorAll("#tlSeasonNav .season-pill");
     expect(pills.length).toBe(state.TRANSFER_LEDGER.length);
-    expect(document.getElementById("tlBody").textContent.length).toBeGreaterThan(
-      0,
-    );
+    expect(
+      document.getElementById("tlBody").textContent.length,
+    ).toBeGreaterThan(0);
   });
 
   it("switches language to PT and re-renders translated content", async () => {
@@ -167,9 +166,7 @@ describe("app boot (main.js)", () => {
     ptLink.click();
 
     await vi.waitFor(() => expect(state.isPt).toBe(true));
-    await vi.waitFor(() =>
-      expect(document.documentElement.lang).toBe("pt"),
-    );
+    await vi.waitFor(() => expect(document.documentElement.lang).toBe("pt"));
     expect(localStorage.getItem("lang")).toBe("pt");
     // KPI strip re-rendered in Portuguese
     await vi.waitFor(() => {

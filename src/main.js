@@ -44,6 +44,7 @@ import { initChartDefaults, ZONE_COLORS } from "./chartUtils.js";
 import { renderKpis } from "./kpi.js";
 import { initGlobalFilters } from "./globalFilters.js";
 import { initPWA } from "./pwa.js";
+import { debounce } from "./utils.js";
 
 // =============================================================
 // LANGUAGE DETECTION
@@ -329,16 +330,6 @@ function updateChartTheme() {
 // =============================================================
 // TAB INDICATOR
 // =============================================================
-
-// Collapses a burst of rapid-fire events (e.g. window resize) into a single
-// call `delayMs` after the last one, instead of running on every event.
-function debounce(fn, delayMs) {
-  let timer = null;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn(...args), delayMs);
-  };
-}
 
 function updateTabIndicator(activeBtn) {
   const tabsContainer = document.querySelector("nav.tabs");

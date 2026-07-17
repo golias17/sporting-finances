@@ -67,8 +67,7 @@ export function syncStateToUrl() {
     state.startSeasonIndex > 0 ||
     (state.endSeasonIndex !== null && state.endSeasonIndex < lastIdx);
   const eraStartLabel = state.fullAnnual[state.startSeasonIndex]?.label;
-  const eraEndLabel =
-    state.fullAnnual[state.endSeasonIndex ?? lastIdx]?.label;
+  const eraEndLabel = state.fullAnnual[state.endSeasonIndex ?? lastIdx]?.label;
   if (eraNarrowed && eraStartLabel && eraEndLabel) {
     params.set("eraStart", eraStartLabel);
     params.set("eraEnd", eraEndLabel);

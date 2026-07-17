@@ -1,5 +1,6 @@
 import { state } from "./state.js";
-import { fmtMillions, mkChart } from "./charts.js";
+import { mkChart } from "./charts.js";
+import { fmtMillions } from "./chartUtils.js";
 import { syncStateToUrl } from "./urlSync.js";
 
 // SEASON COMPARISON

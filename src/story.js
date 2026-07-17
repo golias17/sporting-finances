@@ -1,5 +1,8 @@
 import { state } from "./state.js";
-import { chartRegistry } from "./charts.js";
+// chartRegistry comes from chartUtils.js (where it's defined) rather than
+// via charts.js — keeps Chart.js and every chart builder out of this
+// module's import graph.
+import { chartRegistry } from "./chartUtils.js";
 import { syncStateToUrl } from "./urlSync.js";
 import { STORY_STEPS } from "./storySteps.js";
 

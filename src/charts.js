@@ -55,16 +55,6 @@ import {
   generateAccessibleTable,
   addChartDownloadButton,
 } from "./chartUtils.js";
-// Only fmtMillions and chartRegistry are actually consumed via this
-// re-export path (bonds.js/compare.js/data-table.js import fmtMillions
-// from "./charts.js"; story.js imports chartRegistry the same way).
-// ZONE_COLORS, eventBoxes, baseOpts, generateAccessibleTable and
-// addChartDownloadButton are still imported above for internal use in this
-// file, but nothing imports them *from* charts.js — everywhere else that
-// needs them imports directly from chartUtils.js — so re-exporting them
-// here was dead surface area.
-export { fmtMillions, chartRegistry };
-
 // state.COLORS and state.baseOpts are initialised by initChartDefaults() in
 // chartUtils.js, called once during app boot. Do not assign them here.
 

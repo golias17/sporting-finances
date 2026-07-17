@@ -1,5 +1,5 @@
 import { state } from "./state.js";
-import { fmtMillions } from "./charts.js";
+import { fmtMillions } from "./chartUtils.js";
 
 // DATA TABLE RENDER
 // =============================================================

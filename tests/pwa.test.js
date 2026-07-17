@@ -72,7 +72,9 @@ describe("pwa.js", () => {
 
     const toast = document.getElementById("pwa-offline-toast");
     expect(toast).not.toBeNull();
-    expect(toast.innerHTML).toContain("Aplicação pronta para funcionar offline!");
+    expect(toast.innerHTML).toContain(
+      "Aplicação pronta para funcionar offline!",
+    );
 
     const btn = document.getElementById("pwa-offline-btn");
     expect(btn.textContent).toBe("Ok");

@@ -64,9 +64,10 @@ describe("financials.json schema", () => {
           typeof season[key],
           `${label}.${key} must be a number (got ${season[key]})`,
         ).toBe("number");
-        expect(Number.isFinite(season[key]), `${label}.${key} is not finite`).toBe(
-          true,
-        );
+        expect(
+          Number.isFinite(season[key]),
+          `${label}.${key} is not finite`,
+        ).toBe(true);
       }
     },
   );

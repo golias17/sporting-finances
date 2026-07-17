@@ -9,6 +9,20 @@ export const state = {
   healthBarIdx: null,
   storyIndex: 0,
   activeEventFilter: "all",
+
+  // View state restored from URL query params by applyUrlParams() (urlSync.js)
+  // and consumed once by the module that owns each piece of UI: story mode
+  // (main.js), the compare selects (compare.js), the health season selector
+  // (health.js) and the era filter (globalFilters.js). Declared here so the
+  // state shape is visible in one place rather than appearing via ad-hoc
+  // assignment.
+  urlStoryActive: false,
+  urlCmpA: null,
+  urlCmpB: null,
+  urlHealthSeason: null,
+  urlEraStart: null,
+  urlEraEnd: null,
+
   DATASET: null,
   get annual() {
     if (!this.DATASET) return null;
