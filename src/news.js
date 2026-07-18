@@ -129,13 +129,17 @@ export async function initNewsFeed() {
       category: "FINANCE",
     }));
 
-    const dataItems = [
+    const rawItems = [
       ...finItems1,
       ...mktItems,
       ...corpItems,
       ...finItems2,
       ...finItems3,
     ];
+
+    // Filter noise at the rss2json level (the build-time script handles
+    // news.json; this covers the local-dev / fallback path).
+    const dataItems = filterNoise(rawItems);
 
     if (dataItems.length === 0) {
       throw new Error("No items found or feed is empty.");
@@ -184,8 +188,11 @@ function decodeHtml(html) {
 // boundaries — a naive substring check like includes("porto") also matched
 // "desporto" and "aeroporto" (and, worse, ran before the source suffix was
 // stripped, so every article from sources like "SAPO Desporto" was silently
-// dropped). Matching happens on the cleaned title only, after the
-// " - Source" suffix has been removed.
+// dropped).
+//
+// Production data (news.json) is already filtered at build time by
+// scripts/fetch-news.mjs. This list is used only for the rss2json runtime
+// fallback (local dev / quota exhaustion).
 const NOISE_PATTERNS = [
   // Other squads / sports
   /\bequipa b\b/,
@@ -204,11 +211,26 @@ const NOISE_PATTERNS = [
   /\bfcp\b/,
   /\bslb\b/,
   /\bbraga\b/,
+  // bad sources
+  /\bleonino\b/,
 ];
 
-function isNoise(title) {
-  const t = title.toLowerCase();
+function isNoise(text) {
+  const t = text.toLowerCase();
   return NOISE_PATTERNS.some((rx) => rx.test(t));
+}
+
+/**
+ * Filter noise from raw API items by checking both the title and author.
+ * Used by the rss2json fallback path; the static news.json is pre-filtered
+ * at build time by scripts/fetch-news.mjs.
+ */
+function filterNoise(items) {
+  return items.filter((item) => {
+    const title = (item.title || "").toLowerCase();
+    const author = (item.author || "").toLowerCase();
+    return !isNoise(title) && !isNoise(author);
+  });
 }
 
 function renderNewsItems(container, dataItems, { stale = false } = {}) {
@@ -244,8 +266,7 @@ function renderNewsItems(container, dataItems, { stale = false } = {}) {
     };
   });
 
-  // Drop noise only now that the " - Source" suffix is gone from the title.
-  const relevantItems = processedItems.filter((item) => !isNoise(item.title));
+  const relevantItems = processedItems;
 
   // Cluster news from the same topic
   const storyClusters = [];

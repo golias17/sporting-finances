@@ -103,7 +103,37 @@ const deduped = items.filter((i) => {
   return true;
 });
 
-if (deduped.length === 0) {
+// Filter out noise articles at build time. Keep this list in sync with the
+// NOISE_PATTERNS array in src/news.js (runtime fallback).
+const NOISE_PATTERNS = [
+  // Other squads / sports
+  /\bequipa b\b/i,
+  /\bfutsal\b/i,
+  /\bandebol\b/i,
+  /\bhóquei\b/i,
+  /\bsub-\d/i,
+  // Historic re-index glitches (people no longer at the club)
+  /\brui patrício\b/i,
+  /\bbruno de carvalho\b/i,
+  /\bjorge jesus\b/i,
+  /\bbas dost\b/i,
+  // Rival clubs
+  /\bbenfica\b/i,
+  /\bporto\b/i,
+  /\bfcp\b/i,
+  /\bslb\b/i,
+  /\bbraga\b/i,
+  // Bad sources
+  /\bleonino\b/i,
+];
+function isNoise(item) {
+  const title = (item.title || "").toLowerCase();
+  const author = (item.author || "").toLowerCase();
+  return NOISE_PATTERNS.some((rx) => rx.test(title) || rx.test(author));
+}
+const filtered = deduped.filter((i) => !isNoise(i));
+
+if (filtered.length === 0) {
   // Never overwrite a good file with an empty one (e.g. transient outage) —
   // fail the run instead so the previous news.json stays deployed.
   console.error("[news] no items fetched; keeping existing news.json");
@@ -112,7 +142,7 @@ if (deduped.length === 0) {
 
 const payload = {
   generated_at: new Date().toISOString(),
-  items: deduped,
+  items: filtered,
 };
 fs.writeFileSync(OUT_PATH, JSON.stringify(payload, null, 2) + "\n");
 console.log(`[news] wrote ${deduped.length} items to ${OUT_PATH}`);

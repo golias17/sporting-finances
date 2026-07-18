@@ -126,7 +126,9 @@ describe("news.js", () => {
 
     await initNewsFeed();
     const container = document.getElementById("newsFeed");
-    expect(container.innerHTML).toContain("No recent corporate updates found.");
+    // All items are noise — filterNoise empties the list, triggering the
+    // "No items found" error path (noise is now filtered before rendering).
+    expect(container.innerHTML).toContain("No items found or feed is empty");
   });
 
   it("should not drop articles whose source or title merely contains a filtered word as a substring", async () => {
@@ -167,7 +169,8 @@ describe("news.js", () => {
 
     await initNewsFeed();
     const container = document.getElementById("newsFeed");
-    expect(container.innerHTML).toContain("No recent corporate updates found.");
+    // Noise filtered before rendering — triggers empty-feed error.
+    expect(container.innerHTML).toContain("No items found or feed is empty");
   });
 
   it("should decode XML and HTML entities in titles and source names", async () => {
