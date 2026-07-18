@@ -1,3 +1,5 @@
+import { config } from "./config.js";
+
 const CACHE_KEY = "sportingNews_v1";
 const CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
 
@@ -43,7 +45,7 @@ export async function initNewsFeed() {
   // scripts/fetch-news.mjs (via .github/workflows/news.yml). It loads
   // instantly, hits no third-party quota, and is served from the same origin.
   try {
-    const res = await fetch("./data/news.json");
+    const res = await fetch(config.newsPath);
     if (res.ok) {
       const data = await res.json();
       if (Array.isArray(data.items) && data.items.length > 0) {
@@ -76,11 +78,14 @@ export async function initNewsFeed() {
   try {
     const responses = await Promise.all(
       queries.map((q) => {
-        const url = encodeURIComponent(
-          `https://news.google.com/rss/search?q=${q}&hl=pt-PT&gl=PT&ceid=PT:pt-150`,
-        );
-        return fetch(`https://api.rss2json.com/v1/api.json?rss_url=${url}`)
-          .then((r) => r.json())
+        const url = encodeURIComponent(config.rssSearchUrl(q));
+        return fetch(config.rss2jsonApiUrl(url))
+          .then((r) => {
+            if (!r.ok) {
+              throw new Error(`rss2json fetch failed: HTTP ${r.status}`);
+            }
+            return r.json();
+          })
           .catch(() => ({ items: [] }));
       }),
     );

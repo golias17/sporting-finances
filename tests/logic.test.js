@@ -135,56 +135,7 @@ describe("Event Annotations Utilities", () => {
     expect(annos.e_covid.label.content).toBe("COVID");
   });
 
-  it("drops event markers outside the active global era filter", () => {
-    // Simulates the user narrowing "Explore Era" to 2020/21–2024/25: the
-    // hero chart's x-axis (state.annual) no longer has categories for
-    // 2014/15 or 2017/18, so those markers have nowhere valid to anchor to
-    // and used to get clamped to the edge of the chart instead of being
-    // hidden.
-    const fullSeasons = [
-      "2012/13",
-      "2013/14",
-      "2014/15",
-      "2015/16",
-      "2016/17",
-      "2017/18",
-      "2018/19",
-      "2019/20",
-      "2020/21",
-      "2021/22",
-      "2022/23",
-      "2023/24",
-      "2024/25",
-    ];
-    state.DATASET = {
-      annual_data: fullSeasons.map((label) => ({ label })),
-    };
-    state.startSeasonIndex = fullSeasons.indexOf("2020/21");
-    state.endSeasonIndex = fullSeasons.indexOf("2024/25");
 
-    const annos = eventBoxes([
-      "restructure14",
-      "alcochete",
-      "covid",
-      "vmoc1",
-      "vmoc2",
-      "uspp",
-    ]);
-
-    // 2014/15 and 2017/18 are outside the filtered range — dropped.
-    expect(annos.e_restructure14).toBeUndefined();
-    expect(annos.e_alcochete).toBeUndefined();
-    // 2020/21 through 2024/25 are all inside it — kept.
-    expect(annos.e_covid).toBeDefined();
-    expect(annos.e_vmoc1).toBeDefined();
-    expect(annos.e_vmoc2).toBeDefined();
-    expect(annos.e_uspp).toBeDefined();
-
-    // Reset the shared singleton so later tests aren't affected.
-    state.DATASET = null;
-    state.startSeasonIndex = 0;
-    state.endSeasonIndex = null;
-  });
 
   it("keeps all event markers when no dataset is loaded yet (defensive default)", () => {
     state.DATASET = null;

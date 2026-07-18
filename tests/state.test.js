@@ -33,14 +33,14 @@ describe("state.js", () => {
     expect(state.annual).toEqual(["a", "b", "c"]);
   });
 
-  it("should return sliced DATASET.annual_data based on start and end indices", () => {
+  it("should return full DATASET.annual_data even if start and end indices are changed", () => {
     const mockData = ["a", "b", "c", "d", "e"];
     state.DATASET = { annual_data: mockData };
 
     state.setStartSeasonIndex(1);
     state.setEndSeasonIndex(3);
 
-    expect(state.annual).toEqual(["b", "c", "d"]);
+    expect(state.annual).toEqual(mockData);
     expect(state.fullAnnual).toEqual(mockData);
   });
 

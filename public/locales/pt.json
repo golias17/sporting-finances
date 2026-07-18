@@ -1,4 +1,114 @@
 {
+  "squad_sub_financials": {
+    "text": "Tendências Financeiras",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "squad_sub_analytics": {
+    "text": "Análise de Transferências",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "squad_sub_ledger": {
+    "text": "Livro de Registos",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "chart_eras_title": {
+    "text": "Ganho Líquido de Transferências por Era de Treinador",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "chart_eras_subtitle": {
+    "text": "Vendas vs. compras cumulativas agrupadas em milhões de euros",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "chart_commissions_title": {
+    "text": "Evolução de Comissões de Intermediários",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "chart_commissions_subtitle": {
+    "text": "Total anual de comissões pagas em vendas e aquisições",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_ebitda": {
+    "text": "EBITDA",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_ebitda_margin": {
+    "text": "Margem EBITDA",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_solvency": {
+    "text": "Solvência",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_net_debt_ebitda": {
+    "text": "Dívida Líq. / EBITDA",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_customizer_title": {
+    "text": "Personalizar Relatório PDF",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_customizer_subtitle": {
+    "text": "Selecione as opções para gerar o seu dossier personalizado",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_language": {
+    "text": "Idioma do Relatório",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_pages": {
+    "text": "Páginas a Incluir",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_page_1": {
+    "text": "Capa e KPIs Principais",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_page_2": {
+    "text": "I. Resultados Operacionais e II. Balanço",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_page_3": {
+    "text": "III. Alienações e IV. Fluxos de Caixa",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_page_4": {
+    "text": "V. Financiamento Estratégico e VI. Marcos",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_page_5": {
+    "text": "VII. Livro de Transferências de Referência",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_executive_notes": {
+    "text": "Anotação Executiva Personalizada",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_generate_btn": {
+    "text": "Gerar Relatório",
+    "isAria": false,
+    "innerHTML": false
+  },
   "skip-link": {
     "text": "Saltar para o conteúdo",
     "isAria": false,

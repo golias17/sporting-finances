@@ -1,4 +1,114 @@
 {
+  "squad_sub_financials": {
+    "text": "Financial Trends",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "squad_sub_analytics": {
+    "text": "Transfer Analytics",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "squad_sub_ledger": {
+    "text": "Detailed Ledger",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "chart_eras_title": {
+    "text": "Net Transfer Earnings by Managerial Era",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "chart_eras_subtitle": {
+    "text": "Grouped cumulative sales vs. purchases in millions",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "chart_commissions_title": {
+    "text": "Agent Commissions Trend",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "chart_commissions_subtitle": {
+    "text": "Total annual commissions paid on sales and acquisitions",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_ebitda": {
+    "text": "EBITDA",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_ebitda_margin": {
+    "text": "EBITDA Margin",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_solvency": {
+    "text": "Solvency",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_net_debt_ebitda": {
+    "text": "Net Debt / EBITDA",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_customizer_title": {
+    "text": "Customize PDF Report",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_customizer_subtitle": {
+    "text": "Select options to generate your personalized dossier",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_language": {
+    "text": "Report Language",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_pages": {
+    "text": "Pages to Include",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_page_1": {
+    "text": "Cover Page & KPIs",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_page_2": {
+    "text": "I. Operating Income & II. Balance Sheet",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_page_3": {
+    "text": "III. Player Trading & IV. Cash Flows",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_page_4": {
+    "text": "V. Strategic Financing & VI. Turnaround Milestones",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_page_5": {
+    "text": "VII. Landmark Player Transfers Ledger",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_executive_notes": {
+    "text": "Custom Executive Annotation",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_generate_btn": {
+    "text": "Generate Report",
+    "isAria": false,
+    "innerHTML": false
+  },
   "skip-link": {
     "text": "Skip to content",
     "isAria": false,

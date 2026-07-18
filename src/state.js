@@ -1,4 +1,4 @@
-export const state = {
+const stateTarget = {
   // Initialised to false here; setupApp() sets the real value from localStorage
   // / navigator.language once the DOM is ready. Avoids a DOM read at module
   // import time, which would run before the <html lang> attribute is finalised
@@ -25,17 +25,11 @@ export const state = {
 
   DATASET: null,
   get annual() {
-    if (!this.DATASET) return null;
-    // endSeasonIndex starts as null; treat null as "last season" so the full
-    // dataset is covered before main.js pins it to the real last index.
-    const end =
-      this.endSeasonIndex !== null
-        ? this.endSeasonIndex
-        : this.DATASET.annual_data.length - 1;
-    return this.DATASET.annual_data.slice(this.startSeasonIndex, end + 1);
+    if (!stateTarget.DATASET) return null;
+    return stateTarget.DATASET.annual_data;
   },
   get fullAnnual() {
-    return this.DATASET ? this.DATASET.annual_data : null;
+    return stateTarget.DATASET ? stateTarget.DATASET.annual_data : null;
   },
   TRANSFER_LEDGER: null,
   startSeasonIndex: 0,
@@ -90,14 +84,23 @@ export const state = {
   baseOpts: {},
 
   // Setters
+  setIsPt(val) {
+    stateTarget.isPt = val;
+  },
+  setDataset(val) {
+    stateTarget.DATASET = val;
+  },
+  setTransferLedger(val) {
+    stateTarget.TRANSFER_LEDGER = val;
+  },
   setStartSeasonIndex(idx) {
-    this.startSeasonIndex = idx;
+    stateTarget.startSeasonIndex = idx;
   },
   setEndSeasonIndex(idx) {
-    this.endSeasonIndex = idx;
+    stateTarget.endSeasonIndex = idx;
   },
   setHealthBarIdx(idx) {
-    this.healthBarIdx = idx;
+    stateTarget.healthBarIdx = idx;
   },
   // healthBarIdx is an index into the currently-filtered state.annual, not
   // the full dataset. Narrowing/widening the "Explore Era" range changes
@@ -110,35 +113,35 @@ export const state = {
   // the range changed, so if it's still in range we stay pointed at it,
   // otherwise we fall back to the new range's latest season.
   retargetHealthBarIdx(prevLabel) {
-    if (this.healthBarIdx === null || !this.annual) return;
+    if (stateTarget.healthBarIdx === null || !stateTarget.annual) return;
     if (prevLabel) {
-      const idx = this.annual.findIndex((d) => d.label === prevLabel);
+      const idx = stateTarget.annual.findIndex((d) => d.label === prevLabel);
       if (idx >= 0) {
-        this.healthBarIdx = idx;
+        stateTarget.healthBarIdx = idx;
         return;
       }
     }
-    this.healthBarIdx = this.annual.length - 1;
+    stateTarget.healthBarIdx = stateTarget.annual.length - 1;
   },
   setStoryIndex(idx) {
-    this.storyIndex = idx;
+    stateTarget.storyIndex = idx;
   },
   setActiveEventFilter(filter) {
-    this.activeEventFilter = filter;
+    stateTarget.activeEventFilter = filter;
   },
   setTlActiveSeason(season) {
-    this.tlActiveSeason = season;
+    stateTarget.tlActiveSeason = season;
   },
   // Parameter renamed from 'window' to 'transferWindow' to avoid shadowing the
   // browser global inside this method.
   setTlActiveWindow(transferWindow) {
-    this.tlActiveWindow = transferWindow;
+    stateTarget.tlActiveWindow = transferWindow;
   },
 
   // Lion Finance (bonds) tab switcher — "both" | "lion" | "sporting"
   activeLionTab: "both",
   setActiveLionTab(tab) {
-    this.activeLionTab = tab;
+    stateTarget.activeLionTab = tab;
   },
 
   // Transfer detail table filter state (owned here so initTransfersDetailTable
@@ -151,21 +154,59 @@ export const state = {
   tfSortCol: null,
   tfSortDir: "asc",
   setTfActiveSeason(v) {
-    this.tfActiveSeason = v;
+    stateTarget.tfActiveSeason = v;
   },
   setTfActiveType(v) {
-    this.tfActiveType = v;
+    stateTarget.tfActiveType = v;
   },
   setTfActiveWindow(v) {
-    this.tfActiveWindow = v;
+    stateTarget.tfActiveWindow = v;
   },
   setTfQuery(v) {
-    this.tfQuery = v;
+    stateTarget.tfQuery = v;
   },
   setTfSortCol(v) {
-    this.tfSortCol = v;
+    stateTarget.tfSortCol = v;
   },
   setTfSortDir(v) {
-    this.tfSortDir = v;
+    stateTarget.tfSortDir = v;
+  },
+
+  setUrlStoryActive(v) {
+    stateTarget.urlStoryActive = v;
+  },
+  setUrlCmpA(v) {
+    stateTarget.urlCmpA = v;
+  },
+  setUrlCmpB(v) {
+    stateTarget.urlCmpB = v;
+  },
+  setUrlHealthSeason(v) {
+    stateTarget.urlHealthSeason = v;
+  },
+  setUrlEraStart(v) {
+    stateTarget.urlEraStart = v;
+  },
+  setUrlEraEnd(v) {
+    stateTarget.urlEraEnd = v;
   },
 };
+
+export const state = new Proxy(stateTarget, {
+  set(target, key, value, receiver) {
+    // List of allowed direct mutations to nested structures or Set additions.
+    const bypassWarnKeys = new Set(["COLORS", "baseOpts", "TAB_CHARTS", "renderedCharts"]);
+    if (!bypassWarnKeys.has(key)) {
+      let setterName = "set" + String(key).charAt(0).toUpperCase() + String(key).slice(1);
+      if (key === "DATASET") setterName = "setDataset";
+      if (key === "TRANSFER_LEDGER") setterName = "setTransferLedger";
+      console.warn(
+        `[state] Direct mutation of state.${String(key)} is deprecated. Please call state.${setterName}() instead.`,
+      );
+    }
+    return Reflect.set(target, key, value, receiver);
+  },
+  get(target, key, receiver) {
+    return Reflect.get(target, key, receiver);
+  },
+});

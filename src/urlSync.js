@@ -101,7 +101,7 @@ export function applyUrlParams() {
   // 1. Language Parameter
   const lang = params.get("lang");
   if (lang && (lang === "en" || lang === "pt")) {
-    state.isPt = lang === "pt";
+    state.setIsPt(lang === "pt");
     if (typeof localStorage !== "undefined") {
       localStorage.setItem("lang", lang);
     }
@@ -117,27 +117,27 @@ export function applyUrlParams() {
   if (storyParam) {
     const idx = parseInt(storyParam, 10) - 1;
     if (idx >= 0 && idx < STORY_STEPS.length) {
-      state.storyIndex = idx;
-      state.urlStoryActive = true;
+      state.setStoryIndex(idx);
+      state.setUrlStoryActive(true);
     }
   }
 
   // 4. Comparison Seasons Restoration
   const s1 = params.get("s1");
   const s2 = params.get("s2");
-  if (s1) state.urlCmpA = s1;
-  if (s2) state.urlCmpB = s2;
+  if (s1) state.setUrlCmpA(s1);
+  if (s2) state.setUrlCmpB(s2);
 
   // 5. Healthcheck Season Restoration
   const healthSeason = params.get("healthSeason");
-  if (healthSeason) state.urlHealthSeason = healthSeason;
+  if (healthSeason) state.setUrlHealthSeason(healthSeason);
 
   // 6. Era Filter Restoration — stashed as labels; initGlobalFilters()
   // resolves them to indices once the dataset has loaded.
   const eraStart = params.get("eraStart");
   const eraEnd = params.get("eraEnd");
-  if (eraStart) state.urlEraStart = eraStart;
-  if (eraEnd) state.urlEraEnd = eraEnd;
+  if (eraStart) state.setUrlEraStart(eraStart);
+  if (eraEnd) state.setUrlEraEnd(eraEnd);
 
   return tab;
 }

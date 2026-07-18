@@ -1,3 +1,4 @@
+import { config } from "./config.js";
 import { state } from "./state.js";
 import { applyTranslations, loadTranslations } from "./translations.js";
 import {
@@ -40,9 +41,9 @@ import {
   chartCash,
   chartAnnualNet,
 } from "./charts.js";
-import { initChartDefaults, ZONE_COLORS } from "./chartUtils.js";
+import { initChartDefaults, ZONE_COLORS, chartRegistry } from "./chartUtils.js";
 import { renderKpis } from "./kpi.js";
-import { initGlobalFilters } from "./globalFilters.js";
+import { drawManagerEras, drawCommissions } from "./squadAnalytics.js";
 import { initPWA } from "./pwa.js";
 import { debounce } from "./utils.js";
 
@@ -375,10 +376,64 @@ function scrollToTopOnMobile() {
   }
 }
 
+const TAB_CHART_IDS = {
+  overview: ["chartHero", "chartNetResult", "chartEquity"],
+  revenue: ["chartRevenue", "chartRevStreams", "chartRevVsPayroll", "chartOpResult"],
+  healthcheck: ["chartPayrollBurden", "chartTransferReliance", "chartDebtLoad", "chartCurrentRatio"],
+  debt: ["chartDebt", "chartAssetsLiab", "chartDebtMaturity"],
+  squad: ["chartSquadBook", "chartTransfers", "chartNetTrading", "chartManagerEras", "chartCommissions"],
+  cash: ["chartCashFlow", "chartCash", "chartAnnualNet"],
+  compare: ["chartCompare"],
+};
+
+const CHART_DRAWING_FUNCTIONS = {
+  chartHero,
+  chartNetResult,
+  chartEquity,
+  chartRevenue,
+  chartRevStreams,
+  chartRevVsPayroll,
+  chartOpResult,
+  chartPayrollBurden,
+  chartTransferReliance,
+  chartDebtLoad,
+  chartCurrentRatio,
+  chartDebt,
+  chartAssetsLiab,
+  chartDebtMaturity,
+  chartSquadBook,
+  chartTransfers,
+  chartNetTrading,
+  chartManagerEras: drawManagerEras,
+  chartCommissions: drawCommissions,
+  chartCashFlow,
+  chartCash,
+  chartAnnualNet,
+};
+
+function destroyInactiveCharts(activeTab) {
+  for (const tab in TAB_CHART_IDS) {
+    if (tab !== activeTab) {
+      TAB_CHART_IDS[tab].forEach((canvasId) => {
+        if (chartRegistry.has(canvasId)) {
+          const chart = chartRegistry.get(canvasId);
+          chart.destroy();
+          chartRegistry.delete(canvasId);
+          const fn = CHART_DRAWING_FUNCTIONS[canvasId];
+          if (fn) {
+            state.renderedCharts.delete(fn);
+          }
+        }
+      });
+    }
+  }
+}
+
 // Not exported — main.js is the app's entry point and nothing imports from
 // it (there's no main.test.js; it's exercised indirectly through the DOM).
 function activateTab(tab, pushHash = true) {
   if (!state.VALID_TABS.includes(tab)) tab = "overview";
+  destroyInactiveCharts(tab);
   if (tab !== "overview") {
     exitStory();
   }
@@ -398,22 +453,7 @@ function activateTab(tab, pushHash = true) {
   const activePanel = document.getElementById("tab-" + tab);
   activePanel.classList.add("active");
 
-  // The global era filter is a single shared control (its selects/pills have
-  // unique IDs, so it can't be duplicated per tab) — instead it's moved to
-  // sit right after the active tab's chapter intro, and hidden entirely on
-  // tabs where a date range doesn't apply or would be misleading (bonds has
-  // its own fixed historical breakdown, and compare/events/club/news aren't
-  // season-range driven).
-  const globalFilters = document.querySelector(".global-filters");
-  if (globalFilters) {
-    if (state.TABS_WITHOUT_GLOBAL_FILTER.has(tab)) {
-      globalFilters.classList.add("hidden");
-    } else {
-      const chapter = activePanel.querySelector(".chapter");
-      if (chapter) chapter.insertAdjacentElement("afterend", globalFilters);
-      globalFilters.classList.remove("hidden");
-    }
-  }
+
 
   if (pushHash) {
     history.replaceState(null, "", "#" + tab);
@@ -451,20 +491,14 @@ function activateTab(tab, pushHash = true) {
 function setupApp(initialTab) {
   // Initialise colour palette and chart base options before any chart is built.
   initChartDefaults();
-  initGlobalFilters(() => {
-    // Clear all charts and force re-render of active tab
-    state.renderedCharts.clear();
-    const activeTab = document.querySelector(".tabs button.active");
-    if (activeTab) {
-      activateTab(activeTab.dataset.tab);
-    }
-  });
+
   renderKpis();
   initStoryMode();
   initEventFilter();
   initScrollAnimations();
   initDataExport();
   initNewsFeed();
+  initSquadSubTabs();
 
   state.TAB_CHARTS = {
     overview: [initKpiSeasonSelector, chartHero, chartNetResult, chartEquity],
@@ -479,10 +513,12 @@ function setupApp(initialTab) {
     debt: [chartDebt, chartAssetsLiab, chartDebtMaturity],
     bonds: [renderVmocCost, renderLionFinance, renderUsppTerms],
     squad: [
-      chartSquadBook,
-      chartTransfers,
-      chartNetTrading,
-      renderTransferLedger,
+      () => {
+        const activeSubBtn = document.querySelector(".sub-tabs-container .sub-tab-btn.active");
+        if (activeSubBtn) {
+          activeSubBtn.click();
+        }
+      }
     ],
     cash: [chartCashFlow, chartCash, chartAnnualNet],
     compare: [initComparison],
@@ -519,7 +555,7 @@ function setupApp(initialTab) {
       const lang = link.dataset.lang;
       if ((lang === "pt") === state.isPt) return; // already active
 
-      state.isPt = lang === "pt";
+      state.setIsPt(lang === "pt");
       document.documentElement.lang = lang;
       localStorage.setItem("lang", lang);
 
@@ -600,7 +636,7 @@ function setupApp(initialTab) {
   // Restore saved language preference or auto-detect browser language
   const activeLang = detectActiveLang();
 
-  state.isPt = activeLang === "pt";
+  state.setIsPt(activeLang === "pt");
   document.documentElement.lang = activeLang;
   document
     .querySelectorAll(".lang-link")
@@ -663,13 +699,127 @@ function setupApp(initialTab) {
   initPdfExport();
 }
 
+let pdfAbortController = null;
+
 function initPdfExport() {
   const btn = document.getElementById("pdfExportBtn");
-  if (!btn) return;
+  const modal = document.getElementById("pdfModal");
+  const btnClose = document.getElementById("btnClosePdf");
+  const form = document.getElementById("pdfCustomizerForm");
 
-  btn.addEventListener("click", () => {
+  if (!btn || !modal || !btnClose || !form) return;
+
+  if (pdfAbortController) {
+    pdfAbortController.abort();
+  }
+  pdfAbortController = new AbortController();
+  const { signal } = pdfAbortController;
+
+  function openModal() {
+    // Sync active UI language to modal language selector
+    const langSelect = document.getElementById("pdfLanguageSelect");
+    if (langSelect) {
+      langSelect.value = state.isPt ? "pt" : "en";
+    }
+    // Check all pages by default
+    for (let i = 1; i <= 5; i++) {
+      const chk = document.getElementById(`chkPage${i}`);
+      if (chk) chk.checked = true;
+    }
+    // Clear custom note
+    const notesText = document.getElementById("pdfNotesText");
+    if (notesText) notesText.value = "";
+
+    modal.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeModal() {
+    modal.classList.add("hidden");
+    document.body.style.overflow = "";
+  }
+
+  btn.addEventListener("click", openModal, { signal });
+  btnClose.addEventListener("click", closeModal, { signal });
+
+  // Close on backdrop click
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  }, { signal });
+
+  // Close on ESC key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+      closeModal();
+    }
+  }, { signal });
+
+  // Handle form submission
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const lang = document.getElementById("pdfLanguageSelect").value;
+    const pages = [
+      document.getElementById("chkPage1").checked,
+      document.getElementById("chkPage2").checked,
+      document.getElementById("chkPage3").checked,
+      document.getElementById("chkPage4").checked,
+      document.getElementById("chkPage5").checked,
+    ];
+    const executiveNote = document.getElementById("pdfNotesText").value;
+
     import("./pdfGenerator.js").then((m) => {
-      m.generateCuratedPdf();
+      m.generateCuratedPdf({ lang, pages, executiveNote });
+      closeModal();
+    });
+  }, { signal });
+}
+
+function initSquadSubTabs() {
+  const container = document.querySelector(".sub-tabs-container");
+  if (!container) return;
+
+  const buttons = container.querySelectorAll(".sub-tab-btn");
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const sub = btn.dataset.squadSub;
+
+      // Update sub-tabs active styling
+      buttons.forEach((b) => b.classList.toggle("active", b === btn));
+
+      // Toggle panels visibility
+      document.querySelectorAll(".sub-panel-squad").forEach((panel) => {
+        const isTarget = panel.id === `squad-subpanel-${sub}`;
+        panel.classList.toggle("hidden", !isTarget);
+      });
+
+      // Lazy draw matching subpanel charts
+      if (sub === "financials") {
+        if (!state.renderedCharts.has(chartSquadBook)) {
+          chartSquadBook();
+          state.renderedCharts.add(chartSquadBook);
+        }
+        if (!state.renderedCharts.has(chartTransfers)) {
+          chartTransfers();
+          state.renderedCharts.add(chartTransfers);
+        }
+        if (!state.renderedCharts.has(chartNetTrading)) {
+          chartNetTrading();
+          state.renderedCharts.add(chartNetTrading);
+        }
+      } else if (sub === "analytics") {
+        if (!state.renderedCharts.has(drawManagerEras)) {
+          drawManagerEras();
+          state.renderedCharts.add(drawManagerEras);
+        }
+        if (!state.renderedCharts.has(drawCommissions)) {
+          drawCommissions();
+          state.renderedCharts.add(drawCommissions);
+        }
+      } else if (sub === "ledger") {
+        renderTransferLedger();
+      }
     });
   });
 }
@@ -691,14 +841,22 @@ async function initApp() {
     // independent of each other — load them in parallel instead of
     // serialising three network round-trips.
     const [finRes, trRes] = await Promise.all([
-      fetch("./data/financials.json"),
-      fetch("./data/transfers.json"),
+      fetch(config.financialsPath),
+      fetch(config.transfersPath),
       loadTranslations(detectActiveLang()),
     ]);
-    [state.DATASET, state.TRANSFER_LEDGER] = await Promise.all([
+    if (!finRes.ok) {
+      throw new Error(`Failed to load ${config.financialsPath}: HTTP ${finRes.status} ${finRes.statusText}`);
+    }
+    if (!trRes.ok) {
+      throw new Error(`Failed to load ${config.transfersPath}: HTTP ${trRes.status} ${trRes.statusText}`);
+    }
+    const [dataset, transferLedger] = await Promise.all([
       finRes.json(),
       trRes.json(),
     ]);
+    state.setDataset(dataset);
+    state.setTransferLedger(transferLedger);
 
     // Pin endSeasonIndex to the real last index so the filter UI is correct.
     state.setEndSeasonIndex(state.DATASET.annual_data.length - 1);

@@ -479,6 +479,10 @@ export function chartRevVsPayroll() {
 }
 
 export function chartOpResult() {
+  const recurring = state.annual.map((d) => d.operating_result_excl_players);
+  const players = state.annual.map((d) => d.operating_result_players);
+  const total = recurring.map((v, i) => v + (players[i] || 0));
+
   mkChart("chartOpResult", {
     type: "bar",
     data: {
@@ -488,20 +492,29 @@ export function chartOpResult() {
           label: state.isPt
             ? "Operações Recorrentes (excl. passes)"
             : "Recurring (excl. players)",
-          data: state.annual.map((d) => d.operating_result_excl_players),
+          data: recurring,
           backgroundColor: state.COLORS.negSoft,
           borderColor: state.COLORS.neg,
           borderWidth: 1,
           stack: "s1",
+          order: 1,
         },
         {
           label: state.isPt ? "Trading de passes" : "Player trading",
-          data: state.annual.map((d) => d.operating_result_players),
+          data: players,
           backgroundColor: state.COLORS.posSoft,
           borderColor: state.COLORS.pos,
           borderWidth: 1,
           stack: "s1",
+          order: 1,
         },
+        styledLineDataset({
+          label: state.isPt ? "Resultado Operacional Total" : "Total Operating Result",
+          data: total,
+          color: state.COLORS.gold,
+          bg: state.COLORS.goldSoft,
+          extra: { type: "line", order: 0 },
+        }),
       ],
     },
     options: {

@@ -267,6 +267,10 @@ export function generateAccessibleTable(canvasId, config) {
     (config.options?.scales?.y?.ticks?.callback &&
       config.options.scales.y.ticks.callback(50).toString().includes("%"));
 
+  const isAlreadyInMillions =
+    canvasId.toLowerCase().includes("managereras") ||
+    canvasId.toLowerCase().includes("commissions");
+
   const formatter = (v) => {
     if (v === null || v === undefined) return "—";
     if (isPctChart) {
@@ -275,8 +279,8 @@ export function generateAccessibleTable(canvasId, config) {
     // Default to currency formatting for thousands values (standard in this SAD report)
     if (typeof v === "number") {
       const sign = v < 0 ? "−" : "";
-      const abs = Math.abs(v) / 1000;
-      return `€${sign}${abs.toFixed(1)}M`;
+      const val = isAlreadyInMillions ? Math.abs(v) : Math.abs(v) / 1000;
+      return `€${sign}${val.toFixed(1)}M`;
     }
     return v;
   };

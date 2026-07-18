@@ -14,6 +14,7 @@ vi.mock("jspdf", () => {
   const setFillColorMock = vi.fn();
   const setTextColorMock = vi.fn();
   const setDrawColorMock = vi.fn();
+  const setLineWidthMock = vi.fn();
   const setFontMock = vi.fn();
   const setFontSizeMock = vi.fn();
   const addImageMock = vi.fn();
@@ -29,6 +30,7 @@ vi.mock("jspdf", () => {
       setFillColor: setFillColorMock,
       setTextColor: setTextColorMock,
       setDrawColor: setDrawColorMock,
+      setLineWidth: setLineWidthMock,
       setFont: setFontMock,
       setFontSize: setFontSizeMock,
       addImage: addImageMock,
@@ -154,7 +156,7 @@ describe("pdfGenerator.js", () => {
       },
     ];
 
-    state.isPt = false;
+    state.setIsPt(false);
   });
 
   afterEach(() => {
@@ -164,7 +166,7 @@ describe("pdfGenerator.js", () => {
   });
 
   it("should generate and save the PDF in English by default", async () => {
-    state.isPt = false;
+    state.setIsPt(false);
     await generateCuratedPdf();
 
     // Verify jsPDF instantiation
@@ -196,7 +198,7 @@ describe("pdfGenerator.js", () => {
   });
 
   it("should generate the PDF in Portuguese when state.isPt is true", async () => {
-    state.isPt = true;
+    state.setIsPt(true);
     await generateCuratedPdf();
 
     const docInstance = vi.mocked(jsPDF).mock.results[0].value;

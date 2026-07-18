@@ -15,6 +15,7 @@ function mockFetchRoutes({ staticFile = null, feedItems = null } = {}) {
     }
     if (feedItems === null) return Promise.reject(new Error("API failure"));
     return Promise.resolve({
+      ok: true,
       json: () => Promise.resolve({ items: feedItems }),
     });
   });

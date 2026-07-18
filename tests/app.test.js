@@ -99,7 +99,7 @@ describe("app boot (main.js)", () => {
       if (u.includes("locales/pt.json")) return serveFile("locales/pt.json");
       if (u.includes("data/news.json")) return Promise.resolve({ ok: false });
       // rss2json fallback queries from the news module
-      return Promise.resolve({ json: () => Promise.resolve({ items: [] }) });
+      return Promise.resolve({ ok: true, json: () => Promise.resolve({ items: [] }) });
     });
 
     await import("../src/main.js");
@@ -126,24 +126,13 @@ describe("app boot (main.js)", () => {
     expect(kpis[0].querySelector(".value").textContent).toMatch(/^€/);
   });
 
-  it("populates the era filter with every season", () => {
-    const start = document.getElementById("globalStartSeason");
-    const end = document.getElementById("globalEndSeason");
-    expect(start.options.length).toBe(state.DATASET.annual_data.length);
-    expect(end.options.length).toBe(state.DATASET.annual_data.length);
-    expect(Number(end.value)).toBe(state.DATASET.annual_data.length - 1);
-  });
-
-  it("switches tabs on click and hides the era filter where it doesn't apply", () => {
+  it("switches tabs on click", () => {
     const bondsBtn = document.querySelector(
       'nav.tabs button[data-tab="bonds"]',
     );
     bondsBtn.click();
     expect(
       document.getElementById("tab-bonds").classList.contains("active"),
-    ).toBe(true);
-    expect(
-      document.querySelector(".global-filters").classList.contains("hidden"),
     ).toBe(true);
 
     const revenueBtn = document.querySelector(
@@ -153,14 +142,12 @@ describe("app boot (main.js)", () => {
     expect(
       document.getElementById("tab-revenue").classList.contains("active"),
     ).toBe(true);
-    expect(
-      document.querySelector(".global-filters").classList.contains("hidden"),
-    ).toBe(false);
     expect(revenueBtn.getAttribute("aria-selected")).toBe("true");
   });
 
   it("renders the transfer ledger on the squad tab", () => {
     document.querySelector('nav.tabs button[data-tab="squad"]').click();
+    document.getElementById("btn-squad-ledger").click();
     const pills = document.querySelectorAll("#tlSeasonNav .season-pill");
     expect(pills.length).toBe(state.TRANSFER_LEDGER.length);
     expect(
@@ -194,7 +181,12 @@ describe("app boot (main.js)", () => {
   it("triggers PDF export on button click", async () => {
     const btn = document.getElementById("pdfExportBtn");
     expect(btn).not.toBeNull();
-    btn.click();
+    btn.click(); // Opens the modal
+    
+    const form = document.getElementById("pdfCustomizerForm");
+    expect(form).not.toBeNull();
+    form.dispatchEvent(new window.Event("submit")); // Submit the customizer options
+
     await vi.waitFor(() => {
       expect(pdfGen.generateCuratedPdf).toHaveBeenCalled();
     });

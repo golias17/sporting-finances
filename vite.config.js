@@ -10,7 +10,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   plugins: [
     VitePWA({
-      registerType: "prompt",
+      registerType: "autoUpdate",
       // includeAssets is not needed — globPatterns below already captures all
       // svg, png, and json files from the dist output, including icons and LOGO.
       manifest: {
@@ -62,6 +62,8 @@ export default defineConfig({
         ],
       },
       workbox: {
+        skipWaiting: true,
+        clientsClaim: true,
         globPatterns: ["**/*.{js,css,html,svg,png,json}"],
         maximumFileSizeToCacheInBytes: 15 * 1024 * 1024, // 15 MiB to support high-res images
       },

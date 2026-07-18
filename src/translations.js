@@ -1,5 +1,4 @@
-// src/translations.js
-// Dynamically fetches localized static UI strings.
+import { config } from "./config.js";
 
 let TRANSLATIONS = {};
 let loadedLang = null;
@@ -24,7 +23,10 @@ export async function loadTranslations(lang) {
   }
   const requestId = ++latestRequestId;
   try {
-    const res = await fetch(`./locales/${lang}.json`);
+    const res = await fetch(config.localesPath(lang));
+    if (!res.ok) {
+      throw new Error(`Failed to load ${config.localesPath(lang)}: HTTP ${res.status} ${res.statusText}`);
+    }
     const json = await res.json();
     if (requestId === latestRequestId) {
       TRANSLATIONS = json;
@@ -32,8 +34,21 @@ export async function loadTranslations(lang) {
     }
   } catch (e) {
     console.error(`[translations] Failed to load translations for ${lang}`, e);
+    throw e;
   }
   return TRANSLATIONS;
+}
+
+/**
+ * Safely decodes HTML/XML entities (e.g. &amp;) using textarea.
+ * @param {string} str
+ * @returns {string}
+ */
+export function decodeEntities(str) {
+  if (typeof document === "undefined") return str;
+  const txt = document.createElement("textarea");
+  txt.innerHTML = str;
+  return txt.value;
 }
 
 /**
@@ -55,11 +70,11 @@ export function applyTranslations(_lang) {
     } else {
       // For inputs use placeholder, for others use textContent
       if (el.tagName === "INPUT" && el.hasAttribute("placeholder")) {
-        el.placeholder = text;
+        el.placeholder = decodeEntities(text);
       } else if (el.tagName === "OPTION") {
-        el.textContent = text;
+        el.textContent = decodeEntities(text);
       } else {
-        el.innerHTML = text; // use innerHTML to handle &amp; etc.
+        el.textContent = decodeEntities(text);
       }
     }
   });

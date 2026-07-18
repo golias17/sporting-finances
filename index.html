@@ -305,60 +305,7 @@
           </div>
         </div>
 
-        <!-- GLOBAL FILTERS -->
-        <div class="global-filters">
-          <div class="filter-controls">
-            <label
-              for="globalStartSeason"
-              class="filter-label"
-              data-i18n="filter-era"
-              >Explore Era:</label
-            >
-            <select id="globalStartSeason" class="filter-select">
-              <!-- Populated by JS -->
-            </select>
-            <label for="globalEndSeason" class="filter-to" data-i18n="filter-to"
-              >to</label
-            >
-            <select id="globalEndSeason" class="filter-select">
-              <!-- Populated by JS -->
-            </select>
-          </div>
-          <div class="gf-presets" id="eraPresets">
-            <button
-              class="season-pill"
-              data-start="0"
-              data-end="latest"
-              data-i18n="era-all"
-            >
-              All Time
-            </button>
-            <button
-              class="season-pill"
-              data-start="0"
-              data-end="5"
-              data-i18n="era-restruct"
-            >
-              Restructuring
-            </button>
-            <button
-              class="season-pill"
-              data-start="6"
-              data-end="latest"
-              data-i18n="era-varandas"
-            >
-              Varandas Era
-            </button>
-            <button
-              class="season-pill"
-              data-start="8"
-              data-end="12"
-              data-i18n="era-amorim"
-            >
-              Amorim Era
-            </button>
-          </div>
-        </div>
+
 
         <!-- Story launcher -->
         <div class="card" id="storyLaunchCard">
@@ -1120,81 +1067,125 @@
             </p>
           </div>
         </div>
-        <div class="card">
-          <div class="card-head">
-            <h3 data-i18n="ch06-squad-h3">Squad Book Value Evolution</h3>
-            <span class="tag" data-i18n="ch06-squad-tag">Book vs market</span>
-          </div>
-          <p class="desc" data-i18n="ch06-squad-desc">
-            Book value (intangible asset on balance sheet — acquisition cost
-            less amortization) vs market value (Transfermarkt estimate). Market
-            value far exceeds book because home-grown academy players are
-            recognised at zero acquisition cost on the balance sheet.
-          </p>
-          <div class="chart-box tall">
-            <canvas
-              id="chartSquadBook"
-              role="img"
-              data-i18n="aria-chart-squad-book"
-              aria-label="Squad book value evolution chart"
-            ></canvas>
-          </div>
+        <!-- SUB-TABS NAVIGATION -->
+        <div class="sub-tabs-container">
+          <button class="sub-tab-btn active" id="btn-squad-financials" data-squad-sub="financials" data-i18n="squad_sub_financials">Financial Trends</button>
+          <button class="sub-tab-btn" id="btn-squad-analytics" data-squad-sub="analytics" data-i18n="squad_sub_analytics">Transfer Analytics</button>
+          <button class="sub-tab-btn" id="btn-squad-ledger" data-squad-sub="ledger" data-i18n="squad_sub_ledger">Detailed Ledger</button>
         </div>
-        <div class="grid-2">
+
+        <!-- SUBPANEL 1: FINANCIAL TRENDS -->
+        <div class="sub-panel-squad" id="squad-subpanel-financials">
           <div class="card">
             <div class="card-head">
-              <h3 data-i18n="ch06-income-h3">Player Transfer Income</h3>
-              <span class="tag" data-i18n="ch06-income-tag">Sales</span>
+              <h3 data-i18n="ch06-squad-h3">Squad Book Value Evolution</h3>
+              <span class="tag" data-i18n="ch06-squad-tag">Book vs market</span>
             </div>
-            <p class="desc" data-i18n="ch06-income-desc">
-              Player sales — the financial engine that funded the recovery. Five
-              seasons over €75M.
+            <p class="desc" data-i18n="ch06-squad-desc">
+              Book value (intangible asset on balance sheet — acquisition cost
+              less amortization) vs market value (Transfermarkt estimate). Market
+              value far exceeds book because home-grown academy players are
+              recognised at zero acquisition cost on the balance sheet.
             </p>
-            <div class="chart-box">
+            <div class="chart-box tall">
               <canvas
-                id="chartTransfers"
+                id="chartSquadBook"
                 role="img"
-                data-i18n="aria-chart-transfers"
-                aria-label="Player transfer income chart"
+                data-i18n="aria-chart-squad-book"
+                aria-label="Squad book value evolution chart"
+              ></canvas>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="card">
+              <div class="card-head">
+                <h3 data-i18n="ch06-income-h3">Player Transfer Income</h3>
+                <span class="tag" data-i18n="ch06-income-tag">Sales</span>
+              </div>
+              <p class="desc" data-i18n="ch06-income-desc">
+                Player sales — the financial engine that funded the recovery. Five
+                seasons over €75M.
+              </p>
+              <div class="chart-box">
+                <canvas
+                  id="chartTransfers"
+                  role="img"
+                  data-i18n="aria-chart-transfers"
+                  aria-label="Player transfer income chart"
+                ></canvas>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-head">
+                <h3 data-i18n="ch06-net-h3">Net Player Trading Result</h3>
+                <span class="tag" data-i18n="ch06-net-tag"
+                  >After amortization</span
+                >
+              </div>
+              <p class="desc" data-i18n="ch06-net-desc">
+                Sales income minus acquisitions, amortization and impairments.
+                Profitable in 11 of 13 seasons.
+              </p>
+              <div class="chart-box">
+                <canvas
+                  id="chartNetTrading"
+                  role="img"
+                  data-i18n="aria-chart-net-trading"
+                  aria-label="Net player trading result chart"
+                ></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBPANEL 2: TRANSFER ANALYTICS -->
+        <div class="sub-panel-squad hidden" id="squad-subpanel-analytics">
+          <div class="card">
+            <div class="card-head">
+              <h3 data-i18n="chart_eras_title">Net Earnings by Managerial Era</h3>
+              <span class="tag" data-i18n="chart_eras_subtitle">Purchases vs. Sales</span>
+            </div>
+            <div class="chart-box tall">
+              <canvas
+                id="chartManagerEras"
+                role="img"
+                aria-label="Transfer Net Earnings by Managerial Era"
               ></canvas>
             </div>
           </div>
           <div class="card">
             <div class="card-head">
-              <h3 data-i18n="ch06-net-h3">Net Player Trading Result</h3>
-              <span class="tag" data-i18n="ch06-net-tag"
-                >After amortization</span
+              <h3 data-i18n="chart_commissions_title">Agent Commissions Trend</h3>
+              <span class="tag" data-i18n="chart_commissions_subtitle">Sales vs Acquisitions</span>
+            </div>
+            <div class="chart-box tall">
+              <canvas
+                id="chartCommissions"
+                role="img"
+                aria-label="Agent commissions trend chart"
+              ></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- SUBPANEL 3: DETAILED LEDGER -->
+        <div class="sub-panel-squad hidden" id="squad-subpanel-ledger">
+          <div class="card">
+            <div class="card-head">
+              <h3 data-i18n="ch06-ledger-h3">Detailed Transfer Ledger</h3>
+              <span class="tag" data-i18n="ch06-ledger-tag"
+                >Season breakdown</span
               >
             </div>
-            <p class="desc" data-i18n="ch06-net-desc">
-              Sales income minus acquisitions, amortization and impairments.
-              Profitable in 11 of 13 seasons.
+            <p class="desc" data-i18n="ch06-ledger-desc">
+              Detailed view of permanent and temporary player acquisitions and
+              sales for each season. All figures represent primary transfer fees
+              in millions of Euros.
             </p>
-            <div class="chart-box">
-              <canvas
-                id="chartNetTrading"
-                role="img"
-                data-i18n="aria-chart-net-trading"
-                aria-label="Net player trading result chart"
-              ></canvas>
-            </div>
+            <div class="tl-season-nav" id="tlSeasonNav"></div>
+            <div class="tl-window-nav" id="tlWindowNav"></div>
+            <div id="tlBody"></div>
           </div>
-        </div>
-        <div class="card">
-          <div class="card-head">
-            <h3 data-i18n="ch06-ledger-h3">Detailed Transfer Ledger</h3>
-            <span class="tag" data-i18n="ch06-ledger-tag"
-              >Season breakdown</span
-            >
-          </div>
-          <p class="desc" data-i18n="ch06-ledger-desc">
-            Detailed view of permanent and temporary player acquisitions and
-            sales for each season. All figures represent primary transfer fees
-            in millions of Euros.
-          </p>
-          <div class="tl-season-nav" id="tlSeasonNav"></div>
-          <div class="tl-window-nav" id="tlWindowNav"></div>
-          <div id="tlBody"></div>
         </div>
         <div class="narrative">
           <h4 data-i18n="ch06-narrative-h4">The transfer-trading machine</h4>
@@ -2420,6 +2411,75 @@
           <!-- The ISSUU iframe will be injected here by JS to avoid loading it on initial page load -->
           <div id="jornalIframeContainer" class="jornal-iframe-container"></div>
         </div>
+      </div>
+    </div>
+
+    <!-- PDF Customization Modal -->
+    <div id="pdfModal" class="modal-overlay hidden">
+      <div class="modal-container pdf-modal-container" style="max-width: 550px; height: auto; background: var(--surface); color: var(--ink); border: 1px solid var(--rule-2); padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; justify-content: flex-start; overflow-y: auto;">
+        <button
+          id="btnClosePdf"
+          class="modal-close"
+          aria-label="Close Customizer"
+          style="top: 1.5rem; right: 1.5rem;"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+          <h2 id="pdfModalTitle" style="font-family: var(--sans); font-size: 1.5rem; font-weight: 700; color: var(--green);" data-i18n="pdf_customizer_title">Customize PDF Report</h2>
+          <p id="pdfModalSubtitle" style="font-family: var(--sans); font-size: 0.875rem; color: var(--muted);" data-i18n="pdf_customizer_subtitle">Select options to generate your personalized dossier</p>
+        </div>
+        <form id="pdfCustomizerForm" style="display: flex; flex-direction: column; gap: 1.25rem;">
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label id="lblPdfLanguage" style="font-family: var(--sans); font-size: 0.875rem; font-weight: 700; color: var(--ink);" data-i18n="pdf_language">Report Language</label>
+            <select id="pdfLanguageSelect" style="width: 100%; padding: 0.75rem; background: var(--bg); border: 1px solid var(--rule-2); border-radius: var(--radius-lg); color: var(--ink); font-size: 0.875rem; font-family: var(--sans);">
+              <option value="en">English</option>
+              <option value="pt">Português</option>
+            </select>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label id="lblPdfPages" style="font-family: var(--sans); font-size: 0.875rem; font-weight: 700; color: var(--ink);" data-i18n="pdf_pages">Pages to Include</label>
+            <div style="display: flex; flex-direction: column; gap: 0.75rem; background: var(--bg); padding: 1.25rem; border-radius: var(--radius-lg); border: 1px solid var(--rule-2);">
+              <label style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; cursor: pointer; font-family: var(--sans); color: var(--ink-2);">
+                <input type="checkbox" id="chkPage1" checked style="width: 1.1rem; height: 1.1rem; accent-color: var(--green);" />
+                <span data-i18n="pdf_page_1">Cover Page & KPIs</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; cursor: pointer; font-family: var(--sans); color: var(--ink-2);">
+                <input type="checkbox" id="chkPage2" checked style="width: 1.1rem; height: 1.1rem; accent-color: var(--green);" />
+                <span data-i18n="pdf_page_2">I. Operating Income & II. Balance Sheet</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; cursor: pointer; font-family: var(--sans); color: var(--ink-2);">
+                <input type="checkbox" id="chkPage3" checked style="width: 1.1rem; height: 1.1rem; accent-color: var(--green);" />
+                <span data-i18n="pdf_page_3">III. Player Trading & IV. Cash Flows</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; cursor: pointer; font-family: var(--sans); color: var(--ink-2);">
+                <input type="checkbox" id="chkPage4" checked style="width: 1.1rem; height: 1.1rem; accent-color: var(--green);" />
+                <span data-i18n="pdf_page_4">Strategic Financing & Milestones</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; cursor: pointer; font-family: var(--sans); color: var(--ink-2);">
+                <input type="checkbox" id="chkPage5" checked style="width: 1.1rem; height: 1.1rem; accent-color: var(--green);" />
+                <span data-i18n="pdf_page_5">V. Landmark Player Transfers Ledger</span>
+              </label>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <label id="lblPdfNotes" style="font-family: var(--sans); font-size: 0.875rem; font-weight: 700; color: var(--ink);" data-i18n="pdf_executive_notes">Custom Executive Annotation</label>
+            <textarea id="pdfNotesText" rows="3" style="width: 100%; padding: 0.75rem; background: var(--bg); border: 1px solid var(--rule-2); border-radius: var(--radius-lg); color: var(--ink); font-size: 0.875rem; font-family: var(--sans); resize: none;" placeholder="Enter custom notes or disclaimer..."></textarea>
+          </div>
+          <button type="submit" id="btnPdfModalSubmit" style="width: 100%; padding: 1rem; background: var(--green); color: #ffffff; border: none; border-radius: var(--radius-lg); font-weight: 700; font-size: 0.875rem; font-family: var(--sans); cursor: pointer; transition: opacity 0.2s ease, transform 0.2s ease;">
+            <span data-i18n="pdf_generate_btn">Generate Report</span>
+          </button>
+        </form>
       </div>
     </div>
   </body>
