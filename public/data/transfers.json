@@ -849,7 +849,7 @@
         "rights": "100%",
         "commission": 0.247,
         "window": "winter",
-        "note": "Comissão com empresário João Arazão. €60M release clause.",
+        "note": "Commission with agent João Arazão. €60M release clause.",
         "note_pt": "Comissão com empresário João Arazão. Cláusula de rescisão de €60M."
       },
       {
@@ -1227,7 +1227,7 @@
         "fee": 3,
         "bonus": 1.5,
         "window": "summer",
-        "note": "SCP detém 25% de mais-valia futura.",
+        "note": "SCP holds 25% of a future capital gain.",
         "note_pt": "SCP detém 25% de mais-valia futura."
       },
       {
@@ -1235,7 +1235,7 @@
         "club": "Rio Ave FC",
         "fee": 0.75,
         "window": "summer",
-        "note": "SCP detém 50% de uma futura venda.",
+        "note": "SCP holds 50% of a future sale.",
         "note_pt": "SCP detém 50% de uma futura venda."
       },
       {
@@ -1244,7 +1244,7 @@
         "fee": 3.5,
         "bonus": 12,
         "window": "summer",
-        "note": "SCP detém 10% de uma futura venda.",
+        "note": "SCP holds 10% of a future sale.",
         "note_pt": "SCP detém 10% de uma futura venda."
       },
       {
@@ -1254,7 +1254,7 @@
         "bonus": 1,
         "commission": 0.2,
         "window": "summer",
-        "note": "SCP detém 10% de uma futura venda. Comissão: BM Consulting.",
+        "note": "SCP holds 10% of a future sale. Commission: BM Consulting.",
         "note_pt": "SCP detém 10% de uma futura venda. Comissão: BM Consulting."
       },
       {
@@ -1264,7 +1264,7 @@
         "bonus": 0.25,
         "commission": 0.075,
         "window": "summer",
-        "note": "SCP detém 50% de uma futura venda.",
+        "note": "SCP holds 50% of a future sale.",
         "note_pt": "SCP detém 50% de uma futura venda."
       },
       {
@@ -1273,7 +1273,7 @@
         "fee": 0,
         "commission": 0.075,
         "window": "summer",
-        "note": "SCP detém 50% de uma futura venda.",
+        "note": "SCP holds 50% of a future sale.",
         "note_pt": "SCP detém 50% de uma futura venda."
       }
     ]
@@ -1434,7 +1434,7 @@
         "club": "CD Fátima SAD",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
@@ -1442,7 +1442,7 @@
         "club": "Rio Ave FC",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 25% de uma futura venda e direito de preferência.",
+        "note": "SCP retains 25% of a future sale and right of first refusal.",
         "note_pt": "SCP mantém 25% de uma futura venda e direito de preferência."
       },
       {
@@ -1450,7 +1450,7 @@
         "club": "Rio Ave FC",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 25% de uma futura venda e direito de preferência.",
+        "note": "SCP retains 25% of a future sale and right of first refusal.",
         "note_pt": "SCP mantém 25% de uma futura venda e direito de preferência."
       },
       {
@@ -1458,7 +1458,7 @@
         "club": "CD Tondela",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda e direito de preferência.",
+        "note": "SCP retains 50% of a future sale and right of first refusal.",
         "note_pt": "SCP mantém 50% de uma futura venda e direito de preferência."
       },
       {
@@ -1466,7 +1466,7 @@
         "club": "Apoel Football LTD",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda e direito de preferência.",
+        "note": "SCP retains 50% of a future sale and right of first refusal.",
         "note_pt": "SCP mantém 50% de uma futura venda e direito de preferência."
       },
       {
@@ -1474,7 +1474,7 @@
         "club": "NK Istra",
         "fee": 0,
         "window": "winter",
-        "note": "SCP mantém uma percentagem de uma futura venda.",
+        "note": "SCP retains a percentage of a future sale.",
         "note_pt": "SCP mantém uma percentagem de uma futura venda."
       }
     ]
@@ -1637,7 +1637,7 @@
         "club": "FC Vizela SAD",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 10% de uma futura venda.",
+        "note": "SCP retains 10% of a future sale.",
         "note_pt": "SCP mantém 10% de uma futura venda."
       },
       {
@@ -1645,7 +1645,7 @@
         "club": "FC Vizela SAD",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 40% de uma futura venda.",
+        "note": "SCP retains 40% of a future sale.",
         "note_pt": "SCP mantém 40% de uma futura venda."
       },
       {
@@ -1653,7 +1653,7 @@
         "club": "Antalyaspor SF",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 25% de uma futura venda.",
+        "note": "SCP retains 25% of a future sale.",
         "note_pt": "SCP mantém 25% de uma futura venda."
       },
       {
@@ -1661,7 +1661,7 @@
         "club": "SC Farense SAD",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 40% de uma futura venda.",
+        "note": "SCP retains 40% of a future sale.",
         "note_pt": "SCP mantém 40% de uma futura venda."
       },
       {
@@ -1669,7 +1669,7 @@
         "club": "SC Farense SAD",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 40% de uma futura venda.",
+        "note": "SCP retains 40% of a future sale.",
         "note_pt": "SCP mantém 40% de uma futura venda."
       },
       {
@@ -1677,7 +1677,7 @@
         "club": "Estoril Praia SAD",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
@@ -1686,7 +1686,7 @@
         "fee": 0,
         "bonus": 0.4,
         "window": "summer",
-        "note": "SCP mantém 20% de uma futura venda.",
+        "note": "SCP retains 20% of a future sale.",
         "note_pt": "SCP mantém 20% de uma futura venda."
       },
       {
@@ -1694,7 +1694,7 @@
         "club": "FC Famalicão SAD",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 15% de uma futura venda.",
+        "note": "SCP retains 15% of a future sale.",
         "note_pt": "SCP mantém 15% de uma futura venda."
       },
       {
@@ -1702,7 +1702,7 @@
         "club": "FC Famalicão SAD",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 15% de uma futura venda.",
+        "note": "SCP retains 15% of a future sale.",
         "note_pt": "SCP mantém 15% de uma futura venda."
       },
       {
@@ -1710,7 +1710,7 @@
         "club": "FC Vizela SAD",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 40% de uma futura venda.",
+        "note": "SCP retains 40% of a future sale.",
         "note_pt": "SCP mantém 40% de uma futura venda."
       },
       {
@@ -1718,7 +1718,7 @@
         "club": "Estoril Praia SAD",
         "fee": 0,
         "window": "winter",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
@@ -1726,7 +1726,7 @@
         "club": "Estoril Praia SAD",
         "fee": 0,
         "window": "winter",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
@@ -1734,7 +1734,7 @@
         "club": "CD Mafra SAD",
         "fee": 0,
         "window": "winter",
-        "note": "SCP mantém 40% de uma futura venda.",
+        "note": "SCP retains 40% of a future sale.",
         "note_pt": "SCP mantém 40% de uma futura venda."
       },
       {
@@ -1742,7 +1742,7 @@
         "club": "GD Chaves SAD",
         "fee": 0,
         "window": "winter",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       }
     ]
@@ -1874,7 +1874,7 @@
         "fee": 1.2,
         "commission": 0.2,
         "window": "summer",
-        "note": "SCP detém 100% dos direitos económicos.",
+        "note": "SCP holds 100% of economic rights.",
         "note_pt": "SCP detém 100% dos direitos económicos."
       },
       {
@@ -1883,7 +1883,7 @@
         "fee": 0.05,
         "bonus": 0.05,
         "window": "summer",
-        "note": "RCD Coruña mantém 10% de uma futura venda.",
+        "note": "RCD Coruña retains 10% of a future sale.",
         "note_pt": "RCD Coruña mantém 10% de uma futura venda."
       },
       {
@@ -1892,7 +1892,7 @@
         "fee": 0,
         "commission": 0.02,
         "window": "summer",
-        "note": "Vitória SC SAD mantém 15% de uma futura venda.",
+        "note": "Vitória SC SAD retains 15% of a future sale.",
         "note_pt": "Vitória SC SAD mantém 15% de uma futura venda."
       },
       {
@@ -1901,7 +1901,7 @@
         "fee": 0,
         "commission": 0.02,
         "window": "summer",
-        "note": "Real Madrid CF mantém 30% de uma futura venda.",
+        "note": "Real Madrid CF retains 30% of a future sale.",
         "note_pt": "Real Madrid CF mantém 30% de uma futura venda."
       }
     ],
@@ -1975,7 +1975,7 @@
         "bonus": 10,
         "commission": 0.29,
         "window": "summer",
-        "note": "SCP mantém 10% de uma mais-valia futura.",
+        "note": "SCP retains 10% of a future capital gain.",
         "note_pt": "SCP mantém 10% de uma mais-valia futura."
       },
       {
@@ -1985,7 +1985,7 @@
         "rights": "100%",
         "commission": 0.3,
         "window": "summer",
-        "note": "SCP mantém 10% de uma mais-valia futura.",
+        "note": "SCP retains 10% of a future capital gain.",
         "note_pt": "SCP mantém 10% de uma mais-valia futura."
       },
       {
@@ -2000,7 +2000,7 @@
         "club": "Ascoli 1898",
         "fee": 0.4,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
@@ -2018,7 +2018,7 @@
         "fee": 0,
         "bonus": 0.05,
         "window": "summer",
-        "note": "SCP mantém 10% de uma mais-valia futura.",
+        "note": "SCP retains 10% of a future capital gain.",
         "note_pt": "SCP mantém 10% de uma mais-valia futura."
       },
       {
@@ -2026,7 +2026,7 @@
         "club": "Portimonense SAD",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
@@ -2034,7 +2034,7 @@
         "club": "NEC BV",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
@@ -2042,7 +2042,7 @@
         "club": "Pafos FC",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
@@ -2050,7 +2050,7 @@
         "club": "FC Eindhoven",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
@@ -2058,7 +2058,7 @@
         "club": "FC Arouca",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
@@ -2066,7 +2066,7 @@
         "club": "Apoel Nicosia",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
@@ -2074,7 +2074,7 @@
         "club": "CF Estrela SAD",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 30% de uma futura venda.",
+        "note": "SCP retains 30% of a future sale.",
         "note_pt": "SCP mantém 30% de uma futura venda."
       },
       {
@@ -2082,7 +2082,7 @@
         "club": "Panathinaikos FC",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       }
     ]
@@ -2359,7 +2359,7 @@
         "club": "FC Lugano",
         "fee": 0.3,
         "window": "summer",
-        "note": "SCP mantém 30% de uma futura venda.",
+        "note": "SCP retains 30% of a future sale.",
         "note_pt": "SCP mantém 30% de uma futura venda."
       },
       {
@@ -2367,7 +2367,7 @@
         "club": "Moreirense FC SAD",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
@@ -2375,7 +2375,7 @@
         "club": "Sevilla FC SAD",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
@@ -2389,7 +2389,7 @@
         "club": "OFI Crete",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
@@ -2397,7 +2397,7 @@
         "club": "Al-Ahli S.F.C.",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
@@ -2405,7 +2405,7 @@
         "club": "Hatayspor KD",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
@@ -2413,7 +2413,7 @@
         "club": "Vitória SC SAD",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
@@ -2421,7 +2421,7 @@
         "club": "FC Andorra",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
@@ -2429,7 +2429,7 @@
         "club": "FC Felgueiras SAD",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 50% de uma futura venda.",
+        "note": "SCP retains 50% of a future sale.",
         "note_pt": "SCP mantém 50% de uma futura venda."
       }
     ]
@@ -2568,7 +2568,7 @@
         "fee": 0.05,
         "commission": 0.009,
         "window": "summer",
-        "note": "SC Lusitânia detém 50% de mais-valia futura.",
+        "note": "SC Lusitânia holds 50% of a future capital gain.",
         "note_pt": "SC Lusitânia detém 50% de mais-valia futura."
       },
       {
@@ -2576,7 +2576,7 @@
         "club": "Pogoń Szczecin",
         "fee": 0.1,
         "window": "summer",
-        "note": "Pogoń Szczecin detém 15% de mais-valia futura.",
+        "note": "Pogoń Szczecin holds 15% of a future capital gain.",
         "note_pt": "Pogoń Szczecin detém 15% de mais-valia futura."
       },
       {
@@ -2584,7 +2584,7 @@
         "club": "Real Madrid CF",
         "fee": 0,
         "window": "summer",
-        "note": "Real Madrid CF detém 50% de uma futura venda.",
+        "note": "Real Madrid CF holds 50% of a future sale.",
         "note_pt": "Real Madrid CF detém 50% de uma futura venda."
       },
       {
@@ -2593,7 +2593,7 @@
         "fee": 0,
         "commission": 0.025,
         "window": "summer",
-        "note": "Major League Soccer detém 15% de uma futura venda.",
+        "note": "Major League Soccer holds 15% of a future sale.",
         "note_pt": "Major League Soccer detém 15% de uma futura venda."
       }
     ],
@@ -2909,8 +2909,8 @@
         "fee": 11.0,
         "rights": "100%",
         "window": "summer",
-        "note": "Compra de 40% da futura venda, eliminando o passivo contingente com o FC Barcelona.",
-        "note_pt": "Compra de 40% da futura venda, eliminando o passivo contingente com o FC Barcelona."
+        "note": "Purchase of 50% of the future sale, eliminating the contingent liability with FC Barcelona.",
+        "note_pt": "Compra de 50% da futura venda, eliminando o passivo contingente com o FC Barcelona."
       },
       {
         "player": "Leonardo Paulin",
@@ -2918,7 +2918,7 @@
         "fee": 0.015,
         "rights": "100%",
         "window": "summer",
-        "note": "SC Farense fica com 15% de uma mais-valia futura.",
+        "note": "SC Farense keeps 15% of a future capital gain.",
         "note_pt": "SC Farense fica com 15% de uma mais-valia futura."
       },
       {
@@ -2928,7 +2928,7 @@
         "rights": "100%",
         "commission": 0.007,
         "window": "summer",
-        "note": "KRC Genk fica com 10% de uma futura venda.",
+        "note": "KRC Genk keeps 10% of a future sale.",
         "note_pt": "KRC Genk fica com 10% de uma futura venda."
       },
       {
@@ -2946,7 +2946,7 @@
         "fee": 0,
         "commission": 0.027,
         "window": "summer",
-        "note": "Loan fee is ---. Comissão de manutenção de 0.027M€.",
+        "note": "Loan fee is ---. Maintenance commission of €0.027M.",
         "note_pt": "Taxa de empréstimo: —. Comissão de manutenção de 0.027M€."
       },
       {
@@ -3165,7 +3165,7 @@
         "club": "UD Las Palmas SAD",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 10% de uma futura venda.",
+        "note": "SCP retains 10% of a future sale.",
         "note_pt": "SCP mantém 10% de uma futura venda."
       },
       {
@@ -3173,7 +3173,7 @@
         "club": "SCU Torreense SAD",
         "fee": 0,
         "window": "summer",
-        "note": "SCP mantém 30% de uma futura venda.",
+        "note": "SCP retains 30% of a future sale.",
         "note_pt": "SCP mantém 30% de uma futura venda."
       }
     ]
