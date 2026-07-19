@@ -175,15 +175,15 @@ function renderComparison() {
         {
           label: a.label,
           data: barKeys.map((k) => k.a),
-          backgroundColor: "rgba(10,93,58,0.75)",
-          borderColor: state.COLORS.green,
+          backgroundColor: state.COLORS.posSoft,
+          borderColor: state.COLORS.pos,
           borderWidth: 1,
           borderRadius: 3,
         },
         {
           label: b.label,
           data: barKeys.map((k) => k.b),
-          backgroundColor: "rgba(200,169,81,0.75)",
+          backgroundColor: state.COLORS.goldSoft,
           borderColor: state.COLORS.gold,
           borderWidth: 1,
           borderRadius: 3,
