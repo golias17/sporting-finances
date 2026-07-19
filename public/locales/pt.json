@@ -1825,22 +1825,22 @@
     "innerHTML": false
   },
   "pg-ucl-league": {
-    "text": "Fase de Liga (+€30M)",
+    "text": "Fase de Liga (+€36M)",
     "isAria": false,
     "innerHTML": false
   },
   "pg-ucl-r16": {
-    "text": "Oitavos-de-final (+€41M)",
+    "text": "Oitavos-de-final (+€47M)",
     "isAria": false,
     "innerHTML": false
   },
   "pg-ucl-qf": {
-    "text": "Quartos-de-final (+€53M)",
+    "text": "Quartos-de-final (+€60M)",
     "isAria": false,
     "innerHTML": false
   },
   "pg-ucl-sf": {
-    "text": "Meias-finais / Final (+€70M)",
+    "text": "Meias-finais / Final (+€82M)",
     "isAria": false,
     "innerHTML": false
   },

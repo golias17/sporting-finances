@@ -1825,22 +1825,22 @@
     "innerHTML": false
   },
   "pg-ucl-league": {
-    "text": "League Phase / Group Stage (+€30M)",
+    "text": "League Phase / Group Stage (+€36M)",
     "isAria": false,
     "innerHTML": false
   },
   "pg-ucl-r16": {
-    "text": "Round of 16 (+€41M)",
+    "text": "Round of 16 (+€47M)",
     "isAria": false,
     "innerHTML": false
   },
   "pg-ucl-qf": {
-    "text": "Quarter-finals (+€53M)",
+    "text": "Quarter-finals (+€60M)",
     "isAria": false,
     "innerHTML": false
   },
   "pg-ucl-sf": {
-    "text": "Semi-finals / Finals (+€70M)",
+    "text": "Semi-finals / Finals (+€82M)",
     "isAria": false,
     "innerHTML": false
   },
