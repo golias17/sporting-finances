@@ -2,50 +2,15 @@ import { describe, it, expect, beforeAll, beforeEach, afterEach } from "vitest";
 import { state } from "../src/state.js";
 import { initChartDefaults, chartRegistry } from "../src/chartUtils.js";
 import { drawManagerEras, drawCommissions } from "../src/squadAnalytics.js";
+import { mockChartEnvironment } from "./chartTestUtils.js";
 
 // drawManagerEras/drawCommissions build their charts via charts.js's
 // mkChart() helper, same as every other chart in the app — that needs the
-// *real* Chart.js with jsdom's canvas 2D context mocked out (a fake Chart
-// class without a static `.register()` breaks mkChart's module-level
-// Chart.register(...) calls). Mirrors the setup used in chart.test.js and
-// playground.test.js.
+// *real* Chart.js with jsdom's canvas 2D context mocked out. See
+// chartTestUtils.js.
 describe("squadAnalytics.js - drawManagerEras / drawCommissions", () => {
   beforeAll(() => {
-    global.ResizeObserver = class {
-      observe() {}
-      unobserve() {}
-      disconnect() {}
-    };
-
-    const mockContext = {
-      beginPath: () => {},
-      arc: () => {},
-      fill: () => {},
-      stroke: () => {},
-      closePath: () => {},
-      clearRect: () => {},
-      fillRect: () => {},
-      strokeRect: () => {},
-      fillText: () => {},
-      strokeText: () => {},
-      measureText: () => ({ width: 0, height: 0 }),
-      setTransform: () => {},
-      resetTransform: () => {},
-      drawImage: () => {},
-      save: () => {},
-      restore: () => {},
-      createLinearGradient: () => ({ addColorStop: () => {} }),
-      createPattern: () => {},
-      createRadialGradient: () => {},
-      canvas: null,
-    };
-    if (global.CanvasRenderingContext2D) {
-      Object.setPrototypeOf(mockContext, global.CanvasRenderingContext2D.prototype);
-    }
-    HTMLCanvasElement.prototype.getContext = function () {
-      mockContext.canvas = this;
-      return mockContext;
-    };
+    mockChartEnvironment();
   });
 
   beforeEach(() => {

@@ -31,51 +31,11 @@ import {
   chartAnnualNet,
 } from "../src/charts.js";
 import { chartRegistry } from "../src/chartUtils.js";
+import { mockChartEnvironment } from "./chartTestUtils.js";
 
 describe("Chart.js and Annotation Plugin integration", () => {
   beforeAll(() => {
-    // Mock ResizeObserver
-    global.ResizeObserver = class {
-      observe() {}
-      unobserve() {}
-      disconnect() {}
-    };
-
-    // Mock getContext for canvas to return an object that acts as CanvasRenderingContext2D
-    const mockContext = {
-      beginPath: () => {},
-      arc: () => {},
-      fill: () => {},
-      stroke: () => {},
-      closePath: () => {},
-      clearRect: () => {},
-      fillRect: () => {},
-      strokeRect: () => {},
-      fillText: () => {},
-      strokeText: () => {},
-      measureText: () => ({ width: 0, height: 0 }),
-      setTransform: () => {},
-      resetTransform: () => {},
-      drawImage: () => {},
-      save: () => {},
-      restore: () => {},
-      createLinearGradient: () => ({ addColorStop: () => {} }),
-      createPattern: () => {},
-      createRadialGradient: () => {},
-      canvas: null, // will be set per element
-    };
-
-    if (global.CanvasRenderingContext2D) {
-      Object.setPrototypeOf(
-        mockContext,
-        global.CanvasRenderingContext2D.prototype,
-      );
-    }
-
-    HTMLCanvasElement.prototype.getContext = function () {
-      mockContext.canvas = this;
-      return mockContext;
-    };
+    mockChartEnvironment();
 
     // Create mock canvas elements on the DOM
     document.body.innerHTML = `

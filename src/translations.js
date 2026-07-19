@@ -41,10 +41,12 @@ export async function loadTranslations(lang) {
 
 /**
  * Safely decodes HTML/XML entities (e.g. &amp;) using textarea.
+ * Not exported — only used internally by applyTranslations() below; no
+ * other module imports it.
  * @param {string} str
  * @returns {string}
  */
-export function decodeEntities(str) {
+function decodeEntities(str) {
   if (typeof document === "undefined") return str;
   const txt = document.createElement("textarea");
   txt.innerHTML = str;
