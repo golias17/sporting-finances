@@ -16,6 +16,7 @@ const BASELINE = {
   equity: 40928,
   current_assets: 102909,
   current_liabilities: 165071,
+  total_assets: 374400,
 };
 
 export function initPlayground() {
@@ -93,12 +94,11 @@ function calculateAndRenderProjections() {
 
   const projEquity = BASELINE.equity + projNetResult;
 
-  // Solvency impact (Cash/Current Assets adjust based on net result change & debt repayment cash outflow)
-  const projCurrentLiabilities = BASELINE.current_liabilities - (debtRepayTarget * 1000);
-  const cashImpact = (projNetResult - BASELINE.net_result) - (debtRepayTarget * 1000);
-  const projCurrentAssets = Math.max(0, BASELINE.current_assets + cashImpact);
-  const projCurrentRatio = projCurrentAssets / projCurrentLiabilities;
-  const baselineCurrentRatio = BASELINE.current_assets / BASELINE.current_liabilities;
+  // Solvency impact (Equity / Total Assets)
+  // Cash/Total Assets adjust based on net result change & debt repayment cash outflow
+  const projTotalAssets = BASELINE.total_assets + (projNetResult - BASELINE.net_result) - (debtRepayTarget * 1000);
+  const projSolvency = (projEquity / projTotalAssets) * 100;
+  const baseSolvency = (BASELINE.equity / BASELINE.total_assets) * 100;
 
   // Render KPIs
   updateKpi("pgCardRev", "pgKpiRev", "pgKpiRevDiff", projRevenue / 1000, BASELINE.revenue_operating / 1000);
@@ -112,8 +112,8 @@ function calculateAndRenderProjections() {
     projNetTrading / 1000,
     projNetResult / 1000,
     projEquity / 1000,
-    projCurrentRatio,
-    baselineCurrentRatio
+    projSolvency,
+    baseSolvency
   );
 }
 
@@ -148,8 +148,8 @@ function drawProjectionCharts(
   projTrading,
   projNetResult,
   projEquity,
-  projRatio,
-  baseRatio
+  projSolvency,
+  baseSolvency
 ) {
   const canvas1Id = "chartPlaygroundNet";
   const canvas2Id = "chartPlaygroundSolvency";
@@ -260,8 +260,8 @@ function drawProjectionCharts(
           order: 1,
         },
         styledLineDataset({
-          label: state.isPt ? "Rácio de Solvabilidade (x)" : "Solvency Ratio (x)",
-          data: [baseRatio, projRatio],
+          label: state.isPt ? "Rácio de Solvabilidade (%)" : "Solvency Ratio (%)",
+          data: [baseSolvency, projSolvency],
           color: state.COLORS.green || "#0a5d3a",
           bg: state.COLORS.greenSoft || "rgba(10, 93, 58, 0.2)",
           extra: {
@@ -290,10 +290,10 @@ function drawProjectionCharts(
           position: "right",
           title: {
             display: true,
-            text: state.isPt ? "Rácio de Solvabilidade (x)" : "Solvency Ratio (x)",
+            text: state.isPt ? "Rácio de Solvabilidade (%)" : "Solvency Ratio (%)",
           },
           min: 0,
-          max: Math.max(2.0, baseRatio + 0.5, projRatio + 0.5),
+          max: Math.max(30, baseSolvency + 5, projSolvency + 5),
           grid: { drawOnChartArea: false }, // Avoid grid lines overlap
         },
       },
@@ -302,8 +302,8 @@ function drawProjectionCharts(
           callbacks: {
             label: (context) => {
               const val = context.parsed.y;
-              const suffix = context.datasetIndex === 0 ? " M€" : "x";
-              return `${context.dataset.label}: ${val.toFixed(2)}${suffix}`;
+              const suffix = context.datasetIndex === 0 ? " M€" : "%";
+              return `${context.dataset.label}: ${val.toFixed(1)}${suffix}`;
             }
           }
         },
@@ -312,14 +312,14 @@ function drawProjectionCharts(
             solvencyLimit: {
               type: "line",
               yScaleID: "y1",
-              yMin: 1.0,
-              yMax: 1.0,
+              yMin: 15.0,
+              yMax: 15.0,
               borderColor: "rgba(235, 94, 40, 0.5)",
               borderWidth: 2,
               borderDash: [5, 5],
               label: {
                 display: true,
-                content: state.isPt ? "Limiar de Liquidez (1.0x)" : "Liquidity Threshold (1.0x)",
+                content: state.isPt ? "Meta de Solvabilidade (15%)" : "Solvency Target (15%)",
                 position: "center",
                 backgroundColor: "rgba(235, 94, 40, 0.8)",
                 color: "#fff",
