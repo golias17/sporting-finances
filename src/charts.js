@@ -1,10 +1,44 @@
 import { state } from "./state.js";
 import { getLatestH1Data } from "./metrics.js";
 import { HEALTH_THRESHOLDS } from "./healthThresholds.js";
-import Chart from "chart.js/auto";
+// "chart.js/auto" registers every controller/element/scale/plugin Chart.js
+// ships (Chart.register(...registerables)) — radar, polar area, bubble,
+// scatter, pie/doughnut, the time/logarithmic/radial scales, none of which
+// this app uses anywhere (grep the whole src/ tree for `type: "..."` and
+// every chart is "bar" or "line"). Importing only what's actually used lets
+// the bundler drop the rest. Both this file and health.js (the app's only
+// two Chart.js entry points) register the same explicit list — harmless
+// duplication, since Chart.register() is idempotent and bundlers dedupe
+// identical named imports from the same package into one shared copy — so
+// neither file depends on which one happens to evaluate first.
+import {
+  Chart,
+  BarController,
+  LineController,
+  BarElement,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  Legend,
+  Tooltip,
+  Filler,
+} from "chart.js";
 import annotationPlugin from "chartjs-plugin-annotation";
 import zoomPlugin from "chartjs-plugin-zoom";
 
+Chart.register(
+  BarController,
+  LineController,
+  BarElement,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  Legend,
+  Tooltip,
+  Filler,
+);
 Chart.register(annotationPlugin);
 Chart.register(zoomPlugin);
 

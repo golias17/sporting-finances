@@ -279,6 +279,28 @@ describe("app boot (main.js)", () => {
     expect(document.activeElement).toBe(anchor);
   });
 
+  // Regression test: gallery images used to be openable by mouse/touch
+  // only (plain <img>, no tabindex or keydown handling), so a keyboard
+  // user had no way to reach the lightbox at all.
+  it("makes gallery images keyboard-operable (Tab-reachable, Enter/Space opens the lightbox)", () => {
+    const trigger = document.querySelector(".stadium-panorama-img");
+    expect(trigger.getAttribute("tabindex")).toBe("0");
+    expect(trigger.getAttribute("role")).toBe("button");
+    expect(trigger.getAttribute("aria-label")).toBeTruthy();
+
+    const lightbox = document.getElementById("imageLightbox");
+    expect(lightbox.classList.contains("active")).toBe(false);
+
+    trigger.focus();
+    trigger.dispatchEvent(
+      new window.KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true }),
+    );
+    expect(lightbox.classList.contains("active")).toBe(true);
+
+    document.getElementById("closeLightboxBtn").click();
+    expect(lightbox.classList.contains("active")).toBe(false);
+  });
+
   it("handles window resize and recalculates tab indicator", () => {
     vi.useFakeTimers();
     window.dispatchEvent(new window.Event("resize"));

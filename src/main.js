@@ -216,7 +216,21 @@ function initImageLightbox() {
   let releaseFocusTrap = null;
 
   targets.forEach((img) => {
-    img.addEventListener("click", () => {
+    // Plain <img> elements aren't keyboard-focusable or operable by
+    // default — without this, there was no way to reach or open the
+    // lightbox except by mouse/touch. tabindex makes it Tab-reachable;
+    // role="button" + the keydown handler below make Enter/Space behave
+    // like a click, matching native <button> semantics.
+    img.setAttribute("tabindex", "0");
+    img.setAttribute("role", "button");
+    if (!img.hasAttribute("aria-label")) {
+      img.setAttribute(
+        "aria-label",
+        `${img.alt || "Sporting CP asset"} — view enlarged`,
+      );
+    }
+
+    const openLightboxFor = () => {
       const src = img.src;
       const alt = img.alt || "Sporting CP Asset";
 
@@ -248,6 +262,14 @@ function initImageLightbox() {
       document.body.style.overflow = "hidden";
       releaseFocusTrap = trapFocusWithin(lightbox);
       btnClose.focus();
+    };
+
+    img.addEventListener("click", openLightboxFor);
+    img.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openLightboxFor();
+      }
     });
   });
 

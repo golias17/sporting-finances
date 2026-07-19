@@ -3,7 +3,18 @@
   --green-dark: #053b25;
   --green-light: #2e9e6c;
   --green-tint: #eef5f0;
-  --gold: #b08923;
+  /* --gold, --pos, --warn and --muted-2 below are darkened from their
+     original values — #b08923, #2e8a55, #c98c1f, #737976 respectively —
+     just enough to clear WCAG AA's 4.5:1 text-contrast threshold against
+     --bg/--paper/--surface (worst case ~4.6:1 now; they were 3.0-3.3:1,
+     4.0-4.3:1, 2.7-2.9:1, and 4.2-4.4:1). Same hue and saturation, only
+     lightness changed, so the club's green/gold identity reads the same at
+     a glance while being readable at small sizes — these are used as KPI/
+     status text color throughout, not just decoration. --neg/--info were
+     already comfortably above 4.5:1 in light mode and are unchanged here
+     (--info does need a dark-mode override though — see body.dark below).
+  */
+  --gold: #8b6c1c;
   --gold-soft: #d4b15a;
   --bg: #f5f8f6;
   --bg-gradient: linear-gradient(135deg, #f8faf9 0%, #edf1ef 100%);
@@ -12,12 +23,12 @@
   --ink: #111814;
   --ink-2: #303934;
   --muted: #6a716e;
-  --muted-2: #737976;
+  --muted-2: #6c726f;
   --rule: rgba(0, 0, 0, 0.04);
   --rule-2: rgba(0, 0, 0, 0.07);
-  --pos: #2e8a55;
+  --pos: #2a7f4e;
   --neg: #b8403a;
-  --warn: #c98c1f;
+  --warn: #956817;
   --info: #2c5b8a;
   --serif: "Playfair Display", "Times New Roman", Georgia, serif;
   --sans:
@@ -66,11 +77,21 @@ body.dark {
   --ink: #eaeaea;
   --ink-2: #cccccc;
   --muted: #8c938f;
-  --muted-2: #7a827e;
+  /* Lightened from #7a827e — passed against flat --bg (4.7:1) but fell
+     just short against the translucent --paper/--surface overlays
+     (4.3-4.4:1) that most cards actually sit on. */
+  --muted-2: #7f8783;
   --rule: rgba(255, 255, 255, 0.05);
   --rule-2: rgba(255, 255, 255, 0.08);
   --green-tint: #142e20;
   --pos: #3de080;
   --neg: #ff6b6b;
   --warn: #ffb300;
+  /* --info previously had no dark-mode override at all, so it stayed at
+     the light-mode-tuned #2c5b8a — fine against the light background
+     (6.6:1) but only 2.4-2.6:1 against the dark one, a real WCAG AA
+     failure (it's used as status/badge text, e.g. the VMOC/USPP debt
+     labels, not just chart annotations). Lightened the same hue/sat to
+     clear 4.5:1 against --bg/--paper/--surface here too. */
+  --info: #4c89c6;
 }

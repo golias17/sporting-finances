@@ -6,13 +6,30 @@ import {
   refreshHealthBarIfStale,
 } from "../src/health.js";
 
-// Mock Chart to avoid jsdom canvas issues
-vi.mock("chart.js/auto", () => {
+// Mock Chart to avoid jsdom canvas issues. health.js now imports named
+// components from "chart.js" (not the default export from "chart.js/auto")
+// so it can register only what it needs instead of every controller/scale/
+// plugin Chart.js ships — see the comment in health.js/charts.js. It also
+// calls Chart.register(...) itself at module load, so the mock needs a
+// no-op static .register() or that call throws.
+vi.mock("chart.js", () => {
+  class Chart {
+    constructor() {}
+    static register() {}
+    destroy() {}
+  }
   return {
-    default: class Chart {
-      constructor() {}
-      destroy() {}
-    },
+    Chart,
+    BarController: {},
+    LineController: {},
+    BarElement: {},
+    LineElement: {},
+    PointElement: {},
+    CategoryScale: {},
+    LinearScale: {},
+    Legend: {},
+    Tooltip: {},
+    Filler: {},
   };
 });
 

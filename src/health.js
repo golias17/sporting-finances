@@ -1,10 +1,42 @@
 import { state } from "./state.js";
 import { renderKpis } from "./kpi.js";
 import { fmtMillions } from "./chartUtils.js";
-import Chart from "chart.js/auto";
-
+// Explicit component imports instead of "chart.js/auto" (which registers
+// every controller/scale/plugin Chart.js ships) — see the matching comment
+// in charts.js, the app's other Chart.js entry point, for why. This file's
+// sparklines only actually need Line/Point/CategoryScale/LinearScale, but
+// registers the same full set charts.js does anyway: Chart.register() is
+// idempotent and bundlers dedupe identical imports from the same package,
+// so there's no cost to keeping one consistent list instead of hand-tuning
+// two different minimal ones.
+import {
+  Chart,
+  BarController,
+  LineController,
+  BarElement,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  Legend,
+  Tooltip,
+  Filler,
+} from "chart.js";
 import { calculateHealthSignals } from "./metrics.js";
 import { syncStateToUrl } from "./urlSync.js";
+
+Chart.register(
+  BarController,
+  LineController,
+  BarElement,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
+  Legend,
+  Tooltip,
+  Filler,
+);
 
 // Keep track of sparkline chart instances to destroy them before re-rendering.
 //
