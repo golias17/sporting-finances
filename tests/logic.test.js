@@ -282,6 +282,18 @@ describe("calculateHealthSignals()", () => {
     expect(equitySig.status).toBe("red");
   });
 
+  it('marks equity as "amber" (not "green") between the positive and strong thresholds, matching the "just turned positive" note', () => {
+    // Regression test: status used to turn green above 10000 while the note
+    // text still called anything below 20000 "just turned positive" — a
+    // season at 15000 showed a green dot next to an amber-sounding note.
+    const season = { ...makeState().annual[0], equity: 15000 };
+    const state = makeState({ seasons: [season] });
+    const signals = calculateHealthSignals(state, 0, fmtMillions);
+    const equitySig = signals.find((s) => s.id === "sigEquity");
+    expect(equitySig.status).toBe("amber");
+    expect(equitySig.note).toBe("Just turned positive");
+  });
+
   it('marks current ratio as "green" when >= 1.0', () => {
     const season = {
       ...makeState().annual[0],

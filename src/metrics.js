@@ -252,20 +252,21 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
       : "Wage burden is a problem",
   };
 
+  const { strong, positive, mild, deep } = HEALTH_THRESHOLDS.equity;
   const equityNote =
-    d.equity > 20000
+    d.equity > strong
       ? state.isPt
         ? "Capital próprio positivo e sólido"
         : "Solid positive equity"
-      : d.equity > 0
+      : d.equity > positive
         ? state.isPt
           ? "Tornou-se positivo recentemente"
           : "Just turned positive"
-        : d.equity > -20000
+        : d.equity > mild
           ? state.isPt
             ? "Ligeiramente negativo"
             : "Mildly negative"
-          : d.equity > -50000
+          : d.equity > deep
             ? state.isPt
               ? "Muito negativo"
               : "Deeply negative"
@@ -367,7 +368,7 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
               ? state.isPt
                 ? "Elevada — atenção"
                 : "Elevated — watch it"
-              : netDebtRatio < 4
+              : netDebtRatio < HEALTH_THRESHOLDS.netDebtRatio.crisis
                 ? state.isPt
                   ? "Endividamento pesado"
                   : "Heavy debt load"
@@ -426,7 +427,7 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
       icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>`,
       label: state.isPt ? "Capital próprio" : "Equity",
       value: fmtMillions(d.equity),
-      status: d.equity > 10000 ? "green" : d.equity > 0 ? "amber" : "red",
+      status: d.equity > strong ? "green" : d.equity > positive ? "amber" : "red",
       note: equityNote,
       history: histData.map((y) => y.equity),
     },
@@ -435,13 +436,18 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
       icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="12" cy="12" r="2"></circle><path d="M6 12h.01M18 12h.01"></path></svg>`,
       label: state.isPt ? "Saldo de caixa" : "Cash on hand",
       value: fmtMillions(d.cash),
-      status: d.cash > 20000 ? "green" : d.cash > 5000 ? "amber" : "red",
+      status:
+        d.cash > HEALTH_THRESHOLDS.cash.warn
+          ? "green"
+          : d.cash > HEALTH_THRESHOLDS.cash.danger
+            ? "amber"
+            : "red",
       note:
-        d.cash > 20000
+        d.cash > HEALTH_THRESHOLDS.cash.warn
           ? state.isPt
             ? "Margem confortável"
             : "Comfortable buffer"
-          : d.cash > 5000
+          : d.cash > HEALTH_THRESHOLDS.cash.danger
             ? state.isPt
               ? "Reduzido — risco mensal"
               : "Thin — one bad month matters"
@@ -456,17 +462,17 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
       label: state.isPt ? "Resultado Oper. Recorrente" : "Recurring Op. Profit",
       value: fmtMillions(recurringOpProfit),
       status:
-        recurringOpProfit > 0
+        recurringOpProfit > HEALTH_THRESHOLDS.recurringOpProfit.warn
           ? "green"
-          : recurringOpProfit > -5000
+          : recurringOpProfit > HEALTH_THRESHOLDS.recurringOpProfit.danger
             ? "amber"
             : "red",
       note:
-        recurringOpProfit > 0
+        recurringOpProfit > HEALTH_THRESHOLDS.recurringOpProfit.warn
           ? state.isPt
             ? "Lucro na atividade base"
             : "Profitable without transfers"
-          : recurringOpProfit > -5000
+          : recurringOpProfit > HEALTH_THRESHOLDS.recurringOpProfit.danger
             ? state.isPt
               ? "Pequeno défice estrutural"
               : "Small structural deficit"

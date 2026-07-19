@@ -19,7 +19,22 @@
 // `danger` is red. currentRatio is inverted — lower is worse.
 export const HEALTH_THRESHOLDS = {
   payrollRatio: { warn: 0.6, danger: 0.7 },
-  netDebtRatio: { warn: 1, danger: 2 },
+  // `crisis` is a third, note-text-only tier below `danger` (used to
+  // distinguish "heavy debt load" from "crisis territory" — the status
+  // color itself still just goes red at `danger`).
+  netDebtRatio: { warn: 1, danger: 2, crisis: 4 },
   transferReliance: { warn: 0.35, danger: 0.5 },
   currentRatio: { danger: 0.5, warn: 1.0 },
+
+  // The four ratios above also drive the zone-annotated charts in charts.js.
+  // The three below are absolute €k cutoffs (this dataset's unit) used only
+  // by metrics.js's calculateHealthSignals() health-check cards — there's
+  // no matching chart yet, but they're centralized here anyway since they
+  // used to be inline numbers duplicated between a signal's `status` color
+  // and its `note` text, and had drifted out of sync with each other (see
+  // git history: equity's status turned green at 10000 while its note text
+  // still called anything below 20000 "just turned positive").
+  equity: { strong: 20000, positive: 0, mild: -20000, deep: -50000 },
+  cash: { warn: 20000, danger: 5000 },
+  recurringOpProfit: { warn: 0, danger: -5000 },
 };
