@@ -526,8 +526,8 @@ export function chartDebt() {
             ? "Financiamentos não correntes (L. Prazo)"
             : "Non-current borrowings",
           data: state.annual.map((d) => d.borrowings_nc),
-          backgroundColor: state.COLORS.negSoft,
-          borderColor: state.COLORS.neg,
+          backgroundColor: state.COLORS.infoSoft,
+          borderColor: state.COLORS.info,
           borderWidth: 1,
           stack: "s1",
           order: 1,
@@ -537,8 +537,8 @@ export function chartDebt() {
             ? "Financiamentos correntes (C. Prazo)"
             : "Current borrowings",
           data: state.annual.map((d) => d.borrowings_c),
-          backgroundColor: state.COLORS.infoSoft,
-          borderColor: state.COLORS.info,
+          backgroundColor: state.COLORS.posSoft,
+          borderColor: state.COLORS.pos,
           borderWidth: 1,
           stack: "s1",
           order: 1,
@@ -548,8 +548,8 @@ export function chartDebt() {
             ? "Caixa e equivalentes"
             : "Cash on hands; equivalents",
           data: state.annual.map((d) => d.cash),
-          color: state.COLORS.pos,
-          bg: state.COLORS.posSoft,
+          color: state.COLORS.gold,
+          bg: state.COLORS.goldSoft,
           extra: { type: "line", order: 0 },
         }),
       ],
