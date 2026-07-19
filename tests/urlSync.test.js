@@ -23,6 +23,7 @@ describe("urlSync.js", () => {
     state.urlHealthSeason = null;
     state.urlEraStart = null;
     state.urlEraEnd = null;
+    state.urlPlayground = null;
     state.isPt = false;
 
     // Reset location and mocks
@@ -205,5 +206,74 @@ describe("urlSync.js", () => {
     const callArgs = vi.mocked(history.replaceState).mock.calls[0];
     const urlString = callArgs[2];
     expect(urlString).not.toContain("healthSeason");
+  });
+
+  it("syncStateToUrl should persist the Playground scenario's sliders when that tab is active", () => {
+    document.body.innerHTML = `
+      <nav class="tabs">
+        <button class="active" data-tab="playground"></button>
+      </nav>
+      <select id="uclSelect"><option value="47" selected>Round of 16</option></select>
+      <input id="payrollSlider" value="10" />
+      <input id="salesSlider" value="140" />
+      <input id="purchasesSlider" value="60" />
+      <input id="capexSlider" value="0" />
+      <input id="debtRepaySlider" value="20" />
+      <input id="revGrowthSlider" value="8" />
+    `;
+
+    syncStateToUrl();
+
+    const callArgs = vi.mocked(history.replaceState).mock.calls[0];
+    const urlString = callArgs[2];
+    expect(urlString).toContain("tab=playground");
+    expect(urlString).toContain("pgUcl=47");
+    expect(urlString).toContain("pgPayroll=10");
+    expect(urlString).toContain("pgSales=140");
+    expect(urlString).toContain("pgPurchases=60");
+    expect(urlString).toContain("pgCapex=0");
+    expect(urlString).toContain("pgDebt=20");
+    expect(urlString).toContain("pgRevGrowth=8");
+  });
+
+  it("syncStateToUrl should omit the Playground params on other tabs", () => {
+    document.body.innerHTML = `
+      <nav class="tabs">
+        <button class="active" data-tab="revenue"></button>
+      </nav>
+    `;
+
+    syncStateToUrl();
+
+    const callArgs = vi.mocked(history.replaceState).mock.calls.at(-1);
+    const urlString = callArgs ? callArgs[2] : "";
+    expect(urlString).not.toContain("pgUcl");
+    expect(urlString).not.toContain("pgPayroll");
+  });
+
+  it("applyUrlParams should stash a full Playground scenario for initPlayground to restore", () => {
+    vi.stubGlobal("location", {
+      search: "?tab=playground&pgUcl=47&pgPayroll=10&pgSales=140&pgPurchases=60&pgCapex=0&pgDebt=20&pgRevGrowth=8",
+      pathname: "/",
+      hash: "",
+    });
+
+    const tab = applyUrlParams();
+
+    expect(tab).toBe("playground");
+    expect(state.urlPlayground).toEqual({
+      uclPrize: "47",
+      payrollAdj: "10",
+      salesTarget: "140",
+      purchasesTarget: "60",
+      capexAdj: "0",
+      debtRepayTarget: "20",
+      revGrowthAdj: "8",
+    });
+  });
+
+  it("applyUrlParams should leave urlPlayground null when the URL has no Playground params", () => {
+    applyUrlParams();
+    expect(state.urlPlayground).toBeNull();
   });
 });

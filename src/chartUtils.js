@@ -437,21 +437,44 @@ export function generateAccessibleTable(canvasId, config) {
   const { data } = config;
   if (!data || !data.labels || !data.datasets) return;
 
+  // Whether a given scale (by ID, e.g. "y" or "y1") is a percentage axis —
+  // checked via its title text or tick-formatting callback, so dual-axis
+  // combo charts (e.g. the Playground's Equity €M + Solvency % chart) can
+  // be detected per-axis instead of only via a single chart-wide guess.
+  const scaleIsPct = (scaleId) => {
+    const scale = config.options?.scales?.[scaleId];
+    if (!scale) return false;
+    if (scale.title?.text && String(scale.title.text).includes("%")) return true;
+    if (scale.ticks?.callback) {
+      try {
+        return scale.ticks.callback(50).toString().includes("%");
+      } catch {
+        return false;
+      }
+    }
+    return false;
+  };
+
   // Determine if this is a percentage or ratio chart based on canvas ID or y-axis config
   const isPctChart =
     canvasId.toLowerCase().includes("ratio") ||
     canvasId.toLowerCase().includes("pct") ||
     canvasId.toLowerCase().includes("health") ||
-    (config.options?.scales?.y?.ticks?.callback &&
-      config.options.scales.y.ticks.callback(50).toString().includes("%"));
+    scaleIsPct("y");
 
   const isAlreadyInMillions =
     canvasId.toLowerCase().includes("managereras") ||
-    canvasId.toLowerCase().includes("commissions");
+    canvasId.toLowerCase().includes("commissions") ||
+    canvasId.toLowerCase().includes("playground");
 
-  const formatter = (v) => {
+  // `ds` (the dataset this value belongs to) is optional so existing call
+  // sites that don't pass it keep the prior chart-wide behavior; passing it
+  // lets a dataset pinned to a non-default axis (yAxisID: "y1") be formatted
+  // by that axis's own units instead of the chart's primary "y" axis.
+  const formatter = (v, ds) => {
     if (v === null || v === undefined) return "—";
-    if (isPctChart) {
+    const pct = isPctChart || (ds?.yAxisID && ds.yAxisID !== "y" && scaleIsPct(ds.yAxisID));
+    if (pct) {
       return typeof v === "number" ? `${v.toFixed(1)}%` : `${v}%`;
     }
     // Default to currency formatting for thousands values (standard in this SAD report)
@@ -485,7 +508,7 @@ export function generateAccessibleTable(canvasId, config) {
         `<tr><td>${lbl}</td>${data.datasets
           .map((ds) => {
             const v = ds.data[i];
-            const fmt = formatter(v);
+            const fmt = formatter(v, ds);
             const cls = cellClass(v);
             return `<td${cls}>${fmt}</td>`;
           })

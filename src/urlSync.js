@@ -76,6 +76,31 @@ export function syncStateToUrl() {
     params.delete("eraEnd");
   }
 
+  // 6. Playground scenario — persisted whenever the Playground tab is
+  // active, so a specific what-if scenario can be bookmarked/shared. All 7
+  // controls are read directly from the DOM (mirroring how the compare tab
+  // reads its <select> elements above) rather than from state, since
+  // playground.js keeps the live slider values in the DOM, not in `state`.
+  if (tab === "playground") {
+    const pgIds = {
+      pgUcl: "uclSelect",
+      pgPayroll: "payrollSlider",
+      pgSales: "salesSlider",
+      pgPurchases: "purchasesSlider",
+      pgCapex: "capexSlider",
+      pgDebt: "debtRepaySlider",
+      pgRevGrowth: "revGrowthSlider",
+    };
+    for (const [param, elId] of Object.entries(pgIds)) {
+      const el = document.getElementById(elId);
+      if (el) params.set(param, el.value);
+    }
+  } else {
+    ["pgUcl", "pgPayroll", "pgSales", "pgPurchases", "pgCapex", "pgDebt", "pgRevGrowth"].forEach((p) =>
+      params.delete(p),
+    );
+  }
+
   // Preserve language parameter if present or sync state.isPt
   params.set("lang", state.isPt ? "pt" : "en");
 
@@ -138,6 +163,22 @@ export function applyUrlParams() {
   const eraEnd = params.get("eraEnd");
   if (eraStart) state.setUrlEraStart(eraStart);
   if (eraEnd) state.setUrlEraEnd(eraEnd);
+
+  // 7. Playground Scenario Restoration — stashed as one object (all-or-
+  // nothing: a URL either encodes a full scenario or none) since
+  // playground.js's initPlayground() applies every field at once.
+  const pgParams = {
+    uclPrize: params.get("pgUcl"),
+    payrollAdj: params.get("pgPayroll"),
+    salesTarget: params.get("pgSales"),
+    purchasesTarget: params.get("pgPurchases"),
+    capexAdj: params.get("pgCapex"),
+    debtRepayTarget: params.get("pgDebt"),
+    revGrowthAdj: params.get("pgRevGrowth"),
+  };
+  if (Object.values(pgParams).some((v) => v !== null)) {
+    state.setUrlPlayground(pgParams);
+  }
 
   return tab;
 }

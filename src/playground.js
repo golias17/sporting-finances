@@ -1,6 +1,7 @@
-import Chart from "chart.js/auto";
 import { state } from "./state.js";
-import { chartRegistry, styledLineDataset, getBrandColors } from "./chartUtils.js";
+import { styledLineDataset, getBrandColors } from "./chartUtils.js";
+import { mkChart } from "./charts.js";
+import { syncStateToUrl } from "./urlSync.js";
 
 // Defensive fallback for the (in practice, always-initialized-by-boot)
 // case where a chart is drawn before initChartDefaults() has populated
@@ -64,6 +65,33 @@ const DEFAULT_INPUTS = {
   purchasesTarget: 30,
   capexAdj: 0,
   debtRepayTarget: 0,
+  revGrowthAdj: 0,
+};
+
+// Quick-scenario presets. "base" intentionally equals DEFAULT_INPUTS (same
+// values as the Reset button) — it exists as a named scenario so the three
+// preset buttons read as a coherent Conservative/Base/Optimistic set, not
+// because it does anything Reset doesn't already do.
+const PRESETS = {
+  conservative: {
+    uclPrize: 0,
+    payrollAdj: 5,
+    salesTarget: 80,
+    purchasesTarget: 20,
+    capexAdj: 5,
+    debtRepayTarget: 0,
+    revGrowthAdj: -3,
+  },
+  base: DEFAULT_INPUTS,
+  optimistic: {
+    uclPrize: 47,
+    payrollAdj: 10,
+    salesTarget: 140,
+    purchasesTarget: 60,
+    capexAdj: 0,
+    debtRepayTarget: 20,
+    revGrowthAdj: 8,
+  },
 };
 
 // Pure projection model: given the fixed 2024/25 baseline season and a set
@@ -73,9 +101,15 @@ const DEFAULT_INPUTS = {
 // to get the "no changes" reference scenario, and once at the user's
 // current slider positions — instead of the two scenarios drifting apart
 // if only one call site were ever updated.
-function computeProjection(BASELINE, { uclPrize, payrollAdj, salesTarget, purchasesTarget, capexAdj, debtRepayTarget }) {
-  // Qualified UCL boosts Matchday + Commercial by +€8M as well
-  const revenue = BASELINE.revenue_operating + (uclPrize * 1000) + (uclPrize > 0 ? 8000 : 0);
+function computeProjection(
+  BASELINE,
+  { uclPrize, payrollAdj, salesTarget, purchasesTarget, capexAdj, debtRepayTarget, revGrowthAdj },
+) {
+  // Organic growth (ticket pricing, existing commercial deals) applies to
+  // the whole operating revenue base; qualified UCL then adds its prize
+  // money plus a flat +€8M Matchday/Commercial spillover on top.
+  const revenue =
+    BASELINE.revenue_operating * (1 + (revGrowthAdj || 0) / 100) + (uclPrize * 1000) + (uclPrize > 0 ? 8000 : 0);
   const payroll = BASELINE.personnel_costs * (1 + payrollAdj / 100);
   const overhead = BASELINE.external_supplies * (1 + capexAdj / 100);
 
@@ -149,50 +183,83 @@ export function initPlayground() {
   const purchasesSlider = document.getElementById("purchasesSlider");
   const capexSlider = document.getElementById("capexSlider");
   const debtRepaySlider = document.getElementById("debtRepaySlider");
+  const revGrowthSlider = document.getElementById("revGrowthSlider");
   const btnReset = document.getElementById("btnResetPlayground");
+  const presetButtons = document.querySelectorAll("[data-pg-preset]");
 
-  if (!uclSelect || !payrollSlider || !salesSlider || !purchasesSlider || !capexSlider || !debtRepaySlider || !btnReset) return;
+  if (
+    !uclSelect ||
+    !payrollSlider ||
+    !salesSlider ||
+    !purchasesSlider ||
+    !capexSlider ||
+    !debtRepaySlider ||
+    !revGrowthSlider ||
+    !btnReset
+  )
+    return;
+
+  const rangeSliders = [payrollSlider, salesSlider, purchasesSlider, capexSlider, debtRepaySlider, revGrowthSlider];
+
+  // Sets every control to a given scenario's values (a DEFAULT_INPUTS- or
+  // PRESETS-shaped object) — shared by Reset, the preset buttons, and
+  // restoring a scenario from the URL, instead of each hand-listing the
+  // same 7 assignments.
+  const applyInputs = (inputs) => {
+    uclSelect.value = String(inputs.uclPrize);
+    payrollSlider.value = inputs.payrollAdj;
+    salesSlider.value = inputs.salesTarget;
+    purchasesSlider.value = inputs.purchasesTarget;
+    capexSlider.value = inputs.capexAdj;
+    debtRepaySlider.value = inputs.debtRepayTarget;
+    revGrowthSlider.value = inputs.revGrowthAdj;
+    rangeSliders.forEach(updateSliderFill);
+  };
 
   // Listeners
   const updateProj = () => {
-    updateSliderFill(payrollSlider);
-    updateSliderFill(salesSlider);
-    updateSliderFill(purchasesSlider);
-    updateSliderFill(capexSlider);
-    updateSliderFill(debtRepaySlider);
+    rangeSliders.forEach(updateSliderFill);
     drawPlaygroundCharts();
+    syncStateToUrl();
   };
 
   uclSelect.addEventListener("change", updateProj);
-  payrollSlider.addEventListener("input", updateProj);
-  salesSlider.addEventListener("input", updateProj);
-  purchasesSlider.addEventListener("input", updateProj);
-  capexSlider.addEventListener("input", updateProj);
-  debtRepaySlider.addEventListener("input", updateProj);
+  rangeSliders.forEach((slider) => slider.addEventListener("input", updateProj));
 
   btnReset.addEventListener("click", () => {
-    uclSelect.value = "0";
-    payrollSlider.value = 0;
-    salesSlider.value = 117;
-    purchasesSlider.value = 30;
-    capexSlider.value = 0;
-    debtRepaySlider.value = 0;
-
-    updateSliderFill(payrollSlider);
-    updateSliderFill(salesSlider);
-    updateSliderFill(purchasesSlider);
-    updateSliderFill(capexSlider);
-    updateSliderFill(debtRepaySlider);
-
+    applyInputs(DEFAULT_INPUTS);
     drawPlaygroundCharts();
+    syncStateToUrl();
   });
 
+  presetButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const preset = PRESETS[btn.dataset.pgPreset];
+      if (!preset) return;
+      applyInputs(preset);
+      drawPlaygroundCharts();
+      syncStateToUrl();
+    });
+  });
+
+  // Restore a shared scenario from the URL, if one was encoded — see the
+  // "Playground scenario" section of urlSync.js. Values arrive as strings
+  // (URLSearchParams only deals in strings); coerced back to numbers here
+  // so applyInputs() can hand them straight to the range inputs' values.
+  // Only fields that parse to a real number are applied — a partially
+  // formed URL (e.g. hand-edited) falls back to DEFAULT_INPUTS for
+  // whatever's missing or invalid instead of writing NaN into a slider.
+  if (state.urlPlayground) {
+    const restored = { ...DEFAULT_INPUTS };
+    for (const key of Object.keys(DEFAULT_INPUTS)) {
+      const parsed = parseInt(state.urlPlayground[key], 10);
+      if (!Number.isNaN(parsed)) restored[key] = parsed;
+    }
+    applyInputs(restored);
+  }
+
   // First render
-  updateSliderFill(payrollSlider);
-  updateSliderFill(salesSlider);
-  updateSliderFill(purchasesSlider);
-  updateSliderFill(capexSlider);
-  updateSliderFill(debtRepaySlider);
+  rangeSliders.forEach(updateSliderFill);
   drawPlaygroundCharts();
 }
 
@@ -207,6 +274,7 @@ export function drawPlaygroundCharts() {
     purchasesTarget: parseInt(document.getElementById("purchasesSlider").value, 10), // in millions
     capexAdj: parseInt(document.getElementById("capexSlider").value, 10),
     debtRepayTarget: parseInt(document.getElementById("debtRepaySlider").value, 10), // in millions
+    revGrowthAdj: parseInt(document.getElementById("revGrowthSlider").value, 10),
   };
 
   // Update label text values
@@ -215,6 +283,8 @@ export function drawPlaygroundCharts() {
   document.getElementById("purchasesVal").textContent = inputs.purchasesTarget + " M€";
   document.getElementById("capexVal").textContent = (inputs.capexAdj >= 0 ? "+" : "") + inputs.capexAdj + "%";
   document.getElementById("debtRepayVal").textContent = inputs.debtRepayTarget + " M€";
+  document.getElementById("revGrowthVal").textContent =
+    (inputs.revGrowthAdj >= 0 ? "+" : "") + inputs.revGrowthAdj + "%";
 
   // "baseline" = 2025/26 if nothing is adjusted (2024/25's performance
   // repeats exactly); "proj" = 2025/26 at the user's current slider
@@ -291,11 +361,7 @@ function drawProjectionCharts(baseline, proj) {
   ];
 
   // 1. Net results comparison chart
-  if (chartRegistry.has(canvas1Id)) {
-    chartRegistry.get(canvas1Id).destroy();
-  }
-  const ctx1 = document.getElementById(canvas1Id).getContext("2d");
-  const chart1 = new Chart(ctx1, {
+  mkChart(canvas1Id, {
     type: "bar",
     data: {
       labels,
@@ -382,14 +448,9 @@ function drawProjectionCharts(baseline, proj) {
       }
     }]
   });
-  chartRegistry.set(canvas1Id, chart1);
 
   // 2. Solvency & Equity Chart (Dual Y-Axis)
-  if (chartRegistry.has(canvas2Id)) {
-    chartRegistry.get(canvas2Id).destroy();
-  }
-  const ctx2 = document.getElementById(canvas2Id).getContext("2d");
-  const chart2 = new Chart(ctx2, {
+  mkChart(canvas2Id, {
     type: "bar",
     data: {
       labels: [baselineLabel, projectedLabel],
@@ -455,5 +516,4 @@ function drawProjectionCharts(baseline, proj) {
       }
     },
   });
-  chartRegistry.set(canvas2Id, chart2);
 }

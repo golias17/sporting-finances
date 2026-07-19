@@ -1,51 +1,101 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeAll, beforeEach, afterEach } from "vitest";
 import { state } from "../src/state.js";
 import { initPlayground } from "../src/playground.js";
-import Chart from "chart.js/auto";
+import { chartRegistry } from "../src/chartUtils.js";
 
-// Mock Chart to avoid jsdom canvas issues. Captures each constructed
-// chart's config on a static `instances` array so tests can inspect what
-// data playground.js actually drew (e.g. the equity/solvency chart's bars)
-// without needing a real canvas.
-vi.mock("chart.js/auto", () => {
-  class Chart {
-    constructor(ctx, config) {
-      this.config = config;
-      Chart.instances.push(this);
-    }
-    destroy() {}
-  }
-  Chart.instances = [];
-  return { default: Chart };
-});
-
+// playground.js now builds its two charts via charts.js's mkChart() helper
+// (see src/charts.js) instead of hand-rolling `new Chart(...)` — the same
+// helper every other chart in the app uses, which is what gives it the
+// screen-reader accessible data table and PNG download button for free.
+// That means these tests need the *real* Chart.js (mkChart imports the real
+// `chart.js/auto` module-level `Chart.register(...)` calls, which a fake
+// Chart class without a static `.register()` would break), with jsdom's
+// canvas 2D context mocked out — the same setup tests/chart.test.js uses.
 describe("playground.js CFO Simulator", () => {
-  beforeEach(() => {
-    Chart.instances = [];
+  beforeAll(() => {
+    global.ResizeObserver = class {
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    };
 
-    // Setup Mock DOM
+    const mockContext = {
+      beginPath: () => {},
+      arc: () => {},
+      fill: () => {},
+      stroke: () => {},
+      closePath: () => {},
+      clearRect: () => {},
+      fillRect: () => {},
+      strokeRect: () => {},
+      fillText: () => {},
+      strokeText: () => {},
+      measureText: () => ({ width: 0, height: 0 }),
+      setTransform: () => {},
+      resetTransform: () => {},
+      drawImage: () => {},
+      save: () => {},
+      restore: () => {},
+      createLinearGradient: () => ({ addColorStop: () => {} }),
+      createPattern: () => {},
+      createRadialGradient: () => {},
+      canvas: null,
+    };
+    if (global.CanvasRenderingContext2D) {
+      Object.setPrototypeOf(mockContext, global.CanvasRenderingContext2D.prototype);
+    }
+    HTMLCanvasElement.prototype.getContext = function () {
+      mockContext.canvas = this;
+      return mockContext;
+    };
+  });
+
+  beforeEach(() => {
+    // Destroy (not just drop) any charts left over from the previous test —
+    // mkChart() reuses an existing registry entry via chart.update() rather
+    // than tearing it down, so simply clearing the Map without destroy()
+    // first orphans the old Chart instance's internal resize/mutation
+    // observers, which then fire asynchronously against an already-replaced
+    // (or, between test files, already-torn-down) DOM.
+    chartRegistry.forEach((chart) => chart.destroy());
+    chartRegistry.clear();
+
+    // Setup Mock DOM — mirrors index.html's actual playground markup
+    // (including the .card/.card-head/.chart-box wrapper structure) closely
+    // enough that mkChart()'s generateAccessibleTable()/addChartDownloadButton()
+    // can find their expected insertion points.
     document.body.innerHTML = `
       <section id="tab-playground">
+        <div class="pg-presets">
+          <button data-pg-preset="conservative">Conservative</button>
+          <button data-pg-preset="base">Base Case</button>
+          <button data-pg-preset="optimistic">Optimistic</button>
+        </div>
+
         <select id="uclSelect">
           <option value="0">None</option>
           <option value="40">UCL</option>
+          <option value="47">Round of 16</option>
         </select>
-        
+
+        <span id="revGrowthVal">0%</span>
+        <input type="range" id="revGrowthSlider" min="-10" max="15" value="0" />
+
         <span id="payrollVal">0%</span>
         <input type="range" id="payrollSlider" min="-30" max="30" value="0" />
-        
+
         <span id="salesVal">117 M€</span>
         <input type="range" id="salesSlider" min="0" max="150" value="117" />
 
         <span id="purchasesVal">30 M€</span>
         <input type="range" id="purchasesSlider" min="0" max="100" value="30" />
-        
+
         <span id="capexVal">0%</span>
         <input type="range" id="capexSlider" min="-30" max="30" value="0" />
 
         <span id="debtRepayVal">0 M€</span>
         <input type="range" id="debtRepaySlider" min="0" max="50" value="0" />
-        
+
         <button id="btnResetPlayground">Reset</button>
 
         <div class="kpis">
@@ -67,19 +117,32 @@ describe("playground.js CFO Simulator", () => {
           </div>
         </div>
 
-        <canvas id="chartPlaygroundNet"></canvas>
-        <canvas id="chartPlaygroundSolvency"></canvas>
+        <div class="card">
+          <div class="card-head"><h3>Simulated Financials vs. Baseline</h3></div>
+          <div class="chart-box"><canvas id="chartPlaygroundNet"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Equity & Solvency Health</h3></div>
+          <div class="chart-box"><canvas id="chartPlaygroundSolvency"></canvas></div>
+        </div>
       </section>
     `;
 
     state.isPt = false;
     state.COLORS = {
+      ink: "#1a1a1a",
+      muted: "#6a716e",
+      rule: "rgba(0, 0, 0, 0.05)",
       greenSoft: "rgba(10, 93, 58, 0.4)",
       green: "#0a5d3a",
       goldSoft: "rgba(176, 137, 35, 0.4)",
       gold: "#b08923",
+      pos: "#2e8a55",
+      neg: "#b8403a",
       chartBg: "#ffffff",
     };
+    state.baseOpts = { scales: { x: { ticks: {} } } };
+    state.urlPlayground = null;
 
     // playground.js derives its BASELINE from the real "2024/25" season in
     // state.DATASET instead of hardcoded literals — see getBaseline() in
@@ -108,6 +171,11 @@ describe("playground.js CFO Simulator", () => {
         },
       ],
     };
+  });
+
+  afterEach(() => {
+    chartRegistry.forEach((chart) => chart.destroy());
+    chartRegistry.clear();
   });
 
   it("should initialize with default values and baseline KPIs, with every KPI reading 'no change'", () => {
@@ -148,10 +216,9 @@ describe("playground.js CFO Simulator", () => {
     // (computeProjection() at DEFAULT_INPUTS), so at Reset both bars must
     // be identical — the chart needs no caveat to make sense.
     initPlayground();
-    const solvencyChart = Chart.instances.find(
-      (c) => c.config.data.datasets[0]?.label === "Shareholders' Equity (M€)",
-    );
+    const solvencyChart = chartRegistry.get("chartPlaygroundSolvency");
     expect(solvencyChart).toBeDefined();
+    expect(solvencyChart.config.data.datasets[0].label).toBe("Shareholders' Equity (M€)");
     const [baselineEquity, projectedEquity] = solvencyChart.config.data.datasets[0].data;
     expect(baselineEquity).toBeCloseTo(60.951, 2);
     expect(projectedEquity).toBeCloseTo(60.951, 2);
@@ -194,5 +261,72 @@ describe("playground.js CFO Simulator", () => {
 
     document.getElementById("btnResetPlayground").click();
     expect(document.getElementById("pgKpiRev").textContent).toBe("€148.1M");
+  });
+
+  it("should increase projected revenue when organic revenue growth is raised", () => {
+    initPlayground();
+    const revGrowthSlider = document.getElementById("revGrowthSlider");
+    revGrowthSlider.value = 10; // +10% organic growth
+    revGrowthSlider.dispatchEvent(new Event("input"));
+
+    // 148.149 * 1.10 = 162.9639
+    expect(document.getElementById("pgKpiRev").textContent).toBe("€163.0M");
+    expect(document.getElementById("revGrowthVal").textContent).toBe("+10%");
+  });
+
+  it("should apply the Optimistic preset's full slider combination in one click", () => {
+    initPlayground();
+    document.querySelector('[data-pg-preset="optimistic"]').click();
+
+    expect(document.getElementById("uclSelect").value).toBe("47");
+    expect(document.getElementById("payrollSlider").value).toBe("10");
+    expect(document.getElementById("salesSlider").value).toBe("140");
+    expect(document.getElementById("purchasesSlider").value).toBe("60");
+    expect(document.getElementById("capexSlider").value).toBe("0");
+    expect(document.getElementById("debtRepaySlider").value).toBe("20");
+    expect(document.getElementById("revGrowthSlider").value).toBe("8");
+    // Optimistic should be a strict improvement over the do-nothing baseline.
+    expect(document.getElementById("pgKpiNetDiff").className).toContain("pos");
+  });
+
+  it("should apply the Conservative preset and the Base Case preset should match Reset", () => {
+    initPlayground();
+    document.querySelector('[data-pg-preset="conservative"]').click();
+    expect(document.getElementById("pgKpiNetDiff").className).toContain("neg");
+
+    document.querySelector('[data-pg-preset="base"]').click();
+    expect(document.getElementById("pgKpiNetDiff").textContent).toBe("no change");
+    expect(document.getElementById("uclSelect").value).toBe("0");
+    expect(document.getElementById("revGrowthSlider").value).toBe("0");
+  });
+
+  it("gives both playground charts a screen-reader data table and a PNG download button, like every other chart", () => {
+    // Regression test: playground.js used to hand-roll chartRegistry.set()
+    // + `new Chart(...)` instead of going through charts.js's mkChart()
+    // helper, so it was the only chart pair in the app missing the
+    // accessible-table toggle and download button every other chart gets
+    // automatically.
+    initPlayground();
+
+    expect(document.getElementById("chartPlaygroundNet-a11y-table")).not.toBeNull();
+    expect(document.getElementById("chartPlaygroundNet-table-toggle")).not.toBeNull();
+    expect(document.getElementById("chartPlaygroundNet-download-btn")).not.toBeNull();
+
+    expect(document.getElementById("chartPlaygroundSolvency-a11y-table")).not.toBeNull();
+    expect(document.getElementById("chartPlaygroundSolvency-table-toggle")).not.toBeNull();
+    expect(document.getElementById("chartPlaygroundSolvency-download-btn")).not.toBeNull();
+  });
+
+  it("formats the dual-axis equity/solvency accessible table with each column in its own axis's units", () => {
+    // Regression test for generateAccessibleTable()'s dataset-aware
+    // formatting (chartUtils.js): the Equity column (€M, already in
+    // millions here) must not be re-divided by 1000, and the Solvency
+    // column (%) must not be mistaken for currency, even though they share
+    // one table generated from one dual-axis chart.
+    initPlayground();
+    const table = document.getElementById("chartPlaygroundSolvency-a11y-table");
+    const bodyText = table.querySelector("tbody").textContent;
+    expect(bodyText).toContain("€61.0M");
+    expect(bodyText).toMatch(/14\.5%/);
   });
 });

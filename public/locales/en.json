@@ -1814,6 +1814,21 @@
     "isAria": false,
     "innerHTML": false
   },
+  "pg-preset-conservative": {
+    "text": "Conservative",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-preset-base": {
+    "text": "Base Case",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-preset-optimistic": {
+    "text": "Optimistic",
+    "isAria": false,
+    "innerHTML": false
+  },
   "pg-ucl-label": {
     "text": "UEFA Champions League Campaign",
     "isAria": false,
@@ -1846,6 +1861,16 @@
   },
   "pg-ucl-sf": {
     "text": "Semi-finals / Finals (+€82M)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-revgrowth-label": {
+    "text": "Organic Revenue Growth",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-revgrowth-help": {
+    "text": "Ticket pricing and existing commercial deals, independent of UCL.",
     "isAria": false,
     "innerHTML": false
   },

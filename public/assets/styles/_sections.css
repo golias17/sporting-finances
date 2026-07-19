@@ -2304,6 +2304,43 @@ body.dark .playground-select {
   border-color: var(--green);
 }
 
+.pg-presets {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-preset {
+  flex: 1;
+  background: var(--bg);
+  color: var(--ink);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--radius-lg);
+  padding: 10px 6px;
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-preset:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.btn-preset[data-pg-preset="conservative"]:hover {
+  border-color: var(--neg);
+  color: var(--neg);
+}
+
+.btn-preset--optimistic:hover {
+  border-color: var(--pos);
+  color: var(--pos);
+}
+
 .control-help {
   display: block;
   font-size: var(--fs-xs);

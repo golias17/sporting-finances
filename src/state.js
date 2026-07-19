@@ -22,6 +22,11 @@ const stateTarget = {
   urlHealthSeason: null,
   urlEraStart: null,
   urlEraEnd: null,
+  // Playground scenario (all 7 slider/select values as one object, not
+  // split into scalar fields like urlCmpA/B) — playground.js's controls are
+  // a single cohesive "scenario" consumed together by one module, unlike
+  // e.g. the compare tab's two independent selects.
+  urlPlayground: null,
 
   DATASET: null,
   get annual() {
@@ -191,6 +196,9 @@ const stateTarget = {
   },
   setUrlEraEnd(v) {
     stateTarget.urlEraEnd = v;
+  },
+  setUrlPlayground(v) {
+    stateTarget.urlPlayground = v;
   },
 };
 

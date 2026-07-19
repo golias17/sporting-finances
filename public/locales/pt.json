@@ -1814,6 +1814,21 @@
     "isAria": false,
     "innerHTML": false
   },
+  "pg-preset-conservative": {
+    "text": "Conservador",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-preset-base": {
+    "text": "Cenário Base",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-preset-optimistic": {
+    "text": "Otimista",
+    "isAria": false,
+    "innerHTML": false
+  },
   "pg-ucl-label": {
     "text": "Campanha na UEFA Champions League",
     "isAria": false,
@@ -1846,6 +1861,16 @@
   },
   "pg-ucl-sf": {
     "text": "Meias-finais / Final (+€82M)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-revgrowth-label": {
+    "text": "Crescimento Orgânico da Receita",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-revgrowth-help": {
+    "text": "Preços de bilhética e acordos comerciais existentes, independente da Champions.",
     "isAria": false,
     "innerHTML": false
   },

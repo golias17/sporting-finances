@@ -2360,7 +2360,19 @@
           <div class="card playground-controls">
             <h3 data-i18n="pg-ctrls-title">Simulation Controls</h3>
             <p class="section-desc" data-i18n="pg-ctrls-desc">Adjust the variables below to simulate different business and sports scenarios for the next season.</p>
-            
+
+            <div class="pg-presets" role="group" aria-label="Quick scenarios">
+              <button type="button" class="btn-preset" data-pg-preset="conservative">
+                <span data-i18n="pg-preset-conservative">Conservative</span>
+              </button>
+              <button type="button" class="btn-preset" data-pg-preset="base">
+                <span data-i18n="pg-preset-base">Base Case</span>
+              </button>
+              <button type="button" class="btn-preset btn-preset--optimistic" data-pg-preset="optimistic">
+                <span data-i18n="pg-preset-optimistic">Optimistic</span>
+              </button>
+            </div>
+
             <div class="control-group">
               <div class="control-label-row">
                 <label for="uclSelect" data-i18n="pg-ucl-label">UEFA Champions League Campaign</label>
@@ -2373,6 +2385,19 @@
                 <option value="60" data-i18n="pg-ucl-qf">Quarter-finals (+€60M)</option>
                 <option value="82" data-i18n="pg-ucl-sf">Semi-finals / Finals (+€82M)</option>
               </select>
+            </div>
+
+            <div class="control-group">
+              <div class="control-label-row">
+                <label for="revGrowthSlider" data-i18n="pg-revgrowth-label">Organic Revenue Growth</label>
+                <span id="revGrowthVal" class="value-highlight">0%</span>
+              </div>
+              <span class="control-help" data-i18n="pg-revgrowth-help">Ticket pricing and existing commercial deals, independent of UCL.</span>
+              <input type="range" id="revGrowthSlider" min="-10" max="15" value="0" step="1" class="playground-slider" />
+              <div class="slider-bounds">
+                <span>-10%</span>
+                <span>+15%</span>
+              </div>
             </div>
 
             <div class="control-group">
