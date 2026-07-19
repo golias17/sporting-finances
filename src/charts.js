@@ -395,6 +395,9 @@ export function chartRevVsPayroll() {
   // Same canonical cutoffs as the health-check card and chartPayrollBurden —
   // healthThresholds.js exists precisely so these can't drift apart.
   const { warn, danger } = HEALTH_THRESHOLDS.payrollRatio;
+  // The "warning" tier uses the same gold as Player Transfer Income's
+  // record-season highlight, instead of the generic COLORS.warn amber, so
+  // the one shared accent color looks the same across both charts.
   mkChart("chartRevVsPayroll", {
     type: "bar",
     data: {
@@ -411,7 +414,7 @@ export function chartRevVsPayroll() {
               : r > danger
                 ? state.COLORS.negSoft
                 : r > warn
-                  ? state.COLORS.warn
+                  ? state.COLORS.goldSoft
                   : state.COLORS.posSoft,
           ),
           borderColor: ratios.map((r) =>
@@ -420,7 +423,7 @@ export function chartRevVsPayroll() {
               : r > danger
                 ? state.COLORS.neg
                 : r > warn
-                  ? state.COLORS.warn
+                  ? state.COLORS.gold
                   : state.COLORS.pos,
           ),
           borderWidth: 1,
