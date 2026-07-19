@@ -13,6 +13,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { state } from "../src/state.js";
 import * as pdfGen from "../src/pdfGenerator.js";
+import * as charts from "../src/charts.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.resolve(__dirname, "../public");
@@ -150,6 +151,33 @@ describe("app boot (main.js)", () => {
     expect(revenueBtn.getAttribute("aria-selected")).toBe("true");
   });
 
+  // Regression test for the runOnce() helper extracted from activateTab's
+  // per-tab chart loop (see main.js) — a tab's chart-drawing functions
+  // should only run once per visit, not be re-invoked every time its nav
+  // button is clicked again while already active.
+  //
+  // Note: this only covers the "stays active" half of the behavior.
+  // destroyInactiveCharts() (the other half — clearing the renderedCharts
+  // guard once you navigate *away* from a tab, so it redraws fresh next
+  // visit) keys off the real chartRegistry that charts.js's mkChart()
+  // populates, but charts.js is entirely mocked out in this file (jsdom has
+  // no real canvas), so that registry never actually gets populated here —
+  // there's nothing meaningful for destroyInactiveCharts to find and clear
+  // in this test setup. That half is exercised for real in chart.test.js
+  // and playground.test.js, which use the real mkChart().
+  it("does not redraw a tab's charts again just from re-clicking its already-active nav button", () => {
+    const revenueBtn = document.querySelector(
+      'nav.tabs button[data-tab="revenue"]',
+    );
+
+    revenueBtn.click();
+    const callsAfterFirstVisit = charts.chartRevenue.mock.calls.length;
+    expect(callsAfterFirstVisit).toBeGreaterThan(0);
+
+    revenueBtn.click();
+    expect(charts.chartRevenue.mock.calls.length).toBe(callsAfterFirstVisit);
+  });
+
   it("renders the transfer ledger on the squad tab", () => {
     document.querySelector('nav.tabs button[data-tab="squad"]').click();
     document.getElementById("btn-squad-ledger").click();
@@ -187,7 +215,7 @@ describe("app boot (main.js)", () => {
     const btn = document.getElementById("pdfExportBtn");
     expect(btn).not.toBeNull();
     btn.click(); // Opens the modal
-    
+
     const form = document.getElementById("pdfCustomizerForm");
     expect(form).not.toBeNull();
     form.dispatchEvent(new window.Event("submit")); // Submit the customizer options
@@ -195,6 +223,60 @@ describe("app boot (main.js)", () => {
     await vi.waitFor(() => {
       expect(pdfGen.generateCuratedPdf).toHaveBeenCalled();
     });
+  });
+
+  // The Jornal reader and image lightbox are hand-rolled overlay <div>s
+  // (see initJornalModal()/initImageLightbox() in main.js), not the native
+  // <dialog> element — these tests cover the focus management added for
+  // them: moving focus in on open, closing on Escape, and restoring focus
+  // to whatever triggered the modal once it closes. The Tab-key focus-trap
+  // itself (trapFocusWithin() in main.js) isn't asserted here: it filters
+  // candidates by `el.offsetParent !== null` to skip genuinely hidden
+  // elements, but jsdom doesn't implement layout at all, so offsetParent is
+  // always null for every element regardless of real visibility — asserting
+  // the exact Tab-wrap behavior here would fail for that jsdom limitation,
+  // not for any real bug. It works correctly in real browsers, where
+  // offsetParent reflects actual visibility.
+  it("opens the Jornal modal with dialog semantics, moves focus in, and restores it on Escape", () => {
+    const openBtn = document.getElementById("btnJornalModal");
+    expect(openBtn).not.toBeNull();
+    openBtn.focus();
+    openBtn.click();
+
+    const modal = document.getElementById("jornalModal");
+    expect(modal.classList.contains("hidden")).toBe(false);
+    expect(modal.getAttribute("role")).toBe("dialog");
+    expect(modal.getAttribute("aria-modal")).toBe("true");
+
+    const closeBtn = document.getElementById("btnCloseJornal");
+    expect(document.activeElement).toBe(closeBtn);
+
+    document.dispatchEvent(
+      new window.KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
+    );
+    expect(modal.classList.contains("hidden")).toBe(true);
+    expect(document.activeElement).toBe(openBtn);
+  });
+
+  it("opens the image lightbox with dialog semantics, moves focus in, and restores it on close-button click", () => {
+    const trigger = document.querySelector(".stadium-panorama-img");
+    expect(trigger).not.toBeNull();
+
+    const anchor = document.getElementById("btnJornalModal");
+    anchor.focus(); // deterministic "previously focused" element to restore to
+    trigger.click();
+
+    const lightbox = document.getElementById("imageLightbox");
+    expect(lightbox.classList.contains("active")).toBe(true);
+    expect(lightbox.getAttribute("role")).toBe("dialog");
+    expect(lightbox.getAttribute("aria-modal")).toBe("true");
+
+    const closeBtn = document.getElementById("closeLightboxBtn");
+    expect(document.activeElement).toBe(closeBtn);
+
+    closeBtn.click();
+    expect(lightbox.classList.contains("active")).toBe(false);
+    expect(document.activeElement).toBe(anchor);
   });
 
   it("handles window resize and recalculates tab indicator", () => {

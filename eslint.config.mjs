@@ -36,6 +36,7 @@ export default [
         Image: "readonly",
         URLSearchParams: "readonly",
         HTMLAnchorElement: "readonly",
+        HTMLElement: "readonly",
         Document: "readonly",
         ResizeObserver: "readonly",
         Element: "readonly",

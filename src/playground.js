@@ -2,6 +2,7 @@ import { state } from "./state.js";
 import { styledLineDataset, getBrandColors } from "./chartUtils.js";
 import { mkChart } from "./charts.js";
 import { syncStateToUrl } from "./urlSync.js";
+import { debounce } from "./utils.js";
 
 // Defensive fallback for the (in practice, always-initialized-by-boot)
 // case where a chart is drawn before initChartDefaults() has populated
@@ -256,11 +257,27 @@ export function initPlayground() {
   };
 
   // Listeners
-  const updateProj = () => {
-    rangeSliders.forEach(updateSliderFill);
+  //
+  // Range sliders fire "input" continuously while being dragged — often
+  // 30-60+ times/second — so recomputing the projection, redrawing both
+  // charts (which also rebuilds their accessible data tables via mkChart's
+  // generateAccessibleTable()) and writing to URL history on every single
+  // tick was real, unnecessary overhead for no visible benefit over
+  // collapsing a drag into one update. Same debounce-the-expensive-part
+  // pattern transfers.js already uses for its search box: the slider's own
+  // fill track (updateSliderFill) stays outside the debounce so dragging
+  // still feels instantly responsive; everything derived from the actual
+  // projection (KPIs, slider value labels, charts, preset highlight, URL)
+  // updates together, just debounced.
+  const updateProjHeavy = debounce(() => {
     drawPlaygroundCharts();
     updateActivePresetHighlight();
     syncStateToUrl();
+  }, 60);
+
+  const updateProj = () => {
+    rangeSliders.forEach(updateSliderFill);
+    updateProjHeavy();
   };
 
   uclSelect.addEventListener("change", updateProj);

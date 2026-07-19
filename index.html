@@ -2581,7 +2581,13 @@
     </button>
 
     <!-- Lightbox Modal -->
-    <div id="imageLightbox" class="lightbox-modal">
+    <div
+      id="imageLightbox"
+      class="lightbox-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="lightboxCaption"
+    >
       <button
         class="lightbox-close"
         id="closeLightboxBtn"
@@ -2599,7 +2605,13 @@
     </div>
 
     <!-- Jornal Reader Modal -->
-    <div id="jornalModal" class="modal-overlay hidden">
+    <div
+      id="jornalModal"
+      class="modal-overlay hidden"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Sporting Jornal reader"
+    >
       <div class="modal-container">
         <button
           id="btnCloseJornal"

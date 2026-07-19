@@ -72,6 +72,44 @@ function detectActiveLang() {
 }
 
 // =============================================================
+// MODAL ACCESSIBILITY HELPER
+// =============================================================
+
+// Both modals below (the Jornal reader and the image lightbox) are
+// hand-rolled overlay <div>s, not the native <dialog> element, so neither
+// gets keyboard focus management for free from the browser: trapping
+// Tab/Shift+Tab within the modal's own focusable elements while it's open,
+// so a keyboard user can't tab out into the page hidden behind it. Shared
+// here so both implement it identically instead of drifting. Each modal's
+// own open/close functions are still responsible for moving focus in on
+// open and restoring it to whatever triggered the modal on close — that
+// part depends on which element they call .focus() on, which differs
+// between the two.
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), textarea, input, select, iframe, [tabindex]:not([tabindex="-1"])';
+
+function trapFocusWithin(container) {
+  const handler = (e) => {
+    if (e.key !== "Tab") return;
+    const focusable = Array.from(
+      container.querySelectorAll(FOCUSABLE_SELECTOR),
+    ).filter((el) => el.offsetParent !== null); // visible only
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  };
+  container.addEventListener("keydown", handler);
+  return () => container.removeEventListener("keydown", handler);
+}
+
+// =============================================================
 // JORNAL MODAL
 // =============================================================
 
@@ -96,18 +134,34 @@ function initJornalModal() {
   const iframeSrc =
     "https://e.issuu.com/embed.html?backgroundColor=%23008057&backgroundColorFullscreen=%23008057&d=jornal_sporting_n._4077&hideIssuuLogo=true&hideShareButton=true&showOtherPublicationsAsSuggestions=true&u=sporting-digitalpaper";
 
+  // Restores focus to whatever triggered the modal once it closes, and
+  // releases the Tab focus trap — see trapFocusWithin() above.
+  let previouslyFocused = null;
+  let releaseFocusTrap = null;
+
   function openModal() {
     // Inject iframe only on first open
     if (container.innerHTML === "") {
       container.innerHTML = `<iframe src="${iframeSrc}" allow="clipboard-write; autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen="true"></iframe>`;
     }
+    previouslyFocused = document.activeElement;
     modal.classList.remove("hidden");
     document.body.style.overflow = "hidden"; // Prevent background scrolling
+    releaseFocusTrap = trapFocusWithin(modal);
+    btnClose.focus();
   }
 
   function closeModal() {
     modal.classList.add("hidden");
     document.body.style.overflow = ""; // Restore background scrolling
+    if (releaseFocusTrap) {
+      releaseFocusTrap();
+      releaseFocusTrap = null;
+    }
+    if (previouslyFocused instanceof HTMLElement) {
+      previouslyFocused.focus();
+    }
+    previouslyFocused = null;
   }
 
   btnOpen.addEventListener("click", openModal, { signal });
@@ -156,6 +210,11 @@ function initImageLightbox() {
   let currentBackAlt = "";
   let isShowingBack = false;
 
+  // Restores focus to whatever triggered the lightbox once it closes, and
+  // releases the Tab focus trap — see trapFocusWithin() above.
+  let previouslyFocused = null;
+  let releaseFocusTrap = null;
+
   targets.forEach((img) => {
     img.addEventListener("click", () => {
       const src = img.src;
@@ -184,8 +243,11 @@ function initImageLightbox() {
 
       lightboxImg.src = src;
       lightboxCaption.textContent = alt;
+      previouslyFocused = document.activeElement;
       lightbox.classList.add("active");
       document.body.style.overflow = "hidden";
+      releaseFocusTrap = trapFocusWithin(lightbox);
+      btnClose.focus();
     });
   });
 
@@ -204,6 +266,14 @@ function initImageLightbox() {
   function closeLightbox() {
     lightbox.classList.remove("active");
     document.body.style.overflow = "";
+    if (releaseFocusTrap) {
+      releaseFocusTrap();
+      releaseFocusTrap = null;
+    }
+    if (previouslyFocused instanceof HTMLElement) {
+      previouslyFocused.focus();
+    }
+    previouslyFocused = null;
   }
 
   btnClose.addEventListener("click", closeLightbox);

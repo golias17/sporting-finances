@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeAll, beforeEach, afterEach, vi } from "vitest";
 import { state } from "../src/state.js";
 import { initPlayground } from "../src/playground.js";
 import { chartRegistry } from "../src/chartUtils.js";
@@ -218,10 +218,17 @@ describe("playground.js CFO Simulator", () => {
   });
 
   it("should recalculate KPIs when UEFA Champions League is toggled", () => {
+    // updateProj's expensive work (recompute + redraw + URL sync) is
+    // debounced (see playground.js) so dragging a slider doesn't redo it on
+    // every "input" tick — advance fake timers past the debounce delay to
+    // let it fire.
+    vi.useFakeTimers();
     initPlayground();
     const uclSelect = document.getElementById("uclSelect");
     uclSelect.value = "40";
     uclSelect.dispatchEvent(new Event("change"));
+    vi.runAllTimers();
+    vi.useRealTimers();
 
     // Revenue itself only depends on the selected value (€40M prize + €8M
     // commercial growth on top of the €148.1M actual), regardless of what
@@ -238,10 +245,13 @@ describe("playground.js CFO Simulator", () => {
   });
 
   it("should decrease net result when payroll is increased", () => {
+    vi.useFakeTimers();
     initPlayground();
     const payrollSlider = document.getElementById("payrollSlider");
     payrollSlider.value = 10; // +10% payroll increase
     payrollSlider.dispatchEvent(new Event("input"));
+    vi.runAllTimers();
+    vi.useRealTimers();
 
     // Baseline payroll is -87,736. A 10% increase is +8,773.6 expense, so Net
     // Result decreases relative to the default projection's €75.0M (see
@@ -253,12 +263,17 @@ describe("playground.js CFO Simulator", () => {
   });
 
   it("should reset variables when reset button is clicked", () => {
+    vi.useFakeTimers();
     initPlayground();
     const uclSelect = document.getElementById("uclSelect");
     uclSelect.value = "40";
     uclSelect.dispatchEvent(new Event("change"));
+    vi.runAllTimers();
+    vi.useRealTimers();
     expect(document.getElementById("pgKpiRev").textContent).toBe("€196.1M");
 
+    // Reset's own click handler isn't debounced (only the slider/select
+    // "input"/"change" path is), so no timer advance needed here.
     document.getElementById("btnResetPlayground").click();
     // Reset re-applies DEFAULT_INPUTS, which now assumes uclPrize: 47
     // (Round of 16) rather than 0 — see the comment on DEFAULT_INPUTS in
@@ -267,10 +282,13 @@ describe("playground.js CFO Simulator", () => {
   });
 
   it("should increase projected revenue when organic revenue growth is raised", () => {
+    vi.useFakeTimers();
     initPlayground();
     const revGrowthSlider = document.getElementById("revGrowthSlider");
     revGrowthSlider.value = 10; // +10% organic growth
     revGrowthSlider.dispatchEvent(new Event("input"));
+    vi.runAllTimers();
+    vi.useRealTimers();
 
     // The UCL control is left at its default (Round of 16, +€47M+€8M):
     // (148.149 * 1.10) + 47 + 8 = 217.9639
@@ -323,9 +341,14 @@ describe("playground.js CFO Simulator", () => {
 
     // Dragging any slider away from the Optimistic preset's exact value
     // should drop the highlight — none of the three presets match anymore.
+    // (updateActivePresetHighlight is part of updateProj's debounced work —
+    // see playground.js — so advance fake timers past the delay.)
+    vi.useFakeTimers();
     const payrollSlider = document.getElementById("payrollSlider");
     payrollSlider.value = 25;
     payrollSlider.dispatchEvent(new Event("input"));
+    vi.runAllTimers();
+    vi.useRealTimers();
     expect(optimisticBtn.classList.contains("active")).toBe(false);
     expect(baseBtn.classList.contains("active")).toBe(false);
     expect(conservativeBtn.classList.contains("active")).toBe(false);

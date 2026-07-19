@@ -2383,45 +2383,6 @@ textarea.pdf-field-input {
   font-family: var(--mono);
 }
 
-/* Toggle Switch Styling */
-.toggle-container {
-  display: flex;
-  align-items: center;
-}
-
-.playground-toggle {
-  appearance: none;
-  width: 48px;
-  height: 24px;
-  background-color: var(--rule-2);
-  border-radius: 12px;
-  position: relative;
-  outline: none;
-  cursor: pointer;
-  transition: background-color 0.22s ease;
-}
-
-.playground-toggle:checked {
-  background-color: var(--green);
-}
-
-.playground-toggle::before {
-  content: "";
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: #ffffff;
-  top: 2px;
-  left: 2px;
-  transition: transform 0.22s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-}
-
-.playground-toggle:checked::before {
-  transform: translateX(24px);
-}
-
 /* Range Slider Custom Styling */
 .playground-slider {
   -webkit-appearance: none;
@@ -2431,6 +2392,19 @@ textarea.pdf-field-input {
   border-radius: 3px;
   outline: none;
   cursor: pointer;
+}
+
+/* outline:none above drops the browser's default focus ring with no
+   replacement — unlike .playground-select/.ledger-input just below, which
+   compensate with a border/box-shadow change. A keyboard user tabbing to a
+   slider previously had zero visual indication it was focused. Scoped to
+   :focus-visible (not plain :focus) since a slider doesn't need a ring on
+   mouse click the way a ring on click would — only keyboard focus needs it
+   — and matches the outline token _base.css's global :focus-visible rule
+   already uses everywhere else in the app. */
+.playground-slider:focus-visible {
+  outline: 2px solid var(--green-light);
+  outline-offset: 4px;
 }
 
 .playground-slider::-webkit-slider-thumb {

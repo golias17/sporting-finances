@@ -112,72 +112,79 @@ export function hexToRgbArray(hex) {
 // updateChartTheme() to be visible without re-importing.
 export const ZONE_COLORS = getZoneColors(false);
 
-export function getPitchMilestone(season) {
-  const milestones = {
-    "2012/13": {
-      en: "⚽ Pitch: 7th place in Primeira Liga (worst in club history).",
-      pt: "⚽ Campo: 7º lugar na Primeira Liga (pior na história do clube)."
-    },
-    "2013/14": {
-      en: "⚽ Pitch: Leonardo Jardim leads team to 2nd place & UCL qualification.",
-      pt: "⚽ Campo: Leonardo Jardim lidera equipa ao 2º lugar e qualificação UCL."
-    },
-    "2014/15": {
-      en: "⚽ Pitch: Marco Silva wins Taça de Portugal.",
-      pt: "⚽ Campo: Marco Silva vence Taça de Portugal."
-    },
-    "2015/16": {
-      en: "⚽ Pitch: Jorge Jesus arrives. Record 86 points, finished 2nd.",
-      pt: "⚽ Campo: Jorge Jesus chega. Recorde de 86 pontos, terminou em 2º."
-    },
-    "2016/17": {
-      en: "⚽ Pitch: 3rd place finish, qualified for UCL group stage.",
-      pt: "⚽ Campo: Termina em 3º lugar, qualificação para a fase de grupos UCL."
-    },
-    "2017/18": {
-      en: "⚽ Pitch: Alcochete academy attack. Taça de Portugal runners-up.",
-      pt: "⚽ Campo: Ataque à academia de Alcochete. Finalista vencido da Taça."
-    },
-    "2018/19": {
-      en: "⚽ Pitch: Marcel Keizer wins Taça de Portugal & Taça da Liga.",
-      pt: "⚽ Campo: Marcel Keizer vence Taça de Portugal e Taça da Liga."
-    },
-    "2019/20": {
-      en: "⚽ Pitch: Rúben Amorim appointed in March for record €10M fee.",
-      pt: "⚽ Campo: Rúben Amorim contratado em Março por €10M (recorde)."
-    },
-    "2020/21": {
-      en: "⚽ Pitch: Champions! First Primeira Liga title in 19 years.",
-      pt: "⚽ Campo: Campeões! 1º título da Primeira Liga em 19 anos."
-    },
-    "2021/22": {
-      en: "⚽ Pitch: UCL Round of 16 qualification; won Taça da Liga.",
-      pt: "⚽ Campo: Oitavos-de-final da UCL; vence Taça da Liga."
-    },
-    "2022/23": {
-      en: "⚽ Pitch: 4th place finish; Europa League quarter-finalists.",
-      pt: "⚽ Campo: Termina em 4º lugar; Quartos-de-final da Liga Europa."
-    },
-    "2023/24": {
-      en: "⚽ Pitch: Champions! 20th Primeira Liga title (Gyökeres 29 goals).",
-      pt: "⚽ Campo: Campeões! 20º título da Primeira Liga (Gyökeres 29 golos)."
-    },
-    "2024/25": {
-      en: "⚽ Pitch: Amorim departs for Man Utd; João Pereira appointed.",
-      pt: "⚽ Campo: Amorim sai para o Man Utd; João Pereira contratado."
-    },
-    "2025/26": {
-      en: "⚽ Pitch: Title contention under João Pereira.",
-      pt: "⚽ Campo: Na luta pelo título sob o comando de João Pereira."
-    }
-  };
+// Static data, hoisted to module scope rather than built inside
+// getPitchMilestone() below — that function is wired into every chart's
+// shared tooltip footer callback (state.baseOpts.plugins.tooltip.callbacks.footer
+// in initChartDefaults()), so it used to re-allocate this entire 14-entry
+// bilingual object on every single tooltip update while a user hovers any
+// chart in the app, for no reason since none of it depends on the call's
+// arguments.
+const PITCH_MILESTONES = {
+  "2012/13": {
+    en: "⚽ Pitch: 7th place in Primeira Liga (worst in club history).",
+    pt: "⚽ Campo: 7º lugar na Primeira Liga (pior na história do clube)."
+  },
+  "2013/14": {
+    en: "⚽ Pitch: Leonardo Jardim leads team to 2nd place & UCL qualification.",
+    pt: "⚽ Campo: Leonardo Jardim lidera equipa ao 2º lugar e qualificação UCL."
+  },
+  "2014/15": {
+    en: "⚽ Pitch: Marco Silva wins Taça de Portugal.",
+    pt: "⚽ Campo: Marco Silva vence Taça de Portugal."
+  },
+  "2015/16": {
+    en: "⚽ Pitch: Jorge Jesus arrives. Record 86 points, finished 2nd.",
+    pt: "⚽ Campo: Jorge Jesus chega. Recorde de 86 pontos, terminou em 2º."
+  },
+  "2016/17": {
+    en: "⚽ Pitch: 3rd place finish, qualified for UCL group stage.",
+    pt: "⚽ Campo: Termina em 3º lugar, qualificação para a fase de grupos UCL."
+  },
+  "2017/18": {
+    en: "⚽ Pitch: Alcochete academy attack. Taça de Portugal runners-up.",
+    pt: "⚽ Campo: Ataque à academia de Alcochete. Finalista vencido da Taça."
+  },
+  "2018/19": {
+    en: "⚽ Pitch: Marcel Keizer wins Taça de Portugal & Taça da Liga.",
+    pt: "⚽ Campo: Marcel Keizer vence Taça de Portugal e Taça da Liga."
+  },
+  "2019/20": {
+    en: "⚽ Pitch: Rúben Amorim appointed in March for record €10M fee.",
+    pt: "⚽ Campo: Rúben Amorim contratado em Março por €10M (recorde)."
+  },
+  "2020/21": {
+    en: "⚽ Pitch: Champions! First Primeira Liga title in 19 years.",
+    pt: "⚽ Campo: Campeões! 1º título da Primeira Liga em 19 anos."
+  },
+  "2021/22": {
+    en: "⚽ Pitch: UCL Round of 16 qualification; won Taça da Liga.",
+    pt: "⚽ Campo: Oitavos-de-final da UCL; vence Taça da Liga."
+  },
+  "2022/23": {
+    en: "⚽ Pitch: 4th place finish; Europa League quarter-finalists.",
+    pt: "⚽ Campo: Termina em 4º lugar; Quartos-de-final da Liga Europa."
+  },
+  "2023/24": {
+    en: "⚽ Pitch: Champions! 20th Primeira Liga title (Gyökeres 29 goals).",
+    pt: "⚽ Campo: Campeões! 20º título da Primeira Liga (Gyökeres 29 golos)."
+  },
+  "2024/25": {
+    en: "⚽ Pitch: Amorim departs for Man Utd; João Pereira appointed.",
+    pt: "⚽ Campo: Amorim sai para o Man Utd; João Pereira contratado."
+  },
+  "2025/26": {
+    en: "⚽ Pitch: Title contention under João Pereira.",
+    pt: "⚽ Campo: Na luta pelo título sob o comando de João Pereira."
+  }
+};
 
+export function getPitchMilestone(season) {
   let cleanSeason = season;
   if (season.includes("H1") || season.includes("Semestre") || season.includes("2025/26")) {
     cleanSeason = "2025/26";
   }
 
-  const milestone = milestones[cleanSeason];
+  const milestone = PITCH_MILESTONES[cleanSeason];
   if (!milestone) return "";
 
   return state.isPt ? milestone.pt : milestone.en;
