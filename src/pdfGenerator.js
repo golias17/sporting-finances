@@ -6,6 +6,7 @@ import {
   revenueGrowthPct,
   consecutiveProfitableYears,
 } from "./metrics.js";
+import { getBrandColors, hexToRgbArray } from "./chartUtils.js";
 
 /**
  * Helper: Converts a relative image path to a Base64 data URL using a temporary canvas.
@@ -28,53 +29,38 @@ function getBase64ImageFromUrl(url) {
   });
 }
 
+// Format Helper: Millions with spaces before units. Shared by every page —
+// a plain function (not a closure) so it doesn't need to be threaded
+// through the page-drawing functions' context object.
+function fmtM(val) {
+  if (val === null || val === undefined) return "—";
+  const sign = val < 0 ? "-" : "";
+  return `${sign}${Math.abs(val / 1000).toFixed(1)} M€`;
+}
+
 /**
- * Generates an exhaustive, premium 5-page financial analysis report.
- * Contains localized analysis, a cover page with a 2x2 KPI dashboard,
- * five distinct tables (Operating P&L, Balance Sheet, Player Trading, Cash Flows, and Landmark Transfers),
- * and dynamic overlap-free spacing for timelines.
+ * Builds the shared context (doc handle, colors, formatted labels, and the
+ * page-header/pagination helpers) passed to every drawPage*() function
+ * below. Centralizing this avoids each page re-deriving the same "current
+ * page number" state or re-declaring the same color constants.
  */
-export async function generateCuratedPdf(options = {}) {
-  const {
-    lang = state.isPt ? "pt" : "en",
-    pages = [true, true, true, true, true],
-    executiveNote = "",
-  } = options;
-  if (!state.DATASET) return;
-
-  // Load the brand logo
-  let logoBase64 = null;
-  try {
-    logoBase64 = await getBase64ImageFromUrl("./assets/LOGO.png");
-  } catch (e) {
-    console.error("Failed to load logo image", e);
-  }
-
-  const doc = new jsPDF({
-    orientation: "portrait",
-    unit: "mm",
-    format: "a4",
-  });
-
-  const isPt = lang === "pt";
-  const data = state.fullAnnual;
-  const totalPages = pages.slice(0, 4).filter(Boolean).length + (pages[4] ? 2 : 0);
-  if (totalPages === 0) return;
-
-  // Colors Matching Corporate Green/Gold Guidelines
-  const green = [10, 93, 58]; // #0a5d3a
-  const gold = [200, 169, 81]; // #c8a951
-  const darkInk = [24, 34, 29]; // #18221d
-  const mutedText = [90, 106, 98]; // #5a6a62
-  const positive = [46, 138, 85]; // #2e8a55
-  const negative = [198, 64, 79]; // #c6404f
-  const lightGreyBg = [248, 249, 250]; // #f8f9fa
-
-  // Format Helper: Millions with spaces before units
-  const fmtM = (val) => {
-    if (val === null || val === undefined) return "—";
-    const sign = val < 0 ? "-" : "";
-    return `${sign}${Math.abs(val / 1000).toFixed(1)} M€`;
+function buildPdfContext({ doc, isPt, data, logoBase64, totalPages }) {
+  const brand = getBrandColors(false);
+  // Colors matching corporate green/gold guidelines — derived from the same
+  // canonical light-mode palette the live dashboard uses (chartUtils.js's
+  // getBrandColors()), rather than a separate hand-picked RGB set. That
+  // second copy had drifted from the app's actual palette (stale gold
+  // #c8a951 vs the app's #b08923, and a "negative" red that didn't match
+  // --neg at all) — this PDF export can no longer disagree with the
+  // dashboard's colors.
+  const colors = {
+    green: hexToRgbArray(brand.green),
+    gold: hexToRgbArray(brand.gold),
+    darkInk: hexToRgbArray(brand.ink),
+    mutedText: hexToRgbArray(brand.muted),
+    positive: hexToRgbArray(brand.pos),
+    negative: hexToRgbArray(brand.neg),
+    lightGreyBg: [248, 249, 250], // #f8f9fa — PDF-only background tint, no app equivalent
   };
 
   // Use the most recent *complete* season in annual_data (the in-progress
@@ -91,49 +77,12 @@ export async function generateCuratedPdf(options = {}) {
   // hardcoded so it doesn't need a manual edit every season.
   const rangeEndLabel = h1Data?.label || latestSeason.label || "";
 
-  // Same shared helper as the dashboard KPI strip (metrics.js), so the PDF
-  // cover caption can never disagree with the on-screen number.
-  const revGrowthPct = revenueGrowthPct(data, data.length - 1);
-  const revGrowthLabel = isPt
-    ? revGrowthPct !== null
-      ? `Crescimento sustentável de ${revGrowthPct}%`
-      : "Sem dados suficientes para calcular a tendência"
-    : revGrowthPct !== null
-      ? `Sustainable ${revGrowthPct}% growth trend`
-      : "Not enough seasons to compute a trend";
-
-  // Consecutive profitable seasons ending at the latest season — shared
-  // helper, same reason as above.
-  const consecutiveProfitable = consecutiveProfitableYears(
-    data,
-    data.length - 1,
-  );
-  const netResultLabel = isPt
-    ? consecutiveProfitable > 1
-      ? `${consecutiveProfitable}º ano consecutivo com lucros`
-      : consecutiveProfitable === 1
-        ? "Ano com lucros"
-        : "Ano de prejuízo"
-    : consecutiveProfitable > 1
-      ? `${consecutiveProfitable} consecutive profitable years`
-      : consecutiveProfitable === 1
-        ? "Profitable year"
-        : "Loss-making year";
-
-  const equityLabel = isPt
-    ? latestSeason.equity > 0
-      ? "Balanço revertido a positivo"
-      : `Ainda negativo — défice de ${fmtM(latestSeason.equity)}`
-    : latestSeason.equity > 0
-      ? "Balance sheet restored to positive"
-      : `Still negative — deficit of ${fmtM(latestSeason.equity)}`;
-
   // Header Helper across Pages
   const addHeader = (pageNum) => {
-    doc.setFillColor(...green);
+    doc.setFillColor(...colors.green);
     doc.rect(15, 12, 180, 4, "F");
 
-    doc.setFillColor(...gold);
+    doc.setFillColor(...colors.gold);
     doc.rect(15, 16, 180, 1.5, "F");
 
     let textStartX = 15;
@@ -144,12 +93,12 @@ export async function generateCuratedPdf(options = {}) {
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
-    doc.setTextColor(...green);
+    doc.setTextColor(...colors.green);
     doc.text("SPORTING CLUBE DE PORTUGAL — FUTEBOL, SAD", textStartX, 26);
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8.5);
-    doc.setTextColor(...mutedText);
+    doc.setTextColor(...colors.mutedText);
     doc.text(
       isPt
         ? `Relatório de Evolução Financeira · ${firstSeason.label || "2012/13"} a ${rangeEndLabel}`
@@ -166,24 +115,37 @@ export async function generateCuratedPdf(options = {}) {
     doc.line(15, 34, 195, 34);
   };
 
-  let currentPageNum = 0;
+  const pageCounter = { count: 0 };
   const startNewPage = () => {
-    currentPageNum++;
-    if (currentPageNum > 1) {
+    pageCounter.count++;
+    if (pageCounter.count > 1) {
       doc.addPage();
     }
-    addHeader(currentPageNum);
+    addHeader(pageCounter.count);
   };
 
-  // ==========================================================
-  // PAGE 1: TITLE, SUMMARY, AND EXECUTIVE KPI GRID
-  // ==========================================================
-  if (pages[0]) {
-    startNewPage();
+  return {
+    doc,
+    isPt,
+    data,
+    colors,
+    firstSeason,
+    latestSeason,
+    startNewPage,
+    pageCounter,
+  };
+}
+
+// ==========================================================
+// PAGE 1: TITLE, SUMMARY, AND EXECUTIVE KPI GRID
+// ==========================================================
+function drawCoverPage(ctx, { revGrowthLabel, netResultLabel, equityLabel, executiveNote }) {
+  const { doc, isPt, colors, firstSeason, latestSeason, startNewPage } = ctx;
+  startNewPage();
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(17);
-  doc.setTextColor(...darkInk);
+  doc.setTextColor(...colors.darkInk);
   doc.text(
     isPt
       ? "DOSSIER ANUAL DE ANÁLISE FINANCEIRA"
@@ -194,7 +156,7 @@ export async function generateCuratedPdf(options = {}) {
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(10.5);
-  doc.setTextColor(...gold);
+  doc.setTextColor(...colors.gold);
   doc.text(
     isPt
       ? "Turnaround Estrutural, Reestruturação de Dívida e Avaliação de Ativos"
@@ -204,14 +166,14 @@ export async function generateCuratedPdf(options = {}) {
   );
 
   // Narrative Background Box
-  doc.setFillColor(...lightGreyBg);
+  doc.setFillColor(...colors.lightGreyBg);
   doc.rect(15, 60, 180, 43, "F");
-  doc.setDrawColor(...green);
+  doc.setDrawColor(...colors.green);
   doc.line(15, 60, 15, 103);
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(9.5);
-  doc.setTextColor(...green);
+  doc.setTextColor(...colors.green);
   doc.text(
     isPt
       ? "ENQUADRAMENTO FINANCEIRO E HISTÓRICO"
@@ -222,7 +184,7 @@ export async function generateCuratedPdf(options = {}) {
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8.5);
-  doc.setTextColor(...darkInk);
+  doc.setTextColor(...colors.darkInk);
 
   const introText = isPt
     ? "Este dossier apresenta uma análise exaustiva da transformação financeira operada na Sporting SAD durante a última década. Em 2013, o clube enfrentava uma das piores crises da sua história, caracterizada por insolvência técnica, incapacidade estrutural de gerar fluxos de caixa recorrentes e um passivo de curto prazo asfixiante. Através da implementação de um rigoroso plano de reestruturação — com especial destaque para a emissão e posterior conversão de €135M em obrigações convertíveis (VMOCs), bem como a valorização do talento desportivo proveniente da Academia de Alcochete —, a SAD alcançou a auto-suficiência e estabilidade. A emissão obrigacionista USPP de €225M a 28 anos conclui esta reabilitação, dotando a instituição de uma de maturidade de passivo sem precedentes no desporto nacional."
@@ -234,7 +196,7 @@ export async function generateCuratedPdf(options = {}) {
   // KPI Grid
   doc.setFont("helvetica", "bold");
   doc.setFontSize(11);
-  doc.setTextColor(...green);
+  doc.setTextColor(...colors.green);
   doc.text(
     isPt
       ? `Indicadores Financeiros Chave (Consolidado ${latestSeason.label || ""})`
@@ -244,26 +206,26 @@ export async function generateCuratedPdf(options = {}) {
   );
 
   const drawKpi = (x, y, w, h, labelText, value, trendText) => {
-    doc.setFillColor(...lightGreyBg);
+    doc.setFillColor(...colors.lightGreyBg);
     doc.rect(x, y, w, h, "F");
     doc.setDrawColor(220, 222, 221);
     doc.rect(x, y, w, h, "D");
-    doc.setFillColor(...green);
+    doc.setFillColor(...colors.green);
     doc.rect(x, y, w, 2, "F");
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(7.5);
-    doc.setTextColor(...mutedText);
+    doc.setTextColor(...colors.mutedText);
     doc.text(labelText, x + 4, y + 8);
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(13);
-    doc.setTextColor(...darkInk);
+    doc.setTextColor(...colors.darkInk);
     doc.text(value, x + 4, y + 15);
 
     doc.setFont("helvetica", "italic");
     doc.setFontSize(7);
-    doc.setTextColor(...green);
+    doc.setTextColor(...colors.green);
     doc.text(trendText, x + 4, y + 21);
   };
 
@@ -328,7 +290,7 @@ export async function generateCuratedPdf(options = {}) {
   // Editorial Analysis
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9);
-  doc.setTextColor(...darkInk);
+  doc.setTextColor(...colors.darkInk);
 
   // Equity figures are interpolated from the actual first/latest seasons
   // (rather than hardcoded "-119.4 M€ / +40.9 M€") so this paragraph stays
@@ -349,19 +311,20 @@ export async function generateCuratedPdf(options = {}) {
   doc.text(splitNotesP1, 15, 182);
 
   // Footer Accent Line
-  doc.setFillColor(...green);
+  doc.setFillColor(...colors.green);
   doc.rect(15, 220, 180, 0.5, "F");
 }
 
-  // ==========================================================
-  // PAGE 2: TABLE 1 (REVENUES & WAGES) & TABLE 2 (BALANCE SHEET)
-  // ==========================================================
-  if (pages[1]) {
-    startNewPage();
+// ==========================================================
+// PAGE 2: TABLE 1 (REVENUES & WAGES) & TABLE 2 (BALANCE SHEET)
+// ==========================================================
+function drawFinancialTablesPage(ctx) {
+  const { doc, isPt, data, colors, startNewPage } = ctx;
+  startNewPage();
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10.5);
-  doc.setTextColor(...green);
+  doc.setTextColor(...colors.green);
   doc.text(
     isPt
       ? "I. Demonstração de Resultados Operacionais Recorrentes"
@@ -423,12 +386,12 @@ export async function generateCuratedPdf(options = {}) {
     margin: { left: 15, right: 15 },
     theme: "striped",
     headStyles: {
-      fillColor: green,
+      fillColor: colors.green,
       textColor: [255, 255, 255],
       fontStyle: "bold",
       fontSize: 8,
     },
-    bodyStyles: { fontSize: 7.5, textColor: darkInk },
+    bodyStyles: { fontSize: 7.5, textColor: colors.darkInk },
     columnStyles: {
       0: { fontStyle: "bold", cellWidth: 15 },
       6: { halign: "center", cellWidth: 16 },
@@ -446,10 +409,10 @@ export async function generateCuratedPdf(options = {}) {
         if (pctStr && pctStr !== "—") {
           const val = parseInt(pctStr, 10);
           if (val > 70) {
-            cellData.cell.styles.textColor = negative;
+            cellData.cell.styles.textColor = colors.negative;
             cellData.cell.styles.fontStyle = "bold";
           } else if (val <= 60) {
-            cellData.cell.styles.textColor = positive;
+            cellData.cell.styles.textColor = colors.positive;
             cellData.cell.styles.fontStyle = "bold";
           }
         }
@@ -459,10 +422,10 @@ export async function generateCuratedPdf(options = {}) {
         if (pctStr && pctStr !== "—") {
           const val = parseInt(pctStr, 10);
           if (val < 10) {
-            cellData.cell.styles.textColor = negative;
+            cellData.cell.styles.textColor = colors.negative;
             cellData.cell.styles.fontStyle = "bold";
           } else if (val >= 20) {
-            cellData.cell.styles.textColor = positive;
+            cellData.cell.styles.textColor = colors.positive;
             cellData.cell.styles.fontStyle = "bold";
           }
         }
@@ -475,7 +438,7 @@ export async function generateCuratedPdf(options = {}) {
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10.5);
-  doc.setTextColor(...green);
+  doc.setTextColor(...colors.green);
   doc.text(
     isPt
       ? "II. Estrutura do Balanço e Rácio de Alavancagem"
@@ -539,12 +502,12 @@ export async function generateCuratedPdf(options = {}) {
     margin: { left: 15, right: 15 },
     theme: "striped",
     headStyles: {
-      fillColor: green,
+      fillColor: colors.green,
       textColor: [255, 255, 255],
       fontStyle: "bold",
       fontSize: 8,
     },
-    bodyStyles: { fontSize: 7.5, textColor: darkInk },
+    bodyStyles: { fontSize: 7.5, textColor: colors.darkInk },
     columnStyles: {
       0: { fontStyle: "bold", cellWidth: 15 },
       7: { halign: "center", cellWidth: 16 },
@@ -560,7 +523,7 @@ export async function generateCuratedPdf(options = {}) {
       if (cellData.section === "body" && cellData.column.index === 3) {
         const val = cellData.cell.text[0];
         if (val && val.startsWith("-")) {
-          cellData.cell.styles.textColor = negative;
+          cellData.cell.styles.textColor = colors.negative;
           cellData.cell.styles.fontStyle = "bold";
         } else if (
           val &&
@@ -568,7 +531,7 @@ export async function generateCuratedPdf(options = {}) {
           val !== "0.0 M€" &&
           !val.startsWith("0")
         ) {
-          cellData.cell.styles.textColor = positive;
+          cellData.cell.styles.textColor = colors.positive;
           cellData.cell.styles.fontStyle = "bold";
         }
       }
@@ -577,10 +540,10 @@ export async function generateCuratedPdf(options = {}) {
         if (val && val !== "—") {
           const valNum = parseInt(val, 10);
           if (valNum < 0) {
-            cellData.cell.styles.textColor = negative;
+            cellData.cell.styles.textColor = colors.negative;
             cellData.cell.styles.fontStyle = "bold";
           } else if (valNum >= 15) {
-            cellData.cell.styles.textColor = positive;
+            cellData.cell.styles.textColor = colors.positive;
             cellData.cell.styles.fontStyle = "bold";
           }
         }
@@ -595,7 +558,7 @@ export async function generateCuratedPdf(options = {}) {
     const chartYStart = 236;
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9.5);
-    doc.setTextColor(...green);
+    doc.setTextColor(...colors.green);
     doc.text(
       isPt ? "Evolução do Capital Próprio do Balanço (M€)" : "Shareholders' Equity Evolution Trend (M€)",
       15,
@@ -604,7 +567,7 @@ export async function generateCuratedPdf(options = {}) {
 
     const maxEquityAbs = Math.max(...data.map(d => Math.abs(d.equity || 0)));
     const yZero = chartYStart + 32; // baseline for Y=0
-    
+
     // Draw grid bounds
     doc.setFillColor(248, 249, 250);
     doc.rect(15, chartYStart + 4, 180, 42, "F");
@@ -622,39 +585,40 @@ export async function generateCuratedPdf(options = {}) {
 
       if (val >= 0) {
         const barY = yZero - barHeight;
-        doc.setFillColor(...positive);
+        doc.setFillColor(...colors.positive);
         doc.rect(barX, barY, barWidth, barHeight, "F");
       } else {
         const absHeight = Math.abs(barHeight);
-        doc.setFillColor(...negative);
+        doc.setFillColor(...colors.negative);
         doc.rect(barX, yZero, barWidth, absHeight, "F");
       }
 
       // Draw abbreviated year label
       doc.setFont("helvetica", "normal");
       doc.setFontSize(6.5);
-      doc.setTextColor(...mutedText);
+      doc.setTextColor(...colors.mutedText);
       const yrShort = data[i].label.split("/")[0].slice(2);
       doc.text("'" + yrShort, barX + (barWidth / 2), chartYStart + 40, { align: "center" });
     }
 
     // Gold zero line
-    doc.setDrawColor(...gold);
+    doc.setDrawColor(...colors.gold);
     doc.setLineWidth(0.4);
     doc.line(15, yZero, 195, yZero);
     doc.setLineWidth(0.2); // reset
   }
 }
 
-  // ==========================================================
-  // PAGE 3: TABLE 3 (PLAYER TRADING) & TABLE 4 (CASH FLOWS)
-  // ==========================================================
-  if (pages[2]) {
-    startNewPage();
+// ==========================================================
+// PAGE 3: TABLE 3 (PLAYER TRADING) & TABLE 4 (CASH FLOWS)
+// ==========================================================
+function drawTradingCashFlowPage(ctx) {
+  const { doc, isPt, data, colors, startNewPage } = ctx;
+  startNewPage();
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10.5);
-  doc.setTextColor(...green);
+  doc.setTextColor(...colors.green);
   doc.text(
     isPt
       ? "III. Trading de Passes de Jogadores e Valorização do Plantel"
@@ -700,12 +664,12 @@ export async function generateCuratedPdf(options = {}) {
     margin: { left: 15, right: 15 },
     theme: "striped",
     headStyles: {
-      fillColor: green,
+      fillColor: colors.green,
       textColor: [255, 255, 255],
       fontStyle: "bold",
       fontSize: 8,
     },
-    bodyStyles: { fontSize: 7.5, textColor: darkInk },
+    bodyStyles: { fontSize: 7.5, textColor: colors.darkInk },
     columnStyles: {
       0: { fontStyle: "bold", cellWidth: 16 },
       1: { halign: "right" },
@@ -718,7 +682,7 @@ export async function generateCuratedPdf(options = {}) {
       if (cellData.section === "body" && cellData.column.index === 3) {
         const val = cellData.cell.text[0];
         if (val && val.startsWith("-")) {
-          cellData.cell.styles.textColor = negative;
+          cellData.cell.styles.textColor = colors.negative;
           cellData.cell.styles.fontStyle = "bold";
         } else if (
           val &&
@@ -726,7 +690,7 @@ export async function generateCuratedPdf(options = {}) {
           val !== "0.0 M€" &&
           !val.startsWith("0")
         ) {
-          cellData.cell.styles.textColor = positive;
+          cellData.cell.styles.textColor = colors.positive;
           cellData.cell.styles.fontStyle = "bold";
         }
       }
@@ -738,7 +702,7 @@ export async function generateCuratedPdf(options = {}) {
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10.5);
-  doc.setTextColor(...green);
+  doc.setTextColor(...colors.green);
   doc.text(
     isPt
       ? "IV. Demonstração Histórica de Fluxos de Caixa"
@@ -781,12 +745,12 @@ export async function generateCuratedPdf(options = {}) {
     margin: { left: 15, right: 15 },
     theme: "striped",
     headStyles: {
-      fillColor: green,
+      fillColor: colors.green,
       textColor: [255, 255, 255],
       fontStyle: "bold",
       fontSize: 8,
     },
-    bodyStyles: { fontSize: 7.5, textColor: darkInk },
+    bodyStyles: { fontSize: 7.5, textColor: colors.darkInk },
     columnStyles: {
       0: { fontStyle: "bold", cellWidth: 20 },
       1: { halign: "right" },
@@ -798,7 +762,7 @@ export async function generateCuratedPdf(options = {}) {
       if (cellData.section === "body" && cellData.column.index === 4) {
         const val = cellData.cell.text[0];
         if (val && val.startsWith("-")) {
-          cellData.cell.styles.textColor = negative;
+          cellData.cell.styles.textColor = colors.negative;
           cellData.cell.styles.fontStyle = "bold";
         } else if (
           val &&
@@ -806,7 +770,7 @@ export async function generateCuratedPdf(options = {}) {
           val !== "0.0 M€" &&
           !val.startsWith("0")
         ) {
-          cellData.cell.styles.textColor = positive;
+          cellData.cell.styles.textColor = colors.positive;
           cellData.cell.styles.fontStyle = "bold";
         }
       }
@@ -814,16 +778,17 @@ export async function generateCuratedPdf(options = {}) {
   });
 }
 
-  // ==========================================================
-  // PAGE 4: TIMELINE & FINANCING DETAIL (OVERLAP FREE)
-  // ==========================================================
-  if (pages[3]) {
-    startNewPage();
+// ==========================================================
+// PAGE 4: TIMELINE & FINANCING DETAIL (OVERLAP FREE)
+// ==========================================================
+function drawFinancingTimelinePage(ctx) {
+  const { doc, isPt, colors, startNewPage } = ctx;
+  startNewPage();
 
   // Section: Strategic Financing Profile
   doc.setFont("helvetica", "bold");
   doc.setFontSize(11);
-  doc.setTextColor(...green);
+  doc.setTextColor(...colors.green);
   doc.text(
     isPt
       ? "V. Perfil dos Instrumentos de Financiamento Estratégico"
@@ -834,7 +799,7 @@ export async function generateCuratedPdf(options = {}) {
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8.5);
-  doc.setTextColor(...darkInk);
+  doc.setTextColor(...colors.darkInk);
 
   const notesText = isPt
     ? "• VMOCs (Valores Mobiliários Obrigatoriamente Convertíveis): Emitidos na reestruturação de 2014 para adiar obrigações urgentes com o Novo Banco e o BCP. Em agosto de 2022 (83.6 M€) e dezembro de 2023 (51.4 M€), a quase totalidade foi convertida em ações da Sporting SAD pelo valor nominal de €1.00. Esta conversão de 135.0 M€ de dívida em capital anulou encargos com juros e extinguiu o passivo bancário legado bancário.\n\n• Lion Finance Securitizações: Operações Lion Finance I e II estruturadas para titularização e desconto de recebíveis futuros da NOS (direitos de transmissão de jogos). Funcionaram como principal fonte de liquidez de médio prazo na amortização de contas de curto prazo com fornecedores.\n\n• USPP Bond Placement (225.0 M€): Emitido em outubro de 2025 com maturidade a 28 anos e taxa fixa de 5.75%. Garantiu notação de grau de investimento (Investment Grade) inédita pela Fitch e DBRS. Os fundos destinam-se a reestruturar a dívida bancária sob juros variáveis e a financiar o desenvolvimento de infraestruturas no estádio Alvalade."
@@ -849,7 +814,7 @@ export async function generateCuratedPdf(options = {}) {
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(11);
-  doc.setTextColor(...green);
+  doc.setTextColor(...colors.green);
   doc.text(
     isPt
       ? "VI. Marcos Financeiros Cronológicos"
@@ -901,15 +866,15 @@ export async function generateCuratedPdf(options = {}) {
   timelineEvents.forEach((ev) => {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(8.5);
-    doc.setTextColor(...gold);
+    doc.setTextColor(...colors.gold);
     doc.text(`[${ev.year}]`, 15, currentY);
 
-    doc.setTextColor(...darkInk);
+    doc.setTextColor(...colors.darkInk);
     doc.text(ev.title, 35, currentY);
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
-    doc.setTextColor(...mutedText);
+    doc.setTextColor(...colors.mutedText);
     const splitDesc = doc.splitTextToSize(ev.desc, 155);
     doc.text(splitDesc, 35, currentY + 3.5);
 
@@ -918,67 +883,70 @@ export async function generateCuratedPdf(options = {}) {
   });
 }
 
-  // ==========================================================
-  // PAGE 5: LANDMARK PLAYER TRANSFERS LEDGER
-  // ==========================================================
-  if (pages[4]) {
-    const cleanText = (str) => {
-      if (!str) return "—";
-      return str
-        .replace(/≈/g, "~")
-        .replace(/≥/g, ">=")
-        .replace(/≤/g, "<=");
-    };
+// ==========================================================
+// PAGES 5-6: LANDMARK PLAYER TRANSFERS LEDGER (SALES & PURCHASES)
+// ==========================================================
+function drawTransfersLedgerPages(ctx) {
+  const { doc, isPt, colors, startNewPage } = ctx;
 
-    // Extract transfers >= 8M
-    const salesLedger = [];
-    const purchasesLedger = [];
+  const cleanText = (str) => {
+    if (!str) return "—";
+    return str
+      .replace(/≈/g, "~")
+      .replace(/≥/g, ">=")
+      .replace(/≤/g, "<=");
+  };
 
-    state.TRANSFER_LEDGER.forEach((seasonObj) => {
-      const sLabel = seasonObj.season;
-      if (seasonObj.sales) {
-        seasonObj.sales.forEach((p) => {
-          if (p.fee >= 10.0) {
-            const rawNote = isPt ? (p.note_pt || p.note) : p.note;
-            salesLedger.push({
-              season: sLabel,
-              player: p.player,
-              club: p.club,
-              fee: p.fee,
-              commission: p.commission || 0,
-              note: cleanText(rawNote),
-            });
-          }
-        });
-      }
-      if (seasonObj.purchases) {
-        seasonObj.purchases.forEach((p) => {
-          if (p.fee >= 8.0) {
-            const rawNote = isPt ? (p.note_pt || p.note) : p.note;
-            purchasesLedger.push({
-              season: sLabel,
-              player: p.player,
-              club: p.club,
-              fee: p.fee,
-              note: cleanText(rawNote),
-            });
-          }
-        });
-      }
-    });
+  // Extract transfers >= 8M
+  const salesLedger = [];
+  const purchasesLedger = [];
 
-    // Sort Descending by Fee
-    salesLedger.sort((a, b) => b.fee - a.fee);
-    purchasesLedger.sort((a, b) => b.fee - a.fee);
+  state.TRANSFER_LEDGER.forEach((seasonObj) => {
+    const sLabel = seasonObj.season;
+    if (seasonObj.sales) {
+      seasonObj.sales.forEach((p) => {
+        if (p.fee >= 10.0) {
+          const rawNote = isPt ? (p.note_pt || p.note) : p.note;
+          salesLedger.push({
+            season: sLabel,
+            player: p.player,
+            club: p.club,
+            fee: p.fee,
+            commission: p.commission || 0,
+            note: cleanText(rawNote),
+          });
+        }
+      });
+    }
+    if (seasonObj.purchases) {
+      seasonObj.purchases.forEach((p) => {
+        if (p.fee >= 8.0) {
+          const rawNote = isPt ? (p.note_pt || p.note) : p.note;
+          purchasesLedger.push({
+            season: sLabel,
+            player: p.player,
+            club: p.club,
+            fee: p.fee,
+            note: cleanText(rawNote),
+          });
+        }
+      });
+    }
+  });
 
-    const topSales = salesLedger;
-    const topPurchases = purchasesLedger;
+  // Sort Descending by Fee
+  salesLedger.sort((a, b) => b.fee - a.fee);
+  purchasesLedger.sort((a, b) => b.fee - a.fee);
 
-    startNewPage();
+  const topSales = salesLedger;
+  const topPurchases = purchasesLedger;
+
+  // PAGE 5: SALES
+  startNewPage();
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10.5);
-  doc.setTextColor(...green);
+  doc.setTextColor(...colors.green);
   doc.text(
     isPt
       ? "VII-A. Livro de Transferências Históricas — Recordes de Saídas (Taxa Principal >= 10.0 M€)"
@@ -1021,12 +989,12 @@ export async function generateCuratedPdf(options = {}) {
     margin: { left: 15, right: 15 },
     theme: "striped",
     headStyles: {
-      fillColor: green,
+      fillColor: colors.green,
       textColor: [255, 255, 255],
       fontStyle: "bold",
       fontSize: 7.5,
     },
-    bodyStyles: { fontSize: 7, textColor: darkInk, cellPadding: 1.5 },
+    bodyStyles: { fontSize: 7, textColor: colors.darkInk, cellPadding: 1.5 },
     columnStyles: {
       0: { fontStyle: "bold", cellWidth: 16 },
       1: { fontStyle: "bold", cellWidth: 26 },
@@ -1037,14 +1005,12 @@ export async function generateCuratedPdf(options = {}) {
     },
   });
 
-  // ==========================================================
-  // PAGE 6: LANDMARK PLAYER TRANSFERS LEDGER (ARRIVALS)
-  // ==========================================================
+  // PAGE 6: PURCHASES
   startNewPage();
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10.5);
-  doc.setTextColor(...green);
+  doc.setTextColor(...colors.green);
   doc.text(
     isPt
       ? "VII-B. Livro de Transferências Históricas — Recordes de Entradas (Taxa Principal >= 8.0 M€)"
@@ -1084,12 +1050,12 @@ export async function generateCuratedPdf(options = {}) {
     margin: { left: 15, right: 15 },
     theme: "striped",
     headStyles: {
-      fillColor: green,
+      fillColor: colors.green,
       textColor: [255, 255, 255],
       fontStyle: "bold",
       fontSize: 7.5,
     },
-    bodyStyles: { fontSize: 7, textColor: darkInk, cellPadding: 1.5 },
+    bodyStyles: { fontSize: 7, textColor: colors.darkInk, cellPadding: 1.5 },
     columnStyles: {
       0: { fontStyle: "bold", cellWidth: 16 },
       1: { fontStyle: "bold", cellWidth: 28 },
@@ -1099,21 +1065,110 @@ export async function generateCuratedPdf(options = {}) {
     },
   });
 
-  // Footer page 5
+  // Footer page 6
   doc.setFont("helvetica", "italic");
   doc.setFontSize(7);
-  doc.setTextColor(...mutedText);
+  doc.setTextColor(...colors.mutedText);
   doc.text(
     isPt
       ? "Nota: Informação compilada para fins informativos. Dados extraídos dos relatórios auditados da Sporting SAD."
       : "Disclaimer: Prepared for information purposes only. Source data compiled from audited Sporting SAD annual reports.",
     15,
     283,
-    );
+  );
+}
+
+/**
+ * Generates an exhaustive, premium 5-page financial analysis report.
+ * Contains localized analysis, a cover page with a 2x2 KPI dashboard,
+ * five distinct tables (Operating P&L, Balance Sheet, Player Trading, Cash Flows, and Landmark Transfers),
+ * and dynamic overlap-free spacing for timelines.
+ */
+export async function generateCuratedPdf(options = {}) {
+  const {
+    lang = state.isPt ? "pt" : "en",
+    pages = [true, true, true, true, true],
+    executiveNote = "",
+  } = options;
+  if (!state.DATASET) return;
+
+  // Load the brand logo
+  let logoBase64 = null;
+  try {
+    logoBase64 = await getBase64ImageFromUrl("./assets/LOGO.png");
+  } catch (e) {
+    console.error("Failed to load logo image", e);
+  }
+
+  const doc = new jsPDF({
+    orientation: "portrait",
+    unit: "mm",
+    format: "a4",
+  });
+
+  const isPt = lang === "pt";
+  const data = state.fullAnnual;
+  const totalPages = pages.slice(0, 4).filter(Boolean).length + (pages[4] ? 2 : 0);
+  if (totalPages === 0) return;
+
+  const ctx = buildPdfContext({ doc, isPt, data, logoBase64, totalPages });
+  const { latestSeason } = ctx;
+
+  // Same shared helper as the dashboard KPI strip (metrics.js), so the PDF
+  // cover caption can never disagree with the on-screen number.
+  const revGrowthPct = revenueGrowthPct(data, data.length - 1);
+  const revGrowthLabel = isPt
+    ? revGrowthPct !== null
+      ? `Crescimento sustentável de ${revGrowthPct}%`
+      : "Sem dados suficientes para calcular a tendência"
+    : revGrowthPct !== null
+      ? `Sustainable ${revGrowthPct}% growth trend`
+      : "Not enough seasons to compute a trend";
+
+  // Consecutive profitable seasons ending at the latest season — shared
+  // helper, same reason as above.
+  const consecutiveProfitable = consecutiveProfitableYears(
+    data,
+    data.length - 1,
+  );
+  const netResultLabel = isPt
+    ? consecutiveProfitable > 1
+      ? `${consecutiveProfitable}º ano consecutivo com lucros`
+      : consecutiveProfitable === 1
+        ? "Ano com lucros"
+        : "Ano de prejuízo"
+    : consecutiveProfitable > 1
+      ? `${consecutiveProfitable} consecutive profitable years`
+      : consecutiveProfitable === 1
+        ? "Profitable year"
+        : "Loss-making year";
+
+  const equityLabel = isPt
+    ? latestSeason.equity > 0
+      ? "Balanço revertido a positivo"
+      : `Ainda negativo — défice de ${fmtM(latestSeason.equity)}`
+    : latestSeason.equity > 0
+      ? "Balance sheet restored to positive"
+      : `Still negative — deficit of ${fmtM(latestSeason.equity)}`;
+
+  if (pages[0]) {
+    drawCoverPage(ctx, { revGrowthLabel, netResultLabel, equityLabel, executiveNote });
+  }
+  if (pages[1]) {
+    drawFinancialTablesPage(ctx);
+  }
+  if (pages[2]) {
+    drawTradingCashFlowPage(ctx);
+  }
+  if (pages[3]) {
+    drawFinancingTimelinePage(ctx);
+  }
+  if (pages[4]) {
+    drawTransfersLedgerPages(ctx);
   }
 
   // Save Document if any pages were rendered
-  if (currentPageNum > 0) {
+  if (ctx.pageCounter.count > 0) {
     doc.save("Sporting_SAD_Financial_Dossier.pdf");
   }
 }
