@@ -39,6 +39,7 @@ export default [
         Document: "readonly",
         ResizeObserver: "readonly",
         Element: "readonly",
+        Event: "readonly",
       },
     },
     rules: {
