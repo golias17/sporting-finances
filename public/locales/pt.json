@@ -1974,8 +1974,28 @@
     "isAria": false,
     "innerHTML": false
   },
+  "pg-chart1-tag": {
+    "text": "Comparação de cenários",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-chart1-desc": {
+    "text": "A linha de base assume que 2024/25 se repete exatamente; as etiquetas acima de cada barra mostram a diferença da sua projeção.",
+    "isAria": false,
+    "innerHTML": false
+  },
   "pg-chart2-title": {
     "text": "Saúde do Capital Próprio e Solvabilidade",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-chart2-tag": {
+    "text": "Balanço",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-chart2-desc": {
+    "text": "Eixo esquerdo: capital próprio (M€). Eixo direito: rácio de solvabilidade, capital próprio como percentagem do ativo total.",
     "isAria": false,
     "innerHTML": false
   }

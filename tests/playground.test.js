@@ -74,8 +74,10 @@ describe("playground.js CFO Simulator", () => {
 
         <select id="uclSelect">
           <option value="0">None</option>
+          <option value="36">League Phase</option>
           <option value="40">UCL</option>
-          <option value="47">Round of 16</option>
+          <option value="47" selected>Round of 16</option>
+          <option value="60">Quarter-finals</option>
         </select>
 
         <span id="revGrowthVal">0%</span>
@@ -141,7 +143,25 @@ describe("playground.js CFO Simulator", () => {
       neg: "#b8403a",
       chartBg: "#ffffff",
     };
-    state.baseOpts = { scales: { x: { ticks: {} } } };
+    // Mirrors the shape initChartDefaults() (chartUtils.js) builds in the
+    // real app — playground.js's chart options now spread ...state.baseOpts
+    // (for the themed glass tooltip, bottom legend, and axis tick/grid
+    // colors every other chart gets) instead of building options from a
+    // bare {}, so the mock needs the same scales.x/scales.y/plugins shape.
+    state.baseOpts = {
+      scales: {
+        x: { ticks: { font: { size: 11 }, color: "#6a716e" }, grid: { display: false } },
+        y: {
+          ticks: { font: { size: 11 }, color: "#6a716e", callback: () => "" },
+          grid: { color: "rgba(0,0,0,0.05)" },
+          beginAtZero: true,
+        },
+      },
+      plugins: {
+        legend: { position: "bottom", labels: { boxWidth: 12, font: { size: 11.5 } } },
+        tooltip: { enabled: false, external: () => {}, callbacks: { footer: () => "" } },
+      },
+    };
     state.urlPlayground = null;
 
     // playground.js derives its BASELINE from the real "2024/25" season in
@@ -180,17 +200,22 @@ describe("playground.js CFO Simulator", () => {
 
   it("should initialize with default values and baseline KPIs, with every KPI reading 'no change'", () => {
     initPlayground();
-    expect(document.getElementById("pgKpiRev").textContent).toBe("€148.1M");
-    expect(document.getElementById("pgKpiNet").textContent).toBe("€20.0M");
+    // DEFAULT_INPUTS now assumes a Round of 16 UCL campaign (uclPrize: 47,
+    // matching the <select>'s `selected` option — see the comment on
+    // DEFAULT_INPUTS in src/playground.js) instead of no European football
+    // at all, so the default projection bakes in +€47M prize + €8M
+    // commercial spillover on top of the raw 2024/25 actuals.
+    expect(document.getElementById("pgKpiRev").textContent).toBe("€203.1M");
+    expect(document.getElementById("pgKpiNet").textContent).toBe("€75.0M");
     // pgKpiEq always displays the *projected* (2025/26) closing equity:
     // 2024/25's closing equity (€40.9M) plus a full projected season's net
-    // result (€20.0M, reconstructed to match 2024/25's actual result when
-    // nothing is adjusted), i.e. €61.0M.
-    expect(document.getElementById("pgKpiEq").textContent).toBe("€61.0M");
+    // result (€75.0M under the default Round-of-16 assumption), i.e.
+    // €116.0M.
+    expect(document.getElementById("pgKpiEq").textContent).toBe("€116.0M");
     // BASELINE.cash comes from financials.json's real 2024/25 entry
     // instead of a stale hardcoded literal (which was €7.0M vs the actual
     // €15.6M) — see getBaseline() in src/playground.js.
-    expect(document.getElementById("pgKpiCash").textContent).toBe("€15.6M");
+    expect(document.getElementById("pgKpiCash").textContent).toBe("€70.6M");
 
     // Every KPI is compared against a *computed* "no changes" scenario
     // (computeProjection() at DEFAULT_INPUTS), not against the raw 2024/25
@@ -220,8 +245,8 @@ describe("playground.js CFO Simulator", () => {
     expect(solvencyChart).toBeDefined();
     expect(solvencyChart.config.data.datasets[0].label).toBe("Shareholders' Equity (M€)");
     const [baselineEquity, projectedEquity] = solvencyChart.config.data.datasets[0].data;
-    expect(baselineEquity).toBeCloseTo(60.951, 2);
-    expect(projectedEquity).toBeCloseTo(60.951, 2);
+    expect(baselineEquity).toBeCloseTo(115.951, 2);
+    expect(projectedEquity).toBeCloseTo(115.951, 2);
     expect(baselineEquity).toBeCloseTo(projectedEquity, 6);
   });
 
@@ -231,9 +256,14 @@ describe("playground.js CFO Simulator", () => {
     uclSelect.value = "40";
     uclSelect.dispatchEvent(new Event("change"));
 
-    // Revenue should increase by €40M prize + €8M commercial growth (from €148.1M to €196.1M)
+    // Revenue itself only depends on the selected value (€40M prize + €8M
+    // commercial growth on top of the €148.1M actual), regardless of what
+    // DEFAULT_INPUTS assumes. The diff is what changed: the default
+    // baseline now assumes Round of 16 (+€47M+€8M), a bigger UCL run than
+    // League Phase/Group Stage (+€40M+€8M), so switching to League Phase
+    // reads as a €7M *downgrade* from baseline, not an upgrade.
     expect(document.getElementById("pgKpiRev").textContent).toBe("€196.1M");
-    expect(document.getElementById("pgKpiRevDiff").textContent).toBe("+48.0M vs baseline");
+    expect(document.getElementById("pgKpiRevDiff").textContent).toBe("-7.0M vs baseline");
 
     // Net Result and Equity should also increase by €48M
     expect(document.getElementById("pgKpiNet").textContent).toBe("€68.0M");
@@ -246,10 +276,13 @@ describe("playground.js CFO Simulator", () => {
     payrollSlider.value = 10; // +10% payroll increase
     payrollSlider.dispatchEvent(new Event("input"));
 
-    // Baseline payroll is -87,736. A 10% increase is +8,773.6 expense, so Net Result decreases
-    expect(document.getElementById("pgKpiNet").textContent).not.toBe("€20.0M");
+    // Baseline payroll is -87,736. A 10% increase is +8,773.6 expense, so Net
+    // Result decreases relative to the default projection's €75.0M (see
+    // DEFAULT_INPUTS's comment in src/playground.js for why 75.0 and not
+    // 20.0 — it assumes a Round of 16 UCL run, not no European football).
+    expect(document.getElementById("pgKpiNet").textContent).not.toBe("€75.0M");
     const netVal = parseFloat(document.getElementById("pgKpiNet").textContent.replace("€", "").replace("M", ""));
-    expect(netVal).toBeLessThan(20.0);
+    expect(netVal).toBeLessThan(75.0);
   });
 
   it("should reset variables when reset button is clicked", () => {
@@ -260,7 +293,10 @@ describe("playground.js CFO Simulator", () => {
     expect(document.getElementById("pgKpiRev").textContent).toBe("€196.1M");
 
     document.getElementById("btnResetPlayground").click();
-    expect(document.getElementById("pgKpiRev").textContent).toBe("€148.1M");
+    // Reset re-applies DEFAULT_INPUTS, which now assumes uclPrize: 47
+    // (Round of 16) rather than 0 — see the comment on DEFAULT_INPUTS in
+    // src/playground.js.
+    expect(document.getElementById("pgKpiRev").textContent).toBe("€203.1M");
   });
 
   it("should increase projected revenue when organic revenue growth is raised", () => {
@@ -269,8 +305,9 @@ describe("playground.js CFO Simulator", () => {
     revGrowthSlider.value = 10; // +10% organic growth
     revGrowthSlider.dispatchEvent(new Event("input"));
 
-    // 148.149 * 1.10 = 162.9639
-    expect(document.getElementById("pgKpiRev").textContent).toBe("€163.0M");
+    // The UCL control is left at its default (Round of 16, +€47M+€8M):
+    // (148.149 * 1.10) + 47 + 8 = 217.9639
+    expect(document.getElementById("pgKpiRev").textContent).toBe("€218.0M");
     expect(document.getElementById("revGrowthVal").textContent).toBe("+10%");
   });
 
@@ -278,7 +315,7 @@ describe("playground.js CFO Simulator", () => {
     initPlayground();
     document.querySelector('[data-pg-preset="optimistic"]').click();
 
-    expect(document.getElementById("uclSelect").value).toBe("47");
+    expect(document.getElementById("uclSelect").value).toBe("60");
     expect(document.getElementById("payrollSlider").value).toBe("10");
     expect(document.getElementById("salesSlider").value).toBe("140");
     expect(document.getElementById("purchasesSlider").value).toBe("60");
@@ -296,7 +333,7 @@ describe("playground.js CFO Simulator", () => {
 
     document.querySelector('[data-pg-preset="base"]').click();
     expect(document.getElementById("pgKpiNetDiff").textContent).toBe("no change");
-    expect(document.getElementById("uclSelect").value).toBe("0");
+    expect(document.getElementById("uclSelect").value).toBe("47");
     expect(document.getElementById("revGrowthSlider").value).toBe("0");
   });
 
@@ -357,7 +394,7 @@ describe("playground.js CFO Simulator", () => {
     initPlayground();
     const table = document.getElementById("chartPlaygroundSolvency-a11y-table");
     const bodyText = table.querySelector("tbody").textContent;
-    expect(bodyText).toContain("€61.0M");
-    expect(bodyText).toMatch(/14\.5%/);
+    expect(bodyText).toContain("€116.0M");
+    expect(bodyText).toMatch(/24\.4%/);
   });
 });

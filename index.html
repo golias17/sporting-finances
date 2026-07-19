@@ -2384,7 +2384,7 @@
                 <select id="uclSelect" class="playground-select">
                   <option value="0" data-i18n="pg-ucl-none">Not Qualified (€0M)</option>
                   <option value="36" data-i18n="pg-ucl-league">League Phase / Group Stage (+€36M)</option>
-                  <option value="47" data-i18n="pg-ucl-r16">Round of 16 (+€47M)</option>
+                  <option value="47" data-i18n="pg-ucl-r16" selected>Round of 16 (+€47M)</option>
                   <option value="60" data-i18n="pg-ucl-qf">Quarter-finals (+€60M)</option>
                   <option value="82" data-i18n="pg-ucl-sf">Semi-finals / Finals (+€82M)</option>
                 </select>
@@ -2517,16 +2517,20 @@
               <div class="card">
                 <div class="card-head">
                   <h3 data-i18n="pg-chart1-title">Simulated Financials vs. Baseline</h3>
+                  <span class="tag" data-i18n="pg-chart1-tag">Scenario compare</span>
                 </div>
-                <div class="chart-box">
+                <p class="desc" data-i18n="pg-chart1-desc">Baseline assumes 2024/25 repeats exactly; labels above each bar show how your projection differs from it.</p>
+                <div class="chart-box tall">
                   <canvas id="chartPlaygroundNet" aria-label="Playground Net Results Chart" role="img"></canvas>
                 </div>
               </div>
               <div class="card">
                 <div class="card-head">
                   <h3 data-i18n="pg-chart2-title">Equity & Solvency Health</h3>
+                  <span class="tag" data-i18n="pg-chart2-tag">Balance sheet</span>
                 </div>
-                <div class="chart-box">
+                <p class="desc" data-i18n="pg-chart2-desc">Left axis: shareholders' equity (€M). Right axis: solvency ratio, equity as a share of total assets.</p>
+                <div class="chart-box tall">
                   <canvas id="chartPlaygroundSolvency" aria-label="Playground Solvency Chart" role="img"></canvas>
                 </div>
               </div>

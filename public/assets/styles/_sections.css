@@ -2275,7 +2275,12 @@ textarea.pdf-field-input {
 
 .playground-charts-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  /* 380px (not the app-wide grid's usual 300px) because
+     chartPlaygroundSolvency is a dual-axis chart with a title on both the
+     left and right y-axis plus two long scenario-name x-axis labels — at
+     300px those get cramped/rotated. Wider minmax means the pair drops to
+     a single column sooner on medium viewports instead of squeezing. */
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
   gap: 1.5rem;
 }
 

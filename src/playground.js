@@ -58,6 +58,16 @@ function getBaseline() {
 // zero adjustments. Comparing against this computed baseline instead of
 // against the raw actuals means Reset always shows "no change" everywhere,
 // with no caveat needed for Equity/Solvency.
+//
+// IMPORTANT: every field here must match the corresponding control's
+// initial DOM state (each slider's `value` attribute, and — since it isn't
+// necessarily the first <option> — the <select id="uclSelect"> option
+// marked `selected` in index.html). If they drift apart, the page loads
+// with "proj" (read from the DOM) and "baseline" (read from this object)
+// already disagreeing, so every KPI shows a spurious diff on first render
+// instead of "no change". uclPrize was bumped from 0 to 47 without updating
+// the <select>'s default here — index.html's Round of 16 <option> now
+// carries `selected` to match.
 const DEFAULT_INPUTS = {
   uclPrize: 47,
   payrollAdj: 0,
@@ -407,8 +417,8 @@ function drawProjectionCharts(baseline, proj) {
             baseline.netTrading / 1000,
             baseline.netResult / 1000,
           ],
-          backgroundColor: "rgba(106, 113, 110, 0.4)",
-          borderColor: "#6a716e",
+          backgroundColor: state.COLORS.mutedSoft || FALLBACK.mutedSoft,
+          borderColor: state.COLORS.muted || FALLBACK.muted,
           borderWidth: 1,
         },
         {
@@ -426,17 +436,31 @@ function drawProjectionCharts(baseline, proj) {
       ],
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      // Merge in the app-wide themed defaults (axis tick color/font, the
+      // custom glass-style external tooltip every other chart uses instead
+      // of Chart.js's plain default box, bottom legend styling) instead of
+      // the bare {} this chart used to build its options from — without
+      // this it rendered with unthemed black axis text and a default
+      // browser-style tooltip, both broken in dark mode.
+      ...state.baseOpts,
       scales: {
+        x: { ...state.baseOpts.scales.x },
         y: {
+          ...state.baseOpts.scales.y,
+          // Override the shared callback: it assumes raw EUR-thousands
+          // input (divides by 1000 again), but this chart's data is already
+          // in millions.
+          ticks: { ...state.baseOpts.scales.y.ticks, callback: (v) => v.toFixed(0) + "M€" },
           beginAtZero: false,
-          title: { display: true, text: "M€" },
+          title: { display: true, text: "M€", color: state.COLORS.muted || FALLBACK.muted },
         },
       },
       plugins: {
+        ...state.baseOpts.plugins,
         tooltip: {
+          ...state.baseOpts.plugins.tooltip,
           callbacks: {
+            ...state.baseOpts.plugins.tooltip.callbacks,
             label: (context) => {
               const val = context.parsed.y;
               if (context.datasetIndex === 0) {
@@ -471,7 +495,13 @@ function drawProjectionCharts(baseline, proj) {
           if (Math.abs(delta) < 0.05) return;
 
           const sign = delta > 0 ? "+" : "";
-          const color = delta > 0 ? "#0a5d3a" : "#eb5e28";
+          // Same pos/neg tokens as everywhere else (.kpi .change.pos/.neg,
+          // the KPI diff text above) — the old "#0a5d3a"/"#eb5e28" literals
+          // weren't dark-mode aware and "#eb5e28" wasn't even in the
+          // app's palette.
+          const color = delta > 0
+            ? (state.COLORS.pos || FALLBACK.pos)
+            : (state.COLORS.neg || FALLBACK.neg);
           ctx.fillStyle = color;
 
           const yPos = bar.y + (projVal >= 0 ? -8 : 12);
@@ -512,17 +542,27 @@ function drawProjectionCharts(baseline, proj) {
       ],
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      // Same rationale as chart 1 above: merge in the shared themed
+      // defaults (glass tooltip, bottom legend, themed axis ticks/grid)
+      // instead of building options from a bare {}. The y grid used to
+      // read `state.COLORS.rule`, a key that doesn't exist in the palette
+      // (see chartUtils.js's PALETTE) — it was silently always falling
+      // back to a hardcoded, non-dark-mode-aware rgba. Using
+      // state.baseOpts.scales.y.grid (which updateChartTheme() actually
+      // does keep in sync with light/dark mode) fixes that too.
+      ...state.baseOpts,
       scales: {
+        x: { ...state.baseOpts.scales.x },
         y: {
           type: "linear",
           position: "left",
           title: {
             display: true,
             text: state.isPt ? "Capital Próprio (M€)" : "Shareholders' Equity (M€)",
+            color: state.COLORS.muted || FALLBACK.muted,
           },
-          grid: { color: state.COLORS.rule || "rgba(0, 0, 0, 0.05)" }
+          ticks: { ...state.baseOpts.scales.y.ticks, callback: (v) => v.toFixed(0) },
+          grid: { ...state.baseOpts.scales.y.grid },
         },
         y1: {
           type: "linear",
@@ -530,15 +570,20 @@ function drawProjectionCharts(baseline, proj) {
           title: {
             display: true,
             text: state.isPt ? "Rácio de Solvabilidade (%)" : "Solvency Ratio (%)",
+            color: state.COLORS.muted || FALLBACK.muted,
           },
           min: 0,
           max: Math.max(30, baseline.solvency + 5, proj.solvency + 5),
+          ticks: { ...state.baseOpts.scales.y.ticks, callback: (v) => v.toFixed(0) + "%" },
           grid: { drawOnChartArea: false }, // Avoid grid lines overlap
         },
       },
       plugins: {
+        ...state.baseOpts.plugins,
         tooltip: {
+          ...state.baseOpts.plugins.tooltip,
           callbacks: {
+            ...state.baseOpts.plugins.tooltip.callbacks,
             label: (context) => {
               const val = context.parsed.y;
               const suffix = context.datasetIndex === 0 ? " M€" : "%";

@@ -1974,8 +1974,28 @@
     "isAria": false,
     "innerHTML": false
   },
+  "pg-chart1-tag": {
+    "text": "Scenario compare",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-chart1-desc": {
+    "text": "Baseline assumes 2024/25 repeats exactly; labels above each bar show how your projection differs from it.",
+    "isAria": false,
+    "innerHTML": false
+  },
   "pg-chart2-title": {
     "text": "Equity & Solvency Health",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-chart2-tag": {
+    "text": "Balance sheet",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-chart2-desc": {
+    "text": "Left axis: shareholders' equity (€M). Right axis: solvency ratio, equity as a share of total assets.",
     "isAria": false,
     "innerHTML": false
   }
