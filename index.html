@@ -2432,15 +2432,19 @@
 
             <!-- Charts Side-by-Side -->
             <div class="playground-charts-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-              <div class="card chart-box">
-                <h3 data-i18n="pg-chart1-title">Simulated Financials vs. Baseline</h3>
-                <div class="canvas-wrap" style="position: relative; height: 300px;">
+              <div class="card">
+                <div class="card-head">
+                  <h3 data-i18n="pg-chart1-title">Simulated Financials vs. Baseline</h3>
+                </div>
+                <div class="chart-box">
                   <canvas id="chartPlaygroundNet" aria-label="Playground Net Results Chart" role="img"></canvas>
                 </div>
               </div>
-              <div class="card chart-box">
-                <h3 data-i18n="pg-chart2-title">Equity & Solvency Health</h3>
-                <div class="canvas-wrap" style="position: relative; height: 300px;">
+              <div class="card">
+                <div class="card-head">
+                  <h3 data-i18n="pg-chart2-title">Equity & Solvency Health</h3>
+                </div>
+                <div class="chart-box">
                   <canvas id="chartPlaygroundSolvency" aria-label="Playground Solvency Chart" role="img"></canvas>
                 </div>
               </div>
