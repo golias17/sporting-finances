@@ -59,7 +59,7 @@ function getBaseline() {
 // against the raw actuals means Reset always shows "no change" everywhere,
 // with no caveat needed for Equity/Solvency.
 const DEFAULT_INPUTS = {
-  uclPrize: 0,
+  uclPrize: 47,
   payrollAdj: 0,
   salesTarget: 117,
   purchasesTarget: 30,
@@ -74,7 +74,7 @@ const DEFAULT_INPUTS = {
 // because it does anything Reset doesn't already do.
 const PRESETS = {
   conservative: {
-    uclPrize: 0,
+    uclPrize: 36,
     payrollAdj: 5,
     salesTarget: 80,
     purchasesTarget: 20,
@@ -84,7 +84,7 @@ const PRESETS = {
   },
   base: DEFAULT_INPUTS,
   optimistic: {
-    uclPrize: 47,
+    uclPrize: 60,
     payrollAdj: 10,
     salesTarget: 140,
     purchasesTarget: 60,
