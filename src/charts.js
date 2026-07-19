@@ -350,7 +350,7 @@ export function chartRevStreams() {
             ? "Outras receitas operacionais"
             : "Other operating income",
           data: other,
-          backgroundColor: state.COLORS.muted,
+          backgroundColor: state.COLORS.mutedSoft,
           borderRadius: 3,
           stack: "s1",
         },

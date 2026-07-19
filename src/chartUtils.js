@@ -30,10 +30,16 @@ export const fmtMillions = (v) => {
 // does against a translucent dark surface, so dimming these to match CSS
 // would hurt legibility. Dark-mode ink/muted/pos/neg/warn do have CSS
 // overrides (body.dark in _variables.css) and match those exactly.
+//
+// mutedSoft is dimmer than the other *Soft tokens (0.35/0.2 opacity vs their
+// 0.7/0.35) — it's used for catch-all "other" categories that should recede
+// behind the real data series, not compete with them at the same visual
+// weight the way posSoft/negSoft/infoSoft/goldSoft do for meaningful values.
 const PALETTE = {
   light: {
     ink: "#111814",
     muted: "#6a716e",
+    mutedSoft: "rgba(106,113,110,0.35)",
     chartBg: "#ffffff",
     green: "#0a5d3a",
     greenLight: "#2e9e6c",
@@ -52,6 +58,7 @@ const PALETTE = {
   dark: {
     ink: "#eaeaea",
     muted: "#8c938f",
+    mutedSoft: "rgba(140,147,143,0.2)",
     chartBg: "#121513",
     green: "#2e9e6c",
     greenLight: "#3de080",
