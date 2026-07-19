@@ -1814,6 +1814,26 @@
     "isAria": false,
     "innerHTML": false
   },
+  "pg-section-revenue": {
+    "text": "Receita",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-section-costs": {
+    "text": "Custos & Despesas Gerais",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-section-squad": {
+    "text": "Plantel & Transferências",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-section-debt": {
+    "text": "Dívida",
+    "isAria": false,
+    "innerHTML": false
+  },
   "pg-preset-conservative": {
     "text": "Conservador",
     "isAria": false,

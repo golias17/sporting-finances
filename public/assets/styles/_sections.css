@@ -2288,6 +2288,40 @@ textarea.pdf-field-input {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  /* Keeps the controls in view while the taller results column scrolls
+     past — 88px clears nav.tabs' own sticky bar (top: 16px + ~55px tall),
+     so the two sticky elements never overlap. Own scrollbar kicks in only
+     if the panel itself would otherwise exceed the viewport. */
+  position: sticky;
+  top: 88px;
+  max-height: calc(100vh - 108px);
+  overflow-y: auto;
+}
+
+@media (max-width: 900px) {
+  .playground-controls {
+    position: static;
+    max-height: none;
+    overflow-y: visible;
+  }
+}
+
+.control-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.control-section-title {
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule-2);
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--green);
 }
 
 .control-group {
@@ -2463,6 +2497,7 @@ body.dark .playground-select {
   background: var(--green);
   color: #ffffff;
   border-color: var(--green);
+  transform: translateY(-1px);
 }
 
 .pg-presets {
@@ -2490,6 +2525,7 @@ body.dark .playground-select {
 .btn-preset:hover {
   border-color: var(--gold);
   color: var(--gold);
+  transform: translateY(-1px);
 }
 
 .btn-preset[data-pg-preset="conservative"]:hover {
@@ -2500,6 +2536,28 @@ body.dark .playground-select {
 .btn-preset--optimistic:hover {
   border-color: var(--pos);
   color: var(--pos);
+}
+
+/* Persistent "selected" state — separate from :hover, which only shows on
+   mouseover. A preset stays marked active until a slider is dragged away
+   from its exact values (see updateActivePresetHighlight() in
+   playground.js), so it's always clear which scenario (if any) is applied. */
+.btn-preset.active {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(176, 137, 35, 0.1);
+}
+
+.btn-preset[data-pg-preset="conservative"].active {
+  border-color: var(--neg);
+  color: var(--neg);
+  background: rgba(184, 64, 58, 0.1);
+}
+
+.btn-preset--optimistic.active {
+  border-color: var(--pos);
+  color: var(--pos);
+  background: rgba(46, 138, 85, 0.1);
 }
 
 .control-help {

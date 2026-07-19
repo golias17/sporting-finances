@@ -300,6 +300,37 @@ describe("playground.js CFO Simulator", () => {
     expect(document.getElementById("revGrowthSlider").value).toBe("0");
   });
 
+  it("highlights the matching preset button and clears it once a slider is moved away", () => {
+    initPlayground();
+    const baseBtn = document.querySelector('[data-pg-preset="base"]');
+    const optimisticBtn = document.querySelector('[data-pg-preset="optimistic"]');
+    const conservativeBtn = document.querySelector('[data-pg-preset="conservative"]');
+
+    // Default sliders (Base Case's own values) start out matching "base".
+    expect(baseBtn.classList.contains("active")).toBe(true);
+    expect(baseBtn.getAttribute("aria-pressed")).toBe("true");
+    expect(optimisticBtn.classList.contains("active")).toBe(false);
+
+    optimisticBtn.click();
+    expect(optimisticBtn.classList.contains("active")).toBe(true);
+    expect(optimisticBtn.getAttribute("aria-pressed")).toBe("true");
+    expect(baseBtn.classList.contains("active")).toBe(false);
+    expect(conservativeBtn.classList.contains("active")).toBe(false);
+
+    // Dragging any slider away from the Optimistic preset's exact value
+    // should drop the highlight — none of the three presets match anymore.
+    const payrollSlider = document.getElementById("payrollSlider");
+    payrollSlider.value = 25;
+    payrollSlider.dispatchEvent(new Event("input"));
+    expect(optimisticBtn.classList.contains("active")).toBe(false);
+    expect(baseBtn.classList.contains("active")).toBe(false);
+    expect(conservativeBtn.classList.contains("active")).toBe(false);
+
+    // Reset should bring the highlight back to "base".
+    document.getElementById("btnResetPlayground").click();
+    expect(baseBtn.classList.contains("active")).toBe(true);
+  });
+
   it("gives both playground charts a screen-reader data table and a PNG download button, like every other chart", () => {
     // Regression test: playground.js used to hand-roll chartRegistry.set()
     // + `new Chart(...)` instead of going through charts.js's mkChart()

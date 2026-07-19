@@ -1814,6 +1814,26 @@
     "isAria": false,
     "innerHTML": false
   },
+  "pg-section-revenue": {
+    "text": "Revenue",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-section-costs": {
+    "text": "Costs & Overhead",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-section-squad": {
+    "text": "Squad & Transfers",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-section-debt": {
+    "text": "Debt",
+    "isAria": false,
+    "innerHTML": false
+  },
   "pg-preset-conservative": {
     "text": "Conservative",
     "isAria": false,

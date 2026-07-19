@@ -2362,109 +2362,125 @@
             <p class="section-desc" data-i18n="pg-ctrls-desc">Adjust the variables below to simulate different business and sports scenarios for the next season.</p>
 
             <div class="pg-presets" role="group" aria-label="Quick scenarios">
-              <button type="button" class="btn-preset" data-pg-preset="conservative">
+              <button type="button" class="btn-preset" data-pg-preset="conservative" aria-pressed="false">
                 <span data-i18n="pg-preset-conservative">Conservative</span>
               </button>
-              <button type="button" class="btn-preset" data-pg-preset="base">
+              <button type="button" class="btn-preset" data-pg-preset="base" aria-pressed="true">
                 <span data-i18n="pg-preset-base">Base Case</span>
               </button>
-              <button type="button" class="btn-preset btn-preset--optimistic" data-pg-preset="optimistic">
+              <button type="button" class="btn-preset btn-preset--optimistic" data-pg-preset="optimistic" aria-pressed="false">
                 <span data-i18n="pg-preset-optimistic">Optimistic</span>
               </button>
             </div>
 
-            <div class="control-group">
-              <div class="control-label-row">
-                <label for="uclSelect" data-i18n="pg-ucl-label">UEFA Champions League Campaign</label>
-              </div>
-              <span class="control-help" data-i18n="pg-ucl-help">UEFA prize money, TV rights and ticket sales spillover.</span>
-              <select id="uclSelect" class="playground-select">
-                <option value="0" data-i18n="pg-ucl-none">Not Qualified (€0M)</option>
-                <option value="36" data-i18n="pg-ucl-league">League Phase / Group Stage (+€36M)</option>
-                <option value="47" data-i18n="pg-ucl-r16">Round of 16 (+€47M)</option>
-                <option value="60" data-i18n="pg-ucl-qf">Quarter-finals (+€60M)</option>
-                <option value="82" data-i18n="pg-ucl-sf">Semi-finals / Finals (+€82M)</option>
-              </select>
-            </div>
+            <div class="control-section">
+              <h4 class="control-section-title" data-i18n="pg-section-revenue">Revenue</h4>
 
-            <div class="control-group">
-              <div class="control-label-row">
-                <label for="revGrowthSlider" data-i18n="pg-revgrowth-label">Organic Revenue Growth</label>
-                <span id="revGrowthVal" class="value-highlight">0%</span>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <label for="uclSelect" data-i18n="pg-ucl-label">UEFA Champions League Campaign</label>
+                </div>
+                <span class="control-help" data-i18n="pg-ucl-help">UEFA prize money, TV rights and ticket sales spillover.</span>
+                <select id="uclSelect" class="playground-select">
+                  <option value="0" data-i18n="pg-ucl-none">Not Qualified (€0M)</option>
+                  <option value="36" data-i18n="pg-ucl-league">League Phase / Group Stage (+€36M)</option>
+                  <option value="47" data-i18n="pg-ucl-r16">Round of 16 (+€47M)</option>
+                  <option value="60" data-i18n="pg-ucl-qf">Quarter-finals (+€60M)</option>
+                  <option value="82" data-i18n="pg-ucl-sf">Semi-finals / Finals (+€82M)</option>
+                </select>
               </div>
-              <span class="control-help" data-i18n="pg-revgrowth-help">Ticket pricing and existing commercial deals, independent of UCL.</span>
-              <input type="range" id="revGrowthSlider" min="-10" max="15" value="0" step="1" class="playground-slider" />
-              <div class="slider-bounds">
-                <span>-10%</span>
-                <span>+15%</span>
-              </div>
-            </div>
 
-            <div class="control-group">
-              <div class="control-label-row">
-                <label for="payrollSlider" data-i18n="pg-payroll-label">Payroll (Wage Bill) Change</label>
-                <span id="payrollVal" class="value-highlight">0%</span>
-              </div>
-              <span class="control-help" data-i18n="pg-payroll-help">Personnel expenses. A 10% change represents a €8.8M shift.</span>
-              <input type="range" id="payrollSlider" min="-30" max="30" value="0" step="5" class="playground-slider" />
-              <div class="slider-bounds">
-                <span>-30%</span>
-                <span>+30%</span>
+              <div class="control-group">
+                <div class="control-label-row">
+                  <label for="revGrowthSlider" data-i18n="pg-revgrowth-label">Organic Revenue Growth</label>
+                  <span id="revGrowthVal" class="value-highlight">0%</span>
+                </div>
+                <span class="control-help" data-i18n="pg-revgrowth-help">Ticket pricing and existing commercial deals, independent of UCL.</span>
+                <input type="range" id="revGrowthSlider" min="-10" max="15" value="0" step="1" class="playground-slider" />
+                <div class="slider-bounds">
+                  <span>-10%</span>
+                  <span>+15%</span>
+                </div>
               </div>
             </div>
 
-            <div class="control-group">
-              <div class="control-label-row">
-                <label for="salesSlider" data-i18n="pg-sales-label">Player Sales Targets</label>
-                <span id="salesVal" class="value-highlight">€0M</span>
+            <div class="control-section">
+              <h4 class="control-section-title" data-i18n="pg-section-costs">Costs &amp; Overhead</h4>
+
+              <div class="control-group">
+                <div class="control-label-row">
+                  <label for="payrollSlider" data-i18n="pg-payroll-label">Payroll (Wage Bill) Change</label>
+                  <span id="payrollVal" class="value-highlight">0%</span>
+                </div>
+                <span class="control-help" data-i18n="pg-payroll-help">Personnel expenses. A 10% change represents a €8.8M shift.</span>
+                <input type="range" id="payrollSlider" min="-30" max="30" value="0" step="5" class="playground-slider" />
+                <div class="slider-bounds">
+                  <span>-30%</span>
+                  <span>+30%</span>
+                </div>
               </div>
-              <span class="control-help" data-i18n="pg-sales-help">Selling players generates direct capital gains.</span>
-              <input type="range" id="salesSlider" min="0" max="150" value="117" step="1" class="playground-slider" />
-              <div class="slider-bounds">
-                <span>€0M</span>
-                <span>€150M</span>
+
+              <div class="control-group">
+                <div class="control-label-row">
+                  <label for="capexSlider" data-i18n="pg-capex-label">Ordinary Overhead Change</label>
+                  <span id="capexVal" class="value-highlight">0%</span>
+                </div>
+                <span class="control-help" data-i18n="pg-capex-help">External supplies, security, matches and travel.</span>
+                <input type="range" id="capexSlider" min="-30" max="30" value="0" step="5" class="playground-slider" />
+                <div class="slider-bounds">
+                  <span>-30%</span>
+                  <span>+30%</span>
+                </div>
               </div>
             </div>
 
-            <div class="control-group">
-              <div class="control-label-row">
-                <label for="purchasesSlider" data-i18n="pg-purchases-label">Player Purchases (Reinvestment)</label>
-                <span id="purchasesVal" class="value-highlight">€0M</span>
+            <div class="control-section">
+              <h4 class="control-section-title" data-i18n="pg-section-squad">Squad &amp; Transfers</h4>
+
+              <div class="control-group">
+                <div class="control-label-row">
+                  <label for="salesSlider" data-i18n="pg-sales-label">Player Sales Targets</label>
+                  <span id="salesVal" class="value-highlight">€0M</span>
+                </div>
+                <span class="control-help" data-i18n="pg-sales-help">Selling players generates direct capital gains.</span>
+                <input type="range" id="salesSlider" min="0" max="150" value="117" step="1" class="playground-slider" />
+                <div class="slider-bounds">
+                  <span>€0M</span>
+                  <span>€150M</span>
+                </div>
               </div>
-              <span class="control-help" data-i18n="pg-purchases-help">Squad additions. Outflow is spread over 5-year contracts.</span>
-              <input type="range" id="purchasesSlider" min="0" max="100" value="30" step="5" class="playground-slider" />
-              <div class="slider-bounds">
-                <span>€0M</span>
-                <span>€100M</span>
+
+              <div class="control-group">
+                <div class="control-label-row">
+                  <label for="purchasesSlider" data-i18n="pg-purchases-label">Player Purchases (Reinvestment)</label>
+                  <span id="purchasesVal" class="value-highlight">€0M</span>
+                </div>
+                <span class="control-help" data-i18n="pg-purchases-help">Squad additions. Outflow is spread over 5-year contracts.</span>
+                <input type="range" id="purchasesSlider" min="0" max="100" value="30" step="5" class="playground-slider" />
+                <div class="slider-bounds">
+                  <span>€0M</span>
+                  <span>€100M</span>
+                </div>
               </div>
             </div>
 
-            <div class="control-group">
-              <div class="control-label-row">
-                <label for="capexSlider" data-i18n="pg-capex-label">Ordinary Overhead Change</label>
-                <span id="capexVal" class="value-highlight">0%</span>
-              </div>
-              <span class="control-help" data-i18n="pg-capex-help">External supplies, security, matches and travel.</span>
-              <input type="range" id="capexSlider" min="-30" max="30" value="0" step="5" class="playground-slider" />
-              <div class="slider-bounds">
-                <span>-30%</span>
-                <span>+30%</span>
+            <div class="control-section">
+              <h4 class="control-section-title" data-i18n="pg-section-debt">Debt</h4>
+
+              <div class="control-group">
+                <div class="control-label-row">
+                  <label for="debtRepaySlider" data-i18n="pg-debt-repay-label">Debt Deleveraging (Repayment)</label>
+                  <span id="debtRepayVal" class="value-highlight">€0M</span>
+                </div>
+                <span class="control-help" data-i18n="pg-debt-repay-help">Paying down bank debt principal saves 2% net interest.</span>
+                <input type="range" id="debtRepaySlider" min="0" max="50" value="0" step="5" class="playground-slider" />
+                <div class="slider-bounds">
+                  <span>€0M</span>
+                  <span>€50M</span>
+                </div>
               </div>
             </div>
 
-            <div class="control-group">
-              <div class="control-label-row">
-                <label for="debtRepaySlider" data-i18n="pg-debt-repay-label">Debt Deleveraging (Repayment)</label>
-                <span id="debtRepayVal" class="value-highlight">€0M</span>
-              </div>
-              <span class="control-help" data-i18n="pg-debt-repay-help">Paying down bank debt principal saves 2% net interest.</span>
-              <input type="range" id="debtRepaySlider" min="0" max="50" value="0" step="5" class="playground-slider" />
-              <div class="slider-bounds">
-                <span>€0M</span>
-                <span>€50M</span>
-              </div>
-            </div>
-            
             <button id="btnResetPlayground" class="btn-reset-playground">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rotate-ccw"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
               <span data-i18n="pg-btn-reset">Reset Simulation</span>

@@ -216,10 +216,40 @@ export function initPlayground() {
     rangeSliders.forEach(updateSliderFill);
   };
 
+  // Reads the 7 controls' current values off the DOM into an inputs-shaped
+  // object — shared by drawPlaygroundCharts() (feeds computeProjection())
+  // and updateActivePresetHighlight() (compares against PRESETS) so the two
+  // can't drift into reading the controls differently.
+  const getCurrentInputs = () => ({
+    uclPrize: parseInt(uclSelect.value, 10),
+    payrollAdj: parseInt(payrollSlider.value, 10),
+    salesTarget: parseInt(salesSlider.value, 10),
+    purchasesTarget: parseInt(purchasesSlider.value, 10),
+    capexAdj: parseInt(capexSlider.value, 10),
+    debtRepayTarget: parseInt(debtRepaySlider.value, 10),
+    revGrowthAdj: parseInt(revGrowthSlider.value, 10),
+  });
+
+  // Highlights whichever preset button (if any) matches the controls'
+  // current values, so a preset reads as "selected" until a slider is
+  // dragged away from it — instead of all three buttons always looking
+  // equally unselected regardless of what's actually applied.
+  const updateActivePresetHighlight = () => {
+    const current = getCurrentInputs();
+    presetButtons.forEach((btn) => {
+      const preset = PRESETS[btn.dataset.pgPreset];
+      const matches =
+        !!preset && Object.keys(DEFAULT_INPUTS).every((key) => current[key] === preset[key]);
+      btn.classList.toggle("active", matches);
+      btn.setAttribute("aria-pressed", String(matches));
+    });
+  };
+
   // Listeners
   const updateProj = () => {
     rangeSliders.forEach(updateSliderFill);
     drawPlaygroundCharts();
+    updateActivePresetHighlight();
     syncStateToUrl();
   };
 
@@ -229,6 +259,7 @@ export function initPlayground() {
   btnReset.addEventListener("click", () => {
     applyInputs(DEFAULT_INPUTS);
     drawPlaygroundCharts();
+    updateActivePresetHighlight();
     syncStateToUrl();
   });
 
@@ -238,6 +269,7 @@ export function initPlayground() {
       if (!preset) return;
       applyInputs(preset);
       drawPlaygroundCharts();
+      updateActivePresetHighlight();
       syncStateToUrl();
     });
   });
@@ -261,6 +293,7 @@ export function initPlayground() {
   // First render
   rangeSliders.forEach(updateSliderFill);
   drawPlaygroundCharts();
+  updateActivePresetHighlight();
 }
 
 export function drawPlaygroundCharts() {
