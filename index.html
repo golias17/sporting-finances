@@ -2400,6 +2400,18 @@
 
             <div class="control-group">
               <div class="control-label-row">
+                <label for="purchasesSlider" data-i18n="pg-purchases-label">Player Purchases (Reinvestment)</label>
+                <span id="purchasesVal" class="value-highlight">€0M</span>
+              </div>
+              <input type="range" id="purchasesSlider" min="0" max="100" value="30" step="5" class="playground-slider" />
+              <div class="slider-bounds">
+                <span>€0M</span>
+                <span>€100M</span>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="control-label-row">
                 <label for="capexSlider" data-i18n="pg-capex-label">Ordinary Overhead Change</label>
                 <span id="capexVal" class="value-highlight">0%</span>
               </div>
@@ -2407,6 +2419,18 @@
               <div class="slider-bounds">
                 <span>-30%</span>
                 <span>+30%</span>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="control-label-row">
+                <label for="debtRepaySlider" data-i18n="pg-debt-repay-label">Debt Deleveraging (Repayment)</label>
+                <span id="debtRepayVal" class="value-highlight">€0M</span>
+              </div>
+              <input type="range" id="debtRepaySlider" min="0" max="50" value="0" step="5" class="playground-slider" />
+              <div class="slider-bounds">
+                <span>€0M</span>
+                <span>€50M</span>
               </div>
             </div>
             

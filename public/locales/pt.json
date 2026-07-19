@@ -1854,8 +1854,18 @@
     "isAria": false,
     "innerHTML": false
   },
+  "pg-purchases-label": {
+    "text": "Contratações de Jogadores (Reinvestimento)",
+    "isAria": false,
+    "innerHTML": false
+  },
   "pg-capex-label": {
     "text": "Alteração dos Custos Operacionais Ordinários",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-debt-repay-label": {
+    "text": "Desalavancagem da Dívida (Amortização)",
     "isAria": false,
     "innerHTML": false
   },

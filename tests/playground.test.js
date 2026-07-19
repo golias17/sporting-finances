@@ -27,9 +27,15 @@ describe("playground.js CFO Simulator", () => {
         
         <span id="salesVal">117 M€</span>
         <input type="range" id="salesSlider" min="0" max="150" value="117" />
+
+        <span id="purchasesVal">30 M€</span>
+        <input type="range" id="purchasesSlider" min="0" max="100" value="30" />
         
         <span id="capexVal">0%</span>
         <input type="range" id="capexSlider" min="-30" max="30" value="0" />
+
+        <span id="debtRepayVal">0 M€</span>
+        <input type="range" id="debtRepaySlider" min="0" max="50" value="0" />
         
         <button id="btnResetPlayground">Reset</button>
 
@@ -76,13 +82,13 @@ describe("playground.js CFO Simulator", () => {
     uclSelect.value = "40";
     uclSelect.dispatchEvent(new Event("change"));
 
-    // Revenue should increase by €40M (from €148.1M to €188.1M)
-    expect(document.getElementById("pgKpiRev").textContent).toBe("€188.1M");
-    expect(document.getElementById("pgKpiRevDiff").textContent).toBe("+40.0M vs actual");
+    // Revenue should increase by €40M prize + €8M commercial growth (from €148.1M to €196.1M)
+    expect(document.getElementById("pgKpiRev").textContent).toBe("€196.1M");
+    expect(document.getElementById("pgKpiRevDiff").textContent).toBe("+48.0M vs actual");
 
-    // Net Result and Equity should also increase by €40M
-    expect(document.getElementById("pgKpiNet").textContent).toBe("€60.0M");
-    expect(document.getElementById("pgKpiEq").textContent).toBe("€101.0M");
+    // Net Result and Equity should also increase by €48M
+    expect(document.getElementById("pgKpiNet").textContent).toBe("€68.0M");
+    expect(document.getElementById("pgKpiEq").textContent).toBe("€109.0M");
   });
 
   it("should decrease net result when payroll is increased", () => {
@@ -102,7 +108,7 @@ describe("playground.js CFO Simulator", () => {
     const uclSelect = document.getElementById("uclSelect");
     uclSelect.value = "40";
     uclSelect.dispatchEvent(new Event("change"));
-    expect(document.getElementById("pgKpiRev").textContent).toBe("€188.1M");
+    expect(document.getElementById("pgKpiRev").textContent).toBe("€196.1M");
 
     document.getElementById("btnResetPlayground").click();
     expect(document.getElementById("pgKpiRev").textContent).toBe("€148.1M");

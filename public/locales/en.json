@@ -1854,8 +1854,18 @@
     "isAria": false,
     "innerHTML": false
   },
+  "pg-purchases-label": {
+    "text": "Player Purchases (Reinvestment)",
+    "isAria": false,
+    "innerHTML": false
+  },
   "pg-capex-label": {
     "text": "Ordinary Overhead Change",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-debt-repay-label": {
+    "text": "Debt Deleveraging (Repayment)",
     "isAria": false,
     "innerHTML": false
   },
