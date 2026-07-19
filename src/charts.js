@@ -281,7 +281,9 @@ export function chartRevenue() {
         {
           label: state.isPt ? "Receitas operacionais" : "Operating revenue",
           data: state.annual.map((d) => d.revenue_operating),
-          backgroundColor: state.COLORS.green,
+          backgroundColor: state.COLORS.posSoft,
+          borderColor: state.COLORS.pos,
+          borderWidth: 1,
           borderRadius: 3,
           order: 1,
         },
@@ -560,7 +562,9 @@ export function chartAssetsLiab() {
         {
           label: state.isPt ? "Ativo total" : "Total assets",
           data: state.annual.map((d) => d.total_assets),
-          backgroundColor: state.COLORS.green,
+          backgroundColor: state.COLORS.posSoft,
+          borderColor: state.COLORS.pos,
+          borderWidth: 1,
           borderRadius: 3,
         },
         {
@@ -569,6 +573,8 @@ export function chartAssetsLiab() {
             (d) => d.non_current_liabilities + d.current_liabilities,
           ),
           backgroundColor: state.COLORS.negSoft,
+          borderColor: state.COLORS.neg,
+          borderWidth: 1,
           borderRadius: 3,
         },
       ],
@@ -656,7 +662,9 @@ export function chartSquadBook() {
             ? "Valor contabilístico do plantel (balanço)"
             : "Squad book value (balance sheet)",
           data: bookValues,
-          backgroundColor: state.COLORS.green,
+          backgroundColor: state.COLORS.posSoft,
+          borderColor: state.COLORS.pos,
+          borderWidth: 1,
           borderRadius: 3,
           order: 2,
         },
