@@ -779,6 +779,8 @@ export function chartCashFlow() {
           label: state.isPt ? "Operacional" : "Operating",
           data: state.annual.map((d) => d.cf_operating),
           backgroundColor: state.COLORS.negSoft,
+          borderColor: state.COLORS.neg,
+          borderWidth: 1,
         },
         {
           label: state.isPt
@@ -786,11 +788,15 @@ export function chartCashFlow() {
             : "Investing (incl. player sales)",
           data: state.annual.map((d) => d.cf_investing),
           backgroundColor: state.COLORS.posSoft,
+          borderColor: state.COLORS.pos,
+          borderWidth: 1,
         },
         {
           label: state.isPt ? "Financiamento" : "Financing",
           data: state.annual.map((d) => d.cf_financing),
           backgroundColor: state.COLORS.infoSoft,
+          borderColor: state.COLORS.info,
+          borderWidth: 1,
         },
       ],
     },
