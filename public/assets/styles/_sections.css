@@ -2305,19 +2305,20 @@ textarea.pdf-field-input {
   gap: 20px;
   /* Keeps the controls in view while the taller results column scrolls
      past — 88px clears nav.tabs' own sticky bar (top: 16px + ~55px tall),
-     so the two sticky elements never overlap. Own scrollbar kicks in only
-     if the panel itself would otherwise exceed the viewport. */
+     so the two sticky elements never overlap. No max-height/overflow cap:
+     now that the two charts stack one per row instead of side by side, the
+     results column is comfortably taller than the controls panel's own
+     content, so there's no need to squeeze the panel into an internally
+     scrolling box — it can grow to its full height and simply scroll past
+     with the page once its bottom edge reaches the viewport bottom, like
+     any other sticky element. */
   position: sticky;
   top: 88px;
-  max-height: calc(100vh - 108px);
-  overflow-y: auto;
 }
 
 @media (max-width: 900px) {
   .playground-controls {
     position: static;
-    max-height: none;
-    overflow-y: visible;
   }
 }
 
