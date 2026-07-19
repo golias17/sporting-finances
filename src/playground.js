@@ -201,6 +201,37 @@ function drawProjectionCharts(
           title: { display: true, text: "M€" },
         },
       },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: (context) => {
+              const val = context.parsed.y;
+              return `${context.dataset.label}: ${val.toFixed(1)} M€`;
+            }
+          }
+        },
+        annotation: {
+          annotations: {
+            breakEvenLine: {
+              type: "line",
+              yScaleID: "y",
+              yMin: 0,
+              yMax: 0,
+              borderColor: "rgba(235, 94, 40, 0.4)",
+              borderWidth: 1.5,
+              borderDash: [5, 5],
+              label: {
+                display: true,
+                content: state.isPt ? "Ponto de Equilíbrio (0.0 M€)" : "Break-even Line (0.0 M€)",
+                position: "start",
+                backgroundColor: "rgba(235, 94, 40, 0.75)",
+                color: "#fff",
+                font: { size: 9, weight: "bold" }
+              }
+            }
+          }
+        }
+      }
     },
   });
   chartRegistry.set(canvas1Id, chart1);
@@ -266,6 +297,38 @@ function drawProjectionCharts(
           grid: { drawOnChartArea: false }, // Avoid grid lines overlap
         },
       },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: (context) => {
+              const val = context.parsed.y;
+              const suffix = context.datasetIndex === 0 ? " M€" : "x";
+              return `${context.dataset.label}: ${val.toFixed(2)}${suffix}`;
+            }
+          }
+        },
+        annotation: {
+          annotations: {
+            solvencyLimit: {
+              type: "line",
+              yScaleID: "y1",
+              yMin: 1.0,
+              yMax: 1.0,
+              borderColor: "rgba(235, 94, 40, 0.5)",
+              borderWidth: 2,
+              borderDash: [5, 5],
+              label: {
+                display: true,
+                content: state.isPt ? "Limiar de Liquidez (1.0x)" : "Liquidity Threshold (1.0x)",
+                position: "center",
+                backgroundColor: "rgba(235, 94, 40, 0.8)",
+                color: "#fff",
+                font: { size: 9, weight: "bold" }
+              }
+            }
+          }
+        }
+      }
     },
   });
   chartRegistry.set(canvas2Id, chart2);
