@@ -1819,6 +1819,11 @@
     "isAria": false,
     "innerHTML": false
   },
+  "pg-ucl-help": {
+    "text": "Prêmios UEFA, direitos de TV e receitas de bilheteira adicionais.",
+    "isAria": false,
+    "innerHTML": false
+  },
   "pg-ucl-none": {
     "text": "Não Qualificado (€0M)",
     "isAria": false,
@@ -1849,8 +1854,18 @@
     "isAria": false,
     "innerHTML": false
   },
+  "pg-payroll-help": {
+    "text": "Despesas de pessoal. Uma variação de 10% representa €8.8M.",
+    "isAria": false,
+    "innerHTML": false
+  },
   "pg-sales-label": {
     "text": "Metas de Venda de Jogadores",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-sales-help": {
+    "text": "Venda de jogadores gera mais-valias diretas.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1859,13 +1874,28 @@
     "isAria": false,
     "innerHTML": false
   },
+  "pg-purchases-help": {
+    "text": "Reforços do plantel. Custo distribuído por contratos de 5 anos.",
+    "isAria": false,
+    "innerHTML": false
+  },
   "pg-capex-label": {
     "text": "Alteração dos Custos Operacionais Ordinários",
     "isAria": false,
     "innerHTML": false
   },
+  "pg-capex-help": {
+    "text": "Fornecimentos externos, segurança, jogos e viagens.",
+    "isAria": false,
+    "innerHTML": false
+  },
   "pg-debt-repay-label": {
     "text": "Desalavancagem da Dívida (Amortização)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-debt-repay-help": {
+    "text": "Amortização de dívida bancária poupa 2% de juros líquidos.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1886,6 +1916,11 @@
   },
   "pg-kpi-eq": {
     "text": "Capital Próprio Projetado",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-kpi-cash": {
+    "text": "Saldo de Caixa Projetado",
     "isAria": false,
     "innerHTML": false
   },

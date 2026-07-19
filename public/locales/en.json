@@ -1819,6 +1819,11 @@
     "isAria": false,
     "innerHTML": false
   },
+  "pg-ucl-help": {
+    "text": "UEFA prize money, TV rights and ticket sales spillover.",
+    "isAria": false,
+    "innerHTML": false
+  },
   "pg-ucl-none": {
     "text": "Not Qualified (€0M)",
     "isAria": false,
@@ -1849,8 +1854,18 @@
     "isAria": false,
     "innerHTML": false
   },
+  "pg-payroll-help": {
+    "text": "Personnel expenses. A 10% change represents a €8.8M shift.",
+    "isAria": false,
+    "innerHTML": false
+  },
   "pg-sales-label": {
     "text": "Player Sales Targets",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-sales-help": {
+    "text": "Selling players generates direct capital gains.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1859,13 +1874,28 @@
     "isAria": false,
     "innerHTML": false
   },
+  "pg-purchases-help": {
+    "text": "Squad additions. Outflow is spread over 5-year contracts.",
+    "isAria": false,
+    "innerHTML": false
+  },
   "pg-capex-label": {
     "text": "Ordinary Overhead Change",
     "isAria": false,
     "innerHTML": false
   },
+  "pg-capex-help": {
+    "text": "External supplies, security, matches and travel.",
+    "isAria": false,
+    "innerHTML": false
+  },
   "pg-debt-repay-label": {
     "text": "Debt Deleveraging (Repayment)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-debt-repay-help": {
+    "text": "Paying down bank debt principal saves 2% net interest.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1886,6 +1916,11 @@
   },
   "pg-kpi-eq": {
     "text": "Projected Equity",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-kpi-cash": {
+    "text": "Projected Cash Balance",
     "isAria": false,
     "innerHTML": false
   },

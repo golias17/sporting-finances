@@ -23,6 +23,7 @@ vi.mock("../src/pdfGenerator.js", () => ({
 
 vi.mock("../src/playground.js", () => ({
   initPlayground: vi.fn(),
+  drawPlaygroundCharts: vi.fn(),
 }));
 
 vi.mock("../src/charts.js", () => {

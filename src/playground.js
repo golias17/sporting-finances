@@ -17,7 +17,17 @@ const BASELINE = {
   current_assets: 102909,
   current_liabilities: 165071,
   total_assets: 374400,
+  cash: 7008,
 };
+
+function updateSliderFill(slider) {
+  if (!slider) return;
+  const min = parseFloat(slider.min) || 0;
+  const max = parseFloat(slider.max) || 100;
+  const val = parseFloat(slider.value) || 0;
+  const percentage = ((val - min) / (max - min)) * 100;
+  slider.style.background = `linear-gradient(to right, var(--green, #0a5d3a) ${percentage}%, var(--rule-2, #e5e5e5) ${percentage}%)`;
+}
 
 export function initPlayground() {
   const container = document.getElementById("tab-playground");
@@ -35,7 +45,15 @@ export function initPlayground() {
   if (!uclSelect || !payrollSlider || !salesSlider || !purchasesSlider || !capexSlider || !debtRepaySlider || !btnReset) return;
 
   // Listeners
-  const updateProj = () => calculateAndRenderProjections();
+  const updateProj = () => {
+    updateSliderFill(payrollSlider);
+    updateSliderFill(salesSlider);
+    updateSliderFill(purchasesSlider);
+    updateSliderFill(capexSlider);
+    updateSliderFill(debtRepaySlider);
+    drawPlaygroundCharts();
+  };
+
   uclSelect.addEventListener("change", updateProj);
   payrollSlider.addEventListener("input", updateProj);
   salesSlider.addEventListener("input", updateProj);
@@ -50,14 +68,26 @@ export function initPlayground() {
     purchasesSlider.value = 30;
     capexSlider.value = 0;
     debtRepaySlider.value = 0;
-    calculateAndRenderProjections();
+
+    updateSliderFill(payrollSlider);
+    updateSliderFill(salesSlider);
+    updateSliderFill(purchasesSlider);
+    updateSliderFill(capexSlider);
+    updateSliderFill(debtRepaySlider);
+
+    drawPlaygroundCharts();
   });
 
   // First render
-  calculateAndRenderProjections();
+  updateSliderFill(payrollSlider);
+  updateSliderFill(salesSlider);
+  updateSliderFill(purchasesSlider);
+  updateSliderFill(capexSlider);
+  updateSliderFill(debtRepaySlider);
+  drawPlaygroundCharts();
 }
 
-function calculateAndRenderProjections() {
+export function drawPlaygroundCharts() {
   const uclPrize = parseInt(document.getElementById("uclSelect").value, 10); // in millions
   const payrollAdj = parseInt(document.getElementById("payrollSlider").value, 10);
   const salesTarget = parseInt(document.getElementById("salesSlider").value, 10); // in millions
@@ -78,32 +108,38 @@ function calculateAndRenderProjections() {
   const projPayroll = BASELINE.personnel_costs * (1 + payrollAdj / 100);
   const projOverhead = BASELINE.external_supplies * (1 + capexAdj / 100);
   
-  const projSales = salesTarget * 1000;
+  // Use exact baseline player transfer income when salesTarget is default 117 to prevent integer rounding discrepancy
+  const projSales = salesTarget === 117 ? BASELINE.player_transfer_income : salesTarget * 1000;
   // Purchases adjusts amortization rate dynamically (reinvesting triggers 20% amortization over 5-year contracts)
   const projAmortization = BASELINE.squad_amortization - ((purchasesTarget - 30) * 1000 * 0.20);
   const projNetTrading = projSales + projAmortization + BASELINE.player_transfer_cost;
   
-  // Deleveraging saves 4% average interest costs on the repaid portion
-  const interestSavings = debtRepayTarget * 1000 * 0.04;
+  // Deleveraging saves 2% net interest cost (4.5% interest rate minus 2.5% cash yield opportunity cost)
+  const interestSavings = debtRepayTarget * 1000 * 0.02;
   const projFinancialResult = BASELINE.financial_result + interestSavings;
 
   const projNetResult =
     (projRevenue + projPayroll + projOverhead + BASELINE.da_excl_squad) +
     projNetTrading +
-    projFinancialResult - 11880; // balancing adjustment for other operating costs to match audited 2024/25 Net Result of €20.0M
+    projFinancialResult - 11710; // balancing adjustment for other operating costs to match audited 2024/25 Net Result of €20.0M
 
   const projEquity = BASELINE.equity + projNetResult;
 
-  // Solvency impact (Equity / Total Assets)
-  // Cash/Total Assets adjust based on net result change & debt repayment cash outflow
+  // Solvency impact (Equity / Total Assets) - both base and proj are calculated at the end of the season
   const projTotalAssets = BASELINE.total_assets + (projNetResult - BASELINE.net_result) - (debtRepayTarget * 1000);
   const projSolvency = (projEquity / projTotalAssets) * 100;
-  const baseSolvency = (BASELINE.equity / BASELINE.total_assets) * 100;
+  const baseEquity = BASELINE.equity + BASELINE.net_result;
+  const baseSolvency = (baseEquity / BASELINE.total_assets) * 100;
+
+  // Cash Impact: operating result changes (adding back non-cash amortization delta) minus debt repayment principal outflow minus player purchases reinvestment delta
+  const amortizationDelta = BASELINE.squad_amortization - projAmortization;
+  const projCash = BASELINE.cash + (projNetResult - BASELINE.net_result) + amortizationDelta - (debtRepayTarget * 1000) - ((purchasesTarget - 30) * 1000);
 
   // Render KPIs
   updateKpi("pgCardRev", "pgKpiRev", "pgKpiRevDiff", projRevenue / 1000, BASELINE.revenue_operating / 1000);
   updateKpi("pgCardNet", "pgKpiNet", "pgKpiNetDiff", projNetResult / 1000, BASELINE.net_result / 1000);
-  updateKpi("pgCardEq", "pgKpiEq", "pgKpiEqDiff", projEquity / 1000, BASELINE.equity / 1000);
+  updateKpi("pgCardEq", "pgKpiEq", "pgKpiEqDiff", projEquity / 1000, baseEquity / 1000);
+  updateKpi("pgCardCash", "pgKpiCash", "pgKpiCashDiff", projCash / 1000, BASELINE.cash / 1000);
 
   // Draw Charts
   drawProjectionCharts(
@@ -206,33 +242,47 @@ function drawProjectionCharts(
           callbacks: {
             label: (context) => {
               const val = context.parsed.y;
-              return `${context.dataset.label}: ${val.toFixed(1)} M€`;
-            }
-          }
-        },
-        annotation: {
-          annotations: {
-            breakEvenLine: {
-              type: "line",
-              yScaleID: "y",
-              yMin: 0,
-              yMax: 0,
-              borderColor: "rgba(235, 94, 40, 0.4)",
-              borderWidth: 1.5,
-              borderDash: [5, 5],
-              label: {
-                display: true,
-                content: state.isPt ? "Ponto de Equilíbrio (0.0 M€)" : "Break-even Line (0.0 M€)",
-                position: "start",
-                backgroundColor: "rgba(235, 94, 40, 0.75)",
-                color: "#fff",
-                font: { size: 9, weight: "bold" }
+              if (context.datasetIndex === 0) {
+                return `${context.dataset.label}: ${val.toFixed(1)} M€`;
+              } else {
+                const actualVal = context.chart.data.datasets[0].data[context.dataIndex];
+                const delta = val - actualVal;
+                const sign = delta >= 0 ? "+" : "";
+                const deltaStr = Math.abs(delta) < 0.05 ? " (no change)" : ` (${sign}${delta.toFixed(1)} M€)`;
+                return `${context.dataset.label}: ${val.toFixed(1)} M€${deltaStr}`;
               }
             }
           }
         }
       }
     },
+    plugins: [{
+      id: 'barDelta',
+      afterDatasetsDraw(chart) {
+        const { ctx, data } = chart;
+        ctx.save();
+        ctx.font = 'bold 9px sans-serif';
+        ctx.textAlign = 'center';
+        
+        const actualDS = data.datasets[0].data;
+        const projDS = data.datasets[1].data;
+        
+        chart.getDatasetMeta(1).data.forEach((bar, index) => {
+          const actualVal = actualDS[index];
+          const projVal = projDS[index];
+          const delta = projVal - actualVal;
+          if (Math.abs(delta) < 0.05) return;
+          
+          const sign = delta > 0 ? "+" : "";
+          const color = delta > 0 ? "#0a5d3a" : "#eb5e28";
+          ctx.fillStyle = color;
+          
+          const yPos = bar.y + (projVal >= 0 ? -8 : 12);
+          ctx.fillText(`${sign}${delta.toFixed(1)}M`, bar.x, yPos);
+        });
+        ctx.restore();
+      }
+    }]
   });
   chartRegistry.set(canvas1Id, chart1);
 
@@ -251,7 +301,7 @@ function drawProjectionCharts(
       datasets: [
         {
           label: state.isPt ? "Capital Próprio (M€)" : "Shareholders' Equity (M€)",
-          data: [BASELINE.equity / 1000, projEquity],
+          data: [(BASELINE.equity + BASELINE.net_result) / 1000, projEquity],
           backgroundColor: state.COLORS.goldSoft || "rgba(176, 137, 35, 0.4)",
           borderColor: state.COLORS.gold || "#b08923",
           borderWidth: 1.5,
@@ -304,27 +354,6 @@ function drawProjectionCharts(
               const val = context.parsed.y;
               const suffix = context.datasetIndex === 0 ? " M€" : "%";
               return `${context.dataset.label}: ${val.toFixed(1)}${suffix}`;
-            }
-          }
-        },
-        annotation: {
-          annotations: {
-            solvencyLimit: {
-              type: "line",
-              yScaleID: "y1",
-              yMin: 15.0,
-              yMax: 15.0,
-              borderColor: "rgba(235, 94, 40, 0.5)",
-              borderWidth: 2,
-              borderDash: [5, 5],
-              label: {
-                display: true,
-                content: state.isPt ? "Meta de Solvabilidade (15%)" : "Solvency Target (15%)",
-                position: "center",
-                backgroundColor: "rgba(235, 94, 40, 0.8)",
-                color: "#fff",
-                font: { size: 9, weight: "bold" }
-              }
             }
           }
         }

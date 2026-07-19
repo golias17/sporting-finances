@@ -44,7 +44,7 @@ import {
 import { initChartDefaults, ZONE_COLORS, chartRegistry } from "./chartUtils.js";
 import { renderKpis } from "./kpi.js";
 import { drawManagerEras, drawCommissions } from "./squadAnalytics.js";
-import { initPlayground } from "./playground.js";
+import { initPlayground, drawPlaygroundCharts } from "./playground.js";
 import { initPWA } from "./pwa.js";
 import { debounce } from "./utils.js";
 
@@ -385,6 +385,7 @@ const TAB_CHART_IDS = {
   squad: ["chartSquadBook", "chartTransfers", "chartNetTrading", "chartManagerEras", "chartCommissions"],
   cash: ["chartCashFlow", "chartCash", "chartAnnualNet"],
   compare: ["chartCompare"],
+  playground: ["chartPlaygroundNet", "chartPlaygroundSolvency"],
 };
 
 const CHART_DRAWING_FUNCTIONS = {
@@ -410,6 +411,8 @@ const CHART_DRAWING_FUNCTIONS = {
   chartCashFlow,
   chartCash,
   chartAnnualNet,
+  chartPlaygroundNet: drawPlaygroundCharts,
+  chartPlaygroundSolvency: drawPlaygroundCharts,
 };
 
 function destroyInactiveCharts(activeTab) {
@@ -527,7 +530,7 @@ function setupApp(initialTab) {
     events: [],
     data: [renderTable, initTransfersDetailTable],
     club: [],
-    playground: [initPlayground],
+    playground: [initPlayground, drawPlaygroundCharts],
   };
 
   document.querySelectorAll("nav.tabs button").forEach((btn) => {

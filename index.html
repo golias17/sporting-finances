@@ -2365,6 +2365,7 @@
               <div class="control-label-row">
                 <label for="uclSelect" data-i18n="pg-ucl-label">UEFA Champions League Campaign</label>
               </div>
+              <span class="control-help" data-i18n="pg-ucl-help">UEFA prize money, TV rights and ticket sales spillover.</span>
               <select id="uclSelect" class="playground-select" style="width: 100%; padding: 0.75rem; background: var(--bg); border: 1px solid var(--rule-2); border-radius: var(--radius-lg); color: var(--ink); font-size: 0.875rem; font-family: var(--sans); font-weight: 600; cursor: pointer; transition: border-color 0.2s ease;">
                 <option value="0" data-i18n="pg-ucl-none">Not Qualified (€0M)</option>
                 <option value="36" data-i18n="pg-ucl-league">League Phase / Group Stage (+€36M)</option>
@@ -2379,6 +2380,7 @@
                 <label for="payrollSlider" data-i18n="pg-payroll-label">Payroll (Wage Bill) Change</label>
                 <span id="payrollVal" class="value-highlight">0%</span>
               </div>
+              <span class="control-help" data-i18n="pg-payroll-help">Personnel expenses. A 10% change represents a €8.8M shift.</span>
               <input type="range" id="payrollSlider" min="-30" max="30" value="0" step="5" class="playground-slider" />
               <div class="slider-bounds">
                 <span>-30%</span>
@@ -2391,6 +2393,7 @@
                 <label for="salesSlider" data-i18n="pg-sales-label">Player Sales Targets</label>
                 <span id="salesVal" class="value-highlight">€0M</span>
               </div>
+              <span class="control-help" data-i18n="pg-sales-help">Selling players generates direct capital gains.</span>
               <input type="range" id="salesSlider" min="0" max="150" value="117" step="1" class="playground-slider" />
               <div class="slider-bounds">
                 <span>€0M</span>
@@ -2403,6 +2406,7 @@
                 <label for="purchasesSlider" data-i18n="pg-purchases-label">Player Purchases (Reinvestment)</label>
                 <span id="purchasesVal" class="value-highlight">€0M</span>
               </div>
+              <span class="control-help" data-i18n="pg-purchases-help">Squad additions. Outflow is spread over 5-year contracts.</span>
               <input type="range" id="purchasesSlider" min="0" max="100" value="30" step="5" class="playground-slider" />
               <div class="slider-bounds">
                 <span>€0M</span>
@@ -2415,6 +2419,7 @@
                 <label for="capexSlider" data-i18n="pg-capex-label">Ordinary Overhead Change</label>
                 <span id="capexVal" class="value-highlight">0%</span>
               </div>
+              <span class="control-help" data-i18n="pg-capex-help">External supplies, security, matches and travel.</span>
               <input type="range" id="capexSlider" min="-30" max="30" value="0" step="5" class="playground-slider" />
               <div class="slider-bounds">
                 <span>-30%</span>
@@ -2427,6 +2432,7 @@
                 <label for="debtRepaySlider" data-i18n="pg-debt-repay-label">Debt Deleveraging (Repayment)</label>
                 <span id="debtRepayVal" class="value-highlight">€0M</span>
               </div>
+              <span class="control-help" data-i18n="pg-debt-repay-help">Paying down bank debt principal saves 2% net interest.</span>
               <input type="range" id="debtRepaySlider" min="0" max="50" value="0" step="5" class="playground-slider" />
               <div class="slider-bounds">
                 <span>€0M</span>
@@ -2457,6 +2463,11 @@
                 <div class="label" data-i18n="pg-kpi-eq">Projected Equity</div>
                 <div class="value" id="pgKpiEq">€40.9M</div>
                 <div class="change" id="pgKpiEqDiff">0.0M vs actual</div>
+              </div>
+              <div class="kpi" id="pgCardCash">
+                <div class="label" data-i18n="pg-kpi-cash">Projected Cash Balance</div>
+                <div class="value" id="pgKpiCash">€7.0M</div>
+                <div class="change" id="pgKpiCashDiff">0.0M vs actual</div>
               </div>
             </div>
 

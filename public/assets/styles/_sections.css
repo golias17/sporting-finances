@@ -2252,6 +2252,30 @@ table.ledger .badge.winter {
   transform: scale(1.2);
 }
 
+.playground-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236a716e%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 14px center !important;
+  padding-right: 36px !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+body.dark .playground-select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E") !important;
+}
+
+.playground-select:hover {
+  border-color: var(--green) !important;
+}
+
+.playground-select:focus {
+  border-color: var(--green) !important;
+  box-shadow: 0 0 0 3px rgba(10, 93, 58, 0.15) !important;
+  outline: none;
+}
+
 .btn-reset-playground {
   background: var(--ink);
   color: var(--paper);
@@ -2278,5 +2302,14 @@ table.ledger .badge.winter {
   background: var(--green);
   color: #ffffff;
   border-color: var(--green);
+}
+
+.control-help {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  line-height: 1.4;
+  margin-top: 2px;
+  margin-bottom: 8px;
 }
 

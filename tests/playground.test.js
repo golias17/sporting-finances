@@ -52,6 +52,10 @@ describe("playground.js CFO Simulator", () => {
             <div class="value" id="pgKpiEq">€40.9M</div>
             <div class="change" id="pgKpiEqDiff">no change</div>
           </div>
+          <div class="kpi" id="pgCardCash">
+            <div class="value" id="pgKpiCash">€7.0M</div>
+            <div class="change" id="pgKpiCashDiff">no change</div>
+          </div>
         </div>
 
         <canvas id="chartPlaygroundNet"></canvas>
@@ -74,6 +78,7 @@ describe("playground.js CFO Simulator", () => {
     expect(document.getElementById("pgKpiRev").textContent).toBe("€148.1M");
     expect(document.getElementById("pgKpiNet").textContent).toBe("€20.0M");
     expect(document.getElementById("pgKpiEq").textContent).toBe("€61.0M");
+    expect(document.getElementById("pgKpiCash").textContent).toBe("€7.0M");
   });
 
   it("should recalculate KPIs when UEFA Champions League is toggled", () => {
