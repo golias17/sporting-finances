@@ -1,24 +1,48 @@
 import Chart from "chart.js/auto";
 import { state } from "./state.js";
-import { chartRegistry, styledLineDataset } from "./chartUtils.js";
+import { chartRegistry, styledLineDataset, getBrandColors } from "./chartUtils.js";
 
-// Baseline actuals from 2024/25 (in thousands of EUR)
-const BASELINE = {
-  revenue_operating: 148149,
-  personnel_costs: -87736,
-  external_supplies: -48196,
-  da_excl_squad: -7235,
-  squad_amortization: -50218,
-  player_transfer_cost: -14615,
-  player_transfer_income: 116830, // baseline actual sales
-  financial_result: -25246,
-  net_result: 20023,
-  equity: 40928,
-  current_assets: 102909,
-  current_liabilities: 165071,
-  total_assets: 374400,
-  cash: 7008,
-};
+// Defensive fallback for the (in practice, always-initialized-by-boot)
+// case where a chart is drawn before initChartDefaults() has populated
+// state.COLORS — derived from the canonical palette so this can't drift
+// from the live app's colors the way independently hardcoded hex literals
+// used to.
+const FALLBACK = getBrandColors(false);
+
+// Looks up the season this tool uses as its fixed "Actual 2024/25"
+// baseline. This is a function rather than a module-level constant because
+// state.DATASET isn't populated yet when this module is first evaluated —
+// initApp() in main.js fetches financials.json and calls state.setDataset()
+// before setupApp() (and therefore initPlayground()) ever runs.
+//
+// These fields used to be hand-copied literals frozen at whatever 2024/25's
+// numbers were when this file was written. Two of them (cash, total_assets)
+// had already drifted from financials.json's real 2024/25 entry — this tool
+// was showing a €7.0M cash balance against an actual €15.6M, and total
+// assets off by ~€46M. Deriving from state.annual instead means a future
+// correction to financials.json's 2024/25 figures (e.g. an audit
+// restatement) is picked up automatically, and next season's rollover
+// (making 2025/26 the baseline) only requires changing the label below.
+function getBaseline() {
+  const season = state.annual?.find((s) => s.label === "2024/25");
+  if (!season) return null;
+  return {
+    revenue_operating: season.revenue_operating,
+    personnel_costs: season.personnel_costs,
+    external_supplies: season.external_supplies,
+    da_excl_squad: season.da_excl_squad,
+    squad_amortization: season.squad_amortization_impairment,
+    player_transfer_cost: season.player_transfer_cost,
+    player_transfer_income: season.player_transfer_income, // baseline actual sales
+    financial_result: season.financial_result,
+    net_result: season.net_result,
+    equity: season.equity,
+    current_assets: season.current_assets,
+    current_liabilities: season.current_liabilities,
+    total_assets: season.total_assets,
+    cash: season.cash,
+  };
+}
 
 function updateSliderFill(slider) {
   if (!slider) return;
@@ -88,6 +112,9 @@ export function initPlayground() {
 }
 
 export function drawPlaygroundCharts() {
+  const BASELINE = getBaseline();
+  if (!BASELINE) return; // state.DATASET not ready yet, or "2024/25" isn't in it
+
   const uclPrize = parseInt(document.getElementById("uclSelect").value, 10); // in millions
   const payrollAdj = parseInt(document.getElementById("payrollSlider").value, 10);
   const salesTarget = parseInt(document.getElementById("salesSlider").value, 10); // in millions
@@ -118,17 +145,39 @@ export function drawPlaygroundCharts() {
   const interestSavings = debtRepayTarget * 1000 * 0.02;
   const projFinancialResult = BASELINE.financial_result + interestSavings;
 
+  // The modeled P&L above (revenue, payroll, overhead, D&A, player trading,
+  // financial result) doesn't decompose the full audited income statement —
+  // items like tax aren't modeled individually. Reconcile the zero-slider
+  // scenario back to the baseline season's real net result instead of
+  // hardcoding that gap as an opaque constant: this stays correct if
+  // BASELINE ever points at a different season (e.g. next year's rollover),
+  // where the leftover would be a different number.
+  const modeledBaselineNet =
+    BASELINE.revenue_operating +
+    BASELINE.personnel_costs +
+    BASELINE.external_supplies +
+    BASELINE.da_excl_squad +
+    (BASELINE.player_transfer_income + BASELINE.squad_amortization + BASELINE.player_transfer_cost) +
+    BASELINE.financial_result;
+  const unmodeledCostsAdjustment = BASELINE.net_result - modeledBaselineNet;
+
   const projNetResult =
     (projRevenue + projPayroll + projOverhead + BASELINE.da_excl_squad) +
     projNetTrading +
-    projFinancialResult - 11710; // balancing adjustment for other operating costs to match audited 2024/25 Net Result of €20.0M
+    projFinancialResult +
+    unmodeledCostsAdjustment;
 
   const projEquity = BASELINE.equity + projNetResult;
 
   // Solvency impact (Equity / Total Assets) - both base and proj are calculated at the end of the season
   const projTotalAssets = BASELINE.total_assets + (projNetResult - BASELINE.net_result) - (debtRepayTarget * 1000);
   const projSolvency = (projEquity / projTotalAssets) * 100;
-  const baseEquity = BASELINE.equity + BASELINE.net_result;
+  // BASELINE.equity is already the season's closing equity (it comes
+  // straight from the audited balance sheet), not an opening balance — it
+  // must NOT have BASELINE.net_result added again here. (It previously was,
+  // which overstated the "Actual 2024/25" equity bar and solvency ratio by
+  // exactly one season's net result.)
+  const baseEquity = BASELINE.equity;
   const baseSolvency = (baseEquity / BASELINE.total_assets) * 100;
 
   // Cash Impact: operating result changes (adding back non-cash amortization delta) minus debt repayment principal outflow minus player purchases reinvestment delta
@@ -143,6 +192,8 @@ export function drawPlaygroundCharts() {
 
   // Draw Charts
   drawProjectionCharts(
+    BASELINE,
+    baseEquity,
     projRevenue / 1000,
     projPayroll / 1000,
     projNetTrading / 1000,
@@ -179,6 +230,8 @@ function updateKpi(cardId, valId, diffId, projVal, baseVal) {
 }
 
 function drawProjectionCharts(
+  BASELINE,
+  baseEquity,
   projRevenue,
   projPayroll,
   projTrading,
@@ -222,8 +275,8 @@ function drawProjectionCharts(
         {
           label: state.isPt ? "Projetado 2025/26" : "Projected 2025/26",
           data: [projRevenue, projPayroll, projTrading, projNetResult],
-          backgroundColor: state.COLORS.greenSoft || "rgba(10, 93, 58, 0.4)",
-          borderColor: state.COLORS.green || "#0a5d3a",
+          backgroundColor: state.COLORS.greenSoft || FALLBACK.greenSoft,
+          borderColor: state.COLORS.green || FALLBACK.green,
           borderWidth: 1,
         },
       ],
@@ -301,9 +354,9 @@ function drawProjectionCharts(
       datasets: [
         {
           label: state.isPt ? "Capital Próprio (M€)" : "Shareholders' Equity (M€)",
-          data: [(BASELINE.equity + BASELINE.net_result) / 1000, projEquity],
-          backgroundColor: state.COLORS.goldSoft || "rgba(176, 137, 35, 0.4)",
-          borderColor: state.COLORS.gold || "#b08923",
+          data: [baseEquity / 1000, projEquity],
+          backgroundColor: state.COLORS.goldSoft || FALLBACK.goldSoft,
+          borderColor: state.COLORS.gold || FALLBACK.gold,
           borderWidth: 1.5,
           yAxisID: "y",
           borderRadius: 4,
@@ -312,8 +365,8 @@ function drawProjectionCharts(
         styledLineDataset({
           label: state.isPt ? "Rácio de Solvabilidade (%)" : "Solvency Ratio (%)",
           data: [baseSolvency, projSolvency],
-          color: state.COLORS.green || "#0a5d3a",
-          bg: state.COLORS.greenSoft || "rgba(10, 93, 58, 0.2)",
+          color: state.COLORS.green || FALLBACK.green,
+          bg: state.COLORS.greenSoft || FALLBACK.greenSoft,
           extra: {
             type: "line",
             yAxisID: "y1",

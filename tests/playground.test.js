@@ -1,19 +1,28 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { state } from "../src/state.js";
 import { initPlayground } from "../src/playground.js";
+import Chart from "chart.js/auto";
 
-// Mock Chart to avoid jsdom canvas issues
+// Mock Chart to avoid jsdom canvas issues. Captures each constructed
+// chart's config on a static `instances` array so tests can inspect what
+// data playground.js actually drew (e.g. the "Real 2024/25" equity bar)
+// without needing a real canvas.
 vi.mock("chart.js/auto", () => {
-  return {
-    default: class Chart {
-      constructor() {}
-      destroy() {}
-    },
-  };
+  class Chart {
+    constructor(ctx, config) {
+      this.config = config;
+      Chart.instances.push(this);
+    }
+    destroy() {}
+  }
+  Chart.instances = [];
+  return { default: Chart };
 });
 
 describe("playground.js CFO Simulator", () => {
   beforeEach(() => {
+    Chart.instances = [];
+
     // Setup Mock DOM
     document.body.innerHTML = `
       <section id="tab-playground">
@@ -71,14 +80,69 @@ describe("playground.js CFO Simulator", () => {
       gold: "#b08923",
       chartBg: "#ffffff",
     };
+
+    // playground.js derives its BASELINE from the real "2024/25" season in
+    // state.DATASET instead of hardcoded literals — see getBaseline() in
+    // src/playground.js. Values here match public/data/financials.json's
+    // actual 2024/25 entry (including cash and total_assets, which the old
+    // hardcoded BASELINE had gotten stale/wrong on: €7.0M vs the real
+    // €15.6M cash, and €374.4M vs the real €420.7M total assets).
+    state.DATASET = {
+      annual_data: [
+        {
+          label: "2024/25",
+          revenue_operating: 148149,
+          personnel_costs: -87736,
+          external_supplies: -48196,
+          da_excl_squad: -7235,
+          squad_amortization_impairment: -50218,
+          player_transfer_cost: -14615,
+          player_transfer_income: 116830,
+          financial_result: -25246,
+          net_result: 20023,
+          equity: 40928,
+          current_assets: 102909,
+          current_liabilities: 165071,
+          total_assets: 420747,
+          cash: 15581,
+        },
+      ],
+    };
   });
 
   it("should initialize with default values and baseline KPIs", () => {
     initPlayground();
     expect(document.getElementById("pgKpiRev").textContent).toBe("€148.1M");
     expect(document.getElementById("pgKpiNet").textContent).toBe("€20.0M");
+    // pgKpiEq always displays the *projected* (2025/26) closing equity, not
+    // the 2024/25 baseline — even with every slider at its default, that's
+    // baseline equity (€40.9M) plus a full projected year's net result
+    // (€20.0M, reconstructed to match 2024/25's actual result when nothing
+    // is adjusted), i.e. €61.0M. This is unaffected by the baseEquity fix
+    // below — see the "Real 2024/25 equity bar" test for that.
     expect(document.getElementById("pgKpiEq").textContent).toBe("€61.0M");
-    expect(document.getElementById("pgKpiCash").textContent).toBe("€7.0M");
+    // BASELINE.cash now comes from financials.json's real 2024/25 entry
+    // instead of a stale hardcoded literal (which was €7.0M vs the actual
+    // €15.6M) — see getBaseline() in src/playground.js.
+    expect(document.getElementById("pgKpiCash").textContent).toBe("€15.6M");
+  });
+
+  it('draws the "Real 2024/25" equity bar at the season\'s actual closing equity, not equity + net_result again', () => {
+    // Regression test for a double-counting bug: BASELINE.equity from
+    // financials.json is already the audited *closing* equity for the
+    // season (verified against 2023/24's closing equity + 2024/25's net
+    // result), not an opening balance — so the "Real 2024/25" comparison
+    // bar in the equity/solvency chart must show it as-is. It previously
+    // added BASELINE.net_result on top, inflating that bar (and the
+    // baseline solvency ratio) by exactly one season's net result
+    // (€40.9M shown as €61.0M).
+    initPlayground();
+    const solvencyChart = Chart.instances.find(
+      (c) => c.config.data.datasets[0]?.label === "Shareholders' Equity (M€)",
+    );
+    expect(solvencyChart).toBeDefined();
+    const [actualEquity] = solvencyChart.config.data.datasets[0].data;
+    expect(actualEquity).toBeCloseTo(40.928, 2);
   });
 
   it("should recalculate KPIs when UEFA Champions League is toggled", () => {
