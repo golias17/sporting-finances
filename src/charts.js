@@ -54,6 +54,7 @@ import {
   chartRegistry,
   generateAccessibleTable,
   addChartDownloadButton,
+  styledLineDataset,
 } from "./chartUtils.js";
 // state.COLORS and state.baseOpts are initialised by initChartDefaults() in
 // chartUtils.js, called once during app boot. Do not assign them here.
@@ -97,46 +98,6 @@ export function mkChart(id, config) {
  */
 function seasonLabels() {
   return state.annual.map((d) => d.label);
-}
-
-/**
- * The recurring "premium" line-dataset style used by chartHero, the cash
- * line in chartDebt, chartCash, chartDebtMaturity and the squad market
- * value line in chartSquadBook: a thick tensioned line with themed points.
- * `pointBorderColor` is only included when explicitly passed — most of
- * these datasets never set it (leaving Chart.js' own default), so the
- * helper omits the key by default rather than guessing a value, to avoid
- * changing any chart's rendered look during this refactor.
- * Extra Chart.js dataset keys (e.g. `type: "line"`, `order`, `yAxisID`)
- * can be passed through via `extra`.
- */
-function styledLineDataset({
-  label,
-  data,
-  color,
-  bg,
-  fill = false,
-  spanGaps = false,
-  pointBorderColor,
-  extra = {},
-}) {
-  return {
-    label,
-    data,
-    borderColor: color,
-    backgroundColor: bg,
-    tension: 0.35,
-    borderWidth: 3,
-    pointRadius: 4,
-    pointBackgroundColor: state.COLORS.chartBg,
-    ...(pointBorderColor ? { pointBorderColor } : {}),
-    pointBorderWidth: 2,
-    pointHoverRadius: 7,
-    pointHoverBorderWidth: 3,
-    fill,
-    spanGaps,
-    ...extra,
-  };
 }
 
 /**

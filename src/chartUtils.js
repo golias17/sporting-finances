@@ -90,6 +90,40 @@ export function getPitchMilestone(season) {
 }
 
 /**
+ * The recurring "premium" line-dataset style used across the dashboard.
+ * Extra Chart.js dataset keys (e.g. `type: "line"`, `order`, `yAxisID`)
+ * can be passed through via `extra`.
+ */
+export function styledLineDataset({
+  label,
+  data,
+  color,
+  bg,
+  fill = false,
+  spanGaps = false,
+  pointBorderColor,
+  extra = {},
+}) {
+  return {
+    label,
+    data,
+    borderColor: color,
+    backgroundColor: bg,
+    tension: 0.35,
+    borderWidth: 3,
+    pointRadius: 4,
+    pointBackgroundColor: state.COLORS.chartBg,
+    ...(pointBorderColor ? { pointBorderColor } : {}),
+    pointBorderWidth: 2,
+    pointHoverRadius: 7,
+    pointHoverBorderWidth: 3,
+    fill,
+    spanGaps,
+    ...extra,
+  };
+}
+
+/**
  * Initialise state.COLORS and state.baseOpts.
  * Must be called once during app boot (inside setupApp), after the DOM is ready,
  * so that the order of ES module evaluation no longer affects correctness.

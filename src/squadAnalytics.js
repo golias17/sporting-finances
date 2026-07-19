@@ -1,6 +1,6 @@
 import Chart from "chart.js/auto";
 import { state } from "./state.js";
-import { chartRegistry, generateAccessibleTable, addChartDownloadButton } from "./chartUtils.js";
+import { chartRegistry, generateAccessibleTable, addChartDownloadButton, styledLineDataset } from "./chartUtils.js";
 
 function getEraForSeason(season) {
   if (season === "2012/13") return state.isPt ? "Jesualdo/Sá Pinto (12/13)" : "Jesualdo/Sa Pinto (12/13)";
@@ -68,23 +68,22 @@ export function drawManagerEras() {
           data: sales,
           backgroundColor: state.COLORS.pos || "#2e8a55",
           borderRadius: 4,
+          order: 1,
         },
         {
           label: state.isPt ? "Compras (M€)" : "Purchases (M€)",
           data: purchases,
           backgroundColor: state.COLORS.neg || "#b8403a",
           borderRadius: 4,
+          order: 1,
         },
-        {
+        styledLineDataset({
           label: state.isPt ? "Ganho Líquido (M€)" : "Net Earnings (M€)",
           data: netSpend,
-          type: "line",
-          borderColor: state.COLORS.gold || "#b08923",
-          borderWidth: 3,
-          fill: false,
-          tension: 0.1,
-          pointBackgroundColor: state.COLORS.gold || "#b08923",
-        }
+          color: state.COLORS.gold || "#b08923",
+          bg: state.COLORS.goldSoft || "rgba(176,137,35,0.4)",
+          extra: { type: "line", order: 0 }
+        })
       ]
     },
     options: {
