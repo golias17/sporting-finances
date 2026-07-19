@@ -129,14 +129,18 @@ export function drawManagerEras() {
         {
           label: state.isPt ? "Vendas (M€)" : "Sales (M€)",
           data: sales,
-          backgroundColor: state.COLORS.pos || FALLBACK.pos,
+          backgroundColor: state.COLORS.posSoft || FALLBACK.posSoft,
+          borderColor: state.COLORS.pos || FALLBACK.pos,
+          borderWidth: 1,
           borderRadius: 4,
           order: 1,
         },
         {
           label: state.isPt ? "Compras (M€)" : "Purchases (M€)",
           data: purchases,
-          backgroundColor: state.COLORS.neg || FALLBACK.neg,
+          backgroundColor: state.COLORS.negSoft || FALLBACK.negSoft,
+          borderColor: state.COLORS.neg || FALLBACK.neg,
+          borderWidth: 1,
           borderRadius: 4,
           order: 1,
         },
@@ -187,13 +191,17 @@ export function drawCommissions() {
         {
           label: state.isPt ? "Comissões em Vendas" : "Sales Commissions",
           data: salesCommissions,
-          backgroundColor: state.COLORS.pos || FALLBACK.pos,
+          backgroundColor: state.COLORS.posSoft || FALLBACK.posSoft,
+          borderColor: state.COLORS.pos || FALLBACK.pos,
+          borderWidth: 1,
           stack: "Stack 0",
         },
         {
           label: state.isPt ? "Comissões em Compras" : "Acquisition Commissions",
           data: purchasesCommissions,
-          backgroundColor: state.COLORS.neg || FALLBACK.neg,
+          backgroundColor: state.COLORS.negSoft || FALLBACK.negSoft,
+          borderColor: state.COLORS.neg || FALLBACK.neg,
+          borderWidth: 1,
           stack: "Stack 0",
         }
       ]
