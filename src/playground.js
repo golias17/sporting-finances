@@ -9,8 +9,11 @@ import { chartRegistry, styledLineDataset, getBrandColors } from "./chartUtils.j
 // used to.
 const FALLBACK = getBrandColors(false);
 
-// Looks up the season this tool uses as its fixed "Actual 2024/25"
-// baseline. This is a function rather than a module-level constant because
+// Looks up the season this tool uses as its fixed 2024/25 reference season
+// (BASELINE below — not to be confused with the *computed* "no changes"
+// scenario also called "baseline" elsewhere in this file, see
+// computeProjection() and DEFAULT_INPUTS). This is a function rather than a
+// module-level constant because
 // state.DATASET isn't populated yet when this module is first evaluated —
 // initApp() in main.js fetches financials.json and calls state.setDataset()
 // before setupApp() (and therefore initPlayground()) ever runs.
@@ -42,6 +45,88 @@ function getBaseline() {
     total_assets: season.total_assets,
     cash: season.cash,
   };
+}
+
+// Neutral/no-change slider values — matches the Reset button's values.
+// Used to compute the "flat continuation" scenario (2025/26 assuming
+// 2024/25's performance repeats exactly, with none of the sliders moved),
+// which every projected figure is compared against below. Equity and
+// Solvency layer a full season's net result on top of the prior season's
+// closing balance (see computeProjection()), so — unlike Revenue, Net
+// Result and Cash — they don't equal the raw 2024/25 actuals even with
+// zero adjustments. Comparing against this computed baseline instead of
+// against the raw actuals means Reset always shows "no change" everywhere,
+// with no caveat needed for Equity/Solvency.
+const DEFAULT_INPUTS = {
+  uclPrize: 0,
+  payrollAdj: 0,
+  salesTarget: 117,
+  purchasesTarget: 30,
+  capexAdj: 0,
+  debtRepayTarget: 0,
+};
+
+// Pure projection model: given the fixed 2024/25 baseline season and a set
+// of slider inputs, returns the modeled 2025/26 P&L/balance-sheet figures
+// (in EUR thousands, matching financials.json's convention). Extracted so
+// the same formulas can be run twice per render — once at DEFAULT_INPUTS
+// to get the "no changes" reference scenario, and once at the user's
+// current slider positions — instead of the two scenarios drifting apart
+// if only one call site were ever updated.
+function computeProjection(BASELINE, { uclPrize, payrollAdj, salesTarget, purchasesTarget, capexAdj, debtRepayTarget }) {
+  // Qualified UCL boosts Matchday + Commercial by +€8M as well
+  const revenue = BASELINE.revenue_operating + (uclPrize * 1000) + (uclPrize > 0 ? 8000 : 0);
+  const payroll = BASELINE.personnel_costs * (1 + payrollAdj / 100);
+  const overhead = BASELINE.external_supplies * (1 + capexAdj / 100);
+
+  // Use exact baseline player transfer income when salesTarget is default 117 to prevent integer rounding discrepancy
+  const sales = salesTarget === 117 ? BASELINE.player_transfer_income : salesTarget * 1000;
+  // Purchases adjusts amortization rate dynamically (reinvesting triggers 20% amortization over 5-year contracts)
+  const amortization = BASELINE.squad_amortization - ((purchasesTarget - 30) * 1000 * 0.20);
+  const netTrading = sales + amortization + BASELINE.player_transfer_cost;
+
+  // Deleveraging saves 2% net interest cost (4.5% interest rate minus 2.5% cash yield opportunity cost)
+  const interestSavings = debtRepayTarget * 1000 * 0.02;
+  const financialResult = BASELINE.financial_result + interestSavings;
+
+  // The modeled P&L above (revenue, payroll, overhead, D&A, player trading,
+  // financial result) doesn't decompose the full audited income statement —
+  // items like tax aren't modeled individually. Reconcile the zero-slider
+  // scenario back to the baseline season's real net result instead of
+  // hardcoding that gap as an opaque constant: this stays correct if
+  // BASELINE ever points at a different season (e.g. next year's rollover),
+  // where the leftover would be a different number.
+  const modeledBaselineNet =
+    BASELINE.revenue_operating +
+    BASELINE.personnel_costs +
+    BASELINE.external_supplies +
+    BASELINE.da_excl_squad +
+    (BASELINE.player_transfer_income + BASELINE.squad_amortization + BASELINE.player_transfer_cost) +
+    BASELINE.financial_result;
+  const unmodeledCostsAdjustment = BASELINE.net_result - modeledBaselineNet;
+
+  const netResult =
+    (revenue + payroll + overhead + BASELINE.da_excl_squad) +
+    netTrading +
+    financialResult +
+    unmodeledCostsAdjustment;
+
+  // 2025/26 closing equity = 2024/25's actual closing equity (the opening
+  // balance for the new season) plus the projected season's net result.
+  // BASELINE.equity is already the season's closing equity (it comes
+  // straight from the audited balance sheet), not an opening balance, so
+  // it must NOT be added a second time anywhere else in this function.
+  const equity = BASELINE.equity + netResult;
+
+  // Solvency impact (Equity / Total Assets), both calculated at the end of the projected season
+  const totalAssets = BASELINE.total_assets + (netResult - BASELINE.net_result) - (debtRepayTarget * 1000);
+  const solvency = (equity / totalAssets) * 100;
+
+  // Cash Impact: operating result changes (adding back non-cash amortization delta) minus debt repayment principal outflow minus player purchases reinvestment delta
+  const amortizationDelta = BASELINE.squad_amortization - amortization;
+  const cash = BASELINE.cash + (netResult - BASELINE.net_result) + amortizationDelta - (debtRepayTarget * 1000) - ((purchasesTarget - 30) * 1000);
+
+  return { revenue, payroll, overhead, sales, amortization, netTrading, financialResult, netResult, equity, totalAssets, solvency, cash };
 }
 
 function updateSliderFill(slider) {
@@ -115,93 +200,40 @@ export function drawPlaygroundCharts() {
   const BASELINE = getBaseline();
   if (!BASELINE) return; // state.DATASET not ready yet, or "2024/25" isn't in it
 
-  const uclPrize = parseInt(document.getElementById("uclSelect").value, 10); // in millions
-  const payrollAdj = parseInt(document.getElementById("payrollSlider").value, 10);
-  const salesTarget = parseInt(document.getElementById("salesSlider").value, 10); // in millions
-  const purchasesTarget = parseInt(document.getElementById("purchasesSlider").value, 10); // in millions
-  const capexAdj = parseInt(document.getElementById("capexSlider").value, 10);
-  const debtRepayTarget = parseInt(document.getElementById("debtRepaySlider").value, 10); // in millions
+  const inputs = {
+    uclPrize: parseInt(document.getElementById("uclSelect").value, 10), // in millions
+    payrollAdj: parseInt(document.getElementById("payrollSlider").value, 10),
+    salesTarget: parseInt(document.getElementById("salesSlider").value, 10), // in millions
+    purchasesTarget: parseInt(document.getElementById("purchasesSlider").value, 10), // in millions
+    capexAdj: parseInt(document.getElementById("capexSlider").value, 10),
+    debtRepayTarget: parseInt(document.getElementById("debtRepaySlider").value, 10), // in millions
+  };
 
   // Update label text values
-  document.getElementById("payrollVal").textContent = (payrollAdj >= 0 ? "+" : "") + payrollAdj + "%";
-  document.getElementById("salesVal").textContent = salesTarget + " M€";
-  document.getElementById("purchasesVal").textContent = purchasesTarget + " M€";
-  document.getElementById("capexVal").textContent = (capexAdj >= 0 ? "+" : "") + capexAdj + "%";
-  document.getElementById("debtRepayVal").textContent = debtRepayTarget + " M€";
+  document.getElementById("payrollVal").textContent = (inputs.payrollAdj >= 0 ? "+" : "") + inputs.payrollAdj + "%";
+  document.getElementById("salesVal").textContent = inputs.salesTarget + " M€";
+  document.getElementById("purchasesVal").textContent = inputs.purchasesTarget + " M€";
+  document.getElementById("capexVal").textContent = (inputs.capexAdj >= 0 ? "+" : "") + inputs.capexAdj + "%";
+  document.getElementById("debtRepayVal").textContent = inputs.debtRepayTarget + " M€";
 
-  // Calculations (in thousands)
-  // Qualified UCL boosts Matchday + Commercial by +€8M as well
-  const projRevenue = BASELINE.revenue_operating + (uclPrize * 1000) + (uclPrize > 0 ? 8000 : 0);
-  const projPayroll = BASELINE.personnel_costs * (1 + payrollAdj / 100);
-  const projOverhead = BASELINE.external_supplies * (1 + capexAdj / 100);
-  
-  // Use exact baseline player transfer income when salesTarget is default 117 to prevent integer rounding discrepancy
-  const projSales = salesTarget === 117 ? BASELINE.player_transfer_income : salesTarget * 1000;
-  // Purchases adjusts amortization rate dynamically (reinvesting triggers 20% amortization over 5-year contracts)
-  const projAmortization = BASELINE.squad_amortization - ((purchasesTarget - 30) * 1000 * 0.20);
-  const projNetTrading = projSales + projAmortization + BASELINE.player_transfer_cost;
-  
-  // Deleveraging saves 2% net interest cost (4.5% interest rate minus 2.5% cash yield opportunity cost)
-  const interestSavings = debtRepayTarget * 1000 * 0.02;
-  const projFinancialResult = BASELINE.financial_result + interestSavings;
-
-  // The modeled P&L above (revenue, payroll, overhead, D&A, player trading,
-  // financial result) doesn't decompose the full audited income statement —
-  // items like tax aren't modeled individually. Reconcile the zero-slider
-  // scenario back to the baseline season's real net result instead of
-  // hardcoding that gap as an opaque constant: this stays correct if
-  // BASELINE ever points at a different season (e.g. next year's rollover),
-  // where the leftover would be a different number.
-  const modeledBaselineNet =
-    BASELINE.revenue_operating +
-    BASELINE.personnel_costs +
-    BASELINE.external_supplies +
-    BASELINE.da_excl_squad +
-    (BASELINE.player_transfer_income + BASELINE.squad_amortization + BASELINE.player_transfer_cost) +
-    BASELINE.financial_result;
-  const unmodeledCostsAdjustment = BASELINE.net_result - modeledBaselineNet;
-
-  const projNetResult =
-    (projRevenue + projPayroll + projOverhead + BASELINE.da_excl_squad) +
-    projNetTrading +
-    projFinancialResult +
-    unmodeledCostsAdjustment;
-
-  const projEquity = BASELINE.equity + projNetResult;
-
-  // Solvency impact (Equity / Total Assets) - both base and proj are calculated at the end of the season
-  const projTotalAssets = BASELINE.total_assets + (projNetResult - BASELINE.net_result) - (debtRepayTarget * 1000);
-  const projSolvency = (projEquity / projTotalAssets) * 100;
-  // BASELINE.equity is already the season's closing equity (it comes
-  // straight from the audited balance sheet), not an opening balance — it
-  // must NOT have BASELINE.net_result added again here. (It previously was,
-  // which overstated the "Actual 2024/25" equity bar and solvency ratio by
-  // exactly one season's net result.)
-  const baseEquity = BASELINE.equity;
-  const baseSolvency = (baseEquity / BASELINE.total_assets) * 100;
-
-  // Cash Impact: operating result changes (adding back non-cash amortization delta) minus debt repayment principal outflow minus player purchases reinvestment delta
-  const amortizationDelta = BASELINE.squad_amortization - projAmortization;
-  const projCash = BASELINE.cash + (projNetResult - BASELINE.net_result) + amortizationDelta - (debtRepayTarget * 1000) - ((purchasesTarget - 30) * 1000);
+  // "baseline" = 2025/26 if nothing is adjusted (2024/25's performance
+  // repeats exactly); "proj" = 2025/26 at the user's current slider
+  // positions. Every KPI/chart below compares proj against this computed
+  // baseline rather than against BASELINE's raw 2024/25 figures, so Reset
+  // always lands on "no change" everywhere — see computeProjection()'s
+  // equity/solvency comment for why that isn't automatically true if you
+  // compare against the raw actuals instead.
+  const baseline = computeProjection(BASELINE, DEFAULT_INPUTS);
+  const proj = computeProjection(BASELINE, inputs);
 
   // Render KPIs
-  updateKpi("pgCardRev", "pgKpiRev", "pgKpiRevDiff", projRevenue / 1000, BASELINE.revenue_operating / 1000);
-  updateKpi("pgCardNet", "pgKpiNet", "pgKpiNetDiff", projNetResult / 1000, BASELINE.net_result / 1000);
-  updateKpi("pgCardEq", "pgKpiEq", "pgKpiEqDiff", projEquity / 1000, baseEquity / 1000);
-  updateKpi("pgCardCash", "pgKpiCash", "pgKpiCashDiff", projCash / 1000, BASELINE.cash / 1000);
+  updateKpi("pgCardRev", "pgKpiRev", "pgKpiRevDiff", proj.revenue / 1000, baseline.revenue / 1000);
+  updateKpi("pgCardNet", "pgKpiNet", "pgKpiNetDiff", proj.netResult / 1000, baseline.netResult / 1000);
+  updateKpi("pgCardEq", "pgKpiEq", "pgKpiEqDiff", proj.equity / 1000, baseline.equity / 1000);
+  updateKpi("pgCardCash", "pgKpiCash", "pgKpiCashDiff", proj.cash / 1000, baseline.cash / 1000);
 
   // Draw Charts
-  drawProjectionCharts(
-    BASELINE,
-    baseEquity,
-    projRevenue / 1000,
-    projPayroll / 1000,
-    projNetTrading / 1000,
-    projNetResult / 1000,
-    projEquity / 1000,
-    projSolvency,
-    baseSolvency
-  );
+  drawProjectionCharts(baseline, proj);
 }
 
 function updateKpi(cardId, valId, diffId, projVal, baseVal) {
@@ -221,7 +253,10 @@ function updateKpi(cardId, valId, diffId, projVal, baseVal) {
   } else {
     const isPos = diffVal > 0;
     const sign = isPos ? "+" : "";
-    diffEl.textContent = `${sign}${diffVal.toFixed(1)}M vs actual`;
+    // "vs baseline" (not "vs actual"): baseVal is the computed no-changes
+    // scenario, which for Equity/Solvency already differs from the raw
+    // 2024/25 actual by a full season's net result — see computeProjection().
+    diffEl.textContent = `${sign}${diffVal.toFixed(1)}M ${state.isPt ? "vs linha de base" : "vs baseline"}`;
     diffEl.className = `change ${isPos ? "pos" : "neg"}`;
     if (cardEl) {
       cardEl.classList.add(isPos ? "pos" : "neg");
@@ -229,19 +264,24 @@ function updateKpi(cardId, valId, diffId, projVal, baseVal) {
   }
 }
 
-function drawProjectionCharts(
-  BASELINE,
-  baseEquity,
-  projRevenue,
-  projPayroll,
-  projTrading,
-  projNetResult,
-  projEquity,
-  projSolvency,
-  baseSolvency
-) {
+// Both charts below compare the same two scenarios — "Baseline 2025/26"
+// (computeProjection() run at DEFAULT_INPUTS: 2024/25's performance
+// repeated with no adjustments) against "Your Projection 2025/26" (the
+// user's current slider positions). Sharing these labels keeps that pairing
+// visually consistent across both charts, and means an untouched Reset
+// always renders two identical bars — nothing to explain, since both bars
+// are already projections of the *same* hypothetical season.
+function scenarioLabels() {
+  return {
+    baseline: state.isPt ? "Linha de Base 2025/26 (sem alterações)" : "Baseline 2025/26 (no changes)",
+    projected: state.isPt ? "A Sua Projeção 2025/26" : "Your Projection 2025/26",
+  };
+}
+
+function drawProjectionCharts(baseline, proj) {
   const canvas1Id = "chartPlaygroundNet";
   const canvas2Id = "chartPlaygroundSolvency";
+  const { baseline: baselineLabel, projected: projectedLabel } = scenarioLabels();
 
   const labels = [
     state.isPt ? "Receita" : "Revenue",
@@ -261,20 +301,25 @@ function drawProjectionCharts(
       labels,
       datasets: [
         {
-          label: state.isPt ? "Real 2024/25" : "Actual 2024/25",
+          label: baselineLabel,
           data: [
-            BASELINE.revenue_operating / 1000,
-            BASELINE.personnel_costs / 1000,
-            (BASELINE.player_transfer_income + BASELINE.squad_amortization + BASELINE.player_transfer_cost) / 1000,
-            BASELINE.net_result / 1000,
+            baseline.revenue / 1000,
+            baseline.payroll / 1000,
+            baseline.netTrading / 1000,
+            baseline.netResult / 1000,
           ],
           backgroundColor: "rgba(106, 113, 110, 0.4)",
           borderColor: "#6a716e",
           borderWidth: 1,
         },
         {
-          label: state.isPt ? "Projetado 2025/26" : "Projected 2025/26",
-          data: [projRevenue, projPayroll, projTrading, projNetResult],
+          label: projectedLabel,
+          data: [
+            proj.revenue / 1000,
+            proj.payroll / 1000,
+            proj.netTrading / 1000,
+            proj.netResult / 1000,
+          ],
           backgroundColor: state.COLORS.greenSoft || FALLBACK.greenSoft,
           borderColor: state.COLORS.green || FALLBACK.green,
           borderWidth: 1,
@@ -298,8 +343,8 @@ function drawProjectionCharts(
               if (context.datasetIndex === 0) {
                 return `${context.dataset.label}: ${val.toFixed(1)} M€`;
               } else {
-                const actualVal = context.chart.data.datasets[0].data[context.dataIndex];
-                const delta = val - actualVal;
+                const baselineVal = context.chart.data.datasets[0].data[context.dataIndex];
+                const delta = val - baselineVal;
                 const sign = delta >= 0 ? "+" : "";
                 const deltaStr = Math.abs(delta) < 0.05 ? " (no change)" : ` (${sign}${delta.toFixed(1)} M€)`;
                 return `${context.dataset.label}: ${val.toFixed(1)} M€${deltaStr}`;
@@ -316,20 +361,20 @@ function drawProjectionCharts(
         ctx.save();
         ctx.font = 'bold 9px sans-serif';
         ctx.textAlign = 'center';
-        
-        const actualDS = data.datasets[0].data;
+
+        const baselineDS = data.datasets[0].data;
         const projDS = data.datasets[1].data;
-        
+
         chart.getDatasetMeta(1).data.forEach((bar, index) => {
-          const actualVal = actualDS[index];
+          const baselineVal = baselineDS[index];
           const projVal = projDS[index];
-          const delta = projVal - actualVal;
+          const delta = projVal - baselineVal;
           if (Math.abs(delta) < 0.05) return;
-          
+
           const sign = delta > 0 ? "+" : "";
           const color = delta > 0 ? "#0a5d3a" : "#eb5e28";
           ctx.fillStyle = color;
-          
+
           const yPos = bar.y + (projVal >= 0 ? -8 : 12);
           ctx.fillText(`${sign}${delta.toFixed(1)}M`, bar.x, yPos);
         });
@@ -347,14 +392,11 @@ function drawProjectionCharts(
   const chart2 = new Chart(ctx2, {
     type: "bar",
     data: {
-      labels: [
-        state.isPt ? "Real 2024/25" : "Actual 2024/25",
-        state.isPt ? "Projetado 2025/26" : "Projected 2025/26",
-      ],
+      labels: [baselineLabel, projectedLabel],
       datasets: [
         {
           label: state.isPt ? "Capital Próprio (M€)" : "Shareholders' Equity (M€)",
-          data: [baseEquity / 1000, projEquity],
+          data: [baseline.equity / 1000, proj.equity / 1000],
           backgroundColor: state.COLORS.goldSoft || FALLBACK.goldSoft,
           borderColor: state.COLORS.gold || FALLBACK.gold,
           borderWidth: 1.5,
@@ -364,7 +406,7 @@ function drawProjectionCharts(
         },
         styledLineDataset({
           label: state.isPt ? "Rácio de Solvabilidade (%)" : "Solvency Ratio (%)",
-          data: [baseSolvency, projSolvency],
+          data: [baseline.solvency, proj.solvency],
           color: state.COLORS.green || FALLBACK.green,
           bg: state.COLORS.greenSoft || FALLBACK.greenSoft,
           extra: {
@@ -396,7 +438,7 @@ function drawProjectionCharts(
             text: state.isPt ? "Rácio de Solvabilidade (%)" : "Solvency Ratio (%)",
           },
           min: 0,
-          max: Math.max(30, baseSolvency + 5, projSolvency + 5),
+          max: Math.max(30, baseline.solvency + 5, proj.solvency + 5),
           grid: { drawOnChartArea: false }, // Avoid grid lines overlap
         },
       },

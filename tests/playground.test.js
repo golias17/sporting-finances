@@ -5,7 +5,7 @@ import Chart from "chart.js/auto";
 
 // Mock Chart to avoid jsdom canvas issues. Captures each constructed
 // chart's config on a static `instances` array so tests can inspect what
-// data playground.js actually drew (e.g. the "Real 2024/25" equity bar)
+// data playground.js actually drew (e.g. the equity/solvency chart's bars)
 // without needing a real canvas.
 vi.mock("chart.js/auto", () => {
   class Chart {
@@ -110,39 +110,52 @@ describe("playground.js CFO Simulator", () => {
     };
   });
 
-  it("should initialize with default values and baseline KPIs", () => {
+  it("should initialize with default values and baseline KPIs, with every KPI reading 'no change'", () => {
     initPlayground();
     expect(document.getElementById("pgKpiRev").textContent).toBe("€148.1M");
     expect(document.getElementById("pgKpiNet").textContent).toBe("€20.0M");
-    // pgKpiEq always displays the *projected* (2025/26) closing equity, not
-    // the 2024/25 baseline — even with every slider at its default, that's
-    // baseline equity (€40.9M) plus a full projected year's net result
-    // (€20.0M, reconstructed to match 2024/25's actual result when nothing
-    // is adjusted), i.e. €61.0M. This is unaffected by the baseEquity fix
-    // below — see the "Real 2024/25 equity bar" test for that.
+    // pgKpiEq always displays the *projected* (2025/26) closing equity:
+    // 2024/25's closing equity (€40.9M) plus a full projected season's net
+    // result (€20.0M, reconstructed to match 2024/25's actual result when
+    // nothing is adjusted), i.e. €61.0M.
     expect(document.getElementById("pgKpiEq").textContent).toBe("€61.0M");
-    // BASELINE.cash now comes from financials.json's real 2024/25 entry
+    // BASELINE.cash comes from financials.json's real 2024/25 entry
     // instead of a stale hardcoded literal (which was €7.0M vs the actual
     // €15.6M) — see getBaseline() in src/playground.js.
     expect(document.getElementById("pgKpiCash").textContent).toBe("€15.6M");
+
+    // Every KPI is compared against a *computed* "no changes" scenario
+    // (computeProjection() at DEFAULT_INPUTS), not against the raw 2024/25
+    // actuals — so with every slider still at its default, all four must
+    // read "no change", including Equity/Solvency, which otherwise differ
+    // from the raw actual by a full season's net result even when nothing
+    // has been adjusted. See computeProjection()'s comment in
+    // src/playground.js for why that distinction matters.
+    expect(document.getElementById("pgKpiRevDiff").textContent).toBe("no change");
+    expect(document.getElementById("pgKpiNetDiff").textContent).toBe("no change");
+    expect(document.getElementById("pgKpiEqDiff").textContent).toBe("no change");
+    expect(document.getElementById("pgKpiCashDiff").textContent).toBe("no change");
   });
 
-  it('draws the "Real 2024/25" equity bar at the season\'s actual closing equity, not equity + net_result again', () => {
-    // Regression test for a double-counting bug: BASELINE.equity from
-    // financials.json is already the audited *closing* equity for the
-    // season (verified against 2023/24's closing equity + 2024/25's net
-    // result), not an opening balance — so the "Real 2024/25" comparison
-    // bar in the equity/solvency chart must show it as-is. It previously
-    // added BASELINE.net_result on top, inflating that bar (and the
-    // baseline solvency ratio) by exactly one season's net result
-    // (€40.9M shown as €61.0M).
+  it('draws identical "Baseline 2025/26" and "Your Projection 2025/26" equity bars at Reset (no unexplained jump)', () => {
+    // Regression test for a UX bug: the equity/solvency chart's reference
+    // bar used to be the raw 2024/25 actual equity, while the "Projected"
+    // bar always carried a full season's net result on top (2024/25's
+    // closing equity being the *opening* balance for the 2025/26
+    // projection) — so even with every slider left untouched, the
+    // Projected Equity KPI showed an unexplained "+20.0M vs actual" jump.
+    // The reference bar is now itself a computed "no changes" projection
+    // (computeProjection() at DEFAULT_INPUTS), so at Reset both bars must
+    // be identical — the chart needs no caveat to make sense.
     initPlayground();
     const solvencyChart = Chart.instances.find(
       (c) => c.config.data.datasets[0]?.label === "Shareholders' Equity (M€)",
     );
     expect(solvencyChart).toBeDefined();
-    const [actualEquity] = solvencyChart.config.data.datasets[0].data;
-    expect(actualEquity).toBeCloseTo(40.928, 2);
+    const [baselineEquity, projectedEquity] = solvencyChart.config.data.datasets[0].data;
+    expect(baselineEquity).toBeCloseTo(60.951, 2);
+    expect(projectedEquity).toBeCloseTo(60.951, 2);
+    expect(baselineEquity).toBeCloseTo(projectedEquity, 6);
   });
 
   it("should recalculate KPIs when UEFA Champions League is toggled", () => {
@@ -153,7 +166,7 @@ describe("playground.js CFO Simulator", () => {
 
     // Revenue should increase by €40M prize + €8M commercial growth (from €148.1M to €196.1M)
     expect(document.getElementById("pgKpiRev").textContent).toBe("€196.1M");
-    expect(document.getElementById("pgKpiRevDiff").textContent).toBe("+48.0M vs actual");
+    expect(document.getElementById("pgKpiRevDiff").textContent).toBe("+48.0M vs baseline");
 
     // Net Result and Equity should also increase by €48M
     expect(document.getElementById("pgKpiNet").textContent).toBe("€68.0M");
