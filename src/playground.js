@@ -1,6 +1,6 @@
 import Chart from "chart.js/auto";
 import { state } from "./state.js";
-import { chartRegistry } from "./chartUtils.js";
+import { chartRegistry, styledLineDataset } from "./chartUtils.js";
 
 // Baseline actuals from 2024/25 (in thousands of EUR)
 const BASELINE = {
@@ -205,7 +205,7 @@ function drawProjectionCharts(
   });
   chartRegistry.set(canvas1Id, chart1);
 
-  // 2. Solvency & Equity Chart
+  // 2. Solvency & Equity Chart (Dual Y-Axis)
   if (chartRegistry.has(canvas2Id)) {
     chartRegistry.get(canvas2Id).destroy();
   }
@@ -214,24 +214,31 @@ function drawProjectionCharts(
     type: "bar",
     data: {
       labels: [
-        state.isPt ? "Capital Próprio (M€)" : "Shareholders' Equity (M€)",
-        state.isPt ? "Rácio Solvabilidade (x)" : "Solvency Ratio (x)",
+        state.isPt ? "Real 2024/25" : "Actual 2024/25",
+        state.isPt ? "Projetado 2025/26" : "Projected 2025/26",
       ],
       datasets: [
         {
-          label: state.isPt ? "Real 2024/25" : "Actual 2024/25",
-          data: [BASELINE.equity / 1000, baseRatio],
-          backgroundColor: "rgba(106, 113, 110, 0.4)",
-          borderColor: "#6a716e",
-          borderWidth: 1,
-        },
-        {
-          label: state.isPt ? "Projetado 2025/26" : "Projected 2025/26",
-          data: [projEquity, projRatio],
+          label: state.isPt ? "Capital Próprio (M€)" : "Shareholders' Equity (M€)",
+          data: [BASELINE.equity / 1000, projEquity],
           backgroundColor: state.COLORS.goldSoft || "rgba(176, 137, 35, 0.4)",
           borderColor: state.COLORS.gold || "#b08923",
-          borderWidth: 1,
+          borderWidth: 1.5,
+          yAxisID: "y",
+          borderRadius: 4,
+          order: 1,
         },
+        styledLineDataset({
+          label: state.isPt ? "Rácio de Solvabilidade (x)" : "Solvency Ratio (x)",
+          data: [baseRatio, projRatio],
+          color: state.COLORS.green || "#0a5d3a",
+          bg: state.COLORS.greenSoft || "rgba(10, 93, 58, 0.2)",
+          extra: {
+            type: "line",
+            yAxisID: "y1",
+            order: 0,
+          }
+        })
       ],
     },
     options: {
@@ -239,8 +246,24 @@ function drawProjectionCharts(
       maintainAspectRatio: false,
       scales: {
         y: {
-          beginAtZero: false,
-          title: { display: true, text: "Value" },
+          type: "linear",
+          position: "left",
+          title: {
+            display: true,
+            text: state.isPt ? "Capital Próprio (M€)" : "Shareholders' Equity (M€)",
+          },
+          grid: { color: state.COLORS.rule || "rgba(0, 0, 0, 0.05)" }
+        },
+        y1: {
+          type: "linear",
+          position: "right",
+          title: {
+            display: true,
+            text: state.isPt ? "Rácio de Solvabilidade (x)" : "Solvency Ratio (x)",
+          },
+          min: 0,
+          max: Math.max(2.0, baseRatio + 0.5, projRatio + 0.5),
+          grid: { drawOnChartArea: false }, // Avoid grid lines overlap
         },
       },
     },
