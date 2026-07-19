@@ -2265,22 +2265,32 @@ textarea.pdf-field-input {
 
 /* The shared .kpis grid (see _components.css) defaults to a fixed 6-column
    layout sized for the KPI strip elsewhere in the app; the Playground only
-   has 4 cards, so it needs a flexible auto-fit layout instead. Scoped to
+   has 4 cards, so it gets its own fixed 4-column row instead. Scoped to
    .playground-results so every other .kpis grid keeps its own columns. */
 .playground-results .kpis {
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   margin-bottom: 1.5rem;
   max-width: 100%;
 }
 
+@media (max-width: 600px) {
+  .playground-results .kpis {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 460px) {
+  .playground-results .kpis {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* One chart per row (each still uses .chart-box.tall for room to breathe)
+   instead of squeezing the dual-axis Equity/Solvency chart into half a
+   row alongside the Net Results chart. */
 .playground-charts-container {
   display: grid;
-  /* 380px (not the app-wide grid's usual 300px) because
-     chartPlaygroundSolvency is a dual-axis chart with a title on both the
-     left and right y-axis plus two long scenario-name x-axis labels — at
-     300px those get cramped/rotated. Wider minmax means the pair drops to
-     a single column sooner on medium viewports instead of squeezing. */
-  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  grid-template-columns: 1fr;
   gap: 1.5rem;
 }
 
