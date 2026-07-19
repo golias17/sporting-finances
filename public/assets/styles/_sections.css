@@ -2117,3 +2117,168 @@ table.ledger .badge.winter {
 .sub-panel-squad.hidden {
   display: none !important;
 }
+
+/* CFO Simulator Playground Styles */
+.playground-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 24px;
+  align-items: start;
+  margin-top: 24px;
+}
+
+@media (max-width: 900px) {
+  .playground-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.playground-controls {
+  background: var(--surface);
+  border: 1.5px solid var(--rule-2);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed var(--rule-2);
+}
+
+.control-group:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.control-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--sans);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.value-highlight {
+  color: var(--gold);
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: var(--fs-md);
+  background: rgba(176, 137, 35, 0.08);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(176, 137, 35, 0.2);
+}
+
+.slider-bounds {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-sm);
+  color: var(--muted);
+  margin-top: 2px;
+  font-family: var(--mono);
+}
+
+/* Toggle Switch Styling */
+.toggle-container {
+  display: flex;
+  align-items: center;
+}
+
+.playground-toggle {
+  appearance: none;
+  width: 48px;
+  height: 24px;
+  background-color: var(--rule-2);
+  border-radius: 12px;
+  position: relative;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.22s ease;
+}
+
+.playground-toggle:checked {
+  background-color: var(--green);
+}
+
+.playground-toggle::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.22s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.playground-toggle:checked::before {
+  transform: translateX(24px);
+}
+
+/* Range Slider Custom Styling */
+.playground-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  background: var(--rule-2);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+.playground-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--green);
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease;
+}
+
+.playground-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* KPI styling */
+.playground-results .kpi-card {
+  border: 1px solid var(--rule-2);
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.playground-results .kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+}
+
+.playground-results .kpi-change.neutral {
+  color: var(--muted);
+  font-size: var(--fs-sm);
+}
+
+.playground-results .kpi-change.positive {
+  color: var(--pos);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+}
+
+.playground-results .kpi-change.negative {
+  color: var(--neg);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+}
+
