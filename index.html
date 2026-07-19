@@ -1895,7 +1895,7 @@
           </div>
         </div>
 
-        <div class="club-grid anim-up">
+        <div class="club-grid">
           <!-- CARD 1: KITS -->
           <div class="card asset-card">
             <div class="card-head">
@@ -2107,7 +2107,7 @@
         </div>
 
         <!-- ============== SPORTING EXPERIENCE ============== -->
-        <div class="card experience-card reveal" style="margin-top: 30px">
+        <div class="card experience-card reveal">
           <div class="experience-content">
             <div class="experience-text">
               <h3 data-i18n="ch11-exp-title">
@@ -2142,7 +2142,7 @@
           </div>
         </div>
 
-        <div class="social-hub reveal" style="margin-top: 40px">
+        <div class="social-hub reveal">
           <h3 data-i18n="ch11-social-h3">Official Channels & Media</h3>
           <div class="social-grid">
             <button id="btnJornalModal" class="social-btn jornal">
@@ -2256,7 +2256,7 @@
           </div>
         </div>
 
-        <div class="disclaimer-banner reveal" style="margin-top: 30px">
+        <div class="disclaimer-banner reveal">
           <svg
             viewBox="0 0 24 24"
             fill="none"
@@ -2331,7 +2331,7 @@
           </div>
         </div>
 
-        <div id="newsFeed" class="news-grid anim-up">
+        <div id="newsFeed" class="news-grid">
           <div class="news-loading" data-i18n="ch12-loading">
             Loading live updates...
           </div>
@@ -2345,7 +2345,7 @@
         id="tab-playground"
         role="tabpanel"
       >
-        <div class="chapter anim-up">
+        <div class="chapter">
           <div class="num" data-i18n="ch13-num">Ch. 13 — Play CFO</div>
           <div>
             <h2 data-i18n="ch13-h2">The Fiscal <em>Playground</em>.</h2>
@@ -2355,7 +2355,7 @@
           </div>
         </div>
 
-        <div class="playground-layout anim-up">
+        <div class="playground-layout">
           <!-- Control Panel Card -->
           <div class="card playground-controls">
             <h3 data-i18n="pg-ctrls-title">Simulation Controls</h3>
@@ -2378,7 +2378,7 @@
                 <label for="uclSelect" data-i18n="pg-ucl-label">UEFA Champions League Campaign</label>
               </div>
               <span class="control-help" data-i18n="pg-ucl-help">UEFA prize money, TV rights and ticket sales spillover.</span>
-              <select id="uclSelect" class="playground-select" style="width: 100%; padding: 0.75rem; background: var(--bg); border: 1px solid var(--rule-2); border-radius: var(--radius-lg); color: var(--ink); font-size: 0.875rem; font-family: var(--sans); font-weight: 600; cursor: pointer; transition: border-color 0.2s ease;">
+              <select id="uclSelect" class="playground-select">
                 <option value="0" data-i18n="pg-ucl-none">Not Qualified (€0M)</option>
                 <option value="36" data-i18n="pg-ucl-league">League Phase / Group Stage (+€36M)</option>
                 <option value="47" data-i18n="pg-ucl-r16">Round of 16 (+€47M)</option>
@@ -2473,7 +2473,7 @@
 
           <!-- Output metrics cards & charts -->
           <div class="playground-results">
-            <div class="kpis" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 1.5rem; max-width: 100%;">
+            <div class="kpis">
               <div class="kpi" id="pgCardRev">
                 <div class="label" data-i18n="pg-kpi-rev">Projected Revenue</div>
                 <div class="value" id="pgKpiRev">€148.1M</div>
@@ -2497,7 +2497,7 @@
             </div>
 
             <!-- Charts Side-by-Side -->
-            <div class="playground-charts-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+            <div class="playground-charts-container">
               <div class="card">
                 <div class="card-head">
                   <h3 data-i18n="pg-chart1-title">Simulated Financials vs. Baseline</h3>
@@ -2607,12 +2607,11 @@
 
     <!-- PDF Customization Modal -->
     <div id="pdfModal" class="modal-overlay hidden">
-      <div class="modal-container pdf-modal-container" style="max-width: 550px; height: auto; background: var(--surface); color: var(--ink); border: 1px solid var(--rule-2); padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; justify-content: flex-start; overflow-y: auto;">
+      <div class="modal-container pdf-modal-container">
         <button
           id="btnClosePdf"
           class="modal-close"
           aria-label="Close Customizer"
-          style="top: 1.5rem; right: 1.5rem;"
         >
           <svg
             viewBox="0 0 24 24"
@@ -2626,48 +2625,48 @@
             <line x1="6" y1="6" x2="18" y2="18"></line>
           </svg>
         </button>
-        <div style="display: flex; flex-direction: column; gap: 0.25rem;">
-          <h2 id="pdfModalTitle" style="font-family: var(--sans); font-size: 1.5rem; font-weight: 700; color: var(--green);" data-i18n="pdf_customizer_title">Customize PDF Report</h2>
-          <p id="pdfModalSubtitle" style="font-family: var(--sans); font-size: 0.875rem; color: var(--muted);" data-i18n="pdf_customizer_subtitle">Select options to generate your personalized dossier</p>
+        <div class="pdf-modal-intro">
+          <h2 id="pdfModalTitle" class="pdf-modal-title" data-i18n="pdf_customizer_title">Customize PDF Report</h2>
+          <p id="pdfModalSubtitle" class="pdf-modal-subtitle" data-i18n="pdf_customizer_subtitle">Select options to generate your personalized dossier</p>
         </div>
-        <form id="pdfCustomizerForm" style="display: flex; flex-direction: column; gap: 1.25rem;">
-          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-            <label id="lblPdfLanguage" style="font-family: var(--sans); font-size: 0.875rem; font-weight: 700; color: var(--ink);" data-i18n="pdf_language">Report Language</label>
-            <select id="pdfLanguageSelect" style="width: 100%; padding: 0.75rem; background: var(--bg); border: 1px solid var(--rule-2); border-radius: var(--radius-lg); color: var(--ink); font-size: 0.875rem; font-family: var(--sans);">
+        <form id="pdfCustomizerForm" class="pdf-modal-form">
+          <div class="pdf-field-group">
+            <label id="lblPdfLanguage" class="pdf-field-label" data-i18n="pdf_language">Report Language</label>
+            <select id="pdfLanguageSelect" class="pdf-field-input">
               <option value="en">English</option>
               <option value="pt">Português</option>
             </select>
           </div>
-          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-            <label id="lblPdfPages" style="font-family: var(--sans); font-size: 0.875rem; font-weight: 700; color: var(--ink);" data-i18n="pdf_pages">Pages to Include</label>
-            <div style="display: flex; flex-direction: column; gap: 0.75rem; background: var(--bg); padding: 1.25rem; border-radius: var(--radius-lg); border: 1px solid var(--rule-2);">
-              <label style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; cursor: pointer; font-family: var(--sans); color: var(--ink-2);">
-                <input type="checkbox" id="chkPage1" checked style="width: 1.1rem; height: 1.1rem; accent-color: var(--green);" />
+          <div class="pdf-field-group">
+            <label id="lblPdfPages" class="pdf-field-label" data-i18n="pdf_pages">Pages to Include</label>
+            <div class="pdf-checkbox-list">
+              <label class="pdf-checkbox-label">
+                <input type="checkbox" id="chkPage1" checked />
                 <span data-i18n="pdf_page_1">Cover Page & KPIs</span>
               </label>
-              <label style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; cursor: pointer; font-family: var(--sans); color: var(--ink-2);">
-                <input type="checkbox" id="chkPage2" checked style="width: 1.1rem; height: 1.1rem; accent-color: var(--green);" />
+              <label class="pdf-checkbox-label">
+                <input type="checkbox" id="chkPage2" checked />
                 <span data-i18n="pdf_page_2">I. Operating Income & II. Balance Sheet</span>
               </label>
-              <label style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; cursor: pointer; font-family: var(--sans); color: var(--ink-2);">
-                <input type="checkbox" id="chkPage3" checked style="width: 1.1rem; height: 1.1rem; accent-color: var(--green);" />
+              <label class="pdf-checkbox-label">
+                <input type="checkbox" id="chkPage3" checked />
                 <span data-i18n="pdf_page_3">III. Player Trading & IV. Cash Flows</span>
               </label>
-              <label style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; cursor: pointer; font-family: var(--sans); color: var(--ink-2);">
-                <input type="checkbox" id="chkPage4" checked style="width: 1.1rem; height: 1.1rem; accent-color: var(--green);" />
+              <label class="pdf-checkbox-label">
+                <input type="checkbox" id="chkPage4" checked />
                 <span data-i18n="pdf_page_4">Strategic Financing & Milestones</span>
               </label>
-              <label style="display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; cursor: pointer; font-family: var(--sans); color: var(--ink-2);">
-                <input type="checkbox" id="chkPage5" checked style="width: 1.1rem; height: 1.1rem; accent-color: var(--green);" />
+              <label class="pdf-checkbox-label">
+                <input type="checkbox" id="chkPage5" checked />
                 <span data-i18n="pdf_page_5">V. Landmark Player Transfers Ledger</span>
               </label>
             </div>
           </div>
-          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-            <label id="lblPdfNotes" style="font-family: var(--sans); font-size: 0.875rem; font-weight: 700; color: var(--ink);" data-i18n="pdf_executive_notes">Custom Executive Annotation</label>
-            <textarea id="pdfNotesText" rows="3" style="width: 100%; padding: 0.75rem; background: var(--bg); border: 1px solid var(--rule-2); border-radius: var(--radius-lg); color: var(--ink); font-size: 0.875rem; font-family: var(--sans); resize: none;" placeholder="Enter custom notes or disclaimer..."></textarea>
+          <div class="pdf-field-group">
+            <label id="lblPdfNotes" class="pdf-field-label" data-i18n="pdf_executive_notes">Custom Executive Annotation</label>
+            <textarea id="pdfNotesText" rows="3" class="pdf-field-input" placeholder="Enter custom notes or disclaimer..."></textarea>
           </div>
-          <button type="submit" id="btnPdfModalSubmit" style="width: 100%; padding: 1rem; background: var(--green); color: #ffffff; border: none; border-radius: var(--radius-lg); font-weight: 700; font-size: 0.875rem; font-family: var(--sans); cursor: pointer; transition: opacity 0.2s ease, transform 0.2s ease;">
+          <button type="submit" id="btnPdfModalSubmit" class="pdf-modal-submit">
             <span data-i18n="pdf_generate_btn">Generate Report</span>
           </button>
         </form>

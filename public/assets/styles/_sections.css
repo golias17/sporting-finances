@@ -1032,7 +1032,7 @@ body.dark .rating-badge.investment-grade {
   height: 24px;
   border-radius: var(--radius-round);
   background: var(--green);
-  color: #fff;
+  color: #ffffff;
   font-size: var(--fs-sm);
   font-weight: 700;
   display: flex;
@@ -1665,12 +1665,19 @@ table.ledger .badge.winter {
 }
 
 .social-hub {
-  margin: 0 0 50px;
+  margin: 40px 0 50px;
   background: var(--paper);
   border: 1px solid var(--rule);
   padding: 30px;
   border-radius: var(--radius-2xl);
   backdrop-filter: blur(10px);
+}
+
+/* Extra breathing room specifically when a disclaimer banner follows the
+   social hub (Club tab) — the other .disclaimer-banner instance (News tab)
+   isn't preceded by .social-hub and keeps its default spacing. */
+.social-hub + .disclaimer-banner {
+  margin-top: 30px;
 }
 .social-hub h3 {
   font-family: var(--sans);
@@ -2071,6 +2078,129 @@ table.ledger .badge.winter {
   height: 100%;
   border: none;
 }
+
+/* PDF Customization Modal — a light-surface form modal, distinct from the
+   dark 3D-flip Jornal reader shell above, so it overrides .modal-container's
+   shape/color entirely instead of sharing it. */
+.pdf-modal-container {
+  max-width: 550px;
+  height: auto;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--rule-2);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  justify-content: flex-start;
+  overflow-y: auto;
+}
+
+.pdf-modal-container .modal-close {
+  top: 1.5rem;
+  right: 1.5rem;
+}
+
+.pdf-modal-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pdf-modal-title {
+  font-family: var(--sans);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.pdf-modal-subtitle {
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.pdf-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.pdf-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pdf-field-label {
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.pdf-field-input {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--bg);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--radius-lg);
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-family: var(--sans);
+}
+
+textarea.pdf-field-input {
+  resize: none;
+}
+
+.pdf-checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: var(--bg);
+  padding: 1.25rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--rule-2);
+}
+
+.pdf-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  font-family: var(--sans);
+  color: var(--ink-2);
+}
+
+.pdf-checkbox-label input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--green);
+}
+
+.pdf-modal-submit {
+  width: 100%;
+  padding: 1rem;
+  background: var(--green);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  font-size: 0.875rem;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.pdf-modal-submit:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -2131,6 +2261,22 @@ table.ledger .badge.winter {
   .playground-layout {
     grid-template-columns: 1fr;
   }
+}
+
+/* The shared .kpis grid (see _components.css) defaults to a fixed 6-column
+   layout sized for the KPI strip elsewhere in the app; the Playground only
+   has 4 cards, so it needs a flexible auto-fit layout instead. Scoped to
+   .playground-results so every other .kpis grid keeps its own columns. */
+.playground-results .kpis {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  margin-bottom: 1.5rem;
+  max-width: 100%;
+}
+
+.playground-charts-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
 }
 
 .playground-controls {
@@ -2253,26 +2399,41 @@ table.ledger .badge.winter {
 }
 
 .playground-select {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--bg);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--radius-lg);
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-family: var(--sans);
+  font-weight: 600;
+  cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236a716e%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E") !important;
-  background-repeat: no-repeat !important;
-  background-position: right 14px center !important;
-  padding-right: 36px !important;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236a716e%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  /* Longhand after the `padding` shorthand above so the arrow icon still
+     has room on the right — matches the pre-extraction computed padding
+     exactly (0.75rem on 3 sides, 36px reserved on the right). */
+  padding-right: 36px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 body.dark .playground-select {
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E") !important;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
 }
 
 .playground-select:hover {
-  border-color: var(--green) !important;
+  border-color: var(--green);
 }
 
 .playground-select:focus {
-  border-color: var(--green) !important;
-  box-shadow: 0 0 0 3px rgba(10, 93, 58, 0.15) !important;
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(10, 93, 58, 0.15);
   outline: none;
 }
 

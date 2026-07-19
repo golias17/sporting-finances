@@ -1013,7 +1013,7 @@ body.dark .pwa-toast {
 .toast-btn {
   align-self: flex-start;
   background: var(--green);
-  color: #fff;
+  color: #ffffff;
   border: none;
   border-radius: var(--radius-md);
   padding: 6px 14px;
@@ -1205,42 +1205,57 @@ body.dark .custom-scroll::-webkit-scrollbar-thumb:hover {
   vertical-align: middle;
 }
 
-/* Chart Download Button Styles */
-.chart-download-btn {
+/* Chart Download Button & PDF Export Button — same "outline chip" language
+   (paper background, thin rule border, muted mono label that turns green
+   on hover, identical dark-mode treatment). Declared together so the two
+   can't independently drift apart the way they had (each retyping the same
+   colors/transitions/dark-mode overrides); only their sizing/shape below
+   differs. */
+.chart-download-btn,
+.pdf-export-btn {
   background: var(--paper);
   border: 1px solid var(--rule);
-  border-radius: var(--radius-pill);
   color: var(--muted);
   font-family: var(--mono);
-  font-size: var(--fs-2xs);
   font-weight: 500;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 3px 10px;
-  letter-spacing: 0.08em;
   text-transform: uppercase;
   transition: all 0.2s ease;
   user-select: none;
 }
-.chart-download-btn:hover {
+.chart-download-btn:hover,
+.pdf-export-btn:hover {
   background: var(--green-tint, rgba(10, 93, 58, 0.06));
   border-color: var(--green);
   color: var(--green);
+}
+body.dark .chart-download-btn,
+body.dark .pdf-export-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+body.dark .chart-download-btn:hover,
+body.dark .pdf-export-btn:hover {
+  background: rgba(46, 204, 113, 0.1);
+  border-color: var(--pos);
+  color: var(--pos);
+}
+
+/* Chart Download Button — unique sizing/shape */
+.chart-download-btn {
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-2xs);
+  padding: 3px 10px;
+  letter-spacing: 0.08em;
+}
+.chart-download-btn:hover {
   transform: translateY(-1px);
 }
 .chart-download-btn:active {
   transform: translateY(0);
-}
-body.dark .chart-download-btn {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-body.dark .chart-download-btn:hover {
-  background: rgba(46, 204, 113, 0.1);
-  border-color: var(--pos);
-  color: var(--pos);
 }
 @media (max-width: 600px) {
   .chart-download-btn {
@@ -1248,41 +1263,15 @@ body.dark .chart-download-btn:hover {
   }
 }
 
-/* PDF Export Button Styles */
+/* PDF Export Button — unique sizing/shape */
 .pdf-export-btn {
-  background: var(--paper);
-  border: 1px solid var(--rule);
   border-radius: var(--radius-sm);
-  color: var(--muted);
-  font-family: var(--mono);
   font-size: var(--fs-sm);
-  font-weight: 500;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   padding: 5px 12px;
   letter-spacing: 0.05em;
-  text-transform: uppercase;
-  transition: all 0.2s ease;
-  user-select: none;
-}
-.pdf-export-btn:hover {
-  background: var(--green-tint, rgba(10, 93, 58, 0.06));
-  border-color: var(--green);
-  color: var(--green);
 }
 .pdf-export-btn svg {
   margin-right: 6px;
-}
-body.dark .pdf-export-btn {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-body.dark .pdf-export-btn:hover {
-  background: rgba(46, 204, 113, 0.1);
-  border-color: var(--pos);
-  color: var(--pos);
 }
 @media (max-width: 600px) {
   .pdf-export-btn {
@@ -1684,6 +1673,7 @@ body.dark .seating-link-btn:hover {
   border: 1.5px solid var(--green);
   border-radius: var(--radius-2xl);
   overflow: hidden;
+  margin-top: 30px;
 }
 .experience-content {
   display: flex;
