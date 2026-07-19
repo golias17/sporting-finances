@@ -625,6 +625,58 @@ describe("Chart.js and Annotation Plugin integration", () => {
     state.isPt = false; // restore
   });
 
+  it("renders null (not Infinity/NaN) for ratio charts when a season's denominator is zero", () => {
+    const originalDataset = state.DATASET;
+    const zeroSeason = {
+      label: "9999/00",
+      revenue_operating: 0,
+      player_transfer_income: 0,
+      net_result: 0,
+      equity: 0,
+      squad_market_value: 0,
+      personnel_costs: -1000,
+      borrowings_nc: 0,
+      borrowings_c: 0,
+      current_assets: 5000,
+      current_liabilities: 0,
+      cash: 0,
+    };
+    state.DATASET = {
+      ...originalDataset,
+      annual_data: [...originalDataset.annual_data, zeroSeason],
+    };
+    const lastIdx = state.DATASET.annual_data.length - 1;
+    const origEnd = state.endSeasonIndex;
+    state.setEndSeasonIndex(lastIdx);
+
+    try {
+      chartRevVsPayroll();
+      chartPayrollBurden();
+      chartTransferReliance();
+      chartDebtLoad();
+      chartCurrentRatio();
+      chartDebtMaturity();
+
+      const checks = [
+        "chartRevVsPayroll",
+        "chartPayrollBurden",
+        "chartTransferReliance",
+        "chartDebtLoad",
+        "chartCurrentRatio",
+        "chartDebtMaturity",
+      ];
+
+      checks.forEach((id) => {
+        const chart = chartRegistry.get(id);
+        const value = chart.config.data.datasets[0].data[lastIdx];
+        expect(value, `${id} should be null, not Infinity/NaN`).toBeNull();
+      });
+    } finally {
+      state.DATASET = originalDataset;
+      state.setEndSeasonIndex(origEnd);
+    }
+  });
+
   describe("getPitchMilestone", () => {
     it("returns correct English milestone text for championships and manager changes", () => {
       state.isPt = false;

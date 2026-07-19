@@ -143,6 +143,10 @@ function posNegBarChart(id, { labelText, data, borderRadius }) {
  * worse (current ratio).
  */
 function zoneColor(value, low, high, invert = false) {
+  // A null ratio means the denominator was zero for that season (see the
+  // `!== 0` guards at each call site) — render it as a neutral/muted point
+  // instead of miscoloring it via null's numeric coercion to 0.
+  if (value == null) return state.COLORS.muted;
   if (invert) {
     return value < low
       ? state.COLORS.neg
@@ -381,8 +385,12 @@ export function chartRevStreams() {
 }
 
 export function chartRevVsPayroll() {
-  const ratios = state.annual.map(
-    (d) => Math.abs(d.personnel_costs) / d.revenue_operating,
+  // null when revenue_operating is 0 for a season — avoids plotting
+  // Infinity/NaN, matching the guard metrics.js uses for the same ratio.
+  const ratios = state.annual.map((d) =>
+    d.revenue_operating !== 0
+      ? Math.abs(d.personnel_costs) / d.revenue_operating
+      : null,
   );
   // Same canonical cutoffs as the health-check card and chartPayrollBurden —
   // healthThresholds.js exists precisely so these can't drift apart.
@@ -396,20 +404,24 @@ export function chartRevVsPayroll() {
           label: state.isPt
             ? "Custos com pessoal / Receitas"
             : "Personnel cost / revenue",
-          data: ratios.map((r) => r * 100),
+          data: ratios.map((r) => (r == null ? null : r * 100)),
           backgroundColor: ratios.map((r) =>
-            r > danger
-              ? state.COLORS.negSoft
-              : r > warn
-                ? state.COLORS.warn
-                : state.COLORS.posSoft,
+            r == null
+              ? state.COLORS.muted
+              : r > danger
+                ? state.COLORS.negSoft
+                : r > warn
+                  ? state.COLORS.warn
+                  : state.COLORS.posSoft,
           ),
           borderColor: ratios.map((r) =>
-            r > danger
-              ? state.COLORS.neg
-              : r > warn
-                ? state.COLORS.warn
-                : state.COLORS.pos,
+            r == null
+              ? state.COLORS.muted
+              : r > danger
+                ? state.COLORS.neg
+                : r > warn
+                  ? state.COLORS.warn
+                  : state.COLORS.pos,
           ),
           borderWidth: 1,
         },
@@ -563,9 +575,12 @@ export function chartAssetsLiab() {
 }
 
 export function chartDebtMaturity() {
-  const ncShare = state.annual.map(
-    (d) => d.borrowings_nc / (d.borrowings_nc + d.borrowings_c),
-  );
+  // null in any season with zero total borrowings, so the ratio has no
+  // meaningful denominator.
+  const ncShare = state.annual.map((d) => {
+    const totalDebt = d.borrowings_nc + d.borrowings_c;
+    return totalDebt !== 0 ? d.borrowings_nc / totalDebt : null;
+  });
   mkChart("chartDebtMaturity", {
     type: "line",
     data: {
@@ -575,7 +590,7 @@ export function chartDebtMaturity() {
           label: state.isPt
             ? "Percentagem de dívida a longo prazo"
             : "Long-term share of debt",
-          data: ncShare.map((v) => v * 100),
+          data: ncShare.map((v) => (v == null ? null : v * 100)),
           color: state.COLORS.green,
           bg: state.COLORS.greenSoft,
           fill: true,
@@ -798,8 +813,12 @@ export function chartAnnualNet() {
 
 // HEALTH CHECK TAB RATIOS
 export function chartPayrollBurden() {
-  const ratios = state.annual.map(
-    (d) => (Math.abs(d.personnel_costs) / d.revenue_operating) * 100,
+  // null when revenue_operating is 0 for a season — avoids plotting
+  // Infinity/NaN.
+  const ratios = state.annual.map((d) =>
+    d.revenue_operating !== 0
+      ? (Math.abs(d.personnel_costs) / d.revenue_operating) * 100
+      : null,
   );
   // HEALTH_THRESHOLDS stores payrollRatio as a fraction (0.6 = 60%) to match
   // metrics.js's calculateHealthSignals(), which uses the same cutoffs for
@@ -889,7 +908,7 @@ export function chartPayrollBurden() {
 export function chartTransferReliance() {
   const reliance = state.annual.map((d) => {
     const total = d.revenue_operating + d.player_transfer_income;
-    return (d.player_transfer_income / total) * 100;
+    return total !== 0 ? (d.player_transfer_income / total) * 100 : null;
   });
   // Same fraction-to-percentage scaling rationale as chartPayrollBurden —
   // HEALTH_THRESHOLDS.transferReliance is shared with metrics.js.
@@ -972,7 +991,7 @@ export function chartTransferReliance() {
 export function chartDebtLoad() {
   const netDebtRatio = state.annual.map((d) => {
     const netDebt = d.borrowings_nc + d.borrowings_c - d.cash;
-    return netDebt / d.revenue_operating;
+    return d.revenue_operating !== 0 ? netDebt / d.revenue_operating : null;
   });
   // HEALTH_THRESHOLDS.netDebtRatio is already in "× revenue" multiples, the
   // same unit this chart displays — no scaling needed, unlike the two
@@ -1062,8 +1081,12 @@ export function chartDebtLoad() {
 }
 
 export function chartCurrentRatio() {
-  const ratios = state.annual.map(
-    (d) => d.current_assets / d.current_liabilities,
+  // null when current_liabilities is 0 for a season — avoids plotting
+  // Infinity/NaN, matching the guard metrics.js uses for the same ratio.
+  const ratios = state.annual.map((d) =>
+    d.current_liabilities !== 0
+      ? d.current_assets / d.current_liabilities
+      : null,
   );
   // HEALTH_THRESHOLDS.currentRatio is inverted (lower is worse): `danger` is
   // the low cutoff, `warn` is the high cutoff — same shape metrics.js uses.
