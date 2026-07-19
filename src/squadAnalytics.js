@@ -1,12 +1,6 @@
-import Chart from "chart.js/auto";
 import { state } from "./state.js";
-import {
-  chartRegistry,
-  generateAccessibleTable,
-  addChartDownloadButton,
-  styledLineDataset,
-  getBrandColors,
-} from "./chartUtils.js";
+import { styledLineDataset, getBrandColors } from "./chartUtils.js";
+import { mkChart } from "./charts.js";
 
 // Defensive fallback for the (in practice, always-initialized-by-boot)
 // case where a chart is drawn before initChartDefaults() has populated
@@ -48,6 +42,52 @@ function getAllEraLabels() {
   return MANAGER_ERAS.map((e) => (state.isPt && e.pt ? e.pt : e.en));
 }
 
+// Shared plugins/scales options for this file's two bar+line transfer
+// charts (drawManagerEras, drawCommissions) — same legend/tooltip styling
+// and M€-suffixed axis ticks in both, only `stacked` differs.
+function transferChartOptions({ stacked = false } = {}) {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        labels: {
+          color: state.COLORS.ink || FALLBACK.ink,
+          font: { family: state.COLORS.fontFamily || "sans-serif" },
+        }
+      },
+      tooltip: {
+        mode: "index",
+        intersect: false,
+        callbacks: {
+          label: function (context) {
+            return `${context.dataset.label}: ${context.raw.toFixed(1)} M€`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        stacked,
+        ticks: {
+          color: state.COLORS.muted || FALLBACK.muted,
+          font: { family: state.COLORS.fontFamily || "sans-serif" },
+        },
+        grid: { color: state.COLORS.rule || "rgba(0, 0, 0, 0.05)" }
+      },
+      y: {
+        stacked,
+        ticks: {
+          color: state.COLORS.muted || FALLBACK.muted,
+          font: { family: state.COLORS.fontFamily || "sans-serif" },
+          callback: value => value + " M€",
+        },
+        grid: { color: state.COLORS.rule || "rgba(0, 0, 0, 0.05)" }
+      }
+    }
+  };
+}
+
 export function drawManagerEras() {
   const canvasId = "chartManagerEras";
   const canvas = document.getElementById(canvasId);
@@ -81,11 +121,6 @@ export function drawManagerEras() {
   const purchases = labels.map(l => erasData[l].purchases);
   const netSpend = labels.map(l => erasData[l].sales - erasData[l].purchases);
 
-  if (chartRegistry.has(canvasId)) {
-    chartRegistry.get(canvasId).destroy();
-  }
-
-  const ctx = canvas.getContext("2d");
   const config = {
     type: "bar",
     data: {
@@ -114,51 +149,10 @@ export function drawManagerEras() {
         })
       ]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          labels: {
-            color: state.COLORS.ink || FALLBACK.ink,
-            font: { family: state.COLORS.fontFamily || "sans-serif" },
-          }
-        },
-        tooltip: {
-          mode: "index",
-          intersect: false,
-          callbacks: {
-            label: function (context) {
-              return `${context.dataset.label}: ${context.raw.toFixed(1)} M€`;
-            }
-          }
-        }
-      },
-      scales: {
-        x: {
-          ticks: {
-            color: state.COLORS.muted || FALLBACK.muted,
-            font: { family: state.COLORS.fontFamily || "sans-serif" },
-          },
-          grid: { color: state.COLORS.rule || "rgba(0, 0, 0, 0.05)" }
-        },
-        y: {
-          ticks: {
-            color: state.COLORS.muted || FALLBACK.muted,
-            font: { family: state.COLORS.fontFamily || "sans-serif" },
-            callback: value => value + " M€",
-          },
-          grid: { color: state.COLORS.rule || "rgba(0, 0, 0, 0.05)" }
-        }
-      }
-    }
+    options: transferChartOptions(),
   };
 
-  const chart = new Chart(ctx, config);
-  chartRegistry.set(canvasId, chart);
-
-  generateAccessibleTable(canvasId, config);
-  addChartDownloadButton(canvasId);
+  mkChart(canvasId, config);
 }
 
 export function drawCommissions() {
@@ -185,11 +179,6 @@ export function drawCommissions() {
     purchasesCommissions.push(purchasesComm);
   });
 
-  if (chartRegistry.has(canvasId)) {
-    chartRegistry.get(canvasId).destroy();
-  }
-
-  const ctx = canvas.getContext("2d");
   const config = {
     type: "bar",
     data: {
@@ -209,51 +198,8 @@ export function drawCommissions() {
         }
       ]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          labels: {
-            color: state.COLORS.ink || FALLBACK.ink,
-            font: { family: state.COLORS.fontFamily || "sans-serif" },
-          }
-        },
-        tooltip: {
-          mode: "index",
-          intersect: false,
-          callbacks: {
-            label: function (context) {
-              return `${context.dataset.label}: ${context.raw.toFixed(1)} M€`;
-            }
-          }
-        }
-      },
-      scales: {
-        x: {
-          stacked: true,
-          ticks: {
-            color: state.COLORS.muted || FALLBACK.muted,
-            font: { family: state.COLORS.fontFamily || "sans-serif" },
-          },
-          grid: { color: state.COLORS.rule || "rgba(0, 0, 0, 0.05)" }
-        },
-        y: {
-          stacked: true,
-          ticks: {
-            color: state.COLORS.muted || FALLBACK.muted,
-            font: { family: state.COLORS.fontFamily || "sans-serif" },
-            callback: value => value + " M€",
-          },
-          grid: { color: state.COLORS.rule || "rgba(0, 0, 0, 0.05)" }
-        }
-      }
-    }
+    options: transferChartOptions({ stacked: true }),
   };
 
-  const chart = new Chart(ctx, config);
-  chartRegistry.set(canvasId, chart);
-
-  generateAccessibleTable(canvasId, config);
-  addChartDownloadButton(canvasId);
+  mkChart(canvasId, config);
 }

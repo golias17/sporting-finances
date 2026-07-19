@@ -38,6 +38,56 @@ function fmtM(val) {
   return `${sign}${Math.abs(val / 1000).toFixed(1)} M€`;
 }
 
+// autoTable didParseCell helpers — each table below colors one or two
+// "is this good or bad" columns red/green. These two shapes (fmtM's
+// "-"-prefixed M€ strings, and parseInt'd percentage/multiple strings)
+// used to be hand-copied at every call site (identically, in the "-"-prefix
+// case) instead of shared, which is how the sign-based block ended up
+// pasted verbatim at three different column indices.
+
+// Colors a column red if its fmtM()-formatted value starts with "-",
+// green if it's a genuine positive non-zero value, and leaves zero/"—"
+// unstyled.
+function signColorCell(colIndex, colors) {
+  return (cellData) => {
+    if (cellData.section !== "body" || cellData.column.index !== colIndex) return;
+    const val = cellData.cell.text[0];
+    if (val && val.startsWith("-")) {
+      cellData.cell.styles.textColor = colors.negative;
+      cellData.cell.styles.fontStyle = "bold";
+    } else if (val && val !== "—" && val !== "0.0 M€" && !val.startsWith("0")) {
+      cellData.cell.styles.textColor = colors.positive;
+      cellData.cell.styles.fontStyle = "bold";
+    }
+  };
+}
+
+// Colors a column based on a parseInt'd numeric threshold (a percentage or
+// a "2.0x"-style multiple) — the caller supplies the red/green predicates,
+// since the thresholds and their direction (higher-is-worse vs
+// higher-is-better) differ per column.
+function thresholdColorCell(colIndex, { negativeIf, positiveIf }, colors) {
+  return (cellData) => {
+    if (cellData.section !== "body" || cellData.column.index !== colIndex) return;
+    const str = cellData.cell.text[0];
+    if (!str || str === "—") return;
+    const val = parseInt(str, 10);
+    if (negativeIf(val)) {
+      cellData.cell.styles.textColor = colors.negative;
+      cellData.cell.styles.fontStyle = "bold";
+    } else if (positiveIf(val)) {
+      cellData.cell.styles.textColor = colors.positive;
+      cellData.cell.styles.fontStyle = "bold";
+    }
+  };
+}
+
+// Combines several column-colorers (each already bound to a `colors`
+// palette) into the single didParseCell callback autoTable expects.
+function combineCellColorers(...colorers) {
+  return (cellData) => colorers.forEach((c) => c(cellData));
+}
+
 /**
  * Builds the shared context (doc handle, colors, formatted labels, and the
  * page-header/pagination helpers) passed to every drawPage*() function
@@ -403,34 +453,12 @@ function drawFinancialTablesPage(ctx) {
       5: { halign: "right" },
       7: { halign: "right" },
     },
-    didParseCell: (cellData) => {
-      if (cellData.section === "body" && cellData.column.index === 6) {
-        const pctStr = cellData.cell.text[0];
-        if (pctStr && pctStr !== "—") {
-          const val = parseInt(pctStr, 10);
-          if (val > 70) {
-            cellData.cell.styles.textColor = colors.negative;
-            cellData.cell.styles.fontStyle = "bold";
-          } else if (val <= 60) {
-            cellData.cell.styles.textColor = colors.positive;
-            cellData.cell.styles.fontStyle = "bold";
-          }
-        }
-      }
-      if (cellData.section === "body" && cellData.column.index === 8) {
-        const pctStr = cellData.cell.text[0];
-        if (pctStr && pctStr !== "—") {
-          const val = parseInt(pctStr, 10);
-          if (val < 10) {
-            cellData.cell.styles.textColor = colors.negative;
-            cellData.cell.styles.fontStyle = "bold";
-          } else if (val >= 20) {
-            cellData.cell.styles.textColor = colors.positive;
-            cellData.cell.styles.fontStyle = "bold";
-          }
-        }
-      }
-    },
+    didParseCell: combineCellColorers(
+      // Wage ratio (col 6): higher is worse.
+      thresholdColorCell(6, { negativeIf: (v) => v > 70, positiveIf: (v) => v <= 60 }, colors),
+      // EBITDA margin (col 8): higher is better.
+      thresholdColorCell(8, { negativeIf: (v) => v < 10, positiveIf: (v) => v >= 20 }, colors),
+    ),
   });
 
   // Table 2 (Balance Sheet)
@@ -519,36 +547,10 @@ function drawFinancialTablesPage(ctx) {
       5: { halign: "right" },
       6: { halign: "right" },
     },
-    didParseCell: (cellData) => {
-      if (cellData.section === "body" && cellData.column.index === 3) {
-        const val = cellData.cell.text[0];
-        if (val && val.startsWith("-")) {
-          cellData.cell.styles.textColor = colors.negative;
-          cellData.cell.styles.fontStyle = "bold";
-        } else if (
-          val &&
-          val !== "—" &&
-          val !== "0.0 M€" &&
-          !val.startsWith("0")
-        ) {
-          cellData.cell.styles.textColor = colors.positive;
-          cellData.cell.styles.fontStyle = "bold";
-        }
-      }
-      if (cellData.section === "body" && cellData.column.index === 7) {
-        const val = cellData.cell.text[0];
-        if (val && val !== "—") {
-          const valNum = parseInt(val, 10);
-          if (valNum < 0) {
-            cellData.cell.styles.textColor = colors.negative;
-            cellData.cell.styles.fontStyle = "bold";
-          } else if (valNum >= 15) {
-            cellData.cell.styles.textColor = colors.positive;
-            cellData.cell.styles.fontStyle = "bold";
-          }
-        }
-      }
-    },
+    didParseCell: combineCellColorers(
+      signColorCell(3, colors),
+      thresholdColorCell(7, { negativeIf: (v) => v < 0, positiveIf: (v) => v >= 15 }, colors),
+    ),
   });
 
   const table2EndY = doc.lastAutoTable.finalY || 220;
@@ -678,23 +680,7 @@ function drawTradingCashFlowPage(ctx) {
       4: { halign: "right" },
       5: { halign: "right" },
     },
-    didParseCell: (cellData) => {
-      if (cellData.section === "body" && cellData.column.index === 3) {
-        const val = cellData.cell.text[0];
-        if (val && val.startsWith("-")) {
-          cellData.cell.styles.textColor = colors.negative;
-          cellData.cell.styles.fontStyle = "bold";
-        } else if (
-          val &&
-          val !== "—" &&
-          val !== "0.0 M€" &&
-          !val.startsWith("0")
-        ) {
-          cellData.cell.styles.textColor = colors.positive;
-          cellData.cell.styles.fontStyle = "bold";
-        }
-      }
-    },
+    didParseCell: signColorCell(3, colors),
   });
 
   // Table 4: Cash Flows
@@ -758,23 +744,7 @@ function drawTradingCashFlowPage(ctx) {
       3: { halign: "right" },
       4: { halign: "right" },
     },
-    didParseCell: (cellData) => {
-      if (cellData.section === "body" && cellData.column.index === 4) {
-        const val = cellData.cell.text[0];
-        if (val && val.startsWith("-")) {
-          cellData.cell.styles.textColor = colors.negative;
-          cellData.cell.styles.fontStyle = "bold";
-        } else if (
-          val &&
-          val !== "—" &&
-          val !== "0.0 M€" &&
-          !val.startsWith("0")
-        ) {
-          cellData.cell.styles.textColor = colors.positive;
-          cellData.cell.styles.fontStyle = "bold";
-        }
-      }
-    },
+    didParseCell: signColorCell(4, colors),
   });
 }
 
