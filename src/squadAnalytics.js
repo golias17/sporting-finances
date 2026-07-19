@@ -1,14 +1,51 @@
 import Chart from "chart.js/auto";
 import { state } from "./state.js";
-import { chartRegistry, generateAccessibleTable, addChartDownloadButton, styledLineDataset } from "./chartUtils.js";
+import {
+  chartRegistry,
+  generateAccessibleTable,
+  addChartDownloadButton,
+  styledLineDataset,
+  getBrandColors,
+} from "./chartUtils.js";
 
-function getEraForSeason(season) {
-  if (season === "2012/13") return state.isPt ? "Jesualdo/Sá Pinto (12/13)" : "Jesualdo/Sa Pinto (12/13)";
-  if (season === "2013/14") return "Leonardo Jardim (13/14)";
-  if (season === "2014/15") return "Marco Silva (14/15)";
-  if (["2015/16", "2016/17", "2017/18"].includes(season)) return "Jorge Jesus (15/16 - 17/18)";
-  if (["2018/19", "2019/20"].includes(season)) return "Keizer / Silas (18/19 - 19/20)";
-  return "Rúben Amorim (20/21 - 25/26)";
+// Defensive fallback for the (in practice, always-initialized-by-boot)
+// case where a chart is drawn before initChartDefaults() has populated
+// state.COLORS — derived from the canonical palette so this can't drift
+// from the live app's colors the way independently hardcoded hex literals
+// used to.
+const FALLBACK = getBrandColors(false);
+
+// Season -> manager era lookup. Sporting had three head coaches during
+// 2024/25 alone (Amorim left for Man Utd in Nov 2024, João Pereira was
+// interim for 8 matches, Rui Borges took over 26 Dec 2024), so that season
+// is bucketed as a transition year rather than attributed to one manager.
+// The last entry is an open-ended fallback and MUST be updated once Rui
+// Borges' tenure ends (confirmed still in charge as of April 2026, with
+// reports of a contract extension through 2028/29).
+// Only the first entry carries a `pt` override — not an oversight. Every
+// other label is a manager's proper name (Jorge Jesus, Rúben Amorim, Rui
+// Borges...), which is spelled identically in Portuguese and English
+// throughout the rest of the app (see storySteps.js, translations.json);
+// getEraForSeason()'s `state.isPt && entry.pt ? entry.pt : entry.en`
+// fallback already handles that correctly without duplicating the string.
+const MANAGER_ERAS = [
+  { seasons: ["2012/13"], en: "Jesualdo/Sa Pinto (12/13)", pt: "Jesualdo/Sá Pinto (12/13)" },
+  { seasons: ["2013/14"], en: "Leonardo Jardim (13/14)" },
+  { seasons: ["2014/15"], en: "Marco Silva (14/15)" },
+  { seasons: ["2015/16", "2016/17", "2017/18"], en: "Jorge Jesus (15/16 - 17/18)" },
+  { seasons: ["2018/19", "2019/20"], en: "Keizer / Silas (18/19 - 19/20)" },
+  { seasons: ["2020/21", "2021/22", "2022/23", "2023/24"], en: "Rúben Amorim (20/21 - 23/24)" },
+  { seasons: ["2024/25"], en: "Amorim / Pereira / Borges (24/25)" },
+  { seasons: [], en: "Rui Borges (25/26 - )", isFallback: true },
+];
+
+export function getEraForSeason(season) {
+  const entry = MANAGER_ERAS.find((e) => e.seasons.includes(season)) || MANAGER_ERAS[MANAGER_ERAS.length - 1];
+  return state.isPt && entry.pt ? entry.pt : entry.en;
+}
+
+function getAllEraLabels() {
+  return MANAGER_ERAS.map((e) => (state.isPt && e.pt ? e.pt : e.en));
 }
 
 export function drawManagerEras() {
@@ -16,19 +53,10 @@ export function drawManagerEras() {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
 
-  const erasData = {
-    "Jesualdo/Sa Pinto (12/13)": { sales: 0, purchases: 0 },
-    "Leonardo Jardim (13/14)": { sales: 0, purchases: 0 },
-    "Marco Silva (14/15)": { sales: 0, purchases: 0 },
-    "Jorge Jesus (15/16 - 17/18)": { sales: 0, purchases: 0 },
-    "Keizer / Silas (18/19 - 19/20)": { sales: 0, purchases: 0 },
-    "Rúben Amorim (20/21 - 25/26)": { sales: 0, purchases: 0 },
-  };
-
-  if (state.isPt) {
-    erasData["Jesualdo/Sá Pinto (12/13)"] = { sales: 0, purchases: 0 };
-    delete erasData["Jesualdo/Sa Pinto (12/13)"];
-  }
+  const erasData = {};
+  getAllEraLabels().forEach((label) => {
+    erasData[label] = { sales: 0, purchases: 0 };
+  });
 
   state.TRANSFER_LEDGER.forEach((seasonObj) => {
     const era = getEraForSeason(seasonObj.season);
@@ -66,22 +94,22 @@ export function drawManagerEras() {
         {
           label: state.isPt ? "Vendas (M€)" : "Sales (M€)",
           data: sales,
-          backgroundColor: state.COLORS.pos || "#2e8a55",
+          backgroundColor: state.COLORS.pos || FALLBACK.pos,
           borderRadius: 4,
           order: 1,
         },
         {
           label: state.isPt ? "Compras (M€)" : "Purchases (M€)",
           data: purchases,
-          backgroundColor: state.COLORS.neg || "#b8403a",
+          backgroundColor: state.COLORS.neg || FALLBACK.neg,
           borderRadius: 4,
           order: 1,
         },
         styledLineDataset({
           label: state.isPt ? "Ganho Líquido (M€)" : "Net Earnings (M€)",
           data: netSpend,
-          color: state.COLORS.gold || "#b08923",
-          bg: state.COLORS.goldSoft || "rgba(176,137,35,0.4)",
+          color: state.COLORS.gold || FALLBACK.gold,
+          bg: state.COLORS.goldSoft || FALLBACK.goldSoft,
           extra: { type: "line", order: 0 }
         })
       ]
@@ -92,7 +120,7 @@ export function drawManagerEras() {
       plugins: {
         legend: {
           labels: {
-            color: state.COLORS.ink || "#111814",
+            color: state.COLORS.ink || FALLBACK.ink,
             font: { family: state.COLORS.fontFamily || "sans-serif" },
           }
         },
@@ -109,14 +137,14 @@ export function drawManagerEras() {
       scales: {
         x: {
           ticks: {
-            color: state.COLORS.muted || "#6a716e",
+            color: state.COLORS.muted || FALLBACK.muted,
             font: { family: state.COLORS.fontFamily || "sans-serif" },
           },
           grid: { color: state.COLORS.rule || "rgba(0, 0, 0, 0.05)" }
         },
         y: {
           ticks: {
-            color: state.COLORS.muted || "#6a716e",
+            color: state.COLORS.muted || FALLBACK.muted,
             font: { family: state.COLORS.fontFamily || "sans-serif" },
             callback: value => value + " M€",
           },
@@ -170,13 +198,13 @@ export function drawCommissions() {
         {
           label: state.isPt ? "Comissões em Vendas" : "Sales Commissions",
           data: salesCommissions,
-          backgroundColor: state.COLORS.pos || "#2e8a55",
+          backgroundColor: state.COLORS.pos || FALLBACK.pos,
           stack: "Stack 0",
         },
         {
           label: state.isPt ? "Comissões em Compras" : "Acquisition Commissions",
           data: purchasesCommissions,
-          backgroundColor: state.COLORS.neg || "#b8403a",
+          backgroundColor: state.COLORS.neg || FALLBACK.neg,
           stack: "Stack 0",
         }
       ]
@@ -187,7 +215,7 @@ export function drawCommissions() {
       plugins: {
         legend: {
           labels: {
-            color: state.COLORS.ink || "#111814",
+            color: state.COLORS.ink || FALLBACK.ink,
             font: { family: state.COLORS.fontFamily || "sans-serif" },
           }
         },
@@ -205,7 +233,7 @@ export function drawCommissions() {
         x: {
           stacked: true,
           ticks: {
-            color: state.COLORS.muted || "#6a716e",
+            color: state.COLORS.muted || FALLBACK.muted,
             font: { family: state.COLORS.fontFamily || "sans-serif" },
           },
           grid: { color: state.COLORS.rule || "rgba(0, 0, 0, 0.05)" }
@@ -213,7 +241,7 @@ export function drawCommissions() {
         y: {
           stacked: true,
           ticks: {
-            color: state.COLORS.muted || "#6a716e",
+            color: state.COLORS.muted || FALLBACK.muted,
             font: { family: state.COLORS.fontFamily || "sans-serif" },
             callback: value => value + " M€",
           },
