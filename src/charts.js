@@ -327,21 +327,21 @@ export function chartRevStreams() {
         {
           label: state.isPt ? "TV & Competições" : "TV & Competitions",
           data: tvComp,
-          backgroundColor: state.COLORS.green,
+          backgroundColor: state.COLORS.posSoft,
           borderRadius: 0,
           stack: "s1",
         },
         {
           label: state.isPt ? "Bilheteira & Estádio" : "Matchday",
           data: matchday,
-          backgroundColor: state.COLORS.info,
+          backgroundColor: state.COLORS.infoSoft,
           borderRadius: 0,
           stack: "s1",
         },
         {
           label: state.isPt ? "Comercial & Patrocínios" : "Commercial",
           data: commercial,
-          backgroundColor: state.COLORS.gold,
+          backgroundColor: state.COLORS.goldSoft,
           borderRadius: 0,
           stack: "s1",
         },
@@ -518,7 +518,7 @@ export function chartDebt() {
             ? "Financiamentos não correntes (L. Prazo)"
             : "Non-current borrowings",
           data: state.annual.map((d) => d.borrowings_nc),
-          backgroundColor: state.COLORS.green,
+          backgroundColor: state.COLORS.negSoft,
           stack: "s1",
           order: 1,
         },
@@ -527,7 +527,7 @@ export function chartDebt() {
             ? "Financiamentos correntes (C. Prazo)"
             : "Current borrowings",
           data: state.annual.map((d) => d.borrowings_c),
-          backgroundColor: state.COLORS.greenLight,
+          backgroundColor: state.COLORS.infoSoft,
           stack: "s1",
           order: 1,
         },
@@ -536,8 +536,8 @@ export function chartDebt() {
             ? "Caixa e equivalentes"
             : "Cash on hands; equivalents",
           data: state.annual.map((d) => d.cash),
-          color: state.COLORS.gold,
-          bg: state.COLORS.goldSoft,
+          color: state.COLORS.pos,
+          bg: state.COLORS.posSoft,
           extra: { type: "line", order: 0 },
         }),
       ],
