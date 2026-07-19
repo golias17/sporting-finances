@@ -2252,33 +2252,3 @@ table.ledger .badge.winter {
   transform: scale(1.2);
 }
 
-/* KPI styling */
-.playground-results .kpi-card {
-  border: 1px solid var(--rule-2);
-  padding: 16px 20px;
-  border-radius: var(--radius-md);
-  transition: all 0.2s ease;
-}
-
-.playground-results .kpi-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-}
-
-.playground-results .kpi-change.neutral {
-  color: var(--muted);
-  font-size: var(--fs-sm);
-}
-
-.playground-results .kpi-change.positive {
-  color: var(--pos);
-  font-weight: 600;
-  font-size: var(--fs-sm);
-}
-
-.playground-results .kpi-change.negative {
-  color: var(--neg);
-  font-weight: 600;
-  font-size: var(--fs-sm);
-}
-

@@ -88,9 +88,9 @@ function calculateAndRenderProjections() {
   const baselineCurrentRatio = BASELINE.current_assets / BASELINE.current_liabilities;
 
   // Render KPIs
-  updateKpi("pgKpiRev", "pgKpiRevDiff", projRevenue / 1000, BASELINE.revenue_operating / 1000);
-  updateKpi("pgKpiNet", "pgKpiNetDiff", projNetResult / 1000, BASELINE.net_result / 1000);
-  updateKpi("pgKpiEq", "pgKpiEqDiff", projEquity / 1000, BASELINE.equity / 1000);
+  updateKpi("pgCardRev", "pgKpiRev", "pgKpiRevDiff", projRevenue / 1000, BASELINE.revenue_operating / 1000);
+  updateKpi("pgCardNet", "pgKpiNet", "pgKpiNetDiff", projNetResult / 1000, BASELINE.net_result / 1000);
+  updateKpi("pgCardEq", "pgKpiEq", "pgKpiEqDiff", projEquity / 1000, BASELINE.equity / 1000);
 
   // Draw Charts
   drawProjectionCharts(
@@ -104,19 +104,28 @@ function calculateAndRenderProjections() {
   );
 }
 
-function updateKpi(valId, diffId, projVal, baseVal) {
+function updateKpi(cardId, valId, diffId, projVal, baseVal) {
   const diffVal = projVal - baseVal;
   document.getElementById(valId).textContent = `€${projVal.toFixed(1)}M`;
   
+  const cardEl = document.getElementById(cardId);
   const diffEl = document.getElementById(diffId);
-  if (diffVal === 0) {
+  
+  if (cardEl) {
+    cardEl.classList.remove("pos", "neg");
+  }
+  
+  if (Math.abs(diffVal) < 0.01) {
     diffEl.textContent = state.isPt ? "sem alteração" : "no change";
-    diffEl.className = "kpi-change neutral";
+    diffEl.className = "change";
   } else {
     const isPos = diffVal > 0;
     const sign = isPos ? "+" : "";
     diffEl.textContent = `${sign}${diffVal.toFixed(1)}M vs actual`;
-    diffEl.className = `kpi-change ${isPos ? "positive" : "negative"}`;
+    diffEl.className = `change ${isPos ? "pos" : "neg"}`;
+    if (cardEl) {
+      cardEl.classList.add(isPos ? "pos" : "neg");
+    }
   }
 }
 

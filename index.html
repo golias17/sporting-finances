@@ -2412,21 +2412,21 @@
 
           <!-- Output metrics cards & charts -->
           <div class="playground-results">
-            <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 1.5rem; display: grid; gap: 1rem;">
-              <div class="kpi-card bg-surface shadow-sm">
-                <div class="kpi-label" data-i18n="pg-kpi-rev">Projected Revenue</div>
-                <div class="kpi-val" id="pgKpiRev">€148.1M</div>
-                <div class="kpi-change" id="pgKpiRevDiff">0.0M vs actual</div>
+            <div class="kpis" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 1.5rem; max-width: 100%;">
+              <div class="kpi" id="pgCardRev">
+                <div class="label" data-i18n="pg-kpi-rev">Projected Revenue</div>
+                <div class="value" id="pgKpiRev">€148.1M</div>
+                <div class="change" id="pgKpiRevDiff">0.0M vs actual</div>
               </div>
-              <div class="kpi-card bg-surface shadow-sm">
-                <div class="kpi-label" data-i18n="pg-kpi-net">Projected Net Result</div>
-                <div class="kpi-val" id="pgKpiNet">€20.0M</div>
-                <div class="kpi-change" id="pgKpiNetDiff">0.0M vs actual</div>
+              <div class="kpi" id="pgCardNet">
+                <div class="label" data-i18n="pg-kpi-net">Projected Net Result</div>
+                <div class="value" id="pgKpiNet">€20.0M</div>
+                <div class="change" id="pgKpiNetDiff">0.0M vs actual</div>
               </div>
-              <div class="kpi-card bg-surface shadow-sm">
-                <div class="kpi-label" data-i18n="pg-kpi-eq">Projected Equity</div>
-                <div class="kpi-val" id="pgKpiEq">€40.9M</div>
-                <div class="kpi-change" id="pgKpiEqDiff">0.0M vs actual</div>
+              <div class="kpi" id="pgCardEq">
+                <div class="label" data-i18n="pg-kpi-eq">Projected Equity</div>
+                <div class="value" id="pgKpiEq">€40.9M</div>
+                <div class="change" id="pgKpiEqDiff">0.0M vs actual</div>
               </div>
             </div>
 

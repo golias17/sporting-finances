@@ -31,14 +31,20 @@ describe("playground.js CFO Simulator", () => {
         
         <button id="btnResetPlayground">Reset</button>
 
-        <div id="pgKpiRev">€148.1M</div>
-        <div id="pgKpiRevDiff">no change</div>
-        
-        <div id="pgKpiNet">€20.0M</div>
-        <div id="pgKpiNetDiff">no change</div>
-        
-        <div id="pgKpiEq">€40.9M</div>
-        <div id="pgKpiEqDiff">no change</div>
+        <div class="kpis">
+          <div class="kpi" id="pgCardRev">
+            <div class="value" id="pgKpiRev">€148.1M</div>
+            <div class="change" id="pgKpiRevDiff">no change</div>
+          </div>
+          <div class="kpi" id="pgCardNet">
+            <div class="value" id="pgKpiNet">€20.0M</div>
+            <div class="change" id="pgKpiNetDiff">no change</div>
+          </div>
+          <div class="kpi" id="pgCardEq">
+            <div class="value" id="pgKpiEq">€40.9M</div>
+            <div class="change" id="pgKpiEqDiff">no change</div>
+          </div>
+        </div>
 
         <canvas id="chartPlaygroundNet"></canvas>
         <canvas id="chartPlaygroundSolvency"></canvas>
