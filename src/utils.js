@@ -13,3 +13,23 @@ export function debounce(fn, delayMs) {
     timer = setTimeout(() => fn(...args), delayMs);
   };
 }
+
+/**
+ * Escapes the five HTML-significant characters in `str` so it's safe to
+ * interpolate into an innerHTML template string. Used by transfers.js for
+ * player/club names and note text sourced from transfers.json — currently
+ * developer-maintained, but that's a workflow guarantee, not a language
+ * one, so the render path itself shouldn't rely on it. (news.js's feed
+ * items are the one genuinely external data source in this app and are
+ * kept safe a different way, via textContent assignment instead of
+ * innerHTML — see initNewsFeed().)
+ */
+export function escapeHtml(str) {
+  if (str === null || str === undefined) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}

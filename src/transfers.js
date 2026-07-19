@@ -1,5 +1,5 @@
 import { state } from "./state.js";
-import { debounce } from "./utils.js";
+import { debounce, escapeHtml } from "./utils.js";
 
 // Every note in transfers.json carries a hand-written note_pt sibling — the
 // old runtime regex-translation pipeline (localization.js) is gone. If a
@@ -116,7 +116,7 @@ function renderTlBody(container) {
           );
         }
         if (p.rights)
-          tags.push(`<span class="tl-tag rights">${p.rights}</span>`);
+          tags.push(`<span class="tl-tag rights">${escapeHtml(p.rights)}</span>`);
         if (p.bonus)
           tags.push(
             `<span class="tl-tag bonus">+€${fmtNumStr(p.bonus)}M ${state.isPt ? "bónus" : "bonus"}</span>`,
@@ -128,10 +128,10 @@ function renderTlBody(container) {
         return `
     <div class="tl-row">
       <div class="tl-details">
-        <div class="tl-player">${p.player}</div>
-        <div class="tl-club">${p.club ? p.club : "—"}</div>
+        <div class="tl-player">${escapeHtml(p.player)}</div>
+        <div class="tl-club">${p.club ? escapeHtml(p.club) : "—"}</div>
         ${tags.length ? `<div class="tl-tags">${tags.join("")}</div>` : ""}
-        ${p.note ? `<div class="tl-obs">${localizedNote(p)}</div>` : ""}
+        ${p.note ? `<div class="tl-obs">${escapeHtml(localizedNote(p))}</div>` : ""}
       </div>
       ${fmtFee(p.fee)}
     </div>`;
@@ -152,7 +152,7 @@ function renderTlBody(container) {
   const displayedNote = localizedNote(s);
 
   const note = displayedNote
-    ? `<div class="tl-season-note">${displayedNote}</div>`
+    ? `<div class="tl-season-note">${escapeHtml(displayedNote)}</div>`
     : "";
 
   container.innerHTML = `
@@ -506,16 +506,16 @@ function renderTransfersDetailTable() {
 
       return `
       <tr>
-        <td class="player-cell">${r.player}</td>
+        <td class="player-cell">${escapeHtml(r.player)}</td>
         <td class="align-center">${r.season || "—"}</td>
         <td class="align-center">${windowLabel}</td>
         <td>${typeLabel}</td>
-        <td>${r.club || "—"}</td>
+        <td>${r.club ? escapeHtml(r.club) : "—"}</td>
         <td class="num-cell align-right ${feeCls} text-bold">${fmtFeeDetail(r.fee)}</td>
-        <td class="mono-cell align-center">${r.rights || "100%"}</td>
+        <td class="mono-cell align-center">${r.rights ? escapeHtml(r.rights) : "100%"}</td>
         <td class="num-cell align-right">${fmtValDetail(r.bonus)}</td>
         <td class="num-cell align-right">${fmtValDetail(r.commission)}</td>
-        <td class="notes-cell">${localizedNote(r) || "—"}</td>
+        <td class="notes-cell">${localizedNote(r) ? escapeHtml(localizedNote(r)) : "—"}</td>
       </tr>
     `;
     })
