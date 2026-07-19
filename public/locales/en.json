@@ -1815,7 +1815,32 @@
     "innerHTML": false
   },
   "pg-ucl-label": {
-    "text": "UEFA Champions League Group Stage",
+    "text": "UEFA Champions League Campaign",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-ucl-none": {
+    "text": "Not Qualified (€0M)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-ucl-league": {
+    "text": "League Phase / Group Stage (+€30M)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-ucl-r16": {
+    "text": "Round of 16 (+€41M)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-ucl-qf": {
+    "text": "Quarter-finals (+€53M)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-ucl-sf": {
+    "text": "Semi-finals / Finals (+€70M)",
     "isAria": false,
     "innerHTML": false
   },

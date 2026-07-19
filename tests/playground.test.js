@@ -17,8 +17,10 @@ describe("playground.js CFO Simulator", () => {
     // Setup Mock DOM
     document.body.innerHTML = `
       <section id="tab-playground">
-        <span id="uclVal">No</span>
-        <input type="checkbox" id="uclToggle" />
+        <select id="uclSelect">
+          <option value="0">None</option>
+          <option value="40">UCL</option>
+        </select>
         
         <span id="payrollVal">0%</span>
         <input type="range" id="payrollSlider" min="-30" max="30" value="0" />
@@ -70,9 +72,9 @@ describe("playground.js CFO Simulator", () => {
 
   it("should recalculate KPIs when UEFA Champions League is toggled", () => {
     initPlayground();
-    const uclToggle = document.getElementById("uclToggle");
-    uclToggle.checked = true;
-    uclToggle.dispatchEvent(new Event("change"));
+    const uclSelect = document.getElementById("uclSelect");
+    uclSelect.value = "40";
+    uclSelect.dispatchEvent(new Event("change"));
 
     // Revenue should increase by €40M (from €148.1M to €188.1M)
     expect(document.getElementById("pgKpiRev").textContent).toBe("€188.1M");
@@ -97,9 +99,9 @@ describe("playground.js CFO Simulator", () => {
 
   it("should reset variables when reset button is clicked", () => {
     initPlayground();
-    const uclToggle = document.getElementById("uclToggle");
-    uclToggle.checked = true;
-    uclToggle.dispatchEvent(new Event("change"));
+    const uclSelect = document.getElementById("uclSelect");
+    uclSelect.value = "40";
+    uclSelect.dispatchEvent(new Event("change"));
     expect(document.getElementById("pgKpiRev").textContent).toBe("€188.1M");
 
     document.getElementById("btnResetPlayground").click();

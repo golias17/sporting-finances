@@ -23,23 +23,23 @@ export function initPlayground() {
   if (!container) return;
 
   // Bind input controls
-  const uclToggle = document.getElementById("uclToggle");
+  const uclSelect = document.getElementById("uclSelect");
   const payrollSlider = document.getElementById("payrollSlider");
   const salesSlider = document.getElementById("salesSlider");
   const capexSlider = document.getElementById("capexSlider");
   const btnReset = document.getElementById("btnResetPlayground");
 
-  if (!uclToggle || !payrollSlider || !salesSlider || !capexSlider || !btnReset) return;
+  if (!uclSelect || !payrollSlider || !salesSlider || !capexSlider || !btnReset) return;
 
   // Listeners
   const updateProj = () => calculateAndRenderProjections();
-  uclToggle.addEventListener("change", updateProj);
+  uclSelect.addEventListener("change", updateProj);
   payrollSlider.addEventListener("input", updateProj);
   salesSlider.addEventListener("input", updateProj);
   capexSlider.addEventListener("input", updateProj);
 
   btnReset.addEventListener("click", () => {
-    uclToggle.checked = false;
+    uclSelect.value = "0";
     payrollSlider.value = 0;
     salesSlider.value = 117;
     capexSlider.value = 0;
@@ -51,23 +51,18 @@ export function initPlayground() {
 }
 
 function calculateAndRenderProjections() {
-  const ucl = document.getElementById("uclToggle").checked;
+  const uclPrize = parseInt(document.getElementById("uclSelect").value, 10); // in millions
   const payrollAdj = parseInt(document.getElementById("payrollSlider").value, 10);
   const salesTarget = parseInt(document.getElementById("salesSlider").value, 10); // in millions
   const capexAdj = parseInt(document.getElementById("capexSlider").value, 10);
 
   // Update label text values
-  document.getElementById("uclVal").textContent = ucl
-    ? (state.isPt ? "Sim" : "Yes")
-    : (state.isPt ? "Não" : "No");
-  document.getElementById("uclVal").className = ucl ? "badge badge-success" : "badge badge-neutral";
-  
   document.getElementById("payrollVal").textContent = (payrollAdj >= 0 ? "+" : "") + payrollAdj + "%";
   document.getElementById("salesVal").textContent = salesTarget + " M€";
   document.getElementById("capexVal").textContent = (capexAdj >= 0 ? "+" : "") + capexAdj + "%";
 
   // Calculations (in thousands)
-  const projRevenue = BASELINE.revenue_operating + (ucl ? 40000 : 0);
+  const projRevenue = BASELINE.revenue_operating + (uclPrize * 1000);
   const projPayroll = BASELINE.personnel_costs * (1 + payrollAdj / 100);
   const projOverhead = BASELINE.external_supplies * (1 + capexAdj / 100);
   
