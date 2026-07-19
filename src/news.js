@@ -1,4 +1,5 @@
 import { config } from "./config.js";
+import { state } from "./state.js";
 
 const CACHE_KEY = "sportingNews_v1";
 const CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
@@ -355,19 +356,27 @@ function renderNewsItems(container, dataItems, { stale = false } = {}) {
 
     const date = document.createElement("div");
     date.className = "news-date";
+    // Article content here is inherently Portuguese-language coverage (the
+    // RSS fallback's search queries in initNewsFeed() are Portuguese terms
+    // targeting Portuguese financial press — that's intentional, not a bug,
+    // since English-language coverage of a Portuguese club's SAD finances is
+    // essentially nonexistent). The date *format*, however, should still
+    // follow the site's own language toggle like every other date on the
+    // page, rather than always rendering pt-PT style even in English mode.
+    const recentLabel = state.isPt ? "Recente" : "Recent";
     if (item.pubDate) {
       const d = new Date(item.pubDate.replace(" ", "T") + "Z");
       if (!isNaN(d.getTime())) {
-        date.textContent = d.toLocaleDateString("pt-PT", {
+        date.textContent = d.toLocaleDateString(state.isPt ? "pt-PT" : "en-GB", {
           day: "2-digit",
           month: "short",
           year: "numeric",
         });
       } else {
-        date.textContent = "Recent";
+        date.textContent = recentLabel;
       }
     } else {
-      date.textContent = "Recent";
+      date.textContent = recentLabel;
     }
     card.appendChild(date);
 

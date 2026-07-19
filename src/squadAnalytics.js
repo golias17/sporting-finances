@@ -45,21 +45,31 @@ function getAllEraLabels() {
 // Shared plugins/scales options for this file's two bar+line transfer
 // charts (drawManagerEras, drawCommissions) — same legend/tooltip styling
 // and M€-suffixed axis ticks in both, only `stacked` differs.
+//
+// This used to build its options from scratch and read state.COLORS.fontFamily
+// / state.COLORS.rule — neither of which exists in chartUtils.js's PALETTE, so
+// every render silently fell back to a hardcoded "sans-serif"/light-mode-only
+// grid color (while also spamming the COLORS Proxy's "accessed before
+// initChartDefaults()" console.warn) and, since these charts hand-rolled
+// Chart.js's plain default tooltip instead of the app-wide glass tooltip,
+// looked inconsistent with every other chart. Spreading ...state.baseOpts
+// (same fix already applied to playground.js's charts — see its comment
+// there) fixes all three: themed dark-mode-aware ticks/grid, the shared
+// glass tooltip, and no more bogus color lookups.
 function transferChartOptions({ stacked = false } = {}) {
   return {
-    responsive: true,
-    maintainAspectRatio: false,
+    ...state.baseOpts,
     plugins: {
+      ...state.baseOpts.plugins,
       legend: {
-        labels: {
-          color: state.COLORS.ink || FALLBACK.ink,
-          font: { family: state.COLORS.fontFamily || "sans-serif" },
-        }
+        display: true,
+        position: "bottom",
+        labels: { color: state.COLORS.ink || FALLBACK.ink, font: { size: 12 }, padding: 16 },
       },
       tooltip: {
-        mode: "index",
-        intersect: false,
+        ...state.baseOpts.plugins.tooltip,
         callbacks: {
+          ...state.baseOpts.plugins.tooltip.callbacks,
           label: function (context) {
             return `${context.dataset.label}: ${context.raw.toFixed(1)} M€`;
           }
@@ -67,22 +77,13 @@ function transferChartOptions({ stacked = false } = {}) {
       }
     },
     scales: {
-      x: {
-        stacked,
-        ticks: {
-          color: state.COLORS.muted || FALLBACK.muted,
-          font: { family: state.COLORS.fontFamily || "sans-serif" },
-        },
-        grid: { color: state.COLORS.rule || "rgba(0, 0, 0, 0.05)" }
-      },
+      x: { ...state.baseOpts.scales.x, stacked },
       y: {
+        ...state.baseOpts.scales.y,
         stacked,
-        ticks: {
-          color: state.COLORS.muted || FALLBACK.muted,
-          font: { family: state.COLORS.fontFamily || "sans-serif" },
-          callback: value => value + " M€",
-        },
-        grid: { color: state.COLORS.rule || "rgba(0, 0, 0, 0.05)" }
+        // Override the shared callback: it assumes raw EUR-thousands input
+        // (divides by 1000 again), but this file's data is already in M€.
+        ticks: { ...state.baseOpts.scales.y.ticks, callback: (value) => value + " M€" },
       }
     }
   };

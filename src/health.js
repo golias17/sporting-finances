@@ -6,7 +6,24 @@ import Chart from "chart.js/auto";
 import { calculateHealthSignals } from "./metrics.js";
 import { syncStateToUrl } from "./urlSync.js";
 
-// Keep track of sparkline chart instances to destroy them before re-rendering
+// Keep track of sparkline chart instances to destroy them before re-rendering.
+//
+// Deliberately a separate registry from chartUtils.js's shared chartRegistry
+// / charts.js's mkChart() rather than folding these in, even though every
+// other chart in the app goes through mkChart(): mkChart() unconditionally
+// calls generateAccessibleTable(), which — for canvases not wrapped in the
+// .card/.card-head structure the rest of the app uses (these sparklines sit
+// inside a small .sparkline-wrap next to their own text value/note, one of
+// several per health signal, with dynamically generated IDs) — would still
+// inject a hidden data table plus a "View raw table data" toggle button
+// right next to each tiny sparkline. That's a real UX regression (a stray
+// button cluttering 8 small decorative cards) for very little accessibility
+// gain, since the adjacent .sig-value/.sig-note text already conveys the
+// substantive number to screen readers. This registry's own destroy-before-
+// rebuild handling (below, in renderContent) already covers the one thing
+// the shared registry would otherwise provide. The canvases do still carry
+// role="img"/aria-label (see renderContent) so they aren't silent to
+// assistive tech.
 const sparklineRegistry = {};
 
 // AbortControllers for each season-selector's click listener — replaced each
@@ -181,7 +198,11 @@ function renderHealthBar(idx) {
             <div class="sig-value">${s.value}</div>
             <div class="sig-note">${s.note}</div>
             <div class="sparkline-wrap">
-              <canvas id="${s.id}"></canvas>
+              <canvas
+                id="${s.id}"
+                role="img"
+                aria-label="${state.isPt ? `Tendência de ${s.label}` : `${s.label} trend`}"
+              ></canvas>
             </div>
           </div>`,
       )

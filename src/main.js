@@ -390,6 +390,18 @@ function destroyInactiveCharts(activeTab) {
   }
 }
 
+// Runs fn() at most once per state.renderedCharts.clear() cycle, using the
+// function reference itself as the Set key (stable across minification,
+// unlike fn.name which esbuild can collapse to ""). Shared by activateTab's
+// per-tab chart loop and initSquadSubTabs' lazy subpanel chart draws so the
+// same guard isn't hand-duplicated at every call site.
+function runOnce(fn) {
+  if (!state.renderedCharts.has(fn)) {
+    fn();
+    state.renderedCharts.add(fn);
+  }
+}
+
 // Not exported — main.js is the app's entry point and nothing imports from
 // it (there's no main.test.js; it's exercised indirectly through the DOM).
 function activateTab(tab, pushHash = true) {
@@ -420,14 +432,7 @@ function activateTab(tab, pushHash = true) {
   }
 
   if (state.TAB_CHARTS[tab]) {
-    state.TAB_CHARTS[tab].forEach((fn) => {
-      // Use the function reference itself as the Set key — stable across
-      // minification (unlike fn.name, which esbuild can collapse to "").
-      if (!state.renderedCharts.has(fn)) {
-        fn();
-        state.renderedCharts.add(fn);
-      }
-    });
+    state.TAB_CHARTS[tab].forEach(runOnce);
   }
 
   if (tab === "events") {
@@ -579,18 +584,12 @@ function setupApp(initialTab) {
       localStorage.setItem("theme", isDark ? "dark" : "light");
       updateThemeUI(isDark);
       updateChartTheme();
-      // Force re-rendering of active tab's charts
+      // Force re-rendering of active tab's charts (same pattern as the
+      // language-switch handler above: clear the guard, then re-run
+      // activateTab so every TAB_CHARTS entry redraws with the new theme).
       state.renderedCharts.clear();
       const activeTabBtn = document.querySelector("nav.tabs button.active");
-      if (activeTabBtn) {
-        const tab = activeTabBtn.dataset.tab;
-        if (state.TAB_CHARTS[tab]) {
-          state.TAB_CHARTS[tab].forEach((fn) => {
-            fn();
-            state.renderedCharts.add(fn);
-          });
-        }
-      }
+      if (activeTabBtn) activateTab(activeTabBtn.dataset.tab, false);
     });
   }
 
@@ -730,11 +729,47 @@ function initPdfExport() {
     ];
     const executiveNote = document.getElementById("pdfNotesText").value;
 
-    import("./pdfGenerator.js").then((m) => {
-      m.generateCuratedPdf({ lang, pages, executiveNote });
-      closeModal();
-    });
+    closeModal();
+    import("./pdfGenerator.js")
+      .then((m) => m.generateCuratedPdf({ lang, pages, executiveNote }))
+      .catch((err) => {
+        // generateCuratedPdf() is async and was previously fired-and-forgotten
+        // here — a failure inside it (or in the dynamic import itself) became
+        // a silent unhandled rejection with no user-facing signal at all.
+        console.error("Failed to generate PDF export", err);
+        showPdfExportErrorToast();
+      });
   }, { signal });
+}
+
+// Minimal reuse of the .pwa-toast/.toast-body/.toast-btn styling already
+// used by pwa.js's update/offline toasts — this is the only other failure
+// in the app (besides the initial data-load error screen) that previously
+// had no user-facing indicator at all beyond a console.error.
+function showPdfExportErrorToast() {
+  let toast = document.getElementById("pdf-export-error-toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "pdf-export-error-toast";
+    toast.className = "pwa-toast";
+    document.body.appendChild(toast);
+  }
+  const msg = state.isPt
+    ? "Não foi possível gerar o PDF. Tente novamente."
+    : "Couldn't generate the PDF. Please try again.";
+  const btnTxt = state.isPt ? "Ok" : "Dismiss";
+  toast.innerHTML = `
+    <div class="toast-body">
+      <span>${msg}</span>
+      <button id="pdf-export-error-btn" class="toast-btn">${btnTxt}</button>
+    </div>
+  `;
+  setTimeout(() => toast.classList.add("visible"), 10);
+  document.getElementById("pdf-export-error-btn").addEventListener(
+    "click",
+    () => toast.classList.remove("visible"),
+    { once: true },
+  );
 }
 
 function initSquadSubTabs() {
@@ -757,27 +792,12 @@ function initSquadSubTabs() {
 
       // Lazy draw matching subpanel charts
       if (sub === "financials") {
-        if (!state.renderedCharts.has(chartSquadBook)) {
-          chartSquadBook();
-          state.renderedCharts.add(chartSquadBook);
-        }
-        if (!state.renderedCharts.has(chartTransfers)) {
-          chartTransfers();
-          state.renderedCharts.add(chartTransfers);
-        }
-        if (!state.renderedCharts.has(chartNetTrading)) {
-          chartNetTrading();
-          state.renderedCharts.add(chartNetTrading);
-        }
+        runOnce(chartSquadBook);
+        runOnce(chartTransfers);
+        runOnce(chartNetTrading);
       } else if (sub === "analytics") {
-        if (!state.renderedCharts.has(drawManagerEras)) {
-          drawManagerEras();
-          state.renderedCharts.add(drawManagerEras);
-        }
-        if (!state.renderedCharts.has(drawCommissions)) {
-          drawCommissions();
-          state.renderedCharts.add(drawCommissions);
-        }
+        runOnce(drawManagerEras);
+        runOnce(drawCommissions);
       } else if (sub === "ledger") {
         renderTransferLedger();
       }

@@ -120,6 +120,34 @@ describe("health.js", () => {
     expect(sig.classList.contains("health-signal")).toBe(true);
   });
 
+  it("gives each sparkline canvas a role and aria-label so screen readers aren't served a blank canvas", () => {
+    initHealthBar();
+    vi.runAllTimers();
+
+    const sparklineCanvases = document.querySelectorAll(
+      ".sparkline-wrap canvas",
+    );
+    expect(sparklineCanvases.length).toBeGreaterThan(0);
+    sparklineCanvases.forEach((canvas) => {
+      expect(canvas.getAttribute("role")).toBe("img");
+      expect(canvas.getAttribute("aria-label")).toBeTruthy();
+    });
+  });
+
+  it("localizes the sparkline aria-label when state.isPt is true", () => {
+    state.isPt = true;
+    initHealthBar();
+    vi.runAllTimers();
+
+    const sparklineCanvases = document.querySelectorAll(
+      ".sparkline-wrap canvas",
+    );
+    expect(sparklineCanvases.length).toBeGreaterThan(0);
+    sparklineCanvases.forEach((canvas) => {
+      expect(canvas.getAttribute("aria-label")).toMatch(/^Tendência de /);
+    });
+  });
+
   it("should update language strings based on state.isPt", () => {
     state.isPt = true;
     initHealthBar();
