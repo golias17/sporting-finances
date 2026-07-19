@@ -51,6 +51,7 @@ const stateTarget = {
     "data",
     "news",
     "club",
+    "playground",
   ],
   TAB_CHARTS: {},
   // Tabs where the global era filter is hidden: bonds (05) shows a fixed
@@ -63,6 +64,7 @@ const stateTarget = {
     "events",
     "club",
     "news",
+    "playground",
   ]),
   // Proxy emits a console.warn if a color key is read before initChartDefaults()
   // populates the object, surfacing ordering bugs at development time.

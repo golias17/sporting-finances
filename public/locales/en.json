@@ -1783,5 +1783,85 @@
     "text": "Located in Alcochete over 250,000 m², it is the heart of Sporting CP's youth academy. The first in Europe to receive ISO 9001:2008 certification, and renamed in 2020 to honor Ballon d'Or winner Cristiano Ronaldo.",
     "isAria": false,
     "innerHTML": false
+  },
+  "tab-btn-playground": {
+    "text": "<span class=\"tab-num\">13</span>Playground",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch13-num": {
+    "text": "Ch. 13 — Play CFO",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch13-h2": {
+    "text": "The Fiscal <em>Playground</em>.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch13-lede": {
+    "text": "Adjust variables to project the outcomes of the 2025/26 season in real time.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-ctrls-title": {
+    "text": "Simulation Controls",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-ctrls-desc": {
+    "text": "Adjust the variables below to simulate different business and sports scenarios for the next season.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-ucl-label": {
+    "text": "UEFA Champions League Group Stage",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-payroll-label": {
+    "text": "Payroll (Wage Bill) Change",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-sales-label": {
+    "text": "Player Sales Targets",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-capex-label": {
+    "text": "Ordinary Overhead Change",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-btn-reset": {
+    "text": "Reset Simulation",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-kpi-rev": {
+    "text": "Projected Revenue",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-kpi-net": {
+    "text": "Projected Net Result",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-kpi-eq": {
+    "text": "Projected Equity",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-chart1-title": {
+    "text": "Simulated Financials vs. Baseline",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-chart2-title": {
+    "text": "Equity & Solvency Health",
+    "isAria": false,
+    "innerHTML": false
   }
 }

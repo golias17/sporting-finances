@@ -285,6 +285,16 @@
         >
           <span class="tab-num">12</span>News
         </button>
+        <button
+          aria-controls="tab-playground"
+          aria-selected="false"
+          data-i18n="tab-btn-playground"
+          data-tab="playground"
+          id="btn-tab-playground"
+          role="tab"
+        >
+          <span class="tab-num">13</span>Playground
+        </button>
       </nav>
       <!-- ============== OVERVIEW ============== -->
       <section
@@ -2324,6 +2334,117 @@
         <div id="newsFeed" class="news-grid anim-up">
           <div class="news-loading" data-i18n="ch12-loading">
             Loading live updates...
+          </div>
+        </div>
+      </section>
+
+      <!-- ============== PLAYGROUND / SIMULATOR ============== -->
+      <section
+        aria-labelledby="btn-tab-playground"
+        class="tab-panel"
+        id="tab-playground"
+        role="tabpanel"
+      >
+        <div class="chapter anim-up">
+          <div class="num" data-i18n="ch13-num">Ch. 13 — Play CFO</div>
+          <div>
+            <h2 data-i18n="ch13-h2">The Fiscal <em>Playground</em>.</h2>
+            <p class="lede" data-i18n="ch13-lede">
+              Adjust variables to project the outcomes of the 2025/26 season in real time.
+            </p>
+          </div>
+        </div>
+
+        <div class="playground-layout anim-up">
+          <!-- Control Panel Card -->
+          <div class="card playground-controls">
+            <h3 data-i18n="pg-ctrls-title">Simulation Controls</h3>
+            <p class="section-desc" data-i18n="pg-ctrls-desc">Adjust the variables below to simulate different business and sports scenarios for the next season.</p>
+            
+            <div class="control-group">
+              <div class="control-label-row">
+                <label for="uclToggle" data-i18n="pg-ucl-label">UEFA Champions League Group Stage</label>
+                <span id="uclVal" class="badge badge-neutral">No</span>
+              </div>
+              <div class="toggle-container">
+                <input type="checkbox" id="uclToggle" class="playground-toggle" />
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="control-label-row">
+                <label for="payrollSlider" data-i18n="pg-payroll-label">Payroll (Wage Bill) Change</label>
+                <span id="payrollVal" class="value-highlight">0%</span>
+              </div>
+              <input type="range" id="payrollSlider" min="-30" max="30" value="0" step="5" class="playground-slider" />
+              <div class="slider-bounds">
+                <span>-30%</span>
+                <span>+30%</span>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="control-label-row">
+                <label for="salesSlider" data-i18n="pg-sales-label">Player Sales Targets</label>
+                <span id="salesVal" class="value-highlight">€0M</span>
+              </div>
+              <input type="range" id="salesSlider" min="0" max="150" value="117" step="1" class="playground-slider" />
+              <div class="slider-bounds">
+                <span>€0M</span>
+                <span>€150M</span>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="control-label-row">
+                <label for="capexSlider" data-i18n="pg-capex-label">Ordinary Overhead Change</label>
+                <span id="capexVal" class="value-highlight">0%</span>
+              </div>
+              <input type="range" id="capexSlider" min="-30" max="30" value="0" step="5" class="playground-slider" />
+              <div class="slider-bounds">
+                <span>-30%</span>
+                <span>+30%</span>
+              </div>
+            </div>
+            
+            <button id="btnResetPlayground" class="btn btn-secondary btn-s" style="margin-top: 1rem; width: 100%;" data-i18n="pg-btn-reset">Reset Simulation</button>
+          </div>
+
+          <!-- Output metrics cards & charts -->
+          <div class="playground-results">
+            <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-bottom: 1.5rem; display: grid; gap: 1rem;">
+              <div class="kpi-card bg-surface shadow-sm">
+                <div class="kpi-label" data-i18n="pg-kpi-rev">Projected Revenue</div>
+                <div class="kpi-val" id="pgKpiRev">€148.1M</div>
+                <div class="kpi-change" id="pgKpiRevDiff">0.0M vs actual</div>
+              </div>
+              <div class="kpi-card bg-surface shadow-sm">
+                <div class="kpi-label" data-i18n="pg-kpi-net">Projected Net Result</div>
+                <div class="kpi-val" id="pgKpiNet">€20.0M</div>
+                <div class="kpi-change" id="pgKpiNetDiff">0.0M vs actual</div>
+              </div>
+              <div class="kpi-card bg-surface shadow-sm">
+                <div class="kpi-label" data-i18n="pg-kpi-eq">Projected Equity</div>
+                <div class="kpi-val" id="pgKpiEq">€40.9M</div>
+                <div class="kpi-change" id="pgKpiEqDiff">0.0M vs actual</div>
+              </div>
+            </div>
+
+            <!-- Charts Side-by-Side -->
+            <div class="playground-charts-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+              <div class="card chart-box">
+                <h3 data-i18n="pg-chart1-title">Simulated Financials vs. Baseline</h3>
+                <div class="canvas-wrap" style="position: relative; height: 300px;">
+                  <canvas id="chartPlaygroundNet" aria-label="Playground Net Results Chart" role="img"></canvas>
+                </div>
+              </div>
+              <div class="card chart-box">
+                <h3 data-i18n="pg-chart2-title">Equity & Solvency Health</h3>
+                <div class="canvas-wrap" style="position: relative; height: 300px;">
+                  <canvas id="chartPlaygroundSolvency" aria-label="Playground Solvency Chart" role="img"></canvas>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

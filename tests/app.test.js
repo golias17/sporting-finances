@@ -21,6 +21,10 @@ vi.mock("../src/pdfGenerator.js", () => ({
   generateCuratedPdf: vi.fn(),
 }));
 
+vi.mock("../src/playground.js", () => ({
+  initPlayground: vi.fn(),
+}));
+
 vi.mock("../src/charts.js", () => {
   const chartFnNames = [
     "chartHero",

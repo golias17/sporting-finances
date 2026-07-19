@@ -1783,5 +1783,85 @@
     "text": "Situada em Alcochete com 250.000 m², é o coração da formação leonina. Primeira academia na Europa a obter a certificação ISO 9001:2008, foi rebatizada em 2020 para homenagear o lendário Cristiano Ronaldo.",
     "isAria": false,
     "innerHTML": false
+  },
+  "tab-btn-playground": {
+    "text": "<span class=\"tab-num\">13</span>Simulador",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch13-num": {
+    "text": "Ch. 13 — O Simulador",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch13-h2": {
+    "text": "O <em>Simulador</em> Financeiro.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch13-lede": {
+    "text": "Ajuste as variáveis para projetar os resultados da época 2025/26 em tempo real.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-ctrls-title": {
+    "text": "Controlos de Simulação",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-ctrls-desc": {
+    "text": "Ajuste as variáveis abaixo para simular diferentes cenários financeiros e desportivos para a próxima época.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-ucl-label": {
+    "text": "Fase de Grupos da UEFA Champions League",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-payroll-label": {
+    "text": "Alteração da Folha Salarial",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-sales-label": {
+    "text": "Metas de Venda de Jogadores",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-capex-label": {
+    "text": "Alteração dos Custos Operacionais Ordinários",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-btn-reset": {
+    "text": "Reiniciar Simulação",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-kpi-rev": {
+    "text": "Receita Projetada",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-kpi-net": {
+    "text": "Resultado Líquido Projetado",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-kpi-eq": {
+    "text": "Capital Próprio Projetado",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-chart1-title": {
+    "text": "Financeiro Simulado vs. Linha de Base",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-chart2-title": {
+    "text": "Saúde do Capital Próprio e Solvabilidade",
+    "isAria": false,
+    "innerHTML": false
   }
 }
