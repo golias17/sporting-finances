@@ -13,16 +13,12 @@ describe("urlSync.js", () => {
         { label: "2024/25" },
       ],
     };
-    state.startSeasonIndex = 0;
-    state.endSeasonIndex = 3;
     state.healthBarIdx = null;
     state.storyIndex = 0;
     state.urlStoryActive = false;
     state.urlCmpA = null;
     state.urlCmpB = null;
     state.urlHealthSeason = null;
-    state.urlEraStart = null;
-    state.urlEraEnd = null;
     state.urlPlayground = null;
     state.isPt = false;
 
@@ -84,9 +80,9 @@ describe("urlSync.js", () => {
 
   it("syncStateToUrl should persist healthSeason from the Overview KPI-strip selector, not just the Healthcheck tab's own one", () => {
     // Both selectors read/write the same state.healthBarIdx (see
-    // globalFilters.js / health.js's initKpiSeasonSelector) — the URL sync
-    // used to only recognise the Healthcheck tab's selection, silently
-    // losing whatever season was picked via Overview's on a refresh.
+    // health.js's initKpiSeasonSelector) — the URL sync used to only
+    // recognise the Healthcheck tab's selection, silently losing whatever
+    // season was picked via Overview's on a refresh.
     document.body.innerHTML = `
       <nav class="tabs">
         <button class="active" data-tab="overview"></button>
@@ -115,41 +111,6 @@ describe("urlSync.js", () => {
     const callArgs = vi.mocked(history.replaceState).mock.calls[0];
     const urlString = callArgs[2];
     expect(urlString).not.toContain("healthSeason");
-  });
-
-  it("applyUrlParams should stash the era filter range for initGlobalFilters", () => {
-    vi.stubGlobal("location", {
-      search: "?eraStart=2013/14&eraEnd=2014/15",
-      pathname: "/",
-      hash: "",
-    });
-
-    applyUrlParams();
-    expect(state.urlEraStart).toBe("2013/14");
-    expect(state.urlEraEnd).toBe("2014/15");
-  });
-
-  it("syncStateToUrl should persist a narrowed era range and omit the full range", () => {
-    document.body.innerHTML = `
-      <nav class="tabs">
-        <button class="active" data-tab="revenue"></button>
-      </nav>
-    `;
-
-    // Full range → no era params
-    syncStateToUrl();
-    let urlString = vi.mocked(history.replaceState).mock.calls.at(-1)?.[2];
-    // With nothing to change, replaceState may not even be called — either
-    // way the URL must not contain era params.
-    if (urlString) expect(urlString).not.toContain("eraStart");
-
-    // Narrowed range → labels persisted
-    state.startSeasonIndex = 1;
-    state.endSeasonIndex = 2;
-    syncStateToUrl();
-    urlString = vi.mocked(history.replaceState).mock.calls.at(-1)[2];
-    expect(urlString).toContain("eraStart=2013%2F14");
-    expect(urlString).toContain("eraEnd=2014%2F15");
   });
 
   it("syncStateToUrl should push state elements back into URL parameters", () => {

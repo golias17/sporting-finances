@@ -155,8 +155,6 @@ describe("story.js", () => {
     state.DATASET = {
       annual_data: [{ label: "2012/13" }],
     };
-    state.startSeasonIndex = 0;
-    state.endSeasonIndex = 0;
     startStory(0);
     expect(
       mockChart.options.plugins.annotation.annotations.storyHighlight,

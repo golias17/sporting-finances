@@ -101,12 +101,23 @@ export function generateAccessibleTable(canvasId, config) {
     return false;
   };
 
-  // Determine if this is a percentage or ratio chart based on canvas ID or y-axis config
+  // Charts whose y-axis is a raw "×" multiplier (e.g. debt/EBITDA, current
+  // ratio) rather than a percentage or a currency value. Listed explicitly
+  // by canvas ID — chartCurrentRatio's ID contains "ratio", which used to
+  // misroute it into the percentage branch below, and chartDebtLoad has no
+  // ID hint at all so it fell through to the currency default. Both showed
+  // wrong units in the accessible data table.
+  const isRatioChart =
+    canvasId.toLowerCase() === "chartdebtload" ||
+    canvasId.toLowerCase() === "chartcurrentratio";
+
+  // Determine if this is a percentage chart based on canvas ID or y-axis config
   const isPctChart =
-    canvasId.toLowerCase().includes("ratio") ||
-    canvasId.toLowerCase().includes("pct") ||
-    canvasId.toLowerCase().includes("health") ||
-    scaleIsPct("y");
+    !isRatioChart &&
+    (canvasId.toLowerCase().includes("ratio") ||
+      canvasId.toLowerCase().includes("pct") ||
+      canvasId.toLowerCase().includes("health") ||
+      scaleIsPct("y"));
 
   const isAlreadyInMillions =
     canvasId.toLowerCase().includes("managereras") ||
@@ -119,6 +130,11 @@ export function generateAccessibleTable(canvasId, config) {
   // by that axis's own units instead of the chart's primary "y" axis.
   const formatter = (v, ds) => {
     if (v === null || v === undefined) return "—";
+    if (isRatioChart) {
+      if (typeof v !== "number") return `${v}×`;
+      const sign = v < 0 ? "−" : "";
+      return `${sign}${Math.abs(v).toFixed(1)}×`;
+    }
     const pct =
       isPctChart ||
       (ds?.yAxisID && ds.yAxisID !== "y" && scaleIsPct(ds.yAxisID));

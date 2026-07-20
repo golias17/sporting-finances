@@ -166,7 +166,7 @@ const TAB_CHART_IDS = {
     "chartCommissions",
   ],
   cash: ["chartCashFlow", "chartCash", "chartAnnualNet"],
-  compare: ["chartCompare"],
+  compare: ["compareBarChart"],
   playground: ["chartPlaygroundNet", "chartPlaygroundSolvency"],
 };
 
@@ -195,6 +195,12 @@ const CHART_DRAWING_FUNCTIONS = {
   chartAnnualNet,
   chartPlaygroundNet: drawPlaygroundCharts,
   chartPlaygroundSolvency: drawPlaygroundCharts,
+  // initComparison (not renderComparison) is the runOnce-gated entry point
+  // registered in TAB_CHARTS.compare below, so it's what must come back out
+  // of state.renderedCharts when destroyInactiveCharts tears the chart down
+  // on tab-away — otherwise runOnce would see it as "already run" and skip
+  // rebuilding the chart the next time the Compare tab is revisited.
+  compareBarChart: initComparison,
 };
 
 function destroyInactiveCharts(activeTab) {
@@ -567,9 +573,6 @@ async function initApp() {
     ]);
     state.setDataset(dataset);
     state.setTransferLedger(transferLedger);
-
-    // Pin endSeasonIndex to the real last index so the filter UI is correct.
-    state.setEndSeasonIndex(state.DATASET.annual_data.length - 1);
 
     // Once data is loaded, populate KPIs and setup UI
     setupApp(initialTab);

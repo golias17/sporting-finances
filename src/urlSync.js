@@ -59,24 +59,7 @@ export function syncStateToUrl() {
     params.delete("healthSeason");
   }
 
-  // 5. Era filter range — persisted whenever it isn't the full range, so a
-  // shared URL reproduces the same narrowed view (healthSeason and the
-  // compare selections were already persisted; the era range wasn't).
-  const lastIdx = state.fullAnnual.length - 1;
-  const eraNarrowed =
-    state.startSeasonIndex > 0 ||
-    (state.endSeasonIndex !== null && state.endSeasonIndex < lastIdx);
-  const eraStartLabel = state.fullAnnual[state.startSeasonIndex]?.label;
-  const eraEndLabel = state.fullAnnual[state.endSeasonIndex ?? lastIdx]?.label;
-  if (eraNarrowed && eraStartLabel && eraEndLabel) {
-    params.set("eraStart", eraStartLabel);
-    params.set("eraEnd", eraEndLabel);
-  } else {
-    params.delete("eraStart");
-    params.delete("eraEnd");
-  }
-
-  // 6. Playground scenario — persisted whenever the Playground tab is
+  // 5. Playground scenario — persisted whenever the Playground tab is
   // active, so a specific what-if scenario can be bookmarked/shared. All 7
   // controls are read directly from the DOM (mirroring how the compare tab
   // reads its <select> elements above) rather than from state, since
@@ -163,14 +146,7 @@ export function applyUrlParams() {
   const healthSeason = params.get("healthSeason");
   if (healthSeason) state.setUrlHealthSeason(healthSeason);
 
-  // 6. Era Filter Restoration — stashed as labels; initGlobalFilters()
-  // resolves them to indices once the dataset has loaded.
-  const eraStart = params.get("eraStart");
-  const eraEnd = params.get("eraEnd");
-  if (eraStart) state.setUrlEraStart(eraStart);
-  if (eraEnd) state.setUrlEraEnd(eraEnd);
-
-  // 7. Playground Scenario Restoration — stashed as one object (all-or-
+  // 6. Playground Scenario Restoration — stashed as one object (all-or-
   // nothing: a URL either encodes a full scenario or none) since
   // playground.js's initPlayground() applies every field at once.
   const pgParams = {

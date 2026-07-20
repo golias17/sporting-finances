@@ -126,7 +126,6 @@ describe("app boot (main.js)", () => {
   it("loads both datasets into state", () => {
     expect(state.DATASET.annual_data.length).toBeGreaterThan(10);
     expect(state.TRANSFER_LEDGER.length).toBeGreaterThan(10);
-    expect(state.endSeasonIndex).toBe(state.DATASET.annual_data.length - 1);
   });
 
   it("activates the overview tab and renders the KPI strip", () => {

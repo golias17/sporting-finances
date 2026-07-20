@@ -200,7 +200,6 @@ describe("Chart.js and Annotation Plugin integration", () => {
         cash: 20000,
       },
     };
-    state.setEndSeasonIndex(state.DATASET.annual_data.length - 1);
     initChartDefaults();
   });
 
@@ -328,6 +327,29 @@ describe("Chart.js and Annotation Plugin integration", () => {
     expect(btn.textContent).toBe("Ocultar tabela");
 
     state.isPt = false;
+  });
+
+  it("generateAccessibleTable formats chartDebtLoad and chartCurrentRatio as '×' ratios, not % or €M", () => {
+    const ratioConfig = {
+      data: {
+        labels: ["2012/13", "2013/14"],
+        datasets: [{ label: "Net debt / revenue", data: [1.5, -0.85] }],
+      },
+    };
+
+    generateAccessibleTable("chartDebtLoad", ratioConfig);
+    const dlTable = document.getElementById("chartDebtLoad-a11y-table");
+    const dlCells = [...dlTable.querySelectorAll("tbody td:nth-child(2)")].map(
+      (td) => td.textContent,
+    );
+    expect(dlCells).toEqual(["1.5×", "−0.8×"]);
+
+    generateAccessibleTable("chartCurrentRatio", ratioConfig);
+    const crTable = document.getElementById("chartCurrentRatio-a11y-table");
+    const crCells = [...crTable.querySelectorAll("tbody td:nth-child(2)")].map(
+      (td) => td.textContent,
+    );
+    expect(crCells).toEqual(["1.5×", "−0.8×"]);
   });
 
   it("externalTooltipHandler creates, positions and formats the custom HTML tooltip", () => {
@@ -606,8 +628,6 @@ describe("Chart.js and Annotation Plugin integration", () => {
       annual_data: [...originalDataset.annual_data, zeroSeason],
     };
     const lastIdx = state.DATASET.annual_data.length - 1;
-    const origEnd = state.endSeasonIndex;
-    state.setEndSeasonIndex(lastIdx);
 
     try {
       chartRevVsPayroll();
@@ -633,7 +653,6 @@ describe("Chart.js and Annotation Plugin integration", () => {
       });
     } finally {
       state.DATASET = originalDataset;
-      state.setEndSeasonIndex(origEnd);
     }
   });
 

@@ -52,7 +52,6 @@ The project was recently modernized into a robust, decoupled ES Module architect
 │   ├── state.js                # Centralized global application state store
 │   ├── localization.js         # Language detection and robust Portuguese translation engine (t() helper)
 │   ├── translations.js         # Centralized dictionary containing ~300 Portuguese/English text pairs
-│   ├── globalFilters.js        # Decoupled global season dropdowns and preset controls
 │   ├── pwa.js                  # PWA Service Worker prompt triggers and offline setup
 │   ├── charts.js               # Chart.js initializers, positive/negative color helpers, config
 │   ├── health.js               # Logic for the Season Health-Check matrix tab

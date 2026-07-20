@@ -36,9 +36,6 @@ describe("data-table.js", () => {
         },
       ],
     };
-    state.startSeasonIndex = 0;
-    state.endSeasonIndex = Infinity;
-
     // Mock URL and Blob for downloadLedgerCSV
     global.URL.createObjectURL = vi.fn(() => "mock-url");
     global.URL.revokeObjectURL = vi.fn();

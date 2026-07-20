@@ -12,16 +12,13 @@ const stateTarget = {
 
   // View state restored from URL query params by applyUrlParams() (urlSync.js)
   // and consumed once by the module that owns each piece of UI: story mode
-  // (main.js), the compare selects (compare.js), the health season selector
-  // (health.js) and the era filter (globalFilters.js). Declared here so the
-  // state shape is visible in one place rather than appearing via ad-hoc
-  // assignment.
+  // (main.js), the compare selects (compare.js), and the health season
+  // selector (health.js). Declared here so the state shape is visible in
+  // one place rather than appearing via ad-hoc assignment.
   urlStoryActive: false,
   urlCmpA: null,
   urlCmpB: null,
   urlHealthSeason: null,
-  urlEraStart: null,
-  urlEraEnd: null,
   // Playground scenario (all 7 slider/select values as one object, not
   // split into scalar fields like urlCmpA/B) — playground.js's controls are
   // a single cohesive "scenario" consumed together by one module, unlike
@@ -29,19 +26,20 @@ const stateTarget = {
   urlPlayground: null,
 
   DATASET: null,
+  // `annual` and `fullAnnual` used to differ — `annual` was meant to reflect
+  // a season range narrowed via a since-removed "Explore Era" global filter,
+  // while `fullAnnual` always returned the complete dataset for views (like
+  // compare.js) that intentionally ignore that filter. The narrowing feature
+  // never shipped past scaffolding (nothing ever moved the range off its
+  // default), so the two were already identical in practice; `annual` is
+  // kept as an alias since most of the app reads through it.
   get annual() {
-    if (!stateTarget.DATASET) return null;
-    return stateTarget.DATASET.annual_data;
+    return stateTarget.fullAnnual;
   },
   get fullAnnual() {
     return stateTarget.DATASET ? stateTarget.DATASET.annual_data : null;
   },
   TRANSFER_LEDGER: null,
-  startSeasonIndex: 0,
-  // null means "not yet set" — the annual getter treats it as the last index.
-  // main.js calls setEndSeasonIndex(dataset.length - 1) once data has loaded
-  // so the global filter UI reflects the real last index.
-  endSeasonIndex: null,
   renderedCharts: new Set(),
   VALID_TABS: [
     "overview",
@@ -59,18 +57,6 @@ const stateTarget = {
     "playground",
   ],
   TAB_CHARTS: {},
-  // Tabs where the global era filter is hidden: bonds (05) shows a fixed
-  // historical cost breakdown that shouldn't shrink with the date range,
-  // and compare (08) / events (09) / club (11) / news (12) aren't driven
-  // by a season range at all.
-  TABS_WITHOUT_GLOBAL_FILTER: new Set([
-    "bonds",
-    "compare",
-    "events",
-    "club",
-    "news",
-    "playground",
-  ]),
   // Proxy emits a console.warn if a color key is read before initChartDefaults()
   // populates the object, surfacing ordering bugs at development time.
   // Object.assign(state.COLORS, {...}) in initChartDefaults() still works because
@@ -100,35 +86,8 @@ const stateTarget = {
   setTransferLedger(val) {
     stateTarget.TRANSFER_LEDGER = val;
   },
-  setStartSeasonIndex(idx) {
-    stateTarget.startSeasonIndex = idx;
-  },
-  setEndSeasonIndex(idx) {
-    stateTarget.endSeasonIndex = idx;
-  },
   setHealthBarIdx(idx) {
     stateTarget.healthBarIdx = idx;
-  },
-  // healthBarIdx is an index into the currently-filtered state.annual, not
-  // the full dataset. Narrowing/widening the "Explore Era" range changes
-  // what that array contains, so a stale index either points at the wrong
-  // season or falls past the new end — the latter throws inside
-  // health.js/kpi.js (state.annual[idx].label) and used to abort the rest
-  // of Overview's chart re-render (chartHero, chartNetResult, chartEquity
-  // never ran). Call this right after the start/end season indices change
-  // to keep it valid: `prevLabel` is the season that was selected before
-  // the range changed, so if it's still in range we stay pointed at it,
-  // otherwise we fall back to the new range's latest season.
-  retargetHealthBarIdx(prevLabel) {
-    if (stateTarget.healthBarIdx === null || !stateTarget.annual) return;
-    if (prevLabel) {
-      const idx = stateTarget.annual.findIndex((d) => d.label === prevLabel);
-      if (idx >= 0) {
-        stateTarget.healthBarIdx = idx;
-        return;
-      }
-    }
-    stateTarget.healthBarIdx = stateTarget.annual.length - 1;
   },
   setStoryIndex(idx) {
     stateTarget.storyIndex = idx;
@@ -201,12 +160,6 @@ const stateTarget = {
   },
   setUrlHealthSeason(v) {
     stateTarget.urlHealthSeason = v;
-  },
-  setUrlEraStart(v) {
-    stateTarget.urlEraStart = v;
-  },
-  setUrlEraEnd(v) {
-    stateTarget.urlEraEnd = v;
   },
   setUrlPlayground(v) {
     stateTarget.urlPlayground = v;

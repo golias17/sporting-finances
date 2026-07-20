@@ -1,27 +1,31 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { state } from "../src/state.js";
 import { initComparison } from "../src/compare.js";
+import { chartRegistry } from "../src/chartUtils.js";
+import { mockChartEnvironment } from "./chartTestUtils.js";
 
-// Mock Chart.js which is used inside mkChart internally called by compare.js
-vi.mock("../src/charts.js", async (importOriginal) => {
-  const actual = await importOriginal();
-  return {
-    ...actual,
-    mkChart: vi.fn(),
-  };
-});
+// Uses the real mkChart() (and thus the real chartRegistry) rather than
+// mocking it out, so the tests below can confirm renderComparison() actually
+// registers its chart under the canvas ID ("compareBarChart") that main.js's
+// TAB_CHART_IDS.compare / CHART_DRAWING_FUNCTIONS entries key off of — a
+// mismatch there (main.js used to say "chartCompare") silently broke the
+// tab's chart-teardown-on-navigate-away behavior with nothing catching it.
+mockChartEnvironment();
 
 describe("compare.js", () => {
   beforeEach(() => {
+    // Real chartRegistry is shared module state — clear it each test so
+    // mkChart() always takes its "create a new Chart against this test's
+    // fresh canvas element" branch instead of trying to .update() a Chart
+    // instance left over from a previous test's now-removed canvas.
+    chartRegistry.clear();
+
     document.body.innerHTML = `
       <select id="compareSeasonA"></select>
       <select id="compareSeasonB"></select>
       <span id="cmpHeadA"></span>
       <span id="cmpHeadB"></span>
-      <div id="chartCompareRevenue"></div>
-      <div id="chartCompareEquity"></div>
-      <div id="chartCompareDebt"></div>
-      <div id="chartCompareWages"></div>
+      <canvas id="compareBarChart"></canvas>
       <div id="cmpNarrative"></div>
       <div id="comparisonGrid"></div>
     `;
@@ -50,8 +54,6 @@ describe("compare.js", () => {
         },
       ],
     };
-    state.startSeasonIndex = 0;
-    state.endSeasonIndex = 1;
     state.baseOpts = { scales: { y: {} } };
     state.urlCmpA = null;
     state.urlCmpB = null;
@@ -146,5 +148,35 @@ describe("compare.js", () => {
     // never have been reached — confirms this is a genuine early return,
     // not a partially-applied render.
     expect(document.getElementById("comparisonGrid").innerHTML).toBe("");
+  });
+
+  // Regression test: main.js's TAB_CHART_IDS.compare used to list a canvas
+  // ID ("chartCompare") that renderComparison() never actually builds a
+  // chart under — it registers under "compareBarChart" — so
+  // destroyInactiveCharts() silently found nothing to tear down whenever the
+  // user navigated away from the Compare tab, and the chart instance leaked
+  // for the rest of the session. This pins down the real ID so that
+  // regression can't reoccur unnoticed.
+  it("registers its chart in chartRegistry under the 'compareBarChart' canvas ID", () => {
+    initComparison();
+    const chart = chartRegistry.get("compareBarChart");
+    expect(chart).toBeDefined();
+    expect(chartRegistry.get("chartCompare")).toBeUndefined();
+  });
+
+  it("destroys and rebuilds the chart under the same ID on a second call (simulating a revisit)", () => {
+    initComparison();
+    const firstChart = chartRegistry.get("compareBarChart");
+    expect(firstChart).toBeDefined();
+
+    // Simulate what main.js's destroyInactiveCharts() does when the user
+    // navigates away from the Compare tab, then what runOnce(initComparison)
+    // does when they come back.
+    firstChart.destroy();
+    chartRegistry.delete("compareBarChart");
+
+    expect(() => initComparison()).not.toThrow();
+    const secondChart = chartRegistry.get("compareBarChart");
+    expect(secondChart).toBeDefined();
   });
 });
