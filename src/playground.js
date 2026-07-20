@@ -114,20 +114,32 @@ const PRESETS = {
 // if only one call site were ever updated.
 function computeProjection(
   BASELINE,
-  { uclPrize, payrollAdj, salesTarget, purchasesTarget, capexAdj, debtRepayTarget, revGrowthAdj },
+  {
+    uclPrize,
+    payrollAdj,
+    salesTarget,
+    purchasesTarget,
+    capexAdj,
+    debtRepayTarget,
+    revGrowthAdj,
+  },
 ) {
   // Organic growth (ticket pricing, existing commercial deals) applies to
   // the whole operating revenue base; qualified UCL then adds its prize
   // money plus a flat +€8M Matchday/Commercial spillover on top.
   const revenue =
-    BASELINE.revenue_operating * (1 + (revGrowthAdj || 0) / 100) + (uclPrize * 1000) + (uclPrize > 0 ? 8000 : 0);
+    BASELINE.revenue_operating * (1 + (revGrowthAdj || 0) / 100) +
+    uclPrize * 1000 +
+    (uclPrize > 0 ? 8000 : 0);
   const payroll = BASELINE.personnel_costs * (1 + payrollAdj / 100);
   const overhead = BASELINE.external_supplies * (1 + capexAdj / 100);
 
   // Use exact baseline player transfer income when salesTarget is default 117 to prevent integer rounding discrepancy
-  const sales = salesTarget === 117 ? BASELINE.player_transfer_income : salesTarget * 1000;
+  const sales =
+    salesTarget === 117 ? BASELINE.player_transfer_income : salesTarget * 1000;
   // Purchases adjusts amortization rate dynamically (reinvesting triggers 20% amortization over 5-year contracts)
-  const amortization = BASELINE.squad_amortization - ((purchasesTarget - 30) * 1000 * 0.20);
+  const amortization =
+    BASELINE.squad_amortization - (purchasesTarget - 30) * 1000 * 0.2;
   const netTrading = sales + amortization + BASELINE.player_transfer_cost;
 
   // Deleveraging saves 2% net interest cost (4.5% interest rate minus 2.5% cash yield opportunity cost)
@@ -146,12 +158,17 @@ function computeProjection(
     BASELINE.personnel_costs +
     BASELINE.external_supplies +
     BASELINE.da_excl_squad +
-    (BASELINE.player_transfer_income + BASELINE.squad_amortization + BASELINE.player_transfer_cost) +
+    (BASELINE.player_transfer_income +
+      BASELINE.squad_amortization +
+      BASELINE.player_transfer_cost) +
     BASELINE.financial_result;
   const unmodeledCostsAdjustment = BASELINE.net_result - modeledBaselineNet;
 
   const netResult =
-    (revenue + payroll + overhead + BASELINE.da_excl_squad) +
+    revenue +
+    payroll +
+    overhead +
+    BASELINE.da_excl_squad +
     netTrading +
     financialResult +
     unmodeledCostsAdjustment;
@@ -164,14 +181,35 @@ function computeProjection(
   const equity = BASELINE.equity + netResult;
 
   // Solvency impact (Equity / Total Assets), both calculated at the end of the projected season
-  const totalAssets = BASELINE.total_assets + (netResult - BASELINE.net_result) - (debtRepayTarget * 1000);
+  const totalAssets =
+    BASELINE.total_assets +
+    (netResult - BASELINE.net_result) -
+    debtRepayTarget * 1000;
   const solvency = (equity / totalAssets) * 100;
 
   // Cash Impact: operating result changes (adding back non-cash amortization delta) minus debt repayment principal outflow minus player purchases reinvestment delta
   const amortizationDelta = BASELINE.squad_amortization - amortization;
-  const cash = BASELINE.cash + (netResult - BASELINE.net_result) + amortizationDelta - (debtRepayTarget * 1000) - ((purchasesTarget - 30) * 1000);
+  const cash =
+    BASELINE.cash +
+    (netResult - BASELINE.net_result) +
+    amortizationDelta -
+    debtRepayTarget * 1000 -
+    (purchasesTarget - 30) * 1000;
 
-  return { revenue, payroll, overhead, sales, amortization, netTrading, financialResult, netResult, equity, totalAssets, solvency, cash };
+  return {
+    revenue,
+    payroll,
+    overhead,
+    sales,
+    amortization,
+    netTrading,
+    financialResult,
+    netResult,
+    equity,
+    totalAssets,
+    solvency,
+    cash,
+  };
 }
 
 function updateSliderFill(slider) {
@@ -210,7 +248,14 @@ export function initPlayground() {
   )
     return;
 
-  const rangeSliders = [payrollSlider, salesSlider, purchasesSlider, capexSlider, debtRepaySlider, revGrowthSlider];
+  const rangeSliders = [
+    payrollSlider,
+    salesSlider,
+    purchasesSlider,
+    capexSlider,
+    debtRepaySlider,
+    revGrowthSlider,
+  ];
 
   // Sets every control to a given scenario's values (a DEFAULT_INPUTS- or
   // PRESETS-shaped object) — shared by Reset, the preset buttons, and
@@ -250,7 +295,10 @@ export function initPlayground() {
     presetButtons.forEach((btn) => {
       const preset = PRESETS[btn.dataset.pgPreset];
       const matches =
-        !!preset && Object.keys(DEFAULT_INPUTS).every((key) => current[key] === preset[key]);
+        !!preset &&
+        Object.keys(DEFAULT_INPUTS).every(
+          (key) => current[key] === preset[key],
+        );
       btn.classList.toggle("active", matches);
       btn.setAttribute("aria-pressed", String(matches));
     });
@@ -281,7 +329,9 @@ export function initPlayground() {
   };
 
   uclSelect.addEventListener("change", updateProj);
-  rangeSliders.forEach((slider) => slider.addEventListener("input", updateProj));
+  rangeSliders.forEach((slider) =>
+    slider.addEventListener("input", updateProj),
+  );
 
   btnReset.addEventListener("click", () => {
     applyInputs(DEFAULT_INPUTS);
@@ -372,10 +422,12 @@ export function drawPlaygroundCharts() {
   };
 
   // Update label text values
-  payrollVal.textContent = (inputs.payrollAdj >= 0 ? "+" : "") + inputs.payrollAdj + "%";
+  payrollVal.textContent =
+    (inputs.payrollAdj >= 0 ? "+" : "") + inputs.payrollAdj + "%";
   salesVal.textContent = inputs.salesTarget + " M€";
   purchasesVal.textContent = inputs.purchasesTarget + " M€";
-  capexVal.textContent = (inputs.capexAdj >= 0 ? "+" : "") + inputs.capexAdj + "%";
+  capexVal.textContent =
+    (inputs.capexAdj >= 0 ? "+" : "") + inputs.capexAdj + "%";
   debtRepayVal.textContent = inputs.debtRepayTarget + " M€";
   revGrowthVal.textContent =
     (inputs.revGrowthAdj >= 0 ? "+" : "") + inputs.revGrowthAdj + "%";
@@ -391,10 +443,34 @@ export function drawPlaygroundCharts() {
   const proj = computeProjection(BASELINE, inputs);
 
   // Render KPIs
-  updateKpi("pgCardRev", "pgKpiRev", "pgKpiRevDiff", proj.revenue / 1000, baseline.revenue / 1000);
-  updateKpi("pgCardNet", "pgKpiNet", "pgKpiNetDiff", proj.netResult / 1000, baseline.netResult / 1000);
-  updateKpi("pgCardEq", "pgKpiEq", "pgKpiEqDiff", proj.equity / 1000, baseline.equity / 1000);
-  updateKpi("pgCardCash", "pgKpiCash", "pgKpiCashDiff", proj.cash / 1000, baseline.cash / 1000);
+  updateKpi(
+    "pgCardRev",
+    "pgKpiRev",
+    "pgKpiRevDiff",
+    proj.revenue / 1000,
+    baseline.revenue / 1000,
+  );
+  updateKpi(
+    "pgCardNet",
+    "pgKpiNet",
+    "pgKpiNetDiff",
+    proj.netResult / 1000,
+    baseline.netResult / 1000,
+  );
+  updateKpi(
+    "pgCardEq",
+    "pgKpiEq",
+    "pgKpiEqDiff",
+    proj.equity / 1000,
+    baseline.equity / 1000,
+  );
+  updateKpi(
+    "pgCardCash",
+    "pgKpiCash",
+    "pgKpiCashDiff",
+    proj.cash / 1000,
+    baseline.cash / 1000,
+  );
 
   // Draw Charts
   drawProjectionCharts(baseline, proj);
@@ -412,7 +488,7 @@ function updateKpi(cardId, valId, diffId, projVal, baseVal) {
   if (cardEl) {
     cardEl.classList.remove("pos", "neg");
   }
-  
+
   if (Math.abs(diffVal) < 0.01) {
     diffEl.textContent = state.isPt ? "sem alteração" : "no change";
     diffEl.className = "change";
@@ -439,15 +515,20 @@ function updateKpi(cardId, valId, diffId, projVal, baseVal) {
 // are already projections of the *same* hypothetical season.
 function scenarioLabels() {
   return {
-    baseline: state.isPt ? "Linha de Base 2025/26 (sem alterações)" : "Baseline 2025/26 (no changes)",
-    projected: state.isPt ? "A Sua Projeção 2025/26" : "Your Projection 2025/26",
+    baseline: state.isPt
+      ? "Linha de Base 2025/26 (sem alterações)"
+      : "Baseline 2025/26 (no changes)",
+    projected: state.isPt
+      ? "A Sua Projeção 2025/26"
+      : "Your Projection 2025/26",
   };
 }
 
 function drawProjectionCharts(baseline, proj) {
   const canvas1Id = "chartPlaygroundNet";
   const canvas2Id = "chartPlaygroundSolvency";
-  const { baseline: baselineLabel, projected: projectedLabel } = scenarioLabels();
+  const { baseline: baselineLabel, projected: projectedLabel } =
+    scenarioLabels();
 
   const labels = [
     state.isPt ? "Receita" : "Revenue",
@@ -503,9 +584,16 @@ function drawProjectionCharts(baseline, proj) {
           // Override the shared callback: it assumes raw EUR-thousands
           // input (divides by 1000 again), but this chart's data is already
           // in millions.
-          ticks: { ...state.baseOpts.scales.y.ticks, callback: (v) => v.toFixed(0) + "M€" },
+          ticks: {
+            ...state.baseOpts.scales.y.ticks,
+            callback: (v) => v.toFixed(0) + "M€",
+          },
           beginAtZero: false,
-          title: { display: true, text: "M€", color: state.COLORS.muted || FALLBACK.muted },
+          title: {
+            display: true,
+            text: "M€",
+            color: state.COLORS.muted || FALLBACK.muted,
+          },
         },
       },
       plugins: {
@@ -519,50 +607,57 @@ function drawProjectionCharts(baseline, proj) {
               if (context.datasetIndex === 0) {
                 return `${context.dataset.label}: ${val.toFixed(1)} M€`;
               } else {
-                const baselineVal = context.chart.data.datasets[0].data[context.dataIndex];
+                const baselineVal =
+                  context.chart.data.datasets[0].data[context.dataIndex];
                 const delta = val - baselineVal;
                 const sign = delta >= 0 ? "+" : "";
-                const deltaStr = Math.abs(delta) < 0.05 ? " (no change)" : ` (${sign}${delta.toFixed(1)} M€)`;
+                const deltaStr =
+                  Math.abs(delta) < 0.05
+                    ? " (no change)"
+                    : ` (${sign}${delta.toFixed(1)} M€)`;
                 return `${context.dataset.label}: ${val.toFixed(1)} M€${deltaStr}`;
               }
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     },
-    plugins: [{
-      id: 'barDelta',
-      afterDatasetsDraw(chart) {
-        const { ctx, data } = chart;
-        ctx.save();
-        ctx.font = 'bold 9px sans-serif';
-        ctx.textAlign = 'center';
+    plugins: [
+      {
+        id: "barDelta",
+        afterDatasetsDraw(chart) {
+          const { ctx, data } = chart;
+          ctx.save();
+          ctx.font = "bold 9px sans-serif";
+          ctx.textAlign = "center";
 
-        const baselineDS = data.datasets[0].data;
-        const projDS = data.datasets[1].data;
+          const baselineDS = data.datasets[0].data;
+          const projDS = data.datasets[1].data;
 
-        chart.getDatasetMeta(1).data.forEach((bar, index) => {
-          const baselineVal = baselineDS[index];
-          const projVal = projDS[index];
-          const delta = projVal - baselineVal;
-          if (Math.abs(delta) < 0.05) return;
+          chart.getDatasetMeta(1).data.forEach((bar, index) => {
+            const baselineVal = baselineDS[index];
+            const projVal = projDS[index];
+            const delta = projVal - baselineVal;
+            if (Math.abs(delta) < 0.05) return;
 
-          const sign = delta > 0 ? "+" : "";
-          // Same pos/neg tokens as everywhere else (.kpi .change.pos/.neg,
-          // the KPI diff text above) — the old "#0a5d3a"/"#eb5e28" literals
-          // weren't dark-mode aware and "#eb5e28" wasn't even in the
-          // app's palette.
-          const color = delta > 0
-            ? (state.COLORS.pos || FALLBACK.pos)
-            : (state.COLORS.neg || FALLBACK.neg);
-          ctx.fillStyle = color;
+            const sign = delta > 0 ? "+" : "";
+            // Same pos/neg tokens as everywhere else (.kpi .change.pos/.neg,
+            // the KPI diff text above) — the old "#0a5d3a"/"#eb5e28" literals
+            // weren't dark-mode aware and "#eb5e28" wasn't even in the
+            // app's palette.
+            const color =
+              delta > 0
+                ? state.COLORS.pos || FALLBACK.pos
+                : state.COLORS.neg || FALLBACK.neg;
+            ctx.fillStyle = color;
 
-          const yPos = bar.y + (projVal >= 0 ? -8 : 12);
-          ctx.fillText(`${sign}${delta.toFixed(1)}M`, bar.x, yPos);
-        });
-        ctx.restore();
-      }
-    }]
+            const yPos = bar.y + (projVal >= 0 ? -8 : 12);
+            ctx.fillText(`${sign}${delta.toFixed(1)}M`, bar.x, yPos);
+          });
+          ctx.restore();
+        },
+      },
+    ],
   });
 
   // 2. Solvency & Equity Chart (Dual Y-Axis)
@@ -572,7 +667,9 @@ function drawProjectionCharts(baseline, proj) {
       labels: [baselineLabel, projectedLabel],
       datasets: [
         {
-          label: state.isPt ? "Capital Próprio (M€)" : "Shareholders' Equity (M€)",
+          label: state.isPt
+            ? "Capital Próprio (M€)"
+            : "Shareholders' Equity (M€)",
           data: [baseline.equity / 1000, proj.equity / 1000],
           backgroundColor: state.COLORS.goldSoft || FALLBACK.goldSoft,
           borderColor: state.COLORS.gold || FALLBACK.gold,
@@ -582,7 +679,9 @@ function drawProjectionCharts(baseline, proj) {
           order: 1,
         },
         styledLineDataset({
-          label: state.isPt ? "Rácio de Solvabilidade (%)" : "Solvency Ratio (%)",
+          label: state.isPt
+            ? "Rácio de Solvabilidade (%)"
+            : "Solvency Ratio (%)",
           data: [baseline.solvency, proj.solvency],
           color: state.COLORS.green || FALLBACK.green,
           bg: state.COLORS.greenSoft || FALLBACK.greenSoft,
@@ -590,8 +689,8 @@ function drawProjectionCharts(baseline, proj) {
             type: "line",
             yAxisID: "y1",
             order: 0,
-          }
-        })
+          },
+        }),
       ],
     },
     options: {
@@ -611,10 +710,15 @@ function drawProjectionCharts(baseline, proj) {
           position: "left",
           title: {
             display: true,
-            text: state.isPt ? "Capital Próprio (M€)" : "Shareholders' Equity (M€)",
+            text: state.isPt
+              ? "Capital Próprio (M€)"
+              : "Shareholders' Equity (M€)",
             color: state.COLORS.muted || FALLBACK.muted,
           },
-          ticks: { ...state.baseOpts.scales.y.ticks, callback: (v) => v.toFixed(0) },
+          ticks: {
+            ...state.baseOpts.scales.y.ticks,
+            callback: (v) => v.toFixed(0),
+          },
           grid: { ...state.baseOpts.scales.y.grid },
         },
         y1: {
@@ -622,12 +726,17 @@ function drawProjectionCharts(baseline, proj) {
           position: "right",
           title: {
             display: true,
-            text: state.isPt ? "Rácio de Solvabilidade (%)" : "Solvency Ratio (%)",
+            text: state.isPt
+              ? "Rácio de Solvabilidade (%)"
+              : "Solvency Ratio (%)",
             color: state.COLORS.muted || FALLBACK.muted,
           },
           min: 0,
           max: Math.max(30, baseline.solvency + 5, proj.solvency + 5),
-          ticks: { ...state.baseOpts.scales.y.ticks, callback: (v) => v.toFixed(0) + "%" },
+          ticks: {
+            ...state.baseOpts.scales.y.ticks,
+            callback: (v) => v.toFixed(0) + "%",
+          },
           grid: { drawOnChartArea: false }, // Avoid grid lines overlap
         },
       },
@@ -641,10 +750,10 @@ function drawProjectionCharts(baseline, proj) {
               const val = context.parsed.y;
               const suffix = context.datasetIndex === 0 ? " M€" : "%";
               return `${context.dataset.label}: ${val.toFixed(1)}${suffix}`;
-            }
-          }
-        }
-      }
+            },
+          },
+        },
+      },
     },
   });
 }

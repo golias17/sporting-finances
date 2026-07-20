@@ -199,8 +199,7 @@ export function initStoryMode() {
   const btnPrevStory = document.getElementById("btnPrevStory");
   const btnNextStory = document.getElementById("btnNextStory");
   const btnExitStory = document.getElementById("btnExitStory");
-  if (!btnStartStory || !btnPrevStory || !btnNextStory || !btnExitStory)
-    return;
+  if (!btnStartStory || !btnPrevStory || !btnNextStory || !btnExitStory) return;
 
   btnStartStory.addEventListener("click", () => startStory());
   btnPrevStory.addEventListener("click", prevStory);

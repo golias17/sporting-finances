@@ -1,4 +1,12 @@
-import { describe, it, expect, beforeAll, beforeEach, afterEach, vi } from "vitest";
+import {
+  describe,
+  it,
+  expect,
+  beforeAll,
+  beforeEach,
+  afterEach,
+  vi,
+} from "vitest";
 import { state } from "../src/state.js";
 import { initPlayground, drawPlaygroundCharts } from "../src/playground.js";
 import { chartRegistry } from "../src/chartUtils.js";
@@ -117,7 +125,10 @@ describe("playground.js CFO Simulator", () => {
     // bare {}, so the mock needs the same scales.x/scales.y/plugins shape.
     state.baseOpts = {
       scales: {
-        x: { ticks: { font: { size: 11 }, color: "#6a716e" }, grid: { display: false } },
+        x: {
+          ticks: { font: { size: 11 }, color: "#6a716e" },
+          grid: { display: false },
+        },
         y: {
           ticks: { font: { size: 11 }, color: "#6a716e", callback: () => "" },
           grid: { color: "rgba(0,0,0,0.05)" },
@@ -125,8 +136,15 @@ describe("playground.js CFO Simulator", () => {
         },
       },
       plugins: {
-        legend: { position: "bottom", labels: { boxWidth: 12, font: { size: 11.5 } } },
-        tooltip: { enabled: false, external: () => {}, callbacks: { footer: () => "" } },
+        legend: {
+          position: "bottom",
+          labels: { boxWidth: 12, font: { size: 11.5 } },
+        },
+        tooltip: {
+          enabled: false,
+          external: () => {},
+          callbacks: { footer: () => "" },
+        },
       },
     };
     state.urlPlayground = null;
@@ -191,10 +209,18 @@ describe("playground.js CFO Simulator", () => {
     // from the raw actual by a full season's net result even when nothing
     // has been adjusted. See computeProjection()'s comment in
     // src/playground.js for why that distinction matters.
-    expect(document.getElementById("pgKpiRevDiff").textContent).toBe("no change");
-    expect(document.getElementById("pgKpiNetDiff").textContent).toBe("no change");
-    expect(document.getElementById("pgKpiEqDiff").textContent).toBe("no change");
-    expect(document.getElementById("pgKpiCashDiff").textContent).toBe("no change");
+    expect(document.getElementById("pgKpiRevDiff").textContent).toBe(
+      "no change",
+    );
+    expect(document.getElementById("pgKpiNetDiff").textContent).toBe(
+      "no change",
+    );
+    expect(document.getElementById("pgKpiEqDiff").textContent).toBe(
+      "no change",
+    );
+    expect(document.getElementById("pgKpiCashDiff").textContent).toBe(
+      "no change",
+    );
   });
 
   it('draws identical "Baseline 2025/26" and "Your Projection 2025/26" equity bars at Reset (no unexplained jump)', () => {
@@ -210,8 +236,11 @@ describe("playground.js CFO Simulator", () => {
     initPlayground();
     const solvencyChart = chartRegistry.get("chartPlaygroundSolvency");
     expect(solvencyChart).toBeDefined();
-    expect(solvencyChart.config.data.datasets[0].label).toBe("Shareholders' Equity (M€)");
-    const [baselineEquity, projectedEquity] = solvencyChart.config.data.datasets[0].data;
+    expect(solvencyChart.config.data.datasets[0].label).toBe(
+      "Shareholders' Equity (M€)",
+    );
+    const [baselineEquity, projectedEquity] =
+      solvencyChart.config.data.datasets[0].data;
     expect(baselineEquity).toBeCloseTo(115.951, 2);
     expect(projectedEquity).toBeCloseTo(115.951, 2);
     expect(baselineEquity).toBeCloseTo(projectedEquity, 6);
@@ -237,7 +266,9 @@ describe("playground.js CFO Simulator", () => {
     // League Phase/Group Stage (+€40M+€8M), so switching to League Phase
     // reads as a €7M *downgrade* from baseline, not an upgrade.
     expect(document.getElementById("pgKpiRev").textContent).toBe("€196.1M");
-    expect(document.getElementById("pgKpiRevDiff").textContent).toBe("-7.0M vs baseline");
+    expect(document.getElementById("pgKpiRevDiff").textContent).toBe(
+      "-7.0M vs baseline",
+    );
 
     // Net Result and Equity should also increase by €48M
     expect(document.getElementById("pgKpiNet").textContent).toBe("€68.0M");
@@ -258,7 +289,12 @@ describe("playground.js CFO Simulator", () => {
     // DEFAULT_INPUTS's comment in src/playground.js for why 75.0 and not
     // 20.0 — it assumes a Round of 16 UCL run, not no European football).
     expect(document.getElementById("pgKpiNet").textContent).not.toBe("€75.0M");
-    const netVal = parseFloat(document.getElementById("pgKpiNet").textContent.replace("€", "").replace("M", ""));
+    const netVal = parseFloat(
+      document
+        .getElementById("pgKpiNet")
+        .textContent.replace("€", "")
+        .replace("M", ""),
+    );
     expect(netVal).toBeLessThan(75.0);
   });
 
@@ -317,7 +353,9 @@ describe("playground.js CFO Simulator", () => {
     expect(document.getElementById("pgKpiNetDiff").className).toContain("neg");
 
     document.querySelector('[data-pg-preset="base"]').click();
-    expect(document.getElementById("pgKpiNetDiff").textContent).toBe("no change");
+    expect(document.getElementById("pgKpiNetDiff").textContent).toBe(
+      "no change",
+    );
     expect(document.getElementById("uclSelect").value).toBe("47");
     expect(document.getElementById("revGrowthSlider").value).toBe("0");
   });
@@ -325,8 +363,12 @@ describe("playground.js CFO Simulator", () => {
   it("highlights the matching preset button and clears it once a slider is moved away", () => {
     initPlayground();
     const baseBtn = document.querySelector('[data-pg-preset="base"]');
-    const optimisticBtn = document.querySelector('[data-pg-preset="optimistic"]');
-    const conservativeBtn = document.querySelector('[data-pg-preset="conservative"]');
+    const optimisticBtn = document.querySelector(
+      '[data-pg-preset="optimistic"]',
+    );
+    const conservativeBtn = document.querySelector(
+      '[data-pg-preset="conservative"]',
+    );
 
     // Default sliders (Base Case's own values) start out matching "base".
     expect(baseBtn.classList.contains("active")).toBe(true);
@@ -366,13 +408,25 @@ describe("playground.js CFO Simulator", () => {
     // automatically.
     initPlayground();
 
-    expect(document.getElementById("chartPlaygroundNet-a11y-table")).not.toBeNull();
-    expect(document.getElementById("chartPlaygroundNet-table-toggle")).not.toBeNull();
-    expect(document.getElementById("chartPlaygroundNet-download-btn")).not.toBeNull();
+    expect(
+      document.getElementById("chartPlaygroundNet-a11y-table"),
+    ).not.toBeNull();
+    expect(
+      document.getElementById("chartPlaygroundNet-table-toggle"),
+    ).not.toBeNull();
+    expect(
+      document.getElementById("chartPlaygroundNet-download-btn"),
+    ).not.toBeNull();
 
-    expect(document.getElementById("chartPlaygroundSolvency-a11y-table")).not.toBeNull();
-    expect(document.getElementById("chartPlaygroundSolvency-table-toggle")).not.toBeNull();
-    expect(document.getElementById("chartPlaygroundSolvency-download-btn")).not.toBeNull();
+    expect(
+      document.getElementById("chartPlaygroundSolvency-a11y-table"),
+    ).not.toBeNull();
+    expect(
+      document.getElementById("chartPlaygroundSolvency-table-toggle"),
+    ).not.toBeNull();
+    expect(
+      document.getElementById("chartPlaygroundSolvency-download-btn"),
+    ).not.toBeNull();
   });
 
   it("formats the dual-axis equity/solvency accessible table with each column in its own axis's units", () => {

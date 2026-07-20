@@ -26,8 +26,6 @@ describe("config.js", () => {
   it("builds an rss2json proxy URL wrapping the given RSS URL", () => {
     const rssUrl = "https://news.google.com/rss/search?q=test";
     const url = config.rss2jsonApiUrl(rssUrl);
-    expect(url).toBe(
-      `https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`,
-    );
+    expect(url).toBe(`https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`);
   });
 });

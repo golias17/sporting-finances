@@ -44,7 +44,9 @@ describe("bonds.js", () => {
       renderVmocCost();
 
       const table = document.getElementById("vmocCostTable");
-      expect(table.innerHTML).toContain("Acumulado · Era VMOC (2014/15–2021/22)");
+      expect(table.innerHTML).toContain(
+        "Acumulado · Era VMOC (2014/15–2021/22)",
+      );
     });
 
     it("does nothing (no throw) when the KPI or table container is missing from the page", () => {

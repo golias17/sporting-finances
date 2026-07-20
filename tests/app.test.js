@@ -77,7 +77,10 @@ describe("app boot (main.js)", () => {
     document.body.classList.add("app-loading");
 
     // jsdom stubs for APIs main.js touches during boot.
-    vi.stubGlobal("location", new URL("http://localhost/?tab=overview&story=3"));
+    vi.stubGlobal(
+      "location",
+      new URL("http://localhost/?tab=overview&story=3"),
+    );
     window.matchMedia = vi.fn().mockImplementation((query) => ({
       matches: query.includes("dark"),
       addEventListener: vi.fn(),
@@ -105,7 +108,10 @@ describe("app boot (main.js)", () => {
       if (u.includes("locales/pt.json")) return serveFile("locales/pt.json");
       if (u.includes("data/news.json")) return Promise.resolve({ ok: false });
       // rss2json fallback queries from the news module
-      return Promise.resolve({ ok: true, json: () => Promise.resolve({ items: [] }) });
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ items: [] }),
+      });
     });
 
     await import("../src/main.js");
@@ -293,7 +299,11 @@ describe("app boot (main.js)", () => {
 
     trigger.focus();
     trigger.dispatchEvent(
-      new window.KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true }),
+      new window.KeyboardEvent("keydown", {
+        key: "Enter",
+        bubbles: true,
+        cancelable: true,
+      }),
     );
     expect(lightbox.classList.contains("active")).toBe(true);
   });
@@ -425,7 +435,10 @@ describe("app boot (main.js)", () => {
     expect(scrollToTopBtn).not.toBeNull();
 
     scrollToTopBtn.click();
-    expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
+    expect(window.scrollTo).toHaveBeenCalledWith({
+      top: 0,
+      behavior: "smooth",
+    });
   });
 
   // Regression test: activateTab() looks up "tab-" + tab and immediately
@@ -451,8 +464,6 @@ describe("app boot (main.js)", () => {
   it("does not throw when a PDF customizer field is missing from the DOM", () => {
     document.getElementById("chkPage3")?.remove();
     const form = document.getElementById("pdfCustomizerForm");
-    expect(() =>
-      form.dispatchEvent(new window.Event("submit")),
-    ).not.toThrow();
+    expect(() => form.dispatchEvent(new window.Event("submit"))).not.toThrow();
   });
 });

@@ -308,12 +308,20 @@ describe("news.js", () => {
     const cards = container.querySelectorAll(".news-card");
     expect(cards.length).toBe(3);
 
-    const titles = Array.from(cards).map(c => c.querySelector("h3").textContent);
+    const titles = Array.from(cards).map(
+      (c) => c.querySelector("h3").textContent,
+    );
     expect(titles).toContain("Contas anuais do clube analisadas em detalhe");
-    expect(titles).toContain("Grande reforco de peso contratado para a equipa principal");
-    expect(titles).toContain("Resultados financeiros excelentes apresentados hoje");
+    expect(titles).toContain(
+      "Grande reforco de peso contratado para a equipa principal",
+    );
+    expect(titles).toContain(
+      "Resultados financeiros excelentes apresentados hoje",
+    );
 
-    const dates = Array.from(container.querySelectorAll(".news-date")).map((d) => d.textContent);
+    const dates = Array.from(container.querySelectorAll(".news-date")).map(
+      (d) => d.textContent,
+    );
     expect(dates).toContain("Recent");
   });
 });

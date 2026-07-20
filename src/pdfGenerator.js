@@ -54,7 +54,8 @@ export function fmtM(val) {
 // unstyled.
 export function signColorCell(colIndex, colors) {
   return (cellData) => {
-    if (cellData.section !== "body" || cellData.column.index !== colIndex) return;
+    if (cellData.section !== "body" || cellData.column.index !== colIndex)
+      return;
     const val = cellData.cell.text[0];
     if (val && val.startsWith("-")) {
       cellData.cell.styles.textColor = colors.negative;
@@ -70,9 +71,14 @@ export function signColorCell(colIndex, colors) {
 // a "2.0x"-style multiple) — the caller supplies the red/green predicates,
 // since the thresholds and their direction (higher-is-worse vs
 // higher-is-better) differ per column.
-export function thresholdColorCell(colIndex, { negativeIf, positiveIf }, colors) {
+export function thresholdColorCell(
+  colIndex,
+  { negativeIf, positiveIf },
+  colors,
+) {
   return (cellData) => {
-    if (cellData.section !== "body" || cellData.column.index !== colIndex) return;
+    if (cellData.section !== "body" || cellData.column.index !== colIndex)
+      return;
     const str = cellData.cell.text[0];
     if (!str || str === "—") return;
     const val = parseInt(str, 10);
@@ -161,7 +167,9 @@ function buildPdfContext({ doc, isPt, data, logoBase64, totalPages }) {
       31,
     );
 
-    const pageStr = isPt ? `Página ${pageNum} de ${totalPages}` : `Page ${pageNum} of ${totalPages}`;
+    const pageStr = isPt
+      ? `Página ${pageNum} de ${totalPages}`
+      : `Page ${pageNum} of ${totalPages}`;
     doc.setFontSize(8);
     doc.text(pageStr, 178, 31);
 
@@ -193,7 +201,10 @@ function buildPdfContext({ doc, isPt, data, logoBase64, totalPages }) {
 // ==========================================================
 // PAGE 1: TITLE, SUMMARY, AND EXECUTIVE KPI GRID
 // ==========================================================
-function drawCoverPage(ctx, { revGrowthLabel, netResultLabel, equityLabel, executiveNote }) {
+function drawCoverPage(
+  ctx,
+  { revGrowthLabel, netResultLabel, equityLabel, executiveNote },
+) {
   const { doc, isPt, colors, firstSeason, latestSeason, startNewPage } = ctx;
   startNewPage();
 
@@ -407,7 +418,7 @@ function drawFinancialTablesPage(ctx) {
         "Pessoal",
         "Rácio Sal.",
         "EBITDA",
-        "Margem EBIT."
+        "Margem EBIT.",
       ]
     : [
         "Season",
@@ -418,7 +429,7 @@ function drawFinancialTablesPage(ctx) {
         "Payroll",
         "Wage %",
         "EBITDA",
-        "EBITDA %"
+        "EBITDA %",
       ];
 
   const t1Rows = data.map((d) => {
@@ -426,10 +437,12 @@ function drawFinancialTablesPage(ctx) {
       d.revenue_operating > 0
         ? `${Math.round((Math.abs(d.personnel_costs) / d.revenue_operating) * 100)}%`
         : "—";
-    const ebitda = d.operating_result_excl_players - d.squad_amortization_impairment;
-    const ebitdaMargin = d.revenue_operating > 0
-      ? `${Math.round((ebitda / d.revenue_operating) * 100)}%`
-      : "—";
+    const ebitda =
+      d.operating_result_excl_players - d.squad_amortization_impairment;
+    const ebitdaMargin =
+      d.revenue_operating > 0
+        ? `${Math.round((ebitda / d.revenue_operating) * 100)}%`
+        : "—";
     return [
       d.label,
       fmtM(d.rev_matchday),
@@ -439,7 +452,7 @@ function drawFinancialTablesPage(ctx) {
       fmtM(d.personnel_costs),
       ratioVal,
       fmtM(ebitda),
-      ebitdaMargin
+      ebitdaMargin,
     ];
   });
 
@@ -469,9 +482,17 @@ function drawFinancialTablesPage(ctx) {
     },
     didParseCell: combineCellColorers(
       // Wage ratio (col 6): higher is worse.
-      thresholdColorCell(6, { negativeIf: (v) => v > 70, positiveIf: (v) => v <= 60 }, colors),
+      thresholdColorCell(
+        6,
+        { negativeIf: (v) => v > 70, positiveIf: (v) => v <= 60 },
+        colors,
+      ),
       // EBITDA margin (col 8): higher is better.
-      thresholdColorCell(8, { negativeIf: (v) => v < 10, positiveIf: (v) => v >= 20 }, colors),
+      thresholdColorCell(
+        8,
+        { negativeIf: (v) => v < 10, positiveIf: (v) => v >= 20 },
+        colors,
+      ),
     ),
   });
 
@@ -499,7 +520,7 @@ function drawFinancialTablesPage(ctx) {
         "Caixa",
         "Dívida Líq.",
         "Solvência",
-        "Dív. Líq. / EBITDA"
+        "Dív. Líq. / EBITDA",
       ]
     : [
         "Season",
@@ -510,20 +531,21 @@ function drawFinancialTablesPage(ctx) {
         "Cash",
         "Net Debt",
         "Solvency",
-        "Net Debt / EBITDA"
+        "Net Debt / EBITDA",
       ];
 
   const t2Rows = data.map((d) => {
     const grossDebt = d.borrowings_nc + d.borrowings_c;
     const netDebtVal = grossDebt - d.cash;
     const totalLiab = d.non_current_liabilities + d.current_liabilities;
-    const solvency = d.total_assets > 0
-      ? `${Math.round((d.equity / d.total_assets) * 100)}%`
-      : "—";
-    const ebitda = d.operating_result_excl_players - d.squad_amortization_impairment;
-    const netDebtEbitda = ebitda > 0
-      ? `${(netDebtVal / ebitda).toFixed(1)}x`
-      : "—";
+    const solvency =
+      d.total_assets > 0
+        ? `${Math.round((d.equity / d.total_assets) * 100)}%`
+        : "—";
+    const ebitda =
+      d.operating_result_excl_players - d.squad_amortization_impairment;
+    const netDebtEbitda =
+      ebitda > 0 ? `${(netDebtVal / ebitda).toFixed(1)}x` : "—";
     return [
       d.label,
       fmtM(d.total_assets),
@@ -533,7 +555,7 @@ function drawFinancialTablesPage(ctx) {
       fmtM(d.cash),
       fmtM(netDebtVal),
       solvency,
-      netDebtEbitda
+      netDebtEbitda,
     ];
   });
 
@@ -563,7 +585,11 @@ function drawFinancialTablesPage(ctx) {
     },
     didParseCell: combineCellColorers(
       signColorCell(3, colors),
-      thresholdColorCell(7, { negativeIf: (v) => v < 0, positiveIf: (v) => v >= 15 }, colors),
+      thresholdColorCell(
+        7,
+        { negativeIf: (v) => v < 0, positiveIf: (v) => v >= 15 },
+        colors,
+      ),
     ),
   });
 
@@ -576,12 +602,14 @@ function drawFinancialTablesPage(ctx) {
     doc.setFontSize(9.5);
     doc.setTextColor(...colors.green);
     doc.text(
-      isPt ? "Evolução do Capital Próprio do Balanço (M€)" : "Shareholders' Equity Evolution Trend (M€)",
+      isPt
+        ? "Evolução do Capital Próprio do Balanço (M€)"
+        : "Shareholders' Equity Evolution Trend (M€)",
       15,
       chartYStart,
     );
 
-    const maxEquityAbs = Math.max(...data.map(d => Math.abs(d.equity || 0)));
+    const maxEquityAbs = Math.max(...data.map((d) => Math.abs(d.equity || 0)));
     const yZero = chartYStart + 32; // baseline for Y=0
 
     // Draw grid bounds
@@ -627,7 +655,9 @@ function drawFinancialTablesPage(ctx) {
       doc.setFontSize(6.5);
       doc.setTextColor(...colors.mutedText);
       const yrShort = data[i].label.split("/")[0].slice(2);
-      doc.text("'" + yrShort, barX + (barWidth / 2), chartYStart + 40, { align: "center" });
+      doc.text("'" + yrShort, barX + barWidth / 2, chartYStart + 40, {
+        align: "center",
+      });
     }
 
     // Gold zero line
@@ -888,10 +918,7 @@ function drawTransfersLedgerPages(ctx) {
 
   const cleanText = (str) => {
     if (!str) return "—";
-    return str
-      .replace(/≈/g, "~")
-      .replace(/≥/g, ">=")
-      .replace(/≤/g, "<=");
+    return str.replace(/≈/g, "~").replace(/≥/g, ">=").replace(/≤/g, "<=");
   };
 
   // Extract transfers >= 8M
@@ -903,7 +930,7 @@ function drawTransfersLedgerPages(ctx) {
     if (seasonObj.sales) {
       seasonObj.sales.forEach((p) => {
         if (p.fee >= 10.0) {
-          const rawNote = isPt ? (p.note_pt || p.note) : p.note;
+          const rawNote = isPt ? p.note_pt || p.note : p.note;
           salesLedger.push({
             season: sLabel,
             player: p.player,
@@ -918,7 +945,7 @@ function drawTransfersLedgerPages(ctx) {
     if (seasonObj.purchases) {
       seasonObj.purchases.forEach((p) => {
         if (p.fee >= 8.0) {
-          const rawNote = isPt ? (p.note_pt || p.note) : p.note;
+          const rawNote = isPt ? p.note_pt || p.note : p.note;
           purchasesLedger.push({
             season: sLabel,
             player: p.player,
@@ -1119,7 +1146,8 @@ export async function generateCuratedPdf(options = {}) {
 
   const isPt = lang === "pt";
   const data = state.fullAnnual;
-  const totalPages = pages.slice(0, 4).filter(Boolean).length + (pages[4] ? 2 : 0);
+  const totalPages =
+    pages.slice(0, 4).filter(Boolean).length + (pages[4] ? 2 : 0);
   if (totalPages === 0) return;
 
   const ctx = buildPdfContext({ doc, isPt, data, logoBase64, totalPages });
@@ -1163,7 +1191,12 @@ export async function generateCuratedPdf(options = {}) {
       : `Still negative — deficit of ${fmtM(latestSeason.equity)}`;
 
   if (pages[0]) {
-    drawCoverPage(ctx, { revGrowthLabel, netResultLabel, equityLabel, executiveNote });
+    drawCoverPage(ctx, {
+      revGrowthLabel,
+      netResultLabel,
+      equityLabel,
+      executiveNote,
+    });
   }
   if (pages[1]) {
     drawFinancialTablesPage(ctx);

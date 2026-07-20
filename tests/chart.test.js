@@ -640,15 +640,25 @@ describe("Chart.js and Annotation Plugin integration", () => {
   describe("getPitchMilestone", () => {
     it("returns correct English milestone text for championships and manager changes", () => {
       state.isPt = false;
-      expect(getPitchMilestone("2020/21")).toContain("Champions! First Primeira Liga title in 19 years.");
-      expect(getPitchMilestone("2019/20")).toContain("Rúben Amorim appointed in March");
-      expect(getPitchMilestone("2025/26 H1")).toContain("Title contention under João Pereira.");
+      expect(getPitchMilestone("2020/21")).toContain(
+        "Champions! First Primeira Liga title in 19 years.",
+      );
+      expect(getPitchMilestone("2019/20")).toContain(
+        "Rúben Amorim appointed in March",
+      );
+      expect(getPitchMilestone("2025/26 H1")).toContain(
+        "Title contention under João Pereira.",
+      );
     });
 
     it("returns correct Portuguese milestone text on isPt = true", () => {
       state.isPt = true;
-      expect(getPitchMilestone("2020/21")).toContain("Campeões! 1º título da Primeira Liga em 19 anos.");
-      expect(getPitchMilestone("2019/20")).toContain("Rúben Amorim contratado em Março");
+      expect(getPitchMilestone("2020/21")).toContain(
+        "Campeões! 1º título da Primeira Liga em 19 anos.",
+      );
+      expect(getPitchMilestone("2019/20")).toContain(
+        "Rúben Amorim contratado em Março",
+      );
       state.isPt = false; // restore
     });
   });

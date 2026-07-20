@@ -339,9 +339,7 @@ function initImageLightbox() {
 // accessibility tree — matching what :hover already does visually for
 // mouse users, instead of just tolerating the gap.
 function initKitCardFlip() {
-  const cards = document.querySelectorAll(
-    ".kit-card-container:not(.no-flip)",
-  );
+  const cards = document.querySelectorAll(".kit-card-container:not(.no-flip)");
 
   cards.forEach((card) => {
     const frontImg = card.querySelector(".kit-card-front img");
@@ -527,10 +525,26 @@ function scrollToTopOnMobile() {
 
 const TAB_CHART_IDS = {
   overview: ["chartHero", "chartNetResult", "chartEquity"],
-  revenue: ["chartRevenue", "chartRevStreams", "chartRevVsPayroll", "chartOpResult"],
-  healthcheck: ["chartPayrollBurden", "chartTransferReliance", "chartDebtLoad", "chartCurrentRatio"],
+  revenue: [
+    "chartRevenue",
+    "chartRevStreams",
+    "chartRevVsPayroll",
+    "chartOpResult",
+  ],
+  healthcheck: [
+    "chartPayrollBurden",
+    "chartTransferReliance",
+    "chartDebtLoad",
+    "chartCurrentRatio",
+  ],
   debt: ["chartDebt", "chartAssetsLiab", "chartDebtMaturity"],
-  squad: ["chartSquadBook", "chartTransfers", "chartNetTrading", "chartManagerEras", "chartCommissions"],
+  squad: [
+    "chartSquadBook",
+    "chartTransfers",
+    "chartNetTrading",
+    "chartManagerEras",
+    "chartCommissions",
+  ],
   cash: ["chartCashFlow", "chartCash", "chartAnnualNet"],
   compare: ["chartCompare"],
   playground: ["chartPlaygroundNet", "chartPlaygroundSolvency"],
@@ -670,11 +684,13 @@ function setupApp(initialTab) {
     bonds: [renderVmocCost, renderLionFinance, renderUsppTerms],
     squad: [
       () => {
-        const activeSubBtn = document.querySelector(".sub-tabs-container .sub-tab-btn.active");
+        const activeSubBtn = document.querySelector(
+          ".sub-tabs-container .sub-tab-btn.active",
+        );
         if (activeSubBtn) {
           activeSubBtn.click();
         }
-      }
+      },
     ],
     cash: [chartCashFlow, chartCash, chartAnnualNet],
     compare: [initComparison],
@@ -894,53 +910,73 @@ function initPdfExport() {
   btnClose.addEventListener("click", closeModal, { signal });
 
   // Close on backdrop click
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      closeModal();
-    }
-  }, { signal });
+  modal.addEventListener(
+    "click",
+    (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    },
+    { signal },
+  );
 
   // Close on ESC key
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !modal.classList.contains("hidden")) {
-      closeModal();
-    }
-  }, { signal });
+  document.addEventListener(
+    "keydown",
+    (e) => {
+      if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+        closeModal();
+      }
+    },
+    { signal },
+  );
 
   // Handle form submission
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const langSelect = document.getElementById("pdfLanguageSelect");
-    const chk1 = document.getElementById("chkPage1");
-    const chk2 = document.getElementById("chkPage2");
-    const chk3 = document.getElementById("chkPage3");
-    const chk4 = document.getElementById("chkPage4");
-    const chk5 = document.getElementById("chkPage5");
-    const notesText = document.getElementById("pdfNotesText");
-    if (!langSelect || !chk1 || !chk2 || !chk3 || !chk4 || !chk5 || !notesText)
-      return;
+  form.addEventListener(
+    "submit",
+    (e) => {
+      e.preventDefault();
+      const langSelect = document.getElementById("pdfLanguageSelect");
+      const chk1 = document.getElementById("chkPage1");
+      const chk2 = document.getElementById("chkPage2");
+      const chk3 = document.getElementById("chkPage3");
+      const chk4 = document.getElementById("chkPage4");
+      const chk5 = document.getElementById("chkPage5");
+      const notesText = document.getElementById("pdfNotesText");
+      if (
+        !langSelect ||
+        !chk1 ||
+        !chk2 ||
+        !chk3 ||
+        !chk4 ||
+        !chk5 ||
+        !notesText
+      )
+        return;
 
-    const lang = langSelect.value;
-    const pages = [
-      chk1.checked,
-      chk2.checked,
-      chk3.checked,
-      chk4.checked,
-      chk5.checked,
-    ];
-    const executiveNote = notesText.value;
+      const lang = langSelect.value;
+      const pages = [
+        chk1.checked,
+        chk2.checked,
+        chk3.checked,
+        chk4.checked,
+        chk5.checked,
+      ];
+      const executiveNote = notesText.value;
 
-    closeModal();
-    import("./pdfGenerator.js")
-      .then((m) => m.generateCuratedPdf({ lang, pages, executiveNote }))
-      .catch((err) => {
-        // generateCuratedPdf() is async and was previously fired-and-forgotten
-        // here — a failure inside it (or in the dynamic import itself) became
-        // a silent unhandled rejection with no user-facing signal at all.
-        console.error("Failed to generate PDF export", err);
-        showPdfExportErrorToast();
-      });
-  }, { signal });
+      closeModal();
+      import("./pdfGenerator.js")
+        .then((m) => m.generateCuratedPdf({ lang, pages, executiveNote }))
+        .catch((err) => {
+          // generateCuratedPdf() is async and was previously fired-and-forgotten
+          // here — a failure inside it (or in the dynamic import itself) became
+          // a silent unhandled rejection with no user-facing signal at all.
+          console.error("Failed to generate PDF export", err);
+          showPdfExportErrorToast();
+        });
+    },
+    { signal },
+  );
 }
 
 // Minimal reuse of the .pwa-toast/.toast-body/.toast-btn styling already
@@ -966,11 +1002,11 @@ function showPdfExportErrorToast() {
     </div>
   `;
   setTimeout(() => toast.classList.add("visible"), 10);
-  document.getElementById("pdf-export-error-btn").addEventListener(
-    "click",
-    () => toast.classList.remove("visible"),
-    { once: true },
-  );
+  document
+    .getElementById("pdf-export-error-btn")
+    .addEventListener("click", () => toast.classList.remove("visible"), {
+      once: true,
+    });
 }
 
 function initSquadSubTabs() {
@@ -1028,10 +1064,14 @@ async function initApp() {
       loadTranslations(detectActiveLang()),
     ]);
     if (!finRes.ok) {
-      throw new Error(`Failed to load ${config.financialsPath}: HTTP ${finRes.status} ${finRes.statusText}`);
+      throw new Error(
+        `Failed to load ${config.financialsPath}: HTTP ${finRes.status} ${finRes.statusText}`,
+      );
     }
     if (!trRes.ok) {
-      throw new Error(`Failed to load ${config.transfersPath}: HTTP ${trRes.status} ${trRes.statusText}`);
+      throw new Error(
+        `Failed to load ${config.transfersPath}: HTTP ${trRes.status} ${trRes.statusText}`,
+      );
     }
     const [dataset, transferLedger] = await Promise.all([
       finRes.json(),

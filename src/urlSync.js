@@ -96,9 +96,15 @@ export function syncStateToUrl() {
       if (el) params.set(param, el.value);
     }
   } else {
-    ["pgUcl", "pgPayroll", "pgSales", "pgPurchases", "pgCapex", "pgDebt", "pgRevGrowth"].forEach((p) =>
-      params.delete(p),
-    );
+    [
+      "pgUcl",
+      "pgPayroll",
+      "pgSales",
+      "pgPurchases",
+      "pgCapex",
+      "pgDebt",
+      "pgRevGrowth",
+    ].forEach((p) => params.delete(p));
   }
 
   // Preserve language parameter if present or sync state.isPt

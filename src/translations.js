@@ -25,7 +25,9 @@ export async function loadTranslations(lang) {
   try {
     const res = await fetch(config.localesPath(lang));
     if (!res.ok) {
-      throw new Error(`Failed to load ${config.localesPath(lang)}: HTTP ${res.status} ${res.statusText}`);
+      throw new Error(
+        `Failed to load ${config.localesPath(lang)}: HTTP ${res.status} ${res.statusText}`,
+      );
     }
     const json = await res.json();
     if (requestId === latestRequestId) {

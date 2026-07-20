@@ -253,7 +253,8 @@ describe("urlSync.js", () => {
 
   it("applyUrlParams should stash a full Playground scenario for initPlayground to restore", () => {
     vi.stubGlobal("location", {
-      search: "?tab=playground&pgUcl=47&pgPayroll=10&pgSales=140&pgPurchases=60&pgCapex=0&pgDebt=20&pgRevGrowth=8",
+      search:
+        "?tab=playground&pgUcl=47&pgPayroll=10&pgSales=140&pgPurchases=60&pgCapex=0&pgDebt=20&pgRevGrowth=8",
       pathname: "/",
       hash: "",
     });

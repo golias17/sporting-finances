@@ -23,9 +23,7 @@ describe("storySteps.js", () => {
           expect(text, `step ${i} ${field}.${lang}`).toEqual(
             expect.any(String),
           );
-          expect(text.length, `step ${i} ${field}.${lang}`).toBeGreaterThan(
-            0,
-          );
+          expect(text.length, `step ${i} ${field}.${lang}`).toBeGreaterThan(0);
         }
       }
     });

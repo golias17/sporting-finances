@@ -23,18 +23,30 @@ const FALLBACK = getBrandColors(false);
 // getEraForSeason()'s `state.isPt && entry.pt ? entry.pt : entry.en`
 // fallback already handles that correctly without duplicating the string.
 const MANAGER_ERAS = [
-  { seasons: ["2012/13"], en: "Jesualdo/Sa Pinto (12/13)", pt: "Jesualdo/Sá Pinto (12/13)" },
+  {
+    seasons: ["2012/13"],
+    en: "Jesualdo/Sa Pinto (12/13)",
+    pt: "Jesualdo/Sá Pinto (12/13)",
+  },
   { seasons: ["2013/14"], en: "Leonardo Jardim (13/14)" },
   { seasons: ["2014/15"], en: "Marco Silva (14/15)" },
-  { seasons: ["2015/16", "2016/17", "2017/18"], en: "Jorge Jesus (15/16 - 17/18)" },
+  {
+    seasons: ["2015/16", "2016/17", "2017/18"],
+    en: "Jorge Jesus (15/16 - 17/18)",
+  },
   { seasons: ["2018/19", "2019/20"], en: "Keizer / Silas (18/19 - 19/20)" },
-  { seasons: ["2020/21", "2021/22", "2022/23", "2023/24"], en: "Rúben Amorim (20/21 - 23/24)" },
+  {
+    seasons: ["2020/21", "2021/22", "2022/23", "2023/24"],
+    en: "Rúben Amorim (20/21 - 23/24)",
+  },
   { seasons: ["2024/25"], en: "Amorim / Pereira / Borges (24/25)" },
   { seasons: [], en: "Rui Borges (25/26 - )", isFallback: true },
 ];
 
 export function getEraForSeason(season) {
-  const entry = MANAGER_ERAS.find((e) => e.seasons.includes(season)) || MANAGER_ERAS[MANAGER_ERAS.length - 1];
+  const entry =
+    MANAGER_ERAS.find((e) => e.seasons.includes(season)) ||
+    MANAGER_ERAS[MANAGER_ERAS.length - 1];
   return state.isPt && entry.pt ? entry.pt : entry.en;
 }
 
@@ -64,7 +76,11 @@ function transferChartOptions({ stacked = false } = {}) {
       legend: {
         display: true,
         position: "bottom",
-        labels: { color: state.COLORS.ink || FALLBACK.ink, font: { size: 12 }, padding: 16 },
+        labels: {
+          color: state.COLORS.ink || FALLBACK.ink,
+          font: { size: 12 },
+          padding: 16,
+        },
       },
       tooltip: {
         ...state.baseOpts.plugins.tooltip,
@@ -72,9 +88,9 @@ function transferChartOptions({ stacked = false } = {}) {
           ...state.baseOpts.plugins.tooltip.callbacks,
           label: function (context) {
             return `${context.dataset.label}: ${context.raw.toFixed(1)} M€`;
-          }
-        }
-      }
+          },
+        },
+      },
     },
     scales: {
       x: { ...state.baseOpts.scales.x, stacked },
@@ -83,9 +99,12 @@ function transferChartOptions({ stacked = false } = {}) {
         stacked,
         // Override the shared callback: it assumes raw EUR-thousands input
         // (divides by 1000 again), but this file's data is already in M€.
-        ticks: { ...state.baseOpts.scales.y.ticks, callback: (value) => value + " M€" },
-      }
-    }
+        ticks: {
+          ...state.baseOpts.scales.y.ticks,
+          callback: (value) => value + " M€",
+        },
+      },
+    },
   };
 }
 
@@ -107,10 +126,10 @@ export function drawManagerEras() {
     let purchasesTotal = 0;
 
     if (seasonObj.sales) {
-      seasonObj.sales.forEach((p) => salesTotal += p.fee || 0);
+      seasonObj.sales.forEach((p) => (salesTotal += p.fee || 0));
     }
     if (seasonObj.purchases) {
-      seasonObj.purchases.forEach((p) => purchasesTotal += p.fee || 0);
+      seasonObj.purchases.forEach((p) => (purchasesTotal += p.fee || 0));
     }
 
     erasData[era].sales += salesTotal;
@@ -118,9 +137,9 @@ export function drawManagerEras() {
   });
 
   const labels = Object.keys(erasData);
-  const sales = labels.map(l => erasData[l].sales);
-  const purchases = labels.map(l => erasData[l].purchases);
-  const netSpend = labels.map(l => erasData[l].sales - erasData[l].purchases);
+  const sales = labels.map((l) => erasData[l].sales);
+  const purchases = labels.map((l) => erasData[l].purchases);
+  const netSpend = labels.map((l) => erasData[l].sales - erasData[l].purchases);
 
   const config = {
     type: "bar",
@@ -150,9 +169,9 @@ export function drawManagerEras() {
           data: netSpend,
           color: state.COLORS.gold || FALLBACK.gold,
           bg: state.COLORS.goldSoft || FALLBACK.goldSoft,
-          extra: { type: "line", order: 0 }
-        })
-      ]
+          extra: { type: "line", order: 0 },
+        }),
+      ],
     },
     options: transferChartOptions(),
   };
@@ -165,7 +184,7 @@ export function drawCommissions() {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
 
-  const seasons = state.TRANSFER_LEDGER.map(s => s.season);
+  const seasons = state.TRANSFER_LEDGER.map((s) => s.season);
   const salesCommissions = [];
   const purchasesCommissions = [];
 
@@ -174,10 +193,10 @@ export function drawCommissions() {
     let purchasesComm = 0;
 
     if (seasonObj.sales) {
-      seasonObj.sales.forEach((p) => salesComm += p.commission || 0);
+      seasonObj.sales.forEach((p) => (salesComm += p.commission || 0));
     }
     if (seasonObj.purchases) {
-      seasonObj.purchases.forEach((p) => purchasesComm += p.commission || 0);
+      seasonObj.purchases.forEach((p) => (purchasesComm += p.commission || 0));
     }
 
     salesCommissions.push(salesComm);
@@ -198,14 +217,16 @@ export function drawCommissions() {
           stack: "Stack 0",
         },
         {
-          label: state.isPt ? "Comissões em Compras" : "Acquisition Commissions",
+          label: state.isPt
+            ? "Comissões em Compras"
+            : "Acquisition Commissions",
           data: purchasesCommissions,
           backgroundColor: state.COLORS.negSoft || FALLBACK.negSoft,
           borderColor: state.COLORS.neg || FALLBACK.neg,
           borderWidth: 1,
           stack: "Stack 0",
-        }
-      ]
+        },
+      ],
     },
     options: transferChartOptions({ stacked: true }),
   };

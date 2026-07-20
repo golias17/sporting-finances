@@ -373,11 +373,14 @@ function renderNewsItems(container, dataItems, { stale = false } = {}) {
     if (item.pubDate) {
       const d = new Date(item.pubDate.replace(" ", "T") + "Z");
       if (!isNaN(d.getTime())) {
-        date.textContent = d.toLocaleDateString(state.isPt ? "pt-PT" : "en-GB", {
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-        });
+        date.textContent = d.toLocaleDateString(
+          state.isPt ? "pt-PT" : "en-GB",
+          {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+          },
+        );
       } else {
         date.textContent = recentLabel;
       }
@@ -395,8 +398,7 @@ function renderNewsItems(container, dataItems, { stale = false } = {}) {
       // rss2json, or the build-time news.json), so a malformed or tampered
       // item could otherwise carry a "javascript:" URL that runs on click.
       const link = sourceItem.link;
-      const isSafeUrl =
-        typeof link === "string" && /^https?:\/\//i.test(link);
+      const isSafeUrl = typeof link === "string" && /^https?:\/\//i.test(link);
       if (!isSafeUrl) return;
 
       const pill = document.createElement("a");

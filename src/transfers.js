@@ -135,7 +135,9 @@ function renderTlBody(container) {
           );
         }
         if (p.rights)
-          tags.push(`<span class="tl-tag rights">${escapeHtml(p.rights)}</span>`);
+          tags.push(
+            `<span class="tl-tag rights">${escapeHtml(p.rights)}</span>`,
+          );
         if (p.bonus)
           tags.push(
             `<span class="tl-tag bonus">+€${fmtNumStr(p.bonus)}M ${state.isPt ? "bónus" : "bonus"}</span>`,

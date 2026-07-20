@@ -105,8 +105,7 @@ export function renderTable() {
       return `<tr><td>${f.label}</td>${cells}</tr>`;
     })
     .join("");
-  container.innerHTML =
-    `<table class="data"><thead><tr><th>${state.isPt ? "Métrica" : "Metric"}</th>${headerCells}</tr></thead><tbody>${bodyRows}</tbody></table>`;
+  container.innerHTML = `<table class="data"><thead><tr><th>${state.isPt ? "Métrica" : "Metric"}</th>${headerCells}</tr></thead><tbody>${bodyRows}</tbody></table>`;
 }
 
 export function initDataExport() {

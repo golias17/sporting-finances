@@ -182,8 +182,6 @@ describe("Event Annotations Utilities", () => {
     expect(annos.e_covid.label.content).toBe("COVID");
   });
 
-
-
   it("keeps all event markers when no dataset is loaded yet (defensive default)", () => {
     state.DATASET = null;
     const annos = eventBoxes(["restructure14", "covid"]);
@@ -360,7 +358,7 @@ describe("calculateHealthSignals()", () => {
     expect(crSig.status).toBe("red");
   });
 
-  it('handles current ratio when current_liabilities is 0 (null case)', () => {
+  it("handles current ratio when current_liabilities is 0 (null case)", () => {
     const season = {
       ...makeState().annual[0],
       current_assets: 40000,
@@ -384,7 +382,7 @@ describe("calculateHealthSignals()", () => {
     expect(crSig.note).toBe("Sem passivo corrente registado");
   });
 
-  it('verifies note messages for current ratio in danger zone (< 0.5)', () => {
+  it("verifies note messages for current ratio in danger zone (< 0.5)", () => {
     const season = {
       ...makeState().annual[0],
       current_assets: 10000,

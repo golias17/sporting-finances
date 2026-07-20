@@ -525,7 +525,9 @@ export function chartOpResult() {
           order: 1,
         },
         styledLineDataset({
-          label: state.isPt ? "Resultado Operacional Total" : "Total Operating Result",
+          label: state.isPt
+            ? "Resultado Operacional Total"
+            : "Total Operating Result",
           data: total,
           color: state.COLORS.gold,
           bg: state.COLORS.goldSoft,

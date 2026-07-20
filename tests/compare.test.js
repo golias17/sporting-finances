@@ -129,7 +129,9 @@ describe("compare.js", () => {
     state.isPt = true;
     initComparison();
     narrative = document.getElementById("cmpNarrative").innerHTML;
-    expect(narrative).toContain("O capital próprio passou de €−100.0M para €−50.0M");
+    expect(narrative).toContain(
+      "O capital próprio passou de €−100.0M para €−50.0M",
+    );
   });
 
   it("does nothing (no throw) when the season selects are missing", () => {

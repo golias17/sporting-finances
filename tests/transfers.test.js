@@ -441,7 +441,13 @@ describe("transfers.js", () => {
     it("defaults missing sort values and 100% rights, and orders descending string columns", () => {
       state.TRANSFER_LEDGER[0].purchases = [
         { player: "Zeta", club: "Club X", fee: 10, window: "summer" }, // no `rights`, no `bonus`
-        { player: "Alpha", club: "Club Y", fee: 15, window: "summer", rights: "80%" },
+        {
+          player: "Alpha",
+          club: "Club Y",
+          fee: 15,
+          window: "summer",
+          rights: "80%",
+        },
       ];
       state.TRANSFER_LEDGER[0].sales = [];
 

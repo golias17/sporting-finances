@@ -39,7 +39,7 @@ describe("app load failure", () => {
     const errorTitle = document.body.querySelector("h2");
     expect(errorTitle).not.toBeNull();
     expect(errorTitle.textContent).toBe("Failed to load application data.");
-    
+
     const pre = document.body.querySelector("pre");
     expect(pre).not.toBeNull();
     expect(pre.textContent).toContain("Error Details:");

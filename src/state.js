@@ -205,9 +205,15 @@ const stateTarget = {
 export const state = new Proxy(stateTarget, {
   set(target, key, value, receiver) {
     // List of allowed direct mutations to nested structures or Set additions.
-    const bypassWarnKeys = new Set(["COLORS", "baseOpts", "TAB_CHARTS", "renderedCharts"]);
+    const bypassWarnKeys = new Set([
+      "COLORS",
+      "baseOpts",
+      "TAB_CHARTS",
+      "renderedCharts",
+    ]);
     if (!bypassWarnKeys.has(key)) {
-      let setterName = "set" + String(key).charAt(0).toUpperCase() + String(key).slice(1);
+      let setterName =
+        "set" + String(key).charAt(0).toUpperCase() + String(key).slice(1);
       if (key === "DATASET") setterName = "setDataset";
       if (key === "TRANSFER_LEDGER") setterName = "setTransferLedger";
       console.warn(

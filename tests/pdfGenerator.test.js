@@ -325,7 +325,8 @@ describe("pdfGenerator.js", () => {
 
     expect(
       calls.some(
-        (t) => t && t.includes("Nota Executiva:") && t.includes("Nota de teste."),
+        (t) =>
+          t && t.includes("Nota Executiva:") && t.includes("Nota de teste."),
       ),
     ).toBe(true);
   });

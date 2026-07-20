@@ -143,31 +143,37 @@ describe("story.js", () => {
       options: {
         plugins: {
           annotation: {
-            annotations: {}
-          }
-        }
+            annotations: {},
+          },
+        },
       },
-      update: vi.fn()
+      update: vi.fn(),
     };
     chartRegistry.set("chartHero", mockChart);
 
     // 1. In range path (season of step 0 is '2012/13')
     state.DATASET = {
-      annual_data: [{ label: "2012/13" }]
+      annual_data: [{ label: "2012/13" }],
     };
     state.startSeasonIndex = 0;
     state.endSeasonIndex = 0;
     startStory(0);
-    expect(mockChart.options.plugins.annotation.annotations.storyHighlight).toBeDefined();
-    expect(mockChart.options.plugins.annotation.annotations.storyHighlight.xMin).toBe("2012/13");
+    expect(
+      mockChart.options.plugins.annotation.annotations.storyHighlight,
+    ).toBeDefined();
+    expect(
+      mockChart.options.plugins.annotation.annotations.storyHighlight.xMin,
+    ).toBe("2012/13");
     expect(mockChart.update).toHaveBeenCalled();
 
     // 2. Out of range path (season '2012/13' is not in state.annual)
     state.DATASET = {
-      annual_data: [{ label: "2024/25" }]
+      annual_data: [{ label: "2024/25" }],
     };
     startStory(0);
-    expect(mockChart.options.plugins.annotation.annotations.storyHighlight).toBeUndefined();
+    expect(
+      mockChart.options.plugins.annotation.annotations.storyHighlight,
+    ).toBeUndefined();
 
     // Clean up
     chartRegistry.delete("chartHero");
@@ -179,18 +185,20 @@ describe("story.js", () => {
         plugins: {
           annotation: {
             annotations: {
-              storyHighlight: {}
-            }
-          }
-        }
+              storyHighlight: {},
+            },
+          },
+        },
       },
-      update: vi.fn()
+      update: vi.fn(),
     };
     chartRegistry.set("chartHero", mockChart);
 
     exitStory();
 
-    expect(mockChart.options.plugins.annotation.annotations.storyHighlight).toBeUndefined();
+    expect(
+      mockChart.options.plugins.annotation.annotations.storyHighlight,
+    ).toBeUndefined();
     expect(mockChart.update).toHaveBeenCalled();
 
     // Clean up

@@ -25,7 +25,9 @@ describe("squadAnalytics.js - getEraForSeason", () => {
   });
 
   it("buckets 2024/25 as a transition season (Amorim left for Man Utd mid-season, then Pereira, then Borges)", () => {
-    expect(getEraForSeason("2024/25")).toBe("Amorim / Pereira / Borges (24/25)");
+    expect(getEraForSeason("2024/25")).toBe(
+      "Amorim / Pereira / Borges (24/25)",
+    );
   });
 
   it("does not misattribute 2024/25 or later seasons to Ruben Amorim", () => {

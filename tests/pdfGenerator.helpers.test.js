@@ -72,7 +72,11 @@ describe("pdfGenerator.js — signColorCell()", () => {
   it("ignores cells outside the body section or in a different column", () => {
     const colorer = signColorCell(2, colors);
 
-    const headerCell = fakeCell({ section: "head", colIndex: 2, text: "-5.0 M€" });
+    const headerCell = fakeCell({
+      section: "head",
+      colIndex: 2,
+      text: "-5.0 M€",
+    });
     colorer(headerCell);
     expect(headerCell.cell.styles.textColor).toBeUndefined();
 
@@ -138,7 +142,11 @@ describe("pdfGenerator.js — combineCellColorers()", () => {
   it("lets a real signColorCell + thresholdColorCell pair color different columns independently", () => {
     const combined = combineCellColorers(
       signColorCell(0, colors),
-      thresholdColorCell(1, { negativeIf: (v) => v >= 2, positiveIf: (v) => v < 1 }, colors),
+      thresholdColorCell(
+        1,
+        { negativeIf: (v) => v >= 2, positiveIf: (v) => v < 1 },
+        colors,
+      ),
     );
 
     const feeCell = fakeCell({ colIndex: 0, text: "-10.0 M€" });
