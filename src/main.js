@@ -288,7 +288,18 @@ function setupApp(initialTab) {
   initDataExport();
   initNewsFeed();
   initSquadSubTabs();
-  initPlayground();
+  // initPlayground() is intentionally NOT called here. It's listed in
+  // TAB_CHARTS.playground below and runs lazily via runOnce() on first visit
+  // to the tab, the same pattern every other tab's setup function (initHealthBar,
+  // initComparison, initTransfersDetailTable, ...) already follows. Calling it
+  // here too used to double-register every one of its event listeners
+  // (uclSelect/sliders/reset/preset buttons) — since initPlayground() isn't
+  // itself guarded by runOnce, this eager call and the later
+  // runOnce(initPlayground) triggered by activateTab() both fired, wiring two
+  // independent listeners on every control. That silently doubled the work on
+  // every slider drag or button click for the rest of the session (duplicate
+  // chart redraws, duplicate syncStateToUrl() calls) without corrupting the
+  // displayed numbers, which made it easy to miss.
 
   state.TAB_CHARTS = {
     overview: [initKpiSeasonSelector, chartHero, chartNetResult, chartEquity],

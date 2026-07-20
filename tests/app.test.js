@@ -14,6 +14,7 @@ import { fileURLToPath } from "url";
 import { state } from "../src/state.js";
 import * as pdfGen from "../src/pdfGenerator.js";
 import * as charts from "../src/charts.js";
+import * as playground from "../src/playground.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.resolve(__dirname, "../public");
@@ -182,6 +183,32 @@ describe("app boot (main.js)", () => {
 
     revenueBtn.click();
     expect(charts.chartRevenue.mock.calls.length).toBe(callsAfterFirstVisit);
+  });
+
+  // Regression test: initPlayground() used to be called eagerly in
+  // setupApp() *and* again via runOnce(initPlayground) the first time the
+  // user visited the Playground tab (it's listed in TAB_CHARTS.playground —
+  // see main.js), since the eager call wasn't itself guarded by runOnce.
+  // That silently double-registered every one of its event listeners
+  // (uclSelect/sliders/reset/preset buttons), doubling the work on every
+  // interaction for the rest of the session without corrupting the displayed
+  // numbers — see the comment above initPlayground()'s TAB_CHARTS entry in
+  // main.js. initPlayground/drawPlaygroundCharts are mocked at the top of
+  // this file, so their call counts are directly observable here.
+  it("calls initPlayground() exactly once across boot and the first visit to the Playground tab", () => {
+    const playgroundBtn = document.querySelector(
+      'nav.tabs button[data-tab="playground"]',
+    );
+    playgroundBtn.click();
+    expect(
+      document.getElementById("tab-playground").classList.contains("active"),
+    ).toBe(true);
+    expect(playground.initPlayground).toHaveBeenCalledTimes(1);
+
+    // Re-clicking the already-active tab shouldn't call it again either
+    // (same runOnce guard every other tab's setup function relies on).
+    playgroundBtn.click();
+    expect(playground.initPlayground).toHaveBeenCalledTimes(1);
   });
 
   it("renders the transfer ledger on the squad tab", () => {

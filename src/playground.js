@@ -134,12 +134,22 @@ function computeProjection(
   const payroll = BASELINE.personnel_costs * (1 + payrollAdj / 100);
   const overhead = BASELINE.external_supplies * (1 + capexAdj / 100);
 
-  // Use exact baseline player transfer income when salesTarget is default 117 to prevent integer rounding discrepancy
+  // Use exact baseline player transfer income when salesTarget is at its
+  // default value to prevent integer rounding discrepancy. Compared against
+  // DEFAULT_INPUTS.salesTarget rather than a hardcoded 117 so this can't
+  // silently drift out of sync the way the uclPrize/DEFAULT_INPUTS mismatch
+  // once did (see DEFAULT_INPUTS's comment above) if the default is ever
+  // changed at a season rollover.
   const sales =
-    salesTarget === 117 ? BASELINE.player_transfer_income : salesTarget * 1000;
-  // Purchases adjusts amortization rate dynamically (reinvesting triggers 20% amortization over 5-year contracts)
+    salesTarget === DEFAULT_INPUTS.salesTarget
+      ? BASELINE.player_transfer_income
+      : salesTarget * 1000;
+  // Purchases adjusts amortization rate dynamically (reinvesting triggers 20%
+  // amortization over 5-year contracts). Offset from
+  // DEFAULT_INPUTS.purchasesTarget, not a hardcoded 30, for the same reason.
   const amortization =
-    BASELINE.squad_amortization - (purchasesTarget - 30) * 1000 * 0.2;
+    BASELINE.squad_amortization -
+    (purchasesTarget - DEFAULT_INPUTS.purchasesTarget) * 1000 * 0.2;
   const netTrading = sales + amortization + BASELINE.player_transfer_cost;
 
   // Deleveraging saves 2% net interest cost (4.5% interest rate minus 2.5% cash yield opportunity cost)
@@ -194,7 +204,7 @@ function computeProjection(
     (netResult - BASELINE.net_result) +
     amortizationDelta -
     debtRepayTarget * 1000 -
-    (purchasesTarget - 30) * 1000;
+    (purchasesTarget - DEFAULT_INPUTS.purchasesTarget) * 1000;
 
   return {
     revenue,
