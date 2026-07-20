@@ -1949,6 +1949,11 @@
     "isAria": false,
     "innerHTML": false
   },
+  "pg-btn-pin": {
+    "text": "Fixar Este Cenário",
+    "isAria": false,
+    "innerHTML": false
+  },
   "pg-kpi-rev": {
     "text": "Receita Projetada",
     "isAria": false,

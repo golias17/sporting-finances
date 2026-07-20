@@ -2649,6 +2649,39 @@
               </svg>
               <span data-i18n="pg-btn-reset">Reset Simulation</span>
             </button>
+
+            <!-- Freezes the current scenario as a second reference point,
+                 shown as a third bar/line on both charts alongside Baseline
+                 and Your Projection (see the pin handling in
+                 playground.js). Toggles between "Pin"/"Unpin" — clicking
+                 again while pinned clears it. -->
+            <button
+              id="btnPinScenario"
+              class="btn-pin-playground"
+              type="button"
+              aria-pressed="false"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-pin"
+              >
+                <line x1="12" y1="17" x2="12" y2="22"></line>
+                <path
+                  d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"
+                ></path>
+              </svg>
+              <span id="btnPinScenarioLabel" data-i18n="pg-btn-pin"
+                >Pin This Scenario</span
+              >
+            </button>
+            <div class="pg-pin-readout" id="pgPinReadout"></div>
           </div>
 
           <!-- Output metrics cards & charts -->

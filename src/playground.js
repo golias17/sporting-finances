@@ -237,6 +237,18 @@ function computeProjection(
   };
 }
 
+// Tears down the previous call's listeners before initPlayground() wires up
+// fresh ones — see the AbortController used the same way in compare.js's
+// initComparison(). initPlayground() is only meant to wire its controls
+// once in the common case, but it isn't only ever called once in practice:
+// a language switch clears state.renderedCharts and re-activates the
+// current tab (see main.js's .lang-link handler), which re-runs
+// runOnce(initPlayground) since its guard was just cleared. Without this,
+// every language switch made while the Playground tab had been visited
+// re-registered every listener (uclSelect/sliders/reset/presets/pin) on
+// top of the previous set, compounding further on each subsequent switch.
+let playgroundAbortController = null;
+
 function updateSliderFill(slider) {
   if (!slider) return;
   const min = parseFloat(slider.min) || 0;
@@ -259,6 +271,7 @@ export function initPlayground() {
   const debtRepaySlider = document.getElementById("debtRepaySlider");
   const revGrowthSlider = document.getElementById("revGrowthSlider");
   const btnReset = document.getElementById("btnResetPlayground");
+  const btnPin = document.getElementById("btnPinScenario");
   const presetButtons = document.querySelectorAll("[data-pg-preset]");
 
   if (
@@ -269,7 +282,8 @@ export function initPlayground() {
     !capexSlider ||
     !debtRepaySlider ||
     !revGrowthSlider ||
-    !btnReset
+    !btnReset ||
+    !btnPin
   )
     return;
 
@@ -281,6 +295,12 @@ export function initPlayground() {
     debtRepaySlider,
     revGrowthSlider,
   ];
+
+  if (playgroundAbortController) {
+    playgroundAbortController.abort();
+  }
+  playgroundAbortController = new AbortController();
+  const { signal } = playgroundAbortController;
 
   // Sets every control to a given scenario's values (a DEFAULT_INPUTS- or
   // PRESETS-shaped object) — shared by Reset, the preset buttons, and
@@ -353,28 +373,52 @@ export function initPlayground() {
     updateProjHeavy();
   };
 
-  uclSelect.addEventListener("change", updateProj);
+  uclSelect.addEventListener("change", updateProj, { signal });
   rangeSliders.forEach((slider) =>
-    slider.addEventListener("input", updateProj),
+    slider.addEventListener("input", updateProj, { signal }),
   );
 
-  btnReset.addEventListener("click", () => {
-    applyInputs(DEFAULT_INPUTS);
-    drawPlaygroundCharts();
-    updateActivePresetHighlight();
-    syncStateToUrl();
-  });
-
-  presetButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const preset = PRESETS[btn.dataset.pgPreset];
-      if (!preset) return;
-      applyInputs(preset);
+  btnReset.addEventListener(
+    "click",
+    () => {
+      applyInputs(DEFAULT_INPUTS);
       drawPlaygroundCharts();
       updateActivePresetHighlight();
       syncStateToUrl();
-    });
+    },
+    { signal },
+  );
+
+  presetButtons.forEach((btn) => {
+    btn.addEventListener(
+      "click",
+      () => {
+        const preset = PRESETS[btn.dataset.pgPreset];
+        if (!preset) return;
+        applyInputs(preset);
+        drawPlaygroundCharts();
+        updateActivePresetHighlight();
+        syncStateToUrl();
+      },
+      { signal },
+    );
   });
+
+  // Pin/unpin toggle — freezes the current scenario as a second reference
+  // point (state.pinnedPlaygroundInputs) so the user can keep adjusting the
+  // live scenario while comparing it against the one they pinned. Doesn't
+  // call syncStateToUrl(): the pin is session-only, not part of the shared
+  // URL scenario (see the comment on pinnedPlaygroundInputs in state.js).
+  btnPin.addEventListener(
+    "click",
+    () => {
+      state.setPinnedPlaygroundInputs(
+        state.pinnedPlaygroundInputs ? null : getCurrentInputs(),
+      );
+      drawPlaygroundCharts();
+    },
+    { signal },
+  );
 
   // Restore a shared scenario from the URL, if one was encoded — see the
   // "Playground scenario" section of urlSync.js. Values arrive as strings
@@ -523,8 +567,44 @@ export function drawPlaygroundCharts() {
     verdictEl.style.display = "block";
   }
 
+  // Pinned scenario — a frozen snapshot the user compares the live
+  // scenario against, in addition to the "no changes" baseline (see
+  // state.pinnedPlaygroundInputs's comment in state.js). Recomputed fresh
+  // from its stored inputs on every render, same as baseline/proj, rather
+  // than freezing the computed figures themselves — keeps it correct if
+  // BASELINE data or the UCL cost model ever changes.
+  const pinnedInputs = state.pinnedPlaygroundInputs;
+  const pinned = pinnedInputs
+    ? computeProjection(BASELINE, pinnedInputs)
+    : null;
+
+  const pinBtn = document.getElementById("btnPinScenario");
+  const pinLabel = document.getElementById("btnPinScenarioLabel");
+  if (pinBtn && pinLabel) {
+    pinBtn.setAttribute("aria-pressed", String(!!pinned));
+    pinLabel.textContent = pinned
+      ? state.isPt
+        ? "Remover Fixação"
+        : "Unpin Scenario"
+      : state.isPt
+        ? "Fixar Este Cenário"
+        : "Pin This Scenario";
+  }
+  const pinReadout = document.getElementById("pgPinReadout");
+  if (pinReadout) {
+    if (pinned) {
+      pinReadout.textContent = state.isPt
+        ? `Fixado: Resultado Líq. ${fmtMillions(pinned.netResult)} · Capital Próprio ${fmtMillions(pinned.equity)}`
+        : `Pinned: Net Result ${fmtMillions(pinned.netResult)} · Equity ${fmtMillions(pinned.equity)}`;
+      pinReadout.style.display = "flex";
+    } else {
+      pinReadout.textContent = "";
+      pinReadout.style.display = "none";
+    }
+  }
+
   // Draw Charts
-  drawProjectionCharts(baseline, proj);
+  drawProjectionCharts(baseline, proj, pinned);
 }
 
 // Single source of truth for "is this equity/cash figure healthy" is
@@ -667,14 +747,18 @@ function scenarioLabels() {
     projected: state.isPt
       ? "A Sua Projeção 2025/26"
       : "Your Projection 2025/26",
+    pinned: state.isPt ? "Cenário Fixado" : "Pinned Scenario",
   };
 }
 
-function drawProjectionCharts(baseline, proj) {
+function drawProjectionCharts(baseline, proj, pinned) {
   const canvas1Id = "chartPlaygroundNet";
   const canvas2Id = "chartPlaygroundSolvency";
-  const { baseline: baselineLabel, projected: projectedLabel } =
-    scenarioLabels();
+  const {
+    baseline: baselineLabel,
+    projected: projectedLabel,
+    pinned: pinnedLabel,
+  } = scenarioLabels();
 
   // Full P&L walk from Revenue down to Net Result — Overhead and Financial
   // Result used to be left out even though each has its own slider
@@ -724,6 +808,29 @@ function drawProjectionCharts(baseline, proj) {
           borderColor: state.COLORS.green || FALLBACK.green,
           borderWidth: 1,
         },
+        // Pinned scenario — a third dataset only added while one is pinned
+        // (see the pin toggle in initPlayground()). Gold, matching the
+        // app's existing "marked/reference" color (used for the Base
+        // preset's active state and chart annotations elsewhere) so it
+        // reads as a deliberate reference point rather than a live value.
+        ...(pinned
+          ? [
+              {
+                label: pinnedLabel,
+                data: [
+                  pinned.revenue / 1000,
+                  pinned.payroll / 1000,
+                  pinned.overhead / 1000,
+                  pinned.financialResult / 1000,
+                  pinned.netTrading / 1000,
+                  pinned.netResult / 1000,
+                ],
+                backgroundColor: state.COLORS.goldSoft || FALLBACK.goldSoft,
+                borderColor: state.COLORS.gold || FALLBACK.gold,
+                borderWidth: 1,
+              },
+            ]
+          : []),
       ],
     },
     options: {
@@ -818,16 +925,32 @@ function drawProjectionCharts(baseline, proj) {
   });
 
   // 2. Solvency & Equity Chart (Dual Y-Axis)
+  //
+  // Unlike chart 1 (a 3rd dataset), a pinned scenario here is a 3rd
+  // *category* — this chart already puts one scenario per x-axis position
+  // (Baseline, Your Projection), each carrying an Equity bar + Solvency
+  // line at that position, so "Pinned" just becomes a third position with
+  // its own bar+line, not a new dataset.
+  const chart2Labels = pinned
+    ? [baselineLabel, projectedLabel, pinnedLabel]
+    : [baselineLabel, projectedLabel];
+  const equityData = pinned
+    ? [baseline.equity / 1000, proj.equity / 1000, pinned.equity / 1000]
+    : [baseline.equity / 1000, proj.equity / 1000];
+  const solvencyData = pinned
+    ? [baseline.solvency, proj.solvency, pinned.solvency]
+    : [baseline.solvency, proj.solvency];
+
   mkChart(canvas2Id, {
     type: "bar",
     data: {
-      labels: [baselineLabel, projectedLabel],
+      labels: chart2Labels,
       datasets: [
         {
           label: state.isPt
             ? "Capital Próprio (M€)"
             : "Shareholders' Equity (M€)",
-          data: [baseline.equity / 1000, proj.equity / 1000],
+          data: equityData,
           backgroundColor: state.COLORS.goldSoft || FALLBACK.goldSoft,
           borderColor: state.COLORS.gold || FALLBACK.gold,
           borderWidth: 1.5,
@@ -839,7 +962,7 @@ function drawProjectionCharts(baseline, proj) {
           label: state.isPt
             ? "Rácio de Solvabilidade (%)"
             : "Solvency Ratio (%)",
-          data: [baseline.solvency, proj.solvency],
+          data: solvencyData,
           color: state.COLORS.green || FALLBACK.green,
           bg: state.COLORS.greenSoft || FALLBACK.greenSoft,
           extra: {
@@ -889,7 +1012,12 @@ function drawProjectionCharts(baseline, proj) {
             color: state.COLORS.muted || FALLBACK.muted,
           },
           min: 0,
-          max: Math.max(30, baseline.solvency + 5, proj.solvency + 5),
+          max: Math.max(
+            30,
+            baseline.solvency + 5,
+            proj.solvency + 5,
+            pinned ? pinned.solvency + 5 : 0,
+          ),
           ticks: {
             ...state.baseOpts.scales.y.ticks,
             callback: (v) => v.toFixed(0) + "%",

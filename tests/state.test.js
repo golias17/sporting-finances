@@ -133,6 +133,13 @@ describe("state.js", () => {
 
     state.setTfSortDir("desc");
     expect(state.tfSortDir).toBe("desc");
+
+    const scenario = { uclPrize: 47, payrollAdj: 0 };
+    state.setPinnedPlaygroundInputs(scenario);
+    expect(state.pinnedPlaygroundInputs).toBe(scenario);
+
+    state.setPinnedPlaygroundInputs(null);
+    expect(state.pinnedPlaygroundInputs).toBeNull();
   });
 
   it("COLORS Proxy logs console.warn on first access before initialization", () => {

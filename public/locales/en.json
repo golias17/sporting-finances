@@ -1949,6 +1949,11 @@
     "isAria": false,
     "innerHTML": false
   },
+  "pg-btn-pin": {
+    "text": "Pin This Scenario",
+    "isAria": false,
+    "innerHTML": false
+  },
   "pg-kpi-rev": {
     "text": "Projected Revenue",
     "isAria": false,

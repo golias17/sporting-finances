@@ -11,6 +11,7 @@ import { state } from "../src/state.js";
 import { initPlayground, drawPlaygroundCharts } from "../src/playground.js";
 import { chartRegistry } from "../src/chartUtils.js";
 import { mockChartEnvironment } from "./chartTestUtils.js";
+import * as urlSync from "../src/urlSync.js";
 
 // playground.js now builds its two charts via charts.js's mkChart() helper
 // (see src/charts.js) instead of hand-rolling `new Chart(...)` — the same
@@ -74,6 +75,10 @@ describe("playground.js CFO Simulator", () => {
         <input type="range" id="debtRepaySlider" min="0" max="50" value="0" />
 
         <button id="btnResetPlayground">Reset</button>
+        <button id="btnPinScenario" aria-pressed="false">
+          <span id="btnPinScenarioLabel">Pin This Scenario</span>
+        </button>
+        <div class="pg-pin-readout" id="pgPinReadout"></div>
 
         <div class="kpis">
           <div class="kpi" id="pgCardRev">
@@ -152,6 +157,7 @@ describe("playground.js CFO Simulator", () => {
       },
     };
     state.urlPlayground = null;
+    state.setPinnedPlaygroundInputs(null);
 
     // playground.js derives its BASELINE from the real "2024/25" season in
     // state.DATASET instead of hardcoded literals — see getBaseline() in
@@ -454,6 +460,26 @@ describe("playground.js CFO Simulator", () => {
     expect(bodyText).toMatch(/23\.2%/);
   });
 
+  it("does not accumulate duplicate listeners when called a second time (e.g. a language switch)", () => {
+    // Regression test: main.js's language-switch handler clears
+    // state.renderedCharts and re-activates the current tab, which
+    // re-invokes initPlayground() via runOnce() since its guard was just
+    // cleared — a legitimate, necessary call for every OTHER tab's setup
+    // function (see initComparison()'s own AbortController in compare.js
+    // for the established pattern). Before initPlayground() adopted the
+    // same pattern, this silently doubled every listener (uclSelect,
+    // sliders, reset, presets) on the first language switch made after
+    // visiting the tab, and kept compounding on every switch after that.
+    vi.useFakeTimers();
+    const spy = vi.spyOn(urlSync, "syncStateToUrl").mockImplementation(() => {});
+    initPlayground();
+    initPlayground(); // simulates the language-switch re-init
+    document.getElementById("btnResetPlayground").click();
+    expect(spy).toHaveBeenCalledTimes(1);
+    spy.mockRestore();
+    vi.useRealTimers();
+  });
+
   it("shows a green health zone on Equity and Cash when the baseline scenario is comfortably healthy", () => {
     // Regression test for equityZoneInfo()/cashZoneInfo() in playground.js:
     // the KPI cards' pos/neg coloring only says whether the projection beats
@@ -567,6 +593,128 @@ describe("playground.js CFO Simulator", () => {
     ]);
     expect(netChart.config.data.datasets[0].data.length).toBe(6);
     expect(netChart.config.data.datasets[1].data.length).toBe(6);
+  });
+
+  describe("pin scenario", () => {
+    it("has no third dataset/category on either chart until something is pinned", () => {
+      initPlayground();
+      const netChart = chartRegistry.get("chartPlaygroundNet");
+      const solvencyChart = chartRegistry.get("chartPlaygroundSolvency");
+      expect(netChart.config.data.datasets.length).toBe(2);
+      expect(solvencyChart.config.data.labels.length).toBe(2);
+      expect(document.getElementById("btnPinScenario").getAttribute("aria-pressed")).toBe("false");
+      expect(document.getElementById("pgPinReadout").style.display).toBe("none");
+    });
+
+    it("pins the current scenario as a third dataset on the Simulated Financials chart and a third category on the Equity/Solvency chart", () => {
+      initPlayground();
+      document.querySelector('[data-pg-preset="optimistic"]').click();
+      document.getElementById("btnPinScenario").click();
+
+      const btnPin = document.getElementById("btnPinScenario");
+      expect(btnPin.getAttribute("aria-pressed")).toBe("true");
+      expect(document.getElementById("btnPinScenarioLabel").textContent).toBe(
+        "Unpin Scenario",
+      );
+
+      const netChart = chartRegistry.get("chartPlaygroundNet");
+      expect(netChart.config.data.datasets.length).toBe(3);
+      expect(netChart.config.data.datasets[2].label).toBe("Pinned Scenario");
+      // Optimistic scenario's Net Result column (index 5), computed
+      // independently — see the pgcalc2.mjs verification used while
+      // building this feature.
+      expect(netChart.config.data.datasets[2].data[5]).toBeCloseTo(
+        99.671,
+        2,
+      );
+
+      const solvencyChart = chartRegistry.get("chartPlaygroundSolvency");
+      expect(solvencyChart.config.data.labels).toEqual([
+        "Baseline 2025/26 (no changes)",
+        "Your Projection 2025/26",
+        "Pinned Scenario",
+      ]);
+      expect(solvencyChart.config.data.datasets[0].data[2]).toBeCloseTo(
+        140.599,
+        2,
+      );
+      expect(solvencyChart.config.data.datasets[1].data[2]).toBeCloseTo(
+        29.267,
+        2,
+      );
+    });
+
+    it("shows the pinned scenario's headline figures in the readout", () => {
+      initPlayground();
+      document.querySelector('[data-pg-preset="optimistic"]').click();
+      document.getElementById("btnPinScenario").click();
+
+      const readout = document.getElementById("pgPinReadout");
+      expect(readout.style.display).toBe("flex");
+      expect(readout.textContent).toContain("€99.7M");
+      expect(readout.textContent).toContain("€140.6M");
+    });
+
+    it("keeps the pinned scenario frozen while the live scenario keeps changing", () => {
+      vi.useFakeTimers();
+      initPlayground();
+      // Pin at the default ("no changes") scenario.
+      document.getElementById("btnPinScenario").click();
+
+      // Now push the live scenario away from default.
+      const payrollSlider = document.getElementById("payrollSlider");
+      payrollSlider.value = 25;
+      payrollSlider.dispatchEvent(new Event("input"));
+      vi.runAllTimers();
+      vi.useRealTimers();
+
+      const netChart = chartRegistry.get("chartPlaygroundNet");
+      // Pinned (index 2) still reads the original €68.0M baseline Net
+      // Result, unaffected by the payroll slider moved after pinning.
+      expect(netChart.config.data.datasets[2].data[5]).toBeCloseTo(68.0, 1);
+      // The live Projection (index 1) has moved away from it.
+      expect(netChart.config.data.datasets[1].data[5]).not.toBeCloseTo(
+        68.0,
+        1,
+      );
+    });
+
+    it("unpins on a second click, removing the third dataset/category and restoring the button label", () => {
+      initPlayground();
+      document.getElementById("btnPinScenario").click();
+      document.getElementById("btnPinScenario").click();
+
+      expect(
+        document.getElementById("btnPinScenario").getAttribute("aria-pressed"),
+      ).toBe("false");
+      expect(document.getElementById("btnPinScenarioLabel").textContent).toBe(
+        "Pin This Scenario",
+      );
+      expect(document.getElementById("pgPinReadout").style.display).toBe(
+        "none",
+      );
+
+      const netChart = chartRegistry.get("chartPlaygroundNet");
+      expect(netChart.config.data.datasets.length).toBe(2);
+      const solvencyChart = chartRegistry.get("chartPlaygroundSolvency");
+      expect(solvencyChart.config.data.labels.length).toBe(2);
+    });
+
+    it("renders the pin button label and readout in Portuguese when state.isPt is true", () => {
+      state.isPt = true;
+      initPlayground();
+      document.getElementById("btnPinScenario").click();
+
+      expect(document.getElementById("btnPinScenarioLabel").textContent).toBe(
+        "Remover Fixação",
+      );
+      expect(document.getElementById("pgPinReadout").textContent).toMatch(
+        /Fixado/,
+      );
+
+      const solvencyChart = chartRegistry.get("chartPlaygroundSolvency");
+      expect(solvencyChart.config.data.labels[2]).toBe("Cenário Fixado");
+    });
   });
 
   it("does nothing (no throw) when #tab-playground is missing from the page", () => {

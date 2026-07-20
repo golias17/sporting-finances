@@ -151,6 +151,17 @@ const stateTarget = {
     stateTarget.activeLionTab = tab;
   },
 
+  // Playground "pin this scenario" — a frozen snapshot of the 7 slider/select
+  // inputs (same shape as playground.js's DEFAULT_INPUTS), captured when the
+  // user clicks Pin, so they can keep adjusting the live scenario while
+  // comparing it against the one they pinned. null means nothing is pinned.
+  // Session-only (not persisted to the URL, unlike the live scenario in
+  // urlPlayground) — kept deliberately simple for a first pass.
+  pinnedPlaygroundInputs: null,
+  setPinnedPlaygroundInputs(v) {
+    stateTarget.pinnedPlaygroundInputs = v;
+  },
+
   // Transfer detail table filter state (owned here so initTransfersDetailTable
   // can be called multiple times — e.g. on language toggle — without resetting
   // the user's current filter selections).
