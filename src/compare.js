@@ -2,6 +2,7 @@ import { state } from "./state.js";
 import { mkChart } from "./charts.js";
 import { fmtMillions } from "./chartUtils.js";
 import { syncStateToUrl } from "./urlSync.js";
+import { netDebt, wageBillRatio } from "./metrics.js";
 
 // SEASON COMPARISON
 // =============================================================
@@ -84,8 +85,8 @@ function renderComparison() {
   headA.textContent = a.label;
   headB.textContent = b.label;
 
-  const netDebtA = a.borrowings_nc + a.borrowings_c - a.cash;
-  const netDebtB = b.borrowings_nc + b.borrowings_c - b.cash;
+  const netDebtA = netDebt(a);
+  const netDebtB = netDebt(b);
 
   // Auto-narrative
   const revGrowth =
@@ -94,14 +95,10 @@ function renderComparison() {
           Math.abs(a.revenue_operating)) *
         100
       : null;
-  const wageBillA =
-    Number.isFinite(a.revenue_operating) && a.revenue_operating !== 0
-      ? ((Math.abs(a.personnel_costs) / a.revenue_operating) * 100).toFixed(0)
-      : null;
-  const wageBillB =
-    Number.isFinite(b.revenue_operating) && b.revenue_operating !== 0
-      ? ((Math.abs(b.personnel_costs) / b.revenue_operating) * 100).toFixed(0)
-      : null;
+  const wageRatioA = wageBillRatio(a);
+  const wageRatioB = wageBillRatio(b);
+  const wageBillA = wageRatioA !== null ? (wageRatioA * 100).toFixed(0) : null;
+  const wageBillB = wageRatioB !== null ? (wageRatioB * 100).toFixed(0) : null;
   const equityFlip = a.equity < 0 && b.equity >= 0;
   const parts = [];
 
@@ -305,8 +302,8 @@ function renderComparison() {
         {
           icon: "💼",
           label: state.isPt ? "Custos com Pessoal" : "Wage Bill",
-          a: safeDiv(Math.abs(a.personnel_costs) * 100, a.revenue_operating),
-          b: safeDiv(Math.abs(b.personnel_costs) * 100, b.revenue_operating),
+          a: wageRatioA !== null ? wageRatioA * 100 : null,
+          b: wageRatioB !== null ? wageRatioB * 100 : null,
           fmt: (v) =>
             v === null
               ? "—"

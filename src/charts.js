@@ -1,5 +1,5 @@
 import { state } from "./state.js";
-import { getLatestH1Data } from "./metrics.js";
+import { getLatestH1Data, netDebt, wageBillRatio } from "./metrics.js";
 import { HEALTH_THRESHOLDS } from "./healthThresholds.js";
 // "chart.js/auto" registers every controller/element/scale/plugin Chart.js
 // ships (Chart.register(...registerables)) — radar, polar area, bubble,
@@ -431,11 +431,7 @@ export function chartRevStreams() {
 export function chartRevVsPayroll() {
   // null when revenue_operating is 0 for a season — avoids plotting
   // Infinity/NaN, matching the guard metrics.js uses for the same ratio.
-  const ratios = state.annual.map((d) =>
-    d.revenue_operating !== 0
-      ? Math.abs(d.personnel_costs) / d.revenue_operating
-      : null,
-  );
+  const ratios = state.annual.map((d) => wageBillRatio(d));
   // Same canonical cutoffs as the health-check card and chartPayrollBurden —
   // healthThresholds.js exists precisely so these can't drift apart.
   const { warn, danger } = HEALTH_THRESHOLDS.payrollRatio;
@@ -878,11 +874,10 @@ export function chartAnnualNet() {
 export function chartPayrollBurden() {
   // null when revenue_operating is 0 for a season — avoids plotting
   // Infinity/NaN.
-  const ratios = state.annual.map((d) =>
-    d.revenue_operating !== 0
-      ? (Math.abs(d.personnel_costs) / d.revenue_operating) * 100
-      : null,
-  );
+  const ratios = state.annual.map((d) => {
+    const r = wageBillRatio(d);
+    return r !== null ? r * 100 : null;
+  });
   // HEALTH_THRESHOLDS stores payrollRatio as a fraction (0.6 = 60%) to match
   // metrics.js's calculateHealthSignals(), which uses the same cutoffs for
   // the health-check card right next to this chart — scale to the 0-100
@@ -1052,10 +1047,9 @@ export function chartTransferReliance() {
 }
 
 export function chartDebtLoad() {
-  const netDebtRatio = state.annual.map((d) => {
-    const netDebt = d.borrowings_nc + d.borrowings_c - d.cash;
-    return d.revenue_operating !== 0 ? netDebt / d.revenue_operating : null;
-  });
+  const netDebtRatio = state.annual.map((d) =>
+    d.revenue_operating !== 0 ? netDebt(d) / d.revenue_operating : null,
+  );
   // HEALTH_THRESHOLDS.netDebtRatio is already in "× revenue" multiples, the
   // same unit this chart displays — no scaling needed, unlike the two
   // percentage-based charts above.

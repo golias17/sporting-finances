@@ -1,5 +1,6 @@
 import { state } from "./state.js";
 import { fmtMillions } from "./chartUtils.js";
+import { netDebt } from "./metrics.js";
 
 // DATA TABLE RENDER
 // =============================================================
@@ -49,7 +50,7 @@ const getFields = () => [
     label: state.isPt ? "Caixa e Equivalentes" : "Cash & Equivalents",
   },
   {
-    compute: (d) => d.borrowings_nc + d.borrowings_c - d.cash,
+    compute: (d) => netDebt(d),
     label: state.isPt ? "Dívida Líquida" : "Net Debt",
   },
   {

@@ -3,6 +3,8 @@ import {
   calculateKpis,
   calculateHealthSignals,
   ordinal,
+  netDebt,
+  wageBillRatio,
 } from "../src/metrics.js";
 import {
   fmtMillions,
@@ -64,6 +66,51 @@ describe("ordinal()", () => {
   it("formats 11 as 11th", () => expect(ordinal(11)).toBe("11th"));
   it("formats 12 as 12th", () => expect(ordinal(12)).toBe("12th"));
   it("formats 21 as 21st", () => expect(ordinal(21)).toBe("21st"));
+});
+
+// ---------------------------------------------------------------------------
+// netDebt() / wageBillRatio() — shared formula helpers extracted out of the
+// six places (compare.js, charts.js, data-table.js, pdfGenerator.js, and
+// twice within calculateHealthSignals() itself) that used to hand-compute
+// these independently. Direct coverage here guards the formula itself,
+// separate from any one caller's rendering/formatting around it.
+// ---------------------------------------------------------------------------
+
+describe("netDebt()", () => {
+  it("sums non-current and current borrowings, minus cash", () => {
+    expect(
+      netDebt({ borrowings_nc: 100000, borrowings_c: 20000, cash: 1300 }),
+    ).toBe(118700);
+  });
+
+  it("can go negative when cash exceeds total borrowings", () => {
+    expect(
+      netDebt({ borrowings_nc: 1000, borrowings_c: 500, cash: 5000 }),
+    ).toBe(-3500);
+  });
+});
+
+describe("wageBillRatio()", () => {
+  it("returns personnel costs as a positive fraction of revenue", () => {
+    expect(
+      wageBillRatio({ personnel_costs: -18000, revenue_operating: 30000 }),
+    ).toBeCloseTo(0.6, 5);
+  });
+
+  it("returns null when revenue is zero", () => {
+    expect(
+      wageBillRatio({ personnel_costs: -18000, revenue_operating: 0 }),
+    ).toBeNull();
+  });
+
+  it("returns null when revenue is missing or non-finite", () => {
+    expect(
+      wageBillRatio({ personnel_costs: -18000, revenue_operating: undefined }),
+    ).toBeNull();
+    expect(
+      wageBillRatio({ personnel_costs: -18000, revenue_operating: NaN }),
+    ).toBeNull();
+  });
 });
 
 // ---------------------------------------------------------------------------

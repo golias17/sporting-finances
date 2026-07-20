@@ -19,6 +19,34 @@ export function getLatestH1Data(dataset) {
 // -----------------------------------------------------------------
 
 /**
+ * Net debt (non-current + current borrowings, minus cash) for a single
+ * season entry. This exact formula used to be hand-copied inline in six
+ * different places (compare.js, charts.js, data-table.js, pdfGenerator.js,
+ * and twice within calculateHealthSignals() below) — the same kind of
+ * independent-copy drift that caused this project's chartUtils.js palette
+ * bug and bonds.js's saving-sign bug earlier on. One shared helper means
+ * a future change to how net debt is defined only has to happen once.
+ */
+export function netDebt(d) {
+  return d.borrowings_nc + d.borrowings_c - d.cash;
+}
+
+/**
+ * Personnel costs as a fraction (0-1) of operating revenue for a single
+ * season entry, or null when revenue is zero/missing/non-finite. Shared by
+ * calculateHealthSignals() (current value + sparkline history) and
+ * compare.js's wage-bill comparison instead of each hand-rolling
+ * Math.abs(personnel_costs) / revenue_operating — compare.js's version
+ * already checked Number.isFinite() in addition to !== 0 (metrics.js's own
+ * copy didn't), so that's the contract this shared helper keeps.
+ */
+export function wageBillRatio(d) {
+  return Number.isFinite(d.revenue_operating) && d.revenue_operating !== 0
+    ? Math.abs(d.personnel_costs) / d.revenue_operating
+    : null;
+}
+
+/**
  * Revenue growth of season `idx` vs `span` seasons prior, as a whole-percent
  * string (e.g. "131"), or null when there isn't enough history.
  */
@@ -227,13 +255,9 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
   const histStartIdx = Math.max(0, idx - 4);
   const histData = state.annual.slice(histStartIdx, idx + 1);
 
-  const payrollRatio =
-    d.revenue_operating !== 0
-      ? Math.abs(d.personnel_costs) / d.revenue_operating
-      : null;
-  const netDebt = d.borrowings_nc + d.borrowings_c - d.cash;
+  const payrollRatio = wageBillRatio(d);
   const netDebtRatio =
-    d.revenue_operating !== 0 ? netDebt / d.revenue_operating : null;
+    d.revenue_operating !== 0 ? netDebt(d) / d.revenue_operating : null;
   const transferReliance =
     d.revenue_operating + d.player_transfer_income !== 0
       ? d.player_transfer_income /
@@ -342,11 +366,7 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
             : payrollRatio < HEALTH_THRESHOLDS.payrollRatio.danger
               ? payrollNotes.mid
               : payrollNotes.high,
-      history: histData.map((y) =>
-        y.revenue_operating !== 0
-          ? Math.abs(y.personnel_costs) / y.revenue_operating
-          : null,
-      ),
+      history: histData.map((y) => wageBillRatio(y)),
     },
     {
       id: "sigDebt",
@@ -387,9 +407,7 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
                   ? "Muito elevada — crise"
                   : "Very high — crisis territory",
       history: histData.map((y) =>
-        y.revenue_operating !== 0
-          ? (y.borrowings_nc + y.borrowings_c - y.cash) / y.revenue_operating
-          : null,
+        y.revenue_operating !== 0 ? netDebt(y) / y.revenue_operating : null,
       ),
     },
     {

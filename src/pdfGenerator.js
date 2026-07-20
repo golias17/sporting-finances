@@ -5,6 +5,7 @@ import {
   getLatestH1Data,
   revenueGrowthPct,
   consecutiveProfitableYears,
+  netDebt,
 } from "./metrics.js";
 import { getBrandColors, hexToRgbArray } from "./chartUtils.js";
 
@@ -312,8 +313,7 @@ function drawCoverPage(ctx, { revGrowthLabel, netResultLabel, equityLabel, execu
     equityLabel,
   );
 
-  const nd =
-    latestSeason.borrowings_nc + latestSeason.borrowings_c - latestSeason.cash;
+  const nd = netDebt(latestSeason);
   // revenue_operating is the divisor here — if it's ever 0/null/undefined
   // (e.g. an in-progress season with no revenue booked yet), nd / 0 is NaN
   // or Infinity, which used to print literally as "NaN x"/"Infinity x" in
