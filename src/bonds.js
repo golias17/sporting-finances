@@ -66,8 +66,8 @@ export function renderVmocCost() {
       season: "2019/20",
       period: "vmoc",
       note: state.isPt
-        ? "Ano de custo máximo — VMOCs (€135M) + titularização Lion Finance Nº 1 ativos em simultâneo em ano completo"
-        : "Peak cost year — VMOCs (€135M) + Lion Finance No. 1 securitization in full force simultaneously",
+        ? "Ano de custo máximo da era VMOC — VMOCs (€135M) + titularização Lion Finance Nº 1 ativos em simultâneo em ano completo (a era USPP, a partir de 2024/25, ultrapassa este valor)"
+        : "Peak cost year of the VMOC era — VMOCs (€135M) + Lion Finance No. 1 securitization in full force simultaneously (the USPP era, from 2024/25, exceeds this)",
     },
     {
       season: "2020/21",
@@ -158,7 +158,7 @@ export function renderVmocCost() {
       </div>
       <div class="vmoc-kpi-item">
         <div class="vk-label">${state.isPt ? "Custo finan. líquido após conversão das VMOCs (2023/24)" : "Net financing cost after VMOC conversion (2023/24)"}</div>
-        <div class="vk-value pos">${fmtMillions(postConvResult)}</div>
+        <div class="vk-value neg">${fmtMillions(postConvResult)}</div>
         <div class="vk-note">${state.isPt ? `Poupança de ~${fmtMillions(postConvResult - vmocAvg)}/ano face à média da era VMOC — antes do impacto do USPP` : `Saving of ~${fmtMillions(postConvResult - vmocAvg)}/yr vs the VMOC era average — before USPP kicks in`}</div>
       </div>
     </div>`;
@@ -183,9 +183,13 @@ export function renderVmocCost() {
   // Format as a positive cost figure (e.g. "€25.2M") for the tooltip label.
   const peakFmtLabel = fmtMillions(peakFinancingCost);
 
+  const tableCaption = state.isPt
+    ? "Custo de financiamento líquido por época, 2012/13–2024/25"
+    : "Net financing cost by season, 2012/13–2024/25";
+
   let html =
     legend +
-    `<div class="scroll-x"><table class="vmoc-cost"><thead><tr><th>${state.isPt ? "Época" : "Season"}</th><th>${state.isPt ? "Período" : "Period"}</th><th>${state.isPt ? "Custo de finan. líquido" : "Net financing cost"}</th><th>${state.isPt ? "Escala" : "Scale"}</th><th>${state.isPt ? "Composição deste valor" : "What's inside this number"}</th></tr></thead><tbody>`;
+    `<div class="scroll-x"><table class="vmoc-cost"><caption class="sr-only">${tableCaption}</caption><thead><tr><th>${state.isPt ? "Época" : "Season"}</th><th>${state.isPt ? "Período" : "Period"}</th><th>${state.isPt ? "Custo de finan. líquido" : "Net financing cost"}</th><th>${state.isPt ? "Escala" : "Scale"}</th><th>${state.isPt ? "Composição deste valor" : "What's inside this number"}</th></tr></thead><tbody>`;
   rows.forEach((r) => {
     // Use fullAnnual (not state.annual) so every row in this table is always
     // shown regardless of the active global era filter — this is a fixed
@@ -423,7 +427,7 @@ export function renderLionFinance() {
       ${row(state.isPt ? "Entidade Emitente (SPV)" : "SPV", "Sagasta Finance STC")}
       ${row(state.isPt ? "Garantia" : "Collateral", state.isPt ? "Contrato de TV da NOS" : "NOS TV contract", state.isPt ? "Mesmo contrato de Dez 2015 da LF Nº 1" : "Same Dec 2015 contract as LF No. 1")}
       ${row(state.isPt ? "Total emitido" : "Total issued", "€113.9M", state.isPt ? "Dividido entre a Sporting SAD e a Sporting Comunicação e Plataformas" : "Split between Sporting SAD and Sporting Comunicação e Plataformas")}
-      ${row(state.isPt ? "Aumento líquido face à LF Nº 1" : "Net increase over LF No. 1", "~€50.1M", state.isPt ? "Maior montante libertado pelo melhor perfil de crédito e maior maturidade do contrato NOS" : "Larger pool unlocked by stronger credit profile and longer NOS contract runway")}
+      ${row(state.isPt ? "Aumento face à emissão original da LF Nº 1 (2019)" : "Increase over LF No. 1's original 2019 issuance", "~€50.1M", state.isPt ? "Face aos €64,0M originais de 2019, antes dos aumentos de 2022; maior montante libertado pelo melhor perfil de crédito e maior maturidade do contrato NOS" : "Vs. LF No. 1's original €64.0M from 2019, before the 2022 top-ups; larger pool unlocked by stronger credit profile and longer NOS contract runway")}
       ${row(state.isPt ? "Exposição bancária residual" : "Bank exposure after", state.isPt ? "Apenas Sagasta" : "Sagasta only", state.isPt ? 'Saída total do Novo Banco; fim de todos os "banking covenants"' : "Novo Banco fully exited; all banking covenants ended")}
       ${row(state.isPt ? "Reembolsado" : "Repaid", state.isPt ? "23 Out 2025" : "Oct 23, 2025", state.isPt ? "68.792.338,48 € — voto unânime dos obrigacionistas" : "€68,792,338.48 — unanimous bondholder vote", "warn")}
       ${row(state.isPt ? "Origem do reembolso" : "Source of repayment", state.isPt ? "Fundos obtidos com o USPP" : "USPP proceeds", state.isPt ? "Obrigações USPP emitidas a 22 Out 2025 — LF Nº 2 reembolsada no dia seguinte" : "USPP bond closed Oct 22, 2025 — repaid LF No. 2 the following day", "accent")}
