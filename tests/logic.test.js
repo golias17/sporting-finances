@@ -462,6 +462,60 @@ describe("calculateKpis()", () => {
     expect(h1Kpi.cls).toBe("pos");
   });
 
+  it("formats the squad market value KPI's period from a valid H1 period_end", () => {
+    const state = makeState();
+    state.DATASET = {
+      annual_data: state.annual,
+      h1_25: {
+        label: "25/26",
+        period_end: "2025-12-31",
+        net_result: 15000,
+        squad_market_value: 65000,
+      },
+    };
+    const kpis = calculateKpis(state, 0, fmtMillions);
+    const sqMvKpi = kpis.find((k) => k.label.includes("market value"));
+    expect(sqMvKpi.label).toContain("Dec 25");
+  });
+
+  // Regression test: h1Data.period_end used to be parsed with no validity
+  // check — new Date(undefined) / new Date("not-a-date") is an Invalid
+  // Date, and toLocaleDateString() on one silently returns the literal
+  // string "Invalid Date", which flowed straight into this KPI's label
+  // instead of failing loudly or falling back to something sensible.
+  it("falls back to the H1 entry's own label when period_end is missing or malformed", () => {
+    const state = makeState();
+    state.DATASET = {
+      annual_data: state.annual,
+      h1_25: {
+        label: "2025/26 H1",
+        period_end: "not-a-real-date",
+        net_result: 15000,
+        squad_market_value: 65000,
+      },
+    };
+    const kpis = calculateKpis(state, 0, fmtMillions);
+    const sqMvKpi = kpis.find((k) => k.label.includes("market value"));
+    expect(sqMvKpi.label).toContain("2025/26 H1");
+    expect(sqMvKpi.label).not.toContain("Invalid Date");
+  });
+
+  it("falls back to a generic placeholder when period_end is malformed and the H1 entry has no label either", () => {
+    const state = makeState();
+    state.DATASET = {
+      annual_data: state.annual,
+      h1_25: {
+        period_end: undefined,
+        net_result: 15000,
+        squad_market_value: 65000,
+      },
+    };
+    const kpis = calculateKpis(state, 0, fmtMillions);
+    const sqMvKpi = kpis.find((k) => k.label.includes("market value"));
+    expect(sqMvKpi.label).toContain("current period");
+    expect(sqMvKpi.label).not.toContain("Invalid Date");
+  });
+
   it("computes the 5-year revenue growth against idx - 5, matching calculateHealthSignals", () => {
     const seasons = Array.from({ length: 7 }, (_, i) => ({
       ...makeState().annual[0],

@@ -4,6 +4,14 @@ import { fmtMillions } from "./chartUtils.js";
 // BONDS & DEBT ERA DETAILS
 // =============================================================
 export function renderVmocCost() {
+  // Guarded up front, unlike the two .innerHTML writes below used to be —
+  // matches the defensive style used elsewhere in the app (e.g.
+  // transfers.js/story.js) instead of throwing if either container is ever
+  // missing from the page.
+  const kpisEl = document.getElementById("vmocCostKpis");
+  const tableEl = document.getElementById("vmocCostTable");
+  if (!kpisEl || !tableEl) return;
+
   const rows = [
     {
       season: "2012/13",
@@ -136,7 +144,7 @@ export function renderVmocCost() {
   // (vmocAvg - postConvResult), which is negative in every realistic case —
   // producing a "Saving of ~€−6.3M/yr" caption with a minus sign attached
   // to the word "saving".
-  document.getElementById("vmocCostKpis").innerHTML = `
+  kpisEl.innerHTML = `
     <div class="vmoc-kpi-strip">
       <div class="vmoc-kpi-item">
         <div class="vk-label">${state.isPt ? "Custo finan. líquido total · Era VMOC (2014/15–2021/22)" : "Total net financing cost · VMOC era (2014/15–2021/22)"}</div>
@@ -214,10 +222,13 @@ export function renderVmocCost() {
     <td>${state.isPt ? `Média de ${fmtMillions(vmocAvg)}/ano · todos os instrumentos combinados` : `Avg ${fmtMillions(vmocAvg)}/yr · all instruments combined`}</td>
   </tr>`;
   html += "</tbody></table></div>";
-  document.getElementById("vmocCostTable").innerHTML = html;
+  tableEl.innerHTML = html;
 }
 
 export function renderUsppTerms() {
+  const container = document.getElementById("usppTerms");
+  if (!container) return;
+
   const terms = [
     {
       label: state.isPt ? "Instrumento" : "Instrument",
@@ -340,7 +351,7 @@ export function renderUsppTerms() {
     },
   ];
 
-  document.getElementById("usppTerms").innerHTML = `
+  container.innerHTML = `
     <div class="uspp-grid">
       ${terms
         .map((t) => {

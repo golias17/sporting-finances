@@ -1084,10 +1084,24 @@ function drawTransfersLedgerPages(ctx) {
 export async function generateCuratedPdf(options = {}) {
   const {
     lang = state.isPt ? "pt" : "en",
-    pages = [true, true, true, true, true],
+    pages: requestedPages = [true, true, true, true, true],
     executiveNote = "",
   } = options;
   if (!state.DATASET) return;
+
+  // pages[4] (transfers ledger) needs state.TRANSFER_LEDGER populated —
+  // drawTransfersLedgerPages() below iterates it unconditionally and would
+  // throw if it's unset. Force that page off here rather than letting it
+  // throw partway through rendering (only state.DATASET is checked above),
+  // and do it before totalPages is computed so the page-count/pagination
+  // header ("Page X of Y") stays consistent with what's actually drawn —
+  // copies the array rather than mutating the caller's `options.pages`.
+  const hasTransferLedger =
+    Array.isArray(state.TRANSFER_LEDGER) && state.TRANSFER_LEDGER.length > 0;
+  const pages = [...requestedPages];
+  if (pages[4] && !hasTransferLedger) {
+    pages[4] = false;
+  }
 
   // Load the brand logo
   let logoBase64 = null;

@@ -265,6 +265,23 @@ describe("pdfGenerator.js", () => {
     expect(calls.some((t) => t === PAGE_MARKERS[4])).toBe(true);
   });
 
+  // Regression test: drawTransfersLedgerPages() (pages[4]) iterates
+  // state.TRANSFER_LEDGER unconditionally — with only state.DATASET
+  // checked up front, requesting that page while the ledger is unset used
+  // to throw partway through rendering instead of degrading gracefully.
+  it("silently skips the transfers ledger page (without throwing) when TRANSFER_LEDGER is empty, but still draws the rest", async () => {
+    state.TRANSFER_LEDGER = [];
+    // If this still threw partway through, the missing `await` rejection
+    // would fail the test on its own — no extra assertion needed for that.
+    await generateCuratedPdf({ pages: [true, false, false, false, true] });
+
+    const docInstance = vi.mocked(jsPDF).mock.results[0].value;
+    const calls = textOf(docInstance);
+    expect(calls.some((t) => t === PAGE_MARKERS[0])).toBe(true); // cover still drew
+    expect(calls.some((t) => t === PAGE_MARKERS[4])).toBe(false); // ledger page skipped
+    expect(docInstance.save).toHaveBeenCalled();
+  });
+
   it("returns without saving a PDF when every page is deselected", async () => {
     await generateCuratedPdf({ pages: [false, false, false, false, false] });
     // jsPDF is still instantiated before the empty-selection check runs,

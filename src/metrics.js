@@ -65,7 +65,18 @@ export function calculateKpis(state, idx, fmtMillions) {
 
   if (isLatest && h1Data) {
     let h1PeriodLabel;
-    if (state.isPt) {
+    // If period_end is missing or malformed, `new Date(...)` produces an
+    // Invalid Date, and toLocaleDateString() on that silently returns the
+    // literal string "Invalid Date" — which would otherwise flow straight
+    // into a headline KPI label ("Squad market value (Invalid Date)")
+    // instead of failing loudly. Fall back to the h1 entry's own `label`
+    // field (every h1_* dataset entry carries one, e.g. "2025/26 H1").
+    const parsedPeriodEnd = new Date(h1Data.period_end);
+    const hasValidPeriodEnd = !isNaN(parsedPeriodEnd.getTime());
+    if (!hasValidPeriodEnd) {
+      h1PeriodLabel =
+        h1Data.label || (state.isPt ? "período atual" : "current period");
+    } else if (state.isPt) {
       const monthsPt = {
         Jan: "Jan",
         Feb: "Fev",
@@ -80,14 +91,14 @@ export function calculateKpis(state, idx, fmtMillions) {
         Nov: "Nov",
         Dec: "Dez",
       };
-      const rawLabel = new Date(h1Data.period_end).toLocaleDateString("en-GB", {
+      const rawLabel = parsedPeriodEnd.toLocaleDateString("en-GB", {
         month: "short",
         year: "2-digit",
       });
       const [m, y] = rawLabel.split(" ");
       h1PeriodLabel = `${monthsPt[m] || m} ${y}`;
     } else {
-      h1PeriodLabel = new Date(h1Data.period_end).toLocaleDateString("en-GB", {
+      h1PeriodLabel = parsedPeriodEnd.toLocaleDateString("en-GB", {
         month: "short",
         year: "2-digit",
       });

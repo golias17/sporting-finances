@@ -46,6 +46,14 @@ describe("bonds.js", () => {
       const table = document.getElementById("vmocCostTable");
       expect(table.innerHTML).toContain("Acumulado · Era VMOC (2014/15–2021/22)");
     });
+
+    it("does nothing (no throw) when the KPI or table container is missing from the page", () => {
+      document.getElementById("vmocCostKpis").remove();
+      expect(() => renderVmocCost()).not.toThrow();
+      // The table container is untouched too — this is a genuine early
+      // return, not a partial render.
+      expect(document.getElementById("vmocCostTable").innerHTML).toBe("");
+    });
   });
 
   describe("renderVmocCost — computed values", () => {
@@ -117,6 +125,11 @@ describe("bonds.js", () => {
 
       const terms = document.getElementById("usppTerms");
       expect(terms.innerHTML).toContain("Transformação do Estádio Alvalade");
+    });
+
+    it("does nothing (no throw) when the usppTerms container is missing from the page", () => {
+      document.getElementById("usppTerms").remove();
+      expect(() => renderUsppTerms()).not.toThrow();
     });
   });
 
