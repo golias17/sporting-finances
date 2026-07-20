@@ -1,8 +1,9 @@
 import { state } from "./state.js";
-import { styledLineDataset, getBrandColors } from "./chartUtils.js";
+import { styledLineDataset, getBrandColors, fmtMillions } from "./chartUtils.js";
 import { mkChart } from "./charts.js";
 import { syncStateToUrl } from "./urlSync.js";
 import { debounce } from "./utils.js";
+import { HEALTH_THRESHOLDS } from "./healthThresholds.js";
 
 // Defensive fallback for the (in practice, always-initialized-by-boot)
 // case where a chart is drawn before initChartDefaults() has populated
@@ -105,6 +106,17 @@ const PRESETS = {
   },
 };
 
+// UCL prize money is not "free" revenue: qualifying for a deep run comes
+// with real offsetting costs the model used to ignore entirely — bigger
+// squad bonus payouts, extra travel/logistics, more matchday operational
+// spend. Modeled as a flat percentage of the prize money itself (not the
+// +€8M commercial/matchday spillover computed alongside it below, which
+// isn't bonus-triggering), charged against payroll. This is a simplifying
+// assumption — the club doesn't publish a bonus schedule broken out by UCL
+// round — chosen so the tool doesn't present qualifying for Europe as a
+// pure win with zero downside, which is what it did before this existed.
+const UCL_BONUS_COST_RATE = 0.15;
+
 // Pure projection model: given the fixed 2024/25 baseline season and a set
 // of slider inputs, returns the modeled 2025/26 P&L/balance-sheet figures
 // (in EUR thousands, matching financials.json's convention). Extracted so
@@ -131,7 +143,10 @@ function computeProjection(
     BASELINE.revenue_operating * (1 + (revGrowthAdj || 0) / 100) +
     uclPrize * 1000 +
     (uclPrize > 0 ? 8000 : 0);
-  const payroll = BASELINE.personnel_costs * (1 + payrollAdj / 100);
+  // See UCL_BONUS_COST_RATE's comment above.
+  const uclBonusCost = uclPrize > 0 ? uclPrize * 1000 * UCL_BONUS_COST_RATE : 0;
+  const payroll =
+    BASELINE.personnel_costs * (1 + payrollAdj / 100) - uclBonusCost;
   const overhead = BASELINE.external_supplies * (1 + capexAdj / 100);
 
   // Use exact baseline player transfer income when salesTarget is at its
@@ -482,8 +497,129 @@ export function drawPlaygroundCharts() {
     baseline.cash / 1000,
   );
 
+  // Absolute-value health read for Equity/Cash (see equityZoneInfo()/
+  // cashZoneInfo() below) — separate from updateKpi()'s pos/neg coloring
+  // above, which only says whether the projection beats the baseline, not
+  // whether it's healthy in its own right. Soft-guarded individually
+  // (rather than joining the big guard at the top of this function) since
+  // these are purely additive: a missing zone/verdict element shouldn't
+  // block the core KPI numbers from updating.
+  const eqZoneEl = document.getElementById("pgKpiEqZone");
+  if (eqZoneEl) {
+    const zone = equityZoneInfo(proj.equity);
+    eqZoneEl.innerHTML = `<span class="zone-dot ${zone.cls}"></span> ${zone.text}`;
+  }
+  const cashZoneEl = document.getElementById("pgKpiCashZone");
+  if (cashZoneEl) {
+    const zone = cashZoneInfo(proj.cash);
+    cashZoneEl.innerHTML = `<span class="zone-dot ${zone.cls}"></span> ${zone.text}`;
+  }
+
+  const verdictEl = document.getElementById("pgVerdict");
+  if (verdictEl) {
+    const verdict = buildVerdict(baseline, proj);
+    verdictEl.textContent = verdict.text;
+    verdictEl.classList.toggle("warn", verdict.warn);
+    verdictEl.style.display = "block";
+  }
+
   // Draw Charts
   drawProjectionCharts(baseline, proj);
+}
+
+// Single source of truth for "is this equity/cash figure healthy" is
+// HEALTH_THRESHOLDS (healthThresholds.js) — the same cutoffs the Health
+// Check tab's cards use (see calculateHealthSignals() in metrics.js), so a
+// projected €30M equity reads as the same "green" here as it would on the
+// Health Check tab for a real season. cashZoneInfo()'s wording is taken
+// verbatim from metrics.js's cash signal note for that same consistency;
+// equityZoneInfo()'s amber wording is adapted ("thin buffer" instead of
+// "just turned positive") since this is a forward projection, not a
+// year-over-year trend read.
+function equityZoneInfo(equity) {
+  const { strong, positive } = HEALTH_THRESHOLDS.equity;
+  if (equity > strong) {
+    return {
+      cls: "g",
+      text: state.isPt
+        ? "Capital próprio positivo e sólido"
+        : "Solid positive equity",
+    };
+  }
+  if (equity > positive) {
+    return {
+      cls: "a",
+      text: state.isPt
+        ? "Positivo, mas com margem reduzida"
+        : "Positive, but a thin buffer",
+    };
+  }
+  return {
+    cls: "r",
+    text: state.isPt ? "Insolvência técnica" : "Technically insolvent",
+  };
+}
+
+function cashZoneInfo(cash) {
+  const { warn, danger } = HEALTH_THRESHOLDS.cash;
+  if (cash > warn) {
+    return {
+      cls: "g",
+      text: state.isPt ? "Margem confortável" : "Comfortable buffer",
+    };
+  }
+  if (cash > danger) {
+    return {
+      cls: "a",
+      text: state.isPt ? "Reduzido — risco mensal" : "Thin — one bad month matters",
+    };
+  }
+  return {
+    cls: "r",
+    text: state.isPt ? "Criticamente baixo" : "Critically low",
+  };
+}
+
+// Auto-generated one-line read of the current scenario, in the same
+// build-a-sentence-from-parts style as compare.js's #cmpNarrative — turns
+// the KPI deltas into plain language instead of leaving the user to read
+// four separate numbers and infer the story themselves. Also carries the
+// scenario's one hard warning: if projected cash goes negative, the
+// scenario isn't self-funding as modeled (it would need external financing
+// not represented here), regardless of how good Net Result or Equity look
+// in isolation — a debt-heavy, low-sales scenario can pass every other KPI
+// and still not actually be viable.
+function buildVerdict(baseline, proj) {
+  const netDiff = proj.netResult - baseline.netResult;
+  const eqDiff = proj.equity - baseline.equity;
+  const cashNegative = proj.cash < 0;
+  const flat = Math.abs(netDiff) < 50; // noise floor, well below display rounding
+
+  const parts = [];
+  if (state.isPt) {
+    parts.push(
+      flat
+        ? "Este cenário mantém o resultado líquido em linha com a linha de base."
+        : `Este cenário ${netDiff > 0 ? "melhora" : "reduz"} o resultado líquido em ${fmtMillions(Math.abs(netDiff))} e o capital próprio em ${fmtMillions(Math.abs(eqDiff))} face à linha de base.`,
+    );
+    if (cashNegative) {
+      parts.push(
+        `Atenção: o caixa projetado é negativo (${fmtMillions(proj.cash)}) — este cenário não é autossustentável sem financiamento externo adicional.`,
+      );
+    }
+  } else {
+    parts.push(
+      flat
+        ? "This scenario keeps net result in line with the baseline."
+        : `This scenario ${netDiff > 0 ? "improves" : "reduces"} net result by ${fmtMillions(Math.abs(netDiff))} and equity by ${fmtMillions(Math.abs(eqDiff))} vs. the baseline.`,
+    );
+    if (cashNegative) {
+      parts.push(
+        `Warning: projected cash is negative (${fmtMillions(proj.cash)}) — this scenario isn't self-funding without additional external financing.`,
+      );
+    }
+  }
+  return { text: parts.join(" "), warn: cashNegative };
 }
 
 function updateKpi(cardId, valId, diffId, projVal, baseVal) {
@@ -540,9 +676,16 @@ function drawProjectionCharts(baseline, proj) {
   const { baseline: baselineLabel, projected: projectedLabel } =
     scenarioLabels();
 
+  // Full P&L walk from Revenue down to Net Result — Overhead and Financial
+  // Result used to be left out even though each has its own slider
+  // (Ordinary Overhead Change, Debt Deleveraging); a user moving either one
+  // had no bar in this chart reflecting it at all, only the downstream
+  // effect baked into Net Result. Order follows the income statement.
   const labels = [
     state.isPt ? "Receita" : "Revenue",
     state.isPt ? "Pessoal" : "Payroll",
+    state.isPt ? "Custos Op." : "Overhead",
+    state.isPt ? "Result. Financeiro" : "Financial Result",
     state.isPt ? "Trading" : "Trading Net",
     state.isPt ? "Resultado Líq." : "Net Result",
   ];
@@ -558,6 +701,8 @@ function drawProjectionCharts(baseline, proj) {
           data: [
             baseline.revenue / 1000,
             baseline.payroll / 1000,
+            baseline.overhead / 1000,
+            baseline.financialResult / 1000,
             baseline.netTrading / 1000,
             baseline.netResult / 1000,
           ],
@@ -570,6 +715,8 @@ function drawProjectionCharts(baseline, proj) {
           data: [
             proj.revenue / 1000,
             proj.payroll / 1000,
+            proj.overhead / 1000,
+            proj.financialResult / 1000,
             proj.netTrading / 1000,
             proj.netResult / 1000,
           ],

@@ -2672,6 +2672,7 @@
                 <div class="label" data-i18n="pg-kpi-eq">Projected Equity</div>
                 <div class="value" id="pgKpiEq">—</div>
                 <div class="change" id="pgKpiEqDiff"></div>
+                <div class="pg-zone" id="pgKpiEqZone"></div>
               </div>
               <div class="kpi" id="pgCardCash">
                 <div class="label" data-i18n="pg-kpi-cash">
@@ -2679,8 +2680,16 @@
                 </div>
                 <div class="value" id="pgKpiCash">—</div>
                 <div class="change" id="pgKpiCashDiff"></div>
+                <div class="pg-zone" id="pgKpiCashZone"></div>
               </div>
             </div>
+
+            <!-- Auto-generated one-line read of the current scenario (see
+                 buildVerdict() in playground.js), in the same
+                 build-a-sentence style as the Compare tab's #cmpNarrative.
+                 Hidden until JS populates it, so nothing shows before the
+                 first real computation. -->
+            <div class="pg-verdict" id="pgVerdict"></div>
 
             <!-- Charts Side-by-Side -->
             <div class="playground-charts-container">

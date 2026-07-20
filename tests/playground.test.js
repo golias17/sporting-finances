@@ -87,12 +87,16 @@ describe("playground.js CFO Simulator", () => {
           <div class="kpi" id="pgCardEq">
             <div class="value" id="pgKpiEq">€40.9M</div>
             <div class="change" id="pgKpiEqDiff">no change</div>
+            <div class="pg-zone" id="pgKpiEqZone"></div>
           </div>
           <div class="kpi" id="pgCardCash">
             <div class="value" id="pgKpiCash">€7.0M</div>
             <div class="change" id="pgKpiCashDiff">no change</div>
+            <div class="pg-zone" id="pgKpiCashZone"></div>
           </div>
         </div>
+
+        <div class="pg-verdict" id="pgVerdict"></div>
 
         <div class="card">
           <div class="card-head"><h3>Simulated Financials vs. Baseline</h3></div>
@@ -189,18 +193,20 @@ describe("playground.js CFO Simulator", () => {
     // matching the <select>'s `selected` option — see the comment on
     // DEFAULT_INPUTS in src/playground.js) instead of no European football
     // at all, so the default projection bakes in +€47M prize + €8M
-    // commercial spillover on top of the raw 2024/25 actuals.
+    // commercial spillover on top of the raw 2024/25 actuals, minus a 15%
+    // UCL bonus/logistics cost charged against payroll (see
+    // UCL_BONUS_COST_RATE in src/playground.js — €47M * 15% = €7.05M).
     expect(document.getElementById("pgKpiRev").textContent).toBe("€203.1M");
-    expect(document.getElementById("pgKpiNet").textContent).toBe("€75.0M");
+    expect(document.getElementById("pgKpiNet").textContent).toBe("€68.0M");
     // pgKpiEq always displays the *projected* (2025/26) closing equity:
     // 2024/25's closing equity (€40.9M) plus a full projected season's net
-    // result (€75.0M under the default Round-of-16 assumption), i.e.
-    // €116.0M.
-    expect(document.getElementById("pgKpiEq").textContent).toBe("€116.0M");
+    // result (€68.0M under the default Round-of-16 assumption net of the
+    // UCL bonus cost), i.e. €108.9M.
+    expect(document.getElementById("pgKpiEq").textContent).toBe("€108.9M");
     // BASELINE.cash comes from financials.json's real 2024/25 entry
     // instead of a stale hardcoded literal (which was €7.0M vs the actual
     // €15.6M) — see getBaseline() in src/playground.js.
-    expect(document.getElementById("pgKpiCash").textContent).toBe("€70.6M");
+    expect(document.getElementById("pgKpiCash").textContent).toBe("€63.5M");
 
     // Every KPI is compared against a *computed* "no changes" scenario
     // (computeProjection() at DEFAULT_INPUTS), not against the raw 2024/25
@@ -241,8 +247,8 @@ describe("playground.js CFO Simulator", () => {
     );
     const [baselineEquity, projectedEquity] =
       solvencyChart.config.data.datasets[0].data;
-    expect(baselineEquity).toBeCloseTo(115.951, 2);
-    expect(projectedEquity).toBeCloseTo(115.951, 2);
+    expect(baselineEquity).toBeCloseTo(108.901, 2);
+    expect(projectedEquity).toBeCloseTo(108.901, 2);
     expect(baselineEquity).toBeCloseTo(projectedEquity, 6);
   });
 
@@ -270,9 +276,13 @@ describe("playground.js CFO Simulator", () => {
       "-7.0M vs baseline",
     );
 
-    // Net Result and Equity should also increase by €48M
-    expect(document.getElementById("pgKpiNet").textContent).toBe("€68.0M");
-    expect(document.getElementById("pgKpiEq").textContent).toBe("€109.0M");
+    // Net Result and Equity drop by less than the €7M revenue swing: the
+    // UCL bonus cost (see UCL_BONUS_COST_RATE in src/playground.js) also
+    // shrinks with the smaller prize (15% of €40M vs 15% of €47M is €1.05M
+    // less payroll cost), partially offsetting the lower prize money, so
+    // the net drop is ~€6M rather than the full €7M.
+    expect(document.getElementById("pgKpiNet").textContent).toBe("€62.0M");
+    expect(document.getElementById("pgKpiEq").textContent).toBe("€103.0M");
   });
 
   it("should decrease net result when payroll is increased", () => {
@@ -285,17 +295,19 @@ describe("playground.js CFO Simulator", () => {
     vi.useRealTimers();
 
     // Baseline payroll is -87,736. A 10% increase is +8,773.6 expense, so Net
-    // Result decreases relative to the default projection's €75.0M (see
-    // DEFAULT_INPUTS's comment in src/playground.js for why 75.0 and not
-    // 20.0 — it assumes a Round of 16 UCL run, not no European football).
-    expect(document.getElementById("pgKpiNet").textContent).not.toBe("€75.0M");
+    // Result decreases relative to the default projection's €68.0M (see
+    // DEFAULT_INPUTS's comment in src/playground.js for why not 20.0 — it
+    // assumes a Round of 16 UCL run, not no European football; the €68.0M
+    // rather than €75.0M also nets out the UCL bonus cost — see
+    // UCL_BONUS_COST_RATE).
+    expect(document.getElementById("pgKpiNet").textContent).not.toBe("€68.0M");
     const netVal = parseFloat(
       document
         .getElementById("pgKpiNet")
         .textContent.replace("€", "")
         .replace("M", ""),
     );
-    expect(netVal).toBeLessThan(75.0);
+    expect(netVal).toBeLessThan(68.0);
   });
 
   it("should reset variables when reset button is clicked", () => {
@@ -438,8 +450,123 @@ describe("playground.js CFO Simulator", () => {
     initPlayground();
     const table = document.getElementById("chartPlaygroundSolvency-a11y-table");
     const bodyText = table.querySelector("tbody").textContent;
-    expect(bodyText).toContain("€116.0M");
-    expect(bodyText).toMatch(/24\.4%/);
+    expect(bodyText).toContain("€108.9M");
+    expect(bodyText).toMatch(/23\.2%/);
+  });
+
+  it("shows a green health zone on Equity and Cash when the baseline scenario is comfortably healthy", () => {
+    // Regression test for equityZoneInfo()/cashZoneInfo() in playground.js:
+    // the KPI cards' pos/neg coloring only says whether the projection beats
+    // the baseline, not whether the absolute figure is actually healthy.
+    // At DEFAULT_INPUTS, projected equity (€108.9M) and cash (€63.5M) both
+    // clear HEALTH_THRESHOLDS' "strong"/"warn" cutoffs, so both zones should
+    // read green — the same threshold source the Health Check tab uses.
+    initPlayground();
+    const eqZone = document.getElementById("pgKpiEqZone");
+    const cashZone = document.getElementById("pgKpiCashZone");
+    expect(eqZone.querySelector(".zone-dot.g")).not.toBeNull();
+    expect(eqZone.textContent).toMatch(/solid|sólido/i);
+    expect(cashZone.querySelector(".zone-dot.g")).not.toBeNull();
+    expect(cashZone.textContent).toMatch(/comfortable|confortável/i);
+  });
+
+  it("shows a red health zone and a self-funding warning when a scenario drives cash and equity negative", () => {
+    // No European football, payroll/overhead pushed to their maxima, no
+    // player sales, maximum reinvestment in purchases, and maximum debt
+    // repayment funded from a cash pile that isn't there — a scenario that
+    // isn't internally coherent. Verified via a standalone computation
+    // (see the PR/commit description) that this drives both cash and
+    // equity negative.
+    vi.useFakeTimers();
+    initPlayground();
+    document.getElementById("uclSelect").value = "0";
+    document.getElementById("uclSelect").dispatchEvent(new Event("change"));
+    document.getElementById("payrollSlider").value = 30;
+    document
+      .getElementById("payrollSlider")
+      .dispatchEvent(new Event("input"));
+    document.getElementById("salesSlider").value = 0;
+    document.getElementById("salesSlider").dispatchEvent(new Event("input"));
+    document.getElementById("purchasesSlider").value = 100;
+    document
+      .getElementById("purchasesSlider")
+      .dispatchEvent(new Event("input"));
+    document.getElementById("capexSlider").value = 30;
+    document.getElementById("capexSlider").dispatchEvent(new Event("input"));
+    document.getElementById("debtRepaySlider").value = 50;
+    document
+      .getElementById("debtRepaySlider")
+      .dispatchEvent(new Event("input"));
+    document.getElementById("revGrowthSlider").value = -10;
+    document
+      .getElementById("revGrowthSlider")
+      .dispatchEvent(new Event("input"));
+    vi.runAllTimers();
+    vi.useRealTimers();
+
+    const cashZone = document.getElementById("pgKpiCashZone");
+    const eqZone = document.getElementById("pgKpiEqZone");
+    expect(cashZone.querySelector(".zone-dot.r")).not.toBeNull();
+    expect(eqZone.querySelector(".zone-dot.r")).not.toBeNull();
+
+    const verdict = document.getElementById("pgVerdict");
+    expect(verdict.classList.contains("warn")).toBe(true);
+    expect(verdict.textContent).toMatch(/warning|atenção/i);
+    expect(verdict.textContent).toMatch(/self-funding|autossustentável/i);
+  });
+
+  it("renders an auto-generated verdict describing net result and equity vs. the baseline", () => {
+    vi.useFakeTimers();
+    initPlayground();
+    const revGrowthSlider = document.getElementById("revGrowthSlider");
+    revGrowthSlider.value = 10;
+    revGrowthSlider.dispatchEvent(new Event("input"));
+    vi.runAllTimers();
+    vi.useRealTimers();
+
+    const verdict = document.getElementById("pgVerdict");
+    expect(verdict.style.display).toBe("block");
+    expect(verdict.classList.contains("warn")).toBe(false);
+    expect(verdict.textContent).toMatch(/improves net result/i);
+    expect(verdict.textContent).toContain("equity");
+  });
+
+  it("renders the zone tags, verdict and chart labels in Portuguese when state.isPt is true", () => {
+    state.isPt = true;
+    initPlayground();
+
+    const eqZone = document.getElementById("pgKpiEqZone");
+    expect(eqZone.textContent).toMatch(/sólido/i);
+    const verdict = document.getElementById("pgVerdict");
+    expect(verdict.textContent).toMatch(/linha de base/i);
+
+    const netChart = chartRegistry.get("chartPlaygroundNet");
+    expect(netChart.config.data.labels).toEqual([
+      "Receita",
+      "Pessoal",
+      "Custos Op.",
+      "Result. Financeiro",
+      "Trading",
+      "Resultado Líq.",
+    ]);
+  });
+
+  it("includes Overhead and Financial Result as their own columns in the Simulated Financials chart", () => {
+    // Regression test: Ordinary Overhead Change and Debt Deleveraging each
+    // have their own slider but, before this, neither had a visible bar in
+    // this chart — only their downstream effect on Net Result was shown.
+    initPlayground();
+    const netChart = chartRegistry.get("chartPlaygroundNet");
+    expect(netChart.config.data.labels).toEqual([
+      "Revenue",
+      "Payroll",
+      "Overhead",
+      "Financial Result",
+      "Trading Net",
+      "Net Result",
+    ]);
+    expect(netChart.config.data.datasets[0].data.length).toBe(6);
+    expect(netChart.config.data.datasets[1].data.length).toBe(6);
   });
 
   it("does nothing (no throw) when #tab-playground is missing from the page", () => {

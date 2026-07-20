@@ -2285,6 +2285,50 @@ textarea.pdf-field-input {
   }
 }
 
+/* Absolute-value health read for the Equity/Cash KPI cards (see
+   equityZoneInfo()/cashZoneInfo() in playground.js) — reuses .zone-dot's
+   existing g/a/r coloring from the Health Check tab's zone legend instead
+   of inventing a new dot style, so "green" means the same thing in both
+   places. This is deliberately separate from .change's pos/neg coloring
+   just above it: .change says whether the projection is better or worse
+   than the "no changes" baseline, this says whether the projection itself
+   is in healthy territory — a scenario can be an improvement over baseline
+   and still land in the red zone. */
+.pg-zone {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  color: var(--muted);
+}
+
+/* Auto-generated scenario verdict (see buildVerdict() in playground.js),
+   styled like the Compare tab's #cmpNarrative callout for a consistent
+   "auto-narrative" visual language across the app. Hidden until JS
+   populates it (see the display:block toggle in drawPlaygroundCharts()),
+   same reasoning as #cmpNarrative: nothing shows before there's a real
+   scenario to describe. .warn switches the accent to --neg when the
+   scenario's cash goes negative (see UCL_BONUS_COST_RATE / buildVerdict's
+   comments) — that's the one condition worth flagging as louder than a
+   plain informational read. */
+.pg-verdict {
+  display: none;
+  font-family: var(--serif);
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  background: var(--paper);
+  border-left: 3px solid var(--info);
+  padding: 14px 18px;
+  border-radius: var(--radius-xs);
+  margin: 0 0 1.5rem;
+}
+.pg-verdict.warn {
+  border-left-color: var(--neg);
+}
+
 /* One chart per row (each still uses .chart-box.tall for room to breathe)
    instead of squeezing the dual-axis Equity/Solvency chart into half a
    row alongside the Net Results chart. */
