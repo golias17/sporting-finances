@@ -44,13 +44,21 @@ const PALETTE = {
     green: "#0a5d3a",
     greenLight: "#2e9e6c",
     greenSoft: "rgba(10,93,58,0.15)",
-    gold: "#b08923",
-    goldSoft: "rgba(176,137,35,0.4)",
-    pos: "#2e8a55",
-    posSoft: "rgba(46,138,85,0.7)",
+    // gold/pos/warn were darkened to their current values in a WCAG AA
+    // contrast pass (see _variables.css's matching comment) that touched
+    // --gold/--pos/--warn there but missed updating this palette to match
+    // — exactly the "drifted out of sync" failure mode this comment block
+    // warns about above, just a new instance of it. Chart lines/bars and
+    // the PDF export (both derived from this file, not CSS) were rendering
+    // the old, contrast-failing colors while CSS-driven UI text had
+    // already moved to the compliant ones.
+    gold: "#8b6c1c",
+    goldSoft: "rgba(139,108,28,0.4)",
+    pos: "#2a7f4e",
+    posSoft: "rgba(42,127,78,0.7)",
     neg: "#b8403a",
     negSoft: "rgba(184,64,58,0.7)",
-    warn: "#c98c1f",
+    warn: "#956817",
     info: "#2c5b8a",
     infoSoft: "rgba(44,91,138,0.7)",
     lineBorder: "rgba(0, 0, 0, 0.12)",

@@ -292,13 +292,15 @@ function renderNewsItems(container, dataItems, { stale = false } = {}) {
 
     let addedToCluster = false;
     for (const cluster of storyClusters) {
-      const existingWords = cluster.primary.title
-        .toLowerCase()
-        .split(/[\s\W]+/)
-        .filter((w) => w.length > 3 && !stopWords.has(w));
+      // cluster.primaryWords is precomputed once, when the cluster is
+      // created below, and reused here on every subsequent item's
+      // comparison — cluster.primary.title never changes after that point,
+      // so re-tokenizing it from scratch for every incoming item (as this
+      // used to do) was pure repeated work. Also a Set instead of an array
+      // for O(1) membership checks instead of O(n) .includes() per word.
       let overlap = 0;
       for (const w of words) {
-        if (existingWords.includes(w)) overlap++;
+        if (cluster.primaryWords.has(w)) overlap++;
       }
       // If they share 3 or more significant words, they are likely the same topic
       if (overlap >= 3) {
@@ -311,7 +313,11 @@ function renderNewsItems(container, dataItems, { stale = false } = {}) {
       }
     }
     if (!addedToCluster) {
-      storyClusters.push({ primary: item, sources: [item] });
+      storyClusters.push({
+        primary: item,
+        sources: [item],
+        primaryWords: new Set(words),
+      });
     }
   }
 

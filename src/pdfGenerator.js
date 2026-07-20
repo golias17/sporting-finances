@@ -31,8 +31,11 @@ function getBase64ImageFromUrl(url) {
 
 // Format Helper: Millions with spaces before units. Shared by every page —
 // a plain function (not a closure) so it doesn't need to be threaded
-// through the page-drawing functions' context object.
-function fmtM(val) {
+// through the page-drawing functions' context object. Exported (along with
+// the three cell-colorer helpers below) purely so they're unit-testable in
+// isolation — they're pure functions with no jsPDF/canvas dependency,
+// unlike the page-drawing functions around them.
+export function fmtM(val) {
   if (val === null || val === undefined) return "—";
   const sign = val < 0 ? "-" : "";
   return `${sign}${Math.abs(val / 1000).toFixed(1)} M€`;
@@ -48,7 +51,7 @@ function fmtM(val) {
 // Colors a column red if its fmtM()-formatted value starts with "-",
 // green if it's a genuine positive non-zero value, and leaves zero/"—"
 // unstyled.
-function signColorCell(colIndex, colors) {
+export function signColorCell(colIndex, colors) {
   return (cellData) => {
     if (cellData.section !== "body" || cellData.column.index !== colIndex) return;
     const val = cellData.cell.text[0];
@@ -66,7 +69,7 @@ function signColorCell(colIndex, colors) {
 // a "2.0x"-style multiple) — the caller supplies the red/green predicates,
 // since the thresholds and their direction (higher-is-worse vs
 // higher-is-better) differ per column.
-function thresholdColorCell(colIndex, { negativeIf, positiveIf }, colors) {
+export function thresholdColorCell(colIndex, { negativeIf, positiveIf }, colors) {
   return (cellData) => {
     if (cellData.section !== "body" || cellData.column.index !== colIndex) return;
     const str = cellData.cell.text[0];
@@ -84,7 +87,7 @@ function thresholdColorCell(colIndex, { negativeIf, positiveIf }, colors) {
 
 // Combines several column-colorers (each already bound to a `colors`
 // palette) into the single didParseCell callback autoTable expects.
-function combineCellColorers(...colorers) {
+export function combineCellColorers(...colorers) {
   return (cellData) => colorers.forEach((c) => c(cellData));
 }
 

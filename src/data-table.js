@@ -84,20 +84,25 @@ const getFields = () => [
 
 export function renderTable() {
   const fields = getFields();
-  let html = `<table class="data"><thead><tr><th>${state.isPt ? "Métrica" : "Metric"}</th>`;
-  state.annual.forEach((d) => (html += `<th>${d.label}</th>`));
-  html += "</tr></thead><tbody>";
-  fields.forEach((f) => {
-    html += `<tr><td>${f.label}</td>`;
-    state.annual.forEach((d) => {
-      const v = f.compute ? f.compute(d) : d[f.key];
-      const cls = v < 0 ? "neg" : "";
-      html += `<td class="${cls}">${fmtMillions(v)}</td>`;
-    });
-    html += "</tr>";
-  });
-  html += "</tbody></table>";
-  document.getElementById("dataTable").innerHTML = html;
+  // Built via map().join() rather than += inside the nested loop, matching
+  // every other renderer in the codebase (transfers.js, compare.js,
+  // chartUtils.js) — += repeatedly reallocates and copies the growing
+  // string on every iteration, where join() only concatenates once.
+  const headerCells = state.annual.map((d) => `<th>${d.label}</th>`).join("");
+  const bodyRows = fields
+    .map((f) => {
+      const cells = state.annual
+        .map((d) => {
+          const v = f.compute ? f.compute(d) : d[f.key];
+          const cls = v < 0 ? "neg" : "";
+          return `<td class="${cls}">${fmtMillions(v)}</td>`;
+        })
+        .join("");
+      return `<tr><td>${f.label}</td>${cells}</tr>`;
+    })
+    .join("");
+  document.getElementById("dataTable").innerHTML =
+    `<table class="data"><thead><tr><th>${state.isPt ? "Métrica" : "Metric"}</th>${headerCells}</tr></thead><tbody>${bodyRows}</tbody></table>`;
 }
 
 export function initDataExport() {
