@@ -63,6 +63,14 @@ web_modules/
 
 # Output directory (Vite build)
 dist/
+# Ad-hoc build-verification output dirs used during development (vite build
+# --outDir dist_checkN) — a sandbox quirk made the default dist/ name
+# occasionally non-reusable, so each verification run used a fresh numbered
+# name instead. Never meant to be committed.
+dist_check*/
+# Scratch test files renamed out of the *.test.js glob (so vitest skips
+# them) while reproducing a bug, then left in place rather than deleted.
+*.bak
 
 # Editor files
 .DS_Store

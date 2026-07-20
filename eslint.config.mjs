@@ -62,7 +62,9 @@ export default [
     },
   },
   {
-    ignores: ["dist/**", "node_modules/**", "coverage/**"],
+    // dist_check*/ are ad-hoc `vite build --outDir` verification dirs (see
+    // .gitignore) — untracked scratch output, not source to lint.
+    ignores: ["dist/**", "dist_check*/**", "node_modules/**", "coverage/**"],
   },
   prettierConfig,
 ];
