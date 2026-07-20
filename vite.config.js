@@ -94,22 +94,39 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: ["./tests/setup.js"],
     coverage: {
-      // A conservative starting floor, not a precisely-tuned target —
-      // `vitest run --coverage` can't complete inside some sandboxed dev
-      // environments used on this project (it times out before finishing),
-      // so these numbers weren't set against a real measured baseline.
-      // They're deliberately low enough that the current suite (290+
-      // tests as of this change) should clear them comfortably; the goal
-      // is catching an actual regression — e.g. a large deletion of tests,
-      // or a big new untested file — not enforcing a tight target. Once a
-      // real coverage report is available (CI runs `npm test` with
-      // --coverage on every push), raise these to sit just below the
-      // actual measured numbers.
+      // chartUtils.js is a pure `export * from "./x.js"` re-export barrel
+      // (see its own header comment) with no logic of its own — every
+      // symbol it surfaces is fully covered via the source files it
+      // re-exports from (chartPalette.js, chartAnnotations.js,
+      // chartWidgets.js, chartDefaults.js, all otherwise at/near 100%) and
+      // via chartUtils.test.js's own "re-export barrel" suite, which
+      // imports and asserts on every symbol through this exact file.
+      // Despite that, @vitest/coverage-v8 reports it at a flat 0% across
+      // every metric: native ESM `export * from` declarations are resolved
+      // during module linking rather than as instrumentable executed
+      // statements, so V8's coverage collector never records a hit on them
+      // even though the linkage unquestionably runs on every test that
+      // imports through this file. Excluded so that reports don't misread
+      // this as an actual untested file.
+      exclude: ["src/chartUtils.js"],
+      // A starting floor set against a real measured baseline (see the
+      // coverage report below), not a precisely-tuned target — kept with
+      // headroom under the actual numbers so normal day-to-day variance
+      // doesn't trip it, while still catching a real regression (a large
+      // deletion of tests, or a big new untested file).
+      //
+      //   All files   93.08% stmts | 81.36% branch | 91.08% funcs | 94.79% lines
+      //
+      // `vitest run --coverage` still can't complete inside some sandboxed
+      // dev environments used on this project (it times out before
+      // finishing) — this baseline came from a real run outside that
+      // constraint. Re-raise these again the next time a full report is
+      // available and coverage has meaningfully improved.
       thresholds: {
-        statements: 50,
-        branches: 50,
-        functions: 50,
-        lines: 50,
+        statements: 85,
+        branches: 72,
+        functions: 82,
+        lines: 87,
       },
     },
   },
