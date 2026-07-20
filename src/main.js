@@ -216,18 +216,34 @@ function initImageLightbox() {
   let releaseFocusTrap = null;
 
   targets.forEach((img) => {
-    // Plain <img> elements aren't keyboard-focusable or operable by
-    // default — without this, there was no way to reach or open the
-    // lightbox except by mouse/touch. tabindex makes it Tab-reachable;
-    // role="button" + the keydown handler below make Enter/Space behave
-    // like a click, matching native <button> semantics.
-    img.setAttribute("tabindex", "0");
-    img.setAttribute("role", "button");
-    if (!img.hasAttribute("aria-label")) {
-      img.setAttribute(
-        "aria-label",
-        `${img.alt || "Sporting CP asset"} — view enlarged`,
-      );
+    // Kit flip-cards keep BOTH faces in the DOM at all times (rotated away
+    // via CSS transform + backface-visibility, not display:none) so the
+    // hover-flip animation works — see .kit-card-front/.kit-card-back in
+    // _components.css. The flip itself only triggers on mouse :hover, so a
+    // keyboard user tabbing onto the "back" face would land on an image
+    // that's rotated out of view with no visible focus indicator (nothing
+    // to see, nothing to flip). Skip keyboard affordances on that face —
+    // the lightbox's own toggle button (wired below) already lets keyboard
+    // users flip between front/back once they open the (visible) front
+    // image, so nothing is unreachable, it just isn't a confusing,
+    // invisible Tab stop on the page itself. The click listener still
+    // applies to both faces, so mouse users hovering to reveal the back and
+    // clicking it works exactly as before.
+    const isKitBack = img.closest(".kit-card-back");
+    if (!isKitBack) {
+      // Plain <img> elements aren't keyboard-focusable or operable by
+      // default — without this, there was no way to reach or open the
+      // lightbox except by mouse/touch. tabindex makes it Tab-reachable;
+      // role="button" + the keydown handler below make Enter/Space behave
+      // like a click, matching native <button> semantics.
+      img.setAttribute("tabindex", "0");
+      img.setAttribute("role", "button");
+      if (!img.hasAttribute("aria-label")) {
+        img.setAttribute(
+          "aria-label",
+          `${img.alt || "Sporting CP asset"} — view enlarged`,
+        );
+      }
     }
 
     const openLightboxFor = () => {
@@ -265,12 +281,14 @@ function initImageLightbox() {
     };
 
     img.addEventListener("click", openLightboxFor);
-    img.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        openLightboxFor();
-      }
-    });
+    if (!isKitBack) {
+      img.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openLightboxFor();
+        }
+      });
+    }
   });
 
   toggleBtn.addEventListener("click", () => {

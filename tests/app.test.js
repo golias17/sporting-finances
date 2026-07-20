@@ -296,6 +296,32 @@ describe("app boot (main.js)", () => {
       new window.KeyboardEvent("keydown", { key: "Enter", bubbles: true, cancelable: true }),
     );
     expect(lightbox.classList.contains("active")).toBe(true);
+  });
+
+  // Regression test: kit flip-cards keep both faces in the DOM at all times
+  // (CSS rotates the back face away, it isn't display:none'd), and the flip
+  // itself only triggers on mouse :hover. Giving the back face the same
+  // tabindex/role as everything else would make it a real Tab stop with no
+  // visible focus indicator, since it's rotated out of view. Only the front
+  // face should be keyboard-reachable on the page; the lightbox's own
+  // front/back toggle button already covers seeing the back via keyboard.
+  it("does not make the hidden back face of a kit flip-card an invisible Tab stop", () => {
+    const frontImg = document.querySelector(".kit-card-front .kit-img");
+    const backImg = document.querySelector(".kit-card-back .kit-img");
+    expect(frontImg).not.toBeNull();
+    expect(backImg).not.toBeNull();
+
+    expect(frontImg.getAttribute("tabindex")).toBe("0");
+    expect(frontImg.getAttribute("role")).toBe("button");
+    expect(backImg.hasAttribute("tabindex")).toBe(false);
+    expect(backImg.hasAttribute("role")).toBe(false);
+
+    // Mouse users can still open the lightbox on the back face by clicking
+    // it directly (e.g. after hovering to flip the card).
+    backImg.click();
+    const lightbox = document.getElementById("imageLightbox");
+    expect(lightbox.classList.contains("active")).toBe(true);
+    expect(document.getElementById("lightboxImg").src).toBe(backImg.src);
 
     document.getElementById("closeLightboxBtn").click();
     expect(lightbox.classList.contains("active")).toBe(false);
