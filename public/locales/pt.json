@@ -1855,7 +1855,7 @@
     "innerHTML": false
   },
   "pg-ucl-help": {
-    "text": "Prêmios UEFA, direitos de TV e receitas de bilheteira adicionais.",
+    "text": "Prêmios UEFA, direitos de TV e receitas de bilheteira adicionais, líquido de um custo estimado de prémios/logística que escala com o valor do prémio.",
     "isAria": false,
     "innerHTML": false
   },

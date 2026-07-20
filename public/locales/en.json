@@ -1855,7 +1855,7 @@
     "innerHTML": false
   },
   "pg-ucl-help": {
-    "text": "UEFA prize money, TV rights and ticket sales spillover.",
+    "text": "UEFA prize money, TV rights and ticket sales spillover, net of an estimated bonus/logistics cost that scales with the prize money.",
     "isAria": false,
     "innerHTML": false
   },
