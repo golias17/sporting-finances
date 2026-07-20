@@ -93,5 +93,24 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: ["./tests/setup.js"],
+    coverage: {
+      // A conservative starting floor, not a precisely-tuned target —
+      // `vitest run --coverage` can't complete inside some sandboxed dev
+      // environments used on this project (it times out before finishing),
+      // so these numbers weren't set against a real measured baseline.
+      // They're deliberately low enough that the current suite (290+
+      // tests as of this change) should clear them comfortably; the goal
+      // is catching an actual regression — e.g. a large deletion of tests,
+      // or a big new untested file — not enforcing a tight target. Once a
+      // real coverage report is available (CI runs `npm test` with
+      // --coverage on every push), raise these to sit just below the
+      // actual measured numbers.
+      thresholds: {
+        statements: 50,
+        branches: 50,
+        functions: 50,
+        lines: 50,
+      },
+    },
   },
 });

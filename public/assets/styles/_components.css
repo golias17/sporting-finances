@@ -1315,8 +1315,18 @@ body.dark .pdf-export-btn:hover {
   transform-style: preserve-3d;
   border-radius: var(--radius-lg);
 }
-.kit-card-container:not(.no-flip):hover .kit-card-inner {
+.kit-card-container:not(.no-flip):hover .kit-card-inner,
+.kit-card-container.flipped .kit-card-inner {
   transform: rotateY(180deg);
+}
+/* Keyboard flip trigger — the container itself is made focusable in
+   main.js's initKitCardFlip() so Enter/Space can toggle the .flipped
+   class above, giving keyboard users the same "see the back" affordance
+   :hover gives mouse users. Scoped to :focus-visible (not :focus) so
+   clicking with a mouse doesn't leave a visible ring behind. */
+.kit-card-container:not(.no-flip):focus-visible {
+  outline: 2px solid var(--green-light);
+  outline-offset: 3px;
 }
 .kit-card-front,
 .kit-card-back {

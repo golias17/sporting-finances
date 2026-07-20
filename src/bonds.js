@@ -128,6 +128,14 @@ export function renderVmocCost() {
   // KPI strip
   const postConvResult =
     state.fullAnnual.find((d) => d.label === "2023/24")?.financial_result ?? 0;
+  // Both vmocAvg and postConvResult are financial_result figures — negative
+  // when they're a net cost, as they normally are here. The "saving" is how
+  // much *less* costly 2023/24 was than the VMOC-era average, i.e.
+  // postConvResult - vmocAvg (a less-negative number minus a more-negative
+  // one comes out positive). The formula used to be the other way around
+  // (vmocAvg - postConvResult), which is negative in every realistic case —
+  // producing a "Saving of ~€−6.3M/yr" caption with a minus sign attached
+  // to the word "saving".
   document.getElementById("vmocCostKpis").innerHTML = `
     <div class="vmoc-kpi-strip">
       <div class="vmoc-kpi-item">
@@ -143,7 +151,7 @@ export function renderVmocCost() {
       <div class="vmoc-kpi-item">
         <div class="vk-label">${state.isPt ? "Custo finan. líquido após conversão das VMOCs (2023/24)" : "Net financing cost after VMOC conversion (2023/24)"}</div>
         <div class="vk-value pos">${fmtMillions(postConvResult)}</div>
-        <div class="vk-note">${state.isPt ? `Poupança de ~${fmtMillions(vmocAvg - postConvResult)}/ano face à média da era VMOC — antes do impacto do USPP` : `Saving of ~${fmtMillions(vmocAvg - postConvResult)}/yr vs the VMOC era average — before USPP kicks in`}</div>
+        <div class="vk-note">${state.isPt ? `Poupança de ~${fmtMillions(postConvResult - vmocAvg)}/ano face à média da era VMOC — antes do impacto do USPP` : `Saving of ~${fmtMillions(postConvResult - vmocAvg)}/yr vs the VMOC era average — before USPP kicks in`}</div>
       </div>
     </div>`;
 

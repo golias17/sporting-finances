@@ -48,6 +48,59 @@ describe("bonds.js", () => {
     });
   });
 
+  describe("renderVmocCost — computed values", () => {
+    beforeEach(() => {
+      // A richer mock than the file-level one above, covering all 8
+      // VMOC-era seasons plus the post-conversion season with distinct
+      // values, so the averaging/scaling/saving math is independently
+      // verifiable — not just "some formatted number appears somewhere".
+      state.DATASET = {
+        annual_data: [
+          { label: "2014/15", financial_result: -1000 },
+          { label: "2015/16", financial_result: -2000 },
+          { label: "2016/17", financial_result: -3000 },
+          { label: "2017/18", financial_result: -4000 },
+          { label: "2018/19", financial_result: -5000 },
+          { label: "2019/20", financial_result: -6000 },
+          { label: "2020/21", financial_result: -7000 },
+          { label: "2021/22", financial_result: -8000 },
+          { label: "2023/24", financial_result: -2000 },
+        ],
+      };
+    });
+
+    it("computes the VMOC-era average by dividing the total by all 8 VMOC-period seasons", () => {
+      renderVmocCost();
+      const kpis = document.getElementById("vmocCostKpis").innerHTML;
+      // Total: -1000-2000-3000-4000-5000-6000-7000-8000 = -36000
+      // Average: -36000 / 8 = -4500 -> €−4.5M
+      expect(kpis).toContain("€−4.5M");
+    });
+
+    it("computes the post-conversion saving as postConvResult minus the VMOC-era average, not the other way around", () => {
+      // Regression test: this used to compute vmocAvg - postConvResult,
+      // which is negative in every realistic case (a less-negative
+      // post-conversion cost minus a more-negative era average) — verified
+      // against the real dataset, where it rendered "Saving of ~€−6.3M/yr".
+      // The correct framing is postConvResult - vmocAvg: (-2000) - (-4500)
+      // = +2500 -> a genuinely positive €2.5M/yr saving.
+      renderVmocCost();
+      const kpis = document.getElementById("vmocCostKpis").innerHTML;
+      expect(kpis).toContain("Saving of ~€2.5M/yr");
+      expect(kpis).not.toContain("Saving of ~€−2.5M/yr");
+    });
+
+    it("scales each row's cost bar proportionally to the peak absolute financing cost across all rows", () => {
+      renderVmocCost();
+      const table = document.getElementById("vmocCostTable").innerHTML;
+      // Peak absolute cost among the mocked seasons is 2021/22's €8000 ->
+      // its bar should be exactly 100%.
+      expect(table).toContain('style="width: 100.0%"');
+      // 2014/15's €1000 is 1/8th of the €8000 peak -> 12.5%.
+      expect(table).toContain('style="width: 12.5%"');
+    });
+  });
+
   describe("renderUsppTerms", () => {
     it("should render USPP terms in a grid", () => {
       renderUsppTerms();

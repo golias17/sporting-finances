@@ -301,10 +301,9 @@ describe("app boot (main.js)", () => {
   // Regression test: kit flip-cards keep both faces in the DOM at all times
   // (CSS rotates the back face away, it isn't display:none'd), and the flip
   // itself only triggers on mouse :hover. Giving the back face the same
-  // tabindex/role as everything else would make it a real Tab stop with no
-  // visible focus indicator, since it's rotated out of view. Only the front
-  // face should be keyboard-reachable on the page; the lightbox's own
-  // front/back toggle button already covers seeing the back via keyboard.
+  // tabindex/role as the front would make it a real Tab stop with no
+  // visible focus indicator, since it's rotated out of view. Only the
+  // currently-visible face should be keyboard/screen-reader-reachable.
   it("does not make the hidden back face of a kit flip-card an invisible Tab stop", () => {
     const frontImg = document.querySelector(".kit-card-front .kit-img");
     const backImg = document.querySelector(".kit-card-back .kit-img");
@@ -313,8 +312,13 @@ describe("app boot (main.js)", () => {
 
     expect(frontImg.getAttribute("tabindex")).toBe("0");
     expect(frontImg.getAttribute("role")).toBe("button");
-    expect(backImg.hasAttribute("tabindex")).toBe(false);
+    expect(frontImg.hasAttribute("aria-hidden")).toBe(false);
+    // tabindex="-1" (not simply absent) keeps it out of Tab order;
+    // aria-hidden="true" is what actually removes it from a screen
+    // reader's browse-mode virtual cursor, independent of tab order.
+    expect(backImg.getAttribute("tabindex")).toBe("-1");
     expect(backImg.hasAttribute("role")).toBe(false);
+    expect(backImg.getAttribute("aria-hidden")).toBe("true");
 
     // Mouse users can still open the lightbox on the back face by clicking
     // it directly (e.g. after hovering to flip the card).
@@ -325,6 +329,73 @@ describe("app boot (main.js)", () => {
 
     document.getElementById("closeLightboxBtn").click();
     expect(lightbox.classList.contains("active")).toBe(false);
+  });
+
+  // Regression test: the CSS flip animation itself used to only trigger on
+  // mouse :hover, with no keyboard equivalent — a keyboard user could never
+  // see the back face on the card itself, only via the lightbox's own
+  // toggle button after opening the front. initKitCardFlip() makes the
+  // card container a focusable control so Enter/Space flips it, matching
+  // what :hover already does visually for mouse users.
+  it("makes the kit card itself keyboard-focusable and flips it on Enter, swapping which face is reachable", () => {
+    const card = document.querySelector(".kit-card-container:not(.no-flip)");
+    const frontImg = card.querySelector(".kit-card-front .kit-img");
+    const backImg = card.querySelector(".kit-card-back .kit-img");
+
+    expect(card.getAttribute("tabindex")).toBe("0");
+    expect(card.getAttribute("role")).toBe("button");
+    expect(card.getAttribute("aria-pressed")).toBe("false");
+    expect(card.classList.contains("flipped")).toBe(false);
+
+    card.dispatchEvent(
+      new window.KeyboardEvent("keydown", {
+        key: "Enter",
+        bubbles: true,
+        cancelable: true,
+      }),
+    );
+
+    expect(card.classList.contains("flipped")).toBe(true);
+    expect(card.getAttribute("aria-pressed")).toBe("true");
+    // Reachability flips along with the visual state.
+    expect(backImg.getAttribute("tabindex")).toBe("0");
+    expect(backImg.getAttribute("aria-hidden")).toBe(null);
+    expect(frontImg.getAttribute("tabindex")).toBe("-1");
+    expect(frontImg.getAttribute("aria-hidden")).toBe("true");
+
+    // Pressing Enter again flips it back.
+    card.dispatchEvent(
+      new window.KeyboardEvent("keydown", {
+        key: "Enter",
+        bubbles: true,
+        cancelable: true,
+      }),
+    );
+    expect(card.classList.contains("flipped")).toBe(false);
+  });
+
+  it("does not flip the card when Enter is pressed while a descendant image has focus", () => {
+    // Guards against the flip and the lightbox-open both firing off the
+    // same keypress — the image's own keydown handler (initImageLightbox())
+    // should be the only thing that responds when focus is on the image
+    // itself, not the card's keydown handler.
+    const card = document.querySelector(".kit-card-container:not(.no-flip)");
+    const frontImg = card.querySelector(".kit-card-front .kit-img");
+
+    frontImg.dispatchEvent(
+      new window.KeyboardEvent("keydown", {
+        key: "Enter",
+        bubbles: true,
+        cancelable: true,
+      }),
+    );
+
+    expect(card.classList.contains("flipped")).toBe(false);
+    // It did open the lightbox, though — that's the image's own handler.
+    expect(
+      document.getElementById("imageLightbox").classList.contains("active"),
+    ).toBe(true);
+    document.getElementById("closeLightboxBtn").click();
   });
 
   it("handles window resize and recalculates tab indicator", () => {

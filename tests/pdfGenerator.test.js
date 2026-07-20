@@ -217,4 +217,99 @@ describe("pdfGenerator.js", () => {
       textCalls.some((t) => t && t.includes("Marcos Financeiros Cronológicos")),
     ).toBe(true);
   });
+
+  // Page markers used below — one distinctive, English section title per
+  // drawPage*() function (see pages[0..4] in generateCuratedPdf()).
+  const PAGE_MARKERS = [
+    "ANNUAL FINANCIAL ANALYSIS DOSSIER", // pages[0]: cover
+    "I. Recurring Operating Revenues & Payroll Burden", // pages[1]: financial tables
+    "III. Player Transfer Operations & Squad Appraisals", // pages[2]: trading/cash flow
+    "V. Strategic Debt & Financing Instruments Profile", // pages[3]: financing timeline
+    "VII-A. Landmark Player Transfers Ledger — Record Departures (Fee >= 10.0 M€)", // pages[4]: transfers ledger
+  ];
+
+  function textOf(docInstance) {
+    // splitTextToSize-routed calls pass an array of lines as c[0] instead
+    // of a plain string (see the splitTextToSizeMock above) — flatten both
+    // shapes into one searchable string per call.
+    return docInstance.text.mock.calls.map((c) =>
+      Array.isArray(c[0]) ? c[0].join(" ") : c[0],
+    );
+  }
+
+  it("only draws the selected pages when a partial `pages` array is passed", async () => {
+    // Only the cover page (index 0) — every other page's marker should be
+    // entirely absent from the output, not just "less prominent".
+    await generateCuratedPdf({ pages: [true, false, false, false, false] });
+    const docInstance = vi.mocked(jsPDF).mock.results[0].value;
+    const calls = textOf(docInstance);
+
+    expect(calls.some((t) => t === PAGE_MARKERS[0])).toBe(true);
+    for (const marker of PAGE_MARKERS.slice(1)) {
+      expect(calls.some((t) => t === marker)).toBe(false);
+    }
+    expect(docInstance.save).toHaveBeenCalled();
+  });
+
+  it("draws exactly the pages selected, in a non-default combination", async () => {
+    // Financing timeline (index 3) and transfers ledger (index 4), but not
+    // the cover, financial tables, or trading/cash-flow pages.
+    await generateCuratedPdf({ pages: [false, false, false, true, true] });
+    const docInstance = vi.mocked(jsPDF).mock.results[0].value;
+    const calls = textOf(docInstance);
+
+    expect(calls.some((t) => t === PAGE_MARKERS[0])).toBe(false);
+    expect(calls.some((t) => t === PAGE_MARKERS[1])).toBe(false);
+    expect(calls.some((t) => t === PAGE_MARKERS[2])).toBe(false);
+    expect(calls.some((t) => t === PAGE_MARKERS[3])).toBe(true);
+    expect(calls.some((t) => t === PAGE_MARKERS[4])).toBe(true);
+  });
+
+  it("returns without saving a PDF when every page is deselected", async () => {
+    await generateCuratedPdf({ pages: [false, false, false, false, false] });
+    // jsPDF is still instantiated before the empty-selection check runs,
+    // but nothing should ever get far enough to call .save().
+    const docInstance = vi.mocked(jsPDF).mock.results[0].value;
+    expect(docInstance.save).not.toHaveBeenCalled();
+  });
+
+  it("includes a custom executive note on the cover page when provided", async () => {
+    await generateCuratedPdf({
+      executiveNote: "Sold Ugarte for a club-record fee.",
+    });
+    const docInstance = vi.mocked(jsPDF).mock.results[0].value;
+    const calls = textOf(docInstance);
+
+    expect(
+      calls.some(
+        (t) =>
+          t &&
+          t.includes("Executive Annotation:") &&
+          t.includes("Sold Ugarte for a club-record fee."),
+      ),
+    ).toBe(true);
+  });
+
+  it("omits the executive-note heading entirely when no note is provided", async () => {
+    await generateCuratedPdf({ executiveNote: "" });
+    const docInstance = vi.mocked(jsPDF).mock.results[0].value;
+    const calls = textOf(docInstance);
+
+    expect(calls.some((t) => t && t.includes("Executive Annotation:"))).toBe(
+      false,
+    );
+  });
+
+  it("localizes the executive note heading in Portuguese", async () => {
+    state.setIsPt(true);
+    await generateCuratedPdf({ executiveNote: "Nota de teste." });
+    const docInstance = vi.mocked(jsPDF).mock.results[0].value;
+    const calls = textOf(docInstance);
+
+    expect(
+      calls.some(
+        (t) => t && t.includes("Nota Executiva:") && t.includes("Nota de teste."),
+      ),
+    ).toBe(true);
+  });
 });
