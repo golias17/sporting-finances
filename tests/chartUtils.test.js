@@ -1,10 +1,100 @@
 import { describe, it, expect } from "vitest";
+import * as chartUtils from "../src/chartUtils.js";
 import {
   getBrandColors,
   getZoneColors,
   hexToRgbArray,
   styledLineDataset,
 } from "../src/chartUtils.js";
+import * as chartPalette from "../src/chartPalette.js";
+import * as chartAnnotations from "../src/chartAnnotations.js";
+import * as chartWidgets from "../src/chartWidgets.js";
+import * as chartDefaults from "../src/chartDefaults.js";
+
+// chartUtils.js itself has no logic of its own — it's a pure re-export
+// barrel over chartPalette.js/chartAnnotations.js/chartWidgets.js/
+// chartDefaults.js (see the file's own header comment for why it was split
+// this way while keeping one stable import path). Every consumer elsewhere
+// in the app imports through this barrel, so the one thing actually worth
+// testing about chartUtils.js itself is that the barrel doesn't silently
+// drop or shadow anything — every symbol the four source files export must
+// come through, and must be the exact same reference (not a copy), since
+// e.g. ZONE_COLORS is relied on as a shared mutable object (see
+// themeToggle.js's updateChartTheme()).
+describe("chartUtils.js — re-export barrel", () => {
+  it("re-exports every symbol from chartPalette.js unchanged", () => {
+    for (const key of Object.keys(chartPalette)) {
+      expect(chartUtils[key]).toBe(chartPalette[key]);
+    }
+  });
+
+  it("re-exports every symbol from chartAnnotations.js unchanged", () => {
+    for (const key of Object.keys(chartAnnotations)) {
+      expect(chartUtils[key]).toBe(chartAnnotations[key]);
+    }
+  });
+
+  it("re-exports every symbol from chartWidgets.js unchanged", () => {
+    for (const key of Object.keys(chartWidgets)) {
+      expect(chartUtils[key]).toBe(chartWidgets[key]);
+    }
+  });
+
+  it("re-exports every symbol from chartDefaults.js unchanged", () => {
+    for (const key of Object.keys(chartDefaults)) {
+      expect(chartUtils[key]).toBe(chartDefaults[key]);
+    }
+  });
+
+  it("exposes the specific named exports every other module actually imports by name", () => {
+    // A generic "every key round-trips" loop (above) wouldn't catch a typo'd
+    // rename in a downstream import statement — pin down the exact names
+    // that matter, matched against real import statements across src/.
+    const expected = [
+      // chartPalette.js
+      "fmtMillions",
+      "getBrandColors",
+      "getZoneColors",
+      "hexToRgbArray",
+      "ZONE_COLORS",
+      // chartAnnotations.js
+      "getPitchMilestone",
+      "getEventAnnotations",
+      "eventBoxes",
+      // chartWidgets.js
+      "chartRegistry",
+      "generateAccessibleTable",
+      "externalTooltipHandler",
+      "addChartDownloadButton",
+      // chartDefaults.js
+      "styledLineDataset",
+      "initChartDefaults",
+      "baseOpts",
+    ];
+    expected.forEach((name) => {
+      expect(chartUtils).toHaveProperty(name);
+      expect(chartUtils[name]).toBeDefined();
+    });
+  });
+
+  it("does not have any name collide across the four source files (later export * wouldn't silently shadow an earlier one)", () => {
+    const sources = [chartPalette, chartAnnotations, chartWidgets, chartDefaults];
+    const seen = new Map();
+    sources.forEach((mod, i) => {
+      Object.keys(mod).forEach((key) => {
+        if (seen.has(key)) {
+          throw new Error(
+            `"${key}" is exported by both source module #${seen.get(key)} and #${i} — one silently shadows the other through the barrel.`,
+          );
+        }
+        seen.set(key, i);
+      });
+    });
+    // Getting here without throwing is the assertion; this line just gives
+    // the test a visible pass condition too.
+    expect(seen.size).toBeGreaterThan(0);
+  });
+});
 
 // getBrandColors()/getZoneColors() are the single source of truth for the
 // app's colors — chart builders, the PDF export (via hexToRgbArray), and
