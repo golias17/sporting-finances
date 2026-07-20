@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll, beforeEach, afterEach, vi } from "vitest";
 import { state } from "../src/state.js";
-import { initPlayground } from "../src/playground.js";
+import { initPlayground, drawPlaygroundCharts } from "../src/playground.js";
 import { chartRegistry } from "../src/chartUtils.js";
 import { mockChartEnvironment } from "./chartTestUtils.js";
 
@@ -386,5 +386,23 @@ describe("playground.js CFO Simulator", () => {
     const bodyText = table.querySelector("tbody").textContent;
     expect(bodyText).toContain("€116.0M");
     expect(bodyText).toMatch(/24\.4%/);
+  });
+
+  it("does nothing (no throw) when #tab-playground is missing from the page", () => {
+    document.body.innerHTML = "";
+    expect(() => initPlayground()).not.toThrow();
+  });
+
+  it("does nothing (no throw) when a slider control is missing from the page", () => {
+    document.getElementById("payrollSlider").remove();
+    expect(() => initPlayground()).not.toThrow();
+    // Guarded before any KPI text was written.
+    expect(document.getElementById("pgKpiRev").textContent).toBe("€148.1M");
+  });
+
+  it("drawPlaygroundCharts() no-ops (no throw) when a value label element is missing", () => {
+    initPlayground();
+    document.getElementById("salesVal").remove();
+    expect(() => drawPlaygroundCharts()).not.toThrow();
   });
 });

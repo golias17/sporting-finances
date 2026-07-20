@@ -83,6 +83,9 @@ const getFields = () => [
 ];
 
 export function renderTable() {
+  const container = document.getElementById("dataTable");
+  if (!container) return;
+
   const fields = getFields();
   // Built via map().join() rather than += inside the nested loop, matching
   // every other renderer in the codebase (transfers.js, compare.js,
@@ -101,7 +104,7 @@ export function renderTable() {
       return `<tr><td>${f.label}</td>${cells}</tr>`;
     })
     .join("");
-  document.getElementById("dataTable").innerHTML =
+  container.innerHTML =
     `<table class="data"><thead><tr><th>${state.isPt ? "Métrica" : "Metric"}</th>${headerCells}</tr></thead><tbody>${bodyRows}</tbody></table>`;
 }
 

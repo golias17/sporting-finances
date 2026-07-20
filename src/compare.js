@@ -14,6 +14,7 @@ let comparisonAbortController = null;
 export function initComparison() {
   const selA = document.getElementById("compareSeasonA");
   const selB = document.getElementById("compareSeasonB");
+  if (!selA || !selB) return;
 
   // Always use the full dataset so any two seasons can be compared regardless of
   // whatever the global date-range filter is currently set to.
@@ -66,14 +67,22 @@ export function initComparison() {
 // Not exported — only called internally (initComparison's own change
 // listeners and initial render). Nothing outside this file imports it.
 function renderComparison() {
-  const idxA = parseInt(document.getElementById("compareSeasonA").value, 10);
-  const idxB = parseInt(document.getElementById("compareSeasonB").value, 10);
+  const selA = document.getElementById("compareSeasonA");
+  const selB = document.getElementById("compareSeasonB");
+  const headA = document.getElementById("cmpHeadA");
+  const headB = document.getElementById("cmpHeadB");
+  const narEl = document.getElementById("cmpNarrative");
+  const grid = document.getElementById("comparisonGrid");
+  if (!selA || !selB || !headA || !headB || !narEl || !grid) return;
+
+  const idxA = parseInt(selA.value, 10);
+  const idxB = parseInt(selB.value, 10);
   const a = state.fullAnnual[idxA];
   const b = state.fullAnnual[idxB];
   const baseOpts = state.baseOpts;
 
-  document.getElementById("cmpHeadA").textContent = a.label;
-  document.getElementById("cmpHeadB").textContent = b.label;
+  headA.textContent = a.label;
+  headB.textContent = b.label;
 
   const netDebtA = a.borrowings_nc + a.borrowings_c - a.cash;
   const netDebtB = b.borrowings_nc + b.borrowings_c - b.cash;
@@ -138,7 +147,6 @@ function renderComparison() {
     );
   }
 
-  const narEl = document.getElementById("cmpNarrative");
   narEl.textContent = parts.join(" ");
   narEl.style.display = "block";
 
@@ -430,7 +438,7 @@ function renderComparison() {
     </div>`;
   };
 
-  document.getElementById("comparisonGrid").innerHTML = groups
+  grid.innerHTML = groups
     .map(
       (g) =>
         `<div class="cmp-group">

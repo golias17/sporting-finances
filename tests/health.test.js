@@ -362,4 +362,21 @@ describe("health.js", () => {
       expect(state.healthBarIdx).toBe(2);
     });
   });
+
+  it("does nothing (no throw) when #seasonSelector is missing from the page", () => {
+    document.body.innerHTML = "";
+    expect(() => initHealthBar()).not.toThrow();
+  });
+
+  it("builds season pills but skips rendering signals when healthBarTitle is missing", () => {
+    document.getElementById("healthBarTitle").remove();
+    expect(() => initHealthBar()).not.toThrow();
+    vi.runAllTimers();
+
+    // Pills still get built (that part of initHealthBar runs before the
+    // titleEl/el guard inside renderHealthBar).
+    expect(document.querySelectorAll(".season-pill").length).toBe(3);
+    // But signals were never written.
+    expect(document.getElementById("healthSignals").innerHTML).toBe("");
+  });
 });

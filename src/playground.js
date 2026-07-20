@@ -327,23 +327,57 @@ export function drawPlaygroundCharts() {
   const BASELINE = getBaseline();
   if (!BASELINE) return; // state.DATASET not ready yet, or "2024/25" isn't in it
 
+  // Same elements initPlayground() already guards before wiring listeners
+  // on them — this function reads/writes the same ones on every slider
+  // input, but didn't check for their existence itself.
+  const uclSelect = document.getElementById("uclSelect");
+  const payrollSlider = document.getElementById("payrollSlider");
+  const salesSlider = document.getElementById("salesSlider");
+  const purchasesSlider = document.getElementById("purchasesSlider");
+  const capexSlider = document.getElementById("capexSlider");
+  const debtRepaySlider = document.getElementById("debtRepaySlider");
+  const revGrowthSlider = document.getElementById("revGrowthSlider");
+  const payrollVal = document.getElementById("payrollVal");
+  const salesVal = document.getElementById("salesVal");
+  const purchasesVal = document.getElementById("purchasesVal");
+  const capexVal = document.getElementById("capexVal");
+  const debtRepayVal = document.getElementById("debtRepayVal");
+  const revGrowthVal = document.getElementById("revGrowthVal");
+  if (
+    !uclSelect ||
+    !payrollSlider ||
+    !salesSlider ||
+    !purchasesSlider ||
+    !capexSlider ||
+    !debtRepaySlider ||
+    !revGrowthSlider ||
+    !payrollVal ||
+    !salesVal ||
+    !purchasesVal ||
+    !capexVal ||
+    !debtRepayVal ||
+    !revGrowthVal
+  ) {
+    return;
+  }
+
   const inputs = {
-    uclPrize: parseInt(document.getElementById("uclSelect").value, 10), // in millions
-    payrollAdj: parseInt(document.getElementById("payrollSlider").value, 10),
-    salesTarget: parseInt(document.getElementById("salesSlider").value, 10), // in millions
-    purchasesTarget: parseInt(document.getElementById("purchasesSlider").value, 10), // in millions
-    capexAdj: parseInt(document.getElementById("capexSlider").value, 10),
-    debtRepayTarget: parseInt(document.getElementById("debtRepaySlider").value, 10), // in millions
-    revGrowthAdj: parseInt(document.getElementById("revGrowthSlider").value, 10),
+    uclPrize: parseInt(uclSelect.value, 10), // in millions
+    payrollAdj: parseInt(payrollSlider.value, 10),
+    salesTarget: parseInt(salesSlider.value, 10), // in millions
+    purchasesTarget: parseInt(purchasesSlider.value, 10), // in millions
+    capexAdj: parseInt(capexSlider.value, 10),
+    debtRepayTarget: parseInt(debtRepaySlider.value, 10), // in millions
+    revGrowthAdj: parseInt(revGrowthSlider.value, 10),
   };
 
   // Update label text values
-  document.getElementById("payrollVal").textContent = (inputs.payrollAdj >= 0 ? "+" : "") + inputs.payrollAdj + "%";
-  document.getElementById("salesVal").textContent = inputs.salesTarget + " M€";
-  document.getElementById("purchasesVal").textContent = inputs.purchasesTarget + " M€";
-  document.getElementById("capexVal").textContent = (inputs.capexAdj >= 0 ? "+" : "") + inputs.capexAdj + "%";
-  document.getElementById("debtRepayVal").textContent = inputs.debtRepayTarget + " M€";
-  document.getElementById("revGrowthVal").textContent =
+  payrollVal.textContent = (inputs.payrollAdj >= 0 ? "+" : "") + inputs.payrollAdj + "%";
+  salesVal.textContent = inputs.salesTarget + " M€";
+  purchasesVal.textContent = inputs.purchasesTarget + " M€";
+  capexVal.textContent = (inputs.capexAdj >= 0 ? "+" : "") + inputs.capexAdj + "%";
+  debtRepayVal.textContent = inputs.debtRepayTarget + " M€";
+  revGrowthVal.textContent =
     (inputs.revGrowthAdj >= 0 ? "+" : "") + inputs.revGrowthAdj + "%";
 
   // "baseline" = 2025/26 if nothing is adjusted (2024/25's performance
@@ -368,11 +402,13 @@ export function drawPlaygroundCharts() {
 
 function updateKpi(cardId, valId, diffId, projVal, baseVal) {
   const diffVal = projVal - baseVal;
-  document.getElementById(valId).textContent = `€${projVal.toFixed(1)}M`;
-  
+  const valEl = document.getElementById(valId);
   const cardEl = document.getElementById(cardId);
   const diffEl = document.getElementById(diffId);
-  
+  if (!valEl || !diffEl) return;
+
+  valEl.textContent = `€${projVal.toFixed(1)}M`;
+
   if (cardEl) {
     cardEl.classList.remove("pos", "neg");
   }

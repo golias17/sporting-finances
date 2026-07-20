@@ -112,6 +112,11 @@ describe("data-table.js", () => {
     expect(clickSpy).toHaveBeenCalled();
   });
 
+  it("does nothing (no throw) when #dataTable is missing from the page", () => {
+    document.getElementById("dataTable").remove();
+    expect(() => renderTable()).not.toThrow();
+  });
+
   it("should do nothing on initDataExport if download button is missing", () => {
     document.getElementById("btnDownloadLedger").remove();
     expect(() => initDataExport()).not.toThrow();

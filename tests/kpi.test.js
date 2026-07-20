@@ -50,4 +50,9 @@ describe("kpi.js", () => {
     const kpis = document.querySelectorAll(".kpi");
     expect(kpis.length).toBe(2);
   });
+
+  it("does nothing (no throw) when #kpiRow is missing from the page", () => {
+    document.body.innerHTML = "";
+    expect(() => renderKpis()).not.toThrow();
+  });
 });

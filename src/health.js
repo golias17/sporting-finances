@@ -111,6 +111,7 @@ function pickInitialIdx() {
 // =============================================================
 export function initHealthBar() {
   const selector = document.getElementById("seasonSelector");
+  if (!selector) return;
   selector.innerHTML = buildSeasonPillsHtml();
 
   // Tear down the previous listener before attaching a fresh one
@@ -206,14 +207,17 @@ function renderHealthBar(idx) {
 
   updateActivePills(idx);
 
+  const titleEl = document.getElementById("healthBarTitle");
+  const el = document.getElementById("healthSignals");
+  if (!titleEl || !el) return;
+
   // Title
-  document.getElementById("healthBarTitle").textContent = state.isPt
+  titleEl.textContent = state.isPt
     ? `Saúde Financeira do Clube — ${d.label}`
     : `Club Financial Health — ${d.label}`;
 
   const signals = calculateHealthSignals(state, idx, fmtMillions);
 
-  const el = document.getElementById("healthSignals");
   const isSameYear = el.dataset.renderedIdx === String(idx);
   el.dataset.renderedIdx = idx;
 

@@ -196,4 +196,28 @@ describe("story.js", () => {
     // Clean up
     chartRegistry.delete("chartHero");
   });
+
+  it("does nothing (no throw) when #storyCard is missing from the page", () => {
+    document.getElementById("storyCard").remove();
+    expect(() => startStory()).not.toThrow();
+    expect(() => exitStory()).not.toThrow();
+  });
+
+  it("does nothing (no throw) when a story step element (e.g. storyCounter) is missing", () => {
+    document.getElementById("storyCounter").remove();
+    expect(() => startStory()).not.toThrow();
+    vi.runAllTimers();
+    // Guarded before any step text was written.
+    expect(document.getElementById("storyTitle").textContent).toBe("");
+  });
+
+  it("does nothing (no throw) when initStoryMode is wired against a page missing a story button", () => {
+    document.getElementById("btnExitStory").remove();
+    expect(() => initStoryMode()).not.toThrow();
+    // No listeners were wired — clicking start should not reveal the card.
+    document.getElementById("btnStartStory").click();
+    expect(
+      document.getElementById("storyCard").classList.contains("hidden"),
+    ).toBe(true);
+  });
 });

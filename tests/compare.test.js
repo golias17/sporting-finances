@@ -131,4 +131,18 @@ describe("compare.js", () => {
     narrative = document.getElementById("cmpNarrative").innerHTML;
     expect(narrative).toContain("O capital próprio passou de €−100.0M para €−50.0M");
   });
+
+  it("does nothing (no throw) when the season selects are missing", () => {
+    document.body.innerHTML = "";
+    expect(() => initComparison()).not.toThrow();
+  });
+
+  it("does nothing (no throw) when a comparison output element (e.g. cmpNarrative) is missing", () => {
+    document.getElementById("cmpNarrative").remove();
+    expect(() => initComparison()).not.toThrow();
+    // The grid, which is written after narEl in renderComparison, should
+    // never have been reached — confirms this is a genuine early return,
+    // not a partially-applied render.
+    expect(document.getElementById("comparisonGrid").innerHTML).toBe("");
+  });
 });

@@ -3,6 +3,9 @@ import { calculateKpis } from "./metrics.js";
 import { fmtMillions } from "./chartUtils.js";
 
 export function renderKpis(idx) {
+  const kpiRow = document.getElementById("kpiRow");
+  if (!kpiRow) return;
+
   if (idx === undefined || idx === null) {
     idx =
       state.healthBarIdx !== null
@@ -12,7 +15,7 @@ export function renderKpis(idx) {
 
   const kpis = calculateKpis(state, idx, fmtMillions);
 
-  document.getElementById("kpiRow").innerHTML = kpis
+  kpiRow.innerHTML = kpis
     .map(
       (k) =>
         `<div class="kpi ${k.cls || "neutral"}" tabindex="0" role="group" aria-label="${k.label}: ${k.value}. ${k.change}">
