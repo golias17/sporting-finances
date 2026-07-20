@@ -39,8 +39,15 @@
     font-size: 0.65rem;
   }
 
+  /* Desktop marks the active tab with a separate sliding .tab-indicator
+     pill (background: var(--surface) — see _layout.css) rather than a
+     background-color on the button itself. Mobile's fixed bottom nav has
+     no equivalent indicator element, so give the button that same surface
+     treatment directly. (Previously referenced a --hover variable that was
+     never defined anywhere in the stylesheet, so this rule was a silent
+     no-op and the active tab got no background highlight at all.) */
   nav.tabs button.active {
-    background-color: var(--hover);
+    background-color: var(--surface);
   }
 
   /* Top utility bar: .topbar .wrap had white-space:nowrap + overflow:hidden
@@ -123,34 +130,6 @@
     right: 16px;
     bottom: 90px;
     max-width: none;
-  }
-
-  /* Global era filter: .filter-controls + .gf-presets are two flex rows
-     that fit fine on desktop but crowd a phone width — the 2 season
-     dropdowns + "to" label plus 4 preset pills competing for ~340px of
-     space. Stack them and let the presets fill the width predictably
-     instead of wrapping into a ragged line. */
-  .global-filters {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 14px;
-    padding: 14px 16px;
-  }
-  .filter-controls {
-    width: 100%;
-  }
-  .filter-controls .filter-select {
-    flex: 1 1 0;
-    min-width: 0;
-  }
-  .gf-presets {
-    margin-left: 0;
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .gf-presets .season-pill {
-    text-align: center;
   }
 
   /* KPI cards: bump the label and change-note sizes up slightly for
