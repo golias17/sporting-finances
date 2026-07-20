@@ -14,7 +14,7 @@ export const fmtMillions = (v) => {
 //
 // Single source of truth for the app's brand/status colors, in both light
 // and dark mode. These used to be hand-duplicated across initChartDefaults()
-// below, updateChartTheme() in main.js, the hardcoded fallback literals in
+// below, updateChartTheme() in themeToggle.js, the hardcoded fallback literals in
 // squadAnalytics.js/playground.js, and an entirely separate RGB-array copy
 // in pdfGenerator.js for the PDF export — copies that had already drifted
 // out of sync with each other (the PDF's gold and "negative" colors were
@@ -249,7 +249,7 @@ export function styledLineDataset({
 export function initChartDefaults() {
   // Light-mode defaults, from the canonical palette above — see the
   // PALETTE comment for why this must stay the single source of truth.
-  // updateChartTheme() in main.js re-applies this same palette (plus the
+  // updateChartTheme() in themeToggle.js re-applies this same palette (plus the
   // dark-mode variant) once the DOM/theme is known.
   Object.assign(state.COLORS, getBrandColors(false));
 

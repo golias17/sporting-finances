@@ -1320,7 +1320,7 @@ body.dark .pdf-export-btn:hover {
   transform: rotateY(180deg);
 }
 /* Keyboard flip trigger — the container itself is made focusable in
-   main.js's initKitCardFlip() so Enter/Space can toggle the .flipped
+   imageLightbox.js's initKitCardFlip() so Enter/Space can toggle the .flipped
    class above, giving keyboard users the same "see the back" affordance
    :hover gives mouse users. Scoped to :focus-visible (not :focus) so
    clicking with a mouse doesn't leave a visible ring behind. */

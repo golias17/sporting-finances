@@ -232,11 +232,12 @@ describe("app boot (main.js)", () => {
   });
 
   // The Jornal reader and image lightbox are hand-rolled overlay <div>s
-  // (see initJornalModal()/initImageLightbox() in main.js), not the native
-  // <dialog> element — these tests cover the focus management added for
-  // them: moving focus in on open, closing on Escape, and restoring focus
-  // to whatever triggered the modal once it closes. The Tab-key focus-trap
-  // itself (trapFocusWithin() in main.js) isn't asserted here: it filters
+  // (see initJornalModal() in jornalModal.js / initImageLightbox() in
+  // imageLightbox.js), not the native <dialog> element — these tests cover
+  // the focus management added for them: moving focus in on open, closing
+  // on Escape, and restoring focus to whatever triggered the modal once it
+  // closes. The Tab-key focus-trap itself (trapFocusWithin() in
+  // focusTrap.js) isn't asserted here: it filters
   // candidates by `el.offsetParent !== null` to skip genuinely hidden
   // elements, but jsdom doesn't implement layout at all, so offsetParent is
   // always null for every element regardless of real visibility — asserting
@@ -458,9 +459,10 @@ describe("app boot (main.js)", () => {
 
   // Regression test: the PDF customizer form's submit handler read
   // pdfLanguageSelect/chkPage1-5/pdfNotesText directly off getElementById()
-  // with no guard, unlike openModal() right above it in main.js (which
-  // already treats langSelect/notesText as optional) — an inconsistency
-  // that would throw if any customizer field were ever removed/renamed.
+  // with no guard, unlike openModal() right above it in pdfExportModal.js
+  // (which already treats langSelect/notesText as optional) — an
+  // inconsistency that would throw if any customizer field were ever
+  // removed/renamed.
   it("does not throw when a PDF customizer field is missing from the DOM", () => {
     document.getElementById("chkPage3")?.remove();
     const form = document.getElementById("pdfCustomizerForm");
