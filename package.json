@@ -10,6 +10,7 @@
     "build": "vite build --base=./",
     "preview": "vite preview",
     "test": "vitest run --coverage",
+    "test:unit": "vitest run",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write ."

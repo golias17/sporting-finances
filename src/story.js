@@ -6,6 +6,10 @@ import { chartRegistry } from "./chartUtils.js";
 import { syncStateToUrl } from "./urlSync.js";
 import { STORY_STEPS } from "./storySteps.js";
 
+// Tracks updateStoryStep()'s pending fade-out/fade-in timeout so it can be
+// cancelled — see the comment inside updateStoryStep() for why.
+let pendingStoryStepTimeout = null;
+
 // `startIndex` lets a ?story=N deep link open the story at the right step —
 // startStory() used to always reset to 0, so main.js restoring a shared URL
 // silently landed on step 1 no matter what N said. Clamped so an
@@ -24,6 +28,14 @@ export function exitStory() {
   document.getElementById("storyCard").classList.add("hidden");
   document.getElementById("btnStartStory").classList.remove("hidden");
   document.removeEventListener("keydown", storyKeyHandler);
+  // Cancel any fade-out/fade-in still pending from a step change right
+  // before exiting — otherwise it fires after the card is hidden and
+  // silently writes stale season/title/narrative text into DOM nodes the
+  // user can no longer see, ready to flash briefly on the next startStory().
+  if (pendingStoryStepTimeout) {
+    clearTimeout(pendingStoryStepTimeout);
+    pendingStoryStepTimeout = null;
+  }
   const heroChart = chartRegistry.get("chartHero");
   if (heroChart && heroChart.options.plugins.annotation) {
     delete heroChart.options.plugins.annotation.annotations.storyHighlight;
@@ -54,14 +66,24 @@ export function updateStoryStep() {
   const tNarrative = step.narrative[state.isPt ? "pt" : "en"];
 
   if (wrap) {
+    // Rapid Next/Prev clicks (or held-down arrow keys, via storyKeyHandler)
+    // call this on every step change, each queuing its own 220ms timeout.
+    // Without cancelling the previous one, an older call's timeout could
+    // resolve after a newer one and stomp the newer step's text/fade class
+    // back with stale content for a frame. Only the most recently scheduled
+    // update should ever land.
+    if (pendingStoryStepTimeout) {
+      clearTimeout(pendingStoryStepTimeout);
+    }
     wrap.classList.add("story-fade-out");
     wrap.classList.remove("story-fade-in");
-    setTimeout(() => {
+    pendingStoryStepTimeout = setTimeout(() => {
       document.getElementById("storySeason").textContent = step.season;
       document.getElementById("storyTitle").textContent = tTitle;
       document.getElementById("storyNarrative").textContent = tNarrative;
       wrap.classList.remove("story-fade-out");
       wrap.classList.add("story-fade-in");
+      pendingStoryStepTimeout = null;
     }, 220);
   } else {
     document.getElementById("storySeason").textContent = step.season;

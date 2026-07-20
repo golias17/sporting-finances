@@ -115,5 +115,10 @@ describe("data-table.js", () => {
   it("should do nothing on initDataExport if download button is missing", () => {
     document.getElementById("btnDownloadLedger").remove();
     expect(() => initDataExport()).not.toThrow();
+    // With no button to wire a listener onto, nothing else in the page
+    // should be touched — confirms this is a genuine no-op early return,
+    // not a partially-applied side effect.
+    expect(document.getElementById("dataTable").innerHTML).toBe("");
+    expect(global.URL.createObjectURL).not.toHaveBeenCalled();
   });
 });

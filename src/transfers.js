@@ -15,6 +15,25 @@ function fmtNumStr(n) {
   });
 }
 
+// Column order for #transfersDetailTable's <th>s — shared between wiring up
+// each header's sort-click listener (initTransfersDetailTable) and reading
+// the active sort indicator back off them (renderTransfersDetailTable). Kept
+// as one constant so reordering a column only has to happen in one place;
+// previously these were two separately-maintained copies that had to stay
+// in sync with the HTML by hand.
+const DETAIL_TABLE_SORT_KEYS = [
+  "player",
+  "season",
+  "window",
+  "type",
+  "club",
+  "fee",
+  "rights",
+  "bonus",
+  "commission",
+  "note",
+];
+
 // TRANSFER LEDGER RENDERER
 // =============================================================
 export function renderTransferLedger() {
@@ -203,7 +222,7 @@ export function initTransfersDetailTable() {
   const windowSelect = document.getElementById("tfWindowSelect");
   const typeSelect = document.getElementById("tfTypeSelect");
   const searchInput = document.getElementById("tfSearchInput");
-  if (!seasonSelect) return;
+  if (!seasonSelect || !typeSelect || !searchInput) return;
 
   // Abort previous listeners before wiring new ones
   if (detailTableAbortController) detailTableAbortController.abort();
@@ -264,25 +283,13 @@ export function initTransfersDetailTable() {
 
   // Attach sorting click listeners to table headers
   const headers = document.querySelectorAll("#transfersDetailTable th");
-  const sortKeys = [
-    "player",
-    "season",
-    "window",
-    "type",
-    "club",
-    "fee",
-    "rights",
-    "bonus",
-    "commission",
-    "note",
-  ];
 
   headers.forEach((th, index) => {
     th.classList.add("sortable-header");
     th.addEventListener(
       "click",
       () => {
-        const key = sortKeys[index];
+        const key = DETAIL_TABLE_SORT_KEYS[index];
         if (state.tfSortCol === key) {
           state.setTfSortDir(state.tfSortDir === "asc" ? "desc" : "asc");
         } else {
@@ -383,14 +390,20 @@ function renderTransfersDetailTable() {
     rows = rows.filter((r) => r.window === state.tfActiveWindow);
   }
 
-  // Filter based on search query
+  // Filter based on search query. Matches against localizedNote(r), not
+  // r.note directly — in PT locale the table displays note_pt (see the
+  // notes-cell render below), so searching on the raw EN note left PT users
+  // unable to find rows by any word that only appears in the translated
+  // text they're actually looking at.
   if (state.tfQuery) {
-    rows = rows.filter(
-      (r) =>
+    rows = rows.filter((r) => {
+      const note = localizedNote(r);
+      return (
         r.player.toLowerCase().includes(state.tfQuery) ||
         (r.club && r.club.toLowerCase().includes(state.tfQuery)) ||
-        (r.note && r.note.toLowerCase().includes(state.tfQuery)),
-    );
+        (note && note.toLowerCase().includes(state.tfQuery))
+      );
+    });
   }
 
   // Sort rows if tfSortCol is set
@@ -429,21 +442,9 @@ function renderTransfersDetailTable() {
 
   // Update header classes and indicators
   const headers = document.querySelectorAll("#transfersDetailTable th");
-  const sortKeys = [
-    "player",
-    "season",
-    "window",
-    "type",
-    "club",
-    "fee",
-    "rights",
-    "bonus",
-    "commission",
-    "note",
-  ];
 
   headers.forEach((th, index) => {
-    const key = sortKeys[index];
+    const key = DETAIL_TABLE_SORT_KEYS[index];
     const existingIndicator = th.querySelector(".sort-indicator");
     if (existingIndicator) {
       existingIndicator.remove();

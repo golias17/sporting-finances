@@ -361,6 +361,16 @@ describe("transfers.js", () => {
     it("initTransfersDetailTable is a no-op when the season select is missing", () => {
       document.getElementById("tfSeasonSelect").remove();
       expect(() => initTransfersDetailTable()).not.toThrow();
+      // A genuine early return: no listeners get wired on the other
+      // controls, so the table body is never populated and a change on a
+      // still-present control (e.g. the type select) has no effect.
+      expect(
+        document.getElementById("transfersDetailTableBody").innerHTML,
+      ).toBe("");
+      const typeSelect = document.getElementById("tfTypeSelect");
+      typeSelect.value = "in";
+      typeSelect.dispatchEvent(new window.Event("change"));
+      expect(state.tfActiveType).toBe("all"); // unchanged — no listener wired
     });
 
     it("re-renders when the season, window, and type dropdowns change", () => {
@@ -399,6 +409,12 @@ describe("transfers.js", () => {
     it("renders nothing when the table body container is missing", () => {
       document.getElementById("transfersDetailTableBody").remove();
       expect(() => initTransfersDetailTable()).not.toThrow();
+      // The missing container only short-circuits the render step
+      // (renderTransfersDetailTable's own `if (!container) return`) — the
+      // rest of init still runs safely, e.g. the season dropdown is still
+      // populated from the ledger.
+      const select = document.getElementById("tfSeasonSelect");
+      expect(select.options.length).toBe(2); // "All Seasons" + "2025/26"
     });
 
     it("shows the 'All Seasons' tag and pools rows from every season when tfActiveSeason is 'all'", () => {

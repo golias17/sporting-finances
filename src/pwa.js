@@ -6,6 +6,13 @@ export function showUpdateToast(onConfirm) {
     toast = document.createElement("div");
     toast.id = "pwa-update-toast";
     toast.className = "pwa-toast";
+    // Without this, screen reader users have no way to know this toast
+    // appeared at all — it's inserted well after page load, off in a
+    // corner, with nothing pointing focus at it. role="status" + polite
+    // aria-live means assistive tech announces the text as soon as it's
+    // set below, without interrupting whatever the user is doing.
+    toast.setAttribute("role", "status");
+    toast.setAttribute("aria-live", "polite");
     document.body.appendChild(toast);
   }
 
@@ -37,6 +44,9 @@ export function showOfflineReadyToast() {
     toast = document.createElement("div");
     toast.id = "pwa-offline-toast";
     toast.className = "pwa-toast";
+    // See the matching comment in showUpdateToast() above.
+    toast.setAttribute("role", "status");
+    toast.setAttribute("aria-live", "polite");
     document.body.appendChild(toast);
   }
 

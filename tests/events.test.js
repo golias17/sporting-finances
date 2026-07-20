@@ -57,14 +57,28 @@ describe("events.js", () => {
     expect(event2.classList.contains("hidden")).toBe(false);
   });
 
-  it("should handle missing event-legend DOM gracefully", () => {
+  it("should handle missing event-legend DOM gracefully, still filtering #eventsList", () => {
     document.body.innerHTML = `
       <div id="eventsList">
         <div class="event on-pitch">Event 1</div>
       </div>
     `;
+    // No .event-legend in the DOM — initEventFilter() should skip wiring
+    // the click listener without throwing, but syncEventsFilter() only
+    // reads the legend to sync its *own* active-button styling; the
+    // #eventsList filtering itself doesn't depend on the legend existing,
+    // so it should still actually work.
     expect(() => initEventFilter()).not.toThrow();
-    expect(() => syncEventsFilter()).not.toThrow();
+
+    const event1 = document.querySelector("#eventsList .event.on-pitch");
+
+    state.activeEventFilter = "off-pitch";
+    syncEventsFilter();
+    expect(event1.classList.contains("hidden")).toBe(true);
+
+    state.activeEventFilter = "on-pitch";
+    syncEventsFilter();
+    expect(event1.classList.contains("hidden")).toBe(false);
   });
 
   it("should ignore clicks outside .el-filter inside .event-legend", () => {

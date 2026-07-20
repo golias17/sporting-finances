@@ -311,22 +311,33 @@ function drawCoverPage(ctx, { revGrowthLabel, netResultLabel, equityLabel, execu
 
   const nd =
     latestSeason.borrowings_nc + latestSeason.borrowings_c - latestSeason.cash;
-  const ndRatio = nd / latestSeason.revenue_operating;
-  const ratioStr = ndRatio.toFixed(2) + " x";
+  // revenue_operating is the divisor here — if it's ever 0/null/undefined
+  // (e.g. an in-progress season with no revenue booked yet), nd / 0 is NaN
+  // or Infinity, which used to print literally as "NaN x"/"Infinity x" in
+  // the exported PDF, and worse, every ndRatio < N comparison below is
+  // false for NaN, so it fell through to the red "risk zone" label — an
+  // actively wrong claim for missing data, not just a cosmetic glitch.
+  const hasRevenue = !!latestSeason.revenue_operating;
+  const ndRatio = hasRevenue ? nd / latestSeason.revenue_operating : null;
+  const ratioStr = hasRevenue ? ndRatio.toFixed(2) + " x" : "—";
   // Same thresholds used by chartDebtLoad()/calculateHealthSignals() in the
   // dashboard (green < 1x, amber < 2x, red >= 2x) so the PDF caption always
   // agrees with what the app itself is showing for the same season.
-  const ndRatioLabel = isPt
-    ? ndRatio < 1
-      ? "Métrica de alavancagem saudável"
-      : ndRatio < 2
-        ? "Alavancagem elevada — a acompanhar"
-        : "Alavancagem em zona de risco"
-    : ndRatio < 1
-      ? "Leverage below safety threshold"
-      : ndRatio < 2
-        ? "Elevated leverage — worth watching"
-        : "Leverage in the risk zone";
+  const ndRatioLabel = !hasRevenue
+    ? isPt
+      ? "Receita operacional indisponível"
+      : "Operating revenue unavailable"
+    : isPt
+      ? ndRatio < 1
+        ? "Métrica de alavancagem saudável"
+        : ndRatio < 2
+          ? "Alavancagem elevada — a acompanhar"
+          : "Alavancagem em zona de risco"
+      : ndRatio < 1
+        ? "Leverage below safety threshold"
+        : ndRatio < 2
+          ? "Elevated leverage — worth watching"
+          : "Leverage in the risk zone";
   drawKpi(
     109,
     148,
@@ -578,12 +589,25 @@ function drawFinancialTablesPage(ctx) {
 
     const barWidth = 8;
     const chartWidth = 170;
-    const barSpacing = (chartWidth - (data.length * barWidth)) / (data.length - 1);
+    // data.length - 1 is 0 (division by zero -> Infinity) if there's ever
+    // exactly one season on record; that Infinity then multiplies by i=0
+    // in the loop below (0 * Infinity = NaN), so even the single bar would
+    // be drawn at a NaN x-position. Fall back to 0 spacing — with one bar
+    // there's nothing to space out anyway.
+    const barSpacing =
+      data.length > 1
+        ? (chartWidth - data.length * barWidth) / (data.length - 1)
+        : 0;
+    // maxEquityAbs is 0 if every season's equity is exactly 0 (or data is
+    // empty) - val / 0 is NaN/Infinity for any nonzero val, or NaN for 0/0.
+    // Guard so an all-zero dataset draws flat (zero-height) bars instead of
+    // silently producing NaN rect() calls.
+    const hasEquitySpread = maxEquityAbs > 0;
 
     for (let i = 0; i < data.length; i++) {
       const barX = 15 + 5 + i * (barWidth + barSpacing);
       const val = data[i].equity || 0;
-      const barHeight = (val / maxEquityAbs) * 26; // max scale 26mm
+      const barHeight = hasEquitySpread ? (val / maxEquityAbs) * 26 : 0; // max scale 26mm
 
       if (val >= 0) {
         const barY = yZero - barHeight;

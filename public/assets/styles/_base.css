@@ -1,4 +1,17 @@
-/* Premium transition framework */
+/* Premium transition framework — the single, site-wide theme-toggle
+   transition rule. This used to be duplicated in _components.css ("Global
+   Soft Theme Transitions", a different selector list with a different,
+   narrower property list) which loads after this file; since `transition`
+   is a shorthand, that later same-specificity rule silently won outright
+   wherever the two selector lists overlapped (.card, body, button, select,
+   input, table, th, td, nav.tabs) — dropping `transform` from the mix and
+   quietly breaking .card's hover lift animation (its own dedicated
+   transition, declared later in _components.css, was in turn overridden by
+   that same duplicate block). Consolidated into this one rule; the
+   selectors below that aren't from the original list here (.topbar, .hero,
+   .container, nav.tabs button, .story-btn, .rating-badge, .lf-switch-btn,
+   .cost-bar-container) are what the _components.css duplicate covered and
+   this one didn't. */
 body,
 .card,
 .event,
@@ -16,7 +29,15 @@ th,
 td,
 header.hero,
 nav.tabs,
-footer.site-footer {
+nav.tabs button,
+footer.site-footer,
+.topbar,
+.hero,
+.container,
+.story-btn,
+.rating-badge,
+.lf-switch-btn,
+.cost-bar-container {
   transition:
     background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
     border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),

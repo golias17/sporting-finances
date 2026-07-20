@@ -761,30 +761,14 @@ table.data td.neg {
    LAYOUT & DESIGN EVOLUTION UPGRADES (Chapter 5 & Beyond)
    ───────────────────────────────────────────────────────────── */
 
-/* 1. Global Soft Theme Transitions */
-body,
-.card,
-.topbar,
-.hero,
-.container,
-nav.tabs,
-nav.tabs button,
-table,
-th,
-td,
-input,
-select,
-button,
-.story-btn,
-.rating-badge,
-.lf-switch-btn,
-.cost-bar-container {
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
-}
+/* 1. Global Soft Theme Transitions — consolidated into the single
+   site-wide rule in _base.css. This block used to redeclare the
+   `transition` shorthand for an overlapping selector list (including
+   .card) with different values; being a shorthand and loading after
+   _base.css and after .card's own dedicated transition below, it silently
+   won and dropped `transform` from .card's hover lift and several other
+   elements' transitions. See the comment in _base.css for the full
+   explanation. */
 
 /* 2. Responsive Horizontal Scroll & Sliding Tab Bar */
 nav.tabs {
