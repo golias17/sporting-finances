@@ -427,4 +427,32 @@ describe("app boot (main.js)", () => {
     scrollToTopBtn.click();
     expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
   });
+
+  // Regression test: activateTab() looks up "tab-" + tab and immediately
+  // called .classList.add() on the result — safe only as long as
+  // state.VALID_TABS and index.html's tab-* sections never drift apart. If
+  // they ever did (a typo, a tab added to one but not the other), this would
+  // throw instead of degrading gracefully, unlike every other DOM write in
+  // the app. These two tests run last in this file since they permanently
+  // remove elements from the shared booted-app DOM.
+  it("does not throw when a tab's panel section is missing from the DOM", () => {
+    document.getElementById("tab-events")?.remove();
+    const eventsBtn = document.querySelector(
+      'nav.tabs button[data-tab="events"]',
+    );
+    expect(() => eventsBtn.click()).not.toThrow();
+  });
+
+  // Regression test: the PDF customizer form's submit handler read
+  // pdfLanguageSelect/chkPage1-5/pdfNotesText directly off getElementById()
+  // with no guard, unlike openModal() right above it in main.js (which
+  // already treats langSelect/notesText as optional) — an inconsistency
+  // that would throw if any customizer field were ever removed/renamed.
+  it("does not throw when a PDF customizer field is missing from the DOM", () => {
+    document.getElementById("chkPage3")?.remove();
+    const form = document.getElementById("pdfCustomizerForm");
+    expect(() =>
+      form.dispatchEvent(new window.Event("submit")),
+    ).not.toThrow();
+  });
 });

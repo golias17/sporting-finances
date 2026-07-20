@@ -615,7 +615,7 @@ function activateTab(tab, pushHash = true) {
     .querySelectorAll("section.tab-panel")
     .forEach((p) => p.classList.remove("active"));
   const activePanel = document.getElementById("tab-" + tab);
-  activePanel.classList.add("active");
+  if (activePanel) activePanel.classList.add("active");
 
   if (pushHash) {
     history.replaceState(null, "", "#" + tab);
@@ -910,15 +910,25 @@ function initPdfExport() {
   // Handle form submission
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    const lang = document.getElementById("pdfLanguageSelect").value;
+    const langSelect = document.getElementById("pdfLanguageSelect");
+    const chk1 = document.getElementById("chkPage1");
+    const chk2 = document.getElementById("chkPage2");
+    const chk3 = document.getElementById("chkPage3");
+    const chk4 = document.getElementById("chkPage4");
+    const chk5 = document.getElementById("chkPage5");
+    const notesText = document.getElementById("pdfNotesText");
+    if (!langSelect || !chk1 || !chk2 || !chk3 || !chk4 || !chk5 || !notesText)
+      return;
+
+    const lang = langSelect.value;
     const pages = [
-      document.getElementById("chkPage1").checked,
-      document.getElementById("chkPage2").checked,
-      document.getElementById("chkPage3").checked,
-      document.getElementById("chkPage4").checked,
-      document.getElementById("chkPage5").checked,
+      chk1.checked,
+      chk2.checked,
+      chk3.checked,
+      chk4.checked,
+      chk5.checked,
     ];
-    const executiveNote = document.getElementById("pdfNotesText").value;
+    const executiveNote = notesText.value;
 
     closeModal();
     import("./pdfGenerator.js")
