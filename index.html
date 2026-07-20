@@ -315,8 +315,6 @@
           </div>
         </div>
 
-
-
         <!-- Story launcher -->
         <div class="card" id="storyLaunchCard">
           <div class="story-launch">
@@ -1079,9 +1077,30 @@
         </div>
         <!-- SUB-TABS NAVIGATION -->
         <div class="sub-tabs-container">
-          <button class="sub-tab-btn active" id="btn-squad-financials" data-squad-sub="financials" data-i18n="squad_sub_financials">Financial Trends</button>
-          <button class="sub-tab-btn" id="btn-squad-analytics" data-squad-sub="analytics" data-i18n="squad_sub_analytics">Transfer Analytics</button>
-          <button class="sub-tab-btn" id="btn-squad-ledger" data-squad-sub="ledger" data-i18n="squad_sub_ledger">Detailed Ledger</button>
+          <button
+            class="sub-tab-btn active"
+            id="btn-squad-financials"
+            data-squad-sub="financials"
+            data-i18n="squad_sub_financials"
+          >
+            Financial Trends
+          </button>
+          <button
+            class="sub-tab-btn"
+            id="btn-squad-analytics"
+            data-squad-sub="analytics"
+            data-i18n="squad_sub_analytics"
+          >
+            Transfer Analytics
+          </button>
+          <button
+            class="sub-tab-btn"
+            id="btn-squad-ledger"
+            data-squad-sub="ledger"
+            data-i18n="squad_sub_ledger"
+          >
+            Detailed Ledger
+          </button>
         </div>
 
         <!-- SUBPANEL 1: FINANCIAL TRENDS -->
@@ -1093,9 +1112,9 @@
             </div>
             <p class="desc" data-i18n="ch06-squad-desc">
               Book value (intangible asset on balance sheet — acquisition cost
-              less amortization) vs market value (Transfermarkt estimate). Market
-              value far exceeds book because home-grown academy players are
-              recognised at zero acquisition cost on the balance sheet.
+              less amortization) vs market value (Transfermarkt estimate).
+              Market value far exceeds book because home-grown academy players
+              are recognised at zero acquisition cost on the balance sheet.
             </p>
             <div class="chart-box tall">
               <canvas
@@ -1113,8 +1132,8 @@
                 <span class="tag" data-i18n="ch06-income-tag">Sales</span>
               </div>
               <p class="desc" data-i18n="ch06-income-desc">
-                Player sales — the financial engine that funded the recovery. Five
-                seasons over €75M.
+                Player sales — the financial engine that funded the recovery.
+                Five seasons over €75M.
               </p>
               <div class="chart-box">
                 <canvas
@@ -1152,8 +1171,12 @@
         <div class="sub-panel-squad hidden" id="squad-subpanel-analytics">
           <div class="card">
             <div class="card-head">
-              <h3 data-i18n="chart_eras_title">Net Earnings by Managerial Era</h3>
-              <span class="tag" data-i18n="chart_eras_subtitle">Purchases vs. Sales</span>
+              <h3 data-i18n="chart_eras_title">
+                Net Earnings by Managerial Era
+              </h3>
+              <span class="tag" data-i18n="chart_eras_subtitle"
+                >Purchases vs. Sales</span
+              >
             </div>
             <div class="chart-box tall">
               <canvas
@@ -1165,8 +1188,12 @@
           </div>
           <div class="card">
             <div class="card-head">
-              <h3 data-i18n="chart_commissions_title">Agent Commissions Trend</h3>
-              <span class="tag" data-i18n="chart_commissions_subtitle">Sales vs Acquisitions</span>
+              <h3 data-i18n="chart_commissions_title">
+                Agent Commissions Trend
+              </h3>
+              <span class="tag" data-i18n="chart_commissions_subtitle"
+                >Sales vs Acquisitions</span
+              >
             </div>
             <div class="chart-box tall">
               <canvas
@@ -2358,7 +2385,8 @@
           <div>
             <h2 data-i18n="ch13-h2">The Fiscal <em>Playground</em>.</h2>
             <p class="lede" data-i18n="ch13-lede">
-              Adjust variables to project the outcomes of the 2025/26 season in real time.
+              Adjust variables to project the outcomes of the 2025/26 season in
+              real time.
             </p>
           </div>
         </div>
@@ -2367,44 +2395,91 @@
           <!-- Control Panel Card -->
           <div class="card playground-controls">
             <h3 data-i18n="pg-ctrls-title">Simulation Controls</h3>
-            <p class="section-desc" data-i18n="pg-ctrls-desc">Adjust the variables below to simulate different business and sports scenarios for the next season.</p>
+            <p class="section-desc" data-i18n="pg-ctrls-desc">
+              Adjust the variables below to simulate different business and
+              sports scenarios for the next season.
+            </p>
 
             <div class="pg-presets" role="group" aria-label="Quick scenarios">
-              <button type="button" class="btn-preset" data-pg-preset="conservative" aria-pressed="false">
+              <button
+                type="button"
+                class="btn-preset"
+                data-pg-preset="conservative"
+                aria-pressed="false"
+              >
                 <span data-i18n="pg-preset-conservative">Conservative</span>
               </button>
-              <button type="button" class="btn-preset" data-pg-preset="base" aria-pressed="true">
+              <button
+                type="button"
+                class="btn-preset"
+                data-pg-preset="base"
+                aria-pressed="true"
+              >
                 <span data-i18n="pg-preset-base">Base Case</span>
               </button>
-              <button type="button" class="btn-preset btn-preset--optimistic" data-pg-preset="optimistic" aria-pressed="false">
+              <button
+                type="button"
+                class="btn-preset btn-preset--optimistic"
+                data-pg-preset="optimistic"
+                aria-pressed="false"
+              >
                 <span data-i18n="pg-preset-optimistic">Optimistic</span>
               </button>
             </div>
 
             <div class="control-section">
-              <h4 class="control-section-title" data-i18n="pg-section-revenue">Revenue</h4>
+              <h4 class="control-section-title" data-i18n="pg-section-revenue">
+                Revenue
+              </h4>
 
               <div class="control-group">
                 <div class="control-label-row">
-                  <label for="uclSelect" data-i18n="pg-ucl-label">UEFA Champions League Campaign</label>
+                  <label for="uclSelect" data-i18n="pg-ucl-label"
+                    >UEFA Champions League Campaign</label
+                  >
                 </div>
-                <span class="control-help" data-i18n="pg-ucl-help">UEFA prize money, TV rights and ticket sales spillover.</span>
+                <span class="control-help" data-i18n="pg-ucl-help"
+                  >UEFA prize money, TV rights and ticket sales spillover.</span
+                >
                 <select id="uclSelect" class="playground-select">
-                  <option value="0" data-i18n="pg-ucl-none">Not Qualified (€0M)</option>
-                  <option value="36" data-i18n="pg-ucl-league">League Phase / Group Stage (+€36M)</option>
-                  <option value="47" data-i18n="pg-ucl-r16" selected>Round of 16 (+€47M)</option>
-                  <option value="60" data-i18n="pg-ucl-qf">Quarter-finals (+€60M)</option>
-                  <option value="82" data-i18n="pg-ucl-sf">Semi-finals / Finals (+€82M)</option>
+                  <option value="0" data-i18n="pg-ucl-none">
+                    Not Qualified (€0M)
+                  </option>
+                  <option value="36" data-i18n="pg-ucl-league">
+                    League Phase / Group Stage (+€36M)
+                  </option>
+                  <option value="47" data-i18n="pg-ucl-r16" selected>
+                    Round of 16 (+€47M)
+                  </option>
+                  <option value="60" data-i18n="pg-ucl-qf">
+                    Quarter-finals (+€60M)
+                  </option>
+                  <option value="82" data-i18n="pg-ucl-sf">
+                    Semi-finals / Finals (+€82M)
+                  </option>
                 </select>
               </div>
 
               <div class="control-group">
                 <div class="control-label-row">
-                  <label for="revGrowthSlider" data-i18n="pg-revgrowth-label">Organic Revenue Growth</label>
+                  <label for="revGrowthSlider" data-i18n="pg-revgrowth-label"
+                    >Organic Revenue Growth</label
+                  >
                   <span id="revGrowthVal" class="value-highlight">0%</span>
                 </div>
-                <span class="control-help" data-i18n="pg-revgrowth-help">Ticket pricing and existing commercial deals, independent of UCL.</span>
-                <input type="range" id="revGrowthSlider" min="-10" max="15" value="0" step="1" class="playground-slider" />
+                <span class="control-help" data-i18n="pg-revgrowth-help"
+                  >Ticket pricing and existing commercial deals, independent of
+                  UCL.</span
+                >
+                <input
+                  type="range"
+                  id="revGrowthSlider"
+                  min="-10"
+                  max="15"
+                  value="0"
+                  step="1"
+                  class="playground-slider"
+                />
                 <div class="slider-bounds">
                   <span>-10%</span>
                   <span>+15%</span>
@@ -2413,15 +2488,30 @@
             </div>
 
             <div class="control-section">
-              <h4 class="control-section-title" data-i18n="pg-section-costs">Costs &amp; Overhead</h4>
+              <h4 class="control-section-title" data-i18n="pg-section-costs">
+                Costs &amp; Overhead
+              </h4>
 
               <div class="control-group">
                 <div class="control-label-row">
-                  <label for="payrollSlider" data-i18n="pg-payroll-label">Payroll (Wage Bill) Change</label>
+                  <label for="payrollSlider" data-i18n="pg-payroll-label"
+                    >Payroll (Wage Bill) Change</label
+                  >
                   <span id="payrollVal" class="value-highlight">0%</span>
                 </div>
-                <span class="control-help" data-i18n="pg-payroll-help">Personnel expenses. A 10% change represents a €8.8M shift.</span>
-                <input type="range" id="payrollSlider" min="-30" max="30" value="0" step="5" class="playground-slider" />
+                <span class="control-help" data-i18n="pg-payroll-help"
+                  >Personnel expenses. A 10% change represents a €8.8M
+                  shift.</span
+                >
+                <input
+                  type="range"
+                  id="payrollSlider"
+                  min="-30"
+                  max="30"
+                  value="0"
+                  step="5"
+                  class="playground-slider"
+                />
                 <div class="slider-bounds">
                   <span>-30%</span>
                   <span>+30%</span>
@@ -2430,11 +2520,23 @@
 
               <div class="control-group">
                 <div class="control-label-row">
-                  <label for="capexSlider" data-i18n="pg-capex-label">Ordinary Overhead Change</label>
+                  <label for="capexSlider" data-i18n="pg-capex-label"
+                    >Ordinary Overhead Change</label
+                  >
                   <span id="capexVal" class="value-highlight">0%</span>
                 </div>
-                <span class="control-help" data-i18n="pg-capex-help">External supplies, security, matches and travel.</span>
-                <input type="range" id="capexSlider" min="-30" max="30" value="0" step="5" class="playground-slider" />
+                <span class="control-help" data-i18n="pg-capex-help"
+                  >External supplies, security, matches and travel.</span
+                >
+                <input
+                  type="range"
+                  id="capexSlider"
+                  min="-30"
+                  max="30"
+                  value="0"
+                  step="5"
+                  class="playground-slider"
+                />
                 <div class="slider-bounds">
                   <span>-30%</span>
                   <span>+30%</span>
@@ -2443,15 +2545,29 @@
             </div>
 
             <div class="control-section">
-              <h4 class="control-section-title" data-i18n="pg-section-squad">Squad &amp; Transfers</h4>
+              <h4 class="control-section-title" data-i18n="pg-section-squad">
+                Squad &amp; Transfers
+              </h4>
 
               <div class="control-group">
                 <div class="control-label-row">
-                  <label for="salesSlider" data-i18n="pg-sales-label">Player Sales Targets</label>
+                  <label for="salesSlider" data-i18n="pg-sales-label"
+                    >Player Sales Targets</label
+                  >
                   <span id="salesVal" class="value-highlight">€0M</span>
                 </div>
-                <span class="control-help" data-i18n="pg-sales-help">Selling players generates direct capital gains.</span>
-                <input type="range" id="salesSlider" min="0" max="150" value="117" step="1" class="playground-slider" />
+                <span class="control-help" data-i18n="pg-sales-help"
+                  >Selling players generates direct capital gains.</span
+                >
+                <input
+                  type="range"
+                  id="salesSlider"
+                  min="0"
+                  max="150"
+                  value="117"
+                  step="1"
+                  class="playground-slider"
+                />
                 <div class="slider-bounds">
                   <span>€0M</span>
                   <span>€150M</span>
@@ -2460,11 +2576,24 @@
 
               <div class="control-group">
                 <div class="control-label-row">
-                  <label for="purchasesSlider" data-i18n="pg-purchases-label">Player Purchases (Reinvestment)</label>
+                  <label for="purchasesSlider" data-i18n="pg-purchases-label"
+                    >Player Purchases (Reinvestment)</label
+                  >
                   <span id="purchasesVal" class="value-highlight">€0M</span>
                 </div>
-                <span class="control-help" data-i18n="pg-purchases-help">Squad additions. Outflow is spread over 5-year contracts.</span>
-                <input type="range" id="purchasesSlider" min="0" max="100" value="30" step="5" class="playground-slider" />
+                <span class="control-help" data-i18n="pg-purchases-help"
+                  >Squad additions. Outflow is spread over 5-year
+                  contracts.</span
+                >
+                <input
+                  type="range"
+                  id="purchasesSlider"
+                  min="0"
+                  max="100"
+                  value="30"
+                  step="5"
+                  class="playground-slider"
+                />
                 <div class="slider-bounds">
                   <span>€0M</span>
                   <span>€100M</span>
@@ -2473,15 +2602,29 @@
             </div>
 
             <div class="control-section">
-              <h4 class="control-section-title" data-i18n="pg-section-debt">Debt</h4>
+              <h4 class="control-section-title" data-i18n="pg-section-debt">
+                Debt
+              </h4>
 
               <div class="control-group">
                 <div class="control-label-row">
-                  <label for="debtRepaySlider" data-i18n="pg-debt-repay-label">Debt Deleveraging (Repayment)</label>
+                  <label for="debtRepaySlider" data-i18n="pg-debt-repay-label"
+                    >Debt Deleveraging (Repayment)</label
+                  >
                   <span id="debtRepayVal" class="value-highlight">€0M</span>
                 </div>
-                <span class="control-help" data-i18n="pg-debt-repay-help">Paying down bank debt principal saves 2% net interest.</span>
-                <input type="range" id="debtRepaySlider" min="0" max="50" value="0" step="5" class="playground-slider" />
+                <span class="control-help" data-i18n="pg-debt-repay-help"
+                  >Paying down bank debt principal saves 2% net interest.</span
+                >
+                <input
+                  type="range"
+                  id="debtRepaySlider"
+                  min="0"
+                  max="50"
+                  value="0"
+                  step="5"
+                  class="playground-slider"
+                />
                 <div class="slider-bounds">
                   <span>€0M</span>
                   <span>€50M</span>
@@ -2490,7 +2633,20 @@
             </div>
 
             <button id="btnResetPlayground" class="btn-reset-playground">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rotate-ccw"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-rotate-ccw"
+              >
+                <polyline points="1 4 1 10 7 10"></polyline>
+                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+              </svg>
               <span data-i18n="pg-btn-reset">Reset Simulation</span>
             </button>
           </div>
@@ -2499,12 +2655,16 @@
           <div class="playground-results">
             <div class="kpis">
               <div class="kpi" id="pgCardRev">
-                <div class="label" data-i18n="pg-kpi-rev">Projected Revenue</div>
+                <div class="label" data-i18n="pg-kpi-rev">
+                  Projected Revenue
+                </div>
                 <div class="value" id="pgKpiRev">€148.1M</div>
                 <div class="change" id="pgKpiRevDiff">no change</div>
               </div>
               <div class="kpi" id="pgCardNet">
-                <div class="label" data-i18n="pg-kpi-net">Projected Net Result</div>
+                <div class="label" data-i18n="pg-kpi-net">
+                  Projected Net Result
+                </div>
                 <div class="value" id="pgKpiNet">€20.0M</div>
                 <div class="change" id="pgKpiNetDiff">no change</div>
               </div>
@@ -2514,7 +2674,9 @@
                 <div class="change" id="pgKpiEqDiff">no change</div>
               </div>
               <div class="kpi" id="pgCardCash">
-                <div class="label" data-i18n="pg-kpi-cash">Projected Cash Balance</div>
+                <div class="label" data-i18n="pg-kpi-cash">
+                  Projected Cash Balance
+                </div>
                 <div class="value" id="pgKpiCash">€7.0M</div>
                 <div class="change" id="pgKpiCashDiff">no change</div>
               </div>
@@ -2524,22 +2686,42 @@
             <div class="playground-charts-container">
               <div class="card">
                 <div class="card-head">
-                  <h3 data-i18n="pg-chart1-title">Simulated Financials vs. Baseline</h3>
-                  <span class="tag" data-i18n="pg-chart1-tag">Scenario compare</span>
+                  <h3 data-i18n="pg-chart1-title">
+                    Simulated Financials vs. Baseline
+                  </h3>
+                  <span class="tag" data-i18n="pg-chart1-tag"
+                    >Scenario compare</span
+                  >
                 </div>
-                <p class="desc" data-i18n="pg-chart1-desc">Baseline assumes 2024/25 repeats exactly; labels above each bar show how your projection differs from it.</p>
+                <p class="desc" data-i18n="pg-chart1-desc">
+                  Baseline assumes 2024/25 repeats exactly; labels above each
+                  bar show how your projection differs from it.
+                </p>
                 <div class="chart-box tall">
-                  <canvas id="chartPlaygroundNet" aria-label="Playground Net Results Chart" role="img"></canvas>
+                  <canvas
+                    id="chartPlaygroundNet"
+                    aria-label="Playground Net Results Chart"
+                    role="img"
+                  ></canvas>
                 </div>
               </div>
               <div class="card">
                 <div class="card-head">
                   <h3 data-i18n="pg-chart2-title">Equity & Solvency Health</h3>
-                  <span class="tag" data-i18n="pg-chart2-tag">Balance sheet</span>
+                  <span class="tag" data-i18n="pg-chart2-tag"
+                    >Balance sheet</span
+                  >
                 </div>
-                <p class="desc" data-i18n="pg-chart2-desc">Left axis: shareholders' equity (€M). Right axis: solvency ratio, equity as a share of total assets.</p>
+                <p class="desc" data-i18n="pg-chart2-desc">
+                  Left axis: shareholders' equity (€M). Right axis: solvency
+                  ratio, equity as a share of total assets.
+                </p>
                 <div class="chart-box tall">
-                  <canvas id="chartPlaygroundSolvency" aria-label="Playground Solvency Chart" role="img"></canvas>
+                  <canvas
+                    id="chartPlaygroundSolvency"
+                    aria-label="Playground Solvency Chart"
+                    role="img"
+                  ></canvas>
                 </div>
               </div>
             </div>
@@ -2667,19 +2849,41 @@
           </svg>
         </button>
         <div class="pdf-modal-intro">
-          <h2 id="pdfModalTitle" class="pdf-modal-title" data-i18n="pdf_customizer_title">Customize PDF Report</h2>
-          <p id="pdfModalSubtitle" class="pdf-modal-subtitle" data-i18n="pdf_customizer_subtitle">Select options to generate your personalized dossier</p>
+          <h2
+            id="pdfModalTitle"
+            class="pdf-modal-title"
+            data-i18n="pdf_customizer_title"
+          >
+            Customize PDF Report
+          </h2>
+          <p
+            id="pdfModalSubtitle"
+            class="pdf-modal-subtitle"
+            data-i18n="pdf_customizer_subtitle"
+          >
+            Select options to generate your personalized dossier
+          </p>
         </div>
         <form id="pdfCustomizerForm" class="pdf-modal-form">
           <div class="pdf-field-group">
-            <label id="lblPdfLanguage" class="pdf-field-label" data-i18n="pdf_language">Report Language</label>
+            <label
+              id="lblPdfLanguage"
+              class="pdf-field-label"
+              data-i18n="pdf_language"
+              >Report Language</label
+            >
             <select id="pdfLanguageSelect" class="pdf-field-input">
               <option value="en">English</option>
               <option value="pt">Português</option>
             </select>
           </div>
           <div class="pdf-field-group">
-            <label id="lblPdfPages" class="pdf-field-label" data-i18n="pdf_pages">Pages to Include</label>
+            <label
+              id="lblPdfPages"
+              class="pdf-field-label"
+              data-i18n="pdf_pages"
+              >Pages to Include</label
+            >
             <div class="pdf-checkbox-list">
               <label class="pdf-checkbox-label">
                 <input type="checkbox" id="chkPage1" checked />
@@ -2687,25 +2891,43 @@
               </label>
               <label class="pdf-checkbox-label">
                 <input type="checkbox" id="chkPage2" checked />
-                <span data-i18n="pdf_page_2">I. Operating Income & II. Balance Sheet</span>
+                <span data-i18n="pdf_page_2"
+                  >I. Operating Income & II. Balance Sheet</span
+                >
               </label>
               <label class="pdf-checkbox-label">
                 <input type="checkbox" id="chkPage3" checked />
-                <span data-i18n="pdf_page_3">III. Player Trading & IV. Cash Flows</span>
+                <span data-i18n="pdf_page_3"
+                  >III. Player Trading & IV. Cash Flows</span
+                >
               </label>
               <label class="pdf-checkbox-label">
                 <input type="checkbox" id="chkPage4" checked />
-                <span data-i18n="pdf_page_4">Strategic Financing & Milestones</span>
+                <span data-i18n="pdf_page_4"
+                  >Strategic Financing & Milestones</span
+                >
               </label>
               <label class="pdf-checkbox-label">
                 <input type="checkbox" id="chkPage5" checked />
-                <span data-i18n="pdf_page_5">V. Landmark Player Transfers Ledger</span>
+                <span data-i18n="pdf_page_5"
+                  >V. Landmark Player Transfers Ledger</span
+                >
               </label>
             </div>
           </div>
           <div class="pdf-field-group">
-            <label id="lblPdfNotes" class="pdf-field-label" data-i18n="pdf_executive_notes">Custom Executive Annotation</label>
-            <textarea id="pdfNotesText" rows="3" class="pdf-field-input" placeholder="Enter custom notes or disclaimer..."></textarea>
+            <label
+              id="lblPdfNotes"
+              class="pdf-field-label"
+              data-i18n="pdf_executive_notes"
+              >Custom Executive Annotation</label
+            >
+            <textarea
+              id="pdfNotesText"
+              rows="3"
+              class="pdf-field-input"
+              placeholder="Enter custom notes or disclaimer..."
+            ></textarea>
           </div>
           <button type="submit" id="btnPdfModalSubmit" class="pdf-modal-submit">
             <span data-i18n="pdf_generate_btn">Generate Report</span>
