@@ -1,5 +1,5 @@
 import { beforeAll } from "vitest";
-import { initChartDefaults } from "../src/chartUtils.js";
+import { initChartDefaults } from "../src/charts/chartUtils.js";
 
 beforeAll(() => {
   // Ensure window.getComputedStyle is robustly mocked

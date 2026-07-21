@@ -108,7 +108,7 @@ export default defineConfig({
       // even though the linkage unquestionably runs on every test that
       // imports through this file. Excluded so that reports don't misread
       // this as an actual untested file.
-      exclude: ["src/chartUtils.js"],
+      exclude: ["src/charts/chartUtils.js"],
       // A starting floor set against a real measured baseline (see the
       // coverage report below), not a precisely-tuned target — kept with
       // headroom under the actual numbers so normal day-to-day variance
