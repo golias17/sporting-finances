@@ -1,8 +1,17 @@
 import { describe, it, expect, beforeAll, beforeEach, afterEach } from "vitest";
 import { state } from "../src/state.js";
-import { initChartDefaults, chartRegistry } from "../src/chartUtils.js";
+import {
+  initChartDefaults,
+  chartRegistry,
+  getBrandColors,
+} from "../src/chartUtils.js";
 import { drawManagerEras, drawCommissions } from "../src/squadAnalytics.js";
 import { mockChartEnvironment } from "./chartTestUtils.js";
+
+// Same palette squadAnalytics.js's own FALLBACK constant is derived from
+// (getBrandColors(false), light mode) — used below to assert against it
+// without importing the module's un-exported FALLBACK directly.
+const FALLBACK = getBrandColors(false);
 
 // drawManagerEras/drawCommissions build their charts via charts.js's
 // mkChart() helper, same as every other chart in the app — that needs the
@@ -167,5 +176,81 @@ describe("squadAnalytics.js - drawManagerEras / drawCommissions", () => {
       expect(chart.config.options.scales.x.stacked).toBe(true);
       expect(chart.config.options.scales.y.stacked).toBe(true);
     });
+  });
+
+  // Every ledger season in the shared beforeEach mock has both `sales` and
+  // `purchases` arrays present, so the `if (seasonObj.sales)`/
+  // `if (seasonObj.purchases)` guards in both draw functions only ever took
+  // their true branch. Real ledger seasons can be purchase-only or
+  // sale-only (see data/transfers.json), so the false branch — treating a
+  // missing array as zero rather than throwing — needs its own coverage.
+  it("treats a season missing its sales or purchases array as zero, not a crash, in both charts", () => {
+    state.TRANSFER_LEDGER = [
+      { season: "2013/14", purchases: [{ player: "Only Buy", fee: 10, commission: 1 }] },
+      { season: "2021/22", sales: [{ player: "Only Sell", fee: 30, commission: 3 }] },
+    ];
+
+    expect(() => drawManagerEras()).not.toThrow();
+    const erasChart = chartRegistry.get("chartManagerEras");
+    const [salesDs, purchasesDs] = erasChart.data.datasets;
+    const jardimIdx = erasChart.data.labels.indexOf("Leonardo Jardim (13/14)");
+    const amorimIdx = erasChart.data.labels.indexOf(
+      "Rúben Amorim (20/21 - 23/24)",
+    );
+    expect(salesDs.data[jardimIdx]).toBe(0); // no sales array that season
+    expect(purchasesDs.data[jardimIdx]).toBe(10);
+    expect(salesDs.data[amorimIdx]).toBe(30);
+    expect(purchasesDs.data[amorimIdx]).toBe(0); // no purchases array that season
+
+    expect(() => drawCommissions()).not.toThrow();
+    const commChart = chartRegistry.get("chartCommissions");
+    const [salesCommDs, purchasesCommDs] = commChart.data.datasets;
+    expect(salesCommDs.data).toEqual([0, 3]);
+    expect(purchasesCommDs.data).toEqual([1, 0]);
+  });
+
+  // FALLBACK (derived from getBrandColors(false)) exists specifically for
+  // the case where a chart is drawn before initChartDefaults() has
+  // populated state.COLORS — see the comment on FALLBACK's definition in
+  // squadAnalytics.js. That branch of every `state.COLORS.x || FALLBACK.x`
+  // pair never runs in any other test here since beforeEach always calls
+  // initChartDefaults() first. state.COLORS is a live Proxy over a plain
+  // object (see state.js), so deleting keys off it and restoring them
+  // afterward is enough to exercise the fallback without needing any
+  // export change to state.js.
+  it("falls back to the canonical light palette for legend/dataset colors when state.COLORS isn't populated yet", () => {
+    const keys = ["ink", "posSoft", "pos", "negSoft", "neg", "gold", "goldSoft"];
+    const saved = {};
+    keys.forEach((k) => {
+      saved[k] = state.COLORS[k];
+      delete state.COLORS[k];
+    });
+
+    try {
+      drawManagerEras();
+      const erasChart = chartRegistry.get("chartManagerEras");
+      expect(erasChart.config.options.plugins.legend.labels.color).toBe(
+        FALLBACK.ink,
+      );
+      const [salesDs, purchasesDs, netDs] = erasChart.data.datasets;
+      expect(salesDs.backgroundColor).toBe(FALLBACK.posSoft);
+      expect(salesDs.borderColor).toBe(FALLBACK.pos);
+      expect(purchasesDs.backgroundColor).toBe(FALLBACK.negSoft);
+      expect(purchasesDs.borderColor).toBe(FALLBACK.neg);
+      expect(netDs.borderColor).toBe(FALLBACK.gold);
+      expect(netDs.backgroundColor).toBe(FALLBACK.goldSoft);
+
+      drawCommissions();
+      const commChart = chartRegistry.get("chartCommissions");
+      const [salesCommDs, purchasesCommDs] = commChart.data.datasets;
+      expect(salesCommDs.backgroundColor).toBe(FALLBACK.posSoft);
+      expect(salesCommDs.borderColor).toBe(FALLBACK.pos);
+      expect(purchasesCommDs.backgroundColor).toBe(FALLBACK.negSoft);
+      expect(purchasesCommDs.borderColor).toBe(FALLBACK.neg);
+    } finally {
+      keys.forEach((k) => {
+        state.COLORS[k] = saved[k];
+      });
+    }
   });
 });
