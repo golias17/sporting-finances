@@ -42,38 +42,21 @@ The project was recently modernized into a robust, decoupled ES Module architect
 
 ```
 ├── index.html                  # Core layout and structural i18n hooks
-├── package.json                # Project dependencies (Vite)
+├── package.json                # Project dependencies and npm scripts
+├── vite.config.js              # Vite build configuration and PWA setup
+├── eslint.config.mjs           # ESLint configuration
+├── tests/                      # Vitest unit and integration test suite, mirroring src/
 ├── public/
-│   └── data/
-│       ├── financials.json     # Extracted raw KPI & historical annual datasets
-│       └── transfers.json      # Complete granular player transfer ledger
-├── src/
-│   ├── main.js                 # ES Module entrypoint, orchestrates tab rendering and data fetching
-│   ├── state.js                # Centralized global application state store
-│   ├── localization.js         # Language detection and robust Portuguese translation engine (t() helper)
-│   ├── translations.js         # Centralized dictionary containing ~300 Portuguese/English text pairs
-│   ├── pwa.js                  # PWA Service Worker prompt triggers and offline setup
-│   ├── charts.js               # Chart.js initializers, positive/negative color helpers, config
-│   ├── health.js               # Logic for the Season Health-Check matrix tab
-│   ├── bonds.js                # Logic for the Debt Instruments (VMOCs, Bonds, Securitization) tab
-│   ├── transfers.js            # Logic for the granular player Transfer Ledger tab
-│   ├── data-table.js           # Logic for the Financial Statements full data table and CSV export
-│   ├── story.js                # Logic for the interactive Financial Story Mode timeline
-│   ├── compare.js              # Logic for the Season Comparison tool
-│   ├── events.js               # Logic for filtering timeline Key Events
-│   └── news.js                 # RSS parser and renderer for the News Feed tab
-└── assets/
-    ├── styles/                 # Modular CSS architecture
-    │   ├── _variables.css      # Design tokens, colors, fonts
-    │   ├── _base.css           # Resets and global styles
-    │   ├── _components.css     # Buttons, cards, tooltips, tabs
-    │   ├── _layout.css         # Structural grids and containers
-    │   ├── _sections.css       # View-specific panel styling
-    │   ├── _animations.css     # Cinematic scroll keyframes
-    │   ├── _print.css          # Print-friendly queries
-    │   └── _mobile.css         # Bottom nav and mobile overrides
-    ├── styles.css              # Main entrypoint, @imports all modules
-    └── LOGO.png                # Sporting CP visual emblem
+│   ├── data/                   # Extracted raw JSON datasets (financials, transfers, news)
+│   └── locales/                # Translation dictionaries (en.json, pt.json)
+└── src/
+    ├── core/                   # App bootstrapping, routing, and state management (main.js, router.js, state.js)
+    ├── features/               # Core domain logic (transfers.js, bonds.js, squadAnalytics.js, etc.)
+    ├── charts/                 # Chart.js rendering, configurations, and utilities
+    ├── ui/                     # UI components (theme toggles, modals, lightboxes, PDF export)
+    ├── utils/                  # Shared utility functions and PWA service worker registration
+    ├── styles/                 # Modular CSS architecture (variables, layout, components)
+    └── styles.css              # Main CSS entrypoint, processed by Vite
 ```
 
 ---
