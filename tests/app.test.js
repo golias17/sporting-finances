@@ -15,9 +15,16 @@ import { state } from "../src/state.js";
 import * as pdfGen from "../src/pdfGenerator.js";
 import * as charts from "../src/charts.js";
 import * as playground from "../src/playground.js";
+import { chartRegistry } from "../src/chartUtils.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.resolve(__dirname, "../public");
+
+// Captured by the IntersectionObserver stub in beforeAll below so
+// initScrollAnimations()'s callback (main.js) can be invoked directly —
+// jsdom doesn't implement real intersection detection, so nothing would
+// ever call it otherwise.
+let capturedIntersectionCallback = null;
 
 vi.mock("../src/pdfGenerator.js", () => ({
   generateCuratedPdf: vi.fn(),
@@ -90,6 +97,9 @@ describe("app boot (main.js)", () => {
     window.scrollTo = vi.fn();
     Element.prototype.scrollTo = vi.fn();
     global.IntersectionObserver = class {
+      constructor(callback) {
+        capturedIntersectionCallback = callback;
+      }
       observe() {}
       unobserve() {}
       disconnect() {}
@@ -157,6 +167,88 @@ describe("app boot (main.js)", () => {
     expect(revenueBtn.getAttribute("aria-selected")).toBe("true");
   });
 
+  // initScrollAnimations() wires every .reveal target to an
+  // IntersectionObserver; jsdom never actually fires one, so the captured
+  // callback (see the IntersectionObserver stub in beforeAll) has to be
+  // invoked directly to exercise its body.
+  it("reveals a scroll-animation target and stops observing it once it intersects", () => {
+    expect(capturedIntersectionCallback).toBeTypeOf("function");
+    const target = document.querySelector(".reveal");
+    expect(target).not.toBeNull();
+    target.classList.remove("visible");
+
+    const unobserve = vi.fn();
+    capturedIntersectionCallback(
+      [{ isIntersecting: false, target }],
+      { unobserve },
+    );
+    expect(target.classList.contains("visible")).toBe(false);
+    expect(unobserve).not.toHaveBeenCalled();
+
+    capturedIntersectionCallback(
+      [{ isIntersecting: true, target }],
+      { unobserve },
+    );
+    expect(target.classList.contains("visible")).toBe(true);
+    expect(unobserve).toHaveBeenCalledWith(target);
+  });
+
+  // scrollToTopOnMobile() (main.js) only scrolls below the mobile breakpoint —
+  // every other test in this file runs at jsdom's default (desktop-width)
+  // innerWidth, so that branch is otherwise never taken.
+  it("scrolls to top after a tab switch on mobile-width viewports, but not on desktop", () => {
+    // Uses debt/bonds (not revenue) so it doesn't interfere with the
+    // "does not redraw..." test below, which specifically checks
+    // chartRevenue's *first*-visit call count.
+    const debtBtn = document.querySelector('nav.tabs button[data-tab="debt"]');
+    const bondsBtn = document.querySelector(
+      'nav.tabs button[data-tab="bonds"]',
+    );
+
+    window.scrollTo.mockClear();
+    debtBtn.click(); // desktop width (jsdom default) — no scroll
+    expect(window.scrollTo).not.toHaveBeenCalled();
+
+    Object.defineProperty(window, "innerWidth", {
+      writable: true,
+      configurable: true,
+      value: 500,
+    });
+    bondsBtn.click();
+    expect(window.scrollTo).toHaveBeenCalledWith({
+      top: 0,
+      behavior: "smooth",
+    });
+
+    Object.defineProperty(window, "innerWidth", {
+      writable: true,
+      configurable: true,
+      value: 1024,
+    });
+  });
+
+  // updateTabIndicator() (main.js) defaults to whatever nav button currently
+  // has .active when called with no argument (the debounced resize
+  // listener's call pattern) — if none does, it zeroes the indicator's width
+  // instead of reading offsetLeft/offsetWidth off a null button.
+  it("zeroes the tab indicator's width when no nav button is active", () => {
+    const tabsContainer = document.querySelector("nav.tabs");
+    const activeBtn = tabsContainer.querySelector("button.active");
+    expect(activeBtn).not.toBeNull();
+    activeBtn.classList.remove("active");
+
+    vi.useFakeTimers();
+    window.dispatchEvent(new window.Event("resize"));
+    vi.advanceTimersByTime(150);
+    vi.useRealTimers();
+
+    const indicator = tabsContainer.querySelector(".tab-indicator");
+    expect(indicator.style.width).toBe("0px");
+
+    // Restore so later tests relying on an active tab aren't affected.
+    activeBtn.classList.add("active");
+  });
+
   // Regression test for the runOnce() helper extracted from activateTab's
   // per-tab chart loop (see main.js) — a tab's chart-drawing functions
   // should only run once per visit, not be re-invoked every time its nav
@@ -184,6 +276,142 @@ describe("app boot (main.js)", () => {
     expect(charts.chartRevenue.mock.calls.length).toBe(callsAfterFirstVisit);
   });
 
+  // destroyInactiveCharts() (main.js) is what makes runOnce() draw a tab's
+  // charts fresh on a *later* revisit instead of leaving it permanently
+  // skipped: on navigating away from a tab it destroys any chart still in
+  // chartRegistry for that tab's canvases and clears the matching draw
+  // function back out of state.renderedCharts. charts.js is mocked in this
+  // file, so mkChart() never actually populates chartRegistry itself —
+  // populate it by hand here to exercise the teardown branch directly.
+  it("destroys and forgets a tab's chart when navigating away, so it redraws on the next visit", () => {
+    const revenueBtn = document.querySelector(
+      'nav.tabs button[data-tab="revenue"]',
+    );
+    const bondsBtn = document.querySelector(
+      'nav.tabs button[data-tab="bonds"]',
+    );
+
+    revenueBtn.click(); // revenue is the active tab
+    const destroy = vi.fn();
+    chartRegistry.set("chartRevenue", { destroy });
+
+    bondsBtn.click(); // navigate away — should tear the revenue chart down
+    expect(destroy).toHaveBeenCalledTimes(1);
+    expect(chartRegistry.has("chartRevenue")).toBe(false);
+
+    const callsBeforeRevisit = charts.chartRevenue.mock.calls.length;
+    revenueBtn.click(); // runOnce's guard was cleared — redraws
+    expect(charts.chartRevenue.mock.calls.length).toBeGreaterThan(
+      callsBeforeRevisit,
+    );
+  });
+
+  // activateTab() only calls refreshHealthBarIfStale() (health.js) when the
+  // tab being activated is "healthcheck" — a plain visit to that tab is
+  // enough to exercise that line; the staleness/no-op logic inside
+  // refreshHealthBarIfStale() itself is covered separately in health tests.
+  it("visits the healthcheck tab without throwing and marks it active", () => {
+    const healthBtn = document.querySelector(
+      'nav.tabs button[data-tab="healthcheck"]',
+    );
+    expect(() => healthBtn.click()).not.toThrow();
+    expect(
+      document.getElementById("tab-healthcheck").classList.contains("active"),
+    ).toBe(true);
+  });
+
+  // Keyboard tab navigation: ArrowLeft/ArrowRight on nav.tabs moves focus to
+  // the adjacent button (wrapping at either end) and activates it — but only
+  // when focus is already on one of the tab buttons; a stray arrow keypress
+  // elsewhere, or any other key, is a no-op.
+  it("moves to the next/previous tab with ArrowRight/ArrowLeft, wrapping at the ends, and ignores other keys/targets", () => {
+    const tabsNav = document.querySelector("nav.tabs");
+    const tabs = [...tabsNav.querySelectorAll("button")];
+    const first = tabs[0];
+    const second = tabs[1];
+    const last = tabs[tabs.length - 1];
+
+    first.focus();
+    tabsNav.dispatchEvent(
+      new window.KeyboardEvent("keydown", {
+        key: "ArrowRight",
+        bubbles: true,
+      }),
+    );
+    expect(document.activeElement).toBe(second);
+    expect(second.classList.contains("active")).toBe(true);
+
+    second.focus();
+    tabsNav.dispatchEvent(
+      new window.KeyboardEvent("keydown", {
+        key: "ArrowLeft",
+        bubbles: true,
+      }),
+    );
+    expect(document.activeElement).toBe(first);
+    expect(first.classList.contains("active")).toBe(true);
+
+    // Wraps from the first tab back to the last one.
+    first.focus();
+    tabsNav.dispatchEvent(
+      new window.KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true }),
+    );
+    expect(document.activeElement).toBe(last);
+
+    // A non-arrow key is ignored.
+    last.focus();
+    tabsNav.dispatchEvent(
+      new window.KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+    );
+    expect(document.activeElement).toBe(last);
+
+    // Focus outside the nav buttons entirely (idx === -1) — the listener is
+    // on nav.tabs itself but must ignore this since document.activeElement
+    // isn't one of its buttons.
+    const themeBtn = document.getElementById("themeToggleBtn");
+    themeBtn.focus();
+    tabsNav.dispatchEvent(
+      new window.KeyboardEvent("keydown", {
+        key: "ArrowRight",
+        bubbles: true,
+      }),
+    );
+    expect(document.activeElement).toBe(themeBtn);
+
+    // Restore to overview for tests that assume it.
+    document.querySelector('nav.tabs button[data-tab="overview"]').click();
+  });
+
+  // The analytics squad sub-tab lazily draws drawManagerEras/drawCommissions
+  // (squadAnalytics.js) via the same runOnce() guard as every TAB_CHARTS
+  // entry — squadAnalytics.js isn't mocked in this file, but it only calls
+  // through to charts.js's mkChart(), which is.
+  it("draws the manager-eras and commissions charts on first visit to the squad analytics sub-tab", () => {
+    document.querySelector('nav.tabs button[data-tab="squad"]').click();
+    const analyticsSubBtn = document.querySelector(
+      '.sub-tab-btn[data-squad-sub="analytics"]',
+    );
+    expect(analyticsSubBtn).not.toBeNull();
+
+    expect(() => analyticsSubBtn.click()).not.toThrow();
+    expect(analyticsSubBtn.classList.contains("active")).toBe(true);
+    expect(
+      document
+        .getElementById("squad-subpanel-analytics")
+        .classList.contains("hidden"),
+    ).toBe(false);
+    // mkChart is the mocked entry point both drawing functions funnel
+    // through — two calls confirms both actually ran.
+    expect(charts.mkChart).toHaveBeenCalledWith(
+      "chartManagerEras",
+      expect.anything(),
+    );
+    expect(charts.mkChart).toHaveBeenCalledWith(
+      "chartCommissions",
+      expect.anything(),
+    );
+  });
+
   // Regression test: initPlayground() used to be called eagerly in
   // setupApp() *and* again via runOnce(initPlayground) the first time the
   // user visited the Playground tab (it's listed in TAB_CHARTS.playground —
@@ -208,6 +436,38 @@ describe("app boot (main.js)", () => {
     // (same runOnce guard every other tab's setup function relies on).
     playgroundBtn.click();
     expect(playground.initPlayground).toHaveBeenCalledTimes(1);
+  });
+
+  // Regression test: previously the only PT-language-switch coverage
+  // happened to run while story mode was closed, so the
+  // `if (storyCard && !storyCard.classList.contains("hidden"))` branch in
+  // the language-link handler (main.js) — which re-renders the open story
+  // step's text after switching languages — was never exercised. Runs after
+  // the initPlayground test above (not before) since the language-switch
+  // handler calls state.renderedCharts.clear(), which would otherwise let a
+  // later tab visit re-trigger a runOnce-guarded function a second time.
+  it("re-renders the open story step's text when the language is switched while story mode is open", async () => {
+    document.querySelector('nav.tabs button[data-tab="overview"]').click();
+    const startBtn = document.getElementById("btnStartStory");
+    expect(startBtn).not.toBeNull();
+    startBtn.click();
+
+    const storyCard = document.getElementById("storyCard");
+    expect(storyCard.classList.contains("hidden")).toBe(false);
+
+    const ptLink = document.querySelector('.lang-link[data-lang="pt"]');
+    ptLink.click();
+    await vi.waitFor(() => expect(state.isPt).toBe(true));
+    // Story card should still be open and re-rendered, not closed.
+    expect(storyCard.classList.contains("hidden")).toBe(false);
+
+    // Switch back to English and close story mode so later tests aren't
+    // affected by either state change.
+    const enLink = document.querySelector('.lang-link[data-lang="en"]');
+    enLink.click();
+    await vi.waitFor(() => expect(state.isPt).toBe(false));
+    const exitBtn = document.getElementById("btnExitStory");
+    if (exitBtn) exitBtn.click();
   });
 
   it("renders the transfer ledger on the squad tab", () => {
