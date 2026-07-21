@@ -519,6 +519,8 @@ describe("Chart.js and Annotation Plugin integration", () => {
     chartTransferReliance();
     chartDebtLoad();
     chartCurrentRatio();
+    chartRevVsPayroll();
+    chartDebtMaturity();
 
     // 1. chartRevStreams
     const revStreamsChart = chartRegistry.get("chartRevStreams");
@@ -528,6 +530,30 @@ describe("Chart.js and Annotation Plugin integration", () => {
         dataset: { label: "TV" },
       });
     expect(revStreamsLabel).toContain("TV: €25.0M");
+    // Its footer callback sums every dataset's y value shown in the
+    // tooltip's item list (one per stacked segment for the hovered season)
+    // into a single "Total: €XM" line.
+    const revStreamsFooter =
+      revStreamsChart.config.options.plugins.tooltip.callbacks.footer([
+        { parsed: { y: 25000 } },
+        { parsed: { y: 15000 } },
+        { parsed: { y: 10000 } },
+      ]);
+    expect(revStreamsFooter).toBe("Total: €50.0M");
+
+    // chartRevVsPayroll
+    const rvpChart = chartRegistry.get("chartRevVsPayroll");
+    const rvpLabel = rvpChart.config.options.plugins.tooltip.callbacks.label({
+      parsed: { y: 65 },
+    });
+    expect(rvpLabel).toBe("Ratio: 65%");
+
+    // chartDebtMaturity
+    const dmChart = chartRegistry.get("chartDebtMaturity");
+    const dmLabel = dmChart.config.options.plugins.tooltip.callbacks.label({
+      parsed: { y: 42 },
+    });
+    expect(dmLabel).toBe("Long-term: 42%");
 
     // 2. chartPayrollBurden
     const pbChart = chartRegistry.get("chartPayrollBurden");
@@ -579,6 +605,8 @@ describe("Chart.js and Annotation Plugin integration", () => {
     chartTransferReliance();
     chartDebtLoad();
     chartCurrentRatio();
+    chartRevVsPayroll();
+    chartDebtMaturity();
 
     const pbChart = chartRegistry.get("chartPayrollBurden");
     const pbLabel = pbChart.config.options.plugins.tooltip.callbacks.label({
@@ -603,6 +631,18 @@ describe("Chart.js and Annotation Plugin integration", () => {
       parsed: { y: 0.85 },
     });
     expect(crLabel).toContain("Rácio de solvência: 0.85×");
+
+    const rvpChart = chartRegistry.get("chartRevVsPayroll");
+    const rvpLabel = rvpChart.config.options.plugins.tooltip.callbacks.label({
+      parsed: { y: 65 },
+    });
+    expect(rvpLabel).toBe("Rácio: 65%");
+
+    const dmChart = chartRegistry.get("chartDebtMaturity");
+    const dmLabel = dmChart.config.options.plugins.tooltip.callbacks.label({
+      parsed: { y: 42 },
+    });
+    expect(dmLabel).toBe("Longo prazo: 42%");
 
     state.isPt = false; // restore
   });
@@ -651,6 +691,47 @@ describe("Chart.js and Annotation Plugin integration", () => {
         const value = chart.config.data.datasets[0].data[lastIdx];
         expect(value, `${id} should be null, not Infinity/NaN`).toBeNull();
       });
+    } finally {
+      state.DATASET = originalDataset;
+    }
+  });
+
+  // chartRevStreams() derives a 4th "other operating income" series as the
+  // gap between total revenue and the three named streams — but only for
+  // seasons that actually report rev_tv_comp/rev_matchday/rev_commercial
+  // (older seasons in the real dataset predate that breakdown and are
+  // skipped via the `d.rev_tv_comp == null` guard, which every season in
+  // this file's shared mock DATASET hits — none of them set those fields).
+  // These two seasons add the breakdown fields to exercise the actual gap
+  // computation, covering both its outcomes: a real gap worth showing, and
+  // a rounding-noise gap small enough to suppress as null.
+  it("computes the 'other operating income' gap only for seasons with a revenue breakdown, suppressing negligible gaps", () => {
+    const originalDataset = state.DATASET;
+    const withGap = {
+      label: "9997/98",
+      revenue_operating: 100000,
+      rev_tv_comp: 40000,
+      rev_matchday: 20000,
+      rev_commercial: 30000, // gap = 10000 — a real "other" segment
+    };
+    const negligibleGap = {
+      label: "9998/99",
+      revenue_operating: 90000,
+      rev_tv_comp: 40000,
+      rev_matchday: 20000,
+      rev_commercial: 30000, // gap = 0 — suppressed to null, not plotted
+    };
+    state.DATASET = {
+      ...originalDataset,
+      annual_data: [...originalDataset.annual_data, withGap, negligibleGap],
+    };
+
+    try {
+      chartRevStreams();
+      const other = chartRegistry.get("chartRevStreams").config.data
+        .datasets[3].data;
+      expect(other[other.length - 2]).toBe(10000);
+      expect(other[other.length - 1]).toBeNull();
     } finally {
       state.DATASET = originalDataset;
     }
