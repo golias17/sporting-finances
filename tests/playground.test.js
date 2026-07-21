@@ -734,4 +734,217 @@ describe("playground.js CFO Simulator", () => {
     document.getElementById("salesVal").remove();
     expect(() => drawPlaygroundCharts()).not.toThrow();
   });
+
+  it("restores a shared scenario from state.urlPlayground on init, coercing strings and falling back to defaults for invalid/missing values", () => {
+    // Values arrive as strings (URLSearchParams), and a hand-edited or
+    // partial URL can carry an invalid or missing field for any key — see
+    // the comment above this block in src/playground.js. purchasesTarget
+    // here is unparseable and capexAdj is entirely absent, both of which
+    // must fall back to DEFAULT_INPUTS rather than writing NaN into a
+    // slider.
+    state.urlPlayground = {
+      uclPrize: "40",
+      payrollAdj: "10",
+      salesTarget: "90",
+      purchasesTarget: "not-a-number",
+      debtRepayTarget: "5",
+      revGrowthAdj: "-3",
+    };
+    initPlayground();
+
+    expect(document.getElementById("uclSelect").value).toBe("40");
+    expect(document.getElementById("payrollSlider").value).toBe("10");
+    expect(document.getElementById("salesSlider").value).toBe("90");
+    expect(document.getElementById("purchasesSlider").value).toBe("30"); // DEFAULT_INPUTS fallback
+    expect(document.getElementById("capexSlider").value).toBe("0"); // DEFAULT_INPUTS fallback (missing key)
+    expect(document.getElementById("debtRepaySlider").value).toBe("5");
+    expect(document.getElementById("revGrowthSlider").value).toBe("-3");
+  });
+
+  it("shows an amber health zone on Equity when the projection is positive but below the strong threshold", () => {
+    // Scenario computed against this file's mock BASELINE (equity €40.9M)
+    // to land projected equity at ~€18.9M — inside HEALTH_THRESHOLDS.equity's
+    // (positive=0, strong=20000] amber band, unlike the existing green
+    // (comfortably healthy) and red (insolvent) zone tests.
+    vi.useFakeTimers();
+    initPlayground();
+    const uclSelect = document.getElementById("uclSelect");
+    uclSelect.value = "0";
+    uclSelect.dispatchEvent(new Event("change"));
+    const payrollSlider = document.getElementById("payrollSlider");
+    payrollSlider.value = 6;
+    payrollSlider.dispatchEvent(new Event("input"));
+    const salesSlider = document.getElementById("salesSlider");
+    salesSlider.value = 80;
+    salesSlider.dispatchEvent(new Event("input"));
+    vi.runAllTimers();
+    vi.useRealTimers();
+
+    const eqZone = document.getElementById("pgKpiEqZone");
+    expect(eqZone.querySelector(".zone-dot.a")).not.toBeNull();
+    expect(eqZone.textContent).toMatch(/thin buffer/i);
+  });
+
+  it("renders the self-funding warning in Portuguese when a scenario drives cash negative and state.isPt is true", () => {
+    // Same scenario as the English red-zone test above, but with isPt set
+    // first — the earlier test never ran with isPt true, so buildVerdict()'s
+    // Portuguese cashNegative branch (a distinct string, not just a
+    // translated copy of the English one) never executed.
+    state.isPt = true;
+    vi.useFakeTimers();
+    initPlayground();
+    document.getElementById("uclSelect").value = "0";
+    document.getElementById("uclSelect").dispatchEvent(new Event("change"));
+    document.getElementById("payrollSlider").value = 30;
+    document
+      .getElementById("payrollSlider")
+      .dispatchEvent(new Event("input"));
+    document.getElementById("salesSlider").value = 0;
+    document.getElementById("salesSlider").dispatchEvent(new Event("input"));
+    document.getElementById("purchasesSlider").value = 100;
+    document
+      .getElementById("purchasesSlider")
+      .dispatchEvent(new Event("input"));
+    document.getElementById("capexSlider").value = 30;
+    document.getElementById("capexSlider").dispatchEvent(new Event("input"));
+    document.getElementById("debtRepaySlider").value = 50;
+    document
+      .getElementById("debtRepaySlider")
+      .dispatchEvent(new Event("input"));
+    document.getElementById("revGrowthSlider").value = -10;
+    document
+      .getElementById("revGrowthSlider")
+      .dispatchEvent(new Event("input"));
+    vi.runAllTimers();
+    vi.useRealTimers();
+
+    const verdict = document.getElementById("pgVerdict");
+    expect(verdict.classList.contains("warn")).toBe(true);
+    expect(verdict.textContent).toMatch(/Atenção/);
+    expect(verdict.textContent).toMatch(/autossustentável/);
+  });
+
+  // The Simulated Financials chart's tooltip label callback and its
+  // "barDelta" render plugin (draws a "+X.XM"/"-X.XM" label above/below
+  // each Projected bar) are only ever invoked by Chart.js's own draw/
+  // interaction pipeline — a real tooltip needs a simulated hover, and a
+  // real draw pass isn't guaranteed to run against jsdom's mocked canvas.
+  // Retrieved directly off the built chart (jspdf-autotable-style pattern
+  // used elsewhere for un-exported inline callbacks) and invoked with
+  // controlled inputs so every branch (skip-if-negligible, positive delta,
+  // negative delta, and the two label formats) is exercised deterministically.
+  describe("chartPlaygroundNet — tooltip and barDelta plugin callbacks", () => {
+    it("formats the baseline dataset's tooltip label plainly, and the projected dataset's with a delta suffix", () => {
+      initPlayground();
+      const chart = chartRegistry.get("chartPlaygroundNet");
+      const label = chart.config.options.plugins.tooltip.callbacks.label;
+
+      expect(
+        label({
+          parsed: { y: 68.5 },
+          dataset: { label: "Baseline 2025/26 (no changes)" },
+          datasetIndex: 0,
+        }),
+      ).toBe("Baseline 2025/26 (no changes): 68.5 M€");
+
+      expect(
+        label({
+          parsed: { y: 75.2 },
+          dataset: { label: "Your Projection 2025/26" },
+          datasetIndex: 1,
+          dataIndex: 0,
+          chart: { data: { datasets: [{ data: [68.5] }] } },
+        }),
+      ).toBe("Your Projection 2025/26: 75.2 M€ (+6.7 M€)");
+
+      // A negligible (<0.05) delta reads as "no change" rather than a
+      // near-zero decimal like "(+0.0 M€)".
+      expect(
+        label({
+          parsed: { y: 68.52 },
+          dataset: { label: "Your Projection 2025/26" },
+          datasetIndex: 1,
+          dataIndex: 0,
+          chart: { data: { datasets: [{ data: [68.5] }] } },
+        }),
+      ).toBe("Your Projection 2025/26: 68.5 M€ (no change)");
+    });
+
+    it("draws a delta label above/below each bar with the matching pos/neg color, skipping negligible deltas", () => {
+      initPlayground();
+      const chart = chartRegistry.get("chartPlaygroundNet");
+      const barDelta = chart.config._config.plugins.find(
+        (p) => p.id === "barDelta",
+      );
+      expect(barDelta).toBeDefined();
+
+      const fillTextCalls = [];
+      const fakeCtx = {
+        save: vi.fn(),
+        restore: vi.fn(),
+        fillText: vi.fn((text, x, y) => {
+          fillTextCalls.push({ text, x, y, color: fakeCtx.fillStyle });
+        }),
+      };
+      const fakeChart = {
+        ctx: fakeCtx,
+        data: {
+          datasets: [
+            { data: [100, 50, -20] }, // baseline
+            { data: [100.02, 71, -42] }, // projected
+          ],
+        },
+        getDatasetMeta: () => ({
+          data: [
+            { x: 10, y: 5 },
+            { x: 30, y: 15 },
+            { x: 50, y: -5 },
+          ],
+        }),
+      };
+
+      barDelta.afterDatasetsDraw(fakeChart);
+
+      expect(fakeCtx.save).toHaveBeenCalledTimes(1);
+      expect(fakeCtx.restore).toHaveBeenCalledTimes(1);
+      // Index 0's delta (0.02) is below the noise floor — no label drawn.
+      expect(fillTextCalls).toHaveLength(2);
+      // Index 1: +21 delta, projVal (71) >= 0 -> label drawn above the bar.
+      expect(fillTextCalls[0]).toMatchObject({
+        text: "+21.0M",
+        x: 30,
+        y: 7, // bar.y (15) - 8
+        color: state.COLORS.pos,
+      });
+      // Index 2: -22 delta, projVal (-42) < 0 -> label drawn below the bar.
+      expect(fillTextCalls[1]).toMatchObject({
+        text: "-22.0M",
+        x: 50,
+        y: 7, // bar.y (-5) + 12
+        color: state.COLORS.neg,
+      });
+    });
+  });
+
+  it("formats the Equity/Solvency chart's tooltip label in M€ for the bar dataset and % for the solvency line", () => {
+    initPlayground();
+    const chart = chartRegistry.get("chartPlaygroundSolvency");
+    const label = chart.config.options.plugins.tooltip.callbacks.label;
+
+    expect(
+      label({
+        parsed: { y: 108.9 },
+        dataset: { label: "Shareholders' Equity (M€)" },
+        datasetIndex: 0,
+      }),
+    ).toBe("Shareholders' Equity (M€): 108.9 M€");
+
+    expect(
+      label({
+        parsed: { y: 25.9 },
+        dataset: { label: "Solvency Ratio (%)" },
+        datasetIndex: 1,
+      }),
+    ).toBe("Solvency Ratio (%): 25.9%");
+  });
 });
