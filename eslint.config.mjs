@@ -1,7 +1,10 @@
+import tseslint from "typescript-eslint";
 import js from "@eslint/js";
 import prettierConfig from "eslint-config-prettier";
 
-export default [
+export default tseslint.config(
+  ...tseslint.configs.recommended,
+
   js.configs.recommended,
   {
     languageOptions: {
@@ -67,4 +70,4 @@ export default [
     ignores: ["dist/**", "dist_check*/**", "node_modules/**", "coverage/**"],
   },
   prettierConfig,
-];
+);

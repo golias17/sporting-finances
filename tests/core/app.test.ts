@@ -281,7 +281,7 @@ describe("app boot (main.js)", () => {
   // function back out of state.renderedCharts. charts.js is mocked in this
   // file, so mkChart() never actually populates chartRegistry itself —
   // populate it by hand here to exercise the teardown branch directly.
-  it("destroys and forgets a tab's chart when navigating away, so it redraws on the next visit", () => {
+  it("destroys and forgets a tab's chart when navigating away, so it redraws on the next visit", async () => {
     const revenueBtn = document.querySelector(
       'nav.tabs button[data-tab="revenue"]',
     );
@@ -299,9 +299,11 @@ describe("app boot (main.js)", () => {
 
     const callsBeforeRevisit = charts.chartRevenue.mock.calls.length;
     revenueBtn.click(); // runOnce's guard was cleared — redraws
-    expect(charts.chartRevenue.mock.calls.length).toBeGreaterThan(
-      callsBeforeRevisit,
-    );
+    await vi.waitFor(() => {
+      expect(charts.chartRevenue.mock.calls.length).toBeGreaterThan(
+        callsBeforeRevisit,
+      );
+    });
   });
 
   // activateTab() only calls refreshHealthBarIfStale() (health.js) when the
@@ -384,7 +386,7 @@ describe("app boot (main.js)", () => {
   // (squadAnalytics.js) via the same runOnce() guard as every TAB_CHARTS
   // entry — squadAnalytics.js isn't mocked in this file, but it only calls
   // through to charts.js's mkChart(), which is.
-  it("draws the manager-eras and commissions charts on first visit to the squad analytics sub-tab", () => {
+  it("draws the manager-eras and commissions charts on first visit to the squad analytics sub-tab", async () => {
     document.querySelector('nav.tabs button[data-tab="squad"]').click();
     const analyticsSubBtn = document.querySelector(
       '.sub-tab-btn[data-squad-sub="analytics"]',
@@ -400,14 +402,16 @@ describe("app boot (main.js)", () => {
     ).toBe(false);
     // mkChart is the mocked entry point both drawing functions funnel
     // through — two calls confirms both actually ran.
-    expect(charts.mkChart).toHaveBeenCalledWith(
-      "chartManagerEras",
-      expect.anything(),
-    );
-    expect(charts.mkChart).toHaveBeenCalledWith(
-      "chartCommissions",
-      expect.anything(),
-    );
+    await vi.waitFor(() => {
+      expect(charts.mkChart).toHaveBeenCalledWith(
+        "chartManagerEras",
+        expect.anything(),
+      );
+      expect(charts.mkChart).toHaveBeenCalledWith(
+        "chartCommissions",
+        expect.anything(),
+      );
+    });
   });
 
   // Regression test: initPlayground() used to be called eagerly in
@@ -468,14 +472,16 @@ describe("app boot (main.js)", () => {
     if (exitBtn) exitBtn.click();
   });
 
-  it("renders the transfer ledger on the squad tab", () => {
+  it("renders the transfer ledger on the squad tab", async () => {
     document.querySelector('nav.tabs button[data-tab="squad"]').click();
     document.getElementById("btn-squad-ledger").click();
-    const pills = document.querySelectorAll("#tlSeasonNav .season-pill");
-    expect(pills.length).toBe(state.TRANSFER_LEDGER.length);
-    expect(
-      document.getElementById("tlBody").textContent.length,
-    ).toBeGreaterThan(0);
+    await vi.waitFor(() => {
+      const pills = document.querySelectorAll("#tlSeasonNav .season-pill");
+      expect(pills.length).toBe(state.TRANSFER_LEDGER.length);
+      expect(
+        document.getElementById("tlBody").textContent.length,
+      ).toBeGreaterThan(0);
+    });
   });
 
   it("switches language to PT and re-renders translated content", async () => {
