@@ -44,8 +44,25 @@ vi.mock("jspdf", () => {
 // Mock jspdf-autotable
 vi.mock("jspdf-autotable", () => {
   return {
-    default: vi.fn().mockImplementation((doc) => {
+    default: vi.fn().mockImplementation((doc, config) => {
       doc.lastAutoTable = { finalY: 150 };
+      // The real jspdf-autotable calls didParseCell once per rendered
+      // cell — simulate that here so pdfGenerator.js's inline
+      // thresholdColorCell()/signColorCell() configs (passed via
+      // didParseCell on each table) actually run against real row data,
+      // instead of every one of those closures going uncalled just
+      // because this mock never rendered an actual table.
+      if (typeof config?.didParseCell === "function" && config.body) {
+        config.body.forEach((row) => {
+          row.forEach((text, colIndex) => {
+            config.didParseCell({
+              section: "body",
+              column: { index: colIndex },
+              cell: { text: [String(text)], styles: {} },
+            });
+          });
+        });
+      }
     }),
   };
 });
@@ -134,23 +151,51 @@ describe("pdfGenerator.js", () => {
       },
     };
 
+    // Matches the real data/transfers.json shape (sales/purchases arrays,
+    // not the "transfers: [{ type: 'in'|'out' }]" shape used here
+    // previously) — drawTransfersLedgerPages() (pdfGenerator.js) reads
+    // seasonObj.sales/seasonObj.purchases directly, so the old mock left
+    // its per-transfer forEach loops, fee-threshold filters, and note
+    // cleanup (cleanText()) entirely unexercised: both arrays came back
+    // undefined and the ledger page silently rendered as empty. Includes
+    // one entry per array below the fee cutoff (filtered out) and one
+    // purchase with no note at all (exercises cleanText()'s "—" fallback),
+    // alongside note_pt so both the EN and PT tests below cover the
+    // `isPt ? p.note_pt || p.note : p.note` branch from either side.
     state.TRANSFER_LEDGER = [
       {
         season: "2024/25",
-        transfers: [
+        purchases: [
           {
             player: "Morten Hjulmand",
-            type: "in",
-            fee: 18.0,
             club: "Lecce",
+            fee: 18.0,
             note: "Standard buy",
           },
           {
+            player: "Undisclosed Squad Player",
+            club: "Some FC",
+            fee: 12.0, // above the 8.0 M€ cutoff, but has no note field
+          },
+          {
+            player: "Cheap Loan Signing",
+            club: "Other FC",
+            fee: 2.0, // below the 8.0 M€ cutoff — filtered out
+          },
+        ],
+        sales: [
+          {
             player: "Manuel Ugarte",
-            type: "out",
-            fee: 60.0,
             club: "PSG",
+            fee: 60.0,
+            commission: 6,
             note: "Record sell",
+            note_pt: "Venda recorde",
+          },
+          {
+            player: "Minor Departure",
+            club: "Other FC",
+            fee: 3.0, // below the 10.0 M€ cutoff — filtered out
           },
         ],
       },
@@ -329,5 +374,32 @@ describe("pdfGenerator.js", () => {
           t && t.includes("Nota Executiva:") && t.includes("Nota de teste."),
       ),
     ).toBe(true);
+  });
+
+  // Regression-shaped test: getBase64ImageFromUrl()'s rejection (logo image
+  // fails to load) is caught and logged, but generateCuratedPdf() must still
+  // render and save the rest of the PDF rather than leaving the whole
+  // export broken by one missing asset. The shared beforeEach's global.Image
+  // stub always fires onload, so this failure path never ran anywhere else.
+  it("still generates and saves the PDF (without a logo) when the logo image fails to load", async () => {
+    global.Image = class {
+      constructor() {
+        setTimeout(() => {
+          if (this.onerror) this.onerror(new Error("failed to fetch logo"));
+        }, 1);
+      }
+    };
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    await generateCuratedPdf();
+
+    expect(errorSpy).toHaveBeenCalledWith(
+      "Failed to load logo image",
+      expect.anything(),
+    );
+    const docInstance = vi.mocked(jsPDF).mock.results[0].value;
+    expect(docInstance.save).toHaveBeenCalled();
+
+    errorSpy.mockRestore();
   });
 });
