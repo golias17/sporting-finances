@@ -199,8 +199,9 @@ export function TransfersDetailTable({
     <>
       <div className="ledger-controls">
         <div className="ledger-control-group">
-          <label className="ledger-label">Season:</label>
+          <label className="ledger-label" htmlFor="seasonFilter">Season:</label>
           <select
+            id="seasonFilter"
             className="ledger-select"
             value={activeSeason}
             onChange={(e) => setActiveSeason(e.target.value)}
@@ -216,8 +217,9 @@ export function TransfersDetailTable({
           </select>
         </div>
         <div className="ledger-control-group">
-          <label className="ledger-label">Window:</label>
+          <label className="ledger-label" htmlFor="windowFilter">Window:</label>
           <select
+            id="windowFilter"
             className="ledger-select"
             value={activeWindow}
             onChange={(e) => setActiveWindow(e.target.value)}
@@ -228,8 +230,9 @@ export function TransfersDetailTable({
           </select>
         </div>
         <div className="ledger-control-group">
-          <label className="ledger-label">Type:</label>
+          <label className="ledger-label" htmlFor="typeFilter">Type:</label>
           <select
+            id="typeFilter"
             className="ledger-select"
             value={activeType}
             onChange={(e) => setActiveType(e.target.value)}
@@ -240,8 +243,9 @@ export function TransfersDetailTable({
           </select>
         </div>
         <div className="ledger-control-group ledger-control-group--grow">
-          <label className="sr-only">Search transfers</label>
+          <label className="sr-only" htmlFor="searchInput">Search transfers</label>
           <input
+            id="searchInput"
             className="ledger-input"
             type="text"
             placeholder="Search player, club, or notes..."

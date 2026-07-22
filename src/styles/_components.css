@@ -1148,7 +1148,7 @@ body.dark .custom-scroll::-webkit-scrollbar-thumb:hover {
 .pdf-export-btn {
   background: var(--paper);
   border: 1px solid var(--rule);
-  color: var(--muted);
+  color: #1a3c2b; /* Dark green for light mode contrast */
   font-family: var(--mono);
   font-weight: 500;
   cursor: pointer;
@@ -1169,6 +1169,7 @@ body.dark .chart-download-btn,
 body.dark .pdf-export-btn {
   background: rgba(255, 255, 255, 0.03);
   border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
 }
 body.dark .chart-download-btn:hover,
 body.dark .pdf-export-btn:hover {

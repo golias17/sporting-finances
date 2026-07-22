@@ -130,7 +130,6 @@ export function TabsNavigation() {
           as="button"
           key={tab.id}
           i18nKey={tab.i18n}
-          aria-controls={`tab-${tab.id}`}
           aria-selected={activeTab === tab.id}
           className={activeTab === tab.id ? "active" : ""}
           data-tab={tab.id}

@@ -52,7 +52,7 @@
   font-size: var(--fs-xs);
 }
 .lang-link {
-  color: rgba(238, 245, 240, 0.5);
+  color: rgba(238, 245, 240, 0.7);
   text-decoration: none;
   font-weight: 500;
   transition: all 0.2s ease;
