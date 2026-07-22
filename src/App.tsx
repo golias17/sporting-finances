@@ -3,6 +3,7 @@ import { useAppState } from "./core/state.js";
 import { TopNav } from "./components/TopNav.js";
 import { Hero } from "./components/Hero.js";
 import { TabsNavigation } from "./components/TabsNavigation.js";
+import { TabLoader } from "./components/TabLoader.js";
 import { initJornalModal } from "./ui/jornalModal.js";
 import { initImageLightbox, initKitCardFlip } from "./ui/imageLightbox.js";
 import { initPdfExport } from "./ui/pdfExportModal.js";
@@ -191,7 +192,7 @@ export function App() {
         <TabsNavigation />
 
         <Suspense
-          fallback={<div className="tab-loading">Loading module...</div>}
+          fallback={<TabLoader />}
         >
           {activeTab === "overview" && <OverviewTab />}
           {activeTab === "revenue" && <RevenueTab />}
