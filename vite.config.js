@@ -98,6 +98,7 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: ["./tests/setup.js"],
+    exclude: ["node_modules", "dist", ".idea", ".git", ".cache", "tests/e2e/**"],
     coverage: {
       // chartUtils.js is a pure `export * from "./x.js"` re-export barrel
       // (see its own header comment) with no logic of its own — every
