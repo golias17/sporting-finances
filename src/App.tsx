@@ -4,6 +4,7 @@ import { TopNav } from "./components/TopNav.js";
 import { Hero } from "./components/Hero.js";
 import { TabsNavigation } from "./components/TabsNavigation.js";
 import { TabLoader } from "./components/TabLoader.js";
+import { ErrorBoundary } from "./components/ErrorBoundary.js";
 import { initJornalModal } from "./ui/jornalModal.js";
 import { initImageLightbox, initKitCardFlip } from "./ui/imageLightbox.js";
 import { initPdfExport } from "./ui/pdfExportModal.js";
@@ -191,23 +192,25 @@ export function App() {
       <main className="container" id="main">
         <TabsNavigation />
 
-        <Suspense
-          fallback={<TabLoader />}
-        >
-          {activeTab === "overview" && <OverviewTab />}
-          {activeTab === "revenue" && <RevenueTab />}
-          {activeTab === "healthcheck" && <HealthcheckTab />}
-          {activeTab === "debt" && <DebtTab />}
-          {activeTab === "bonds" && <BondsTab />}
-          {activeTab === "squad" && <SquadTab />}
-          {activeTab === "cash" && <CashTab />}
-          {activeTab === "compare" && <CompareTab />}
-          {activeTab === "events" && <EventsTab />}
-          {activeTab === "data" && <DataTab />}
-          {activeTab === "club" && <ClubTab />}
-          {activeTab === "news" && <NewsTab />}
-          {activeTab === "playground" && <PlaygroundTab />}
-        </Suspense>
+        <ErrorBoundary>
+          <Suspense
+            fallback={<TabLoader />}
+          >
+            {activeTab === "overview" && <OverviewTab />}
+            {activeTab === "revenue" && <RevenueTab />}
+            {activeTab === "healthcheck" && <HealthcheckTab />}
+            {activeTab === "debt" && <DebtTab />}
+            {activeTab === "bonds" && <BondsTab />}
+            {activeTab === "squad" && <SquadTab />}
+            {activeTab === "cash" && <CashTab />}
+            {activeTab === "compare" && <CompareTab />}
+            {activeTab === "events" && <EventsTab />}
+            {activeTab === "data" && <DataTab />}
+            {activeTab === "club" && <ClubTab />}
+            {activeTab === "news" && <NewsTab />}
+            {activeTab === "playground" && <PlaygroundTab />}
+          </Suspense>
+        </ErrorBoundary>
       </main>
 
       <button

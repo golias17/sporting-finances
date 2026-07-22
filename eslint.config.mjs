@@ -11,39 +11,16 @@ export default tseslint.config(
       ecmaVersion: 2022,
       sourceType: "module",
       globals: {
-        document: "readonly",
-        window: "readonly",
-        console: "readonly",
-        fetch: "readonly",
-        Chart: "readonly",
-        setTimeout: "readonly",
-        clearTimeout: "readonly",
-        localStorage: "readonly",
-        sessionStorage: "readonly",
-        navigator: "readonly",
-        location: "readonly",
-        history: "readonly",
-        IntersectionObserver: "readonly",
-        AbortController: "readonly",
-        Blob: "readonly",
-        URL: "readonly",
-        Request: "readonly",
-        Response: "readonly",
-        Headers: "readonly",
-        caches: "readonly",
-        self: "readonly",
-        FetchEvent: "readonly",
-        registration: "readonly",
-        global: "readonly",
-        HTMLCanvasElement: "readonly",
-        Image: "readonly",
-        URLSearchParams: "readonly",
-        HTMLAnchorElement: "readonly",
-        HTMLElement: "readonly",
-        Document: "readonly",
-        ResizeObserver: "readonly",
-        Element: "readonly",
-        Event: "readonly",
+        // Browser globals — most are covered by tsconfig's "lib": ["DOM"],
+        // but ESLint needs them declared for the no-undef rule (currently off).
+        // Only non-standard or library globals that TS lib doesn't cover are
+        // listed here; standard DOM/window APIs are implicit.
+        Chart: "readonly", // chart.js global when loaded via CDN
+        caches: "readonly", // Service Worker Cache API
+        self: "readonly", // Service Worker global scope
+        FetchEvent: "readonly", // Service Worker event type
+        registration: "readonly", // Service Worker registration
+        global: "readonly", // Node.js compat in some build contexts
       },
     },
     rules: {
@@ -53,7 +30,7 @@ export default tseslint.config(
       "no-undef": "off", // TypeScript already checks for undefined variables
       "@typescript-eslint/no-explicit-any": "off", // Allow explicit any during JS -> TS migration
       "@typescript-eslint/no-unused-expressions": "off", // Too many false positives
-      "@typescript-eslint/ban-ts-comment": "off", // We need @ts-nocheck in vite.config.js
+      "@typescript-eslint/ban-ts-comment": "off", // We need @ts-nocheck in some config files
       "no-console": ["warn", { allow: ["info", "warn", "error"] }],
     },
   },

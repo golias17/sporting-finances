@@ -105,6 +105,15 @@ export interface BrandColors {
   lineBorder: string;
 }
 
+/** Chart.js dataset structure passed to AccessibleTable. */
+export interface ChartTableData {
+  labels: (string | number)[];
+  datasets: {
+    label?: string;
+    data: (number | null)[];
+  }[];
+}
+
 export interface AppState {
   DATASET: FinancialDataset;
   TRANSFER_LEDGER: TransferLedgerSeason[];
