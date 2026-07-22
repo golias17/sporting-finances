@@ -134,9 +134,7 @@ export default defineConfig({
         functions: 82,
         lines: 87,
       },
-    },
   },
-  build: {
     rollupOptions: {
       output: {
         manualChunks(id) {
