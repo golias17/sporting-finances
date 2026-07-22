@@ -83,11 +83,7 @@ describe("urlSync.js", () => {
     // health.js's initKpiSeasonSelector) — the URL sync used to only
     // recognise the Healthcheck tab's selection, silently losing whatever
     // season was picked via Overview's on a refresh.
-    document.body.innerHTML = `
-      <nav class="tabs">
-        <button class="active" data-tab="overview"></button>
-      </nav>
-    `;
+    state.setActiveTab("overview");
     state.setHealthBarIdx(1); // "2013/14"
 
     syncStateToUrl();
@@ -99,11 +95,7 @@ describe("urlSync.js", () => {
   });
 
   it("syncStateToUrl should not persist healthSeason on tabs where it isn't in play", () => {
-    document.body.innerHTML = `
-      <nav class="tabs">
-        <button class="active" data-tab="revenue"></button>
-      </nav>
-    `;
+    state.setActiveTab("revenue");
     state.setHealthBarIdx(1);
 
     syncStateToUrl();
@@ -114,11 +106,8 @@ describe("urlSync.js", () => {
   });
 
   it("syncStateToUrl should push state elements back into URL parameters", () => {
-    // Setup elements on document body to mimic DOM
+    state.setActiveTab("compare");
     document.body.innerHTML = `
-      <nav class="tabs">
-        <button class="active" data-tab="compare"></button>
-      </nav>
       <select id="compareSeasonA"><option selected>2012/13</option></select>
       <select id="compareSeasonB"><option selected>2024/25</option></select>
     `;
@@ -134,10 +123,8 @@ describe("urlSync.js", () => {
   });
 
   it("syncStateToUrl should persist story parameter when story card is visible", () => {
+    state.setActiveTab("overview");
     document.body.innerHTML = `
-      <nav class="tabs">
-        <button class="active" data-tab="overview"></button>
-      </nav>
       <div id="storyCard"></div>
     `;
     state.setStoryIndex(1);
@@ -155,11 +142,7 @@ describe("urlSync.js", () => {
       pathname: "/",
       hash: "",
     });
-    document.body.innerHTML = `
-      <nav class="tabs">
-        <button class="active" data-tab="overview"></button>
-      </nav>
-    `;
+    state.setActiveTab("overview");
     state.setHealthBarIdx(999); // invalid/missing
 
     syncStateToUrl();
@@ -170,10 +153,8 @@ describe("urlSync.js", () => {
   });
 
   it("syncStateToUrl should persist the Playground scenario's sliders when that tab is active", () => {
+    state.setActiveTab("playground");
     document.body.innerHTML = `
-      <nav class="tabs">
-        <button class="active" data-tab="playground"></button>
-      </nav>
       <select id="uclSelect"><option value="47" selected>Round of 16</option></select>
       <input id="payrollSlider" value="10" />
       <input id="salesSlider" value="140" />
@@ -198,11 +179,7 @@ describe("urlSync.js", () => {
   });
 
   it("syncStateToUrl should omit the Playground params on other tabs", () => {
-    document.body.innerHTML = `
-      <nav class="tabs">
-        <button class="active" data-tab="revenue"></button>
-      </nav>
-    `;
+    state.setActiveTab("revenue");
 
     syncStateToUrl();
 

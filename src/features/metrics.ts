@@ -1,15 +1,20 @@
 import { HEALTH_THRESHOLDS } from "./healthThresholds.js";
+import type {
+  FinancialDataset,
+  FinancialRecord,
+  AppState,
+} from "../core/types.ts";
 
-export function ordinal(n) {
+export function ordinal(n: number) {
   const s = ["th", "st", "nd", "rd"];
   const v = n % 100;
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
 
-export function getLatestH1Data(dataset) {
+export function getLatestH1Data(dataset: FinancialDataset | null) {
   if (!dataset) return null;
   const h1Key = Object.keys(dataset).find((k) => k.startsWith("h1_"));
-  return h1Key ? dataset[h1Key] : null;
+  return h1Key ? (dataset as any)[h1Key] : null;
 }
 
 // -----------------------------------------------------------------
@@ -27,7 +32,7 @@ export function getLatestH1Data(dataset) {
  * bug and bonds.js's saving-sign bug earlier on. One shared helper means
  * a future change to how net debt is defined only has to happen once.
  */
-export function netDebt(d) {
+export function netDebt(d: FinancialRecord) {
   return d.borrowings_nc + d.borrowings_c - d.cash;
 }
 
@@ -40,7 +45,7 @@ export function netDebt(d) {
  * already checked Number.isFinite() in addition to !== 0 (metrics.js's own
  * copy didn't), so that's the contract this shared helper keeps.
  */
-export function wageBillRatio(d) {
+export function wageBillRatio(d: FinancialRecord) {
   return Number.isFinite(d.revenue_operating) && d.revenue_operating !== 0
     ? Math.abs(d.personnel_costs) / d.revenue_operating
     : null;
@@ -50,7 +55,11 @@ export function wageBillRatio(d) {
  * Revenue growth of season `idx` vs `span` seasons prior, as a whole-percent
  * string (e.g. "131"), or null when there isn't enough history.
  */
-export function revenueGrowthPct(annual, idx, span = 5) {
+export function revenueGrowthPct(
+  annual: FinancialRecord[],
+  idx: number,
+  span = 5,
+) {
   const compIdx = idx - span;
   const comp = compIdx >= 0 ? annual[compIdx] : null;
   if (!comp || !comp.revenue_operating) return null;
@@ -64,7 +73,10 @@ export function revenueGrowthPct(annual, idx, span = 5) {
 /**
  * Number of consecutive profitable seasons ending at (and including) `idx`.
  */
-export function consecutiveProfitableYears(annual, idx) {
+export function consecutiveProfitableYears(
+  annual: FinancialRecord[],
+  idx: number,
+) {
   let count = 0;
   for (let i = idx; i >= 0; i--) {
     if (annual[i].net_result > 0) count++;
@@ -73,7 +85,11 @@ export function consecutiveProfitableYears(annual, idx) {
   return count;
 }
 
-export function calculateKpis(state, idx, fmtMillions) {
+export function calculateKpis(
+  state: AppState,
+  idx: number,
+  fmtMillions: (n: number) => string,
+) {
   const isLatest = idx === state.annual.length - 1;
   const curr = state.annual[idx];
   const first = state.annual[0];
@@ -105,7 +121,7 @@ export function calculateKpis(state, idx, fmtMillions) {
       h1PeriodLabel =
         h1Data.label || (state.isPt ? "período atual" : "current period");
     } else if (state.isPt) {
-      const monthsPt = {
+      const monthsPt: Record<string, string> = {
         Jan: "Jan",
         Feb: "Fev",
         Mar: "Mar",
@@ -248,7 +264,11 @@ export function calculateKpis(state, idx, fmtMillions) {
   return kpis;
 }
 
-export function calculateHealthSignals(state, idx, fmtMillions) {
+export function calculateHealthSignals(
+  state: AppState,
+  idx: number,
+  fmtMillions: (n: number) => string,
+) {
   const d = state.annual[idx];
   const prev5 = idx >= 5 ? state.annual[idx - 5] : null;
 
@@ -274,7 +294,7 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
 
   const payrollNotes = {
     low:
-      payrollRatio < 0.5
+      (payrollRatio ?? 0) < 0.5
         ? state.isPt
           ? "Excecionalmente baixo"
           : "Exceptionally lean"
@@ -336,7 +356,7 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
           : state.isPt
             ? "Menos de 5 épocas de dados"
             : "Less than 5 seasons of data",
-      history: histData.map((y) => y.revenue_operating),
+      history: histData.map((y: FinancialRecord) => y.revenue_operating),
     },
     {
       id: "sigWage",
@@ -366,7 +386,7 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
             : payrollRatio < HEALTH_THRESHOLDS.payrollRatio.danger
               ? payrollNotes.mid
               : payrollNotes.high,
-      history: histData.map((y) => wageBillRatio(y)),
+      history: histData.map((y: FinancialRecord) => wageBillRatio(y) || 0),
     },
     {
       id: "sigDebt",
@@ -406,8 +426,8 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
                 : state.isPt
                   ? "Muito elevada — crise"
                   : "Very high — crisis territory",
-      history: histData.map((y) =>
-        y.revenue_operating !== 0 ? netDebt(y) / y.revenue_operating : null,
+      history: histData.map((y: FinancialRecord) =>
+        y.revenue_operating !== 0 ? netDebt(y) / y.revenue_operating : 0,
       ),
     },
     {
@@ -444,11 +464,11 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
               : state.isPt
                 ? "Altamente dependente de transferências"
                 : "Very dependent on transfers",
-      history: histData.map((y) =>
+      history: histData.map((y: FinancialRecord) =>
         y.revenue_operating + y.player_transfer_income !== 0
           ? y.player_transfer_income /
             (y.revenue_operating + y.player_transfer_income)
-          : null,
+          : 0,
       ),
     },
     {
@@ -459,7 +479,7 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
       status:
         d.equity > strong ? "green" : d.equity > positive ? "amber" : "red",
       note: equityNote,
-      history: histData.map((y) => y.equity),
+      history: histData.map((y: FinancialRecord) => y.equity),
     },
     {
       id: "sigCash",
@@ -484,7 +504,7 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
             : state.isPt
               ? "Criticamente baixo"
               : "Critically low",
-      history: histData.map((y) => y.cash),
+      history: histData.map((y: FinancialRecord) => y.cash),
     },
     {
       id: "sigOpProfit",
@@ -509,7 +529,9 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
             : state.isPt
               ? "Défice estrutural acentuado"
               : "Deep structural deficit",
-      history: histData.map((y) => y.operating_result_excl_players),
+      history: histData.map(
+        (y: FinancialRecord) => y.operating_result_excl_players,
+      ),
     },
     {
       id: "sigCurrentRatio",
@@ -540,7 +562,7 @@ export function calculateHealthSignals(state, idx, fmtMillions) {
               : state.isPt
                 ? "Risco de liquidez alto"
                 : "High short-term liquidity risk",
-      history: histData.map((y) =>
+      history: histData.map((y: FinancialRecord) =>
         y.current_liabilities !== 0
           ? y.current_assets / y.current_liabilities
           : null,

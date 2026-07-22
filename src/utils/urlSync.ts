@@ -11,8 +11,7 @@ export function syncStateToUrl() {
   const params = new URLSearchParams(window.location.search);
 
   // 1. Active Tab
-  const activeBtn = document.querySelector("nav.tabs button.active");
-  const tab = activeBtn ? activeBtn.dataset.tab : "overview";
+  const tab = state.activeTab || "overview";
   params.set("tab", tab);
 
   // 2. Story step (only if overview tab and story is visible)
@@ -22,15 +21,19 @@ export function syncStateToUrl() {
     storyCard &&
     !storyCard.classList.contains("hidden")
   ) {
-    params.set("story", state.storyIndex + 1);
+    params.set("story", (state.storyIndex + 1).toString());
   } else {
     params.delete("story");
   }
 
   // 3. Comparison seasons (only if compare tab)
   if (tab === "compare") {
-    const selA = document.getElementById("compareSeasonA");
-    const selB = document.getElementById("compareSeasonB");
+    const selA = document.getElementById(
+      "compareSeasonA",
+    ) as HTMLSelectElement | null;
+    const selB = document.getElementById(
+      "compareSeasonB",
+    ) as HTMLSelectElement | null;
     if (selA && selB) {
       const labelA = selA.options[selA.selectedIndex]?.textContent;
       const labelB = selB.options[selB.selectedIndex]?.textContent;
@@ -49,7 +52,7 @@ export function syncStateToUrl() {
     (tab === "healthcheck" || tab === "overview") &&
     state.healthBarIdx !== null
   ) {
-    const healthSeason = state.annual[state.healthBarIdx]?.label;
+    const healthSeason = state.annual[state.healthBarIdx as number]?.label;
     if (healthSeason) {
       params.set("healthSeason", healthSeason);
     } else {
@@ -75,7 +78,8 @@ export function syncStateToUrl() {
       pgRevGrowth: "revGrowthSlider",
     };
     for (const [param, elId] of Object.entries(pgIds)) {
-      const el = document.getElementById(elId);
+      const el = document.getElementById(elId) as
+        HTMLInputElement | HTMLSelectElement | null;
       if (el) params.set(param, el.value);
     }
   } else {

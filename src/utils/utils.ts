@@ -6,10 +6,13 @@
  * (main.js) and the transfer table's search box (transfers.js) — both fire
  * dozens of times in quick succession when only the settled value matters.
  */
-export function debounce(fn, delayMs) {
-  let timer = null;
-  return (...args) => {
-    clearTimeout(timer);
+export function debounce<T extends (...args: any[]) => void>(
+  fn: T,
+  delayMs: number,
+) {
+  let timer: ReturnType<typeof setTimeout> | null = null;
+  return (...args: Parameters<T>) => {
+    if (timer) clearTimeout(timer);
     timer = setTimeout(() => fn(...args), delayMs);
   };
 }
@@ -24,7 +27,7 @@ export function debounce(fn, delayMs) {
  * kept safe a different way, via textContent assignment instead of
  * innerHTML — see initNewsFeed().)
  */
-export function escapeHtml(str) {
+export function escapeHtml(str: string) {
   if (str === null || str === undefined) return "";
   return String(str)
     .replace(/&/g, "&amp;")

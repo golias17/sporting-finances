@@ -1,6 +1,8 @@
+/// <reference types="vite-plugin-pwa/client" />
+/// <reference types="vite/client" />
 import { state } from "../core/state.js";
 
-export function showUpdateToast(onConfirm) {
+export function showUpdateToast(onConfirm: () => void) {
   let toast = document.getElementById("pwa-update-toast");
   if (!toast) {
     toast = document.createElement("div");
@@ -30,10 +32,10 @@ export function showUpdateToast(onConfirm) {
   `;
 
   // Entrance slide animation
-  setTimeout(() => toast.classList.add("visible"), 100);
+  setTimeout(() => toast?.classList.add("visible"), 100);
 
-  document.getElementById("pwa-update-btn").addEventListener("click", () => {
-    toast.classList.remove("visible");
+  document.getElementById("pwa-update-btn")?.addEventListener("click", () => {
+    toast?.classList.remove("visible");
     onConfirm();
   });
 }
@@ -63,10 +65,10 @@ export function showOfflineReadyToast() {
     </div>
   `;
 
-  setTimeout(() => toast.classList.add("visible"), 100);
+  setTimeout(() => toast?.classList.add("visible"), 100);
 
-  document.getElementById("pwa-offline-btn").addEventListener("click", () => {
-    toast.classList.remove("visible");
+  document.getElementById("pwa-offline-btn")?.addEventListener("click", () => {
+    toast?.classList.remove("visible");
   });
 }
 

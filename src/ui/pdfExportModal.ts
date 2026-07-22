@@ -3,11 +3,11 @@ import { state } from "../core/state.js";
 // PDF EXPORT MODAL
 // =============================================================
 
-let pdfAbortController = null;
+let pdfAbortController: AbortController | null = null;
 
 export function initPdfExport() {
   const btn = document.getElementById("pdfExportBtn");
-  const modal = document.getElementById("pdfModal");
+  const modal = document.getElementById("pdfModal") as HTMLElement;
   const btnClose = document.getElementById("btnClosePdf");
   const form = document.getElementById("pdfCustomizerForm");
 
@@ -21,17 +21,21 @@ export function initPdfExport() {
 
   function openModal() {
     // Sync active UI language to modal language selector
-    const langSelect = document.getElementById("pdfLanguageSelect");
+    const langSelect = document.getElementById(
+      "pdfLanguageSelect",
+    ) as HTMLSelectElement;
     if (langSelect) {
       langSelect.value = state.isPt ? "pt" : "en";
     }
     // Check all pages by default
     for (let i = 1; i <= 5; i++) {
-      const chk = document.getElementById(`chkPage${i}`);
+      const chk = document.getElementById(`chkPage${i}`) as HTMLInputElement;
       if (chk) chk.checked = true;
     }
     // Clear custom note
-    const notesText = document.getElementById("pdfNotesText");
+    const notesText = document.getElementById(
+      "pdfNotesText",
+    ) as HTMLTextAreaElement;
     if (notesText) notesText.value = "";
 
     modal.classList.remove("hidden");
@@ -73,13 +77,17 @@ export function initPdfExport() {
     "submit",
     (e) => {
       e.preventDefault();
-      const langSelect = document.getElementById("pdfLanguageSelect");
-      const chk1 = document.getElementById("chkPage1");
-      const chk2 = document.getElementById("chkPage2");
-      const chk3 = document.getElementById("chkPage3");
-      const chk4 = document.getElementById("chkPage4");
-      const chk5 = document.getElementById("chkPage5");
-      const notesText = document.getElementById("pdfNotesText");
+      const langSelect = document.getElementById(
+        "pdfLanguageSelect",
+      ) as HTMLSelectElement;
+      const chk1 = document.getElementById("chkPage1") as HTMLInputElement;
+      const chk2 = document.getElementById("chkPage2") as HTMLInputElement;
+      const chk3 = document.getElementById("chkPage3") as HTMLInputElement;
+      const chk4 = document.getElementById("chkPage4") as HTMLInputElement;
+      const chk5 = document.getElementById("chkPage5") as HTMLInputElement;
+      const notesText = document.getElementById(
+        "pdfNotesText",
+      ) as HTMLTextAreaElement;
       if (
         !langSelect ||
         !chk1 ||
@@ -141,7 +149,7 @@ function showPdfExportErrorToast() {
   setTimeout(() => toast.classList.add("visible"), 10);
   document
     .getElementById("pdf-export-error-btn")
-    .addEventListener("click", () => toast.classList.remove("visible"), {
+    ?.addEventListener("click", () => toast.classList.remove("visible"), {
       once: true,
     });
 }

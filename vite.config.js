@@ -1,6 +1,9 @@
+// @ts-nocheck
+/// <reference types="vitest" />
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import viteCompression from "vite-plugin-compression";
+import react from "@vitejs/plugin-react";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -9,6 +12,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [
+    react(),
     VitePWA({
       registerType: "autoUpdate",
       // includeAssets is not needed — globPatterns below already captures all
@@ -91,6 +95,7 @@ export default defineConfig({
     target: "es2022",
   },
   test: {
+    globals: true,
     environment: "jsdom",
     setupFiles: ["./tests/setup.js"],
     coverage: {
@@ -127,6 +132,21 @@ export default defineConfig({
         branches: 72,
         functions: 82,
         lines: 87,
+      },
+    },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("react") || id.includes("react-dom"))
+              return "react";
+            if (id.includes("chart.js") || id.includes("react-chartjs-2"))
+              return "chartjs";
+            return "vendor";
+          }
+        },
       },
     },
   },

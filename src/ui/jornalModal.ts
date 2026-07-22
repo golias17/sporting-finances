@@ -5,13 +5,15 @@ import { trapFocusWithin } from "../utils/focusTrap.js";
 
 // AbortController for modal listeners — replaced on each call so re-invoking
 // initJornalModal never accumulates duplicate document-level keydown handlers.
-let jornalAbortController = null;
+let jornalAbortController: AbortController | null = null;
 
 export function initJornalModal() {
-  const btnOpen = document.getElementById("btnJornalModal");
-  const btnClose = document.getElementById("btnCloseJornal");
-  const modal = document.getElementById("jornalModal");
-  const container = document.getElementById("jornalIframeContainer");
+  const btnOpen = document.getElementById("btnJornalModal") as HTMLElement;
+  const btnClose = document.getElementById("btnCloseJornal") as HTMLElement;
+  const modal = document.getElementById("jornalModal") as HTMLElement;
+  const container = document.getElementById(
+    "jornalIframeContainer",
+  ) as HTMLElement;
 
   if (!btnOpen || !btnClose || !modal || !container) return;
 
@@ -26,8 +28,8 @@ export function initJornalModal() {
 
   // Restores focus to whatever triggered the modal once it closes, and
   // releases the Tab focus trap — see trapFocusWithin() in focusTrap.js.
-  let previouslyFocused = null;
-  let releaseFocusTrap = null;
+  let previouslyFocused: Element | null = null;
+  let releaseFocusTrap: (() => void) | null = null;
 
   function openModal() {
     // Inject iframe only on first open

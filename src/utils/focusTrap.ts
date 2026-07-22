@@ -14,15 +14,15 @@
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), textarea, input, select, iframe, [tabindex]:not([tabindex="-1"])';
 
-export function trapFocusWithin(container) {
-  const handler = (e) => {
+export function trapFocusWithin(container: HTMLElement) {
+  const handler = (e: KeyboardEvent) => {
     if (e.key !== "Tab") return;
     const focusable = Array.from(
       container.querySelectorAll(FOCUSABLE_SELECTOR),
-    ).filter((el) => el.offsetParent !== null); // visible only
+    ).filter((el) => (el as HTMLElement).offsetParent !== null); // visible only
     if (focusable.length === 0) return;
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
+    const first = focusable[0] as HTMLElement;
+    const last = focusable[focusable.length - 1] as HTMLElement;
     if (e.shiftKey && document.activeElement === first) {
       e.preventDefault();
       last.focus();

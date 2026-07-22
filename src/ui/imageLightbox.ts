@@ -4,31 +4,39 @@ import { trapFocusWithin } from "../utils/focusTrap.js";
 // IMAGE LIGHTBOX MODAL
 // =============================================================
 export function initImageLightbox() {
-  const lightbox = document.getElementById("imageLightbox");
-  const lightboxImg = document.getElementById("lightboxImg");
-  const lightboxCaption = document.getElementById("lightboxCaption");
-  const btnClose = document.getElementById("closeLightboxBtn");
-  const toggleBtn = document.getElementById("lightboxToggleKitBtn");
+  const lightbox = document.getElementById("imageLightbox") as HTMLElement;
+  const lightboxImg = document.getElementById(
+    "lightboxImg",
+  ) as HTMLImageElement;
+  const lightboxCaption = document.getElementById(
+    "lightboxCaption",
+  ) as HTMLElement;
+  const btnClose = document.getElementById("closeLightboxBtn") as HTMLElement;
+  const toggleBtn = document.getElementById(
+    "lightboxToggleKitBtn",
+  ) as HTMLElement;
 
   if (!lightbox || !lightboxImg || !lightboxCaption || !btnClose || !toggleBtn)
     return;
 
-  const targets = document.querySelectorAll(
+  const targets = document.querySelectorAll<HTMLImageElement>(
     ".stadium-panorama-img, .court-panorama-img, .academy-panorama-img, .museum-panorama-img, .kit-img",
   );
 
-  let currentFrontSrc = null;
-  let currentBackSrc = null;
+  let currentFrontSrc: string | null = null;
+  let currentBackSrc: string | null = null;
   let currentFrontAlt = "";
   let currentBackAlt = "";
   let isShowingBack = false;
 
   // Restores focus to whatever triggered the lightbox once it closes, and
   // releases the Tab focus trap — see trapFocusWithin() in focusTrap.js.
-  let previouslyFocused = null;
-  let releaseFocusTrap = null;
+  let previouslyFocused: Element | null = null;
+  let releaseFocusTrap: (() => void) | null = null;
 
   targets.forEach((img) => {
+    if (img.dataset.lightboxBound) return;
+    img.dataset.lightboxBound = "true";
     // Plain <img> elements aren't keyboard-focusable or operable by
     // default — without this, there was no way to reach or open the
     // lightbox except by mouse/touch. tabindex makes it Tab-reachable;
@@ -67,8 +75,12 @@ export function initImageLightbox() {
       // Detect if image is inside a kit flip card
       const kitInner = img.closest(".kit-card-inner");
       if (kitInner) {
-        const frontImg = kitInner.querySelector(".kit-card-front img");
-        const backImg = kitInner.querySelector(".kit-card-back img");
+        const frontImg = kitInner.querySelector(
+          ".kit-card-front img",
+        ) as HTMLImageElement;
+        const backImg = kitInner.querySelector(
+          ".kit-card-back img",
+        ) as HTMLImageElement;
         if (frontImg && backImg) {
           currentFrontSrc = frontImg.src;
           currentBackSrc = backImg.src;
@@ -89,7 +101,7 @@ export function initImageLightbox() {
     };
 
     img.addEventListener("click", openLightboxFor);
-    img.addEventListener("keydown", (e) => {
+    img.addEventListener("keydown", (e: KeyboardEvent) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         openLightboxFor();
@@ -123,13 +135,16 @@ export function initImageLightbox() {
   }
 
   btnClose.addEventListener("click", closeLightbox);
-  lightbox.addEventListener("click", (e) => {
-    if (e.target === lightbox || e.target.id === "imageLightbox") {
+  lightbox.addEventListener("click", (e: MouseEvent) => {
+    if (
+      e.target === lightbox ||
+      (e.target as HTMLElement)?.id === "imageLightbox"
+    ) {
       closeLightbox();
     }
   });
 
-  document.addEventListener("keydown", (e) => {
+  document.addEventListener("keydown", (e: KeyboardEvent) => {
     if (e.key === "Escape" && lightbox.classList.contains("active")) {
       closeLightbox();
     }
@@ -158,16 +173,24 @@ export function initImageLightbox() {
 // click/keydown listeners onto, and the comments in both functions
 // cross-reference each other's behavior.
 export function initKitCardFlip() {
-  const cards = document.querySelectorAll(".kit-card-container:not(.no-flip)");
+  const cards = document.querySelectorAll<HTMLElement>(
+    ".kit-card-container:not(.no-flip)",
+  );
 
   cards.forEach((card) => {
-    const frontImg = card.querySelector(".kit-card-front img");
-    const backImg = card.querySelector(".kit-card-back img");
+    if (card.dataset.flipBound) return;
+    card.dataset.flipBound = "true";
+    const frontImg = card.querySelector(
+      ".kit-card-front img",
+    ) as HTMLImageElement;
+    const backImg = card.querySelector(
+      ".kit-card-back img",
+    ) as HTMLImageElement;
     if (!frontImg || !backImg) return;
 
     const kitName = (frontImg.alt || "Kit").replace(/\s*Front$/i, "");
 
-    const syncFaceReachability = (flipped) => {
+    const syncFaceReachability = (flipped: boolean) => {
       const [visible, hidden] = flipped
         ? [backImg, frontImg]
         : [frontImg, backImg];
@@ -184,7 +207,7 @@ export function initKitCardFlip() {
       hidden.setAttribute("aria-hidden", "true");
     };
 
-    const setFlipped = (flipped) => {
+    const setFlipped = (flipped: boolean) => {
       card.classList.toggle("flipped", flipped);
       card.setAttribute("aria-pressed", String(flipped));
       card.setAttribute(
@@ -204,17 +227,17 @@ export function initKitCardFlip() {
     card.setAttribute("role", "button");
     setFlipped(false);
 
-    card.addEventListener("click", (e) => {
+    card.addEventListener("click", (e: MouseEvent) => {
       // Clicking either face's image opens the lightbox (wired in
       // initImageLightbox()) — that's the existing, expected behavior for
       // mouse users, who flip via :hover rather than by clicking the card.
       // Only toggle the flip for clicks on the card's own chrome (e.g. the
       // kit label), not one that's really targeting a descendant image.
-      if (e.target.closest("img")) return;
+      if ((e.target as HTMLElement).closest("img")) return;
       setFlipped(!card.classList.contains("flipped"));
     });
 
-    card.addEventListener("keydown", (e) => {
+    card.addEventListener("keydown", (e: KeyboardEvent) => {
       // Only handle Enter/Space when the card itself is focused — if focus
       // is on a descendant image, that image's own keydown handler (in
       // initImageLightbox()) already opens the lightbox, and this would

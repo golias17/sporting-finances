@@ -10,7 +10,7 @@ import { state } from "../core/state.js";
 // entire 14-entry bilingual object on every single tooltip update while a
 // user hovers any chart in the app, for no reason since none of it depends
 // on the call's arguments.
-const PITCH_MILESTONES = {
+const PITCH_MILESTONES: Record<string, { en: string; pt: string }> = {
   "2012/13": {
     en: "⚽ Pitch: 7th place in Primeira Liga (worst in club history).",
     pt: "⚽ Campo: 7º lugar na Primeira Liga (pior na história do clube).",
@@ -69,7 +69,7 @@ const PITCH_MILESTONES = {
   },
 };
 
-export function getPitchMilestone(season) {
+export function getPitchMilestone(season: string) {
   let cleanSeason = season;
   if (
     season.includes("H1") ||
@@ -85,7 +85,7 @@ export function getPitchMilestone(season) {
   return state.isPt ? milestone.pt : milestone.en;
 }
 
-export function getEventAnnotations() {
+export function getEventAnnotations(): Record<string, any> {
   return {
     restructure14: {
       x: "2014/15",
@@ -118,8 +118,8 @@ export function getEventAnnotations() {
   };
 }
 
-export function eventBoxes(eventKeys) {
-  const annos = {};
+export function eventBoxes(eventKeys: string[]) {
+  const annos: Record<string, any> = {};
   const eventAnnotations = getEventAnnotations();
   // Event markers have a fixed season (e.g. "2014/15") regardless of the
   // active global era filter. The chart's x-axis only has categories for
@@ -127,9 +127,10 @@ export function eventBoxes(eventKeys) {
   // has nowhere valid to anchor to — the annotation plugin was clamping it
   // to the nearest edge instead, making it look like it belonged to
   // whichever season happened to be first/last. Drop it instead.
-  const visibleSeasons = state.annual
-    ? new Set(state.annual.map((d) => d.label))
-    : null;
+  const visibleSeasons =
+    state.annual && state.annual.length > 0
+      ? new Set(state.annual.map((d) => d.label))
+      : null;
   eventKeys.forEach((k) => {
     const e = eventAnnotations[k];
     if (!e) return;

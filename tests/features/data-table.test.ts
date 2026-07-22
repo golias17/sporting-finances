@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { act } from "@testing-library/react";
 import { state } from "../../src/core/state.js";
 import { renderTable, initDataExport } from "../../src/features/data-table.js";
 
@@ -52,7 +53,9 @@ describe("data-table.js", () => {
   });
 
   it("should render a table inside #dataTable with the correct headers and formatted data", () => {
-    renderTable();
+    act(() => {
+      renderTable();
+    });
 
     const container = document.getElementById("dataTable");
     const table = container.querySelector("table");
@@ -86,7 +89,9 @@ describe("data-table.js", () => {
 
   it("should format table headers in Portuguese when state.isPt is true", () => {
     state.setIsPt(true);
-    renderTable();
+    act(() => {
+      renderTable();
+    });
 
     const container = document.getElementById("dataTable");
     const table = container.querySelector("table");

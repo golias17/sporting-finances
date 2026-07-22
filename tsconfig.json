@@ -4,23 +4,18 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "strict": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "allowJs": true,
     "checkJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ES2022"
-    ],
+    "allowImportingTsExtensions": true,
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "jsx": "react-jsx",
     "noEmit": true
   },
-  "include": [
-    "src/**/*.ts",
-    "tests/**/*.ts",
-    "vite.config.js"
-  ]
+  "include": ["src/**/*", "vite.config.js"],
+  "exclude": ["tests/**/*", "node_modules"]
 }

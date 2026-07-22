@@ -12,7 +12,7 @@ import { getBrandColors, hexToRgbArray } from "../charts/chartUtils.js";
 /**
  * Helper: Converts a relative image path to a Base64 data URL using a temporary canvas.
  */
-function getBase64ImageFromUrl(url) {
+function getBase64ImageFromUrl(url: string) {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.crossOrigin = "Anonymous";
@@ -21,6 +21,7 @@ function getBase64ImageFromUrl(url) {
       canvas.width = img.width;
       canvas.height = img.height;
       const ctx = canvas.getContext("2d");
+      if (!ctx) return;
       ctx.drawImage(img, 0, 0);
       const dataURL = canvas.toDataURL("image/png");
       resolve(dataURL);
@@ -36,7 +37,7 @@ function getBase64ImageFromUrl(url) {
 // the three cell-colorer helpers below) purely so they're unit-testable in
 // isolation — they're pure functions with no jsPDF/canvas dependency,
 // unlike the page-drawing functions around them.
-export function fmtM(val) {
+export function fmtM(val: number | null | undefined) {
   if (val === null || val === undefined) return "—";
   const sign = val < 0 ? "-" : "";
   return `${sign}${Math.abs(val / 1000).toFixed(1)} M€`;
@@ -52,8 +53,8 @@ export function fmtM(val) {
 // Colors a column red if its fmtM()-formatted value starts with "-",
 // green if it's a genuine positive non-zero value, and leaves zero/"—"
 // unstyled.
-export function signColorCell(colIndex, colors) {
-  return (cellData) => {
+export function signColorCell(colIndex: number, colors: any) {
+  return (cellData: any) => {
     if (cellData.section !== "body" || cellData.column.index !== colIndex)
       return;
     const val = cellData.cell.text[0];
@@ -72,11 +73,11 @@ export function signColorCell(colIndex, colors) {
 // since the thresholds and their direction (higher-is-worse vs
 // higher-is-better) differ per column.
 export function thresholdColorCell(
-  colIndex,
-  { negativeIf, positiveIf },
-  colors,
+  colIndex: number,
+  { negativeIf, positiveIf }: any,
+  colors: any,
 ) {
-  return (cellData) => {
+  return (cellData: any) => {
     if (cellData.section !== "body" || cellData.column.index !== colIndex)
       return;
     const str = cellData.cell.text[0];
@@ -94,8 +95,8 @@ export function thresholdColorCell(
 
 // Combines several column-colorers (each already bound to a `colors`
 // palette) into the single didParseCell callback autoTable expects.
-export function combineCellColorers(...colorers) {
-  return (cellData) => colorers.forEach((c) => c(cellData));
+export function combineCellColorers(...colorers: any[]) {
+  return (cellData: any) => colorers.forEach((c) => c(cellData));
 }
 
 /**
@@ -104,7 +105,7 @@ export function combineCellColorers(...colorers) {
  * below. Centralizing this avoids each page re-deriving the same "current
  * page number" state or re-declaring the same color constants.
  */
-function buildPdfContext({ doc, isPt, data, logoBase64, totalPages }) {
+function buildPdfContext({ doc, isPt, data, logoBase64, totalPages }: any) {
   const brand = getBrandColors(false);
   // Colors matching corporate green/gold guidelines — derived from the same
   // canonical light-mode palette the live dashboard uses (chartUtils.js's
@@ -138,7 +139,7 @@ function buildPdfContext({ doc, isPt, data, logoBase64, totalPages }) {
   const rangeEndLabel = h1Data?.label || latestSeason.label || "";
 
   // Header Helper across Pages
-  const addHeader = (pageNum) => {
+  const addHeader = (pageNum: number) => {
     doc.setFillColor(...colors.green);
     doc.rect(15, 12, 180, 4, "F");
 
@@ -202,8 +203,8 @@ function buildPdfContext({ doc, isPt, data, logoBase64, totalPages }) {
 // PAGE 1: TITLE, SUMMARY, AND EXECUTIVE KPI GRID
 // ==========================================================
 function drawCoverPage(
-  ctx,
-  { revGrowthLabel, netResultLabel, equityLabel, executiveNote },
+  ctx: any,
+  { revGrowthLabel, netResultLabel, equityLabel, executiveNote }: any,
 ) {
   const { doc, isPt, colors, firstSeason, latestSeason, startNewPage } = ctx;
   startNewPage();
@@ -270,7 +271,15 @@ function drawCoverPage(
     112,
   );
 
-  const drawKpi = (x, y, w, h, labelText, value, trendText) => {
+  const drawKpi = (
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    labelText: string,
+    value: string | number,
+    trendText: string,
+  ) => {
     doc.setFillColor(...colors.lightGreyBg);
     doc.rect(x, y, w, h, "F");
     doc.setDrawColor(220, 222, 221);
@@ -333,7 +342,7 @@ function drawCoverPage(
   // actively wrong claim for missing data, not just a cosmetic glitch.
   const hasRevenue = !!latestSeason.revenue_operating;
   const ndRatio = hasRevenue ? nd / latestSeason.revenue_operating : null;
-  const ratioStr = hasRevenue ? ndRatio.toFixed(2) + " x" : "—";
+  const ratioStr = hasRevenue ? ndRatio!.toFixed(2) + " x" : "—";
   // Same thresholds used by chartDebtLoad()/calculateHealthSignals() in the
   // dashboard (green < 1x, amber < 2x, red >= 2x) so the PDF caption always
   // agrees with what the app itself is showing for the same season.
@@ -342,14 +351,14 @@ function drawCoverPage(
       ? "Receita operacional indisponível"
       : "Operating revenue unavailable"
     : isPt
-      ? ndRatio < 1
+      ? ndRatio! < 1
         ? "Métrica de alavancagem saudável"
-        : ndRatio < 2
+        : ndRatio! < 2
           ? "Alavancagem elevada — a acompanhar"
           : "Alavancagem em zona de risco"
-      : ndRatio < 1
+      : ndRatio! < 1
         ? "Leverage below safety threshold"
-        : ndRatio < 2
+        : ndRatio! < 2
           ? "Elevated leverage — worth watching"
           : "Leverage in the risk zone";
   drawKpi(
@@ -393,7 +402,7 @@ function drawCoverPage(
 // ==========================================================
 // PAGE 2: TABLE 1 (REVENUES & WAGES) & TABLE 2 (BALANCE SHEET)
 // ==========================================================
-function drawFinancialTablesPage(ctx) {
+function drawFinancialTablesPage(ctx: any) {
   const { doc, isPt, data, colors, startNewPage } = ctx;
   startNewPage();
 
@@ -432,7 +441,7 @@ function drawFinancialTablesPage(ctx) {
         "EBITDA %",
       ];
 
-  const t1Rows = data.map((d) => {
+  const t1Rows = data.map((d: any) => {
     const ratioVal =
       d.revenue_operating > 0
         ? `${Math.round((Math.abs(d.personnel_costs) / d.revenue_operating) * 100)}%`
@@ -484,13 +493,13 @@ function drawFinancialTablesPage(ctx) {
       // Wage ratio (col 6): higher is worse.
       thresholdColorCell(
         6,
-        { negativeIf: (v) => v > 70, positiveIf: (v) => v <= 60 },
+        { negativeIf: (v: any) => v > 70, positiveIf: (v: any) => v <= 60 },
         colors,
       ),
       // EBITDA margin (col 8): higher is better.
       thresholdColorCell(
         8,
-        { negativeIf: (v) => v < 10, positiveIf: (v) => v >= 20 },
+        { negativeIf: (v: any) => v < 10, positiveIf: (v: any) => v >= 20 },
         colors,
       ),
     ),
@@ -534,7 +543,7 @@ function drawFinancialTablesPage(ctx) {
         "Net Debt / EBITDA",
       ];
 
-  const t2Rows = data.map((d) => {
+  const t2Rows = data.map((d: any) => {
     const grossDebt = d.borrowings_nc + d.borrowings_c;
     const netDebtVal = grossDebt - d.cash;
     const totalLiab = d.non_current_liabilities + d.current_liabilities;
@@ -587,7 +596,7 @@ function drawFinancialTablesPage(ctx) {
       signColorCell(3, colors),
       thresholdColorCell(
         7,
-        { negativeIf: (v) => v < 0, positiveIf: (v) => v >= 15 },
+        { negativeIf: (v: any) => v < 0, positiveIf: (v: any) => v >= 15 },
         colors,
       ),
     ),
@@ -609,7 +618,9 @@ function drawFinancialTablesPage(ctx) {
       chartYStart,
     );
 
-    const maxEquityAbs = Math.max(...data.map((d) => Math.abs(d.equity || 0)));
+    const maxEquityAbs = Math.max(
+      ...data.map((d: any) => Math.abs(d.equity || 0)),
+    );
     const yZero = chartYStart + 32; // baseline for Y=0
 
     // Draw grid bounds
@@ -671,7 +682,7 @@ function drawFinancialTablesPage(ctx) {
 // ==========================================================
 // PAGE 3: TABLE 3 (PLAYER TRADING) & TABLE 4 (CASH FLOWS)
 // ==========================================================
-function drawTradingCashFlowPage(ctx) {
+function drawTradingCashFlowPage(ctx: any) {
   const { doc, isPt, data, colors, startNewPage } = ctx;
   startNewPage();
 
@@ -704,7 +715,7 @@ function drawTradingCashFlowPage(ctx) {
         "Market Value",
       ];
 
-  const t3Rows = data.map((d) => {
+  const t3Rows = data.map((d: any) => {
     const netTradingVal = d.player_transfer_income + d.player_transfer_cost;
     return [
       d.label,
@@ -770,7 +781,7 @@ function drawTradingCashFlowPage(ctx) {
         "Net Cash Change",
       ];
 
-  const t4Rows = data.map((d) => {
+  const t4Rows = data.map((d: any) => {
     const netChange = d.cf_operating + d.cf_investing + d.cf_financing;
     return [
       d.label,
@@ -808,7 +819,7 @@ function drawTradingCashFlowPage(ctx) {
 // ==========================================================
 // PAGE 4: TIMELINE & FINANCING DETAIL (OVERLAP FREE)
 // ==========================================================
-function drawFinancingTimelinePage(ctx) {
+function drawFinancingTimelinePage(ctx: any) {
   const { doc, isPt, colors, startNewPage } = ctx;
   startNewPage();
 
@@ -913,17 +924,17 @@ function drawFinancingTimelinePage(ctx) {
 // ==========================================================
 // PAGES 5-6: LANDMARK PLAYER TRANSFERS LEDGER (SALES & PURCHASES)
 // ==========================================================
-function drawTransfersLedgerPages(ctx) {
+function drawTransfersLedgerPages(ctx: any) {
   const { doc, isPt, colors, startNewPage } = ctx;
 
-  const cleanText = (str) => {
+  const cleanText = (str: string | undefined) => {
     if (!str) return "—";
     return str.replace(/≈/g, "~").replace(/≥/g, ">=").replace(/≤/g, "<=");
   };
 
   // Extract transfers >= 8M
-  const salesLedger = [];
-  const purchasesLedger = [];
+  const salesLedger: any[] = [];
+  const purchasesLedger: any[] = [];
 
   state.TRANSFER_LEDGER.forEach((seasonObj) => {
     const sLabel = seasonObj.season;
@@ -1108,7 +1119,7 @@ function drawTransfersLedgerPages(ctx) {
  * five distinct tables (Operating P&L, Balance Sheet, Player Trading, Cash Flows, and Landmark Transfers),
  * and dynamic overlap-free spacing for timelines.
  */
-export async function generateCuratedPdf(options = {}) {
+export async function generateCuratedPdf(options: any = {}) {
   const {
     lang = state.isPt ? "pt" : "en",
     pages: requestedPages = [true, true, true, true, true],
@@ -1146,6 +1157,7 @@ export async function generateCuratedPdf(options = {}) {
 
   const isPt = lang === "pt";
   const data = state.fullAnnual;
+  if (!data) return;
   const totalPages =
     pages.slice(0, 4).filter(Boolean).length + (pages[4] ? 2 : 0);
   if (totalPages === 0) return;

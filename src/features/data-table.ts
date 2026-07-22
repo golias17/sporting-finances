@@ -1,9 +1,24 @@
-import { state } from "../core/state.js";
-import { fmtMillions } from "../charts/chartUtils.js";
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { state } from "../core/state.ts";
+import { DataTable } from "./DataTable.tsx";
 import { netDebt } from "./metrics.js";
 
-// DATA TABLE RENDER
-// =============================================================
+let root: any = null;
+let currentContainer: HTMLElement | null = null;
+
+export function renderTable() {
+  const container = document.getElementById("dataTable");
+  if (!container) return;
+
+  if (!root || currentContainer !== container) {
+    root = createRoot(container);
+    currentContainer = container;
+  }
+
+  root.render(React.createElement(DataTable, { data: state.annual }));
+}
+
 const getFields = () => [
   {
     key: "revenue_operating",
@@ -50,7 +65,7 @@ const getFields = () => [
     label: state.isPt ? "Caixa e Equivalentes" : "Cash & Equivalents",
   },
   {
-    compute: (d) => netDebt(d),
+    compute: (d: any) => netDebt(d),
     label: state.isPt ? "Dívida Líquida" : "Net Debt",
   },
   {
@@ -83,31 +98,6 @@ const getFields = () => [
   },
 ];
 
-export function renderTable() {
-  const container = document.getElementById("dataTable");
-  if (!container) return;
-
-  const fields = getFields();
-  // Built via map().join() rather than += inside the nested loop, matching
-  // every other renderer in the codebase (transfers.js, compare.js,
-  // chartUtils.js) — += repeatedly reallocates and copies the growing
-  // string on every iteration, where join() only concatenates once.
-  const headerCells = state.annual.map((d) => `<th>${d.label}</th>`).join("");
-  const bodyRows = fields
-    .map((f) => {
-      const cells = state.annual
-        .map((d) => {
-          const v = f.compute ? f.compute(d) : d[f.key];
-          const cls = v < 0 ? "neg" : "";
-          return `<td class="${cls}">${fmtMillions(v)}</td>`;
-        })
-        .join("");
-      return `<tr><td>${f.label}</td>${cells}</tr>`;
-    })
-    .join("");
-  container.innerHTML = `<table class="data"><thead><tr><th>${state.isPt ? "Métrica" : "Metric"}</th>${headerCells}</tr></thead><tbody>${bodyRows}</tbody></table>`;
-}
-
 export function initDataExport() {
   const btn = document.getElementById("btnDownloadLedger");
   if (!btn) return;
@@ -115,14 +105,14 @@ export function initDataExport() {
     const fields = getFields();
     let csv =
       (state.isPt ? "Métrica," : "Metric,") +
-      state.annual.map((d) => d.label).join(",") +
+      state.annual.map((d: any) => d.label).join(",") +
       "\n";
 
     fields.forEach((f) => {
       // Wrap label in quotes in case it has commas
       csv += `"${f.label}",`;
-      const rowVals = state.annual.map((d) => {
-        const v = f.compute ? f.compute(d) : d[f.key];
+      const rowVals = state.annual.map((d: any) => {
+        const v = f.compute ? f.compute(d) : d[f.key!];
         return v;
       });
       csv += rowVals.join(",") + "\n";
@@ -140,5 +130,3 @@ export function initDataExport() {
     document.body.removeChild(link);
   });
 }
-
-// =============================================================

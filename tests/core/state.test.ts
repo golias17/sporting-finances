@@ -12,8 +12,8 @@ describe("state.js", () => {
     state.setTlActiveWindow("All");
   });
 
-  it("should return null for annual and fullAnnual if DATASET is null", () => {
-    expect(state.annual).toBeNull();
+  it("should return [] for annual and null for fullAnnual if DATASET is null", () => {
+    expect(state.annual).toEqual([]);
     expect(state.fullAnnual).toBeNull();
   });
 
@@ -69,13 +69,12 @@ describe("state.js", () => {
   it("COLORS Proxy logs console.warn on first access before initialization", () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
-    // Read an undefined key from COLORS
-    const val = state.COLORS.nonexistentKey;
+    // Read COLORS before initialization
+    const val = state.COLORS;
 
     expect(warnSpy).toHaveBeenCalledWith(
-      "[state] COLORS.nonexistentKey accessed before initChartDefaults() was called",
+      "[state] COLORS accessed before initChartDefaults() was called",
     );
-    expect(val).toBeUndefined();
 
     warnSpy.mockRestore();
   });

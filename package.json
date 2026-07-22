@@ -31,7 +31,13 @@
   "_pinnedDependencyNotes": "vite/vitest/@vitest-coverage-v8/jsdom in devDependencies are pinned to exact versions (no ^) rather than left as caret ranges. They were all on very recent major releases (vite 8, vitest/coverage-v8 4, jsdom 27) as of this review, with less real-world mileage than the rest of the toolchain. A caret range wouldn't auto-bump the major anyway, but it would auto-bump minor/patch releases of a young major unattended; pinning exactly freezes the versions this app has actually been tested against until someone deliberately reviews and bumps them.",
   "devDependencies": {
     "@eslint/js": "^9.39.5",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^7.0.0",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^26.1.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.3",
     "@vitest/coverage-v8": "4.1.10",
     "eslint": "^9.39.5",
     "eslint-config-prettier": "^10.1.8",
@@ -47,8 +53,11 @@
   "dependencies": {
     "chart.js": "^4.5.1",
     "chartjs-plugin-annotation": "^3.1.0",
-    "chartjs-plugin-zoom": "^2.2.0",
     "jspdf": "^4.2.1",
-    "jspdf-autotable": "^5.0.8"
+    "jspdf-autotable": "^5.0.8",
+    "react": "^19.2.7",
+    "react-chartjs-2": "^5.3.1",
+    "react-dom": "^19.2.7",
+    "zustand": "^5.0.14"
   }
 }

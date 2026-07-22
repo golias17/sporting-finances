@@ -62,10 +62,7 @@ describe("chartUtils.js — re-export barrel", () => {
       "getEventAnnotations",
       "eventBoxes",
       // chartWidgets.js
-      "chartRegistry",
-      "generateAccessibleTable",
       "externalTooltipHandler",
-      "addChartDownloadButton",
       // chartDefaults.js
       "styledLineDataset",
       "initChartDefaults",

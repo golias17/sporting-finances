@@ -8,7 +8,7 @@ import {
 // THEME
 // =============================================================
 
-export function updateThemeUI(isDark) {
+export function updateThemeUI(isDark: boolean) {
   const themeBtn = document.getElementById("themeToggleBtn");
   if (!themeBtn) return;
   const btnText = themeBtn.querySelector("span");

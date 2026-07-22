@@ -6,7 +6,7 @@ export function syncEventsFilter() {
   const filterValue = state.activeEventFilter || "all";
   const eventLegend = document.querySelector(".event-legend");
   if (eventLegend) {
-    eventLegend.querySelectorAll(".el-filter").forEach((btn) => {
+    eventLegend.querySelectorAll<HTMLElement>(".el-filter").forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.filter === filterValue);
     });
   }
@@ -23,9 +23,10 @@ export function syncEventsFilter() {
 export function initEventFilter() {
   const eventLegend = document.querySelector(".event-legend");
   if (eventLegend) {
-    eventLegend.addEventListener("click", (e) => {
-      const filterBtn = e.target.closest(".el-filter");
-      if (!filterBtn) return;
+    eventLegend.addEventListener("click", (e: Event) => {
+      const target = e.target as HTMLElement;
+      const filterBtn = target.closest(".el-filter") as HTMLElement | null;
+      if (!filterBtn || !filterBtn.dataset.filter) return;
       state.setActiveEventFilter(filterBtn.dataset.filter);
       syncEventsFilter();
     });

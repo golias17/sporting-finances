@@ -1,7 +1,7 @@
 // CHART PALETTE & NUMBER FORMATTING
 // =============================================================
 
-export const fmtMillions = (v) => {
+export const fmtMillions = (v: number | null | undefined) => {
   if (v === null || v === undefined) return "—";
   return "€" + (v < 0 ? "−" : "") + Math.abs(v / 1000).toFixed(1) + "M";
 };
@@ -96,18 +96,18 @@ const ZONE_PALETTE = {
   },
 };
 
-export function getBrandColors(isDark) {
+export function getBrandColors(isDark: boolean) {
   return { ...PALETTE[isDark ? "dark" : "light"] };
 }
 
-export function getZoneColors(isDark) {
+export function getZoneColors(isDark: boolean) {
   return { ...ZONE_PALETTE[isDark ? "dark" : "light"] };
 }
 
 // Converts a "#rrggbb" hex string to a jsPDF-style [r, g, b] array. Used by
 // pdfGenerator.js so the PDF export's colors stay derived from the same
 // canonical hex values instead of a hand-copied RGB triple.
-export function hexToRgbArray(hex) {
+export function hexToRgbArray(hex: string) {
   const int = parseInt(hex.replace("#", ""), 16);
   return [(int >> 16) & 255, (int >> 8) & 255, int & 255];
 }

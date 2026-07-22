@@ -1,7 +1,41 @@
-import { state } from "../core/state.js";
+import { state, useAppState } from "../core/state.js";
 import { getBrandColors } from "./chartPalette.js";
 import { getPitchMilestone } from "./chartAnnotations.js";
 import { externalTooltipHandler } from "./chartWidgets.js";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  ArcElement,
+  LineController,
+  BarController,
+  DoughnutController,
+  Title,
+  Tooltip,
+  Legend,
+  Filler,
+} from "chart.js";
+import annotationPlugin from "chartjs-plugin-annotation";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  ArcElement,
+  LineController,
+  BarController,
+  DoughnutController,
+  Title,
+  Tooltip,
+  Legend,
+  Filler,
+  annotationPlugin,
+);
 
 // CHART DEFAULTS — shared dataset style + the one-time app-wide Chart.js
 // options every chart builds on top of.
@@ -21,6 +55,15 @@ export function styledLineDataset({
   spanGaps = false,
   pointBorderColor,
   extra = {},
+}: {
+  label: string;
+  data: (number | null)[];
+  color: string;
+  bg: string;
+  fill?: boolean;
+  spanGaps?: boolean;
+  pointBorderColor?: string;
+  extra?: any;
 }) {
   return {
     label,
@@ -56,9 +99,10 @@ export function initChartDefaults() {
   // that file's PALETTE comment for why this must stay the single source of
   // truth. updateChartTheme() in themeToggle.js re-applies this same palette
   // (plus the dark-mode variant) once the DOM/theme is known.
-  Object.assign(state.COLORS, getBrandColors(false));
+  const rawState = useAppState.getState();
+  Object.assign(rawState.COLORS, getBrandColors(false));
 
-  Object.assign(state.baseOpts, {
+  Object.assign(rawState.baseOpts, {
     responsive: true,
     maintainAspectRatio: false,
     interaction: { mode: "index", intersect: false },
@@ -71,7 +115,7 @@ export function initChartDefaults() {
         enabled: false,
         external: externalTooltipHandler,
         callbacks: {
-          footer: (tooltipItems) => {
+          footer: (tooltipItems: any[]) => {
             const label = tooltipItems[0]?.label;
             if (!label) return "";
             return getPitchMilestone(label);
@@ -104,7 +148,10 @@ export function initChartDefaults() {
         ticks: {
           font: { size: 11 },
           color: state.COLORS.muted,
-          callback: (v) => "€" + (v / 1000).toFixed(0) + "M",
+          callback: (v: number | string) => {
+            const num = typeof v === "string" ? parseFloat(v) : v;
+            return "€" + (num / 1000).toFixed(0) + "M";
+          },
         },
         grid: { color: "rgba(0,0,0,0.05)" },
         beginAtZero: true,
