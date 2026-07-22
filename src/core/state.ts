@@ -3,6 +3,9 @@ import type {
   AppState,
   FinancialDataset,
   TransferLedgerSeason,
+  PlaygroundInputs,
+  BrandColors,
+  ChartOptions,
 } from "./types.ts";
 
 export const useAppState = create<AppState>((set, get) => ({
@@ -41,9 +44,9 @@ export const useAppState = create<AppState>((set, get) => ({
     "club",
     "playground",
   ],
-  TAB_CHARTS: {},
-  COLORS: {},
-  baseOpts: {},
+  TAB_CHARTS: {} as Record<string, ChartOptions>,
+  COLORS: {} as BrandColors,
+  baseOpts: {} as ChartOptions,
 
   activeLionTab: "both",
   pinnedPlaygroundInputs: null,
@@ -79,7 +82,8 @@ export const useAppState = create<AppState>((set, get) => ({
   setTlActiveWindow: (transferWindow: string) =>
     set({ tlActiveWindow: transferWindow }),
   setActiveLionTab: (tab: string) => set({ activeLionTab: tab }),
-  setPinnedPlaygroundInputs: (v: any) => set({ pinnedPlaygroundInputs: v }),
+  setPinnedPlaygroundInputs: (v: PlaygroundInputs | null) =>
+    set({ pinnedPlaygroundInputs: v }),
   setTfActiveSeason: (v: string) => set({ tfActiveSeason: v }),
   setTfActiveType: (v: string) => set({ tfActiveType: v }),
   setTfActiveWindow: (v: string) => set({ tfActiveWindow: v }),
@@ -87,10 +91,10 @@ export const useAppState = create<AppState>((set, get) => ({
   setTfSortCol: (v: string | null) => set({ tfSortCol: v }),
   setTfSortDir: (v: string) => set({ tfSortDir: v }),
   setUrlStoryActive: (v: boolean) => set({ urlStoryActive: v }),
-  setUrlCmpA: (v: any) => set({ urlCmpA: v }),
-  setUrlCmpB: (v: any) => set({ urlCmpB: v }),
-  setUrlHealthSeason: (v: any) => set({ urlHealthSeason: v }),
-  setUrlPlayground: (v: any) => set({ urlPlayground: v }),
+  setUrlCmpA: (v: string | null) => set({ urlCmpA: v }),
+  setUrlCmpB: (v: string | null) => set({ urlCmpB: v }),
+  setUrlHealthSeason: (v: string | null) => set({ urlHealthSeason: v }),
+  setUrlPlayground: (v: PlaygroundInputs | null) => set({ urlPlayground: v }),
 }));
 
 export const state = new Proxy({} as AppState, {

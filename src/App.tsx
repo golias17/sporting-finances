@@ -311,27 +311,11 @@ export function App() {
 
       {/* PDF Customization Modal */}
       <div id="pdfModal" className="modal-overlay hidden">
-        <div
-          className="modal-container pdf-modal-container"
-          style={{
-            maxWidth: "550px",
-            height: "auto",
-            background: "var(--surface)",
-            color: "var(--ink)",
-            border: "1px solid var(--rule-2)",
-            padding: "2rem",
-            display: "flex",
-            flexDirection: "column",
-            gap: "1.5rem",
-            justifyContent: "flex-start",
-            overflowY: "auto",
-          }}
-        >
+        <div className="modal-container pdf-modal-container">
           <button
             id="btnClosePdf"
             className="modal-close"
             aria-label="Close Customizer"
-            style={{ top: "1.5rem", right: "1.5rem" }}
           >
             <svg
               viewBox="0 0 24 24"
@@ -345,267 +329,107 @@ export function App() {
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
           </button>
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}
-          >
+          <div className="pdf-modal-intro">
             <T
               as="h2"
               id="pdfModalTitle"
-              style={{
-                fontFamily: "var(--sans)",
-                fontSize: "1.5rem",
-                fontWeight: 700,
-                color: "var(--green)",
-              }}
+              className="pdf-modal-title"
               i18nKey="pdf_customizer_title"
             />
             <T
               as="p"
               id="pdfModalSubtitle"
-              style={{
-                fontFamily: "var(--sans)",
-                fontSize: "0.875rem",
-                color: "var(--muted)",
-              }}
+              className="pdf-modal-subtitle"
               i18nKey="pdf_customizer_subtitle"
             />
           </div>
           <form
             id="pdfCustomizerForm"
-            style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}
+            className="pdf-modal-form"
           >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.5rem",
-              }}
-            >
+            <div className="pdf-field-group">
               <T
                 as="label"
                 id="lblPdfLanguage"
-                style={{
-                  fontFamily: "var(--sans)",
-                  fontSize: "0.875rem",
-                  fontWeight: 700,
-                  color: "var(--ink)",
-                }}
+                className="pdf-field-label"
                 i18nKey="pdf_language"
               />
               <select
                 id="pdfLanguageSelect"
-                style={{
-                  width: "100%",
-                  padding: "0.75rem",
-                  background: "var(--bg)",
-                  border: "1px solid var(--rule-2)",
-                  borderRadius: "var(--radius-lg)",
-                  color: "var(--ink)",
-                  fontSize: "0.875rem",
-                  fontFamily: "var(--sans)",
-                }}
+                className="pdf-field-input"
               >
                 <option value="en">English</option>
                 <option value="pt">Português</option>
               </select>
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.5rem",
-              }}
-            >
+            <div className="pdf-field-group">
               <T
                 as="label"
                 id="lblPdfPages"
-                style={{
-                  fontFamily: "var(--sans)",
-                  fontSize: "0.875rem",
-                  fontWeight: 700,
-                  color: "var(--ink)",
-                }}
+                className="pdf-field-label"
                 i18nKey="pdf_pages"
               />
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.75rem",
-                  background: "var(--bg)",
-                  padding: "1.25rem",
-                  borderRadius: "var(--radius-lg)",
-                  border: "1px solid var(--rule-2)",
-                }}
-              >
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.75rem",
-                    fontSize: "0.875rem",
-                    cursor: "pointer",
-                    fontFamily: "var(--sans)",
-                    color: "var(--ink-2)",
-                  }}
-                >
+              <div className="pdf-checkbox-list">
+                <label className="pdf-checkbox-label">
                   <input
                     type="checkbox"
                     id="chkPage1"
                     defaultChecked
-                    style={{
-                      width: "1.1rem",
-                      height: "1.1rem",
-                      accentColor: "var(--green)",
-                    }}
                   />
                   <T as="span" i18nKey="pdf_page_1" />
                 </label>
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.75rem",
-                    fontSize: "0.875rem",
-                    cursor: "pointer",
-                    fontFamily: "var(--sans)",
-                    color: "var(--ink-2)",
-                  }}
-                >
+                <label className="pdf-checkbox-label">
                   <input
                     type="checkbox"
                     id="chkPage2"
                     defaultChecked
-                    style={{
-                      width: "1.1rem",
-                      height: "1.1rem",
-                      accentColor: "var(--green)",
-                    }}
                   />
                   <T as="span" i18nKey="pdf_page_2" />
                 </label>
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.75rem",
-                    fontSize: "0.875rem",
-                    cursor: "pointer",
-                    fontFamily: "var(--sans)",
-                    color: "var(--ink-2)",
-                  }}
-                >
+                <label className="pdf-checkbox-label">
                   <input
                     type="checkbox"
                     id="chkPage3"
                     defaultChecked
-                    style={{
-                      width: "1.1rem",
-                      height: "1.1rem",
-                      accentColor: "var(--green)",
-                    }}
                   />
                   <T as="span" i18nKey="pdf_page_3" />
                 </label>
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.75rem",
-                    fontSize: "0.875rem",
-                    cursor: "pointer",
-                    fontFamily: "var(--sans)",
-                    color: "var(--ink-2)",
-                  }}
-                >
+                <label className="pdf-checkbox-label">
                   <input
                     type="checkbox"
                     id="chkPage4"
                     defaultChecked
-                    style={{
-                      width: "1.1rem",
-                      height: "1.1rem",
-                      accentColor: "var(--green)",
-                    }}
                   />
                   <T as="span" i18nKey="pdf_page_4" />
                 </label>
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.75rem",
-                    fontSize: "0.875rem",
-                    cursor: "pointer",
-                    fontFamily: "var(--sans)",
-                    color: "var(--ink-2)",
-                  }}
-                >
+                <label className="pdf-checkbox-label">
                   <input
                     type="checkbox"
                     id="chkPage5"
                     defaultChecked
-                    style={{
-                      width: "1.1rem",
-                      height: "1.1rem",
-                      accentColor: "var(--green)",
-                    }}
                   />
                   <T as="span" i18nKey="pdf_page_5" />
                 </label>
               </div>
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.5rem",
-              }}
-            >
+            <div className="pdf-field-group">
               <T
                 as="label"
                 id="lblPdfNotes"
-                style={{
-                  fontFamily: "var(--sans)",
-                  fontSize: "0.875rem",
-                  fontWeight: 700,
-                  color: "var(--ink)",
-                }}
+                className="pdf-field-label"
                 i18nKey="pdf_executive_notes"
               />
               <textarea
                 id="pdfNotesText"
                 rows={3}
-                style={{
-                  width: "100%",
-                  padding: "0.75rem",
-                  background: "var(--bg)",
-                  border: "1px solid var(--rule-2)",
-                  borderRadius: "var(--radius-lg)",
-                  color: "var(--ink)",
-                  fontSize: "0.875rem",
-                  fontFamily: "var(--sans)",
-                  resize: "none",
-                }}
+                className="pdf-field-input"
                 placeholder="Enter custom notes or disclaimer..."
               ></textarea>
             </div>
             <button
               type="submit"
               id="btnPdfModalSubmit"
-              style={{
-                width: "100%",
-                padding: "1rem",
-                background: "var(--green)",
-                color: "#ffffff",
-                border: "none",
-                borderRadius: "var(--radius-lg)",
-                fontWeight: 700,
-                fontSize: "0.875rem",
-                fontFamily: "var(--sans)",
-                cursor: "pointer",
-                transition: "opacity 0.2s ease, transform 0.2s ease",
-              }}
+              className="pdf-modal-submit"
             >
               <T as="span" i18nKey="pdf_generate_btn" />
             </button>

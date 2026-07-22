@@ -64,6 +64,47 @@ export interface TransferLedgerSeason {
   sales: TransferTransaction[];
 }
 
+/** Playground simulation inputs — the 7 sliders/controls. */
+export interface PlaygroundInputs {
+  uclPrize: number;
+  payrollAdj: number;
+  salesTarget: number;
+  purchasesTarget: number;
+  capexAdj: number;
+  debtRepayTarget: number;
+  revGrowthAdj: number;
+}
+
+/** Chart.js options object (subset of the full ChartOptions type). */
+export interface ChartOptions {
+  responsive?: boolean;
+  maintainAspectRatio?: boolean;
+  plugins?: Record<string, any>;
+  scales?: Record<string, any>;
+  [key: string]: any;
+}
+
+/** Brand color tokens used across charts and the PDF export. */
+export interface BrandColors {
+  ink: string;
+  muted: string;
+  mutedSoft: string;
+  chartBg: string;
+  green: string;
+  greenLight: string;
+  greenSoft: string;
+  gold: string;
+  goldSoft: string;
+  pos: string;
+  posSoft: string;
+  neg: string;
+  negSoft: string;
+  warn: string;
+  info: string;
+  infoSoft: string;
+  lineBorder: string;
+}
+
 export interface AppState {
   DATASET: FinancialDataset;
   TRANSFER_LEDGER: TransferLedgerSeason[];
@@ -79,20 +120,20 @@ export interface AppState {
   activeEventFilter: string;
 
   urlStoryActive: boolean;
-  urlCmpA: any;
-  urlCmpB: any;
-  urlHealthSeason: any;
-  urlPlayground: any;
+  urlCmpA: string | null;
+  urlCmpB: string | null;
+  urlHealthSeason: string | null;
+  urlPlayground: PlaygroundInputs | null;
 
   annual: FinancialRecord[];
   fullAnnual: FinancialRecord[] | null;
   VALID_TABS: string[];
-  TAB_CHARTS: Record<string, any>;
-  COLORS: Record<string, string>;
-  baseOpts: any;
+  TAB_CHARTS: Record<string, ChartOptions>;
+  COLORS: BrandColors;
+  baseOpts: ChartOptions;
 
   activeLionTab: string;
-  pinnedPlaygroundInputs: any;
+  pinnedPlaygroundInputs: PlaygroundInputs | null;
 
   tfActiveSeason: string;
   tfActiveType: string;
@@ -118,7 +159,7 @@ export interface AppState {
   setTlActiveSeason(season: string): void;
   setTlActiveWindow(transferWindow: string): void;
   setActiveLionTab(tab: string): void;
-  setPinnedPlaygroundInputs(v: any): void;
+  setPinnedPlaygroundInputs(v: PlaygroundInputs | null): void;
   setTfActiveSeason(v: string): void;
   setTfActiveType(v: string): void;
   setTfActiveWindow(v: string): void;
@@ -126,8 +167,8 @@ export interface AppState {
   setTfSortCol(v: string | null): void;
   setTfSortDir(v: string): void;
   setUrlStoryActive(v: boolean): void;
-  setUrlCmpA(v: any): void;
-  setUrlCmpB(v: any): void;
-  setUrlHealthSeason(v: any): void;
-  setUrlPlayground(v: any): void;
+  setUrlCmpA(v: string | null): void;
+  setUrlCmpB(v: string | null): void;
+  setUrlHealthSeason(v: string | null): void;
+  setUrlPlayground(v: PlaygroundInputs | null): void;
 }
