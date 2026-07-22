@@ -4,10 +4,14 @@ import { TopNav } from "./components/TopNav.js";
 import { Hero } from "./components/Hero.js";
 import { TabsNavigation } from "./components/TabsNavigation.js";
 import { TabLoader } from "./components/TabLoader.js";
-import { initJornalModal } from "./ui/jornalModal.js";
-import { initImageLightbox, initKitCardFlip } from "./ui/imageLightbox.js";
-import { initPdfExport } from "./ui/pdfExportModal.js";
-import { initDataExport } from "./features/data-table.js";
+import { ErrorBoundary } from "./components/ErrorBoundary.js";
+import { useScrollToTop } from "./hooks/useScrollToTop.js";
+import { useImageLightbox, setupLightboxTriggers } from "./hooks/useImageLightbox.js";
+import { LightboxProvider } from "./hooks/useLightboxContext.tsx";
+import { usePdfExport } from "./hooks/usePdfExport.js";
+import { useDataExport } from "./hooks/useDataExport.js";
+import { usePWA } from "./hooks/usePWA.js";
+import { initKitCardFlip } from "./ui/imageLightbox.js";
 import { initNewsFeed } from "./features/News.js";
 import { loadTranslations } from "./ui/translations.js";
 import { useTranslation } from "./hooks/useTranslation.js";
@@ -128,6 +132,11 @@ export function App() {
   const activeTab = useAppState((s) => s.activeTab);
   const isPt = useAppState((s) => s.isPt);
   const { t, T } = useTranslation();
+  const { btnRef: scrollToTopRef, isVisible: scrollToTopVisible, scrollToTop } = useScrollToTop();
+  const lightbox = useImageLightbox();
+  const pdfExport = usePdfExport();
+  const dataExport = useDataExport();
+  const pwa = usePWA();
 
   // Re-run scroll animations when tab changes and new nodes appear
   useScrollAnimations(activeTab);
@@ -146,37 +155,13 @@ export function App() {
 
   useEffect(() => {
     // Initialize global UI features that were previously in main.ts
-    initJornalModal();
-    initImageLightbox();
+    setupLightboxTriggers(lightbox.open);
     initKitCardFlip();
-    initPdfExport();
-    initDataExport();
     initNewsFeed();
-
-    // Scroll to Top Button listener
-    const scrollToTopBtn = document.getElementById("scrollToTopBtn");
-    if (scrollToTopBtn) {
-      const onScroll = () => {
-        if (window.scrollY > 300) {
-          scrollToTopBtn.classList.add("visible");
-        } else {
-          scrollToTopBtn.classList.remove("visible");
-        }
-      };
-      window.addEventListener("scroll", onScroll, { passive: true });
-
-      scrollToTopBtn.addEventListener("click", () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-
-      return () => {
-        window.removeEventListener("scroll", onScroll);
-      };
-    }
   }, []);
 
   return (
-    <>
+    <LightboxProvider open={lightbox.open}>
       <T as="a" className="skip-link" href="#main" i18nKey="skip-link" />
       <div
         id="a11yAnnouncer"
@@ -185,35 +170,38 @@ export function App() {
         aria-atomic="true"
       ></div>
 
-      <TopNav />
+      <TopNav onPdfExport={pdfExport.open} />
       <Hero />
 
       <main className="container" id="main">
         <TabsNavigation />
 
-        <Suspense
-          fallback={<TabLoader />}
-        >
-          {activeTab === "overview" && <OverviewTab />}
-          {activeTab === "revenue" && <RevenueTab />}
-          {activeTab === "healthcheck" && <HealthcheckTab />}
-          {activeTab === "debt" && <DebtTab />}
-          {activeTab === "bonds" && <BondsTab />}
-          {activeTab === "squad" && <SquadTab />}
-          {activeTab === "cash" && <CashTab />}
-          {activeTab === "compare" && <CompareTab />}
-          {activeTab === "events" && <EventsTab />}
-          {activeTab === "data" && <DataTab />}
-          {activeTab === "club" && <ClubTab />}
-          {activeTab === "news" && <NewsTab />}
-          {activeTab === "playground" && <PlaygroundTab />}
-        </Suspense>
+        <ErrorBoundary>
+          <Suspense
+            fallback={<TabLoader />}
+          >
+            {activeTab === "overview" && <OverviewTab />}
+            {activeTab === "revenue" && <RevenueTab />}
+            {activeTab === "healthcheck" && <HealthcheckTab />}
+            {activeTab === "debt" && <DebtTab />}
+            {activeTab === "bonds" && <BondsTab />}
+            {activeTab === "squad" && <SquadTab />}
+            {activeTab === "cash" && <CashTab />}
+            {activeTab === "compare" && <CompareTab />}
+            {activeTab === "events" && <EventsTab />}
+            {activeTab === "data" && <DataTab onExportCsv={dataExport.exportCsv} />}
+            {activeTab === "club" && <ClubTab />}
+            {activeTab === "news" && <NewsTab />}
+            {activeTab === "playground" && <PlaygroundTab />}
+          </Suspense>
+        </ErrorBoundary>
       </main>
 
       <button
-        id="scrollToTopBtn"
-        className="scroll-to-top"
+        ref={scrollToTopRef}
+        className={`scroll-to-top ${scrollToTopVisible ? "visible" : ""}`}
         aria-label="Scroll to top"
+        onClick={scrollToTop}
       >
         <svg
           className="icon-inline"
@@ -256,82 +244,49 @@ export function App() {
       </footer>
 
       {/* Lightbox Modal */}
-      <div id="imageLightbox" className="lightbox-modal">
+      <div
+        ref={lightbox.lightboxRef}
+        id="imageLightbox"
+        className={`lightbox-modal ${lightbox.isOpen ? "active" : ""}`}
+        onClick={lightbox.handleBackdropClick}
+      >
         <button
+          ref={lightbox.closeBtnRef}
           className="lightbox-close"
-          id="closeLightboxBtn"
           aria-label="Close image"
+          onClick={lightbox.close}
         >
           &times;
         </button>
         <div className="lightbox-image-wrapper">
           <img
             className="lightbox-content"
-            id="lightboxImg"
-            alt="Enlarged view"
+            src={lightbox.currentSrc}
+            alt={lightbox.currentAlt}
           />
-          <button
-            id="lightboxToggleKitBtn"
-            className="lightbox-toggle-btn hidden"
-          >
-            <span>Flip Kit 🔄</span>
-          </button>
-        </div>
-        <div id="lightboxCaption" className="lightbox-caption"></div>
-      </div>
-
-      {/* Jornal Reader Modal */}
-      <div id="jornalModal" className="modal-overlay hidden">
-        <div className="modal-container">
-          <button
-            id="btnCloseJornal"
-            className="modal-close"
-            aria-label="Close Reader"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+          {lightbox.isKitFlip && (
+            <button
+              className="lightbox-toggle-btn"
+              onClick={lightbox.toggleKitFlip}
             >
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-          <div className="modal-content-wrapper">
-            <div
-              id="jornalIframeContainer"
-              className="jornal-iframe-container"
-            ></div>
-          </div>
+              <span>Flip Kit 🔄</span>
+            </button>
+          )}
         </div>
+        <div className="lightbox-caption">{lightbox.currentAlt}</div>
       </div>
 
       {/* PDF Customization Modal */}
-      <div id="pdfModal" className="modal-overlay hidden">
-        <div
-          className="modal-container pdf-modal-container"
-          style={{
-            maxWidth: "550px",
-            height: "auto",
-            background: "var(--surface)",
-            color: "var(--ink)",
-            border: "1px solid var(--rule-2)",
-            padding: "2rem",
-            display: "flex",
-            flexDirection: "column",
-            gap: "1.5rem",
-            justifyContent: "flex-start",
-            overflowY: "auto",
-          }}
-        >
+      <div
+        id="pdfModal"
+        className={`modal-overlay ${pdfExport.isOpen ? "" : "hidden"}`}
+        onClick={pdfExport.handleBackdropClick}
+      >
+        <div className="modal-container pdf-modal-container">
           <button
-            id="btnClosePdf"
             className="modal-close"
             aria-label="Close Customizer"
-            style={{ top: "1.5rem", right: "1.5rem" }}
+            onClick={pdfExport.close}
           >
             <svg
               viewBox="0 0 24 24"
@@ -345,273 +300,114 @@ export function App() {
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
           </button>
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}
-          >
+          <div className="pdf-modal-intro">
             <T
               as="h2"
-              id="pdfModalTitle"
-              style={{
-                fontFamily: "var(--sans)",
-                fontSize: "1.5rem",
-                fontWeight: 700,
-                color: "var(--green)",
-              }}
+              className="pdf-modal-title"
               i18nKey="pdf_customizer_title"
             />
             <T
               as="p"
-              id="pdfModalSubtitle"
-              style={{
-                fontFamily: "var(--sans)",
-                fontSize: "0.875rem",
-                color: "var(--muted)",
-              }}
+              className="pdf-modal-subtitle"
               i18nKey="pdf_customizer_subtitle"
             />
           </div>
           <form
-            id="pdfCustomizerForm"
-            style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}
+            className="pdf-modal-form"
+            onSubmit={pdfExport.handleSubmit}
           >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.5rem",
-              }}
-            >
+            <div className="pdf-field-group">
               <T
                 as="label"
-                id="lblPdfLanguage"
-                style={{
-                  fontFamily: "var(--sans)",
-                  fontSize: "0.875rem",
-                  fontWeight: 700,
-                  color: "var(--ink)",
-                }}
+                className="pdf-field-label"
                 i18nKey="pdf_language"
               />
               <select
-                id="pdfLanguageSelect"
-                style={{
-                  width: "100%",
-                  padding: "0.75rem",
-                  background: "var(--bg)",
-                  border: "1px solid var(--rule-2)",
-                  borderRadius: "var(--radius-lg)",
-                  color: "var(--ink)",
-                  fontSize: "0.875rem",
-                  fontFamily: "var(--sans)",
-                }}
+                className="pdf-field-input"
+                value={pdfExport.language}
+                onChange={(e) => pdfExport.setLanguage(e.target.value as "en" | "pt")}
               >
                 <option value="en">English</option>
                 <option value="pt">Português</option>
               </select>
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.5rem",
-              }}
-            >
+            <div className="pdf-field-group">
               <T
                 as="label"
-                id="lblPdfPages"
-                style={{
-                  fontFamily: "var(--sans)",
-                  fontSize: "0.875rem",
-                  fontWeight: 700,
-                  color: "var(--ink)",
-                }}
+                className="pdf-field-label"
                 i18nKey="pdf_pages"
               />
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.75rem",
-                  background: "var(--bg)",
-                  padding: "1.25rem",
-                  borderRadius: "var(--radius-lg)",
-                  border: "1px solid var(--rule-2)",
-                }}
-              >
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.75rem",
-                    fontSize: "0.875rem",
-                    cursor: "pointer",
-                    fontFamily: "var(--sans)",
-                    color: "var(--ink-2)",
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    id="chkPage1"
-                    defaultChecked
-                    style={{
-                      width: "1.1rem",
-                      height: "1.1rem",
-                      accentColor: "var(--green)",
-                    }}
-                  />
-                  <T as="span" i18nKey="pdf_page_1" />
-                </label>
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.75rem",
-                    fontSize: "0.875rem",
-                    cursor: "pointer",
-                    fontFamily: "var(--sans)",
-                    color: "var(--ink-2)",
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    id="chkPage2"
-                    defaultChecked
-                    style={{
-                      width: "1.1rem",
-                      height: "1.1rem",
-                      accentColor: "var(--green)",
-                    }}
-                  />
-                  <T as="span" i18nKey="pdf_page_2" />
-                </label>
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.75rem",
-                    fontSize: "0.875rem",
-                    cursor: "pointer",
-                    fontFamily: "var(--sans)",
-                    color: "var(--ink-2)",
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    id="chkPage3"
-                    defaultChecked
-                    style={{
-                      width: "1.1rem",
-                      height: "1.1rem",
-                      accentColor: "var(--green)",
-                    }}
-                  />
-                  <T as="span" i18nKey="pdf_page_3" />
-                </label>
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.75rem",
-                    fontSize: "0.875rem",
-                    cursor: "pointer",
-                    fontFamily: "var(--sans)",
-                    color: "var(--ink-2)",
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    id="chkPage4"
-                    defaultChecked
-                    style={{
-                      width: "1.1rem",
-                      height: "1.1rem",
-                      accentColor: "var(--green)",
-                    }}
-                  />
-                  <T as="span" i18nKey="pdf_page_4" />
-                </label>
-                <label
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.75rem",
-                    fontSize: "0.875rem",
-                    cursor: "pointer",
-                    fontFamily: "var(--sans)",
-                    color: "var(--ink-2)",
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    id="chkPage5"
-                    defaultChecked
-                    style={{
-                      width: "1.1rem",
-                      height: "1.1rem",
-                      accentColor: "var(--green)",
-                    }}
-                  />
-                  <T as="span" i18nKey="pdf_page_5" />
-                </label>
+              <div className="pdf-checkbox-list">
+                {pdfExport.pages.map((checked, i) => (
+                  <label key={i} className="pdf-checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => pdfExport.togglePage(i)}
+                    />
+                    <T as="span" i18nKey={`pdf_page_${i + 1}`} />
+                  </label>
+                ))}
               </div>
             </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.5rem",
-              }}
-            >
+            <div className="pdf-field-group">
               <T
                 as="label"
-                id="lblPdfNotes"
-                style={{
-                  fontFamily: "var(--sans)",
-                  fontSize: "0.875rem",
-                  fontWeight: 700,
-                  color: "var(--ink)",
-                }}
+                className="pdf-field-label"
                 i18nKey="pdf_executive_notes"
               />
               <textarea
-                id="pdfNotesText"
                 rows={3}
-                style={{
-                  width: "100%",
-                  padding: "0.75rem",
-                  background: "var(--bg)",
-                  border: "1px solid var(--rule-2)",
-                  borderRadius: "var(--radius-lg)",
-                  color: "var(--ink)",
-                  fontSize: "0.875rem",
-                  fontFamily: "var(--sans)",
-                  resize: "none",
-                }}
+                className="pdf-field-input"
                 placeholder="Enter custom notes or disclaimer..."
+                value={pdfExport.executiveNote}
+                onChange={(e) => pdfExport.setExecutiveNote(e.target.value)}
               ></textarea>
             </div>
             <button
               type="submit"
-              id="btnPdfModalSubmit"
-              style={{
-                width: "100%",
-                padding: "1rem",
-                background: "var(--green)",
-                color: "#ffffff",
-                border: "none",
-                borderRadius: "var(--radius-lg)",
-                fontWeight: 700,
-                fontSize: "0.875rem",
-                fontFamily: "var(--sans)",
-                cursor: "pointer",
-                transition: "opacity 0.2s ease, transform 0.2s ease",
-              }}
+              className="pdf-modal-submit"
             >
               <T as="span" i18nKey="pdf_generate_btn" />
             </button>
           </form>
         </div>
       </div>
-    </>
+      {pdfExport.error && (
+        <div className="pwa-toast visible">
+          <div className="toast-body">
+            <span>{pdfExport.error}</span>
+            <button
+              className="toast-btn"
+              onClick={() => pdfExport.close()}
+            >
+              {pdfExport.language === "pt" ? "Ok" : "Dismiss"}
+            </button>
+          </div>
+        </div>
+      )}
+      {/* PWA Update Toast */}
+      {pwa.showUpdate && (
+        <div className="pwa-toast visible" role="status" aria-live="polite">
+          <div className="toast-body">
+            <span>{pwa.updateMsg}</span>
+            <button className="toast-btn" onClick={pwa.applyUpdate}>
+              {pwa.updateBtnTxt}
+            </button>
+          </div>
+        </div>
+      )}
+      {/* PWA Offline Ready Toast */}
+      {pwa.showOfflineReady && (
+        <div className="pwa-toast visible" role="status" aria-live="polite">
+          <div className="toast-body">
+            <span>{pwa.offlineMsg}</span>
+            <button className="toast-btn" onClick={pwa.dismissOfflineReady}>
+              {pwa.offlineBtnTxt}
+            </button>
+          </div>
+        </div>
+      )}
+    </LightboxProvider>
   );
 }

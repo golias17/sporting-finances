@@ -1,6 +1,10 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { state } from "../../src/core/state.js";
-import { updateThemeUI, updateChartTheme } from "../../src/ui/themeToggle.js";
+import {
+  updateChartTheme,
+  MOON_SVG,
+  SUN_SVG,
+} from "../../src/ui/themeToggle.js";
 import {
   getBrandColors,
   getZoneColors,
@@ -10,12 +14,6 @@ import {
 describe("themeToggle.js", () => {
   beforeEach(() => {
     document.body.className = "";
-    document.body.innerHTML = `
-      <button id="themeToggleBtn">
-        <svg></svg>
-        <span></span>
-      </button>
-    `;
     state.setIsPt(false);
     // Minimal shape updateChartTheme() needs — the real one is built by
     // initChartDefaults() (chartDefaults.js), not reproduced here.
@@ -27,43 +25,15 @@ describe("themeToggle.js", () => {
     };
   });
 
-  describe("updateThemeUI", () => {
-    it("does nothing (no throw) when the theme button isn't in the DOM", () => {
-      document.body.innerHTML = "";
-      expect(() => updateThemeUI(true)).not.toThrow();
+  describe("SVG icon constants", () => {
+    it("MOON_SVG contains a path element (crescent moon)", () => {
+      expect(MOON_SVG).toContain("<path");
+      expect(MOON_SVG).toContain("M21 12.79");
     });
 
-    it("does nothing (no throw) when the button has no span/svg children", () => {
-      document.body.innerHTML = `<button id="themeToggleBtn"></button>`;
-      expect(() => updateThemeUI(true)).not.toThrow();
-      expect(() => updateThemeUI(false)).not.toThrow();
-    });
-
-    it("shows 'Light Mode' and a sun icon when switching to dark mode (EN)", () => {
-      updateThemeUI(true);
-      const btn = document.getElementById("themeToggleBtn");
-      expect(btn.querySelector("span").textContent).toBe("Light Mode");
-      // Sun icon is built from <circle>/<line> primitives; moon is a single <path>.
-      expect(btn.querySelector("svg").innerHTML).toContain("<circle");
-    });
-
-    it("shows 'Dark Mode' and a moon icon when switching to light mode (EN)", () => {
-      updateThemeUI(false);
-      const btn = document.getElementById("themeToggleBtn");
-      expect(btn.querySelector("span").textContent).toBe("Dark Mode");
-      expect(btn.querySelector("svg").innerHTML).toContain("<path");
-      expect(btn.querySelector("svg").innerHTML).not.toContain("<circle");
-    });
-
-    it("localises the label to Portuguese when state.isPt is true", () => {
-      state.setIsPt(true);
-      const btn = document.getElementById("themeToggleBtn");
-
-      updateThemeUI(true);
-      expect(btn.querySelector("span").textContent).toBe("Modo Claro");
-
-      updateThemeUI(false);
-      expect(btn.querySelector("span").textContent).toBe("Modo Escuro");
+    it("SUN_SVG contains a circle element (sun)", () => {
+      expect(SUN_SVG).toContain("<circle");
+      expect(SUN_SVG).toContain('cx="12"');
     });
   });
 

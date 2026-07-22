@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import { useAppState } from "../core/state.js";
+import type { ChartTableData } from "../core/types.js";
 
 interface AccessibleTableProps {
-  data: any;
+  data: ChartTableData;
   chartId: string;
   valueType?:
-    "currency-thousands" | "currency-millions" | "ratio" | "percentage";
+    | "currency-thousands"
+    | "currency-millions"
+    | "ratio"
+    | "percentage";
   // Fallback for combo charts where datasets have different scales (e.g. playground)
   datasetValueTypes?: Record<
     number,
@@ -42,42 +46,35 @@ export function AccessibleTable({
         : "Hide table data";
   };
 
-  const formatter = (v: any, dsIndex: number) => {
+  const formatter = (v: number | null, dsIndex: number) => {
     if (v === null || v === undefined) return "—";
 
     const type = datasetValueTypes?.[dsIndex] || valueType;
 
     if (type === "ratio") {
-      if (typeof v !== "number") return `${v}×`;
       const sign = v < 0 ? "−" : "";
       return `${sign}${Math.abs(v).toFixed(1)}×`;
     }
 
     if (type === "percentage") {
-      return typeof v === "number" ? `${v.toFixed(1)}%` : `${v}%`;
+      return `${v.toFixed(1)}%`;
     }
 
     if (type === "currency-millions") {
-      if (typeof v === "number") {
-        const sign = v < 0 ? "−" : "";
-        return `€${sign}${Math.abs(v).toFixed(1)}M`;
-      }
+      const sign = v < 0 ? "−" : "";
+      return `€${sign}${Math.abs(v).toFixed(1)}M`;
     }
 
     // Default currency-thousands
-    if (typeof v === "number") {
-      const sign = v < 0 ? "−" : "";
-      const val = Math.abs(v) / 1000;
-      return `€${sign}${val.toFixed(1)}M`;
-    }
-
-    return v;
+    const sign = v < 0 ? "−" : "";
+    const val = Math.abs(v) / 1000;
+    return `€${sign}${val.toFixed(1)}M`;
   };
 
-  const cellClass = (v: any) => {
-    if (typeof v === "number" && v < 0) return "neg";
+  const cellClass = (v: number | null) => {
+    if (v === null) return undefined;
+    if (v < 0) return "neg";
     if (
-      typeof v === "number" &&
       v > 0 &&
       (chartId.toLowerCase().includes("netresult") ||
         chartId.toLowerCase().includes("profit"))
@@ -95,6 +92,38 @@ export function AccessibleTable({
 
   return (
     <>
+      <div
+        id={`${chartId}-a11y-table-wrap`}
+        className={`table-wrap scroll-x ${isHidden ? "sr-only" : ""}`}
+      >
+        <table id={`${chartId}-a11y-table`} className="data">
+          <caption>{captionText}</caption>
+          <thead>
+            <tr>
+              <th>{yearHeader}</th>
+              {data.datasets.map((ds, i) => (
+                <th key={i}>{ds.label || "Value"}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.labels.map((lbl, i) => (
+              <tr key={i}>
+                <td>{lbl}</td>
+                {data.datasets.map((ds, j) => {
+                  const v = ds.data[i];
+                  return (
+                    <td key={j} className={cellClass(v)}>
+                      {formatter(v, j)}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
       <button
         id={`${chartId}-table-toggle`}
         className="table-toggle-btn"
@@ -126,38 +155,6 @@ export function AccessibleTable({
         </svg>
         <span>{getBtnText(isHidden)}</span>
       </button>
-
-      <div
-        id={`${chartId}-a11y-table-wrap`}
-        className={`table-wrap scroll-x ${isHidden ? "sr-only" : ""}`}
-      >
-        <table id={`${chartId}-a11y-table`} className="data">
-          <caption>{captionText}</caption>
-          <thead>
-            <tr>
-              <th>{yearHeader}</th>
-              {data.datasets.map((ds: any, i: number) => (
-                <th key={i}>{ds.label || "Value"}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.labels.map((lbl: any, i: number) => (
-              <tr key={i}>
-                <td>{lbl}</td>
-                {data.datasets.map((ds: any, j: number) => {
-                  const v = ds.data[i];
-                  return (
-                    <td key={j} className={cellClass(v)}>
-                      {formatter(v, j)}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
     </>
   );
 }

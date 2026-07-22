@@ -4,7 +4,11 @@ import { DataTable } from "../DataTable";
 import { useTranslation } from "../../hooks/useTranslation";
 import { useAppState } from "../../core/state.js";
 
-export function DataTab() {
+interface DataTabProps {
+  onExportCsv?: () => void;
+}
+
+export function DataTab({ onExportCsv }: DataTabProps) {
   const { t, T } = useTranslation();
   const ledgerData = useAppState((s) => s.TRANSFER_LEDGER);
   const annualData = useAppState((s) => s.annual);
@@ -23,7 +27,10 @@ export function DataTab() {
             <T as="h3" i18nKey="ch10-annual-h3" />
             <T as="span" className="tag" i18nKey="ch10-annual-tag" />
           </div>
-          <button id="btnDownloadLedger" className="story-btn btn-small">
+          <button
+            className="story-btn btn-small"
+            onClick={onExportCsv}
+          >
             <svg
               width="12"
               height="12"
@@ -46,7 +53,7 @@ export function DataTab() {
         <T as="p" className="desc" i18nKey="ch10-annual-desc" />
         <T as="p" className="scroll-hint" i18nKey="ch10-scroll-hint" />
         <div className="table-wrap">
-          <div className="scroll-x" id="dataTable">
+          <div className="scroll-x">
             <DataTable data={annualData} />
           </div>
         </div>

@@ -3,6 +3,7 @@ import { AppChart } from "../components/AppChart.js";
 import { useAppState } from "../core/state.ts";
 import { getBrandColors } from "../charts/chartUtils.ts";
 import { useTranslation } from "../hooks/useTranslation.js";
+import type { ChartOptions, BrandColors } from "../core/types.js";
 
 const FALLBACK = getBrandColors(false);
 
@@ -41,7 +42,7 @@ function getEraForSeason(season: string, isPt: boolean) {
   return isPt && entry.pt ? entry.pt : entry.en;
 }
 
-function transferChartOptions(stacked = false, baseOpts: any, COLORS: any) {
+function transferChartOptions(stacked = false, baseOpts: ChartOptions, COLORS: BrandColors) {
   return {
     ...baseOpts,
     plugins: {
@@ -221,7 +222,7 @@ export function SquadAnalytics() {
             id="squad-eras"
             type="bar"
             data={erasData as any}
-            options={transferChartOptions(false, baseOpts, COLORS) as any}
+            options={transferChartOptions(false, baseOpts, COLORS)}
           />
         </div>
       </div>
@@ -235,7 +236,7 @@ export function SquadAnalytics() {
             id="squad-commissions"
             type="bar"
             data={commData}
-            options={transferChartOptions(true, baseOpts, COLORS) as any}
+            options={transferChartOptions(true, baseOpts, COLORS)}
           />
         </div>
       </div>

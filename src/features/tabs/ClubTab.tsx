@@ -1,16 +1,62 @@
 import React, { useEffect } from "react";
 import { useTranslation } from "../../hooks/useTranslation";
-import { initImageLightbox, initKitCardFlip } from "../../ui/imageLightbox.js";
-import { initJornalModal } from "../../ui/jornalModal.js";
+import { useJornalModal } from "../../hooks/useJornalModal";
+import { useLightbox } from "../../hooks/useLightboxContext.tsx";
+import { initKitCardFlip } from "../../ui/imageLightbox.js";
 
 export function ClubTab() {
   const { t, T } = useTranslation();
+  const jornal = useJornalModal();
+  const lightbox = useLightbox();
 
   useEffect(() => {
-    initImageLightbox();
     initKitCardFlip();
-    initJornalModal();
-  }, []);
+
+    // Set up lightbox triggers for images in this tab
+    const targets = document.querySelectorAll<HTMLImageElement>(
+      ".stadium-panorama-img, .court-panorama-img, .academy-panorama-img, .museum-panorama-img, .kit-img",
+    );
+
+    targets.forEach((img) => {
+      if (img.dataset.lightboxBound) return;
+      img.dataset.lightboxBound = "true";
+
+      img.setAttribute("tabindex", "0");
+      img.setAttribute("role", "button");
+      if (!img.hasAttribute("aria-label")) {
+        img.setAttribute(
+          "aria-label",
+          `${img.alt || "Sporting CP asset"} — view enlarged`,
+        );
+      }
+
+      const handleClick = () => {
+        const kitInner = img.closest(".kit-card-inner");
+        if (kitInner) {
+          const frontImg = kitInner.querySelector(".kit-card-front img") as HTMLImageElement;
+          const backImg = kitInner.querySelector(".kit-card-back img") as HTMLImageElement;
+          if (frontImg && backImg) {
+            lightbox.open(img, {
+              frontSrc: frontImg.src,
+              backSrc: backImg.src,
+              frontAlt: frontImg.alt || "Kit Front",
+              backAlt: backImg.alt || "Kit Back",
+            });
+            return;
+          }
+        }
+        lightbox.open(img);
+      };
+
+      img.addEventListener("click", handleClick);
+      img.addEventListener("keydown", (e: KeyboardEvent) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleClick();
+        }
+      });
+    });
+  }, [lightbox]);
 
   return (
     <>
@@ -240,7 +286,10 @@ export function ClubTab() {
       <div className="social-hub reveal">
         <T as="h3" i18nKey="ch11-social-h3" />
         <div className="social-grid">
-          <button id="btnJornalModal" className="social-btn jornal">
+          <button
+            className="social-btn jornal"
+            onClick={jornal.open}
+          >
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -356,6 +405,47 @@ export function ClubTab() {
         </svg>
         <div className="disclaimer-text">
           <T as="p" i18nKey="ch11-disclaimer-p" />
+        </div>
+      </div>
+
+      {/* Jornal Reader Modal */}
+      <div
+        ref={jornal.modalRef}
+        id="jornalModal"
+        className={`modal-overlay ${jornal.isOpen ? "" : "hidden"}`}
+        onClick={jornal.handleBackdropClick}
+      >
+        <div className="modal-container">
+          <button
+            ref={jornal.closeBtnRef}
+            className="modal-close"
+            aria-label="Close Reader"
+            onClick={jornal.close}
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+          <div className="modal-content-wrapper">
+            <div className="jornal-iframe-container">
+              {jornal.isOpen && (
+                <iframe
+                  src={jornal.iframeSrc}
+                  allow="clipboard-write; autoplay; encrypted-media; fullscreen; picture-in-picture"
+                  allowFullScreen
+                  onLoad={() => jornal.setIframeLoaded(true)}
+                />
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </>

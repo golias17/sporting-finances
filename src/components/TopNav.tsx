@@ -1,16 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useAppState } from "../core/state.js";
 import { loadTranslations } from "../ui/translations.js";
 import { syncStateToUrl } from "../utils/urlSync.js";
-import { updateThemeUI, updateChartTheme } from "../ui/themeToggle.js";
+import {
+  updateChartTheme,
+  MOON_SVG,
+  SUN_SVG,
+} from "../ui/themeToggle.js";
 import { useTranslation } from "../hooks/useTranslation.js";
 
-export function TopNav() {
+interface TopNavProps {
+  onPdfExport?: () => void;
+}
+
+export function TopNav({ onPdfExport }: TopNavProps) {
   const isPt = useAppState((s) => s.isPt);
   const theme = useAppState((s) => s.theme);
   const setIsPt = useAppState((s) => s.setIsPt);
   const setTheme = useAppState((s) => s.setTheme);
   const { t, T } = useTranslation();
+  const btnRef = useRef<HTMLButtonElement>(null);
 
   const handleLangToggle = async (lang: "en" | "pt") => {
     if ((lang === "pt") === isPt) return;
@@ -26,10 +35,10 @@ export function TopNav() {
     const newTheme = isDark ? "dark" : "light";
     localStorage.setItem("theme", newTheme);
     setTheme(newTheme);
-    updateThemeUI(isDark);
     updateChartTheme();
 
-    const btn = document.getElementById("themeToggleBtn");
+    // Trigger the animation
+    const btn = btnRef.current;
     if (btn) {
       btn.classList.add("animating");
       btn.addEventListener(
@@ -44,13 +53,13 @@ export function TopNav() {
     document.documentElement.lang = isPt ? "pt" : "en";
     if (theme === "dark") {
       document.body.classList.add("dark");
-      updateThemeUI(true);
     } else {
       document.body.classList.remove("dark");
-      updateThemeUI(false);
     }
     updateChartTheme();
   }, []);
+
+  const isDark = theme === "dark";
 
   return (
     <nav className="topbar">
@@ -87,7 +96,7 @@ export function TopNav() {
             t("topbar-export-pdf-aria") || "Export Financial Dossier as PDF"
           }
           className="pdf-export-btn"
-          id="pdfExportBtn"
+          onClick={onPdfExport}
         >
           <svg
             className="icon-inline"
@@ -110,10 +119,10 @@ export function TopNav() {
           <T as="span" i18nKey="topbar-export-pdf" />
         </button>
         <button
-          aria-pressed={theme === "dark"}
+          ref={btnRef}
+          aria-pressed={isDark}
           aria-label={t("auto-txt-span-1-aria") || "Toggle dark mode"}
           className="theme-toggle-btn"
-          id="themeToggleBtn"
           onClick={handleThemeToggle}
         >
           <svg
@@ -127,10 +136,11 @@ export function TopNav() {
             viewBox="0 0 24 24"
             width="12"
             aria-hidden="true"
-          >
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-          <T as="span" i18nKey="auto-txt-span-1" />
+            dangerouslySetInnerHTML={{
+              __html: isDark ? SUN_SVG : MOON_SVG,
+            }}
+          />
+          <T as="span" i18nKey={isDark ? "auto-txt-span-1-dark" : "auto-txt-span-1"} />
         </button>
       </div>
     </nav>

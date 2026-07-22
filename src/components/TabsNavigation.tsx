@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from "react";
 import { useAppState } from "../core/state.js";
 import { syncStateToUrl } from "../utils/urlSync.js";
 import { debounce } from "../utils/utils.js";
-import { syncEventsFilter } from "../features/events.js";
 import { useTranslation } from "../hooks/useTranslation.js";
 
 const TABS = [
@@ -81,10 +80,6 @@ export function TabsNavigation() {
 
     if (tabId !== "overview") {
       setIsStoryVisible(false);
-    }
-    if (tabId === "events") {
-      // Need a slight delay to let the DOM render before syncing events scroll
-      setTimeout(syncEventsFilter, 50);
     }
 
     if (window.innerWidth <= 768) {
