@@ -5,6 +5,7 @@ import { Hero } from "./components/Hero.js";
 import { TabsNavigation } from "./components/TabsNavigation.js";
 import { TabLoader } from "./components/TabLoader.js";
 import { ErrorBoundary } from "./components/ErrorBoundary.js";
+import { useScrollToTop } from "./hooks/useScrollToTop.js";
 import { initJornalModal } from "./ui/jornalModal.js";
 import { initImageLightbox, initKitCardFlip } from "./ui/imageLightbox.js";
 import { initPdfExport } from "./ui/pdfExportModal.js";
@@ -129,6 +130,7 @@ export function App() {
   const activeTab = useAppState((s) => s.activeTab);
   const isPt = useAppState((s) => s.isPt);
   const { t, T } = useTranslation();
+  const { btnRef: scrollToTopRef, isVisible: scrollToTopVisible, scrollToTop } = useScrollToTop();
 
   // Re-run scroll animations when tab changes and new nodes appear
   useScrollAnimations(activeTab);
@@ -153,27 +155,6 @@ export function App() {
     initPdfExport();
     initDataExport();
     initNewsFeed();
-
-    // Scroll to Top Button listener
-    const scrollToTopBtn = document.getElementById("scrollToTopBtn");
-    if (scrollToTopBtn) {
-      const onScroll = () => {
-        if (window.scrollY > 300) {
-          scrollToTopBtn.classList.add("visible");
-        } else {
-          scrollToTopBtn.classList.remove("visible");
-        }
-      };
-      window.addEventListener("scroll", onScroll, { passive: true });
-
-      scrollToTopBtn.addEventListener("click", () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-
-      return () => {
-        window.removeEventListener("scroll", onScroll);
-      };
-    }
   }, []);
 
   return (
@@ -214,9 +195,10 @@ export function App() {
       </main>
 
       <button
-        id="scrollToTopBtn"
-        className="scroll-to-top"
+        ref={scrollToTopRef}
+        className={`scroll-to-top ${scrollToTopVisible ? "visible" : ""}`}
         aria-label="Scroll to top"
+        onClick={scrollToTop}
       >
         <svg
           className="icon-inline"
