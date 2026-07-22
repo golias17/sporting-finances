@@ -1,41 +1,73 @@
+import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import React from "react";
 import { TabsNavigation } from "../../src/components/TabsNavigation";
-import { useAppState } from "../../src/core/state";
 
 vi.mock("../../src/core/state", () => ({
   useAppState: vi.fn(),
+}));
+
+vi.mock("../../src/hooks/useTranslation", () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    T: ({ as: Component = "span", children, i18nKey, ...props }: any) => (
+      <Component {...props}>{children || i18nKey}</Component>
+    ),
+  }),
 }));
 
 vi.mock("../../src/utils/urlSync", () => ({
   syncStateToUrl: vi.fn(),
 }));
 
-vi.mock("../../src/features/events", () => ({
-  syncEventsFilter: vi.fn(),
-}));
+const mockSetActiveTab = vi.fn();
+const mockSetIsStoryVisible = vi.fn();
 
-vi.mock("../../src/hooks/useTranslation", () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-    T: ({ i18nKey, children, onClick, ...props }: any) => (
-      <button onClick={onClick} {...props}>
-        {children}
-      </button>
-    ),
-  }),
-}));
+import { useAppState } from "../../src/core/state";
 
-describe("TabsNavigation Component", () => {
-  let mockSetActiveTab: any;
-  let mockSetIsStoryVisible: any;
-
+describe("TabsNavigation", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockSetActiveTab = vi.fn();
-    mockSetIsStoryVisible = vi.fn();
+    (useAppState as any).mockImplementation((selector: any) => {
+      const state = {
+        activeTab: "overview",
+        setActiveTab: mockSetActiveTab,
+        setIsStoryVisible: mockSetIsStoryVisible,
+      };
+      return selector(state);
+    });
+  });
 
+  it("renders all tab buttons", () => {
+    render(<TabsNavigation />);
+    expect(screen.getByText("Overview")).toBeInTheDocument();
+    expect(screen.getByText("Revenue")).toBeInTheDocument();
+    expect(screen.getByText("Health")).toBeInTheDocument();
+    expect(screen.getByText("Debt")).toBeInTheDocument();
+    expect(screen.getByText("Instruments")).toBeInTheDocument();
+    expect(screen.getByText("Squad")).toBeInTheDocument();
+    expect(screen.getByText("Cash")).toBeInTheDocument();
+    expect(screen.getByText("Compare")).toBeInTheDocument();
+    expect(screen.getByText("Events")).toBeInTheDocument();
+    expect(screen.getByText("Data")).toBeInTheDocument();
+    expect(screen.getByText("Club SAD")).toBeInTheDocument();
+    expect(screen.getByText("News")).toBeInTheDocument();
+    expect(screen.getByText("Playground")).toBeInTheDocument();
+  });
+
+  it("marks the active tab", () => {
+    render(<TabsNavigation />);
+    const overviewBtn = screen.getByText("Overview").closest("button");
+    expect(overviewBtn).toHaveAttribute("aria-selected", "true");
+  });
+
+  it("calls setActiveTab when a tab is clicked", () => {
+    render(<TabsNavigation />);
+    fireEvent.click(screen.getByText("Revenue"));
+    expect(mockSetActiveTab).toHaveBeenCalledWith("revenue");
+  });
+
+  it("hides story when switching away from overview", () => {
     (useAppState as any).mockImplementation((selector: any) => {
       const state = {
         activeTab: "overview",
@@ -45,45 +77,68 @@ describe("TabsNavigation Component", () => {
       return selector(state);
     });
 
-    // Mock scrollTo on window and element
-    window.scrollTo = vi.fn();
-    Element.prototype.scrollTo = vi.fn();
-  });
-
-  it("renders all tabs and marks the active tab", () => {
     render(<TabsNavigation />);
-    
-    // There are 13 tabs
-    const overviewTab = screen.getByRole("tab", { name: /01Overview/i });
-    expect(overviewTab).toBeInTheDocument();
-    expect(overviewTab).toHaveClass("active");
-
-    const revenueTab = screen.getByRole("tab", { name: /02Revenue/i });
-    expect(revenueTab).toBeInTheDocument();
-    expect(revenueTab).not.toHaveClass("active");
-  });
-
-  it("calls setActiveTab when a tab is clicked", () => {
-    render(<TabsNavigation />);
-    
-    const revenueTab = screen.getByRole("tab", { name: /02Revenue/i });
-    fireEvent.click(revenueTab);
-
-    expect(mockSetActiveTab).toHaveBeenCalledWith("revenue");
+    fireEvent.click(screen.getByText("Revenue"));
     expect(mockSetIsStoryVisible).toHaveBeenCalledWith(false);
   });
 
-  it("supports keyboard navigation with arrow keys", () => {
-    render(<TabsNavigation />);
-    
-    const nav = screen.getByRole("tablist");
-    
-    // Press right arrow
-    fireEvent.keyDown(nav, { key: "ArrowRight" });
-    expect(mockSetActiveTab).toHaveBeenCalledWith("revenue");
+  it("does not hide story when clicking overview", () => {
+    (useAppState as any).mockImplementation((selector: any) => {
+      const state = {
+        activeTab: "revenue",
+        setActiveTab: mockSetActiveTab,
+        setIsStoryVisible: mockSetIsStoryVisible,
+      };
+      return selector(state);
+    });
 
-    // Press left arrow
-    fireEvent.keyDown(nav, { key: "ArrowLeft" });
-    expect(mockSetActiveTab).toHaveBeenCalledWith("playground"); // Wraps around
+    render(<TabsNavigation />);
+    fireEvent.click(screen.getByText("Overview"));
+    expect(mockSetIsStoryVisible).not.toHaveBeenCalledWith(false);
+  });
+
+  it("navigates tabs with arrow keys", () => {
+    render(<TabsNavigation />);
+    const overviewBtn = screen.getByText("Overview").closest("button")!;
+    overviewBtn.focus();
+
+    fireEvent.keyDown(overviewBtn, { key: "ArrowRight" });
+    expect(mockSetActiveTab).toHaveBeenCalledWith("revenue");
+  });
+
+  it("wraps around with arrow keys", () => {
+    (useAppState as any).mockImplementation((selector: any) => {
+      const state = {
+        activeTab: "playground",
+        setActiveTab: mockSetActiveTab,
+        setIsStoryVisible: mockSetIsStoryVisible,
+      };
+      return selector(state);
+    });
+
+    render(<TabsNavigation />);
+    const playgroundBtn = screen.getByText("Playground").closest("button")!;
+    playgroundBtn.focus();
+
+    fireEvent.keyDown(playgroundBtn, { key: "ArrowRight" });
+    expect(mockSetActiveTab).toHaveBeenCalledWith("overview");
+  });
+
+  it("navigates left with arrow keys", () => {
+    render(<TabsNavigation />);
+    const overviewBtn = screen.getByText("Overview").closest("button")!;
+    overviewBtn.focus();
+
+    fireEvent.keyDown(overviewBtn, { key: "ArrowLeft" });
+    expect(mockSetActiveTab).toHaveBeenCalledWith("playground");
+  });
+
+  it("ignores non-arrow keys", () => {
+    render(<TabsNavigation />);
+    const overviewBtn = screen.getByText("Overview").closest("button")!;
+    overviewBtn.focus();
+
+    fireEvent.keyDown(overviewBtn, { key: "Enter" });
+    expect(mockSetActiveTab).not.toHaveBeenCalled();
   });
 });
