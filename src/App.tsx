@@ -7,6 +7,7 @@ import { TabLoader } from "./components/TabLoader.js";
 import { ErrorBoundary } from "./components/ErrorBoundary.js";
 import { useScrollToTop } from "./hooks/useScrollToTop.js";
 import { useImageLightbox, setupLightboxTriggers } from "./hooks/useImageLightbox.js";
+import { LightboxProvider } from "./hooks/useLightboxContext.tsx";
 import { usePdfExport } from "./hooks/usePdfExport.js";
 import { useDataExport } from "./hooks/useDataExport.js";
 import { usePWA } from "./hooks/usePWA.js";
@@ -160,7 +161,7 @@ export function App() {
   }, []);
 
   return (
-    <>
+    <LightboxProvider open={lightbox.open}>
       <T as="a" className="skip-link" href="#main" i18nKey="skip-link" />
       <div
         id="a11yAnnouncer"
@@ -407,6 +408,6 @@ export function App() {
           </div>
         </div>
       )}
-    </>
+    </LightboxProvider>
   );
 }

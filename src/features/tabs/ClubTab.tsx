@@ -1,21 +1,62 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useTranslation } from "../../hooks/useTranslation";
 import { useJornalModal } from "../../hooks/useJornalModal";
-import { setupLightboxTriggers } from "../../hooks/useImageLightbox";
+import { useLightbox } from "../../hooks/useLightboxContext.tsx";
 import { initKitCardFlip } from "../../ui/imageLightbox.js";
-import { useEffect } from "react";
 
 export function ClubTab() {
   const { t, T } = useTranslation();
   const jornal = useJornalModal();
+  const lightbox = useLightbox();
 
   useEffect(() => {
-    setupLightboxTriggers((img) => {
-      // Lightbox integration for ClubTab images
-      void img;
-    });
     initKitCardFlip();
-  }, []);
+
+    // Set up lightbox triggers for images in this tab
+    const targets = document.querySelectorAll<HTMLImageElement>(
+      ".stadium-panorama-img, .court-panorama-img, .academy-panorama-img, .museum-panorama-img, .kit-img",
+    );
+
+    targets.forEach((img) => {
+      if (img.dataset.lightboxBound) return;
+      img.dataset.lightboxBound = "true";
+
+      img.setAttribute("tabindex", "0");
+      img.setAttribute("role", "button");
+      if (!img.hasAttribute("aria-label")) {
+        img.setAttribute(
+          "aria-label",
+          `${img.alt || "Sporting CP asset"} — view enlarged`,
+        );
+      }
+
+      const handleClick = () => {
+        const kitInner = img.closest(".kit-card-inner");
+        if (kitInner) {
+          const frontImg = kitInner.querySelector(".kit-card-front img") as HTMLImageElement;
+          const backImg = kitInner.querySelector(".kit-card-back img") as HTMLImageElement;
+          if (frontImg && backImg) {
+            lightbox.open(img, {
+              frontSrc: frontImg.src,
+              backSrc: backImg.src,
+              frontAlt: frontImg.alt || "Kit Front",
+              backAlt: backImg.alt || "Kit Back",
+            });
+            return;
+          }
+        }
+        lightbox.open(img);
+      };
+
+      img.addEventListener("click", handleClick);
+      img.addEventListener("keydown", (e: KeyboardEvent) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleClick();
+        }
+      });
+    });
+  }, [lightbox]);
 
   return (
     <>
