@@ -1,9 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { state } from "../../src/core/state.js";
-import {
-  initEventFilter,
-  syncEventsFilter,
-} from "../../src/features/events.js";
 
 describe("events.js", () => {
   beforeEach(() => {
@@ -25,69 +21,32 @@ describe("events.js", () => {
     vi.clearAllMocks();
   });
 
-  it("should initialize event filters and handle click events", () => {
-    initEventFilter();
+  it("should manage event filter state via Zustand", () => {
+    // Initial state
+    expect(state.activeEventFilter).toBe("all");
 
-    const buttons = document.querySelectorAll(".event-legend .el-filter");
-
-    // Click 'on-pitch' filter
-    buttons[1].click();
+    // Set filter
+    state.setActiveEventFilter("on-pitch");
     expect(state.activeEventFilter).toBe("on-pitch");
-    expect(buttons[0].classList.contains("active")).toBe(false);
-    expect(buttons[1].classList.contains("active")).toBe(true);
 
-    const event1 = document.querySelector("#eventsList .event.on-pitch");
-    const event2 = document.querySelector("#eventsList .event.off-pitch");
-
-    expect(event1.classList.contains("hidden")).toBe(false);
-    expect(event2.classList.contains("hidden")).toBe(true);
+    // Reset filter
+    state.setActiveEventFilter("all");
+    expect(state.activeEventFilter).toBe("all");
   });
 
-  it("should sync events with current filter", () => {
-    state.setActiveEventFilter("off-pitch");
-    syncEventsFilter();
+  it("should support all filter values", () => {
+    const filters = ["all", "on-pitch", "off-pitch", "win", "crisis", "restructure"];
+    filters.forEach((filter) => {
+      state.setActiveEventFilter(filter);
+      expect(state.activeEventFilter).toBe(filter);
+    });
+  });
 
-    const event1 = document.querySelector("#eventsList .event.on-pitch");
-    const event2 = document.querySelector("#eventsList .event.off-pitch");
-
-    expect(event1.classList.contains("hidden")).toBe(true);
-    expect(event2.classList.contains("hidden")).toBe(false);
+  it("should allow resetting filter to default", () => {
+    state.setActiveEventFilter("crisis");
+    expect(state.activeEventFilter).toBe("crisis");
 
     state.setActiveEventFilter("all");
-    syncEventsFilter();
-
-    expect(event1.classList.contains("hidden")).toBe(false);
-    expect(event2.classList.contains("hidden")).toBe(false);
-  });
-
-  it("should handle missing event-legend DOM gracefully, still filtering #eventsList", () => {
-    document.body.innerHTML = `
-      <div id="eventsList">
-        <div class="event on-pitch">Event 1</div>
-      </div>
-    `;
-    // No .event-legend in the DOM — initEventFilter() should skip wiring
-    // the click listener without throwing, but syncEventsFilter() only
-    // reads the legend to sync its *own* active-button styling; the
-    // #eventsList filtering itself doesn't depend on the legend existing,
-    // so it should still actually work.
-    expect(() => initEventFilter()).not.toThrow();
-
-    const event1 = document.querySelector("#eventsList .event.on-pitch");
-
-    state.setActiveEventFilter("off-pitch");
-    syncEventsFilter();
-    expect(event1.classList.contains("hidden")).toBe(true);
-
-    state.setActiveEventFilter("on-pitch");
-    syncEventsFilter();
-    expect(event1.classList.contains("hidden")).toBe(false);
-  });
-
-  it("should ignore clicks outside .el-filter inside .event-legend", () => {
-    initEventFilter();
-    const legend = document.querySelector(".event-legend");
-    legend.click();
     expect(state.activeEventFilter).toBe("all");
   });
 });

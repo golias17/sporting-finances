@@ -9,7 +9,11 @@ import {
 } from "../ui/themeToggle.js";
 import { useTranslation } from "../hooks/useTranslation.js";
 
-export function TopNav() {
+interface TopNavProps {
+  onPdfExport?: () => void;
+}
+
+export function TopNav({ onPdfExport }: TopNavProps) {
   const isPt = useAppState((s) => s.isPt);
   const theme = useAppState((s) => s.theme);
   const setIsPt = useAppState((s) => s.setIsPt);
@@ -92,7 +96,7 @@ export function TopNav() {
             t("topbar-export-pdf-aria") || "Export Financial Dossier as PDF"
           }
           className="pdf-export-btn"
-          id="pdfExportBtn"
+          onClick={onPdfExport}
         >
           <svg
             className="icon-inline"

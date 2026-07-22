@@ -6,10 +6,11 @@ import { TabsNavigation } from "./components/TabsNavigation.js";
 import { TabLoader } from "./components/TabLoader.js";
 import { ErrorBoundary } from "./components/ErrorBoundary.js";
 import { useScrollToTop } from "./hooks/useScrollToTop.js";
+import { useImageLightbox, setupLightboxTriggers } from "./hooks/useImageLightbox.js";
+import { usePdfExport } from "./hooks/usePdfExport.js";
+import { useDataExport } from "./hooks/useDataExport.js";
 import { initJornalModal } from "./ui/jornalModal.js";
-import { initImageLightbox, initKitCardFlip } from "./ui/imageLightbox.js";
-import { initPdfExport } from "./ui/pdfExportModal.js";
-import { initDataExport } from "./features/data-table.js";
+import { initKitCardFlip } from "./ui/imageLightbox.js";
 import { initNewsFeed } from "./features/News.js";
 import { loadTranslations } from "./ui/translations.js";
 import { useTranslation } from "./hooks/useTranslation.js";
@@ -131,6 +132,9 @@ export function App() {
   const isPt = useAppState((s) => s.isPt);
   const { t, T } = useTranslation();
   const { btnRef: scrollToTopRef, isVisible: scrollToTopVisible, scrollToTop } = useScrollToTop();
+  const lightbox = useImageLightbox();
+  const pdfExport = usePdfExport();
+  const dataExport = useDataExport();
 
   // Re-run scroll animations when tab changes and new nodes appear
   useScrollAnimations(activeTab);
@@ -150,10 +154,8 @@ export function App() {
   useEffect(() => {
     // Initialize global UI features that were previously in main.ts
     initJornalModal();
-    initImageLightbox();
+    setupLightboxTriggers(lightbox.open);
     initKitCardFlip();
-    initPdfExport();
-    initDataExport();
     initNewsFeed();
   }, []);
 
@@ -167,7 +169,7 @@ export function App() {
         aria-atomic="true"
       ></div>
 
-      <TopNav />
+      <TopNav onPdfExport={pdfExport.open} />
       <Hero />
 
       <main className="container" id="main">
@@ -186,7 +188,7 @@ export function App() {
             {activeTab === "cash" && <CashTab />}
             {activeTab === "compare" && <CompareTab />}
             {activeTab === "events" && <EventsTab />}
-            {activeTab === "data" && <DataTab />}
+            {activeTab === "data" && <DataTab onExportCsv={dataExport.exportCsv} />}
             {activeTab === "club" && <ClubTab />}
             {activeTab === "news" && <NewsTab />}
             {activeTab === "playground" && <PlaygroundTab />}
@@ -241,28 +243,36 @@ export function App() {
       </footer>
 
       {/* Lightbox Modal */}
-      <div id="imageLightbox" className="lightbox-modal">
+      <div
+        ref={lightbox.lightboxRef}
+        id="imageLightbox"
+        className={`lightbox-modal ${lightbox.isOpen ? "active" : ""}`}
+        onClick={lightbox.handleBackdropClick}
+      >
         <button
+          ref={lightbox.closeBtnRef}
           className="lightbox-close"
-          id="closeLightboxBtn"
           aria-label="Close image"
+          onClick={lightbox.close}
         >
           &times;
         </button>
         <div className="lightbox-image-wrapper">
           <img
             className="lightbox-content"
-            id="lightboxImg"
-            alt="Enlarged view"
+            src={lightbox.currentSrc}
+            alt={lightbox.currentAlt}
           />
-          <button
-            id="lightboxToggleKitBtn"
-            className="lightbox-toggle-btn hidden"
-          >
-            <span>Flip Kit 🔄</span>
-          </button>
+          {lightbox.isKitFlip && (
+            <button
+              className="lightbox-toggle-btn"
+              onClick={lightbox.toggleKitFlip}
+            >
+              <span>Flip Kit 🔄</span>
+            </button>
+          )}
         </div>
-        <div id="lightboxCaption" className="lightbox-caption"></div>
+        <div className="lightbox-caption">{lightbox.currentAlt}</div>
       </div>
 
       {/* Jornal Reader Modal */}
@@ -295,12 +305,16 @@ export function App() {
       </div>
 
       {/* PDF Customization Modal */}
-      <div id="pdfModal" className="modal-overlay hidden">
+      <div
+        id="pdfModal"
+        className={`modal-overlay ${pdfExport.isOpen ? "" : "hidden"}`}
+        onClick={pdfExport.handleBackdropClick}
+      >
         <div className="modal-container pdf-modal-container">
           <button
-            id="btnClosePdf"
             className="modal-close"
             aria-label="Close Customizer"
+            onClick={pdfExport.close}
           >
             <svg
               viewBox="0 0 24 24"
@@ -317,31 +331,29 @@ export function App() {
           <div className="pdf-modal-intro">
             <T
               as="h2"
-              id="pdfModalTitle"
               className="pdf-modal-title"
               i18nKey="pdf_customizer_title"
             />
             <T
               as="p"
-              id="pdfModalSubtitle"
               className="pdf-modal-subtitle"
               i18nKey="pdf_customizer_subtitle"
             />
           </div>
           <form
-            id="pdfCustomizerForm"
             className="pdf-modal-form"
+            onSubmit={pdfExport.handleSubmit}
           >
             <div className="pdf-field-group">
               <T
                 as="label"
-                id="lblPdfLanguage"
                 className="pdf-field-label"
                 i18nKey="pdf_language"
               />
               <select
-                id="pdfLanguageSelect"
                 className="pdf-field-input"
+                value={pdfExport.language}
+                onChange={(e) => pdfExport.setLanguage(e.target.value as "en" | "pt")}
               >
                 <option value="en">English</option>
                 <option value="pt">Português</option>
@@ -350,70 +362,38 @@ export function App() {
             <div className="pdf-field-group">
               <T
                 as="label"
-                id="lblPdfPages"
                 className="pdf-field-label"
                 i18nKey="pdf_pages"
               />
               <div className="pdf-checkbox-list">
-                <label className="pdf-checkbox-label">
-                  <input
-                    type="checkbox"
-                    id="chkPage1"
-                    defaultChecked
-                  />
-                  <T as="span" i18nKey="pdf_page_1" />
-                </label>
-                <label className="pdf-checkbox-label">
-                  <input
-                    type="checkbox"
-                    id="chkPage2"
-                    defaultChecked
-                  />
-                  <T as="span" i18nKey="pdf_page_2" />
-                </label>
-                <label className="pdf-checkbox-label">
-                  <input
-                    type="checkbox"
-                    id="chkPage3"
-                    defaultChecked
-                  />
-                  <T as="span" i18nKey="pdf_page_3" />
-                </label>
-                <label className="pdf-checkbox-label">
-                  <input
-                    type="checkbox"
-                    id="chkPage4"
-                    defaultChecked
-                  />
-                  <T as="span" i18nKey="pdf_page_4" />
-                </label>
-                <label className="pdf-checkbox-label">
-                  <input
-                    type="checkbox"
-                    id="chkPage5"
-                    defaultChecked
-                  />
-                  <T as="span" i18nKey="pdf_page_5" />
-                </label>
+                {pdfExport.pages.map((checked, i) => (
+                  <label key={i} className="pdf-checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => pdfExport.togglePage(i)}
+                    />
+                    <T as="span" i18nKey={`pdf_page_${i + 1}`} />
+                  </label>
+                ))}
               </div>
             </div>
             <div className="pdf-field-group">
               <T
                 as="label"
-                id="lblPdfNotes"
                 className="pdf-field-label"
                 i18nKey="pdf_executive_notes"
               />
               <textarea
-                id="pdfNotesText"
                 rows={3}
                 className="pdf-field-input"
                 placeholder="Enter custom notes or disclaimer..."
+                value={pdfExport.executiveNote}
+                onChange={(e) => pdfExport.setExecutiveNote(e.target.value)}
               ></textarea>
             </div>
             <button
               type="submit"
-              id="btnPdfModalSubmit"
               className="pdf-modal-submit"
             >
               <T as="span" i18nKey="pdf_generate_btn" />
@@ -421,6 +401,19 @@ export function App() {
           </form>
         </div>
       </div>
+      {pdfExport.error && (
+        <div className="pwa-toast visible">
+          <div className="toast-body">
+            <span>{pdfExport.error}</span>
+            <button
+              className="toast-btn"
+              onClick={() => pdfExport.close()}
+            >
+              {pdfExport.language === "pt" ? "Ok" : "Dismiss"}
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
