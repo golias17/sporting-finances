@@ -1,204 +1,128 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { state } from "../../src/core/state.js";
-import { initPdfExport } from "../../src/ui/pdfExportModal.js";
+import { renderHook, act } from "@testing-library/react";
+import { usePdfExport } from "../../src/hooks/usePdfExport.js";
 
 const generateCuratedPdf = vi.fn(() => Promise.resolve());
 vi.mock("../../src/ui/pdfGenerator.js", () => ({
-  generateCuratedPdf: (...args) => generateCuratedPdf(...args),
+  generateCuratedPdf: (...args: any[]) => generateCuratedPdf(...args),
 }));
 
-function buildDom() {
-  document.body.innerHTML = `
-    <button id="pdfExportBtn"></button>
-    <div id="pdfModal" class="modal-overlay hidden">
-      <div class="modal-content">
-        <button id="btnClosePdf"></button>
-        <form id="pdfCustomizerForm">
-          <select id="pdfLanguageSelect">
-            <option value="en">English</option>
-            <option value="pt">Português</option>
-          </select>
-          <input type="checkbox" id="chkPage1" />
-          <input type="checkbox" id="chkPage2" />
-          <input type="checkbox" id="chkPage3" />
-          <input type="checkbox" id="chkPage4" />
-          <input type="checkbox" id="chkPage5" />
-          <textarea id="pdfNotesText"></textarea>
-          <button type="submit">Export</button>
-        </form>
-      </div>
-    </div>
-  `;
-}
-
-describe("pdfExportModal.js", () => {
+describe("usePdfExport hook", () => {
   beforeEach(() => {
-    buildDom();
-    state.setIsPt(false);
+    document.body.className = "";
+    document.body.style.overflow = "";
     generateCuratedPdf.mockClear();
     generateCuratedPdf.mockImplementation(() => Promise.resolve());
   });
 
-  it("does nothing (no throw) when a required element is missing", () => {
-    document.body.innerHTML = "";
-    expect(() => initPdfExport()).not.toThrow();
+  it("starts with modal closed", () => {
+    const { result } = renderHook(() => usePdfExport());
+    expect(result.current.isOpen).toBe(false);
   });
 
-  it("opens the modal, resets its fields, and syncs the language selector to the active UI language", () => {
-    state.setIsPt(true);
-    initPdfExport();
+  it("opens and closes the modal", () => {
+    const { result } = renderHook(() => usePdfExport());
 
-    document.getElementById("pdfNotesText").value = "leftover note";
-    document.getElementById("chkPage1").checked = false;
-
-    document.getElementById("pdfExportBtn").click();
-
-    const modal = document.getElementById("pdfModal");
-    expect(modal.classList.contains("hidden")).toBe(false);
+    act(() => result.current.open());
+    expect(result.current.isOpen).toBe(true);
     expect(document.body.style.overflow).toBe("hidden");
-    expect(document.getElementById("pdfLanguageSelect").value).toBe("pt");
-    for (let i = 1; i <= 5; i++) {
-      expect(document.getElementById(`chkPage${i}`).checked).toBe(true);
-    }
-    expect(document.getElementById("pdfNotesText").value).toBe("");
-  });
 
-  it("closes the modal and restores body overflow via the close button", () => {
-    initPdfExport();
-    document.getElementById("pdfExportBtn").click();
-
-    document.getElementById("btnClosePdf").click();
-
-    expect(
-      document.getElementById("pdfModal").classList.contains("hidden"),
-    ).toBe(true);
+    act(() => result.current.close());
+    expect(result.current.isOpen).toBe(false);
     expect(document.body.style.overflow).toBe("");
   });
 
-  it("closes the modal on a backdrop click but not on a click inside its content", () => {
-    initPdfExport();
-    const modal = document.getElementById("pdfModal");
-    document.getElementById("pdfExportBtn").click();
-    expect(modal.classList.contains("hidden")).toBe(false);
+  it("resets form state when opened", () => {
+    const { result } = renderHook(() => usePdfExport());
 
-    modal
-      .querySelector(".modal-content")
-      .dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
-    expect(modal.classList.contains("hidden")).toBe(false);
-
-    modal.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
-    expect(modal.classList.contains("hidden")).toBe(true);
+    act(() => result.current.open());
+    expect(result.current.pages).toEqual([true, true, true, true, true]);
+    expect(result.current.executiveNote).toBe("");
+    expect(result.current.error).toBeNull();
   });
 
-  it("closes the modal on Escape, and is a no-op when the modal is already hidden", () => {
-    initPdfExport();
-    const modal = document.getElementById("pdfModal");
+  it("toggles page selection", () => {
+    const { result } = renderHook(() => usePdfExport());
 
-    // Already hidden — Escape shouldn't do anything observable.
-    document.dispatchEvent(
-      new window.KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
-    );
-    expect(modal.classList.contains("hidden")).toBe(true);
+    act(() => result.current.togglePage(1));
+    expect(result.current.pages[1]).toBe(false);
 
-    document.getElementById("pdfExportBtn").click();
-    expect(modal.classList.contains("hidden")).toBe(false);
-
-    document.dispatchEvent(
-      new window.KeyboardEvent("keydown", { key: "Escape", bubbles: true }),
-    );
-    expect(modal.classList.contains("hidden")).toBe(true);
+    act(() => result.current.togglePage(1));
+    expect(result.current.pages[1]).toBe(true);
   });
 
-  it("submits the chosen language, page selections, and executive note to generateCuratedPdf, then closes the modal", async () => {
-    initPdfExport();
-    document.getElementById("pdfExportBtn").click();
+  it("sets language", () => {
+    const { result } = renderHook(() => usePdfExport());
 
-    document.getElementById("pdfLanguageSelect").value = "pt";
-    document.getElementById("chkPage1").checked = true;
-    document.getElementById("chkPage2").checked = false;
-    document.getElementById("chkPage3").checked = true;
-    document.getElementById("chkPage4").checked = false;
-    document.getElementById("chkPage5").checked = true;
-    document.getElementById("pdfNotesText").value =
-      "Focus on the debt chapter.";
+    act(() => result.current.setLanguage("pt"));
+    expect(result.current.language).toBe("pt");
 
-    document
-      .getElementById("pdfCustomizerForm")
-      .dispatchEvent(
-        new window.Event("submit", { bubbles: true, cancelable: true }),
-      );
+    act(() => result.current.setLanguage("en"));
+    expect(result.current.language).toBe("en");
+  });
 
-    expect(
-      document.getElementById("pdfModal").classList.contains("hidden"),
-    ).toBe(true);
+  it("sets executive note", () => {
+    const { result } = renderHook(() => usePdfExport());
 
-    await vi.waitFor(() => expect(generateCuratedPdf).toHaveBeenCalledTimes(1));
+    act(() => result.current.setExecutiveNote("Focus on debt."));
+    expect(result.current.executiveNote).toBe("Focus on debt.");
+  });
+
+  it("submits form and calls generateCuratedPdf", async () => {
+    const { result } = renderHook(() => usePdfExport());
+
+    act(() => result.current.open());
+    act(() => result.current.setLanguage("pt"));
+    act(() => result.current.togglePage(1)); // uncheck page 2
+    act(() => result.current.togglePage(3)); // uncheck page 4
+    act(() => result.current.setExecutiveNote("Test note"));
+
+    await act(async () => {
+      await result.current.handleSubmit({
+        preventDefault: vi.fn(),
+      } as any);
+    });
+
     expect(generateCuratedPdf).toHaveBeenCalledWith({
       lang: "pt",
       pages: [true, false, true, false, true],
-      executiveNote: "Focus on the debt chapter.",
+      executiveNote: "Test note",
     });
+    expect(result.current.isOpen).toBe(false);
   });
 
-  it("shows a dismissible error toast (localised) when generateCuratedPdf rejects", async () => {
-    generateCuratedPdf.mockImplementation(() =>
-      Promise.reject(new Error("boom")),
-    );
-    state.setIsPt(true);
-    initPdfExport();
-    document.getElementById("pdfExportBtn").click();
+  it("shows error toast when generateCuratedPdf rejects", async () => {
+    generateCuratedPdf.mockImplementation(() => Promise.reject(new Error("boom")));
 
-    document
-      .getElementById("pdfCustomizerForm")
-      .dispatchEvent(
-        new window.Event("submit", { bubbles: true, cancelable: true }),
-      );
+    const { result } = renderHook(() => usePdfExport());
 
-    const toast = await vi.waitFor(() => {
-      const el = document.getElementById("pdf-export-error-toast");
-      if (!el) throw new Error("toast not rendered yet");
-      return el;
+    act(() => result.current.open());
+
+    await act(async () => {
+      await result.current.handleSubmit({
+        preventDefault: vi.fn(),
+      } as any);
     });
-    expect(toast.textContent).toContain(
-      "Não foi possível gerar o PDF. Tente novamente.",
-    );
 
-    await vi.waitFor(() =>
-      expect(toast.classList.contains("visible")).toBe(true),
-    );
-    document.getElementById("pdf-export-error-btn").click();
-    expect(toast.classList.contains("visible")).toBe(false);
+    expect(result.current.error).toContain("Couldn't generate the PDF");
   });
 
-  it("does not accumulate duplicate listeners when called a second time", () => {
-    initPdfExport();
-    initPdfExport();
+  it("clears error on close", async () => {
+    generateCuratedPdf.mockImplementation(() => Promise.reject(new Error("boom")));
 
-    document.getElementById("pdfExportBtn").click();
-    expect(
-      document.getElementById("pdfModal").classList.contains("hidden"),
-    ).toBe(false);
+    const { result } = renderHook(() => usePdfExport());
 
-    document.getElementById("btnClosePdf").click();
-    // If listeners had doubled up, this single click would still only close
-    // once (closeModal() is idempotent) — the real signal is submit firing
-    // generateCuratedPdf exactly once, checked below.
-    expect(
-      document.getElementById("pdfModal").classList.contains("hidden"),
-    ).toBe(true);
-  });
+    act(() => result.current.open());
 
-  it("submits exactly once per click when initialised twice (AbortController re-init)", async () => {
-    initPdfExport();
-    initPdfExport();
+    await act(async () => {
+      await result.current.handleSubmit({
+        preventDefault: vi.fn(),
+      } as any);
+    });
 
-    document.getElementById("pdfExportBtn").click();
-    document
-      .getElementById("pdfCustomizerForm")
-      .dispatchEvent(
-        new window.Event("submit", { bubbles: true, cancelable: true }),
-      );
+    expect(result.current.error).not.toBeNull();
 
-    await vi.waitFor(() => expect(generateCuratedPdf).toHaveBeenCalledTimes(1));
+    act(() => result.current.close());
+    expect(result.current.error).toBeNull();
   });
 });

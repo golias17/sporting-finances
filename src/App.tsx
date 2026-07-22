@@ -9,7 +9,7 @@ import { useScrollToTop } from "./hooks/useScrollToTop.js";
 import { useImageLightbox, setupLightboxTriggers } from "./hooks/useImageLightbox.js";
 import { usePdfExport } from "./hooks/usePdfExport.js";
 import { useDataExport } from "./hooks/useDataExport.js";
-import { initJornalModal } from "./ui/jornalModal.js";
+import { usePWA } from "./hooks/usePWA.js";
 import { initKitCardFlip } from "./ui/imageLightbox.js";
 import { initNewsFeed } from "./features/News.js";
 import { loadTranslations } from "./ui/translations.js";
@@ -135,6 +135,7 @@ export function App() {
   const lightbox = useImageLightbox();
   const pdfExport = usePdfExport();
   const dataExport = useDataExport();
+  const pwa = usePWA();
 
   // Re-run scroll animations when tab changes and new nodes appear
   useScrollAnimations(activeTab);
@@ -153,7 +154,6 @@ export function App() {
 
   useEffect(() => {
     // Initialize global UI features that were previously in main.ts
-    initJornalModal();
     setupLightboxTriggers(lightbox.open);
     initKitCardFlip();
     initNewsFeed();
@@ -275,35 +275,6 @@ export function App() {
         <div className="lightbox-caption">{lightbox.currentAlt}</div>
       </div>
 
-      {/* Jornal Reader Modal */}
-      <div id="jornalModal" className="modal-overlay hidden">
-        <div className="modal-container">
-          <button
-            id="btnCloseJornal"
-            className="modal-close"
-            aria-label="Close Reader"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-          <div className="modal-content-wrapper">
-            <div
-              id="jornalIframeContainer"
-              className="jornal-iframe-container"
-            ></div>
-          </div>
-        </div>
-      </div>
-
       {/* PDF Customization Modal */}
       <div
         id="pdfModal"
@@ -410,6 +381,28 @@ export function App() {
               onClick={() => pdfExport.close()}
             >
               {pdfExport.language === "pt" ? "Ok" : "Dismiss"}
+            </button>
+          </div>
+        </div>
+      )}
+      {/* PWA Update Toast */}
+      {pwa.showUpdate && (
+        <div className="pwa-toast visible" role="status" aria-live="polite">
+          <div className="toast-body">
+            <span>{pwa.updateMsg}</span>
+            <button className="toast-btn" onClick={pwa.applyUpdate}>
+              {pwa.updateBtnTxt}
+            </button>
+          </div>
+        </div>
+      )}
+      {/* PWA Offline Ready Toast */}
+      {pwa.showOfflineReady && (
+        <div className="pwa-toast visible" role="status" aria-live="polite">
+          <div className="toast-body">
+            <span>{pwa.offlineMsg}</span>
+            <button className="toast-btn" onClick={pwa.dismissOfflineReady}>
+              {pwa.offlineBtnTxt}
             </button>
           </div>
         </div>

@@ -5,7 +5,6 @@ import { config } from "./config.js";
 import { state } from "./state.js";
 import { loadTranslations } from "../ui/translations.js";
 import { applyUrlParams } from "../utils/urlSync.js";
-import { initPWA } from "../utils/pwa.js";
 
 // =============================================================
 // LANGUAGE DETECTION
@@ -105,6 +104,3 @@ async function initApp() {
 
 // Start application
 initApp();
-
-// Initialize PWA service worker and updates notification
-initPWA();
