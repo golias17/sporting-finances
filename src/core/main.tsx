@@ -46,9 +46,11 @@ async function initApp() {
     const initialTab = applyUrlParams();
     state.setActiveTab(initialTab || "overview");
 
-    const [finRes, trRes] = await Promise.all([
+    const [finRes, trRes, benRes, porRes] = await Promise.all([
       fetch(config.financialsPath),
       fetch(config.transfersPath),
+      fetch(config.benficaPath),
+      fetch(config.portoPath),
       loadTranslations(detectActiveLang()),
     ]);
 
@@ -63,13 +65,17 @@ async function initApp() {
       );
     }
 
-    const [dataset, transferLedger] = await Promise.all([
+    const [dataset, transferLedger, benficaData, portoData] = await Promise.all([
       finRes.json(),
       trRes.json(),
+      benRes.json(),
+      porRes.json(),
     ]);
 
     state.setDataset(dataset);
     state.setTransferLedger(transferLedger);
+    state.setBenficaDataset(benficaData);
+    state.setPortoDataset(portoData);
 
     // Initialise chart options and palette before charts mount
     const { initChartDefaults } = await import("../charts/chartUtils.js");

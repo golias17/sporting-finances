@@ -778,6 +778,23 @@ nav.tabs {
   -ms-overflow-style: none; /* Hide scrollbar IE */
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
+  position: relative;
+}
+nav.tabs::after {
+  content: "";
+  position: sticky;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  min-width: 40px;
+  background: linear-gradient(to right, transparent, var(--bg, #fff));
+  pointer-events: none;
+  z-index: 5;
+  flex-shrink: 0;
+}
+body.dark nav.tabs::after {
+  background: linear-gradient(to right, transparent, #121513);
 }
 nav.tabs::-webkit-scrollbar {
   display: none !important; /* Hide scrollbar Chrome/Safari */
@@ -1781,4 +1798,10 @@ body.dark .seating-link-btn:hover {
   .skeleton-subtitle {
     width: 250px;
   }
+}
+
+/* Narrative header styling */
+.narrative-header {
+  color: var(--green);
+  font-weight: 600;
 }

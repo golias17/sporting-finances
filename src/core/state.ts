@@ -24,6 +24,8 @@ export const useAppState = create<AppState>((set, get) => ({
   urlPlayground: null,
 
   DATASET: null as unknown as FinancialDataset,
+  BENFICA_DATASET: null as unknown as FinancialDataset,
+  PORTO_DATASET: null as unknown as FinancialDataset,
   TRANSFER_LEDGER: null as unknown as TransferLedgerSeason[],
   activeTab: "overview",
 
@@ -43,6 +45,7 @@ export const useAppState = create<AppState>((set, get) => ({
     "news",
     "club",
     "playground",
+    "competitive",
   ],
   TAB_CHARTS: {} as Record<string, ChartOptions>,
   COLORS: {} as BrandColors,
@@ -69,6 +72,8 @@ export const useAppState = create<AppState>((set, get) => ({
       annual: val ? val.annual_data : [],
       fullAnnual: val ? val.annual_data : null,
     }),
+  setBenficaDataset: (val: FinancialDataset) => set({ BENFICA_DATASET: val }),
+  setPortoDataset: (val: FinancialDataset) => set({ PORTO_DATASET: val }),
   setActiveTab: (tab: string) => set({ activeTab: tab }),
   setTransferLedger: (val: TransferLedgerSeason[]) =>
     set({ TRANSFER_LEDGER: val }),

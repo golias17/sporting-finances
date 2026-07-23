@@ -57,7 +57,7 @@ const getFields = (isPt: boolean) => [
   },
   {
     key: "squad_market_value",
-    label: isPt ? "Valor de Mercado (Transfermarkt)" : "Squad Market Value",
+    label: isPt ? "Valor de Mercado (Transfermarkt)" : "Squad Market Value (Transfermarkt)",
   },
   {
     key: "cf_operating",

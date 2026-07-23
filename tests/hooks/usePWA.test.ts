@@ -3,8 +3,16 @@ import { renderHook, act } from "@testing-library/react";
 import { usePWA } from "../../src/hooks/usePWA";
 import { state } from "../../src/core/state";
 
-// Mock virtual:pwa-register
-const mockRegisterSW = vi.fn();
+// Track registered callbacks
+let onNeedRefreshCb: (() => void) | null = null;
+let onOfflineReadyCb: (() => void) | null = null;
+const mockUpdateSW = vi.fn();
+const mockRegisterSW = vi.fn((opts: any) => {
+  onNeedRefreshCb = opts.onNeedRefresh;
+  onOfflineReadyCb = opts.onOfflineReady;
+  return mockUpdateSW;
+});
+
 vi.mock("virtual:pwa-register", () => ({
   registerSW: (...args: any[]) => mockRegisterSW(...args),
 }));
@@ -13,6 +21,8 @@ describe("usePWA", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.useFakeTimers();
+    onNeedRefreshCb = null;
+    onOfflineReadyCb = null;
     state.setIsPt(false);
   });
 

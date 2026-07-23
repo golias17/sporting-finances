@@ -4,6 +4,8 @@ export const config = {
   financialsPath: "./data/financials.json",
   transfersPath: "./data/transfers.json",
   newsPath: "./data/news.json",
+  benficaPath: "./data/benfica.json",
+  portoPath: "./data/porto.json",
   // hl/gl are deliberately pinned to pt-PT/PT regardless of the site's own
   // language toggle (state.isPt) — the query terms passed in (see news.js's
   // `queries` array) are Portuguese financial-press search terms for a

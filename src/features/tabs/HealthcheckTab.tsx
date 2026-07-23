@@ -15,6 +15,10 @@ export function HealthcheckTab() {
     debtLoadOptions,
     currentRatioData,
     currentRatioOptions,
+    transferDebtData,
+    transferDebtOptions,
+    ebitdaData,
+    ebitdaOptions,
   } = useHealthcheckCharts();
   return (
     <>
@@ -100,6 +104,28 @@ export function HealthcheckTab() {
           data={currentRatioData}
           options={currentRatioOptions}
           valueType="ratio"
+        />
+      </div>
+      <div className="grid-2">
+        <ChartCard
+          id="chartTransferDebt"
+          title={<T as="h3" i18nKey="ch03-transfer-debt-h3" />}
+          tag={<span className="tag">2010/11 → 2024/25</span>}
+          desc={<T as="p" className="desc" i18nKey="ch03-transfer-debt-desc" />}
+          chartType="bar"
+          data={transferDebtData}
+          options={transferDebtOptions}
+          valueType="currency-millions"
+        />
+        <ChartCard
+          id="chartEbitda"
+          title={<T as="h3" i18nKey="ch03-ebitda-h3" />}
+          tag={<span className="tag">2010/11 → 2024/25</span>}
+          desc={<T as="p" className="desc" i18nKey="ch03-ebitda-desc" />}
+          chartType="line"
+          data={ebitdaData}
+          options={ebitdaOptions}
+          valueType="currency-millions"
         />
       </div>
       <div className="narrative">

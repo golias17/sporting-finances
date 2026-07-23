@@ -1,4 +1,24 @@
 {
+  "ch03-transfer-debt-h3": {
+    "text": "Transfer Net Debt (Payables vs Receivables)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch03-transfer-debt-desc": {
+    "text": "Comparison of outstanding payables to other clubs for player purchases vs receivables for player sales.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch03-ebitda-h3": {
+    "text": "Operating & Total EBITDA",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch03-ebitda-desc": {
+    "text": "Evolution of the SAD's intrinsic capability to generate operating cash results before D&A.",
+    "isAria": false,
+    "innerHTML": false
+  },
   "squad_sub_financials": {
     "text": "Financial Trends",
     "isAria": false,
@@ -405,7 +425,7 @@
     "innerHTML": true
   },
   "auto-txt-div-81": {
-    "text": "Dossier · 2012/13 → 2025/26 H1<br/> Period ended 31 Dec 2025<br/> Euronext Lisbon · SCP",
+    "text": "Dossier · 2010/11 → 2024/25<br/> Period ended 30 June 2025<br/> Euronext Lisbon · SCP",
     "isAria": false,
     "innerHTML": true
   },
@@ -510,7 +530,7 @@
     "innerHTML": false
   },
   "auto-txt-p-4": {
-    "text": "From <em class=\"neg\">−€119M</em> to <em class=\"pos\">+€41M</em>.<br/>Thirteen fiscal years, told in one chart.",
+    "text": "From <em class=\"neg\">−€119M</em> to <em class=\"pos\">+€41M</em>.<br />Fifteen fiscal years, told in one chart.",
     "isAria": false,
     "innerHTML": true
   },
@@ -535,7 +555,7 @@
     "innerHTML": false
   },
   "auto-txt-title-0": {
-    "text": "Sporting CP — Financial Evolution Dashboard (2012/13 → 2025/26)",
+    "text": "Sporting CP — Financial Evolution Dashboard (2010/11 → 2024/25)",
     "isAria": false,
     "innerHTML": false
   },
@@ -555,7 +575,7 @@
     "innerHTML": false
   },
   "ch01-h2": {
-    "text": "The shape of <em>thirteen years</em>.",
+    "text": "The shape of <em>fifteen years</em>.",
     "isAria": false,
     "innerHTML": true
   },
@@ -625,7 +645,7 @@
     "innerHTML": false
   },
   "ch01-story-quote": {
-    "text": "From <em>−€119M</em> to <em>+€41M</em>.<br />Thirteen fiscal years, told in one chart.",
+    "text": "From <em>−€119M</em> to <em>+€41M</em>.<br />Fifteen fiscal years, told in one chart.",
     "isAria": false,
     "innerHTML": true
   },
@@ -645,7 +665,7 @@
     "innerHTML": false
   },
   "ch02-narrative-p1": {
-    "text": "Sporting's recurring operations (revenue minus payroll, supplies and ordinary D&A, before player trading) have been negative in 11 of the 13 seasons. Only 2014/15 (post-restructuring downsize) and 2021/22 (Champions League return + first full post-COVID stadium) produced positive recurring operating results. The model relies on player trading — which the club is exceptionally good at — to fund the rest.",
+    "text": "Sporting's recurring operations (revenue minus payroll, supplies and ordinary D&A, before player trading) have been negative in 13 of the 15 seasons. Only 2014/15 (post-restructuring downsize) and 2021/22 (Champions League return + first full post-COVID stadium) produced positive recurring operating results. The model relies on player trading — which the club is exceptionally good at — to fund the rest.",
     "isAria": false,
     "innerHTML": false
   },
@@ -655,7 +675,7 @@
     "innerHTML": false
   },
   "ch02-num": {
-    "text": "Ch. 02 — Revenue",
+    "text": "Ch. 02 — Revenue Structure",
     "isAria": false,
     "innerHTML": false
   },
@@ -825,12 +845,12 @@
     "innerHTML": false
   },
   "ch03-narrative-p": {
-    "text": "Every year that Sporting's matchday and TV revenue doesn't cover wages, the gap is filled by the transfer market. That's been true in 11 of the last 13 seasons. But here's the twist: Alcochete academy graduates — Manuel Ugarte, Nuno Mendes, João Palhinha, Gonçalo Inácio — were developed internally at near-zero acquisition cost. Selling a player for €60M who cost nothing to produce is 100% margin. As long as Alcochete keeps producing elite talent, this model works. The question is whether commercial and matchday revenue can keep growing fast enough that Sporting needs to rely on it less.",
+    "text": "Every year that Sporting's matchday and TV revenue doesn't cover wages, the gap is filled by the transfer market. That's been true in 13 of the last 15 seasons. But here's the twist: Alcochete academy graduates — Manuel Ugarte, Nuno Mendes, João Palhinha, Gonçalo Inácio — were developed internally at near-zero acquisition cost. Selling a player for €60M who cost nothing to produce is 100% margin. As long as Alcochete keeps producing elite talent, this model works. The question is whether commercial and matchday revenue can keep growing fast enough that Sporting needs to rely on it less.",
     "isAria": false,
     "innerHTML": false
   },
   "ch03-num": {
-    "text": "Ch. 03 — Health Check",
+    "text": "Ch. 03 — Financial Health",
     "isAria": false,
     "innerHTML": false
   },
@@ -970,12 +990,12 @@
     "innerHTML": false
   },
   "ch04-num": {
-    "text": "Ch. 04 — Debt & Balance",
+    "text": "Ch. 04 — Debt Profile",
     "isAria": false,
     "innerHTML": false
   },
   "ch05-h2": {
-    "text": "Os instrumentos que <em>salvaram o clube</em>.",
+    "text": "The instruments that <em>saved the club</em>.",
     "isAria": false,
     "innerHTML": true
   },
@@ -984,8 +1004,13 @@
     "isAria": false,
     "innerHTML": false
   },
+  "ch13-num": {
+    "text": "Ch. 13 — Latest News",
+    "isAria": false,
+    "innerHTML": false
+  },
   "ch05-num": {
-    "text": "Ch. 05 — Financing Instruments",
+    "text": "Ch. 05 — Instruments",
     "isAria": false,
     "innerHTML": false
   },
@@ -1010,7 +1035,7 @@
     "innerHTML": false
   },
   "ch06-lede": {
-    "text": "Alcochete graduates — and smart recruitment — have generated over €75M in five of the last nine seasons. The squad's market value has tripled since 2012/13, despite hundreds of millions in player sales along the way.",
+    "text": "Alcochete graduates — and smart recruitment — have generated over €75M in seven of the last fifteen seasons.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1045,12 +1070,12 @@
     "innerHTML": false
   },
   "ch06-narrative-p3": {
-    "text": "The squad's market value (Transfermarkt, Dec 2025) stands at €474M — 3× the €151.9M estimate from 2012/13, despite the club having sold hundreds of millions in talent over the same period. The market-to-book gap is wide because Alcochete graduates carry zero acquisition cost on the balance sheet.",
+    "text": "The squad's market value (Transfermarkt, Dec 2025) stands at €474M — 3× the €151.9M estimate from 2010/11, despite the club having sold hundreds of millions in talent over the same period. The market-to-book gap is wide because Alcochete graduates carry zero acquisition cost on the balance sheet.",
     "isAria": false,
     "innerHTML": false
   },
   "ch06-net-desc": {
-    "text": "Sales income minus acquisitions, amortization and impairments. Profitable in 11 of 13 seasons.",
+    "text": "Sales income minus acquisitions, amortization and impairments. Profitable in 13 of 15 seasons.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1065,7 +1090,7 @@
     "innerHTML": false
   },
   "ch06-num": {
-    "text": "Ch. 06 — Squad & Transfers",
+    "text": "Ch. 06 — Squad Valuation",
     "isAria": false,
     "innerHTML": false
   },
@@ -1120,7 +1145,7 @@
     "innerHTML": true
   },
   "ch07-lede": {
-    "text": "Operating cash flow has been negative in 12 of 13 seasons — player sales are the structural offset that keeps the club solvent. The USPP bond restructures the debt profile and funds the stadium; it does not directly fix operating cash generation.",
+    "text": "Operating cash flow has been negative in 14 of 15 seasons — player sales are the structural offset that keeps the club solvent. The USPP bond restructures the debt profile and funds the stadium; it does not directly fix operating cash generation.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1130,12 +1155,12 @@
     "innerHTML": false
   },
   "ch07-narrative-p1": {
-    "text": "Sporting SAD has run negative cash from operating activities in 12 of the 13 seasons in the dataset. The sole exception is 2014/15 (+€29.2M), where the capital restructuring year produced unusually large inflows. In every other season — including 2023/24 at −€92.2M, the worst on record — wages, supplies and player-acquisition instalment payments absorb more cash than the business generates before transfers. Player sales (investing activities) are the structural offset that prevents the cash position from collapsing.",
+    "text": "Sporting SAD has run negative cash from operating activities in 14 of the 15 seasons in the dataset. The sole exception is 2014/15 (+€29.2M), where the capital restructuring year produced unusually large inflows. In every other season — including 2023/24 at −€92.2M, the worst on record — wages, supplies and player-acquisition instalment payments absorb more cash than the business generates before transfers. Player sales (investing activities) are the structural offset that prevents the cash position from collapsing.",
     "isAria": false,
     "innerHTML": false
   },
   "ch07-narrative-p2": {
-    "text": "Year-end cash has never exceeded €15.6M and fell below €4M in 5 of 13 seasons — including as low as €1.3M in 2012/13. The USPP bond (€225M, October 2025) refinances short-term facilities and extends the debt maturity profile; its primary purpose is the Estádio Alvalade transformation, not curing operating cash generation. At 5.75% on €225M, the annual coupon (~€12.9M) will increase financing outflows from 2025/26 onward.",
+    "text": "Year-end cash has never exceeded €15.6M and fell below €4M in 7 of 15 seasons — including as low as €1.3M in 2010/11. The USPP bond (€225M, October 2025) refinances short-term facilities and extends the debt maturity profile; its primary purpose is the Estádio Alvalade transformation, not curing operating cash generation. At 5.75% on €225M, the annual coupon (~€12.9M) will increase financing outflows from 2025/26 onward.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1150,12 +1175,12 @@
     "innerHTML": false
   },
   "ch07-net-tag": {
-    "text": "13 seasons",
+    "text": "15 seasons",
     "isAria": false,
     "innerHTML": false
   },
   "ch07-num": {
-    "text": "Ch. 07 — Cash & Liquidity",
+    "text": "Ch. 07 — Cash Flow",
     "isAria": false,
     "innerHTML": false
   },
@@ -1185,7 +1210,7 @@
     "innerHTML": false
   },
   "ch08-num": {
-    "text": "Ch. 08 — Compare",
+    "text": "Ch. 08 — Historical Comparison",
     "isAria": false,
     "innerHTML": false
   },
@@ -1205,12 +1230,12 @@
     "innerHTML": false
   },
   "ch09-h2": {
-    "text": "Inflection points, <em>2014 → 2025</em>.",
+    "text": "Rivals <em>Comparison</em>",
     "isAria": false,
     "innerHTML": true
   },
   "ch09-lede": {
-    "text": "The events that shaped the trajectory — some on the pitch, most off it. Each card pairs the sporting moment with what it did to the numbers.",
+    "text": "Direct financial comparison across Sporting CP, SL Benfica, and FC Porto over 15 seasons (2010/11 → 2024/25), sourced from official CMVM consolidated filings and Transfermarkt.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1230,162 +1255,27 @@
     "innerHTML": false
   },
   "ch09-num": {
-    "text": "Ch. 09 — Key Events",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-annual-desc": {
-    "text": "Negative cells in red indicate losses or negative balances. Source PDFs: Sporting SAD annual reports (CMVM).",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-annual-h3": {
-    "text": "Annual data — all metrics in EUR thousands",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-annual-tag": {
-    "text": "13 seasons",
+    "text": "Ch. 09 — Competitive Analysis",
     "isAria": false,
     "innerHTML": false
   },
   "ch10-h2": {
-    "text": "The numbers, <em>in full</em>.",
+    "text": "Key <em>Events</em>.",
     "isAria": false,
     "innerHTML": true
   },
   "ch10-lede": {
-    "text": "Every metric across thirteen seasons. Negative cells in red indicate losses or negative balances. Source PDFs: Sporting SAD annual reports filed with the CMVM.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-ledger-desc": {
-    "text": "A consolidated, interactive table displaying the full details of all player arrivals and departures. Use the season filter to explore prior years.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-ledger-h3": {
-    "text": "Full Transfer Details Ledger",
+    "text": "Major milestones in Sporting SAD's financial journey",
     "isAria": false,
     "innerHTML": false
   },
   "ch10-num": {
-    "text": "Ch. 10 — Raw Data",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-scroll-hint": {
-    "text": "Scroll horizontally to see all 13 seasons",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-bonus": {
-    "text": "Bonus",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-club": {
-    "text": "Club",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-comm": {
-    "text": "Comm.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-fee": {
-    "text": "Fee",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-notes": {
-    "text": "Notes & Details",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-player": {
-    "text": "Player",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-rights": {
-    "text": "Rights",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-season": {
-    "text": "Season",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-type": {
-    "text": "Type",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-window": {
-    "text": "Window",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-search": {
-    "text": "Search player, club, or notes...",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-season-all": {
-    "text": "All Seasons",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-season-label": {
-    "text": "Season:",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-type-all": {
-    "text": "All Transfers",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-type-in": {
-    "text": "Arrivals (Purchases/Loans In)",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-type-label": {
-    "text": "Type:",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-type-out": {
-    "text": "Departures (Sales/Loans Out/Terminations)",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-window-all": {
-    "text": "All Windows",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-window-label": {
-    "text": "Window:",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-window-summer": {
-    "text": "Summer Window",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-window-winter": {
-    "text": "Winter Window",
+    "text": "Ch. 10 — Key Events",
     "isAria": false,
     "innerHTML": false
   },
   "hero-eyebrow": {
-    "text": "A Financial Dossier · 2012 → 2026",
+    "text": "A Financial Dossier · 2010 → 2025",
     "isAria": false,
     "innerHTML": false
   },
@@ -1400,54 +1290,54 @@
     "innerHTML": false
   },
   "tab-btn-bonds": {
-    "text": "<span class=\"tab-num\">05</span>Instruments",
+    "text": "05. Instruments",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-cash": {
-    "text": "<span class=\"tab-num\">07</span>Cash",
+    "text": "07. Cash",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-compare": {
-    "text": "<span class=\"tab-num\">08</span>Compare",
+    "text": "08. Compare",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-data": {
-    "text": "<span class=\"tab-num\">10</span>Data",
+    "text": "11. Data",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-debt": {
-    "text": "<span class=\"tab-num\">04</span>Debt",
+    "text": "04. Debt",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-events": {
-    "text": "<span class=\"tab-num\">09</span>Events",
+    "text": "10. Events",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-healthcheck": {
-    "text": "<span class=\"tab-num\">03</span>Health",
+    "text": "03. Health",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-overview": {
-    "text": "<span class=\"tab-num\">01</span>Overview",
+    "text": "01. Overview",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-revenue": {
-    "text": "<span class=\"tab-num\">02</span>Revenue",
+    "text": "02. Revenue",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-squad": {
-    "text": "<span class=\"tab-num\">06</span>Squad",
+    "text": "06. Squad",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "topbar-export-pdf": {
     "text": "Export PDF",
@@ -1590,12 +1480,7 @@
     "innerHTML": false
   },
   "kpi-hb-title": {
-    "text": "Club Overview — 2012/13",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-search-label": {
-    "text": "Search transfers",
+    "text": "Club Overview — 2010/11",
     "isAria": false,
     "innerHTML": false
   },
@@ -1609,198 +1494,63 @@
     "isAria": false,
     "innerHTML": false
   },
-  "ch10-download-csv": {
-    "text": "Download CSV",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-search-placeholder": {
-    "text": "Search player, club, or notes...",
-    "isAria": false,
-    "innerHTML": false
-  },
   "ch11-num": {
-    "text": "Ch. 11 — Club Assets & Identity",
+    "text": "Ch. 11 — Raw Data",
     "isAria": false,
     "innerHTML": false
   },
   "ch11-h2": {
-    "text": "Visual symbols, <em>physical heritage</em>.",
+    "text": "The numbers, <em>in full</em>.",
     "isAria": false,
     "innerHTML": true
   },
   "ch11-lede": {
-    "text": "Sporting CP's identity is defined by its home and visual legacy. Explore the kits, the stadium, the sports hall, and the museum that connect the SAD to the fans.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-social-h3": {
-    "text": "Official Channels & Media",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-jornal-btn": {
-    "text": "Jornal Sporting",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-linkedin-btn": {
-    "text": "LinkedIn",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-twitter-btn": {
-    "text": "Twitter / X",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-instagram-btn": {
-    "text": "Instagram",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-youtube-btn": {
-    "text": "YouTube",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-disclaimer-p": {
-    "text": "<strong>Important Notice:</strong> None of the external media channels or official resources linked here are legally binding financial disclosures. For statutory financial metrics, refer only to official SAD filings.",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "ch11-stromp-unrevealed": {
-    "text": "Not Revealed",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-exp-title": {
-    "text": "Sporting Experience — Tours & Tickets",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-exp-desc": {
-    "text": "Discover the heart of Alvalade. Experience pitch-side views, dressing rooms, the press room, and the Pavilhão João Rocha. Visit the Museu Sporting to walk through 119 years of glory.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-exp-btn": {
-    "text": "Book Your Tour",
+    "text": "Every metric across fifteen seasons. Negative cells in red indicate losses or negative balances. Source PDFs: Sporting SAD annual reports filed with the CMVM.",
     "isAria": false,
     "innerHTML": false
   },
   "tab-btn-news": {
-    "text": "<span class=\"tab-num\">12</span>News",
+    "text": "13. News",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-club": {
-    "text": "<span class=\"tab-num\">11</span>Club SAD",
+    "text": "12. Club SAD",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "ch12-num": {
-    "text": "Ch. 12 — News",
+    "text": "Ch. 12 — Patrimony & Identity",
     "isAria": false,
     "innerHTML": false
   },
   "ch12-h2": {
-    "text": "Live <em>Updates</em>.",
+    "text": "Visual symbols, <em>physical heritage</em>.",
     "isAria": false,
     "innerHTML": true
   },
   "ch12-lede": {
-    "text": "The latest financial and corporate news regarding Sporting CP, aggregated live from Portuguese media.",
+    "text": "Sporting CP's identity is defined by its home and visual legacy. Explore the kits, the stadium, the sports hall, and the museum that connect the SAD to the fans.",
     "isAria": false,
     "innerHTML": false
-  },
-  "ch12-disclaimer-p": {
-    "text": "<strong>Important Notice:</strong> None of the external news feed items or media articles linked here are official, audited, or legally binding. They do not constitute financial advice or verified SAD communications. Official SAD and financial disclosures must be treated as the sole source of truth until formally filed with the CMVM.",
-    "isAria": false,
-    "innerHTML": true
   },
   "ch12-loading": {
     "text": "Loading live updates...",
     "isAria": false,
     "innerHTML": false
   },
-  "ch11-card-kits-title": {
-    "text": "Official Match Kits (2025/26)",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-card-kits-desc": {
-    "text": "The legendary green-and-white horizontal hoops (Home), the modern design (Away), and the half-green, half-white Stromp kit named in honour of founder Francisco Stromp.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-card-stadium-title": {
-    "text": "Estádio José Alvalade",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-card-stadium-desc": {
-    "text": "Inaugurated in 2003 and rated UEFA Category 4. Under the 2025 'Alvalade 2.0' modernization (partially funded by the USPP bond), the club closed the stadium moat to add 2,000 extra seats, raising capacity to 52,095. Upgrades include a Grassmax hybrid pitch, a 28-seat VIP Pitch Row, Loges equipped with individual tablet-TVs, and the Deluxe Emerald Lounge, alongside the classic Gamebox season tickets and Lion Seats.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-stadium-gamebox": {
-    "text": "Gamebox Season Tickets",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-stadium-lionseats": {
-    "text": "Lion Seats (Premium VIP)",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-card-hall-title": {
-    "text": "Pavilhão João Rocha",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-card-hall-desc": {
-    "text": "Located adjacent to the stadium, the 3,000-seat multi-sports arena houses Sporting CP's historic indoor sports (Futsal, Handball, Roller Hockey, and Basketball). Named after former president João Rocha.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-card-museum-title": {
-    "text": "Museu Sporting",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-card-museum-desc": {
-    "text": "Housing over 16,000 historic trophies, the museum celebrates the golden eras of European triumphs and national dominance, showcasing the legacy of Lisbon's most decorated sports institution.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-card-academy-title": {
-    "text": "Academia Cristiano Ronaldo",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-card-academy-desc": {
-    "text": "Located in Alcochete over 250,000 m², it is the heart of Sporting CP's youth academy. The first in Europe to receive ISO 9001:2008 certification, and renamed in 2020 to honor Ballon d'Or winner Cristiano Ronaldo.",
-    "isAria": false,
-    "innerHTML": false
-  },
   "tab-btn-playground": {
-    "text": "<span class=\"tab-num\">13</span>Playground",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "ch13-num": {
-    "text": "Ch. 13 — Play CFO",
+    "text": "14. Simulator",
     "isAria": false,
     "innerHTML": false
   },
   "ch13-h2": {
-    "text": "The Fiscal <em>Playground</em>.",
+    "text": "Latest <em>News</em>",
     "isAria": false,
     "innerHTML": true
   },
   "ch13-lede": {
-    "text": "Adjust variables to project the outcomes of the 2025/26 season in real time.",
+    "text": "Corporate updates, financial disclosures, and market movements related to Sporting CP SAD.",
     "isAria": false,
     "innerHTML": false
   },
@@ -2003,5 +1753,500 @@
     "text": "Left axis: shareholders' equity (€M). Right axis: solvency ratio, equity as a share of total assets.",
     "isAria": false,
     "innerHTML": false
+  },
+  "tab-btn-competitive": {
+    "text": "09. Rivals",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-revenue-h3": {
+    "text": "Operating Revenue Comparison",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-revenue-desc": {
+    "text": "Annual operating revenue for the Big Three Portuguese clubs (€M).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-netresult-h3": {
+    "text": "Net Result Comparison",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-netresult-desc": {
+    "text": "Annual net profit/loss for the Big Three Portuguese clubs (€M).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-equity-h3": {
+    "text": "Shareholders Equity Comparison",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-equity-desc": {
+    "text": "Evolution of shareholders equity for the Big Three Portuguese clubs (€M).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-squad-h3": {
+    "text": "Squad Market Value Comparison",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-squad-desc": {
+    "text": "Transfermarkt squad valuations for the Big Three Portuguese clubs (€M).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-narrative-h4": {
+    "text": "Competitive Context",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-narrative-p1": {
+    "text": "Sporting CP has historically operated with lower revenues than Benfica and Porto, but has shown remarkable improvement in recent years, particularly after the 2021 championship season.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-narrative-p2": {
+    "text": "The clubs financial transformation from technical insolvency in 2013 to positive equity in 2023 is one of the most impressive turnarounds in Portuguese football history.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-data-source": {
+    "text": "Data Sources & Methodology",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-data-source-desc": {
+    "text": "Financial metrics extracted directly from official CMVM-audited annual reports for all three SADs. Squad market values reflect Transfermarkt historical records as of June 30th of each year.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-legend-title": {
+    "text": "Clubs",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-sporting": {
+    "text": "Sporting CP",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-benfica": {
+    "text": "SL Benfica",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-porto": {
+    "text": "FC Porto",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-revenue-h3": {
+    "text": "Operating Revenue (excl. Transfers)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-revenue-desc": {
+    "text": "Annual revenue generated from TV rights, matchday, and commercial sponsorships.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-personnel-h3": {
+    "text": "Wage Bill & Personnel Costs",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-personnel-desc": {
+    "text": "Total annual expenditure on players, technical staff, and employees (€M).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-squad-h3": {
+    "text": "Squad Market Value",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-squad-desc": {
+    "text": "Aggregate first-team market valuation at the end of each season (Transfermarkt).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-netresult-h3": {
+    "text": "Net Profit / Loss",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-netresult-desc": {
+    "text": "Consolidated annual net result after transfers and financial costs (€M).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-equity-h3": {
+    "text": "Shareholders' Equity & Solvency",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-equity-desc": {
+    "text": "Consolidated net equity position across all three SADs (€M).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-liabilities-h3": {
+    "text": "Total Liabilities",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-liabilities-desc": {
+    "text": "Total gross debt and short/long-term financial obligations (€M).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-narrative-h4": {
+    "text": "Key Findings",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-narrative-p1": {
+    "text": "<strong class=\"narrative-header\">Revenue Evolution:</strong> Sporting's revenue has grown significantly since 2013, driven by improved TV deals, matchday income, and commercial partnerships. However, Benfica and Porto maintain higher absolute revenues, reflecting their larger fan bases and European competition performance. The revenue by source breakdown shows all three clubs rely heavily on TV/UEFA income, with Benfica generating the most from commercial activities.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch09-narrative-p2": {
+    "text": "<strong class=\"narrative-header\">Cost Efficiency:</strong> Sporting's personnel costs ratio has improved significantly, moving from over 100% of revenue to a more sustainable level. This indicates better wage discipline compared to earlier years. Benfica and Porto maintain lower ratios, suggesting more efficient salary structures relative to their revenue base.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch14-num": {
+    "text": "Ch. 14 — Financial Simulator",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-cumulative-label": {
+    "text": "15-Year Cumulative Total:",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch14-h2": {
+    "text": "The Fiscal <em>Playground</em>.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch14-lede": {
+    "text": "Adjust variables to project the outcomes of the 2025/26 season in real time.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-annual-desc": {
+    "text": "Negative cells in red indicate losses or negative balances. Source PDFs: Sporting SAD annual reports (CMVM).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-annual-h3": {
+    "text": "Annual data — all metrics in EUR thousands",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-annual-tag": {
+    "text": "15 seasons",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-ledger-desc": {
+    "text": "A consolidated, interactive table displaying the full details of all player arrivals and departures. Use the season filter to explore prior years.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-ledger-h3": {
+    "text": "Full Transfer Details Ledger",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-scroll-hint": {
+    "text": "Scroll horizontally to see all 15 seasons",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-bonus": {
+    "text": "Bonus",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-club": {
+    "text": "Club",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-comm": {
+    "text": "Comm.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-fee": {
+    "text": "Fee",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-notes": {
+    "text": "Notes & Details",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-player": {
+    "text": "Player",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-rights": {
+    "text": "Rights",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-season": {
+    "text": "Season",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-type": {
+    "text": "Type",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-window": {
+    "text": "Window",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-search": {
+    "text": "Search player, club, or notes...",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-season-all": {
+    "text": "All Seasons",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-season-label": {
+    "text": "Season:",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-type-all": {
+    "text": "All Transfers",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-type-in": {
+    "text": "Arrivals (Purchases/Loans In)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-type-label": {
+    "text": "Type:",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-type-out": {
+    "text": "Departures (Sales/Loans Out/Terminations)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-window-all": {
+    "text": "All Windows",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-window-label": {
+    "text": "Window:",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-window-summer": {
+    "text": "Summer Window",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-window-winter": {
+    "text": "Winter Window",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-search-label": {
+    "text": "Search transfers",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-download-csv": {
+    "text": "Download CSV",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-search-placeholder": {
+    "text": "Search player, club, or notes...",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-disclaimer-p": {
+    "text": "<strong>Important Notice:</strong> None of the external media channels or official resources linked here are legally binding financial disclosures. For statutory financial metrics, refer only to official SAD filings.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch11-social-h3": {
+    "text": "Official Channels & Media",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-jornal-btn": {
+    "text": "Jornal Sporting",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-linkedin-btn": {
+    "text": "LinkedIn",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-twitter-btn": {
+    "text": "Twitter / X",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-instagram-btn": {
+    "text": "Instagram",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-youtube-btn": {
+    "text": "YouTube",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-stromp-unrevealed": {
+    "text": "Not Revealed",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-exp-title": {
+    "text": "Sporting Experience — Tours & Tickets",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-exp-desc": {
+    "text": "Discover the heart of Alvalade. Experience pitch-side views, dressing rooms, the press room, and the Pavilhão João Rocha. Visit the Museu Sporting to walk through 119 years of glory.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-exp-btn": {
+    "text": "Book Your Tour",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-kits-title": {
+    "text": "Official Match Kits (2025/26)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-kits-desc": {
+    "text": "The legendary green-and-white horizontal hoops (Home), the modern design (Away), and the half-green, half-white Stromp kit named in honour of founder Francisco Stromp.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-stadium-title": {
+    "text": "Estádio José Alvalade",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-stadium-desc": {
+    "text": "Inaugurated in 2003 and rated UEFA Category 4. Under the 2025 'Alvalade 2.0' modernization (partially funded by the USPP bond), the club closed the stadium moat to add 2,000 extra seats, raising capacity to 52,095. Upgrades include a Grassmax hybrid pitch, a 28-seat VIP Pitch Row, Loges equipped with individual tablet-TVs, and the Deluxe Emerald Lounge, alongside the classic Gamebox season tickets and Lion Seats.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-stadium-gamebox": {
+    "text": "Gamebox Season Tickets",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-stadium-lionseats": {
+    "text": "Lion Seats (Premium VIP)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-hall-title": {
+    "text": "Pavilhão João Rocha",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-hall-desc": {
+    "text": "Located adjacent to the stadium, the 3,000-seat multi-sports arena houses Sporting CP's historic indoor sports (Futsal, Handball, Roller Hockey, and Basketball). Named after former president João Rocha.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-museum-title": {
+    "text": "Museu Sporting",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-museum-desc": {
+    "text": "Housing over 16,000 historic trophies, the museum celebrates the golden eras of European triumphs and national dominance, showcasing the legacy of Lisbon's most decorated sports institution.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-academy-title": {
+    "text": "Academia Cristiano Ronaldo",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-academy-desc": {
+    "text": "Located in Alcochete over 250,000 m², it is the heart of Sporting CP's youth academy. The first in Europe to receive ISO 9001:2008 certification, and renamed in 2020 to honor Ballon d'Or winner Cristiano Ronaldo.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch13-disclaimer-p": {
+    "text": "<strong>Important Notice:</strong> None of the external media channels or official resources linked here are legally binding financial disclosures. For statutory financial metrics, refer only to official SAD filings.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch09-revenue-source-h3": {
+    "text": "Revenue by Source",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-revenue-source-desc": {
+    "text": "Operating revenue breakdown: TV/UEFA, Matchday, and Commercial",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-personnel-ratio-h3": {
+    "text": "Personnel Costs Ratio",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-personnel-ratio-desc": {
+    "text": "Personnel costs as percentage of operating revenue",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-transfer-balance-h3": {
+    "text": "Transfer Balance",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-transfer-balance-desc": {
+    "text": "Net transfer spending (income minus costs)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-narrative-p3": {
+    "text": "<strong class=\"narrative-header\">Transfer Strategy:</strong> The transfer balance chart reveals different approaches. Sporting has generally maintained positive transfer balances in recent years, indicating a selling model that generates profit from player development. Porto and Benfica show more volatile patterns, with periods of heavy investment followed by sales.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch09-narrative-p4": {
+    "text": "<strong class=\"narrative-header\">Financial Health:</strong> Sporting's recovery from negative equity to positive values demonstrates strong financial restructuring. Benfica carries higher liabilities, partly due to stadium investments. Porto's equity position fluctuates based on European competition success. The cumulative net results show all three clubs face challenges in maintaining profitability.",
+    "isAria": false,
+    "innerHTML": true
   }
 }

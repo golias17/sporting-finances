@@ -345,19 +345,63 @@ export function TransfersDetailTable({
         </table>
       </div>
 
-      <div className="ledger-footer-note">
-        <strong>Note:</strong>
-        <span className="tf-season-tag">
-          {activeSeason === "all"
-            ? isPt
-              ? "Todas as Épocas"
-              : "All Seasons"
-            : activeSeason}
-        </span>
+      <div
+        className="ledger-footer-note"
+        style={{
+          marginTop: "1.25rem",
+          padding: "0.85rem 1.15rem",
+          borderRadius: "10px",
+          background: "var(--surface-soft, rgba(255, 255, 255, 0.03))",
+          border: "1px solid var(--border-soft, rgba(255, 255, 255, 0.08))",
+          display: "flex",
+          alignItems: "center",
+          gap: "0.75rem",
+          fontSize: "0.85rem",
+          color: "var(--muted)",
+          flexWrap: "wrap",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{ opacity: 0.85, flexShrink: 0 }}
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="16" x2="12" y2="12" />
+            <line x1="12" y1="8" x2="12.01" y2="8" />
+          </svg>
+          <strong style={{ color: "var(--ink)", fontWeight: 600 }}>
+            {isPt ? "Nota:" : "Note:"}
+          </strong>
+          <span
+            className="tf-season-tag"
+            style={{
+              padding: "0.15rem 0.55rem",
+              borderRadius: "6px",
+              background: "rgba(46, 158, 108, 0.15)",
+              color: "var(--green-light, #2e9e6c)",
+              fontWeight: 600,
+              fontSize: "0.78rem",
+            }}
+          >
+            {activeSeason === "all"
+              ? isPt
+                ? "Todas as Épocas"
+                : "All Seasons"
+              : activeSeason}
+          </span>
+        </div>
         <span>
-          {" "}
-          figures do not include undisclosed agent fees, solidarity payments, or
-          training compensation.
+          {isPt
+            ? "— Os valores indicados não incluem comissões de intermediação não divulgadas, mecanismos de solidariedade nem direitos de formação."
+            : "— Figures do not include undisclosed agent fees, solidarity payments, or training compensation."}
         </span>
       </div>
     </>

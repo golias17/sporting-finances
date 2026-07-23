@@ -7,10 +7,10 @@ export function PlaygroundTab() {
   return (
     <>
       <div className="chapter">
-        <T as="div" className="num" i18nKey="ch13-num" />
+        <T as="div" className="num" i18nKey="ch14-num" />
         <div>
-          <T as="h2" i18nKey="ch13-h2" />
-          <T as="p" className="lede" i18nKey="ch13-lede" />
+          <T as="h2" i18nKey="ch14-h2" />
+          <T as="p" className="lede" i18nKey="ch14-lede" />
         </div>
       </div>
       <Playground />

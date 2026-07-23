@@ -7,10 +7,10 @@ export function NewsTab() {
   return (
     <>
       <div className="chapter">
-        <T as="div" className="num" i18nKey="ch12-num" />
+        <T as="div" className="num" i18nKey="ch13-num" />
         <div>
-          <T as="h2" i18nKey="ch12-h2" />
-          <T as="p" className="lede" i18nKey="ch12-lede" />
+          <T as="h2" i18nKey="ch13-h2" />
+          <T as="p" className="lede" i18nKey="ch13-lede" />
         </div>
       </div>
 
@@ -30,7 +30,7 @@ export function NewsTab() {
           <line x1="12" y1="17" x2="12.01" y2="17"></line>
         </svg>
         <div className="disclaimer-text">
-          <T as="p" i18nKey="ch12-disclaimer-p" />
+          <T as="p" i18nKey="ch13-disclaimer-p" />
         </div>
       </div>
 

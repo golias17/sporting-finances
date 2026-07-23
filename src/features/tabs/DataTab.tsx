@@ -15,17 +15,17 @@ export function DataTab({ onExportCsv }: DataTabProps) {
   return (
     <>
       <div className="chapter">
-        <T as="div" className="num" i18nKey="ch10-num" />
+        <T as="div" className="num" i18nKey="ch11-num" />
         <div>
-          <T as="h2" i18nKey="ch10-h2" />
-          <T as="p" className="lede" i18nKey="ch10-lede" />
+          <T as="h2" i18nKey="ch11-h2" />
+          <T as="p" className="lede" i18nKey="ch11-lede" />
         </div>
       </div>
       <div className="card">
         <div className="card-head card-head-center">
           <div className="card-actions-row">
-            <T as="h3" i18nKey="ch10-annual-h3" />
-            <T as="span" className="tag" i18nKey="ch10-annual-tag" />
+            <T as="h3" i18nKey="ch11-annual-h3" />
+            <T as="span" className="tag" i18nKey="ch11-annual-tag" />
           </div>
           <button
             className="story-btn btn-small"
@@ -47,11 +47,11 @@ export function DataTab({ onExportCsv }: DataTabProps) {
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            <T as="span" i18nKey="ch10-download-csv" />
+            <T as="span" i18nKey="ch11-download-csv" />
           </button>
         </div>
-        <T as="p" className="desc" i18nKey="ch10-annual-desc" />
-        <T as="p" className="scroll-hint" i18nKey="ch10-scroll-hint" />
+        <T as="p" className="desc" i18nKey="ch11-annual-desc" />
+        <T as="p" className="scroll-hint" i18nKey="ch11-scroll-hint" />
         <div className="table-wrap">
           <div className="scroll-x">
             <DataTable data={annualData} />
@@ -60,12 +60,12 @@ export function DataTab({ onExportCsv }: DataTabProps) {
       </div>
       <div className="card card--spaced">
         <div className="card-head">
-          <T as="h3" i18nKey="ch10-ledger-h3" />
+          <T as="h3" i18nKey="ch11-ledger-h3" />
           <span className="tag" id="transfersTableSeasonTag">
             2025/26
           </span>
         </div>
-        <T as="p" className="desc" i18nKey="ch10-ledger-desc" />
+        <T as="p" className="desc" i18nKey="ch11-ledger-desc" />
         <TransfersDetailTable ledgerData={ledgerData} />
       </div>
     </>

@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useAppState, state } from "../../core/state.js";
 import { baseOpts, ZONE_COLORS } from "../../charts/chartUtils.js";
+import { getBrandColors } from "../../charts/chartPalette.js";
 import { useChartLabels } from "../../charts/chartHooks.js";
 import { wageBillRatio, netDebt } from "../metrics.js";
 import { HEALTH_THRESHOLDS } from "../healthThresholds.js";
@@ -424,6 +425,118 @@ export function useHealthcheckCharts() {
     };
   }, [isPt]);
 
+  const theme = useAppState((s) => s.theme);
+  const colors = useMemo(() => getBrandColors(theme === "dark"), [theme]);
+
+  // 5. Transfer Net Debt (Payables vs Receivables)
+  const transferDebtData = useMemo<ChartData<"bar">>(() => {
+    return {
+      labels,
+      datasets: [
+        {
+          label: isPt ? "Dívidas a Clubes (Passes)" : "Transfer Payables",
+          data: annual.map(
+            (d) =>
+              ((d.transfer_payables_c || 0) + (d.transfer_payables_nc || 0)) /
+              1000,
+          ),
+          backgroundColor: colors.neg + "B3",
+          borderColor: colors.neg,
+          borderWidth: 1,
+        },
+        {
+          label: isPt ? "Créditos a Receber de Clubes" : "Transfer Receivables",
+          data: annual.map(
+            (d) =>
+              ((d.transfer_receivables_c || 0) +
+                (d.transfer_receivables_nc || 0)) /
+              1000,
+          ),
+          backgroundColor: colors.pos + "B3",
+          borderColor: colors.pos,
+          borderWidth: 1,
+        },
+      ],
+    };
+  }, [labels, annual, isPt, colors]);
+
+  const transferDebtOptions = useMemo<ChartOptions<any>>(() => {
+    return {
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        legend: { display: true, position: "bottom" },
+      },
+      scales: {
+        ...baseOpts.scales,
+        y: {
+          ...baseOpts.scales.y,
+          ticks: {
+            ...(baseOpts.scales?.y?.ticks || {}),
+            callback: (v: any) => `€${v}M`,
+          },
+        },
+      },
+    };
+  }, []);
+
+  // 6. EBITDA (Operacional vs Total)
+  const ebitdaData = useMemo<ChartData<"line">>(() => {
+    return {
+      labels,
+      datasets: [
+        {
+          label: isPt ? "EBITDA Operacional" : "Operating EBITDA",
+          data: annual.map(
+            (d) =>
+              (d.operating_result_excl_players + Math.abs(d.da_excl_squad)) /
+              1000,
+          ),
+          borderColor: colors.gold,
+          backgroundColor: "transparent",
+          borderWidth: 2,
+          tension: 0.25,
+          fill: false,
+        },
+        {
+          label: isPt ? "EBITDA Total (c/ Passes)" : "Total EBITDA (w/ Transfers)",
+          data: annual.map(
+            (d) =>
+              (d.operating_result_total +
+                Math.abs(d.da_excl_squad) +
+                Math.abs(d.squad_amortization_impairment)) /
+              1000,
+          ),
+          borderColor: colors.pos,
+          backgroundColor: "transparent",
+          borderWidth: 2.5,
+          tension: 0.25,
+          fill: false,
+        },
+      ],
+    };
+  }, [labels, annual, isPt, colors]);
+
+  const ebitdaOptions = useMemo<ChartOptions<any>>(() => {
+    return {
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        legend: { display: true, position: "bottom" },
+      },
+      scales: {
+        ...baseOpts.scales,
+        y: {
+          ...baseOpts.scales.y,
+          ticks: {
+            ...(baseOpts.scales?.y?.ticks || {}),
+            callback: (v: any) => `€${v}M`,
+          },
+        },
+      },
+    };
+  }, []);
+
   return {
     payrollBurdenData,
     payrollBurdenOptions,
@@ -433,5 +546,9 @@ export function useHealthcheckCharts() {
     debtLoadOptions,
     currentRatioData,
     currentRatioOptions,
+    transferDebtData,
+    transferDebtOptions,
+    ebitdaData,
+    ebitdaOptions,
   };
 }

@@ -69,7 +69,7 @@ export function TransfersLedger({
         tags.push(
           <span
             key="win"
-            className={`tl-tag ${p.window === "summer" ? "bonus" : "comm"} text-capitalize`}
+            className={`tl-tag ${p.window === "summer" ? "summer" : "winter"} text-capitalize`}
           >
             {winLabel}
           </span>,

@@ -48,6 +48,7 @@ describe("TabsNavigation", () => {
     expect(screen.getByText("Squad")).toBeInTheDocument();
     expect(screen.getByText("Cash")).toBeInTheDocument();
     expect(screen.getByText("Compare")).toBeInTheDocument();
+    expect(screen.getByText("Rivals")).toBeInTheDocument();
     expect(screen.getByText("Events")).toBeInTheDocument();
     expect(screen.getByText("Data")).toBeInTheDocument();
     expect(screen.getByText("Club SAD")).toBeInTheDocument();

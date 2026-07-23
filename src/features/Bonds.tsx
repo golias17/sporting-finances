@@ -142,8 +142,8 @@ export function VmocCost() {
   );
   const peakFmtLabel = fmtMillions(peakFinancingCost);
   const tableCaption = isPt
-    ? "Custo de financiamento líquido por época, 2012/13–2024/25"
-    : "Net financing cost by season, 2012/13–2024/25";
+    ? "Custo de financiamento líquido por época, 2010/11–2024/25"
+    : "Net financing cost by season, 2010/11–2024/25";
 
   return (
     <>

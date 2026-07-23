@@ -31,6 +31,13 @@ export interface FinancialRecord {
   cf_operating: number;
   cf_investing: number;
   cf_financing: number;
+  operating_costs_total?: number;
+  operating_costs_excl_squad?: number;
+  transfer_payables_c?: number;
+  transfer_payables_nc?: number;
+  transfer_receivables_c?: number;
+  transfer_receivables_nc?: number;
+  agent_commissions?: number;
   source: string;
 }
 
@@ -177,7 +184,12 @@ export interface AppState {
   setTfSortDir(v: string): void;
   setUrlStoryActive(v: boolean): void;
   setUrlCmpA(v: string | null): void;
-  setUrlCmpB(v: string | null): void;
-  setUrlHealthSeason(v: string | null): void;
-  setUrlPlayground(v: PlaygroundInputs | null): void;
+  setUrlCmpB: (v: string | null) => void;
+  setUrlHealthSeason: (v: string | null) => void;
+  setUrlPlayground: (v: PlaygroundInputs | null) => void;
+
+  BENFICA_DATASET: FinancialDataset;
+  PORTO_DATASET: FinancialDataset;
+  setBenficaDataset: (val: FinancialDataset) => void;
+  setPortoDataset: (val: FinancialDataset) => void;
 }

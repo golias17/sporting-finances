@@ -1,4 +1,24 @@
 {
+  "ch03-transfer-debt-h3": {
+    "text": "Saldo de Passes (Dívidas vs Créditos a Clubes)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch03-transfer-debt-desc": {
+    "text": "Comparação entre dívidas pendentes a pagar a outros clubes por aquisição de passes vs créditos pendentes a receber por alienação de passes.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch03-ebitda-h3": {
+    "text": "EBITDA Operacional e Total",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch03-ebitda-desc": {
+    "text": "Evolução da capacidade intrínseca da SAD em gerar resultados antes de amortizações e depreciações.",
+    "isAria": false,
+    "innerHTML": false
+  },
   "squad_sub_financials": {
     "text": "Tendências Financeiras",
     "isAria": false,
@@ -405,7 +425,7 @@
     "innerHTML": true
   },
   "auto-txt-div-81": {
-    "text": "Dossier · 2012/13 → 2025/26 H1<br/> Período findo em 31 de dezembro de 2025<br/> Euronext Lisbon · SCP",
+    "text": "Dossier · 2010/11 → 2024/25<br/> Período findo em 30 de junho de 2025<br/> Euronext Lisbon · SCP",
     "isAria": false,
     "innerHTML": true
   },
@@ -535,7 +555,7 @@
     "innerHTML": false
   },
   "auto-txt-title-0": {
-    "text": "Sporting CP — Evolução Financeira (2012/13 → 2025/26)",
+    "text": "Sporting CP — Evolução Financeira (2010/11 → 2024/25)",
     "isAria": false,
     "innerHTML": false
   },
@@ -645,7 +665,7 @@
     "innerHTML": false
   },
   "ch02-narrative-p1": {
-    "text": "As operações recorrentes do Sporting (receitas menos salários, fornecimentos e D&A ordinária, antes do trading de passes) foram negativas em 11 das 13 épocas. Apenas 2014/15 (redimensionamento pós-reestruturação) e 2021/22 (regresso à Champions League + primeiro estádio pós-COVID completo) produziram resultados operacionais recorrentes positivos. O modelo assenta no trading de passes — no qual o clube é excecionalmente bom — para financiar o resto.",
+    "text": "As operações recorrentes do Sporting (receitas menos salários, fornecimentos e D&A ordinária, antes do trading de passes) foram negativas em 13 das 15 épocas. Apenas 2014/15 (redimensionamento pós-reestruturação) e 2021/22 (regresso à Champions League + primeiro estádio pós-COVID completo) produziram resultados operacionais recorrentes positivos. O modelo assenta no trading de passes — no qual o clube é excecionalmente bom — para financiar o resto.",
     "isAria": false,
     "innerHTML": false
   },
@@ -655,7 +675,7 @@
     "innerHTML": false
   },
   "ch02-num": {
-    "text": "Cap. 02 — Receitas",
+    "text": "Cap. 02 — Estrutura de Receitas",
     "isAria": false,
     "innerHTML": false
   },
@@ -830,7 +850,7 @@
     "innerHTML": false
   },
   "ch03-num": {
-    "text": "Cap. 03 — Indicadores de Saúde",
+    "text": "Cap. 03 — Saúde Financeira",
     "isAria": false,
     "innerHTML": false
   },
@@ -970,7 +990,7 @@
     "innerHTML": false
   },
   "ch04-num": {
-    "text": "Cap. 04 — Dívida e Balanço",
+    "text": "Cap. 04 — Perfil de Dívida",
     "isAria": false,
     "innerHTML": false
   },
@@ -985,7 +1005,7 @@
     "innerHTML": false
   },
   "ch05-num": {
-    "text": "Cap. 05 — Instrumentos de Financiamento",
+    "text": "Cap. 05 — Instrumentos",
     "isAria": false,
     "innerHTML": false
   },
@@ -1010,7 +1030,7 @@
     "innerHTML": false
   },
   "ch06-lede": {
-    "text": "Os formandos de Alcochete — e um recrutamento inteligente — geraram mais de €75M em comissões em cinco das últimas nove épocas. O valor de mercado do plantel triplicou desde 2012/13, apesar de centenas de milhões em vendas de jogadores pelo caminho.",
+    "text": "Os diplomados de Alcochete — e recrutamento inteligente — geraram mais de €75M em sete das últimas quinze épocas.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1045,12 +1065,12 @@
     "innerHTML": false
   },
   "ch06-narrative-p3": {
-    "text": "O valor de mercado do plantel (Transfermarkt, Dez 2025) situa-se em €474M — 3× a estimativa de €151,9M de 2012/13, apesar de o clube ter vendido centenas de milhões em talento no mesmo período. O hiato entre valor de mercado e contabilístico é grande porque os formandos de Alcochete têm custo de aquisição zero no balanço.",
+    "text": "O valor de mercado do plantel (Transfermarkt, dez 2025) é de €474M — 3× o €151.9M estimado em 2010/11, apesar do clube ter vendido centenas de milhões em talento no mesmo período. A diferença entre valor de mercado e valor contabilístico é grande porque os diplomados de Alcochete têm custo de aquisição zero no balanço.",
     "isAria": false,
     "innerHTML": false
   },
   "ch06-net-desc": {
-    "text": "Receitas de vendas menos aquisições, amortizações e imparidades. Lucrativo em 11 das 13 épocas.",
+    "text": "Rendimentos de vendas menos aquisições, amortizações e imparidades. Lucrativo em 13 das 15 épocas.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1065,7 +1085,7 @@
     "innerHTML": false
   },
   "ch06-num": {
-    "text": "Cap. 06 — Plantel e Transferências",
+    "text": "Cap. 06 — Valorização do Plantel",
     "isAria": false,
     "innerHTML": false
   },
@@ -1120,7 +1140,7 @@
     "innerHTML": true
   },
   "ch07-lede": {
-    "text": "O fluxo de caixa operacional foi negativo em 12 de 13 épocas — as vendas de jogadores são a compensação estrutural que evita a rotura. A obrigação USPP reestrutura a maturidade da dívida e apoia obras no estádio, mas não resolve diretamente o défice operacional recorrente.",
+    "text": "O fluxo de caixa operacional foi negativo em 14 das 15 épocas — as vendas de jogadores são a compensação estrutural que mantém o clube solvente. O USPP reestrutura o perfil da dívida e financia o estádio; não resolve diretamente a geração de caixa operacional.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1130,12 +1150,12 @@
     "innerHTML": false
   },
   "ch07-narrative-p1": {
-    "text": "A Sporting SAD registou fluxo de caixa operacional negativo em 12 das 13 épocas do conjunto de dados. A única exceção é 2014/15 (+€29,2M), onde o ano de reestruturação de capital produziu entradas de caixa invulgarmente grandes. Em todas as outras épocas — incluindo 2023/24 em -€92,2M, o pior registo — salários, fornecimentos e prestações de aquisição de jogadores cobrem as saídas. As vendas de jogadores (atividades de investimento) são o contrapeso estrutural.",
+    "text": "A Sporting SAD teve fluxo de caixa negativo das atividades operacionais em 14 das 15 épocas do dataset. A única exceção foi 2014/15 (+€29.2M), onde o ano de reestruturação de capital produziu entradas invulgarmente elevadas. Em todas as outras épocas — incluindo 2023/24 com −€92.2M, o pior registo — salários, fornecimentos e pagamentos de prestações de aquisição de jogadores absorvem mais caixa do que o negócio gera antes das transferências. As vendas de jogadores (atividades de investimento) são a compensação estrutural que evita o colapso da posição de caixa.",
     "isAria": false,
     "innerHTML": false
   },
   "ch07-narrative-p2": {
-    "text": "A caixa no final do ano nunca excedeu €15,6M e caiu abaixo de €4M em 5 das 13 épocas — incluindo apenas €1,3M em 2012/13. A obrigação USPP (€225M, outubro de 2025) refinancia linhas de curto prazo e estende o perfil de maturidade da dívida; o seu objetivo principal é a transformação do Estádio José Alvalade, não curar a geração de caixa operacional. A 5,75% sobre €225M, o cupão anual (~€12,9M) aumentará as saídas de financiamento a partir de 2025/26.",
+    "text": "O caixa de fim de ano nunca excedeu €15.6M e caiu abaixo de €4M em 7 das 15 épocas — incluindo valores tão baixos como €1.3M em 2010/11. O USPP (€225M, outubro 2025) refinancia instalações de curto prazo e estende o perfil de maturidade da dívida; o seu objetivo principal é a transformação do Estádio Alvalade, não resolver a geração de caixa operacional. A 5,75% sobre €225M, o cupão anual (~€12.9M) irá aumentar os fluxos financeiros a partir de 2025/26.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1150,12 +1170,12 @@
     "innerHTML": false
   },
   "ch07-net-tag": {
-    "text": "13 épocas",
+    "text": "15 épocas",
     "isAria": false,
     "innerHTML": false
   },
   "ch07-num": {
-    "text": "Cap. 07 — Fluxos de Caixa e Liquidez",
+    "text": "Cap. 07 — Tesouraria e Caixa",
     "isAria": false,
     "innerHTML": false
   },
@@ -1185,7 +1205,7 @@
     "innerHTML": false
   },
   "ch08-num": {
-    "text": "Cap. 08 — Comparar",
+    "text": "Cap. 08 — Comparação Histórica",
     "isAria": false,
     "innerHTML": false
   },
@@ -1205,12 +1225,12 @@
     "innerHTML": false
   },
   "ch09-h2": {
-    "text": "Pontos de inflexão, <em>2014 → 2025</em>.",
+    "text": "Comparativo <em>Rivais</em>",
     "isAria": false,
     "innerHTML": true
   },
   "ch09-lede": {
-    "text": "Os eventos que moldaram a trajetória — alguns em campo, a maioria fora dele. Cada cartão associa o momento desportivo ao que fez com os números.",
+    "text": "Análise financeira comparativa entre Sporting CP, SL Benfica e FC Porto ao longo de 15 épocas (2010/11 → 2024/25), com dados extraídos dos Relatórios & Contas consolidados apresentados à CMVM e avaliações do Transfermarkt.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1230,162 +1250,27 @@
     "innerHTML": false
   },
   "ch09-num": {
-    "text": "Cap. 09 — Eventos-Chave",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-annual-desc": {
-    "text": "Células negativas a vermelho indicam perdas ou saldos negativos. PDFs fonte: relatórios anuais da Sporting SAD (CMVM).",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-annual-h3": {
-    "text": "Dados anuais — todas as métricas em milhares de EUR",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-annual-tag": {
-    "text": "13 épocas",
+    "text": "Cap. 09 — Análise Competitiva",
     "isAria": false,
     "innerHTML": false
   },
   "ch10-h2": {
-    "text": "Os números, <em>na íntegra</em>.",
+    "text": "Eventos <em>Principais</em>.",
     "isAria": false,
     "innerHTML": true
   },
   "ch10-lede": {
-    "text": "Cada métrica ao longo de treze épocas. Células negativas a vermelho indicam perdas ou saldos negativos. PDFs fonte: relatórios anuais da Sporting SAD depositados na CMVM.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-ledger-desc": {
-    "text": "Uma tabela consolidada e interativa com os detalhes completos de todas as chegadas e saídas de jogadores. Use o filtro de época para explorar anos anteriores.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-ledger-h3": {
-    "text": "Livro Completo de Detalhes de Transferências",
+    "text": "Marcos na jornada financeira da Sporting SAD",
     "isAria": false,
     "innerHTML": false
   },
   "ch10-num": {
-    "text": "Cap. 10 — Dados em Bruto",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-scroll-hint": {
-    "text": "Deslize horizontalmente para ver todas as 13 épocas",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-bonus": {
-    "text": "Bónus",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-club": {
-    "text": "Clube",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-comm": {
-    "text": "Comissão",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-fee": {
-    "text": "Valor",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-notes": {
-    "text": "Notas e Detalhes",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-player": {
-    "text": "Jogador",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-rights": {
-    "text": "Direitos",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-season": {
-    "text": "Época",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-type": {
-    "text": "Tipo",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-col-window": {
-    "text": "Janela",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-search": {
-    "text": "Pesquisar jogador, clube ou notas...",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-season-all": {
-    "text": "Todas as Épocas",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-season-label": {
-    "text": "Época:",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-type-all": {
-    "text": "Todas as transferências",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-type-in": {
-    "text": "Chegadas (Compras/Empréstimos de entrada)",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-type-label": {
-    "text": "Tipo:",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-type-out": {
-    "text": "Saídas (Vendas/Empréstimos/Rescisões)",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-window-all": {
-    "text": "Todas as janelas",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-window-label": {
-    "text": "Janela:",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-window-summer": {
-    "text": "Mercado de Verão",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-window-winter": {
-    "text": "Mercado de Inverno",
+    "text": "Cap. 10 — Eventos-Chave",
     "isAria": false,
     "innerHTML": false
   },
   "hero-eyebrow": {
-    "text": "Um Dossier Financeiro · 2012 → 2026",
+    "text": "Dossier Financeiro · 2010 → 2025",
     "isAria": false,
     "innerHTML": false
   },
@@ -1400,54 +1285,54 @@
     "innerHTML": false
   },
   "tab-btn-bonds": {
-    "text": "<span class=\"tab-num\">05</span>Instrumentos",
+    "text": "05. Instrumentos",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-cash": {
-    "text": "<span class=\"tab-num\">07</span>Fluxos Caixa",
+    "text": "07. Caixa",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-compare": {
-    "text": "<span class=\"tab-num\">08</span>Comparar",
+    "text": "08. Comparar",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-data": {
-    "text": "<span class=\"tab-num\">10</span>Dados",
+    "text": "11. Dados",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-debt": {
-    "text": "<span class=\"tab-num\">04</span>Dívida",
+    "text": "04. Dívida",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-events": {
-    "text": "<span class=\"tab-num\">09</span>Eventos",
+    "text": "10. Eventos",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-healthcheck": {
-    "text": "<span class=\"tab-num\">03</span>Saúde",
+    "text": "03. Saúde",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-overview": {
-    "text": "<span class=\"tab-num\">01</span>Visão Geral",
+    "text": "01. Overview",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-revenue": {
-    "text": "<span class=\"tab-num\">02</span>Receitas",
+    "text": "02. Receitas",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-squad": {
-    "text": "<span class=\"tab-num\">06</span>Plantel",
+    "text": "06. Plantel",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "topbar-export-pdf": {
     "text": "Exportar PDF",
@@ -1590,12 +1475,7 @@
     "innerHTML": false
   },
   "kpi-hb-title": {
-    "text": "Visão Geral do Clube — 2012/13",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-search-label": {
-    "text": "Pesquisar transferências",
+    "text": "Visão Geral — 2010/11",
     "isAria": false,
     "innerHTML": false
   },
@@ -1609,198 +1489,68 @@
     "isAria": false,
     "innerHTML": false
   },
-  "ch10-download-csv": {
-    "text": "Descarregar CSV",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch10-tf-search-placeholder": {
-    "text": "Pesquisar jogador, clube ou notas...",
-    "isAria": false,
-    "innerHTML": false
-  },
   "ch11-num": {
-    "text": "Cap. 11 — Património e Identidade",
+    "text": "Cap. 11 — Dados em Bruto",
     "isAria": false,
     "innerHTML": false
   },
   "ch11-h2": {
-    "text": "Símbolos visuais, <em>património físico</em>.",
+    "text": "Os números, <em>na íntegra</em>.",
     "isAria": false,
     "innerHTML": true
   },
   "ch11-lede": {
-    "text": "A identidade do Sporting CP é definida pelo seu património físico e legado visual. Conheça os equipamentos, o estádio, o pavilhão e o museu que unem a SAD aos adeptos.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-social-h3": {
-    "text": "Canais Oficiais e Imprensa",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-jornal-btn": {
-    "text": "Jornal Sporting",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-linkedin-btn": {
-    "text": "LinkedIn",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-twitter-btn": {
-    "text": "Twitter / X",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-instagram-btn": {
-    "text": "Instagram",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-youtube-btn": {
-    "text": "YouTube",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-disclaimer-p": {
-    "text": "<strong>Aviso Importante:</strong> Nenhum dos canais externos ou recursos oficiais aqui associados constituem divulgações financeiras legalmente vinculativas. Para métricas estatutárias, consulte apenas os relatórios oficiais da SAD.",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "ch11-stromp-unrevealed": {
-    "text": "Por Revelar",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-exp-title": {
-    "text": "Sporting Experience — Visitas e Bilhetes",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-exp-desc": {
-    "text": "Descubra o coração de Alvalade. Viva a experiência de estar junto ao relvado, balneários, sala de imprensa e Pavilhão João Rocha. Visite o Museu Sporting e percorra 119 anos de glória.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-exp-btn": {
-    "text": "Reservar Visita",
+    "text": "Cada métrica ao longo de quinze épocas. Células negativas a vermelho indicam prejuízos ou saldos negativos. PDFs fonte: Relatórios anuais da Sporting SAD entregues à CMVM.",
     "isAria": false,
     "innerHTML": false
   },
   "tab-btn-news": {
-    "text": "<span class=\"tab-num\">12</span>Notícias",
+    "text": "13. Notícias",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "tab-btn-club": {
-    "text": "<span class=\"tab-num\">11</span>Clube SAD",
+    "text": "12. Clube SAD",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "ch12-num": {
-    "text": "Cap. 12 — Notícias",
+    "text": "Cap. 12 — Património e Identidade",
     "isAria": false,
     "innerHTML": false
   },
   "ch12-h2": {
-    "text": "<em>Atualizações</em> em direto.",
+    "text": "Símbolos visuais, <em>património físico</em>.",
     "isAria": false,
     "innerHTML": true
   },
   "ch12-lede": {
-    "text": "As últimas notícias financeiras e corporativas do Sporting CP, agregadas em direto dos meios de comunicação portugueses.",
+    "text": "A identidade do Sporting CP é definida pelo seu património físico e legado visual. Conheça os equipamentos, o estádio, o pavilhão e o museu que unem a SAD aos adeptos.",
     "isAria": false,
     "innerHTML": false
-  },
-  "ch12-disclaimer-p": {
-    "text": "<strong>Aviso Importante:</strong> Nenhuma das notícias externas ou artigos de imprensa aqui associados são oficiais, auditados ou legalmente vinculativos. Não constituem aconselhamento financeiro ou comunicações oficiais da SAD. As divulgações oficiais e financeiras da SAD devem ser consideradas a única fonte de verdade até serem formalmente comunicadas à CMVM.",
-    "isAria": false,
-    "innerHTML": true
   },
   "ch12-loading": {
-    "text": "A carregar atualizações...",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-card-kits-title": {
-    "text": "Equipamentos Oficiais (2025/26)",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-card-kits-desc": {
-    "text": "As lendárias listras horizontais verdes e brancas (Principal), o design moderno (Alternativo) e o equipamento bipartido Stromp, em homenagem ao fundador Francisco Stromp.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-card-stadium-title": {
-    "text": "Estádio José Alvalade",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-card-stadium-desc": {
-    "text": "Inaugurado em 2003 e classificado como Categoria 4 da UEFA. Com a remodelação 'Alvalade 2.0' de 2025 (financiada no âmbito da emissão USPP), foi fechado o fosso para criar mais 2.000 lugares, subindo a lotação para 52.095 espectadores. Destaca-se o relvado híbrido Grassmax, a VIP Pitch Row com 28 lugares premium, Loges com ecrãs individuais e o Deluxe Emerald Lounge, além dos anuais Gamebox e Lion Seats.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-stadium-gamebox": {
-    "text": "Lugar Anual Gamebox",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-stadium-lionseats": {
-    "text": "Lion Seats (Premium VIP)",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-card-hall-title": {
-    "text": "Pavilhão João Rocha",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-card-hall-desc": {
-    "text": "Localizado junto ao estádio, a arena multi-desportiva com 3.000 lugares acolhe as modalidades de pavilhão do Sporting CP (Futsal, Andebol, Hóquei em Patins e Basquetebol). Homenageia o antigo presidente João Rocha.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-card-museum-title": {
-    "text": "Museu Sporting",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-card-museum-desc": {
-    "text": "Alojando mais de 16.000 troféus históricos, o museu celebra as eras de ouro dos triunfos europeus e o domínio nacional, exibindo o legado da instituição mais eclética e titulada de Lisboa.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-card-academy-title": {
-    "text": "Academia Cristiano Ronaldo",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch11-card-academy-desc": {
-    "text": "Situada em Alcochete com 250.000 m², é o coração da formação leonina. Primeira academia na Europa a obter a certificação ISO 9001:2008, foi rebatizada em 2020 para homenagear o lendário Cristiano Ronaldo.",
+    "text": "A carregar atualizações ao vivo...",
     "isAria": false,
     "innerHTML": false
   },
   "tab-btn-playground": {
-    "text": "<span class=\"tab-num\">13</span>Simulador",
+    "text": "14. Simulador",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "ch13-num": {
-    "text": "Ch. 13 — O Simulador",
+    "text": "Cap. 13 — Últimas Notícias",
     "isAria": false,
     "innerHTML": false
   },
   "ch13-h2": {
-    "text": "O <em>Simulador</em> Financeiro.",
+    "text": "Últimas <em>Notícias</em>",
     "isAria": false,
     "innerHTML": true
   },
   "ch13-lede": {
-    "text": "Ajuste as variáveis para projetar os resultados da época 2025/26 em tempo real.",
+    "text": "Atualizações corporativas, divulgações financeiras e movimentos de mercado relacionados com o Sporting CP SAD.",
     "isAria": false,
     "innerHTML": false
   },
@@ -2003,5 +1753,530 @@
     "text": "Eixo esquerdo: capital próprio (M€). Eixo direito: rácio de solvabilidade, capital próprio como percentagem do ativo total.",
     "isAria": false,
     "innerHTML": false
+  },
+  "tab-btn-competitive": {
+    "text": "09. Rivais",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-revenue-h3": {
+    "text": "Comparação de Receitas Operacionais",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-revenue-desc": {
+    "text": "Receita operacional anual dos três grandes clubes portugueses (€M).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-netresult-h3": {
+    "text": "Comparação de Resultados Líquidos",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-netresult-desc": {
+    "text": "Resultado líquido anual dos três grandes clubes portugueses (€M).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-equity-h3": {
+    "text": "Comparação de Capitais Próprios",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-equity-desc": {
+    "text": "Evolução dos capitais próprios dos três grandes clubes portugueses (€M).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-squad-h3": {
+    "text": "Comparação de Valor de Mercado do Plantel",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-squad-desc": {
+    "text": "Valor de mercado do plantel no Transfermarkt dos três grandes clubes portugueses (€M).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-narrative-h4": {
+    "text": "Contexto Competitivo",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-narrative-p1": {
+    "text": "O Sporting CP historicamente operou com receitas inferiores ao Benfica e Porto, mas mostrou uma melhoria notável nos últimos anos, particularmente após a época do campeonato de 2021.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-narrative-p2": {
+    "text": "A transformação financeira do clube desde a insolvência técnica em 2013 até capitais próprios positivos em 2023 é uma das reviravoltas mais impressionantes na história do futebol português.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-data-source": {
+    "text": "Fonte dos Dados",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-data-source-desc": {
+    "text": "Os dados financeiros dos três clubes são derivados de relatórios anuais oficiais apresentados à Comissão do Mercado de Valores Mobiliários (CMVM). Os valores do Benfica e Porto são estimativas baseadas em demonstrações financeiras publicamente disponíveis.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-legend-title": {
+    "text": "Club",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-sporting": {
+    "text": "Sporting CP",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-benfica": {
+    "text": "SL Benfica",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch12-porto": {
+    "text": "FC Porto",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch14-num": {
+    "text": "Cap. 14 — O Simulador",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-data-source": {
+    "text": "Origem dos Dados & Metodologia",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-data-source-desc": {
+    "text": "Métricas extraídas na íntegra dos Relatórios & Contas oficiais das 3 SADs auditados e depositados na CMVM. As avaliações de mercado dos plantéis correspondem ao registo histórico do Transfermarkt a 30 de junho de cada ano.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-legend-title": {
+    "text": "Clubes",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-sporting": {
+    "text": "Sporting CP",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-benfica": {
+    "text": "SL Benfica",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-porto": {
+    "text": "FC Porto",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-revenue-h3": {
+    "text": "Receitas Operacionais (s/ Passes)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-revenue-desc": {
+    "text": "Volume de negócios anual gerado por direitos de TV, bilheteira e patrocínios (exclui ganhos com transferências).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-personnel-h3": {
+    "text": "Massa Salarial & Encargos de Pessoal",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-personnel-desc": {
+    "text": "Custos totais com equipas técnicas, futebol profissional e colaboradores (€M).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-squad-h3": {
+    "text": "Valor de Mercado do Plantel",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-squad-desc": {
+    "text": "Avaliação agregada do plantel principal no fecho de cada época (Transfermarkt).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-netresult-h3": {
+    "text": "Resultado Líquido do Exercício",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-netresult-desc": {
+    "text": "Lucro ou prejuízo líquido consolidado apurado no final de cada época desportiva (€M).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-equity-h3": {
+    "text": "Capital Próprio & Solvência",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-equity-desc": {
+    "text": "Situação patrimonial líquida consolidada de cada SAD (€M).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-liabilities-h3": {
+    "text": "Passivo Total",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-liabilities-desc": {
+    "text": "Montante global de dívidas e obrigações de curto e longo prazo (€M).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-narrative-h4": {
+    "text": "Principais Constatações",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-narrative-p1": {
+    "text": "<strong class=\"narrative-header\">Evolução das Receitas:</strong> A receita do Sporting cresceu significativamente desde 2013, impulsionada por melhores contratos televisivos, receitas de bilheteira e parcerias comerciais. No entanto, Benfica e Porto mantêm receitas absolutas superiores, refletindo as suas maiores bases de adeptos e desempenho nas competições europeias. A análise por fonte revela que os três clubes dependem fortemente do income TV/UEFA, com o Benfica a gerar mais receitas comerciais.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch09-narrative-p2": {
+    "text": "<strong class=\"narrative-header\">Eficiência de Custos:</strong> A relação entre despesas com pessoal e receitas do Sporting melhorou significativamente, passando de mais de 100% das receitas para um nível mais sustentável. Isto indica uma melhor disciplina salarial em comparação com anos anteriores. Benfica e Porto mantêm rácios mais baixos, sugerindo estruturas salariais mais eficientes em relação à sua base de receitas.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch09-cumulative-label": {
+    "text": "Total Acumulado (15 Épocas):",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch14-h2": {
+    "text": "O <em>Simulador</em> Financeiro.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch14-lede": {
+    "text": "Ajuste as variáveis para projetar os resultados da época 2025/26 em tempo real.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-annual-desc": {
+    "text": "Células negativas a vermelho indicam perdas ou saldos negativos. PDFs fonte: relatórios anuais da Sporting SAD (CMVM).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-annual-h3": {
+    "text": "Dados anuais — todas as métricas em milhares de EUR",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-annual-tag": {
+    "text": "15 épocas",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-ledger-desc": {
+    "text": "Uma tabela consolidada e interativa com os detalhes completos de todas as chegadas e saídas de jogadores. Use o filtro de época para explorar anos anteriores.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-ledger-h3": {
+    "text": "Livro Completo de Detalhes de Transferências",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-scroll-hint": {
+    "text": "Deslize horizontalmente para ver todas as 15 épocas",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-bonus": {
+    "text": "Bónus",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-club": {
+    "text": "Clube",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-comm": {
+    "text": "Comissão",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-fee": {
+    "text": "Valor",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-notes": {
+    "text": "Notas e Detalhes",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-player": {
+    "text": "Jogador",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-rights": {
+    "text": "Direitos",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-season": {
+    "text": "Época",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-type": {
+    "text": "Tipo",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-col-window": {
+    "text": "Janela",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-search": {
+    "text": "Pesquisar jogador, clube ou notas...",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-season-all": {
+    "text": "Todas as Épocas",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-season-label": {
+    "text": "Época:",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-type-all": {
+    "text": "Todas as transferências",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-type-in": {
+    "text": "Chegadas (Compras/Empréstimos de entrada)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-type-label": {
+    "text": "Tipo:",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-type-out": {
+    "text": "Saídas (Vendas/Empréstimos/Rescisões)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-window-all": {
+    "text": "Todas as janelas",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-window-label": {
+    "text": "Janela:",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-window-summer": {
+    "text": "Mercado de Verão",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-window-winter": {
+    "text": "Mercado de Inverno",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-search-label": {
+    "text": "Pesquisar transferências",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-download-csv": {
+    "text": "Descarregar CSV",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-tf-search-placeholder": {
+    "text": "Pesquisar jogador, clube ou notas...",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-disclaimer-p": {
+    "text": "<strong>Aviso Importante:</strong> Nenhum dos canais externos ou recursos oficiais aqui associados constituem divulgações financeiras legalmente vinculativas. Para métricas estatutárias, consulte apenas os relatórios oficiais da SAD.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch11-social-h3": {
+    "text": "Canais Oficiais e Imprensa",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-jornal-btn": {
+    "text": "Jornal Sporting",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-linkedin-btn": {
+    "text": "LinkedIn",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-twitter-btn": {
+    "text": "Twitter / X",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-instagram-btn": {
+    "text": "Instagram",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-youtube-btn": {
+    "text": "YouTube",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-stromp-unrevealed": {
+    "text": "Por Revelar",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-exp-title": {
+    "text": "Sporting Experience — Visitas e Bilhetes",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-exp-desc": {
+    "text": "Descubra o coração de Alvalade. Viva a experiência de estar junto ao relvado, balneários, sala de imprensa e Pavilhão João Rocha. Visite o Museu Sporting e percorra 119 anos de glória.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-exp-btn": {
+    "text": "Reservar Visita",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-kits-title": {
+    "text": "Equipamentos Oficiais (2025/26)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-kits-desc": {
+    "text": "As lendárias listras horizontais verdes e brancas (Principal), o design moderno (Alternativo) e o equipamento bipartido Stromp, em homenagem ao fundador Francisco Stromp.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-stadium-title": {
+    "text": "Estádio José Alvalade",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-stadium-desc": {
+    "text": "Inaugurado em 2003 e classificado como Categoria 4 da UEFA. Com a remodelação 'Alvalade 2.0' de 2025 (financiada no âmbito da emissão USPP), foi fechado o fosso para criar mais 2.000 lugares, subindo a lotação para 52.095 espectadores. Destaca-se o relvado híbrido Grassmax, a VIP Pitch Row com 28 lugares premium, Loges com ecrãs individuais e o Deluxe Emerald Lounge, além dos anuais Gamebox e Lion Seats.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-stadium-gamebox": {
+    "text": "Lugar Anual Gamebox",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-stadium-lionseats": {
+    "text": "Lion Seats (Premium VIP)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-hall-title": {
+    "text": "Pavilhão João Rocha",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-hall-desc": {
+    "text": "Localizado junto ao estádio, a arena multi-desportiva com 3.000 lugares acolhe as modalidades de pavilhão do Sporting CP (Futsal, Andebol, Hóquei em Patins e Basquetebol). Homenageia o antigo presidente João Rocha.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-museum-title": {
+    "text": "Museu Sporting",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-museum-desc": {
+    "text": "Alojando mais de 16.000 troféus históricos, o museu celebra as eras de ouro dos triunfos europeus e o domínio nacional, exibindo o legado da instituição mais eclética e titulada de Lisboa.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-academy-title": {
+    "text": "Academia Cristiano Ronaldo",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-card-academy-desc": {
+    "text": "Situada em Alcochete com 250.000 m², é o coração da formação leonina. Primeira academia na Europa a obter a certificação ISO 9001:2008, foi rebatizada em 2020 para homenagear o lendário Cristiano Ronaldo.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch13-disclaimer-p": {
+    "text": "<strong>Aviso Importante:</strong> Nenhum dos canais externos ou recursos oficiais aqui associados constituem divulgações financeiras legalmente vinculativas. Para métricas estatutárias, consulte apenas os relatórios oficiais da SAD.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch09-revenue-source-h3": {
+    "text": "Receita por Fonte",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-revenue-source-desc": {
+    "text": "Detalhe das receitas operacionais: TV/UEFA, Bilheteira e Comercial",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-personnel-ratio-h3": {
+    "text": "Rácio Despesas com Pessoal",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-personnel-ratio-desc": {
+    "text": "Despesas com pessoal como percentagem das receitas operacionais",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-transfer-balance-h3": {
+    "text": "Saldo de Transferências",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-transfer-balance-desc": {
+    "text": "Gasto líquido em transferências (receitas menos custos)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-narrative-p3": {
+    "text": "<strong class=\"narrative-header\">Estratégia de Transferências:</strong> O gráfico de saldo de transferências revela abordagens diferentes. O Sporting tem mantido saldos positivos nos últimos anos, indicando um modelo de venda que gera lucro com o desenvolvimento de jogadores. Porto e Benfica mostram padrões mais voláteis, com períodos de investimento pesado seguidos de vendas.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch09-narrative-p4": {
+    "text": "<strong class=\"narrative-header\">Saúde Financeira:</strong> A recuperação do Sporting de capitais próprios negativos para valores positivos demonstra uma forte reestruturação financeira. O Benfica carrega passivos mais elevados, em parte devido a investimentos no estádio. A posição de capitais próprios do Porto flutua com base no sucesso nas competições europeias. Os resultados líquidos acumulados mostram que os três clubes enfrentam desafios na manutenção da rentabilidade.",
+    "isAria": false,
+    "innerHTML": true
   }
 }

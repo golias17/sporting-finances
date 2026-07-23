@@ -1,5 +1,297 @@
 [
   {
+    "season": "2010/11",
+    "income": 36717,
+    "cost": -22976,
+    "note": "Major squad overhaul with key sales of João Moutinho to FC Porto (€24M) and Miguel Veloso to Genoa (€9M). Incomings included Ricky van Wolfswinkel, Jaime Valdés, and Alberto Zapater.",
+    "note_pt": "Reestruturação profunda do plantel marcada pelas saídas de João Moutinho para o FC Porto (€24M) e Miguel Veloso para o Génova (€9M). Destaque para as entradas de Ricky van Wolfswinkel, Jaime Valdés e Alberto Zapater.",
+    "purchases": [
+      {
+        "player": "Ricky van Wolfswinkel",
+        "club": "FC Utrecht",
+        "fee": 5.075,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Became Sporting's top goalscorer before selling to Norwich City",
+        "note_pt": "Tornou-se o melhor marcador do Sporting antes de ser vendido ao Norwich City"
+      },
+      {
+        "player": "Jaime Valdés",
+        "club": "Atalanta",
+        "fee": 3.3,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Chilean playmaker acquired for €3.3M",
+        "note_pt": "Médio ofensivo chileno adquirido por €3,3M"
+      },
+      {
+        "player": "Valeri Bojinov",
+        "club": "Parma",
+        "fee": 2.6,
+        "rights": "80%",
+        "window": "summer",
+        "note": "Bulgarian striker purchased from Parma",
+        "note_pt": "Avançado búlgaro adquirido ao Parma"
+      },
+      {
+        "player": "Fabián Rinaudo",
+        "club": "Gimnasia La Plata",
+        "fee": 2.42,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Argentine defensive midfielder 'Fito' Rinaudo",
+        "note_pt": "Médio defensivo argentino 'Fito' Rinaudo"
+      },
+      {
+        "player": "Alberto Zapater",
+        "club": "Genoa",
+        "fee": 2.0,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Acquired as part of the Miguel Veloso transfer agreement",
+        "note_pt": "Adquirido no âmbito do acordo da transferência de Miguel Veloso"
+      },
+      {
+        "player": "Stephanus Schaars",
+        "club": "AZ Alkmaar",
+        "fee": 1.35,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Dutch international midfielder from AZ Alkmaar",
+        "note_pt": "Médio internacional holandês vindo do AZ Alkmaar"
+      },
+      {
+        "player": "Alberto Rodríguez",
+        "club": "SC Braga",
+        "fee": 1.236,
+        "rights": "70%",
+        "window": "summer",
+        "note": "Peruvian central defender signed from SC Braga",
+        "note_pt": "Defesa central peruano contratado ao SC Braga"
+      },
+      {
+        "player": "Nuno André Coelho",
+        "club": "FC Porto",
+        "fee": 1.0,
+        "rights": "50%",
+        "window": "summer",
+        "note": "Central defender acquired from FC Porto",
+        "note_pt": "Defesa central adquirido ao FC Porto"
+      },
+      {
+        "player": "Marcelo Boeck",
+        "club": "Marítimo",
+        "fee": 0.959,
+        "rights": "75%",
+        "window": "summer",
+        "note": "Brazilian goalkeeper signed from Marítimo",
+        "note_pt": "Guarda-redes brasileiro vindo do Marítimo"
+      },
+      {
+        "player": "Santiago Arias",
+        "club": "La Equidad",
+        "fee": 0.92,
+        "rights": "50%",
+        "window": "summer",
+        "note": "Colombian right-back prospect",
+        "note_pt": "Jovem lateral direito colombiano"
+      },
+      {
+        "player": "André Carrillo",
+        "club": "Alianza Lima",
+        "fee": 0.69,
+        "rights": "50%",
+        "window": "summer",
+        "note": "Peruvian winger signed from Alianza Lima",
+        "note_pt": "Extremo peruano contratado ao Alianza Lima"
+      }
+    ],
+    "sales": [
+      {
+        "player": "João Moutinho",
+        "club": "FC Porto",
+        "fee": 24.0,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Transfer of team captain to rivals FC Porto (€24M gross)",
+        "note_pt": "Transferência do capitão de equipa para o rival FC Porto (€24M brutos)"
+      },
+      {
+        "player": "Miguel Veloso",
+        "club": "Genoa",
+        "fee": 9.0,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Sold to Genoa for €9M plus Alberto Zapater",
+        "note_pt": "Vendido ao Génova por €9M mais a inclusão de Alberto Zapater"
+      },
+      {
+        "player": "Liedson",
+        "club": "Corinthians",
+        "fee": 1.8,
+        "rights": "100%",
+        "window": "winter",
+        "note": "'Levezinho' returned to Corinthians in January 2011",
+        "note_pt": "'Levezinho' regressou ao Corinthians em janeiro de 2011"
+      },
+      {
+        "player": "Marco Torsiglieri",
+        "club": "Metalist Kharkiv",
+        "fee": 1.7,
+        "rights": "50%",
+        "window": "summer",
+        "note": "Sold to Ukrainian side Metalist",
+        "note_pt": "Vendido aos ucranianos do Metalist"
+      },
+      {
+        "player": "Nuno Coelho",
+        "club": "Newell's Old Boys",
+        "fee": 0.463,
+        "rights": "30%",
+        "window": "summer",
+        "note": "Transfer of 30% economic rights",
+        "note_pt": "Transferência de 30% dos direitos económicos"
+      },
+      {
+        "player": "Vladimir Stojković",
+        "club": "Partizan Belgrade",
+        "fee": 0.369,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Definitive transfer to Partizan Belgrade",
+        "note_pt": "Transferência definitiva para o Partizan de Belgrado"
+      }
+    ]
+  },
+  {
+    "season": "2011/12",
+    "income": 11812,
+    "cost": -32547,
+    "note": "High investment under Godinho Lopes presidency. Incomings featured Elias (€8.85M record transfer), Diego Capel, Jeffrén, and Emiliano Insúa. Partial economic rights ceded to Quality Football Fund.",
+    "note_pt": "Forte investimento sob a presidência de Godinho Lopes. Entradas de relevo de Elias (€8,85M, contratação recorde), Diego Capel, Jeffrén e Emiliano Insúa. Cedência parcial de direitos económicos ao Quality Football Fund.",
+    "purchases": [
+      {
+        "player": "Elias Trindade",
+        "club": "Atlético Madrid",
+        "fee": 8.85,
+        "rights": "50%",
+        "window": "summer",
+        "note": "Most expensive signing in Sporting history at the time (€8.85M for 50% rights)",
+        "note_pt": "Contratação mais cara da história do Sporting à data (€8,85M por 50% dos direitos)"
+      },
+      {
+        "player": "Jeffrén Suárez",
+        "club": "FC Barcelona",
+        "fee": 3.75,
+        "rights": "75%",
+        "window": "summer",
+        "note": "Winger signed from Barcelona with buy-back clause",
+        "note_pt": "Extremo contratado ao Barcelona com cláusula de recompra"
+      },
+      {
+        "player": "Diego Capel",
+        "club": "Sevilla FC",
+        "fee": 3.5,
+        "rights": "75%",
+        "window": "summer",
+        "note": "Spanish international winger signed from Sevilla",
+        "note_pt": "Extremo internacional espanhol vindo do Sevilha"
+      },
+      {
+        "player": "Emiliano Insúa",
+        "club": "Liverpool FC",
+        "fee": 3.5,
+        "rights": "35%",
+        "window": "summer",
+        "note": "Argentine left-back signed from Liverpool",
+        "note_pt": "Lateral esquerdo argentino contratado ao Liverpool"
+      },
+      {
+        "player": "Oguchi Onyewu",
+        "club": "AC Milan",
+        "fee": 1.5,
+        "rights": "80%",
+        "window": "summer",
+        "note": "American defender signed on free transfer with signing bonus",
+        "note_pt": "Defesa norte-americano contratado a custo zero com prémio de assinatura"
+      },
+      {
+        "player": "Zakaria Labyad",
+        "club": "PSV Eindhoven",
+        "fee": 1.5,
+        "rights": "80%",
+        "window": "summer",
+        "note": "Moroccan midfielder prospect signed from PSV",
+        "note_pt": "Jovem médio marroquino contratado ao PSV"
+      },
+      {
+        "player": "Diego Rubio",
+        "club": "Colo-Colo",
+        "fee": 1.0,
+        "rights": "25%",
+        "window": "summer",
+        "note": "Young Chilean striker prospect",
+        "note_pt": "Jovem promessa avançado chileno"
+      }
+    ],
+    "sales": [
+      {
+        "player": "João Pereira",
+        "club": "Valencia CF",
+        "fee": 3.68,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Right-back transferred to Valencia CF at end of season",
+        "note_pt": "Lateral direito transferido para o Valência no fecho da época"
+      },
+      {
+        "player": "Simon Vukčević",
+        "club": "Blackburn Rovers",
+        "fee": 1.75,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Montenegrin winger sold to Premier League side Blackburn",
+        "note_pt": "Extremo montenegrino vendido aos ingleses do Blackburn"
+      },
+      {
+        "player": "Alberto Zapater",
+        "club": "Lokomotiv Moscow",
+        "fee": 1.5,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Spanish midfielder transferred to Lokomotiv Moscow",
+        "note_pt": "Médio espanhol transferido para o Lokomotiv de Moscovo"
+      },
+      {
+        "player": "Hélder Postiga",
+        "club": "Real Zaragoza",
+        "fee": 1.0,
+        "rights": "50%",
+        "window": "summer",
+        "note": "Portuguese international striker sold to Zaragoza",
+        "note_pt": "Avançado internacional português vendido ao Saragoça"
+      },
+      {
+        "player": "Yannick D'Jaló",
+        "club": "OGC Nice",
+        "fee": 0.782,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Definitive transfer after contractual resolution",
+        "note_pt": "Transferência definitiva após resolução contratual"
+      },
+      {
+        "player": "Carlos Saleiro",
+        "club": "Servette FC",
+        "fee": 0.5,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Striker transferred to Swiss club Servette",
+        "note_pt": "Avançado transferido para os suíços do Servette"
+      }
+    ]
+  },
+  {
     "season": "2012/13",
     "income": 21887,
     "cost": -16379,

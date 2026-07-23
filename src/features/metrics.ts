@@ -37,6 +37,41 @@ export function netDebt(d: FinancialRecord) {
 }
 
 /**
+ * Total liabilities (current + non-current liabilities) for a single season.
+ */
+export function totalLiabilities(d: FinancialRecord) {
+  return d.current_liabilities + d.non_current_liabilities;
+}
+
+/**
+ * Operating EBITDA (excluding player transfer gains/amortizations).
+ */
+export function ebitdaOperating(d: FinancialRecord) {
+  return d.operating_result_excl_players + Math.abs(d.da_excl_squad);
+}
+
+/**
+ * Total EBITDA (including operating result from player transfers).
+ */
+export function ebitdaTotal(d: FinancialRecord) {
+  return (
+    d.operating_result_total +
+    Math.abs(d.da_excl_squad) +
+    Math.abs(d.squad_amortization_impairment)
+  );
+}
+
+/**
+ * Net transfer debt: total payables to clubs minus total receivables from clubs.
+ */
+export function netTransferDebt(d: FinancialRecord) {
+  const payables = (d.transfer_payables_c || 0) + (d.transfer_payables_nc || 0);
+  const receivables =
+    (d.transfer_receivables_c || 0) + (d.transfer_receivables_nc || 0);
+  return payables - receivables;
+}
+
+/**
  * Personnel costs as a fraction (0-1) of operating revenue for a single
  * season entry, or null when revenue is zero/missing/non-finite. Shared by
  * calculateHealthSignals() (current value + sparkline history) and

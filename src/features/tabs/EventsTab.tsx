@@ -11,10 +11,10 @@ export function EventsTab() {
   return (
     <>
       <div className="chapter">
-        <T as="div" className="num" i18nKey="ch09-num" />
+        <T as="div" className="num" i18nKey="ch10-num" />
         <div>
-          <T as="h2" i18nKey="ch09-h2" />
-          <T as="p" className="lede" i18nKey="ch09-lede" />
+          <T as="h2" i18nKey="ch10-h2" />
+          <T as="p" className="lede" i18nKey="ch10-lede" />
         </div>
       </div>
       <div className="event-legend">

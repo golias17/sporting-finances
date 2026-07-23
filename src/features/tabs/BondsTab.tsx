@@ -9,7 +9,7 @@ export function BondsTab() {
       <div className="chapter">
         <T as="div" className="num" i18nKey="ch05-num" />
         <div>
-          <T as="h2" i18nKey="auto-txt-h2-14" />
+          <T as="h2" i18nKey="ch05-h2" />
           <T as="p" className="lede" i18nKey="ch05-lede" />
         </div>
       </div>

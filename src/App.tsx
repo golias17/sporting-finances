@@ -68,6 +68,11 @@ const PlaygroundTab = React.lazy(() =>
     default: m.PlaygroundTab,
   })),
 );
+const CompetitiveTab = React.lazy(() =>
+  import("./features/tabs/CompetitiveTab.js").then((m) => ({
+    default: m.CompetitiveTab,
+  })),
+);
 
 function useScrollAnimations(activeTab: string) {
   useEffect(() => {
@@ -193,6 +198,7 @@ export function App() {
             {activeTab === "club" && <ClubTab />}
             {activeTab === "news" && <NewsTab />}
             {activeTab === "playground" && <PlaygroundTab />}
+            {activeTab === "competitive" && <CompetitiveTab />}
           </Suspense>
         </ErrorBoundary>
       </main>
@@ -234,7 +240,7 @@ export function App() {
             per the 2024/25 report. Compiled for editorial reference.
           </T>
           <T as="div" className="footer-meta" i18nKey="auto-txt-div-81">
-            Dossier · 2012/13 → 2025/26 H1
+            Dossier · 2010/11 → 2024/25 H1
             <br />
             Period ended 31 Dec 2025
             <br />
@@ -259,11 +265,13 @@ export function App() {
           &times;
         </button>
         <div className="lightbox-image-wrapper">
-          <img
-            className="lightbox-content"
-            src={lightbox.currentSrc}
-            alt={lightbox.currentAlt}
-          />
+          {lightbox.currentSrc && (
+            <img
+              className="lightbox-content"
+              src={lightbox.currentSrc}
+              alt={lightbox.currentAlt}
+            />
+          )}
           {lightbox.isKitFlip && (
             <button
               className="lightbox-toggle-btn"
