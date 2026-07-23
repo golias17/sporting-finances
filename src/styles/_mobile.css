@@ -1,0 +1,165 @@
+/* ── Mobile UI Overhaul (Bottom Navigation) ── */
+@media (max-width: 768px) {
+  nav.tabs {
+    box-sizing: border-box;
+    position: fixed;
+    top: auto !important;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    z-index: 9999;
+    background-color: var(--surface);
+    border: none;
+    border-top: 1px solid var(--rule);
+    border-radius: 0;
+    margin: 0;
+    padding: 10px 10px;
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  nav.tabs button {
+    flex-direction: column;
+    padding: 8px 12px;
+    font-size: 0.75rem;
+    align-items: center;
+    justify-content: center;
+    border: none !important;
+    border-radius: var(--radius-lg);
+    margin-right: 5px;
+    flex-shrink: 0;
+  }
+
+  nav.tabs button .tab-num {
+    margin-right: 0;
+    margin-bottom: 4px;
+    font-size: 0.65rem;
+  }
+
+  /* Desktop marks the active tab with a separate sliding .tab-indicator
+     pill (background: var(--surface) — see _layout.css) rather than a
+     background-color on the button itself. Mobile's fixed bottom nav has
+     no equivalent indicator element, so give the button that same surface
+     treatment directly. (Previously referenced a --hover variable that was
+     never defined anywhere in the stylesheet, so this rule was a silent
+     no-op and the active tab got no background highlight at all.) */
+  nav.tabs button.active {
+    background-color: var(--surface);
+  }
+
+  /* Top utility bar: .topbar .wrap had white-space:nowrap + overflow:hidden
+     with every child pinned to flex-shrink:0, so on narrow viewports (5
+     items: update note, listing note, lang switcher, PDF button, theme
+     toggle) content simply got clipped off-screen with no way to reach it.
+     Let it wrap onto multiple rows instead of silently losing content. */
+  .topbar {
+    padding: 8px 16px;
+  }
+  .topbar .wrap {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    overflow: visible;
+    white-space: normal;
+    row-gap: 6px;
+    column-gap: 12px;
+  }
+
+  /* Drop the exchange-listing note on mobile — decorative/secondary info
+     that isn't worth the space in an already-tight topbar row. */
+  .topbar-listing {
+    display: none;
+  }
+
+  /* Hero header: badge-row's ::after generates a long fixed brand string
+     ("Sporting Clube de Portugal SAD") right of the crest with no wrap
+     allowance, which could push the row wider than the viewport. Let it
+     wrap and drop the divider/indent that only makes sense on one line. */
+  header.hero {
+    padding: 36px 20px 32px;
+  }
+  .badge-row {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+  .badge-row::after {
+    border-left: 0;
+    padding-left: 0;
+    font-size: var(--fs-2xs);
+  }
+
+  /* Icon-only topbar buttons: drop the text labels so the two buttons take
+     up less of the already-tight topbar row, leaving just the icon. The
+     accessible name is preserved via each button's aria-label, so this is
+     purely a visual/space change, not a loss of information. */
+  .pdf-export-btn span,
+  .theme-toggle-btn span {
+    display: none;
+  }
+  .pdf-export-btn {
+    padding: 6px 8px;
+  }
+  .pdf-export-btn svg {
+    margin-right: 0;
+  }
+  .theme-toggle-btn {
+    padding: 6px 8px;
+    gap: 0;
+  }
+
+  /* Add padding to body so bottom content isn't hidden by the nav */
+  body {
+    padding-bottom: 80px;
+  }
+
+  /* Move scroll-to-top button above the mobile nav */
+  .scroll-to-top {
+    bottom: 90px;
+  }
+
+  /* PWA update toast: fixed at bottom:24px with a lower z-index than the
+     mobile bottom nav (1000 vs 9999), so on mobile the nav bar rendered on
+     top of it, hiding it entirely behind the tab bar. Move it above the
+     nav like the scroll-to-top button, and let it span the width with
+     margins instead of a fixed left offset + max-width so it doesn't risk
+     overflowing narrow phone screens. */
+  .pwa-toast {
+    left: 16px;
+    right: 16px;
+    bottom: 90px;
+    max-width: none;
+  }
+
+  /* KPI cards: bump the label and change-note sizes up slightly for
+     legibility at phone viewing distance — they were sized for a 6-wide
+     desktop grid where cards have much more room to breathe. */
+  .kpi .label {
+    font-size: var(--fs-xs);
+    letter-spacing: 0.08em;
+  }
+  .kpi .change {
+    font-size: var(--fs-md);
+  }
+
+  /* Chart heights (.chart-box in _components.css, .chart-box--short in
+     _layout.css) are fixed pixel values with no responsive adjustment —
+     fine on desktop where cards are wide, but below this breakpoint a
+     card's width shrinks to roughly the phone's viewport width while the
+     chart height stays pinned at 340-440px, so charts go from a wide/short
+     aspect ratio to a near-square or taller-than-wide one. Chart.js is
+     configured with maintainAspectRatio: false (see baseOpts in
+     chartUtils.js), so it fills whatever box it's given rather than
+     correcting for this itself — reduce the heights here instead so axis
+     labels (13+ season labels on most charts) have room to stay readable. */
+  .chart-box {
+    height: 260px;
+  }
+  .chart-box.tall {
+    height: 300px;
+  }
+  .chart-box--short {
+    height: 200px;
+  }
+}

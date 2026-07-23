@@ -1,0 +1,1807 @@
+.glass-tooltip {
+  background: var(--paper);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(46, 158, 108, 0.25);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  pointer-events: none;
+  position: absolute;
+  transform: translate(-50%, 0);
+  transition: all 0.1s ease;
+  box-shadow: 0 8px 32px rgba(46, 158, 108, 0.08);
+  z-index: 100;
+  opacity: 1;
+}
+.glass-tooltip.hidden {
+  opacity: 0;
+}
+.glass-tooltip-title {
+  font-family: var(--sans);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 6px;
+}
+.glass-tooltip-body {
+  font-family: var(--mono);
+  font-size: var(--fs-base);
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.glass-tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.glass-tooltip-color {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-xs);
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+body {
+  font-family: var(--sans);
+  background: var(--bg-gradient, var(--bg));
+  background-attachment: fixed;
+  color: var(--ink);
+  line-height: 1.55;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "cv11";
+}
+
+/* ── Headline KPI strip — premium glassmorphic cards ── */
+/* .kpi-strip also carries .health-bar (see that rule further down) so the
+   season selector and the KPI cards sit inside one shared card, the same
+   "vital signs" bar treatment the Health tab uses for its own season
+   selector + signal cards. */
+.kpi-strip .season-selector {
+  margin-bottom: 20px;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+.kpis {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+  padding: 6px 4px; /* prevents hover scaling clipping */
+}
+@media (max-width: 1100px) {
+  .kpis {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+}
+@media (max-width: 600px) {
+  .kpis {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+@media (max-width: 460px) {
+  /* On the smallest phones even 2 columns leaves each card too narrow for
+     its label/value/note to read comfortably — go full-width single column
+     instead of cramming. */
+  .kpis {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+.kpi {
+  padding: 20px 22px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-2xl);
+  position: relative;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition:
+    transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+}
+.kpi:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 12px 32px rgba(10, 93, 58, 0.05),
+    0 4px 12px rgba(0, 0, 0, 0.02),
+    inset 0 0 0 1px rgba(10, 93, 58, 0.08);
+  border-color: rgba(10, 93, 58, 0.3);
+}
+body.dark .kpi {
+  background: rgba(24, 34, 29, 0.5);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+body.dark .kpi:hover {
+  border-color: rgba(0, 230, 118, 0.25);
+  box-shadow:
+    0 10px 26px rgba(0, 230, 118, 0.06),
+    inset 0 0 0 1px rgba(0, 230, 118, 0.08);
+}
+/* Status border — same visual signature as the Health tab's .health-signal
+   cards (colored bottom edge for the direction of change). Neutral KPIs
+   (no meaningful prior-year comparison) keep the plain default border. */
+.kpi.pos {
+  border-bottom: 3px solid var(--pos);
+}
+.kpi.neg {
+  border-bottom: 3px solid var(--neg);
+}
+.kpi.pos:hover {
+  box-shadow: 0 8px 24px rgba(10, 93, 58, 0.15);
+}
+.kpi.neg:hover {
+  box-shadow: 0 8px 24px rgba(184, 64, 58, 0.15);
+}
+.kpi .label {
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+  line-height: 1.3;
+  /* Reserve space for 2 lines even when a label fits on one — otherwise
+     cards whose label happens to wrap (e.g. "Squad Market Value (2013/14)")
+     push their value/change down further than the rest of the row, so the
+     figures across a row of 6 cards start at inconsistent heights. */
+  min-height: 2.6em;
+  margin-bottom: 10px;
+}
+.kpi .value {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  margin: 0 0 8px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  line-height: 1.05;
+}
+/* Plain caption text, matching .health-signal .sig-note's style, rather
+   than a pill/badge — the card's own status border (above) now carries the
+   pos/neg signal, same division of labor as the Health tab's cards. */
+.kpi .change {
+  font-size: var(--fs-base);
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--muted);
+  font-family: var(--sans);
+}
+.kpi .change.pos {
+  color: #1e7a45;
+}
+.kpi .change.neg {
+  color: #a8302a;
+}
+body.dark .kpi .change.pos {
+  color: #3de080;
+}
+body.dark .kpi .change.neg {
+  color: #ff6b6b;
+}
+body.dark .kpi .change.neutral {
+  color: var(--muted);
+}
+.kpi .change.pos::before {
+  content: "▲ ";
+  font-size: var(--fs-3xs);
+  margin-right: 3px;
+}
+.kpi .change.neg::before {
+  content: "▼ ";
+  font-size: var(--fs-3xs);
+  margin-right: 3px;
+}
+
+/* ── Cards / chart panels ── */
+.card {
+  background: rgba(255, 255, 255, 0.93);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(10, 93, 58, 0.05);
+  border-radius: var(--radius-2xl);
+  padding: 22px 24px 20px;
+  margin-bottom: 16px;
+  position: relative;
+  box-shadow:
+    0 4px 20px rgba(10, 93, 58, 0.015),
+    0 1px 3px rgba(0, 0, 0, 0.01);
+  transition:
+    transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+    box-shadow 0.35s cubic-bezier(0.25, 0.8, 0.25, 1),
+    border-color 0.3s ease;
+}
+.card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(46, 158, 108, 0.4);
+  box-shadow:
+    0 16px 36px rgba(46, 158, 108, 0.12),
+    0 4px 12px rgba(46, 158, 108, 0.03),
+    inset 0 0 0 1px rgba(46, 158, 108, 0.08);
+}
+body.dark .card {
+  background: rgba(24, 34, 29, 0.6);
+  border-color: rgba(255, 255, 255, 0.07);
+}
+body.dark .card:hover {
+  border-color: rgba(0, 230, 118, 0.25);
+  box-shadow:
+    0 10px 30px rgba(0, 230, 118, 0.08),
+    inset 0 0 0 1px rgba(0, 230, 118, 0.08);
+}
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+/* Explicit reflow order: title + PNG download button always share the top
+   row (button pinned right via space-between); the tag pill is forced onto
+   its own row below with flex-basis:100%. Without this, the 3 flex children
+   (h3, tag, button) wrapped unpredictably per-card depending on title
+   length, so the tag sometimes ended up sharing a row with the button
+   instead of sitting under the title. */
+.card-head h3 {
+  order: 1;
+}
+.card-head .chart-download-btn {
+  order: 2;
+}
+.card-head .tag {
+  order: 3;
+  flex-basis: 100%;
+}
+.card h3 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: var(--fs-3xl);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  font-variation-settings: "opsz" 36;
+}
+.card .tag {
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--green);
+  padding: 4px 10px;
+  border: 1px solid rgba(10, 93, 58, 0.18);
+  border-radius: var(--radius-pill);
+  background: var(--green-tint);
+}
+body.dark .card .tag {
+  color: var(--green-light);
+  border-color: rgba(46, 158, 108, 0.25);
+  background: rgba(46, 158, 108, 0.08);
+}
+.card .desc {
+  color: var(--muted);
+  font-size: var(--fs-md);
+  line-height: 1.5;
+  margin: 6px 0 18px;
+}
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 900px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+.chart-box {
+  position: relative;
+  height: 340px;
+}
+.chart-box.tall {
+  height: 440px;
+}
+
+/* Pull-quote / narrative commentary ── */
+.narrative {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--green);
+  padding: 22px 28px 24px;
+  margin: 18px 0;
+  border-radius: var(--radius-sm);
+  position: relative;
+}
+.narrative h4 {
+  margin: 0 0 12px;
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--green);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+.narrative p {
+  margin: 8px 0;
+  font-family: var(--serif);
+  font-size: var(--fs-xl);
+  line-height: 1.6;
+  color: var(--ink-2);
+  font-variation-settings: "opsz" 24;
+}
+.narrative p:first-of-type::first-letter {
+  font-size: 1.4em;
+  font-weight: 600;
+  color: var(--green);
+}
+
+/* Event cards */
+.events {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 30px 0 0;
+  padding-left: 36px;
+}
+.events::before {
+  content: "";
+  position: absolute;
+  left: 11px;
+  top: 14px;
+  bottom: 14px;
+  width: 2px;
+  background: var(--rule-2);
+  border-radius: var(--radius-xs);
+}
+.event {
+  position: relative;
+  background: var(--paper);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--gold);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.event:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
+  border-color: var(--rule-2);
+}
+body.dark .event:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+}
+.event.crisis {
+  border-left-color: var(--neg);
+}
+.event.win {
+  border-left-color: var(--pos);
+}
+.event.restructure {
+  border-left-color: var(--info);
+}
+
+/* Timeline dot */
+.event::before {
+  content: "";
+  position: absolute;
+  left: -30px;
+  top: 24px;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-round);
+  background: var(--muted-2);
+  border: 2px solid var(--paper);
+  box-shadow: 0 0 0 2px var(--bg);
+  z-index: 2;
+  transition:
+    transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    background-color 0.25s ease;
+}
+.event:hover::before {
+  transform: scale(1.35);
+}
+.event.win::before {
+  background: var(--pos);
+}
+.event.crisis::before {
+  background: var(--neg);
+}
+.event.restructure::before {
+  background: var(--info);
+}
+
+.event-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.event-date {
+  font-family: var(--mono);
+  font-size: var(--fs-sm);
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.event-badge {
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+}
+.event.win .event-badge {
+  background: rgba(46, 138, 85, 0.08);
+  color: var(--pos);
+  border: 1px solid rgba(46, 138, 85, 0.15);
+}
+.event.crisis .event-badge {
+  background: rgba(198, 64, 79, 0.08);
+  color: var(--neg);
+  border: 1px solid rgba(198, 64, 79, 0.15);
+}
+.event.restructure .event-badge {
+  background: rgba(44, 91, 138, 0.08);
+  color: var(--info);
+  border: 1px solid rgba(44, 91, 138, 0.15);
+}
+.event .title {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 21px;
+  line-height: 1.25;
+  margin: 0 0 12px;
+  color: var(--ink);
+}
+.event .body {
+  font-size: var(--fs-lg);
+  color: var(--ink-2);
+  line-height: 1.6;
+  margin: 0;
+}
+.event .impact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+  border-top: 1px dashed var(--rule);
+  padding-top: 16px;
+}
+.event .impact > span {
+  display: block;
+  background: var(--bg);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  font-size: var(--fs-md);
+  color: var(--ink-2);
+  line-height: 1.55;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+.event:hover .impact > span {
+  border-color: var(--rule);
+  background: var(--surface);
+}
+.event .impact strong {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+}
+.event .impact .pitch strong {
+  color: var(--green-light);
+}
+.event .impact .numbers strong {
+  color: var(--gold);
+}
+
+@media (max-width: 768px) {
+  .events {
+    padding-left: 0;
+  }
+  .events::before {
+    display: none;
+  }
+  .event::before {
+    display: none;
+  }
+  .event {
+    padding: 16px 20px;
+  }
+  .event .impact {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+/* ── Event legend / interactive filters ── */
+.event-legend {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.event-legend .el-filter {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  color: var(--ink-2);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-family: var(--sans);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.event-legend .el-filter:hover {
+  background: var(--bg);
+  border-color: var(--rule-2);
+  transform: translateY(-1px);
+}
+.event-legend .el-filter::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-round);
+  background: var(--muted);
+  flex-shrink: 0;
+  transition: background-color 0.2s ease;
+}
+.event-legend .el-filter[data-filter="all"]::before {
+  background: var(--muted-2);
+}
+.event-legend .el-filter.win::before {
+  background: var(--pos);
+}
+.event-legend .el-filter.crisis::before {
+  background: var(--neg);
+}
+.event-legend .el-filter.restructure::before {
+  background: var(--info);
+}
+
+.event-legend .el-filter.active {
+  background: var(--surface);
+  border-color: var(--ink);
+  color: var(--ink);
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+.event-legend .el-filter.win.active {
+  border-color: var(--pos);
+  background: rgba(46, 138, 85, 0.06);
+  color: var(--pos);
+}
+.event-legend .el-filter.crisis.active {
+  border-color: var(--neg);
+  background: rgba(198, 64, 79, 0.06);
+  color: var(--neg);
+}
+.event-legend .el-filter.restructure.active {
+  border-color: var(--info);
+  background: rgba(44, 91, 138, 0.06);
+  color: var(--info);
+}
+body.dark .event-legend .el-filter.active {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Data table — financial statement style ── */
+table.data {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+}
+table.data th,
+table.data td {
+  padding: 8px 12px;
+  text-align: right;
+  border-bottom: 1px solid var(--rule);
+}
+table.data tbody tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.015);
+}
+body.dark table.data tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.015);
+}
+table.data tbody tr:hover {
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1px var(--rule);
+}
+table.data tbody td:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+body.dark table.data tbody td:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+table.data th:first-child,
+table.data td:first-child {
+  text-align: left;
+  font-family: var(--sans);
+  font-weight: 600;
+  color: var(--ink);
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  background: var(--surface);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+}
+body.dark table.data th:first-child,
+body.dark table.data td:first-child {
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+}
+table.data thead th {
+  background: var(--paper);
+  font-family: var(--mono);
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.12em;
+  border-bottom: 1px solid var(--ink);
+  border-top: 1px solid var(--ink);
+  position: sticky;
+  top: 0;
+  padding: 10px 12px;
+  z-index: 4;
+}
+table.data thead th:first-child {
+  z-index: 6;
+}
+table.data td.pos {
+  color: var(--pos);
+}
+table.data td.neg {
+  color: var(--neg);
+}
+
+/* ── Health bar ── */
+.health-bar {
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  padding: 18px 24px 22px;
+  margin-bottom: 28px;
+}
+.health-bar .hb-title {
+  font-family: var(--serif);
+  font-size: var(--fs-3xl);
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
+}
+.health-bar .hb-sub {
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 16px;
+}
+.season-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--rule);
+}
+.season-pill {
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+}
+.season-pill:hover {
+  background: var(--green-tint);
+  color: var(--green);
+  border-color: var(--green);
+}
+.season-pill.active {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.health-signals.fading {
+  opacity: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   LAYOUT & DESIGN EVOLUTION UPGRADES (Chapter 5 & Beyond)
+   ───────────────────────────────────────────────────────────── */
+
+/* 1. Global Soft Theme Transitions — consolidated into the single
+   site-wide rule in _base.css. This block used to redeclare the
+   `transition` shorthand for an overlapping selector list (including
+   .card) with different values; being a shorthand and loading after
+   _base.css and after .card's own dedicated transition below, it silently
+   won and dropped `transform` from .card's hover lift and several other
+   elements' transitions. See the comment in _base.css for the full
+   explanation. */
+
+/* 2. Responsive Horizontal Scroll & Sliding Tab Bar */
+nav.tabs {
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  scrollbar-width: none; /* Hide scrollbar Firefox */
+  -ms-overflow-style: none; /* Hide scrollbar IE */
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  position: relative;
+}
+nav.tabs::after {
+  content: "";
+  position: sticky;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  min-width: 40px;
+  background: linear-gradient(to right, transparent, var(--bg, #fff));
+  pointer-events: none;
+  z-index: 5;
+  flex-shrink: 0;
+}
+body.dark nav.tabs::after {
+  background: linear-gradient(to right, transparent, #121513);
+}
+nav.tabs::-webkit-scrollbar {
+  display: none !important; /* Hide scrollbar Chrome/Safari */
+}
+nav.tabs button {
+  flex-shrink: 0 !important;
+  transition:
+    color 0.25s ease,
+    background-color 0.25s ease !important;
+  position: relative;
+  z-index: 2;
+}
+/* Legacy active background removed for unified pill indicator */
+
+/* 3. Glassmorphic Card Enhancements & Hover Effects (Consolidated to main card rules above) */
+
+/* 4. Theme Button Switch Rotation & Scale */
+#themeToggleBtn svg {
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+#themeToggleBtn:active svg {
+  transform: scale(0.8);
+}
+#themeToggleBtn.animating svg {
+  transform: rotate(180deg) scale(1.1);
+}
+
+/* 5. Minimalist Scroll to Top Button */
+.scroll-to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-round);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease,
+    transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+    background-color 0.3s,
+    border-color 0.3s,
+    color 0.3s;
+  z-index: 999;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+body.dark .scroll-to-top {
+  background: rgba(24, 34, 29, 0.85);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+.scroll-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+.scroll-to-top:hover {
+  transform: translateY(-4px);
+  border-color: var(--green);
+  color: var(--green);
+  box-shadow: 0 6px 16px rgba(0, 230, 118, 0.1);
+}
+.scroll-to-top svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.5px;
+  transition: transform 0.3s ease;
+}
+.scroll-to-top:hover svg {
+  transform: translateY(-2px);
+}
+
+/* 6. Story Card transitions */
+.story-body {
+  transition: border-color 0.3s ease;
+}
+.story-content-wrap {
+  transition:
+    opacity 0.22s cubic-bezier(0.25, 1, 0.5, 1),
+    transform 0.22s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.story-content-wrap.story-fade-out {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+.story-content-wrap.story-fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 7. Skeleton Placeholders */
+.skeleton-card {
+  position: relative;
+  overflow: hidden;
+  height: 104px; /* Matches default KPI card height */
+}
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--rule) 25%,
+    var(--rule-2) 50%,
+    var(--rule) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-pulse 1.6s infinite linear;
+  border-radius: var(--radius-sm);
+}
+body.dark .skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 75%
+  );
+  background-size: 200% 100%;
+}
+.skeleton-label {
+  width: 50%;
+  height: 10px;
+  margin-bottom: 12px;
+}
+.skeleton-value {
+  width: 75%;
+  height: 28px;
+  margin-bottom: 10px;
+}
+.skeleton-change {
+  width: 40%;
+  height: 14px;
+  border-radius: var(--radius-2xl);
+}
+@keyframes skeleton-pulse {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Page boot global loading overlay blocker on body */
+body.app-loading .chart-box {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+}
+body.app-loading .chart-box::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    var(--surface) 25%,
+    var(--rule) 50%,
+    var(--surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-pulse 1.6s infinite linear;
+}
+body.app-loading .chart-box * {
+  visibility: hidden;
+}
+
+/* 8. PWA Update Prompt Toast */
+.pwa-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  background: var(--surface);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--radius-xl);
+  padding: 14px 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+  transform: translateY(100px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  max-width: 320px;
+}
+body.dark .pwa-toast {
+  background: rgba(24, 34, 29, 0.85);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+.pwa-toast.visible {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+.toast-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: var(--fs-md);
+  color: var(--ink);
+  font-weight: 500;
+}
+.toast-btn {
+  align-self: flex-start;
+  background: var(--green);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 6px 14px;
+  font-family: var(--sans);
+  font-size: var(--fs-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.toast-btn:hover {
+  background: var(--green-light);
+  transform: translateY(-1px);
+}
+
+/* 9. Accessible Table Toggle Button */
+.table-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  margin: 12px 0 0;
+  transition: all 0.2s ease;
+}
+.table-toggle-btn:hover {
+  background: var(--green-tint);
+  border-color: var(--green);
+  color: var(--green);
+}
+body.dark .table-toggle-btn:hover {
+  background: rgba(46, 204, 113, 0.08);
+  border-color: var(--green-light);
+  color: var(--green-light);
+}
+
+/* 10. Custom HTML Tooltip Dark Mode supports */
+body.dark .glass-tooltip {
+  background: rgba(24, 34, 29, 0.95);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+body.dark .glass-tooltip-title {
+  color: #eaeaea;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+body.dark .glass-tooltip-body {
+  color: #cccccc;
+}
+.glass-tooltip-footer {
+  margin-top: 6px;
+  border-top: 1px solid var(--rule);
+  padding-top: 6px;
+  font-family: var(--sans);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--ink);
+}
+body.dark .glass-tooltip-footer {
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #eaeaea;
+}
+
+/* Restrict raw table wrappers inside fixed-height chart boxes */
+.chart-box .table-wrap {
+  height: 100%;
+  overflow: auto;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  box-sizing: border-box;
+}
+body.dark .chart-box .table-wrap {
+  background: var(--paper);
+}
+
+/* Sleek custom scrollbars for any scrollable panels/tables */
+.table-wrap::-webkit-scrollbar,
+.chart-box .table-wrap::-webkit-scrollbar,
+.custom-scroll::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+.table-wrap::-webkit-scrollbar-track,
+.chart-box .table-wrap::-webkit-scrollbar-track,
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.table-wrap::-webkit-scrollbar-thumb,
+.chart-box .table-wrap::-webkit-scrollbar-thumb,
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: var(--radius-xl);
+}
+body.dark .table-wrap::-webkit-scrollbar-thumb,
+body.dark .chart-box .table-wrap::-webkit-scrollbar-thumb,
+body.dark .custom-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+.table-wrap::-webkit-scrollbar-thumb:hover,
+.chart-box .table-wrap::-webkit-scrollbar-thumb:hover,
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--green);
+}
+body.dark .table-wrap::-webkit-scrollbar-thumb:hover,
+body.dark .chart-box .table-wrap::-webkit-scrollbar-thumb:hover,
+body.dark .custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--pos);
+}
+
+/* ── Extracted Inline Styles ── */
+.card-head-center {
+  align-items: center;
+}
+
+.card-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-small {
+  padding: 6px 12px;
+  font-size: var(--fs-sm);
+}
+
+.icon-small {
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+/* Chart Download Button & PDF Export Button — same "outline chip" language
+   (paper background, thin rule border, muted mono label that turns green
+   on hover, identical dark-mode treatment). Declared together so the two
+   can't independently drift apart the way they had (each retyping the same
+   colors/transitions/dark-mode overrides); only their sizing/shape below
+   differs. */
+.chart-download-btn,
+.pdf-export-btn {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  color: #1a3c2b; /* Dark green for light mode contrast */
+  font-family: var(--mono);
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.chart-download-btn:hover,
+.pdf-export-btn:hover {
+  background: var(--green-tint, rgba(10, 93, 58, 0.06));
+  border-color: var(--green);
+  color: var(--green);
+}
+body.dark .chart-download-btn,
+body.dark .pdf-export-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+}
+body.dark .chart-download-btn:hover,
+body.dark .pdf-export-btn:hover {
+  background: rgba(46, 204, 113, 0.1);
+  border-color: var(--pos);
+  color: var(--pos);
+}
+
+/* Chart Download Button — unique sizing/shape */
+.chart-download-btn {
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-2xs);
+  padding: 3px 10px;
+  letter-spacing: 0.08em;
+}
+.chart-download-btn:hover {
+  transform: translateY(-1px);
+}
+.chart-download-btn:active {
+  transform: translateY(0);
+}
+@media (max-width: 600px) {
+  .chart-download-btn {
+    margin-top: 4px;
+  }
+}
+
+/* PDF Export Button — unique sizing/shape */
+.pdf-export-btn {
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-sm);
+  padding: 5px 12px;
+  letter-spacing: 0.05em;
+}
+.pdf-export-btn svg {
+  margin-right: 6px;
+}
+@media (max-width: 600px) {
+  .pdf-export-btn {
+    padding: 4px 8px;
+    font-size: var(--fs-xs);
+  }
+}
+
+/* Club Assets Tab Panel Styles */
+.club-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.asset-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 340px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--rule);
+}
+.asset-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--green);
+  box-shadow: 0 12px 30px rgba(10, 93, 58, 0.08);
+}
+
+.card-desc {
+  font-family: var(--sans);
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--muted);
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+/* Kits Showcase styling */
+.kit-showcase {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+}
+.kit-card-container {
+  flex: 1;
+  height: 230px;
+  perspective: 1000px;
+}
+.kit-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  border-radius: var(--radius-lg);
+}
+.kit-card-container:not(.no-flip):hover .kit-card-inner,
+.kit-card-container.flipped .kit-card-inner {
+  transform: rotateY(180deg);
+}
+/* Keyboard flip trigger — the container itself is made focusable in
+   imageLightbox.js's initKitCardFlip() so Enter/Space can toggle the .flipped
+   class above, giving keyboard users the same "see the back" affordance
+   :hover gives mouse users. Scoped to :focus-visible (not :focus) so
+   clicking with a mouse doesn't leave a visible ring behind. */
+.kit-card-container:not(.no-flip):focus-visible {
+  outline: 2px solid var(--green-light);
+  outline-offset: 3px;
+}
+.kit-card-front,
+.kit-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1.5px solid var(--rule);
+  background: #ffffff;
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease;
+}
+body.dark .kit-card-front,
+body.dark .kit-card-back {
+  background: var(--card-bg, #18221d);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.kit-card-back {
+  transform: rotateY(180deg);
+  background: #fdfdfd;
+}
+body.dark .kit-card-back {
+  background: var(--card-bg, #18221d);
+}
+.kit-img {
+  width: 100%;
+  height: 82%;
+  object-fit: contain;
+  background: transparent;
+  padding: 4px;
+}
+.kit-item {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1.5px solid var(--rule);
+  position: relative;
+  overflow: hidden;
+}
+.kit-item.stromp {
+  background: linear-gradient(90deg, var(--green) 50%, #ffffff 50%);
+}
+.stromp-unrevealed-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(24, 34, 29, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  gap: 8px;
+}
+.lock-icon {
+  font-size: 24px;
+}
+.unrevealed-label {
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: bold;
+}
+.kit-label {
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(25, 35, 30, 0.95);
+  color: #ffffff;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+}
+
+/* Stadium Pitch styling */
+.stadium-image-box {
+  width: 100%;
+  height: 130px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  margin-top: 10px;
+  position: relative;
+}
+.stadium-panorama-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.stadium-image-box:hover .stadium-panorama-img {
+  transform: scale(1.05);
+}
+
+/* Basketball Court Floor styling */
+.court-image-box {
+  width: 100%;
+  height: 130px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  margin-top: 10px;
+  position: relative;
+}
+.court-panorama-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.court-image-box:hover .court-panorama-img {
+  transform: scale(1.05);
+}
+
+/* Museum Image styling */
+.museum-image-box {
+  width: 100%;
+  height: 130px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  margin-top: 10px;
+  position: relative;
+}
+.museum-panorama-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.museum-image-box:hover .museum-panorama-img {
+  transform: scale(1.05);
+}
+
+/* Stadium Seating Links */
+.stadium-seating-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+.seating-link-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--green-tint, rgba(10, 93, 58, 0.05));
+  border: 1px solid rgba(10, 93, 58, 0.15);
+  color: var(--green);
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: var(--fs-base);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+body.dark .seating-link-btn {
+  background: rgba(46, 204, 113, 0.05);
+  border-color: rgba(46, 204, 113, 0.15);
+  color: var(--pos);
+}
+.seating-link-btn:hover {
+  background: var(--green);
+  color: #ffffff;
+  border-color: var(--green);
+  transform: translateX(4px);
+}
+body.dark .seating-link-btn:hover {
+  background: var(--pos);
+  color: #18221d;
+  border-color: var(--pos);
+}
+.seating-link-btn .arrow-icon {
+  width: 12px;
+  height: 12px;
+  stroke-width: 2.5px;
+  transition: transform 0.2s ease;
+}
+.seating-link-btn:hover .arrow-icon {
+  transform: translateX(2px);
+}
+
+/* Academy Image styling */
+.academy-image-box {
+  width: 100%;
+  height: 130px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  margin-top: 10px;
+  position: relative;
+}
+.academy-panorama-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.academy-image-box:hover .academy-panorama-img {
+  transform: scale(1.05);
+}
+
+.stadium-panorama-img,
+.court-panorama-img,
+.academy-panorama-img,
+.museum-panorama-img,
+.kit-img {
+  cursor: pointer;
+}
+
+/* Lightbox Modal */
+.lightbox-modal {
+  display: none;
+  position: fixed;
+  z-index: 10000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(10, 15, 12, 0.95);
+  backdrop-filter: blur(8px);
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.lightbox-modal.active {
+  display: flex;
+  opacity: 1;
+}
+.lightbox-content {
+  max-width: 90vw;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+.lightbox-modal.active .lightbox-content {
+  transform: scale(1);
+}
+.lightbox-image-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  max-width: 90vw;
+  max-height: 80vh;
+}
+.lightbox-toggle-btn {
+  position: absolute;
+  bottom: 20px;
+  background: var(--green);
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: var(--radius-3xl);
+  font-family: var(--sans);
+  font-size: var(--fs-base);
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 10100;
+}
+.lightbox-toggle-btn:hover {
+  background: #0d7346;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+.lightbox-toggle-btn.hidden {
+  display: none;
+}
+.lightbox-close {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 40px;
+  font-weight: 300;
+  cursor: pointer;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
+}
+.lightbox-close:hover {
+  color: var(--green);
+  transform: rotate(90deg);
+}
+.lightbox-caption {
+  position: absolute;
+  bottom: 30px;
+  color: #ffffff;
+  font-family: var(--sans);
+  font-size: var(--fs-lg);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Sporting Experience Card */
+.experience-card {
+  background: linear-gradient(
+    135deg,
+    rgba(10, 93, 58, 0.04) 0%,
+    rgba(200, 169, 81, 0.04) 100%
+  );
+  border: 1.5px solid var(--green);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  margin-top: 30px;
+}
+.experience-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 30px;
+}
+.experience-text {
+  flex: 1;
+}
+.experience-text h3 {
+  font-family: var(--sans);
+  font-size: var(--fs-2xl);
+  color: var(--green);
+  margin-bottom: 12px;
+}
+.experience-text p {
+  font-size: var(--fs-md);
+  color: var(--muted);
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+.experience-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--green);
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(10, 93, 58, 0.15);
+}
+.experience-btn:hover {
+  background: #0d7346;
+  transform: translateX(4px);
+  color: #ffffff;
+}
+.arrow-icon {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+}
+.experience-branding {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.branding-logos {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #18221d; /* Dark background so the white logo stands out beautifully */
+  padding: 15px 25px;
+  border-radius: var(--radius-xl);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.exp-logo {
+  height: 44px;
+  object-fit: contain;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .experience-content {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+  .experience-branding {
+    margin-top: 10px;
+  }
+  .branding-logos {
+    justify-content: center;
+  }
+  .experience-btn {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 850px) {
+  .club-grid {
+    grid-template-columns: 1fr;
+  }
+  .asset-card {
+    min-height: auto;
+  }
+}
+
+/* SKELETON LOADER */
+/* ============================================================= */
+
+.tab-loading-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  animation: skeleton-pulse 1.5s infinite ease-in-out;
+  padding: 20px 0;
+}
+
+.skeleton-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.skeleton-title {
+  height: 36px;
+  width: 250px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-subtitle {
+  height: 18px;
+  width: 400px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  max-width: 100%;
+}
+
+.skeleton-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.skeleton-card {
+  height: 120px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--rule-2);
+}
+
+.skeleton-chart {
+  grid-column: 1 / -1;
+  height: 350px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--rule-2);
+}
+
+@keyframes skeleton-pulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.4; }
+}
+
+@media (max-width: 768px) {
+  .skeleton-grid {
+    grid-template-columns: 1fr;
+  }
+  .skeleton-subtitle {
+    width: 250px;
+  }
+}
+
+/* Narrative header styling */
+.narrative-header {
+  color: var(--green);
+  font-weight: 600;
+}
