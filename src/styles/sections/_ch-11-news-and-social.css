@@ -1,0 +1,1053 @@
+/* ── Ch 11. News & Social ── */
+
+.disclaimer-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: rgba(200, 169, 81, 0.1);
+  border: 1px solid var(--warn);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 32px;
+}
+.disclaimer-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--warn);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.disclaimer-banner strong {
+  display: block;
+  font-family: var(--sans);
+  font-size: var(--fs-lg);
+  color: var(--warn);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.disclaimer-banner p {
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--ink-2);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.social-hub {
+  margin: 40px 0 50px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 30px;
+  border-radius: var(--radius-2xl);
+  backdrop-filter: blur(10px);
+}
+
+/* Extra breathing room specifically when a disclaimer banner follows the
+   social hub (Club tab) — the other .disclaimer-banner instance (News tab)
+   isn't preceded by .social-hub and keeps its default spacing. */
+.social-hub + .disclaimer-banner {
+  margin-top: 30px;
+}
+.social-hub h3 {
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: var(--fs-lg);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin: 0 0 20px;
+}
+.social-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+}
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 18px 24px;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: var(--fs-xl);
+  font-weight: 500;
+  color: var(--ink);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+.social-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+/* Brand Hover Colors */
+.social-btn.jornal::before {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 128, 87, 0.15),
+    rgba(0, 128, 87, 0.02)
+  );
+}
+.social-btn.linkedin::before {
+  background: linear-gradient(
+    135deg,
+    rgba(0, 119, 181, 0.1),
+    rgba(0, 119, 181, 0.02)
+  );
+}
+.social-btn.twitter::before {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.01));
+}
+.social-btn.instagram::before {
+  background: linear-gradient(
+    135deg,
+    rgba(225, 48, 108, 0.1),
+    rgba(253, 29, 29, 0.05)
+  );
+}
+.social-btn.youtube::before {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 0, 0, 0.1),
+    rgba(255, 0, 0, 0.02)
+  );
+}
+
+.social-btn:hover {
+  transform: translateY(-4px);
+  border-color: var(--green);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
+}
+.social-btn:hover::before {
+  opacity: 1;
+}
+.social-btn svg,
+.social-btn span {
+  position: relative;
+  z-index: 1;
+}
+.social-btn:hover svg {
+  transform: scale(1.1);
+}
+.social-btn svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  grid-auto-rows: minmax(200px, auto);
+  gap: 20px;
+}
+.news-loading {
+  font-family: var(--mono);
+  font-size: var(--fs-lg);
+  color: var(--muted);
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+}
+.news-stale-notice {
+  font-family: var(--sans);
+  font-size: var(--fs-md);
+  color: var(--muted);
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 10px 16px;
+  margin-bottom: 4px;
+  background: rgba(200, 169, 81, 0.12);
+  border: 1px solid rgba(200, 169, 81, 0.35);
+  border-radius: var(--radius-lg);
+}
+.news-card {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-2xl);
+  padding: 24px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+.news-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  border-color: var(--green);
+}
+.hero-card {
+  grid-column: span 2;
+  grid-row: span 2;
+  background: var(--green);
+  color: #ffffff;
+  border-color: var(--green);
+}
+@media (max-width: 768px) {
+  .hero-card {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+}
+.hero-card .news-title {
+  color: #ffffff;
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+.hero-card .news-source,
+.hero-card .news-date {
+  color: rgba(255, 255, 255, 0.8);
+}
+.hero-card:hover {
+  box-shadow: 0 16px 32px rgba(0, 68, 56, 0.2);
+}
+.news-badge {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  z-index: 2;
+}
+
+/* News Card Category Accents */
+.news-card.category-finance {
+  border-top: 3px solid var(--gold);
+}
+.news-card.category-market {
+  border-top: 3px solid var(--green);
+}
+.news-card.category-corporate {
+  border-top: 3px solid var(--muted);
+}
+
+.badge-finance {
+  background: rgba(200, 169, 81, 0.15);
+  color: var(--gold);
+}
+.hero-card .badge-finance {
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--gold);
+}
+.badge-market {
+  background: rgba(0, 68, 56, 0.1);
+  color: var(--green);
+}
+.hero-card .badge-market {
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--green);
+}
+.badge-corporate {
+  background: var(--bg);
+  color: var(--muted);
+}
+.hero-card .badge-corporate {
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--muted);
+}
+
+.news-source {
+  font-family: var(--mono);
+  font-size: var(--fs-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--green);
+  margin-bottom: 12px;
+}
+.news-title {
+  font-family: var(--sans);
+  font-size: var(--fs-2xl);
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  margin: 0 0 16px;
+  padding-right: 100px; /* Space for absolute badge */
+}
+.news-date {
+  font-family: var(--sans);
+  font-size: var(--fs-base);
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: auto;
+  margin-bottom: 20px; /* Space before sources */
+}
+
+/* Source Pills Container */
+.news-sources-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-top: 1px solid var(--rule);
+  padding-top: 16px;
+  margin-top: auto;
+}
+
+/* Individual Source Pill */
+.source-pill {
+  font-family: var(--sans);
+  font-size: var(--fs-base);
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  padding: 6px 12px;
+  border-radius: var(--radius-3xl);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.source-pill:hover {
+  background: var(--green);
+  color: #ffffff;
+  border-color: var(--green);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 68, 56, 0.15);
+}
+
+.hero-card .news-sources-list {
+  border-top-color: rgba(255, 255, 255, 0.2);
+}
+.hero-card .source-pill {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+.hero-card .source-pill:hover {
+  background: #ffffff;
+  color: var(--green);
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1500px; /* Enable cinematic 3D perspective depth */
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 0.4s ease,
+    visibility 0.4s ease;
+}
+
+.modal-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* 3D Newspaper Hinge Transition */
+.modal-container {
+  position: relative;
+  width: 90vw;
+  max-width: 1200px;
+  height: 90vh;
+  background: #008057; /* Jornal typically uses Sporting green background */
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transform-style: preserve-3d;
+  transform-origin: left center; /* Hinge open from the left edge like a book */
+  transform: rotateY(0deg) scale(1) translateZ(0);
+  opacity: 1;
+  transition:
+    transform 0.65s cubic-bezier(0.25, 1, 0.5, 1),
+    opacity 0.5s ease;
+}
+
+.modal-overlay.hidden .modal-container {
+  transform: rotateY(-90deg) scale(0.85) translateZ(-150px);
+  opacity: 0;
+}
+
+/* Close Button */
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 48px;
+  height: 48px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-round);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.modal-close:hover {
+  background: #ffffff;
+  color: #000000;
+  transform: rotate(90deg);
+}
+
+.modal-close svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Iframe Wrapper */
+.modal-content-wrapper {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.jornal-iframe-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.jornal-iframe-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* PDF Customization Modal — a light-surface form modal, distinct from the
+   dark 3D-flip Jornal reader shell above, so it overrides .modal-container's
+   shape/color entirely instead of sharing it. */
+.pdf-modal-container {
+  max-width: 550px;
+  height: auto;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--rule-2);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  justify-content: flex-start;
+  overflow-y: auto;
+}
+
+.pdf-modal-container .modal-close {
+  top: 1.5rem;
+  right: 1.5rem;
+}
+
+.pdf-modal-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pdf-modal-title {
+  font-family: var(--sans);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.pdf-modal-subtitle {
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.pdf-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.pdf-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pdf-field-label {
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.pdf-field-input {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--bg);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--radius-lg);
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-family: var(--sans);
+}
+
+textarea.pdf-field-input {
+  resize: none;
+}
+
+.pdf-checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: var(--bg);
+  padding: 1.25rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--rule-2);
+}
+
+.pdf-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  font-family: var(--sans);
+  color: var(--ink-2);
+}
+
+.pdf-checkbox-label input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--green);
+}
+
+.pdf-modal-submit {
+  width: 100%;
+  padding: 1rem;
+  background: var(--green);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-weight: 700;
+  font-size: 0.875rem;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.pdf-modal-submit:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Squad Sub-Tabs Styles */
+.sub-tabs-container {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  border-bottom: 1.5px solid var(--rule-2);
+  padding-bottom: 8px;
+}
+.sub-tab-btn {
+  background: none;
+  border: none;
+  padding: 8px 18px;
+  font-size: var(--fs-md);
+  font-family: var(--sans);
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: all 0.22s ease-in-out;
+}
+.sub-tab-btn:hover {
+  color: var(--ink);
+  background-color: var(--rule-2);
+}
+.sub-tab-btn.active {
+  color: #ffffff;
+  background-color: var(--green);
+}
+.sub-panel-squad {
+  transition: opacity 0.3s ease;
+}
+.sub-panel-squad.hidden {
+  display: none !important;
+}
+
+/* CFO Simulator Playground Styles */
+.playground-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 24px;
+  align-items: start;
+  margin-top: 24px;
+}
+
+@media (max-width: 900px) {
+  .playground-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* The shared .kpis grid (see _components.css) defaults to a fixed 6-column
+   layout sized for the KPI strip elsewhere in the app; the Playground only
+   has 4 cards, so it gets its own fixed 4-column row instead. Scoped to
+   .playground-results so every other .kpis grid keeps its own columns. */
+.playground-results .kpis {
+  grid-template-columns: repeat(4, 1fr);
+  margin-bottom: 1.5rem;
+  max-width: 100%;
+}
+
+@media (max-width: 600px) {
+  .playground-results .kpis {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 460px) {
+  .playground-results .kpis {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Absolute-value health read for the Equity/Cash KPI cards (see
+   equityZoneInfo()/cashZoneInfo() in playground.js) — reuses .zone-dot's
+   existing g/a/r coloring from the Health Check tab's zone legend instead
+   of inventing a new dot style, so "green" means the same thing in both
+   places. This is deliberately separate from .change's pos/neg coloring
+   just above it: .change says whether the projection is better or worse
+   than the "no changes" baseline, this says whether the projection itself
+   is in healthy territory — a scenario can be an improvement over baseline
+   and still land in the red zone. */
+.pg-zone {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  color: var(--muted);
+}
+
+/* Auto-generated scenario verdict (see buildVerdict() in playground.js),
+   styled like the Compare tab's #cmpNarrative callout for a consistent
+   "auto-narrative" visual language across the app. Hidden until JS
+   populates it (see the display:block toggle in drawPlaygroundCharts()),
+   same reasoning as #cmpNarrative: nothing shows before there's a real
+   scenario to describe. .warn switches the accent to --neg when the
+   scenario's cash goes negative (see UCL_BONUS_COST_RATE / buildVerdict's
+   comments) — that's the one condition worth flagging as louder than a
+   plain informational read. */
+.pg-verdict {
+  display: none;
+  font-family: var(--serif);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--ink-2);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--green);
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-lg);
+  margin: 0 0 1.5rem;
+}
+.pg-verdict .pg-verdict-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--green);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.pg-verdict .pg-verdict-header svg {
+  flex-shrink: 0;
+}
+.pg-verdict.warn {
+  border-left-color: var(--neg);
+}
+.pg-verdict.warn .pg-verdict-header {
+  color: var(--neg);
+}
+
+/* One chart per row (each still uses .chart-box.tall for room to breathe)
+   instead of squeezing the dual-axis Equity/Solvency chart into half a
+   row alongside the Net Results chart. */
+.playground-charts-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.playground-controls {
+  background: var(--surface);
+  border: 1.5px solid var(--rule-2);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* Keeps the controls in view while the taller results column scrolls
+     past — 88px clears nav.tabs' own sticky bar (top: 16px + ~55px tall),
+     so the two sticky elements never overlap. No max-height/overflow cap:
+     now that the two charts stack one per row instead of side by side, the
+     results column is comfortably taller than the controls panel's own
+     content, so there's no need to squeeze the panel into an internally
+     scrolling box — it can grow to its full height and simply scroll past
+     with the page once its bottom edge reaches the viewport bottom, like
+     any other sticky element. */
+  position: sticky;
+  top: 88px;
+}
+
+@media (max-width: 900px) {
+  .playground-controls {
+    position: static;
+  }
+}
+
+.control-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.control-section-title {
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule-2);
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--green);
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed var(--rule-2);
+}
+
+.control-group:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.control-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--sans);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.value-highlight {
+  color: var(--gold);
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: var(--fs-md);
+  background: rgba(176, 137, 35, 0.08);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(176, 137, 35, 0.2);
+}
+
+.slider-bounds {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-sm);
+  color: var(--muted);
+  margin-top: 2px;
+  font-family: var(--mono);
+}
+
+/* Range Slider Custom Styling */
+.playground-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  background: var(--rule-2);
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* outline:none above drops the browser's default focus ring with no
+   replacement — unlike .playground-select/.ledger-input just below, which
+   compensate with a border/box-shadow change. A keyboard user tabbing to a
+   slider previously had zero visual indication it was focused. Scoped to
+   :focus-visible (not plain :focus) since a slider doesn't need a ring on
+   mouse click the way a ring on click would — only keyboard focus needs it
+   — and matches the outline token _base.css's global :focus-visible rule
+   already uses everywhere else in the app. */
+.playground-slider:focus-visible {
+  outline: 2px solid var(--green-light);
+  outline-offset: 4px;
+}
+
+.playground-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--green);
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease;
+}
+
+.playground-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.playground-select {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--bg);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--radius-lg);
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-family: var(--sans);
+  font-weight: 600;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236a716e%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  /* Longhand after the `padding` shorthand above so the arrow icon still
+     has room on the right — matches the pre-extraction computed padding
+     exactly (0.75rem on 3 sides, 36px reserved on the right). */
+  padding-right: 36px;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+body.dark .playground-select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E");
+}
+
+.playground-select:hover {
+  border-color: var(--green);
+}
+
+.playground-select:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(10, 93, 58, 0.15);
+  outline: none;
+}
+
+.btn-reset-playground {
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--radius-lg);
+  padding: 12px 22px;
+  font-family: var(--mono);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.22s ease-in-out;
+  margin-top: 16px;
+  width: 100%;
+}
+
+.btn-reset-playground:hover {
+  background: var(--green);
+  color: #ffffff;
+  border-color: var(--green);
+  transform: translateY(-1px);
+}
+
+/* Freezes the current scenario as a third reference point on both charts
+   (see the pin handling in playground.js) — styled as a lighter-weight
+   sibling of .btn-reset-playground (outline, not filled, since pinning
+   isn't a destructive action the way Reset is) with an --info accent to
+   match #pgPinReadout and the "reference marker" language used for
+   #pgVerdict's default border color. */
+.btn-pin-playground {
+  background: var(--bg);
+  color: var(--ink);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--radius-lg);
+  padding: 10px 22px;
+  font-family: var(--mono);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.22s ease-in-out;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.btn-pin-playground:hover {
+  border-color: var(--info);
+  color: var(--info);
+  transform: translateY(-1px);
+}
+
+.btn-pin-playground[aria-pressed="true"] {
+  border-color: var(--info);
+  color: var(--info);
+  background: rgba(44, 91, 138, 0.1);
+}
+
+/* Small readout of the pinned scenario's headline figures — shown next to
+   the Pin button so the frozen numbers are visible without having to read
+   them off the chart legend. Hidden until a scenario is pinned (see
+   updatePinUI() in playground.js), same display:none/"block" toggle
+   #pgVerdict and compare.js's #cmpNarrative already use. */
+.pg-pin-readout {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: var(--radius-xs);
+  background: rgba(44, 91, 138, 0.08);
+  border: 1px solid rgba(44, 91, 138, 0.25);
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  color: var(--info);
+  line-height: 1.5;
+}
+
+.pg-presets {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-preset {
+  flex: 1;
+  background: var(--bg);
+  color: var(--ink);
+  border: 1px solid var(--rule-2);
+  border-radius: var(--radius-lg);
+  padding: 10px 6px;
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-preset:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  transform: translateY(-1px);
+}
+
+.btn-preset[data-pg-preset="conservative"]:hover {
+  border-color: var(--neg);
+  color: var(--neg);
+}
+
+.btn-preset--optimistic:hover {
+  border-color: var(--pos);
+  color: var(--pos);
+}
+
+/* Persistent "selected" state — separate from :hover, which only shows on
+   mouseover. A preset stays marked active until a slider is dragged away
+   from its exact values (see updateActivePresetHighlight() in
+   playground.js), so it's always clear which scenario (if any) is applied. */
+.btn-preset.active {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(176, 137, 35, 0.1);
+}
+
+.btn-preset[data-pg-preset="conservative"].active {
+  border-color: var(--neg);
+  color: var(--neg);
+  background: rgba(184, 64, 58, 0.1);
+}
+
+.btn-preset--optimistic.active {
+  border-color: var(--pos);
+  color: var(--pos);
+  background: rgba(46, 138, 85, 0.1);
+}
+
+.control-help {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  line-height: 1.4;
+  margin-top: 2px;
+  margin-bottom: 8px;
+}

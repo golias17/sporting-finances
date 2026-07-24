@@ -1,0 +1,39 @@
+/* ── Health Check tab ── */
+
+.check-intro {
+  font-size: var(--fs-lg);
+  line-height: 1.65;
+  color: var(--ink);
+  margin-bottom: 18px;
+}
+.zone-legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+.zone-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.zone-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-round);
+  flex-shrink: 0;
+}
+.zone-dot.g {
+  background: var(--pos);
+}
+.zone-dot.a {
+  background: var(--warn);
+}
+.zone-dot.r {
+  background: var(--neg);
+}

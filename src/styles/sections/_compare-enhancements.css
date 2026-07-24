@@ -1,0 +1,50 @@
+/* ── Compare enhancements ── */
+
+.cmp-narrative {
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  background: var(--paper);
+  border-left: 3px solid var(--green);
+  padding: 16px 22px;
+  border-radius: var(--radius-xs);
+  margin: 0 0 22px;
+  display: none;
+  font-variation-settings: "opsz" 24;
+}
+.cmp-group {
+  margin-bottom: 28px;
+}
+.cmp-group-title {
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+.cmp-group-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+}
+.cmp-abs-delta {
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  margin-top: 6px;
+  letter-spacing: 0.04em;
+}
+.cmp-abs-delta.pos {
+  color: var(--pos);
+}
+.cmp-abs-delta.neg {
+  color: var(--neg);
+}
+.cmp-abs-delta.neu {
+  color: var(--muted);
+}
