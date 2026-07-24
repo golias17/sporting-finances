@@ -92,4 +92,80 @@ describe("SquadAnalytics", () => {
     const charts = screen.queryAllByTestId("mock-chart-bar");
     expect(charts.length).toBeGreaterThan(0);
   });
+
+  it("renders with transfer ledger data including commissions", () => {
+    state.setTransferLedger([
+      {
+        season: "2013/14",
+        sales: [
+          { player: "Player A", fee: 10000, commission: 500 },
+          { player: "Player B", fee: 5000, commission: 250 },
+        ],
+        purchases: [
+          { player: "Player C", fee: 8000, commission: 400 },
+        ],
+      },
+      {
+        season: "2019/20",
+        sales: [{ player: "Player D", fee: 20000, commission: 1000 }],
+        purchases: [{ player: "Player E", fee: 15000, commission: 750 }],
+      },
+    ]);
+
+    render(<SquadAnalytics />);
+    const charts = screen.queryAllByTestId("mock-chart-bar");
+    expect(charts.length).toBeGreaterThan(0);
+  });
+
+  it("renders with sales only (no purchases)", () => {
+    state.setTransferLedger([
+      {
+        season: "2023/24",
+        sales: [{ player: "Player F", fee: 30000, commission: 1500 }],
+        purchases: [],
+      },
+    ]);
+
+    render(<SquadAnalytics />);
+    const charts = screen.queryAllByTestId("mock-chart-bar");
+    expect(charts.length).toBeGreaterThan(0);
+  });
+
+  it("renders with purchases only (no sales)", () => {
+    state.setTransferLedger([
+      {
+        season: "2023/24",
+        sales: [],
+        purchases: [{ player: "Player G", fee: 25000, commission: 1250 }],
+      },
+    ]);
+
+    render(<SquadAnalytics />);
+    const charts = screen.queryAllByTestId("mock-chart-bar");
+    expect(charts.length).toBeGreaterThan(0);
+  });
+
+  it("handles multiple seasons with mixed data", () => {
+    state.setTransferLedger([
+      {
+        season: "2013/14",
+        sales: [{ player: "A", fee: 1000, commission: 50 }],
+        purchases: [{ player: "B", fee: 2000, commission: 100 }],
+      },
+      {
+        season: "2019/20",
+        sales: [{ player: "C", fee: 3000, commission: 150 }],
+        purchases: [],
+      },
+      {
+        season: "2023/24",
+        sales: [],
+        purchases: [{ player: "D", fee: 4000, commission: 200 }],
+      },
+    ]);
+
+    render(<SquadAnalytics />);
+    const charts = screen.queryAllByTestId("mock-chart-bar");
+    expect(charts.length).toBeGreaterThan(0);
+  });
 });

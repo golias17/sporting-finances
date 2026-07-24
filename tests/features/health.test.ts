@@ -164,5 +164,23 @@ describe("health.test.ts", () => {
       const kpiGroups = screen.getAllByRole("group");
       expect(kpiGroups.length).toBeGreaterThan(0);
     });
+
+    it("renders with default index when healthBarIdx is null", () => {
+      state.setHealthBarIdx(null);
+      render(React.createElement(KPIBar));
+      expect(screen.getByText("Club Overview — 2012/13")).toBeInTheDocument();
+    });
+
+    it("renders correct title in Portuguese", () => {
+      state.setIsPt(true);
+      render(React.createElement(KPIBar));
+      expect(screen.getByText(/Visão Geral do Clube/)).toBeInTheDocument();
+    });
+
+    it("renders headline KPIs label in Portuguese", () => {
+      state.setIsPt(true);
+      render(React.createElement(KPIBar));
+      expect(screen.getByText("Indicadores Principais")).toBeInTheDocument();
+    });
   });
 });

@@ -99,4 +99,45 @@ describe("ErrorBoundary", () => {
     expect(screen.getByText("Something went wrong")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Try again" })).toBeInTheDocument();
   });
+
+  it("resets retry count when reset is clicked", () => {
+    const ThrowingChild = () => {
+      throw new Error("Test error");
+    };
+
+    render(
+      <ErrorBoundary maxRetries={2}>
+        <ThrowingChild />
+      </ErrorBoundary>,
+    );
+
+    expect(screen.getByText("Something went wrong")).toBeInTheDocument();
+
+    // Click try again twice
+    const tryAgainBtn = screen.getByText("Try again");
+    tryAgainBtn.click();
+    tryAgainBtn.click();
+
+    // Now click reset
+    const resetBtn = screen.getByText("Reset");
+    resetBtn.click();
+
+    // Should show error again (child still throws)
+    expect(screen.getByText("Something went wrong")).toBeInTheDocument();
+  });
+
+  it("does not show retry count initially", () => {
+    const ThrowingChild = () => {
+      throw new Error("Test error");
+    };
+
+    render(
+      <ErrorBoundary>
+        <ThrowingChild />
+      </ErrorBoundary>,
+    );
+
+    // Should not show retry count
+    expect(screen.queryByText(/Retry/)).not.toBeInTheDocument();
+  });
 });

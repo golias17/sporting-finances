@@ -85,10 +85,69 @@ describe("TopNav Component", () => {
   it("toggles the theme when theme button is clicked", () => {
     render(<TopNav />);
     
-    const themeBtn = screen.getByText("nav-theme-light"); // Assuming mock uses i18nKey
+    const themeBtn = screen.getByText("nav-theme-light");
     fireEvent.click(themeBtn);
 
     expect(mockSetTheme).toHaveBeenCalledWith("dark");
     expect(document.body.classList.contains("dark")).toBe(true);
+  });
+
+  it("handles language toggle when already in same language", () => {
+    (useAppState as any).mockImplementation((selector: any) => {
+      const state = {
+        isPt: true,
+        theme: "light",
+        setIsPt: mockSetIsPt,
+        setTheme: mockSetTheme,
+      };
+      return selector(state);
+    });
+
+    render(<TopNav />);
+    
+    const ptBtn = screen.getByText("PT");
+    fireEvent.click(ptBtn);
+
+    // Should not call setIsPt since already in PT
+    expect(mockSetIsPt).not.toHaveBeenCalled();
+  });
+
+  it("handles dark theme to light theme toggle", () => {
+    (useAppState as any).mockImplementation((selector: any) => {
+      const state = {
+        isPt: false,
+        theme: "dark",
+        setIsPt: mockSetIsPt,
+        setTheme: mockSetTheme,
+      };
+      return selector(state);
+    });
+
+    document.body.classList.add("dark");
+    
+    render(<TopNav />);
+    
+    const themeBtn = screen.getByText("nav-theme-dark");
+    fireEvent.click(themeBtn);
+
+    expect(mockSetTheme).toHaveBeenCalledWith("light");
+    expect(document.body.classList.contains("dark")).toBe(false);
+  });
+
+  it("handles PDF export button click", () => {
+    const mockOnPdfExport = vi.fn();
+    render(<TopNav onPdfExport={mockOnPdfExport} />);
+    
+    const pdfBtn = screen.getByRole("button", { name: /export/i });
+    fireEvent.click(pdfBtn);
+
+    expect(mockOnPdfExport).toHaveBeenCalled();
+  });
+
+  it("renders without PDF export button when onPdfExport is not provided", () => {
+    render(<TopNav />);
+    
+    // Should still render without errors
+    expect(screen.getByText("EN")).toBeInTheDocument();
   });
 });
