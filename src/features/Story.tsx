@@ -133,7 +133,7 @@ export function Story() {
       {!isStoryVisible && (
         <div className="story-launch">
           <div className="launch-text">
-            <T as="p" className="launch-quote" i18nKey="auto-txt-p-4" />
+            <T as="p" className="launch-quote" i18nKey="story-launch-quote" />
             <T as="span" className="launch-cite" i18nKey="ch01-story-cite" />
           </div>
           <T
@@ -191,7 +191,7 @@ export function Story() {
                 className="story-btn exit"
                 id="btnExitStory"
                 onClick={exitStory}
-                i18nKey="auto-txt-button-7"
+                i18nKey="story-launch-button"
               />
             </div>
             <div

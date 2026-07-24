@@ -107,9 +107,7 @@ export const state = new Proxy({} as AppState, {
     const s = useAppState.getState() as any;
 
     if (key === "COLORS" && (!s.COLORS || Object.keys(s.COLORS).length === 0)) {
-      console.warn(
-        `[state] COLORS accessed before initChartDefaults() was called`,
-      );
+
       return s.COLORS || {};
     }
 
@@ -128,13 +126,7 @@ export const state = new Proxy({} as AppState, {
     if (key === "DATASET") setterName = "setDataset";
     if (key === "TRANSFER_LEDGER") setterName = "setTransferLedger";
 
-    if (!bypassWarnKeys.has(key as string)) {
-      if (!s[setterName]) {
-        console.warn(
-          `[state] Direct mutation of state.${String(key)} is deprecated. Please call state.${setterName}() instead.`,
-        );
-      }
-    }
+
 
     if (s[setterName] && typeof s[setterName] === "function") {
       s[setterName](value);

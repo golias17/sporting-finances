@@ -33,7 +33,7 @@ export function RevenueTab() {
         data={revenueData}
         options={revenueOptions}
         chartClassName="tall"
-        valueType="currency-millions"
+        valueType="currency-thousands"
       />
       <ChartCard
         id="chartRevStreams"
@@ -44,7 +44,7 @@ export function RevenueTab() {
         data={revStreamsData}
         options={revStreamsOptions}
         chartClassName="tall"
-        valueType="currency-millions"
+        valueType="currency-thousands"
       />
       <div className="grid-2">
         <ChartCard
@@ -65,7 +65,7 @@ export function RevenueTab() {
           chartType="bar"
           data={opResultData}
           options={opResultOptions}
-          valueType="currency-millions"
+          valueType="currency-thousands"
         />
       </div>
       <div className="narrative">

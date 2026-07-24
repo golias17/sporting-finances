@@ -50,7 +50,7 @@
     "innerHTML": false
   },
   "chart_commissions_subtitle": {
-    "text": "Total annual commissions paid on sales and acquisitions",
+    "text": "Direct commissions contracted in player acquisition and sale transactions",
     "isAria": false,
     "innerHTML": false
   },
@@ -164,26 +164,6 @@
     "isAria": false,
     "innerHTML": false
   },
-  "auto-txt-button-7": {
-    "text": "Exit",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-10": {
-    "text": "<span><span class=\"zone-dot g\"></span> Below 35% — diversified</span> <span><span class=\"zone-dot a\"></span> 35–50% — reliant</span> <span><span class=\"zone-dot r\"></span> Above 50% — high risk</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-12": {
-    "text": "<span><span class=\"zone-dot g\"></span> Below 1× — manageable</span> <span><span class=\"zone-dot a\"></span> 1–2× — elevated</span> <span><span class=\"zone-dot r\"></span> Above 2× — heavy</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-13": {
-    "text": "<span><span class=\"zone-dot g\"></span> Above 1.0 — can cover bills</span> <span><span class=\"zone-dot a\"></span> 0.5–1.0 — tight</span> <span><span class=\"zone-dot r\"></span> Below 0.5 — very stretched</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
   "auto-txt-div-34": {
     "text": "<span class=\"cmp-col-label\" id=\"cmpHeadA\"></span> <span></span> <span class=\"cmp-col-label\" id=\"cmpHeadB\"></span>",
     "isAria": false,
@@ -194,365 +174,15 @@
     "isAria": false,
     "innerHTML": true
   },
-  "auto-txt-div-36": {
-    "text": "<span class=\"event-date\">Nov 2014</span><span class=\"event-badge\">Restructuring</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-37": {
-    "text": "Capital restructuring &amp; first VMOCs",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-38": {
-    "text": "Bruno de Carvalho's AGM authorizes a major capital increase and the issuance of Mandatorily-Convertible Bonds (VMOCs), restructuring short-term debt into longer-dated obligations.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-39": {
-    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> Stability returned — Sporting could plan ahead and invest in the squad again.</span> <span class=\"numbers\"><strong>In the numbers —</strong> Equity flipped positive (+€7M) for the first time; short-term debt load nearly halved.</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-40": {
-    "text": "<span class=\"event-date\">Jun 2017</span><span class=\"event-badge\">Milestone</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-41": {
-    "text": "€30.5M net profit — pre-attack peak",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-42": {
-    "text": "Powered by player sales (João Mário €40M to Inter, Slimani €30.5M to Leicester, and others) and Champions League qualification, the SAD posts the largest net result of the era so far.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-43": {
-    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> Champions League group stage reached; Jorge Jesus's era producing the best football in a decade.</span> <span class=\"numbers\"><strong>In the numbers —</strong> €93M in transfer income — a new record at the time; equity at its best since 2014.</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-44": {
-    "text": "<span class=\"event-date\">15 May 2018</span><span class=\"event-badge\">Crisis</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-45": {
-    "text": "Alcochete attack",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-46": {
-    "text": "A group of organized supporters attacks the training ground. Players activate just-cause termination clauses; key sales (Patrício, William Carvalho, Gelson Martins) follow. Bruno de Carvalho is impeached.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-47": {
-    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> The best squad in years was dismantled overnight. Sporting finished 3rd the following season.</span> <span class=\"numbers\"><strong>In the numbers —</strong> Forced to sell at distressed prices; equity crashed back to -€13M; financial result hit -€10M from rising debt costs.</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-48": {
-    "text": "<span class=\"event-date\">2019</span><span class=\"event-badge\">Restructuring</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-49": {
-    "text": "€65M securitization",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-50": {
-    "text": "Sporting refinances player-receivable cash flows through a securitization vehicle, easing short-term liquidity pressure — while Rúben Amorim is identified as the new coach.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-51": {
-    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> Freed up budget to bring in Rúben Amorim mid-season in 2019/20 — the hire that changed everything.</span> <span class=\"numbers\"><strong>In the numbers —</strong> Non-current (long-term) liabilities jumped from €110M to €184M as short-term debt was pushed out; pressure eased.</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-52": {
-    "text": "<span class=\"event-date\">Mar–Jun 2020/21</span><span class=\"event-badge\">Crisis</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-53": {
-    "text": "COVID-19 stadium ban",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-54": {
-    "text": "Empty stadiums, suspended ticketing, broadcasting deal renegotiations. The 20/21 season is played with no fans in the stands.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-55": {
-    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> Sporting won the Liga anyway — first title in 19 years — in front of empty seats on 11 May 2021.</span> <span class=\"numbers\"><strong>In the numbers —</strong> Revenue fell -16% vs prior year; worst net result in the dataset (-€33M); equity hit rock bottom at -€41M.</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-56": {
-    "text": "<span class=\"event-date\">11 May 2021</span><span class=\"event-badge\">Milestone</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-57": {
-    "text": "First Liga title in 19 years",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-58": {
-    "text": "Rúben Amorim's squad ends the longest title drought in club history. The win comes despite the pandemic-affected season — in an empty Alvalade.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-59": {
-    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> The drought is over. Amorim becomes a legend. The squad's togetherness carries through two more titles.</span> <span class=\"numbers\"><strong>In the numbers —</strong> The full financial effect came in 21/22 — when fans returned and Champions League revenue flooded in (+€58M revenue jump in one year).</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-60": {
-    "text": "<span class=\"event-date\">Aug 2022</span><span class=\"event-badge\">Restructuring</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-61": {
-    "text": "First VMOC conversion (€83.6M)",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-62": {
-    "text": "€83,571,872 of the mandatorily-convertible bonds issued in 2014 are converted into share capital — wiping the equivalent debt from the balance sheet.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-63": {
-    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> Financial stability gave Frederico Varandas the runway to keep building the project — Ugarte signed, Gyökeres arrived the next year.</span> <span class=\"numbers\"><strong>In the numbers —</strong> €83.6M of debt simply disappeared; equity crossed zero for the first time since 2017 (+€8.9M); financial expenses dropped and the balance sheet started to look like a normal business.</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-64": {
-    "text": "<span class=\"event-date\">Dec 2023</span><span class=\"event-badge\">Restructuring</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-65": {
-    "text": "Second VMOC conversion (€51.4M)",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-66": {
-    "text": "A further €51,416,952 of VMOCs convert into equity. Combined with the August 2022 conversion, €135M of debt has been permanently erased.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-67": {
-    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> Back in Champions League regularly; squad value at €365M and rising.</span> <span class=\"numbers\"><strong>In the numbers —</strong> The second conversion brought total debt erased to €135M; equity grew from +€8.9M to +€21M, with financial expenses structurally reduced. The balance sheet reinforced for the long term.</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-68": {
-    "text": "<span class=\"event-date\">May 2024</span><span class=\"event-badge\">Milestone</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-69": {
-    "text": "Second Liga title in 4 years",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-70": {
-    "text": "Rúben Amorim wins his second league before leaving for Manchester United in November 2024.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-71": {
-    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> Back-to-back domestic dominance. Ugarte (€60M to PSG) and others sold; Gyökeres already scoring at will.</span> <span class=\"numbers\"><strong>In the numbers —</strong> Record €144M in transfer income — the highest single-season figure in the dataset; equity grew to €21M.</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-72": {
-    "text": "<span class=\"event-date\">May 2025</span><span class=\"event-badge\">Milestone</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-73": {
-    "text": "Back-to-back Liga + Taça de Portugal",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-74": {
-    "text": "Sporting wins both major domestic trophies under new coach Rui Borges. Gyökeres (€65.8M to Arsenal) departs in the summer.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-75": {
-    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> Three Liga titles in five years. Rui Borges's transition is seamless. Squad market value hits €511M.</span> <span class=\"numbers\"><strong>In the numbers —</strong> Revenue reaches €148M — 130% up on 5 years prior; wage bill at 59%, the healthiest ratio in 13 years; equity +€41M.</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-76": {
-    "text": "<span class=\"event-date\">Oct 2025</span><span class=\"event-badge\">Restructuring</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-77": {
-    "text": "€225M USPP bond, investment grade &amp; Sporting Entertainment",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-78": {
-    "text": "A landmark month. Sporting becomes the first Portuguese football club rated investment grade by both Fitch and DBRS — securing a €225M 28-year private placement at 5.75% that refinances all legacy short-term debt. Simultaneously, Sporting Entertainment is created as a commercial subsidiary, triggering the club's first-ever consolidated financial statements.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-div-79": {
-    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> The rating is a bigger structural advantage than most trophies — Benfica and Porto don't have it. The subsidiary unlocks new commercial revenue streams.</span> <span class=\"numbers\"><strong>In the numbers —</strong> Nearly all debt pushed out to 28+ years at lower cost. First consolidated H1 shows working capital of €100M and a record H1 net result of €32M.</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
   "auto-txt-div-8": {
     "text": "Club Financial Health — select a season",
     "isAria": false,
     "innerHTML": false
   },
-  "auto-txt-div-80": {
-    "text": "<strong>Sporting Clube de Portugal — Futebol, SAD.</strong> Built from the SAD's official annual and semester reports filed with the CMVM. Figures in EUR thousands; some 2023/24 numbers restated per the 2024/25 report. Compiled for editorial reference.",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-81": {
-    "text": "Dossier · 2010/11 → 2024/25<br/> Period ended 30 June 2025<br/> Euronext Lisbon · SCP",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-div-9": {
-    "text": "<span><span class=\"zone-dot g\"></span> Below 60% — healthy</span> <span><span class=\"zone-dot a\"></span> 60–70% — watch this</span> <span><span class=\"zone-dot r\"></span> Above 70% — problem</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-h1-2": {
-    "text": "From insolvency to <em>investment grade</em>.",
-    "isAria": false,
-    "innerHTML": true
-  },
   "auto-txt-h2-14": {
     "text": "The instruments that <em>saved the club</em>.",
     "isAria": false,
     "innerHTML": true
-  },
-  "auto-txt-h3-18": {
-    "text": "Annual financing cost — across all instruments",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-h3-24": {
-    "text": "Lion Finance — key facts",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-h3-30": {
-    "text": "USPP bond — key terms",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-h4-15": {
-    "text": "What is a VMOC?",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-h4-21": {
-    "text": "What is a securitization (titularização)?",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-h4-27": {
-    "text": "What is a USPP bond?",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-p-11": {
-    "text": "Net debt compared to a full year of revenue — the classic “can you afford what you owe?” question.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-p-16": {
-    "text": "VMOC stands for <em>Valores Mobiliários Obrigatoriamente Convertíveis</em> — mandatorily convertible bonds. Unlike regular bonds, VMOCs do not pay back cash at maturity: they convert into shares. Sporting issued them in November 2014 as part of a capital restructuring designed to push short-term bank debt out by several years and give the club breathing room. Crucially, because conversion into equity was guaranteed, the VMOCs sat closer to equity than debt in economic terms — but were still classified as borrowings on the balance sheet until the conversion dates arrived.",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-p-17": {
-    "text": "The two conversion events — €83.6M in August 2022 and €51.4M in December 2023 — did not involve any cash leaving the club. Debt simply became share capital. The €135M that had sat on the liabilities side of the balance sheet for eight years disappeared, and equity crossed zero for the first time since 2017.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-p-20": {
-    "text": "The net financial result line from the income statement each year — interest paid across every debt instrument (VMOCs, securitization, public bonds, bank loans) minus any financial income. VMOCs were the dominant driver from 2014 to 2022, which is why the cost drops so sharply once they convert. This is <em>not</em> an isolated VMOC figure — it is the total annual financing cost of the club.",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-p-22": {
-    "text": "A securitization is a form of asset-backed financing: instead of borrowing money outright, the club assigns future revenue streams — in this case, TV broadcast payments due from NOS Lusomundo Audiovisuais — to a special purpose vehicle (Sagasta Finance STC, S.A.). That SPV then issues bonds backed by those receivables to institutional investors, and passes the cash on to Sporting. As NOS pays its instalments over the coming seasons, the money flows through the SPV to the bondholders. Sporting receives a large upfront lump sum; bondholders receive a stream of secured payments; and NOS keeps paying as normal.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-p-23": {
-    "text": "The technique let Sporting monetise future TV income immediately — without selling players or issuing new shares — and at rates competitive with bank loans. Lion Finance No. 1 (2019) was the original vehicle; Lion Finance No. 2 (2023) refinanced and expanded it, ultimately being repaid in full using USPP proceeds in October 2025.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-p-26": {
-    "text": "Two sequential securitizations of the same NOS TV-rights contract, managed through the SPV Sagasta Finance STC, S.A. Click the tabs to compare.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-p-28": {
-    "text": "USPP stands for US Private Placement — a form of long-term debt sold directly to institutional investors (primarily US insurance companies and pension funds) rather than issued on a public exchange. USPP bonds typically carry longer maturities than bank loans or public bonds, and require the issuer to obtain a credit rating. For Sporting, the October 2025 USPP was transformational: €225M raised over 28 years at 5.75%, refinancing all legacy short-term facilities in a single transaction.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-p-29": {
-    "text": "The ratings from Fitch (BBB−) and DBRS (BBB low) — both investment grade — make Sporting the first Portuguese football club to reach this threshold. Investment grade matters because it unlocks a class of institutional investors who are prohibited by mandate from holding sub-investment-grade debt, and because it signals to the market that the club's financials are structurally sound, not just cyclically good.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-p-32": {
-    "text": "The defining financial transaction of the post-recovery era. Every term below is a milestone for Portuguese football.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-p-33": {
-    "text": "Since 2016/17 the club has generated between €34M and €144M in transfer income every season. The 2023/24 season set the all-time record at €144M. The 2025/26 H1 alone already reached €110M, anchored by the Gyökeres deal.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-p-4": {
-    "text": "From <em class=\"neg\">−€119M</em> to <em class=\"pos\">+€41M</em>.<br />Fifteen fiscal years, told in one chart.",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-span-1": {
-    "text": "Dark Mode",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-span-19": {
-    "text": "Net financial result · P&amp;L",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "auto-txt-span-25": {
-    "text": "Sagasta Finance STC",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "auto-txt-span-31": {
-    "text": "Oct 2025",
-    "isAria": false,
-    "innerHTML": false
   },
   "auto-txt-title-0": {
     "text": "Sporting CP — Financial Evolution Dashboard (2010/11 → 2024/25)",
@@ -585,7 +215,7 @@
     "innerHTML": false
   },
   "ch01-hero-h3": {
-    "text": "The 13-year story in one chart",
+    "text": "The 15-year story in one chart",
     "isAria": false,
     "innerHTML": false
   },
@@ -755,7 +385,7 @@
     "innerHTML": false
   },
   "ch03-brief-p": {
-    "text": "Revenue has tripled in five years. The wage bill is the smallest share of income in 13 years. Net debt is — for the first time — below one year's revenue. Equity is positive for the third year running. The one honest caveat: Sporting still relies on selling players for nearly 44% of its total income. That's not a crisis — it's the model. Alcochete academy players cost €0 to produce and sell for tens of millions. But it means a bad transfer window still hurts.",
+    "text": "Revenue has tripled in five years. The wage bill is the smallest share of income in 15 years. Net debt is — for the first time — below one year's revenue. Equity is positive for the third year running. The one honest caveat: Sporting still relies on selling players for nearly 44% of its total income. That's not a crisis — it's the model. Alcochete academy players cost €0 to produce and sell for tens of millions. But it means a bad transfer window still hurts.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1283,11 +913,6 @@
     "text": "From insolvency to <em>investment&nbsp;grade</em>.",
     "isAria": false,
     "innerHTML": true
-  },
-  "hero-sub": {
-    "text": "A 13-year journey at Sporting Clube de Portugal — through a capital restructuring, a training-ground attack, an empty-stadium league title, two bond conversions, and a €225M investment-grade placement. Annual data drawn directly from official Sporting SAD reports.",
-    "isAria": false,
-    "innerHTML": false
   },
   "tab-btn-bonds": {
     "text": "05. Instruments",
@@ -2246,6 +1871,381 @@
   },
   "ch09-narrative-p4": {
     "text": "<strong class=\"narrative-header\">Financial Health:</strong> Sporting's recovery from negative equity to positive values demonstrates strong financial restructuring. Benfica carries higher liabilities, partly due to stadium investments. Porto's equity position fluctuates based on European competition success. The cumulative net results show all three clubs face challenges in maintaining profitability.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch01-hero-h1": {
+    "text": "From insolvency to <em>investment grade</em>.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch01-hero-sub": {
+    "text": "A 15-year journey at Sporting Clube de Portugal — through a capital restructuring, a training-ground attack, an empty-stadium league title, two bond conversions, and a €225M investment-grade placement. Annual data drawn directly from official Sporting SAD reports.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "nav-theme-light": {
+    "text": "Dark Mode",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "footer-meta": {
+    "text": "Dossier · 2010/11 → 2024/25<br/> Period ended 30 June 2025<br/> Euronext Lisbon · SCP",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch05-vmoc-h4": {
+    "text": "What is a VMOC?",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch05-vmoc-p1": {
+    "text": "VMOC stands for <em>Valores Mobiliários Obrigatoriamente Convertíveis</em> — mandatorily convertible bonds. Unlike regular bonds, VMOCs do not pay back cash at maturity: they convert into shares. Sporting issued them in November 2014 as part of a capital restructuring designed to push short-term bank debt out by several years and give the club breathing room. Crucially, because conversion into equity was guaranteed, the VMOCs sat closer to equity than debt in economic terms — but were still classified as borrowings on the balance sheet until the conversion dates arrived.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch05-vmoc-p2": {
+    "text": "The two conversion events — €83.6M in August 2022 and €51.4M in December 2023 — did not involve any cash leaving the club. Debt simply became share capital. The €135M that had sat on the liabilities side of the balance sheet for eight years disappeared, and equity crossed zero for the first time since 2017.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch05-uspp-h3": {
+    "text": "Annual financing cost — across all instruments",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch05-uspp-tag": {
+    "text": "Net financial result · P&amp;L",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch05-uspp-desc": {
+    "text": "The net financial result line from the income statement each year — interest paid across every debt instrument (VMOCs, securitization, public bonds, bank loans) minus any financial income. VMOCs were the dominant driver from 2014 to 2022, which is why the cost drops so sharply once they convert. This is <em>not</em> an isolated VMOC figure — it is the total annual financing cost of the club.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch05-timeline-h4": {
+    "text": "What is a securitization (titularização)?",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch05-timeline-p1": {
+    "text": "A securitization is a form of asset-backed financing: instead of borrowing money outright, the club assigns future revenue streams — in this case, TV broadcast payments due from NOS Lusomundo Audiovisuais — to a special purpose vehicle (Sagasta Finance STC, S.A.). That SPV then issues bonds backed by those receivables to institutional investors, and passes the cash on to Sporting. As NOS pays its instalments over the coming seasons, the money flows through the SPV to the bondholders. Sporting receives a large upfront lump sum; bondholders receive a stream of secured payments; and NOS keeps paying as normal.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch05-timeline-p2": {
+    "text": "The technique let Sporting monetise future TV income immediately — without selling players or issuing new shares — and at rates competitive with bank loans. Lion Finance No. 1 (2019) was the original vehicle; Lion Finance No. 2 (2023) refinanced and expanded it, ultimately being repaid in full using USPP proceeds in October 2025.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch05-summary-h3": {
+    "text": "Lion Finance — key facts",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch05-summary-tag": {
+    "text": "Sagasta Finance STC",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch05-summary-desc": {
+    "text": "Two sequential securitizations of the same NOS TV-rights contract, managed through the SPV Sagasta Finance STC, S.A. Click the tabs to compare.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch05-impact-h4": {
+    "text": "What is a USPP bond?",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch05-impact-p1": {
+    "text": "USPP stands for US Private Placement — a form of long-term debt sold directly to institutional investors (primarily US insurance companies and pension funds) rather than issued on a public exchange. USPP bonds typically carry longer maturities than bank loans or public bonds, and require the issuer to obtain a credit rating. For Sporting, the October 2025 USPP was transformational: €225M raised over 28 years at 5.75%, refinancing all legacy short-term facilities in a single transaction.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch05-impact-p2": {
+    "text": "The ratings from Fitch (BBB−) and DBRS (BBB low) — both investment grade — make Sporting the first Portuguese football club to reach this threshold. Investment grade matters because it unlocks a class of institutional investors who are prohibited by mandate from holding sub-investment-grade debt, and because it signals to the market that the club's financials are structurally sound, not just cyclically good.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch05-schedule-h3": {
+    "text": "USPP bond — key terms",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch05-schedule-tag": {
+    "text": "Oct 2025",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch05-schedule-p1": {
+    "text": "The defining financial transaction of the post-recovery era. Every term below is a milestone for Portuguese football.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch06-note": {
+    "text": "Since 2016/17 the club has generated between €34M and €144M in transfer income every season. The 2023/24 season set the all-time record at €144M. The 2025/26 H1 alone already reached €110M, anchored by the Gyökeres deal.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch03-zone-healthy": {
+    "text": "<span><span class=\"zone-dot g\"></span> Below 60% — healthy</span> <span><span class=\"zone-dot a\"></span> 60–70% — watch this</span> <span><span class=\"zone-dot r\"></span> Above 70% — problem</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch03-zone-caution": {
+    "text": "<span><span class=\"zone-dot g\"></span> Below 35% — diversified</span> <span><span class=\"zone-dot a\"></span> 35–50% — reliant</span> <span><span class=\"zone-dot r\"></span> Above 50% — high risk</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch03-zone-warning-desc": {
+    "text": "Net debt compared to a full year of revenue — the classic “can you afford what you owe?” question.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch03-zone-warning": {
+    "text": "<span><span class=\"zone-dot g\"></span> Below 1× — manageable</span> <span><span class=\"zone-dot a\"></span> 1–2× — elevated</span> <span><span class=\"zone-dot r\"></span> Above 2× — heavy</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch03-zone-danger": {
+    "text": "<span><span class=\"zone-dot g\"></span> Above 1.0 — can cover bills</span> <span><span class=\"zone-dot a\"></span> 0.5–1.0 — tight</span> <span><span class=\"zone-dot r\"></span> Below 0.5 — very stretched</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "story-launch-quote": {
+    "text": "From <em class=\"neg\">−€119M</em> to <em class=\"pos\">+€41M</em>.<br />Fifteen fiscal years, told in one chart.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "story-launch-button": {
+    "text": "Exit",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-restructure-header": {
+    "text": "<span class=\"event-date\">Nov 2014</span><span class=\"event-badge\">Restructuring</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-restructure-title": {
+    "text": "Capital restructuring &amp; first VMOCs",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-restructure-body": {
+    "text": "Bruno de Carvalho's AGM authorizes a major capital increase and the issuance of Mandatorily-Convertible Bonds (VMOCs), restructuring short-term debt into longer-dated obligations.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-alcochete-header": {
+    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> Stability returned — Sporting could plan ahead and invest in the squad again.</span> <span class=\"numbers\"><strong>In the numbers —</strong> Equity flipped positive (+€7M) for the first time; short-term debt load nearly halved.</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-alcochete-title": {
+    "text": "<span class=\"event-date\">Jun 2017</span><span class=\"event-badge\">Milestone</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-alcochete-body": {
+    "text": "€30.5M net profit — pre-attack peak",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-covid-header": {
+    "text": "Powered by player sales (João Mário €40M to Inter, Slimani €30.5M to Leicester, and others) and Champions League qualification, the SAD posts the largest net result of the era so far.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-covid-title": {
+    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> Champions League group stage reached; Jorge Jesus's era producing the best football in a decade.</span> <span class=\"numbers\"><strong>In the numbers —</strong> €93M in transfer income — a new record at the time; equity at its best since 2014.</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-covid-body": {
+    "text": "<span class=\"event-date\">15 May 2018</span><span class=\"event-badge\">Crisis</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-vmoc1-header": {
+    "text": "Alcochete attack",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-vmoc1-title": {
+    "text": "A group of organized supporters attacks the training ground. Players activate just-cause termination clauses; key sales (Patrício, William Carvalho, Gelson Martins) follow. Bruno de Carvalho is impeached.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-vmoc1-body": {
+    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> The best squad in years was dismantled overnight. Sporting finished 3rd the following season.</span> <span class=\"numbers\"><strong>In the numbers —</strong> Forced to sell at distressed prices; equity crashed back to -€13M; financial result hit -€10M from rising debt costs.</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-vmoc2-header": {
+    "text": "<span class=\"event-date\">2019</span><span class=\"event-badge\">Restructuring</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-vmoc2-title": {
+    "text": "€65M securitization",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-vmoc2-body": {
+    "text": "Sporting refinances player-receivable cash flows through a securitization vehicle, easing short-term liquidity pressure — while Rúben Amorim is identified as the new coach.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-uspp-header": {
+    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> Freed up budget to bring in Rúben Amorim mid-season in 2019/20 — the hire that changed everything.</span> <span class=\"numbers\"><strong>In the numbers —</strong> Non-current (long-term) liabilities jumped from €110M to €184M as short-term debt was pushed out; pressure eased.</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-uspp-title": {
+    "text": "<span class=\"event-date\">Mar–Jun 2020/21</span><span class=\"event-badge\">Crisis</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-uspp-body": {
+    "text": "COVID-19 stadium ban",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-champions-header": {
+    "text": "Empty stadiums, suspended ticketing, broadcasting deal renegotiations. The 20/21 season is played with no fans in the stands.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-champions-title": {
+    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> Sporting won the Liga anyway — first title in 19 years — in front of empty seats on 11 May 2021.</span> <span class=\"numbers\"><strong>In the numbers —</strong> Revenue fell -16% vs prior year; worst net result in the dataset (-€33M); equity hit rock bottom at -€41M.</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-champions-body": {
+    "text": "<span class=\"event-date\">11 May 2021</span><span class=\"event-badge\">Milestone</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-academy-header": {
+    "text": "First Liga title in 19 years",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-academy-title": {
+    "text": "Rúben Amorim's squad ends the longest title drought in club history. The win comes despite the pandemic-affected season — in an empty Alvalade.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-academy-body": {
+    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> The drought is over. Amorim becomes a legend. The squad's togetherness carries through two more titles.</span> <span class=\"numbers\"><strong>In the numbers —</strong> The full financial effect came in 21/22 — when fans returned and Champions League revenue flooded in (+€58M revenue jump in one year).</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-stadium-header": {
+    "text": "<span class=\"event-date\">Aug 2022</span><span class=\"event-badge\">Restructuring</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-stadium-title": {
+    "text": "First VMOC conversion (€83.6M)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-stadium-body": {
+    "text": "€83,571,872 of the mandatorily-convertible bonds issued in 2014 are converted into share capital — wiping the equivalent debt from the balance sheet.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-sponsorship-header": {
+    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> Financial stability gave Frederico Varandas the runway to keep building the project — Ugarte signed, Gyökeres arrived the next year.</span> <span class=\"numbers\"><strong>In the numbers —</strong> €83.6M of debt simply disappeared; equity crossed zero for the first time since 2017 (+€8.9M); financial expenses dropped and the balance sheet started to look like a normal business.</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-sponsorship-title": {
+    "text": "<span class=\"event-date\">Dec 2023</span><span class=\"event-badge\">Restructuring</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-sponsorship-body": {
+    "text": "Second VMOC conversion (€51.4M)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-transfer-record-header": {
+    "text": "A further €51,416,952 of VMOCs convert into equity. Combined with the August 2022 conversion, €135M of debt has been permanently erased.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-transfer-record-title": {
+    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> Back in Champions League regularly; squad value at €365M and rising.</span> <span class=\"numbers\"><strong>In the numbers —</strong> The second conversion brought total debt erased to €135M; equity grew from +€8.9M to +€21M, with financial expenses structurally reduced. The balance sheet reinforced for the long term.</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-transfer-record-body": {
+    "text": "<span class=\"event-date\">May 2024</span><span class=\"event-badge\">Milestone</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-manager-header": {
+    "text": "Second Liga title in 4 years",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-manager-title": {
+    "text": "Rúben Amorim wins his second league before leaving for Manchester United in November 2024.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-manager-body": {
+    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> Back-to-back domestic dominance. Ugarte (€60M to PSG) and others sold; Gyökeres already scoring at will.</span> <span class=\"numbers\"><strong>In the numbers —</strong> Record €144M in transfer income — the highest single-season figure in the dataset; equity grew to €21M.</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-youth-header": {
+    "text": "<span class=\"event-date\">May 2025</span><span class=\"event-badge\">Milestone</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-youth-title": {
+    "text": "Back-to-back Liga + Taça de Portugal",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-youth-body": {
+    "text": "Sporting wins both major domestic trophies under new coach Rui Borges. Gyökeres (€65.8M to Arsenal) departs in the summer.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-community-header": {
+    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> Three Liga titles in five years. Rui Borges's transition is seamless. Squad market value hits €511M.</span> <span class=\"numbers\"><strong>In the numbers —</strong> Revenue reaches €148M — 130% up on 5 years prior; wage bill at 59%, the healthiest ratio in 15 years; equity +€41M.</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-community-title": {
+    "text": "<span class=\"event-date\">Oct 2025</span><span class=\"event-badge\">Restructuring</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-community-body": {
+    "text": "€225M USPP bond, investment grade &amp; Sporting Entertainment",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch10-event-digital-header": {
+    "text": "A landmark month. Sporting becomes the first Portuguese football club rated investment grade by both Fitch and DBRS — securing a €225M 28-year private placement at 5.75% that refinances all legacy short-term debt. Simultaneously, Sporting Entertainment is created as a commercial subsidiary, triggering the club's first-ever consolidated financial statements.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-event-digital-title": {
+    "text": "<span class=\"pitch\"><strong>On the pitch —</strong> The rating is a bigger structural advantage than most trophies — Benfica and Porto don't have it. The subsidiary unlocks new commercial revenue streams.</span> <span class=\"numbers\"><strong>In the numbers —</strong> Nearly all debt pushed out to 28+ years at lower cost. First consolidated H1 shows working capital of €100M and a record H1 net result of €32M.</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "footer-credit": {
+    "text": "<strong>Sporting Clube de Portugal — Futebol, SAD.</strong> Built from the SAD's official annual and semester reports filed with the CMVM. Figures in EUR thousands; some 2023/24 numbers restated per the 2024/25 report. Compiled for editorial reference.",
     "isAria": false,
     "innerHTML": true
   }

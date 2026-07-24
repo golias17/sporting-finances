@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useAppState, state } from "../../core/state.js";
-import { baseOpts, styledLineDataset } from "../../charts/chartUtils.js";
+import { baseOpts, styledLineDataset, fmtMillions } from "../../charts/chartUtils.js";
 import { useChartLabels } from "../../charts/chartHooks.js";
 import type { ChartData, ChartOptions } from "chart.js";
 
@@ -50,6 +50,16 @@ export function useDebtCharts() {
   const debtOptions = useMemo<ChartOptions<any>>(
     () => ({
       ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        tooltip: {
+          ...baseOpts.plugins.tooltip,
+          callbacks: {
+            label: (ctx: any) =>
+              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+          },
+        },
+      },
       scales: {
         ...baseOpts.scales,
         x: { ...baseOpts.scales.x, stacked: true },
@@ -138,11 +148,32 @@ export function useDebtCharts() {
     [isPt],
   );
 
+  const assetsLiabOptions = useMemo<ChartOptions<any>>(
+    () => ({
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        tooltip: {
+          ...baseOpts.plugins.tooltip,
+          callbacks: {
+            label: (ctx: any) =>
+              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+          },
+        },
+      },
+      scales: {
+        ...baseOpts.scales,
+        y: { ...baseOpts.scales.y, beginAtZero: true },
+      },
+    }),
+    [],
+  );
+
   return {
     debtData,
     debtOptions,
     assetsLiabData,
-    assetsLiabOptions: state.baseOpts as ChartOptions<any>,
+    assetsLiabOptions,
     debtMaturityData,
     debtMaturityOptions,
   };

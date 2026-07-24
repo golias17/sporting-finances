@@ -137,9 +137,7 @@ export function News() {
           .map((r) => r.message)
           .filter(Boolean);
 
-        if (quotaErrors.length > 0) {
-          console.warn("[news] rss2json reported errors:", quotaErrors);
-        }
+
 
         const rawItems = [
           ...(responses[0].items || []).map((i: any) => ({
@@ -175,7 +173,6 @@ export function News() {
           setLoading(false);
         }
       } catch (err: any) {
-        console.error("Failed to load news feed:", err);
         const stale = getCachedItems(true);
         if (stale && stale.length > 0) {
           if (mounted) {

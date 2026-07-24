@@ -102,7 +102,7 @@ export function SquadTab() {
       <div className="narrative">
         <T as="h4" i18nKey="ch06-narrative-h4" />
         <T as="p" i18nKey="ch06-narrative-p1" />
-        <T as="p" i18nKey="auto-txt-p-33" />
+        <T as="p" i18nKey="ch06-note" />
         <T as="p" i18nKey="ch06-narrative-p3" />
       </div>
     </>

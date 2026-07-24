@@ -50,7 +50,7 @@ export function HealthcheckTab() {
           desc={
             <>
               <T as="p" className="desc" i18nKey="ch03-wage-desc" />
-              <T as="div" className="zone-legend" i18nKey="auto-txt-div-9" />
+              <T as="div" className="zone-legend" i18nKey="ch03-zone-healthy" />
             </>
           }
           chartType="line"
@@ -65,7 +65,7 @@ export function HealthcheckTab() {
           desc={
             <>
               <T as="p" className="desc" i18nKey="ch03-rel-desc" />
-              <T as="div" className="zone-legend" i18nKey="auto-txt-div-10" />
+              <T as="div" className="zone-legend" i18nKey="ch03-zone-caution" />
             </>
           }
           chartType="line"
@@ -81,8 +81,8 @@ export function HealthcheckTab() {
           tag={<T as="span" className="tag" i18nKey="ch03-debt-tag" />}
           desc={
             <>
-              <T as="p" className="desc" i18nKey="auto-txt-p-11" />
-              <T as="div" className="zone-legend" i18nKey="auto-txt-div-12" />
+              <T as="p" className="desc" i18nKey="ch03-zone-warning-desc" />
+              <T as="div" className="zone-legend" i18nKey="ch03-zone-warning" />
             </>
           }
           chartType="line"
@@ -97,7 +97,7 @@ export function HealthcheckTab() {
           desc={
             <>
               <T as="p" className="desc" i18nKey="ch03-liq-desc" />
-              <T as="div" className="zone-legend" i18nKey="auto-txt-div-13" />
+              <T as="div" className="zone-legend" i18nKey="ch03-zone-danger" />
             </>
           }
           chartType="line"
@@ -115,7 +115,7 @@ export function HealthcheckTab() {
           chartType="bar"
           data={transferDebtData}
           options={transferDebtOptions}
-          valueType="currency-millions"
+          valueType="currency-thousands"
         />
         <ChartCard
           id="chartEbitda"
@@ -125,7 +125,7 @@ export function HealthcheckTab() {
           chartType="line"
           data={ebitdaData}
           options={ebitdaOptions}
-          valueType="currency-millions"
+          valueType="currency-thousands"
         />
       </div>
       <div className="narrative">

@@ -403,7 +403,7 @@ export function CompareTab() {
           data={chartData}
           options={chartOptions as any}
           className="chart-box--short"
-          valueType="currency-millions"
+          valueType="currency-thousands"
         />
 
         <div className="cmp-col-headers">

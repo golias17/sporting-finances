@@ -85,7 +85,7 @@ describe("TopNav Component", () => {
   it("toggles the theme when theme button is clicked", () => {
     render(<TopNav />);
     
-    const themeBtn = screen.getByText("auto-txt-span-1"); // Assuming mock uses i18nKey
+    const themeBtn = screen.getByText("nav-theme-light"); // Assuming mock uses i18nKey
     fireEvent.click(themeBtn);
 
     expect(mockSetTheme).toHaveBeenCalledWith("dark");

@@ -36,13 +36,11 @@ export function usePWA() {
             setState((prev) => ({ ...prev, showUpdate: true, updateSW: () => updateSW(true) }));
           },
           onOfflineReady() {
-            console.info("App ready to work offline.");
             setState((prev) => ({ ...prev, showOfflineReady: true }));
           },
         });
       })
       .catch((err) => {
-        console.error("Failed to load virtual:pwa-register", err);
       });
   }, []);
 

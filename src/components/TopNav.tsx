@@ -121,7 +121,7 @@ export function TopNav({ onPdfExport }: TopNavProps) {
         <button
           ref={btnRef}
           aria-pressed={isDark}
-          aria-label={t("auto-txt-span-1-aria") || "Toggle dark mode"}
+          aria-label={t("nav-theme-toggle-aria") || "Toggle dark mode"}
           className="theme-toggle-btn"
           onClick={handleThemeToggle}
         >
@@ -140,7 +140,7 @@ export function TopNav({ onPdfExport }: TopNavProps) {
               __html: isDark ? SUN_SVG : MOON_SVG,
             }}
           />
-          <T as="span" i18nKey={isDark ? "auto-txt-span-1-dark" : "auto-txt-span-1"} />
+          <T as="span" i18nKey={isDark ? "nav-theme-dark" : "nav-theme-light"} />
         </button>
       </div>
     </nav>

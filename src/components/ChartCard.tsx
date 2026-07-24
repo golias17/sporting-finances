@@ -17,8 +17,9 @@ interface ChartCardProps {
   chartClassName?: string; // Appended to .chart-box
 
   valueType?:
-    | "currency-thousands"
+"currency-thousands"
     | "currency-millions"
+   
     | "ratio"
     | "percentage"
     | "auto";

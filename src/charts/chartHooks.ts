@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useAppState, state } from "../core/state.js";
-import { baseOpts } from "./chartUtils.js";
+import { baseOpts, fmtMillions } from "./chartUtils.js";
 import { getBrandColors } from "./chartPalette.js";
 
 const FALLBACK = getBrandColors(false);
@@ -46,7 +46,17 @@ export function usePosNegBarChart(
   const chartOptions = useMemo(
     () => ({
       ...baseOpts,
-      plugins: { ...baseOpts.plugins, legend: { display: false } },
+      plugins: {
+        ...baseOpts.plugins,
+        legend: { display: false },
+        tooltip: {
+          ...baseOpts.plugins.tooltip,
+          callbacks: {
+            label: (ctx: any) =>
+              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+          },
+        },
+      },
       scales: {
         ...baseOpts.scales,
         y: { ...(baseOpts.scales?.y || {}), beginAtZero: false },

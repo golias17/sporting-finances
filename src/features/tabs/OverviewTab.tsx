@@ -34,7 +34,7 @@ export function OverviewTab() {
         data={heroData}
         options={heroOptions}
         chartClassName="tall"
-        valueType="currency-millions"
+        valueType="currency-thousands"
       />
 
       <div className="grid-2">
@@ -46,7 +46,7 @@ export function OverviewTab() {
           chartType="bar"
           data={netResult.data}
           options={netResult.options}
-          valueType="currency-millions"
+          valueType="currency-thousands"
         />
 
         <ChartCard
@@ -57,7 +57,7 @@ export function OverviewTab() {
           chartType="bar"
           data={equity.data}
           options={equity.options}
-          valueType="currency-millions"
+          valueType="currency-thousands"
         />
       </div>
 

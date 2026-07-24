@@ -17,13 +17,20 @@ export function useSquadCharts() {
   const baseLabels = useChartLabels();
 
   const squadBookData = useMemo<ChartData<"bar" | "line">>(() => {
+    // Filter data up to 2024/25 only
+    const filteredAnnual = annual.filter((d) => {
+      const season = d.label || d.season;
+      return season && season <= "2024/25";
+    });
+    const filteredLabels = baseLabels.filter((l) => l <= "2024/25");
+    
     const h1Data = getLatestH1Data(DATASET);
-    const labels = [...baseLabels];
-    const bookValues: (number | null)[] = annual.map((d) => d.squad_book_value);
-    const marketValues: (number | null)[] = annual.map(
+    const labels = [...filteredLabels];
+    const bookValues: (number | null)[] = filteredAnnual.map((d) => d.squad_book_value);
+    const marketValues: (number | null)[] = filteredAnnual.map(
       (d) => d.squad_market_value,
     );
-    if (h1Data) {
+    if (h1Data && h1Data.label && h1Data.label <= "2024/25") {
       labels.push(h1Data.label ?? (isPt ? "1º Semestre" : "H1"));
       bookValues.push(null);
       marketValues.push(h1Data.squad_market_value ?? null);
@@ -116,7 +123,17 @@ export function useSquadCharts() {
   const transfersOptions = useMemo<ChartOptions<"bar">>(
     () => ({
       ...baseOpts,
-      plugins: { ...baseOpts.plugins, legend: { display: false } },
+      plugins: {
+        ...baseOpts.plugins,
+        legend: { display: false },
+        tooltip: {
+          ...baseOpts.plugins.tooltip,
+          callbacks: {
+            label: (ctx: any) =>
+              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+          },
+        },
+      },
     }),
     [],
   );

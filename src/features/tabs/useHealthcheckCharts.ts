@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useAppState, state } from "../../core/state.js";
-import { baseOpts, ZONE_COLORS } from "../../charts/chartUtils.js";
+import { baseOpts, ZONE_COLORS, fmtMillions } from "../../charts/chartUtils.js";
+
 import { getBrandColors } from "../../charts/chartPalette.js";
 import { useChartLabels } from "../../charts/chartHooks.js";
 import { wageBillRatio, netDebt } from "../metrics.js";
@@ -437,8 +438,7 @@ export function useHealthcheckCharts() {
           label: isPt ? "Dívidas a Clubes (Passes)" : "Transfer Payables",
           data: annual.map(
             (d) =>
-              ((d.transfer_payables_c || 0) + (d.transfer_payables_nc || 0)) /
-              1000,
+              (d.transfer_payables_c || 0) + (d.transfer_payables_nc || 0),
           ),
           backgroundColor: colors.neg + "B3",
           borderColor: colors.neg,
@@ -448,9 +448,8 @@ export function useHealthcheckCharts() {
           label: isPt ? "Créditos a Receber de Clubes" : "Transfer Receivables",
           data: annual.map(
             (d) =>
-              ((d.transfer_receivables_c || 0) +
-                (d.transfer_receivables_nc || 0)) /
-              1000,
+              (d.transfer_receivables_c || 0) +
+                (d.transfer_receivables_nc || 0),
           ),
           backgroundColor: colors.pos + "B3",
           borderColor: colors.pos,
@@ -466,6 +465,13 @@ export function useHealthcheckCharts() {
       plugins: {
         ...baseOpts.plugins,
         legend: { display: true, position: "bottom" },
+        tooltip: {
+          ...baseOpts.plugins.tooltip,
+          callbacks: {
+            label: (ctx: any) =>
+              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+          },
+        },
       },
       scales: {
         ...baseOpts.scales,
@@ -489,8 +495,7 @@ export function useHealthcheckCharts() {
           label: isPt ? "EBITDA Operacional" : "Operating EBITDA",
           data: annual.map(
             (d) =>
-              (d.operating_result_excl_players + Math.abs(d.da_excl_squad)) /
-              1000,
+              d.operating_result_excl_players + Math.abs(d.da_excl_squad),
           ),
           borderColor: colors.gold,
           backgroundColor: "transparent",
@@ -502,10 +507,9 @@ export function useHealthcheckCharts() {
           label: isPt ? "EBITDA Total (c/ Passes)" : "Total EBITDA (w/ Transfers)",
           data: annual.map(
             (d) =>
-              (d.operating_result_total +
+              d.operating_result_total +
                 Math.abs(d.da_excl_squad) +
-                Math.abs(d.squad_amortization_impairment)) /
-              1000,
+                Math.abs(d.squad_amortization_impairment),
           ),
           borderColor: colors.pos,
           backgroundColor: "transparent",
@@ -523,6 +527,13 @@ export function useHealthcheckCharts() {
       plugins: {
         ...baseOpts.plugins,
         legend: { display: true, position: "bottom" },
+        tooltip: {
+          ...baseOpts.plugins.tooltip,
+          callbacks: {
+            label: (ctx: any) =>
+              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+          },
+        },
       },
       scales: {
         ...baseOpts.scales,

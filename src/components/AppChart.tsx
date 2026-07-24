@@ -11,8 +11,9 @@ interface AppChartProps {
   className?: string;
   ariaLabel?: string;
   valueType?:
-    | "currency-thousands"
+"currency-thousands"
     | "currency-millions"
+   
     | "ratio"
     | "percentage"
     | "auto";

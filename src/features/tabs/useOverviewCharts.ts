@@ -4,6 +4,7 @@ import {
   baseOpts,
   styledLineDataset,
   eventBoxes,
+  fmtMillions,
 } from "../../charts/chartUtils.js";
 import { useChartLabels, usePosNegBarChart } from "../../charts/chartHooks.js";
 import type { ChartData, ChartOptions } from "chart.js";
@@ -85,6 +86,13 @@ export function useOverviewCharts() {
       ...baseOpts,
       plugins: {
         ...baseOpts.plugins,
+        tooltip: {
+          ...baseOpts.plugins.tooltip,
+          callbacks: {
+            label: (ctx: any) =>
+              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+          },
+        },
         annotation: {
           drawTime: "beforeDatasetsDraw",
           annotations,
