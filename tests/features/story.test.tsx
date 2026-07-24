@@ -119,4 +119,66 @@ describe("Story Component", () => {
     });
     expect(useAppState.getState().storyIndex).toBe(5);
   });
+
+  it("should handle startStory with custom index", () => {
+    act(() => {
+      startStory(2);
+    });
+    expect(useAppState.getState().storyIndex).toBe(2);
+    expect(useAppState.getState().isStoryVisible).toBe(true);
+  });
+
+  it("should handle startStory with index exceeding max", () => {
+    act(() => {
+      startStory(100);
+    });
+    // Should clamp to max index
+    expect(useAppState.getState().storyIndex).toBeLessThan(100);
+    expect(useAppState.getState().isStoryVisible).toBe(true);
+  });
+
+  it("should handle nextStory at the end", () => {
+    act(() => {
+      useAppState.setState({ isStoryVisible: true });
+    });
+    render(<Story />);
+
+    // Navigate to the end
+    for (let i = 0; i < 20; i++) {
+      act(() => {
+        nextStory();
+      });
+    }
+
+    // Should exit story when reaching the end
+    expect(useAppState.getState().isStoryVisible).toBe(false);
+  });
+
+  it("should handle prevStory at the beginning", () => {
+    act(() => {
+      useAppState.setState({ isStoryVisible: true, storyIndex: 0 });
+    });
+    render(<Story />);
+
+    act(() => {
+      prevStory();
+    });
+
+    // Should stay at index 0
+    expect(useAppState.getState().storyIndex).toBe(0);
+  });
+
+  it("should handle keyboard navigation when story is not visible", () => {
+    act(() => {
+      useAppState.setState({ isStoryVisible: false });
+    });
+    render(<Story />);
+
+    act(() => {
+      fireEvent.keyDown(document, { key: "ArrowRight" });
+    });
+
+    // Should not change index when story is not visible
+    expect(useAppState.getState().storyIndex).toBe(0);
+  });
 });
