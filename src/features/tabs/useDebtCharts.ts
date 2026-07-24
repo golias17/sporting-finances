@@ -55,7 +55,7 @@ export function useDebtCharts() {
         tooltip: {
           ...baseOpts.plugins.tooltip,
           callbacks: {
-            label: (ctx: any) =>
+            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
         },
@@ -127,7 +127,7 @@ export function useDebtCharts() {
         tooltip: {
           ...baseOpts.plugins.tooltip,
           callbacks: {
-            label: (ctx: any) =>
+            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               `${isPt ? "Longo prazo" : "Long-term"}: ${ctx.parsed.y.toFixed(0)}%`,
           },
         },
@@ -138,7 +138,7 @@ export function useDebtCharts() {
           ...baseOpts.scales.y,
           ticks: {
             ...(baseOpts.scales?.y?.ticks || {}),
-            callback: (v: any) => v + "%",
+            callback: (v: number | string) => v + "%",
           },
           beginAtZero: true,
           max: 100,
@@ -156,7 +156,7 @@ export function useDebtCharts() {
         tooltip: {
           ...baseOpts.plugins.tooltip,
           callbacks: {
-            label: (ctx: any) =>
+            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
         },

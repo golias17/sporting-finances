@@ -29,8 +29,8 @@ function zoneColor(
       : state.COLORS.pos;
 }
 
-function zoneAnnotations({ zones, lines }: { zones: any[]; lines: any[] }) {
-  const annotations: any = {};
+function zoneAnnotations({ zones, lines }: { zones: Array<{ low: number; high: number; color: string; label: string }>; lines: Array<{ value: number; color: string; label: string }> }) {
+  const annotations: Record<string, { type: string; yMin: number; yMax: number; backgroundColor: string; label: { display: boolean; content: string } }> = {};
   zones.forEach((z) => {
     annotations[z.key] = {
       type: "box",
@@ -104,7 +104,7 @@ export function useHealthcheckCharts() {
         tooltip: {
           ...baseOpts.plugins.tooltip,
           callbacks: {
-            label: (ctx: any) =>
+            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               `${isPt ? "Custos com pessoal" : "Wage bill"}: ${ctx.parsed.y.toFixed(0)}% ${isPt ? "da receita" : "of revenue"}`,
           },
         },
@@ -146,7 +146,7 @@ export function useHealthcheckCharts() {
           max: 130,
           ticks: {
             ...(baseOpts.scales?.y?.ticks || {}),
-            callback: (v: any) => v + "%",
+            callback: (v: number | string) => v + "%",
           },
         },
       },
@@ -197,7 +197,7 @@ export function useHealthcheckCharts() {
         tooltip: {
           ...baseOpts.plugins.tooltip,
           callbacks: {
-            label: (ctx: any) =>
+            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               `${isPt ? "Dependência de passes" : "Transfer reliance"}: ${ctx.parsed.y.toFixed(0)}%`,
           },
         },
@@ -234,7 +234,7 @@ export function useHealthcheckCharts() {
           max: 80,
           ticks: {
             ...(baseOpts.scales?.y?.ticks || {}),
-            callback: (v: any) => v + "%",
+            callback: (v: number | string) => v + "%",
           },
         },
       },
@@ -293,7 +293,7 @@ export function useHealthcheckCharts() {
         tooltip: {
           ...baseOpts.plugins.tooltip,
           callbacks: {
-            label: (ctx: any) =>
+            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               `${isPt ? "Dívida líquida" : "Net debt"}: ${ctx.parsed.y.toFixed(1)}× ${isPt ? "receita anual" : "annual revenue"}`,
           },
         },
@@ -325,7 +325,7 @@ export function useHealthcheckCharts() {
           beginAtZero: false,
           ticks: {
             ...(baseOpts.scales?.y?.ticks || {}),
-            callback: (v: any) => v.toFixed(1) + "×",
+            callback: (v: number | string) => v.toFixed(1) + "×",
           },
         },
       },
@@ -387,7 +387,7 @@ export function useHealthcheckCharts() {
         tooltip: {
           ...baseOpts.plugins.tooltip,
           callbacks: {
-            label: (ctx: any) =>
+            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               `${isPt ? "Rácio de solvência" : "Current ratio"}: ${ctx.parsed.y.toFixed(2)}×`,
           },
         },
@@ -419,7 +419,7 @@ export function useHealthcheckCharts() {
           beginAtZero: true,
           ticks: {
             ...(baseOpts.scales?.y?.ticks || {}),
-            callback: (v: any) => v.toFixed(1) + "×",
+            callback: (v: number | string) => v.toFixed(1) + "×",
           },
         },
       },
@@ -468,7 +468,7 @@ export function useHealthcheckCharts() {
         tooltip: {
           ...baseOpts.plugins.tooltip,
           callbacks: {
-            label: (ctx: any) =>
+            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
         },
@@ -479,7 +479,7 @@ export function useHealthcheckCharts() {
           ...baseOpts.scales.y,
           ticks: {
             ...(baseOpts.scales?.y?.ticks || {}),
-            callback: (v: any) => `€${v}M`,
+            callback: (v: number | string) => `€${v}M`,
           },
         },
       },
@@ -530,7 +530,7 @@ export function useHealthcheckCharts() {
         tooltip: {
           ...baseOpts.plugins.tooltip,
           callbacks: {
-            label: (ctx: any) =>
+            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
         },
@@ -541,7 +541,7 @@ export function useHealthcheckCharts() {
           ...baseOpts.scales.y,
           ticks: {
             ...(baseOpts.scales?.y?.ticks || {}),
-            callback: (v: any) => `€${v}M`,
+            callback: (v: number | string) => `€${v}M`,
           },
         },
       },

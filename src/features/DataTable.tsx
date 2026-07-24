@@ -48,7 +48,7 @@ const getFields = (isPt: boolean) => [
     label: isPt ? "Caixa e Equivalentes" : "Cash & Equivalents",
   },
   {
-    compute: (d: any) => netDebt(d),
+    compute: (d: Record<string, number>) => netDebt(d),
     label: isPt ? "Dívida Líquida" : "Net Debt",
   },
   {

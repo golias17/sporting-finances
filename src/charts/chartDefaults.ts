@@ -63,7 +63,7 @@ export function styledLineDataset({
   fill?: boolean;
   spanGaps?: boolean;
   pointBorderColor?: string;
-  extra?: any;
+  extra?: Record<string, unknown>;
 }) {
   return {
     label,
@@ -115,7 +115,7 @@ export function initChartDefaults() {
         enabled: false,
         external: externalTooltipHandler,
         callbacks: {
-          footer: (tooltipItems: any[]) => {
+          footer: (tooltipItems: Array<{ label: string }>) => {
             const label = tooltipItems[0]?.label;
             if (!label) return "";
             return getPitchMilestone(label);

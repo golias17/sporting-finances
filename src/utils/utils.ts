@@ -6,7 +6,7 @@
  * (main.js) and the transfer table's search box (transfers.js) — both fire
  * dozens of times in quick succession when only the settled value matters.
  */
-export function debounce<T extends (...args: any[]) => void>(
+export function debounce<T extends (...args: unknown[]) => void>(
   fn: T,
   delayMs: number,
 ) {

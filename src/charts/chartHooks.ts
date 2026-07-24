@@ -52,7 +52,7 @@ export function usePosNegBarChart(
         tooltip: {
           ...baseOpts.plugins.tooltip,
           callbacks: {
-            label: (ctx: any) =>
+            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
         },

@@ -18,10 +18,10 @@ export function useTranslation() {
     ...props
   }: {
     i18nKey: string;
-    as?: any;
+    as?: React.ComponentType<any>;
     className?: string;
     children?: React.ReactNode;
-    [key: string]: any;
+    [key: string]: unknown;
   }) => {
     const entry = translations[i18nKey];
 

@@ -23,7 +23,7 @@ interface AppChartProps {
   >;
   hideTable?: boolean;
   chartRef?: React.RefObject<any>;
-  plugins?: any[];
+  plugins?: Array<{ id: string; beforeDraw?: (chart: { ctx: CanvasRenderingContext2D }) => void }>;
 }
 
 export function AppChart({

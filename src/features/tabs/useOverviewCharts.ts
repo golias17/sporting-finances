@@ -58,7 +58,7 @@ export function useOverviewCharts() {
   const storyIndex = useAppState((s) => s.storyIndex);
 
   const heroOptions = useMemo<ChartOptions<any>>(() => {
-    const annotations: any = eventBoxes([
+    const annotations: Record<string, { type: string; xMin: string; xMax: string; borderColor: string; borderWidth: number; label: { display: boolean; content: string } }> = eventBoxes([
       "restructure14",
       "alcochete",
       "covid",
@@ -89,7 +89,7 @@ export function useOverviewCharts() {
         tooltip: {
           ...baseOpts.plugins.tooltip,
           callbacks: {
-            label: (ctx: any) =>
+            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
         },

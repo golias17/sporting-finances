@@ -48,7 +48,7 @@ const PRESETS: Record<string, typeof DEFAULT_INPUTS> = {
 const UCL_BONUS_COST_RATE = 0.15;
 
 function getBaseline() {
-  const season = state.annual?.find((s: any) => s.label === "2024/25");
+  const season = state.annual?.find((s: { label: string }) => s.label === "2024/25");
   if (!season) return null;
   return {
     revenue_operating: season.revenue_operating,
@@ -69,7 +69,7 @@ function getBaseline() {
 }
 
 function computeProjection(
-  BASELINE: any,
+  BASELINE: { revenue_operating: number; personnel_costs: number; net_result: number; equity: number; cash: number },
   {
     uclPrize,
     payrollAdj,
@@ -197,7 +197,7 @@ function cashZoneInfo(cash: number, isPt: boolean) {
   };
 }
 
-function buildVerdict(baseline: any, proj: any, isPt: boolean) {
+function buildVerdict(baseline: { revenue_operating: number; personnel_costs: number; net_result: number; equity: number; cash: number }, proj: { revenue_operating: number; personnel_costs: number; net_result: number; equity: number; cash: number }, isPt: boolean) {
   const netDiff = proj.netResult - baseline.netResult;
   const eqDiff = proj.equity - baseline.equity;
   const cashNegative = proj.cash < 0;
@@ -241,9 +241,9 @@ function scenarioLabels(isPt: boolean) {
 }
 
 function usePlaygroundCharts(
-  baseline: any,
-  proj: any,
-  pinned: any,
+  baseline: { revenue_operating: number; personnel_costs: number; net_result: number; equity: number; cash: number },
+  proj: { revenue_operating: number; personnel_costs: number; net_result: number; equity: number; cash: number },
+  pinned: { netResult: number; equity: number } | null,
   isPt: boolean,
 ) {
   return React.useMemo(() => {
@@ -323,7 +323,7 @@ function usePlaygroundCharts(
           ...state.baseOpts.scales?.y,
           ticks: {
             ...state.baseOpts.scales?.y?.ticks,
-            callback: (v: any) => v.toFixed(0) + "M€",
+            callback: (v: number | string) => v.toFixed(0) + "M€",
           },
           beginAtZero: false,
           title: {
@@ -339,7 +339,7 @@ function usePlaygroundCharts(
           ...state.baseOpts.plugins?.tooltip,
           callbacks: {
             ...state.baseOpts.plugins?.tooltip?.callbacks,
-            label: (context: any) => {
+            label: (context: { dataset: { label: string }; parsed: { y: number } }) => {
               const val = context.parsed.y;
               if (context.datasetIndex === 0) {
                 return `${context.dataset.label}: ${val.toFixed(1)} M€`;
@@ -363,7 +363,7 @@ function usePlaygroundCharts(
     const netPlugins = [
       {
         id: "barDelta",
-        afterDatasetsDraw(chart: any) {
+        afterDatasetsDraw(chart: { getDatasetMeta: (index: number) => { data: Array<{ x: number; y: number; width: number; height: number }> } }) {
           const { ctx, data } = chart;
           ctx.save();
           ctx.font = "bold 9px sans-serif";
@@ -372,7 +372,7 @@ function usePlaygroundCharts(
           const baselineDS = data.datasets[0].data;
           const projDS = data.datasets[1].data;
 
-          chart.getDatasetMeta(1).data.forEach((bar: any, index: any) => {
+          chart.getDatasetMeta(1).data.forEach((bar: { x: number; y: number; width: number; height: number }, index: number) => {
             const baselineVal = baselineDS[index];
             const projVal = projDS[index];
             const delta = projVal - baselineVal;
@@ -445,7 +445,7 @@ function usePlaygroundCharts(
           },
           ticks: {
             ...state.baseOpts.scales?.y?.ticks,
-            callback: (v: any) => v.toFixed(0),
+            callback: (v: number | string) => v.toFixed(0),
           },
           grid: { ...state.baseOpts.scales?.y?.grid },
         },
@@ -466,7 +466,7 @@ function usePlaygroundCharts(
           ),
           ticks: {
             ...state.baseOpts.scales?.y?.ticks,
-            callback: (v: any) => v.toFixed(0) + "%",
+            callback: (v: number | string) => v.toFixed(0) + "%",
           },
           grid: { drawOnChartArea: false },
         },
@@ -477,7 +477,7 @@ function usePlaygroundCharts(
           ...state.baseOpts.plugins?.tooltip,
           callbacks: {
             ...state.baseOpts.plugins?.tooltip?.callbacks,
-            label: (context: any) => {
+            label: (context: { dataset: { label: string }; parsed: { y: number } }) => {
               const val = context.parsed.y;
               const suffix = context.datasetIndex === 0 ? " M€" : "%";
               return `${context.dataset.label}: ${val.toFixed(1)}${suffix}`;

@@ -89,7 +89,7 @@ async function initApp() {
     // Mount the React Application
     const root = createRoot(rootEl);
     root.render(<App />);
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.error("Failed to load application data", e);
     const wrap = document.createElement("div");
     wrap.style.cssText =

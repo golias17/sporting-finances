@@ -88,7 +88,7 @@ export interface ChartOptions {
   maintainAspectRatio?: boolean;
   plugins?: Record<string, any>;
   scales?: Record<string, any>;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /** Brand color tokens used across charts and the PDF export. */

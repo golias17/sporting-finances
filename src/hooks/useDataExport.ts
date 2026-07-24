@@ -5,7 +5,7 @@ import { netDebt } from "../features/metrics.js";
 interface FieldDef {
   key?: string;
   label: string;
-  compute?: (d: any) => number;
+  compute?: (d: Record<string, unknown>) => number;
 }
 
 function getFields(isPt: boolean): FieldDef[] {
