@@ -1,9 +1,23 @@
 import { state } from "../core/state.js";
+import type { Chart } from "chart.js";
+
+interface TooltipContext {
+  chart: Chart;
+  tooltip: {
+    opacity: number;
+    title: string[];
+    body: Array<{ lines: string[] }>;
+    labelColors: Array<{ backgroundColor?: string; borderColor?: string }>;
+    footer: string[];
+    caretX: number;
+    caretY: number;
+  };
+}
 
 // CHART COMPANION WIDGETS
 // =============================================================
 
-export function externalTooltipHandler(context: any) {
+export function externalTooltipHandler(context: TooltipContext) {
   const { chart, tooltip } = context;
   let tooltipEl = document.getElementById("chartjs-tooltip");
 
@@ -26,7 +40,7 @@ export function externalTooltipHandler(context: any) {
       .join("");
 
     let bodyHtml = '<div class="glass-tooltip-body">';
-    tooltip.body.forEach((bodyItem: any, i: number) => {
+    tooltip.body.forEach((bodyItem: { lines: string[] }, i: number) => {
       const colors = tooltip.labelColors[i] || {};
       const color = colors.backgroundColor || colors.borderColor || "#ccc";
 

@@ -19,7 +19,7 @@ function getCachedItems(allowStale = false) {
   }
 }
 
-function setCachedItems(items: any[]) {
+function setCachedItems(items: Array<{ title: string; link: string; pubDate: string; sourceName: string }>) {
   try {
     sessionStorage.setItem(
       CACHE_KEY,
@@ -65,7 +65,7 @@ function isNoise(text: string) {
   return NOISE_PATTERNS.some((rx) => rx.test(t));
 }
 
-function filterNoise(items: any[]) {
+function filterNoise(items: Array<{ title: string; link: string; pubDate: string; sourceName: string }>) {
   return items.filter((item) => {
     const title = (item.title || "").toLowerCase();
     const author = (item.author || "").toLowerCase();
@@ -140,23 +140,23 @@ export function News() {
 
 
         const rawItems = [
-          ...(responses[0].items || []).map((i: any) => ({
+          ...(responses[0].items || []).map((i: { title: string; link: string; pubDate: string }) => ({
             ...i,
             category: "FINANCE",
           })),
-          ...(responses[1].items || []).map((i: any) => ({
+          ...(responses[1].items || []).map((i: { title: string; link: string; pubDate: string }) => ({
             ...i,
             category: "MARKET",
           })),
-          ...(responses[2].items || []).map((i: any) => ({
+          ...(responses[2].items || []).map((i: { title: string; link: string; pubDate: string }) => ({
             ...i,
             category: "CORPORATE",
           })),
-          ...(responses[3].items || []).map((i: any) => ({
+          ...(responses[3].items || []).map((i: { title: string; link: string; pubDate: string }) => ({
             ...i,
             category: "FINANCE",
           })),
-          ...(responses[4].items || []).map((i: any) => ({
+          ...(responses[4].items || []).map((i: { title: string; link: string; pubDate: string }) => ({
             ...i,
             category: "FINANCE",
           })),
@@ -172,7 +172,7 @@ export function News() {
           setDataItems(filtered);
           setLoading(false);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         const stale = getCachedItems(true);
         if (stale && stale.length > 0) {
           if (mounted) {
@@ -224,7 +224,7 @@ export function News() {
     };
   });
 
-  const storyClusters: any[] = [];
+  const storyClusters: Array<{ title: string; sources: Array<{ title: string; link: string; pubDate: string; sourceName: string }> }> = [];
   const stopWords = new Set([
     "sporting",
     "sad",
@@ -252,7 +252,7 @@ export function News() {
       }
       if (overlap >= 3) {
         if (
-          !cluster.sources.find((s: any) => s.sourceName === item.sourceName)
+          !cluster.sources.find((s: { sourceName: string }) => s.sourceName === item.sourceName)
         ) {
           cluster.sources.push(item);
         }
@@ -327,7 +327,7 @@ export function News() {
             <h3 className="news-title">{item.title}</h3>
             <div className="news-date">{dateText}</div>
             <div className="news-sources-list">
-              {cluster.sources.map((sourceItem: any, idx: number) => {
+              {cluster.sources.map((sourceItem: { title: string; link: string; pubDate: string; sourceName: string }, idx: number) => {
                 const link = sourceItem.link;
                 const isSafeUrl =
                   typeof link === "string" && /^https?:\/\//i.test(link);
@@ -352,7 +352,7 @@ export function News() {
   );
 }
 
-let newsRoot: any = null;
+let newsRoot: HTMLElement | null = null;
 export function initNewsFeed() {
   const container = document.getElementById("newsFeed");
   if (!container) return;

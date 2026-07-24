@@ -367,7 +367,7 @@ export function useCompetitiveCharts() {
         intersect: false,
         callbacks: {
           ...(baseOpts.plugins?.tooltip as any)?.callbacks,
-          label: (ctx: any) =>
+          label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
             ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           footer: () => "",
         },
@@ -379,7 +379,7 @@ export function useCompetitiveCharts() {
         ...baseOpts.scales?.y,
         ticks: {
           ...baseOpts.scales?.y?.ticks,
-          callback: (value: number) => `€${value}M`,
+          callback: (value: number) => `€${(value / 1000).toFixed(0)}M`,
         },
       },
     },
@@ -411,7 +411,7 @@ export function useCompetitiveCharts() {
         intersect: false,
         callbacks: {
           ...(baseOpts.plugins?.tooltip as any)?.callbacks,
-          label: (ctx: any) =>
+          label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
             ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}%`,
           footer: () => "",
         },

@@ -652,10 +652,10 @@ export function LionFinance() {
 // -------------------------------------------------------------
 // Mount functions
 // -------------------------------------------------------------
-let vmocCostKpisRoot: any = null;
-const vmocCostTableRoot: any = null;
-let usppTermsRoot: any = null;
-let lionFinanceCardsRoot: any = null;
+let vmocCostKpisRoot: HTMLElement | null = null;
+const vmocCostTableRoot: HTMLElement | null = null;
+let usppTermsRoot: HTMLElement | null = null;
+let lionFinanceCardsRoot: HTMLElement | null = null;
 
 function renderVmocCost() {
   const kpisContainer = document.getElementById("vmocCostKpis");

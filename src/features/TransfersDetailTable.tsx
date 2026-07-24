@@ -129,7 +129,7 @@ export function TransfersDetailTable({
     }
 
     if (sortCol) {
-      result.sort((a: any, b: any) => {
+      result.sort((a: { date?: string; season?: string }, b: { date?: string; season?: string }) => {
         let valA = a[sortCol];
         let valB = b[sortCol];
 

@@ -77,7 +77,7 @@ export function useSquadCharts() {
         tooltip: {
           ...baseOpts.plugins?.tooltip,
           callbacks: {
-            label: (ctx: any) => {
+            label: (ctx: { dataset: { label: string }; parsed: { y: number | null } }) => {
               if (ctx.parsed.y === null || ctx.parsed.y === undefined)
                 return null;
               return ctx.dataset.label + ": " + fmtMillions(ctx.parsed.y);
@@ -91,7 +91,7 @@ export function useSquadCharts() {
 
   const transfersData = useMemo<ChartData<"bar">>(() => {
     const recordLabel = fullAnnual?.reduce(
-      (best: any, d: any) =>
+      (best: { player_transfer_income: number } | null, d: { player_transfer_income: number }) =>
         best === null || d.player_transfer_income > best.player_transfer_income
           ? d
           : best,
@@ -129,7 +129,7 @@ export function useSquadCharts() {
         tooltip: {
           ...baseOpts.plugins.tooltip,
           callbacks: {
-            label: (ctx: any) =>
+            label: (ctx: { dataset: { label: string }; parsed: { y: number | null } }) =>
               ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
         },

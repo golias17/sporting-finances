@@ -117,11 +117,11 @@ export function useRevenueCharts() {
         tooltip: {
           ...baseOpts.plugins.tooltip,
           callbacks: {
-            label: (ctx: any) =>
+            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
-            footer: (items: any[]) => {
+            footer: (items: Array<{ parsed: { y: number } }>) => {
               const total = items.reduce(
-                (s: number, i: any) => s + i.parsed.y,
+                (s: number, i: { parsed: { y: number } }) => s + i.parsed.y,
                 0,
               );
               return `Total: ${fmtMillions(total)}`;
@@ -183,7 +183,7 @@ export function useRevenueCharts() {
         tooltip: {
           ...baseOpts.plugins.tooltip,
           callbacks: {
-            label: (ctx: any) =>
+            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               `${isPt ? "Rácio" : "Ratio"}: ${ctx.parsed.y.toFixed(0)}%`,
           },
         },
@@ -194,7 +194,7 @@ export function useRevenueCharts() {
           ...baseOpts.scales.y,
           ticks: {
             ...(baseOpts.scales?.y?.ticks || {}),
-            callback: (v: any) => v + "%",
+            callback: (v: number | string) => v + "%",
           },
           beginAtZero: true,
         },
@@ -252,7 +252,7 @@ export function useRevenueCharts() {
         tooltip: {
           ...baseOpts.plugins.tooltip,
           callbacks: {
-            label: (ctx: any) =>
+            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
         },
@@ -275,7 +275,7 @@ export function useRevenueCharts() {
         tooltip: {
           ...state.baseOpts.plugins.tooltip,
           callbacks: {
-            label: (ctx: any) =>
+            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
         },

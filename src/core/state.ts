@@ -103,7 +103,7 @@ export const useAppState = create<AppState>((set, get) => ({
 }));
 
 export const state = new Proxy({} as AppState, {
-  get(target: any, key: PropertyKey, receiver: any) {
+  get(target: Record<string, unknown>, key: PropertyKey, receiver: unknown) {
     const s = useAppState.getState() as any;
 
     if (key === "COLORS" && (!s.COLORS || Object.keys(s.COLORS).length === 0)) {
@@ -113,7 +113,7 @@ export const state = new Proxy({} as AppState, {
 
     return s[key];
   },
-  set(target: any, key: PropertyKey, value: any, receiver: any) {
+  set(target: Record<string, unknown>, key: PropertyKey, value: unknown, receiver: unknown) {
     const bypassWarnKeys = new Set([
       "COLORS",
       "baseOpts",
