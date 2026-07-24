@@ -479,7 +479,7 @@ export function useHealthcheckCharts() {
           ...baseOpts.scales.y,
           ticks: {
             ...(baseOpts.scales?.y?.ticks || {}),
-            callback: (v: number | string) => `€${v}M`,
+            callback: (v: number | string) => `€${(Number(v) / 1000).toFixed(0)}M`,
           },
         },
       },
@@ -541,7 +541,7 @@ export function useHealthcheckCharts() {
           ...baseOpts.scales.y,
           ticks: {
             ...(baseOpts.scales?.y?.ticks || {}),
-            callback: (v: number | string) => `€${v}M`,
+            callback: (v: number | string) => `€${(Number(v) / 1000).toFixed(0)}M`,
           },
         },
       },
