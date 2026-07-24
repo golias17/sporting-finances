@@ -15,8 +15,8 @@ export function Hero() {
             />
           </div>
           <T as="p" className="eyebrow" i18nKey="hero-eyebrow" />
-          <T as="h1" i18nKey="auto-txt-h1-2" />
-          <T as="p" className="sub" i18nKey="hero-sub" />
+          <T as="h1" i18nKey="ch01-hero-h1" />
+          <T as="p" className="sub" i18nKey="ch01-hero-sub" />
         </div>
       </div>
     </header>

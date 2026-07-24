@@ -2326,17 +2326,36 @@ textarea.pdf-field-input {
 .pg-verdict {
   display: none;
   font-family: var(--serif);
-  font-size: 15.5px;
-  line-height: 1.55;
+  font-size: var(--fs-sm);
+  line-height: 1.6;
   color: var(--ink-2);
   background: var(--paper);
-  border-left: 3px solid var(--info);
-  padding: 14px 18px;
-  border-radius: var(--radius-xs);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--green);
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-lg);
   margin: 0 0 1.5rem;
+}
+.pg-verdict .pg-verdict-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--green);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.pg-verdict .pg-verdict-header svg {
+  flex-shrink: 0;
 }
 .pg-verdict.warn {
   border-left-color: var(--neg);
+}
+.pg-verdict.warn .pg-verdict-header {
+  color: var(--neg);
 }
 
 /* One chart per row (each still uses .chart-box.tall for room to breathe)

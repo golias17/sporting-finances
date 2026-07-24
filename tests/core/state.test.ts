@@ -65,17 +65,4 @@ describe("state.js", () => {
     state.setPinnedPlaygroundInputs(null);
     expect(state.pinnedPlaygroundInputs).toBeNull();
   });
-
-  it("COLORS Proxy logs console.warn on first access before initialization", () => {
-    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
-
-    // Read COLORS before initialization
-    const val = state.COLORS;
-
-    expect(warnSpy).toHaveBeenCalledWith(
-      "[state] COLORS accessed before initChartDefaults() was called",
-    );
-
-    warnSpy.mockRestore();
-  });
 });

@@ -233,13 +233,13 @@ export function App() {
             src="assets/LOGO.png"
             loading="lazy"
           />
-          <T as="div" className="footer-credit" i18nKey="auto-txt-div-80">
+          <T as="div" className="footer-credit" i18nKey="footer-credit">
             <strong>Sporting Clube de Portugal — Futebol, SAD.</strong>
             Built from the SAD's official annual and semester reports filed with
             the CMVM. Figures in EUR thousands; some 2023/24 numbers restated
             per the 2024/25 report. Compiled for editorial reference.
           </T>
-          <T as="div" className="footer-meta" i18nKey="auto-txt-div-81">
+          <T as="div" className="footer-meta" i18nKey="footer-meta">
             Dossier · 2010/11 → 2024/25 H1
             <br />
             Period ended 31 Dec 2025

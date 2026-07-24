@@ -247,6 +247,16 @@ export function useRevenueCharts() {
   const opResultOptions = useMemo<ChartOptions<any>>(
     () => ({
       ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        tooltip: {
+          ...baseOpts.plugins.tooltip,
+          callbacks: {
+            label: (ctx: any) =>
+              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+          },
+        },
+      },
       scales: {
         ...baseOpts.scales,
         x: { ...baseOpts.scales.x, stacked: true },
@@ -258,7 +268,19 @@ export function useRevenueCharts() {
 
   return {
     revenueData,
-    revenueOptions: state.baseOpts as ChartOptions<any>,
+    revenueOptions: {
+      ...state.baseOpts,
+      plugins: {
+        ...state.baseOpts.plugins,
+        tooltip: {
+          ...state.baseOpts.plugins.tooltip,
+          callbacks: {
+            label: (ctx: any) =>
+              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+          },
+        },
+      },
+    } as ChartOptions<any>,
     revStreamsData,
     revStreamsOptions,
     revVsPayrollData,

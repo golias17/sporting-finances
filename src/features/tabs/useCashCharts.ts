@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useAppState, state } from "../../core/state.js";
-import { baseOpts, styledLineDataset } from "../../charts/chartUtils.js";
+import { baseOpts, styledLineDataset, fmtMillions } from "../../charts/chartUtils.js";
 import { useChartLabels, usePosNegBarChart } from "../../charts/chartHooks.js";
 import type { ChartData, ChartOptions } from "chart.js";
 
@@ -44,6 +44,16 @@ export function useCashCharts() {
   const cashFlowOptions = useMemo<ChartOptions<"bar">>(
     () => ({
       ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        tooltip: {
+          ...baseOpts.plugins.tooltip,
+          callbacks: {
+            label: (ctx: any) =>
+              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+          },
+        },
+      },
       scales: {
         ...baseOpts.scales,
         y: { ...(baseOpts.scales?.y || {}), beginAtZero: false },
@@ -73,7 +83,17 @@ export function useCashCharts() {
   const cashOptions = useMemo<ChartOptions<"line">>(
     () => ({
       ...baseOpts,
-      plugins: { ...baseOpts.plugins, legend: { display: false } },
+      plugins: {
+        ...baseOpts.plugins,
+        legend: { display: false },
+        tooltip: {
+          ...baseOpts.plugins.tooltip,
+          callbacks: {
+            label: (ctx: any) =>
+              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+          },
+        },
+      },
     }),
     [],
   );

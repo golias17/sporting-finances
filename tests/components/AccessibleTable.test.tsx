@@ -66,8 +66,8 @@ describe("AccessibleTable", () => {
     render(<AccessibleTable data={mockData} chartId="test" />);
     fireEvent.click(screen.getByText("View raw table data"));
 
-    expect(screen.getByText("€50.0M")).toBeInTheDocument();
-    expect(screen.getByText("€−30.0M")).toBeInTheDocument();
+    expect(screen.getByText("€50000.0k")).toBeInTheDocument();
+    expect(screen.getByText("€−30000.0k")).toBeInTheDocument();
   });
 
   it("adds neg class to negative values", () => {

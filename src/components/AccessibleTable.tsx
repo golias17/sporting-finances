@@ -13,7 +13,7 @@ interface AccessibleTableProps {
   // Fallback for combo charts where datasets have different scales (e.g. playground)
   datasetValueTypes?: Record<
     number,
-    "currency-thousands" | "currency-millions" | "ratio" | "percentage"
+"currency-thousands" | "currency-millions" | "ratio" | "percentage"
   >;
   onToggle?: (isTableVisible: boolean) => void;
 }
@@ -67,8 +67,7 @@ export function AccessibleTable({
 
     // Default currency-thousands
     const sign = v < 0 ? "−" : "";
-    const val = Math.abs(v) / 1000;
-    return `€${sign}${val.toFixed(1)}M`;
+    return `€${sign}${Math.abs(v).toFixed(1)}k`;
   };
 
   const cellClass = (v: number | null) => {

@@ -1,11 +1,82 @@
 import { useMemo } from "react";
 import { useAppState } from "../../core/state.js";
-import { getBrandColors } from "../../charts/chartUtils.js";
+import { getBrandColors, fmtMillions } from "../../charts/chartUtils.js";
 
-interface CompetitorData {
+interface FinancialData {
+  season: string;
+  label?: string;
+  year?: string;
+  revenue_operating: number;
+  personnel_costs: number;
+  net_result: number;
+  equity: number;
+  non_current_liabilities: number;
+  current_liabilities: number;
+  squad_market_value?: number;
+  rev_tv_comp?: number;
+  rev_matchday?: number;
+  rev_commercial?: number;
+  player_transfer_income?: number;
+  player_transfer_cost?: number;
+}
+
+interface ChartDataset {
   label: string;
-  color: string;
-  data: number[];
+  data: (number | null)[];
+  borderColor: string;
+  backgroundColor: string;
+  tension?: number;
+  fill?: boolean;
+  borderWidth?: number;
+  borderRadius?: number;
+  stack?: string;
+}
+
+// Helper to create competitor dataset for line charts
+function createCompetitorLineDatasets(
+  annual: FinancialData[],
+  benficaAnnual: FinancialData[],
+  portoAnnual: FinancialData[],
+  competitorColors: { sporting: string; benfica: string; porto: string },
+  getField: (d: FinancialData) => number | null,
+  divisor: number = 1
+): ChartDataset[] {
+  const findRivalData = (dataset: FinancialData[], season: string) => {
+    return dataset.find(d => d.season === season || d.year === season);
+  };
+
+  return [
+    {
+      label: "Sporting",
+      data: annual.map((d) => getField(d) !== null ? getField(d)! / divisor : null),
+      borderColor: competitorColors.sporting,
+      backgroundColor: competitorColors.sporting + "33",
+      tension: 0.3,
+      fill: false,
+    },
+    {
+      label: "Benfica",
+      data: annual.map((d) => {
+        const bd = findRivalData(benficaAnnual, d.season);
+        return bd && getField(bd) !== null ? getField(bd)! / divisor : null;
+      }),
+      borderColor: competitorColors.benfica,
+      backgroundColor: competitorColors.benfica + "33",
+      tension: 0.3,
+      fill: false,
+    },
+    {
+      label: "Porto",
+      data: annual.map((d) => {
+        const pd = findRivalData(portoAnnual, d.season);
+        return pd && getField(pd) !== null ? getField(pd)! / divisor : null;
+      }),
+      borderColor: competitorColors.porto,
+      backgroundColor: competitorColors.porto + "33",
+      tension: 0.3,
+      fill: false,
+    },
+  ];
 }
 
 export function useCompetitiveCharts() {
@@ -20,62 +91,56 @@ export function useCompetitiveCharts() {
   const COLORS = useAppState((s) => s.COLORS);
   const baseOpts = useAppState((s) => s.baseOpts);
 
-  // Competitor colors matching Cash Flow by Activity (Green for Sporting, Red/Neg for Benfica, Blue/Info for Porto)
   const brandColors = useMemo(() => getBrandColors(theme === "dark"), [theme]);
 
   const competitorColors = useMemo(() => ({
     sporting: brandColors.green,
-    benfica: brandColors.neg,  // Red (matches Cash Flow Investing)
-    porto: brandColors.info,   // Blue (matches Cash Flow Financing)
+    benfica: brandColors.neg,
+    porto: brandColors.info,
   }), [brandColors]);
 
   const labels = useMemo(() => annual.map((d) => d.label || d.season), [annual]);
 
-  // Helper to find data by season
-  const findRivalData = (dataset: any[], season: string) => {
+  const findRivalData = (dataset: FinancialData[], season: string) => {
     return dataset.find(d => d.season === season || d.year === season);
   };
 
-  // Revenue by Source (stacked bar) - replaces revenueComparison
+  // Revenue by Source (stacked bar)
   const revenueBySource = useMemo(() => ({
     labels,
     datasets: [
-      // Sporting - TV
       {
         label: "Sporting - TV & UEFA",
-        data: annual.map((d) => (d.rev_tv_comp ?? 0) / 1000),
+        data: annual.map((d) => d.rev_tv_comp ?? 0),
         backgroundColor: competitorColors.sporting + "B3",
         borderColor: competitorColors.sporting,
         borderWidth: 1,
         borderRadius: 0,
         stack: "sporting",
       },
-      // Sporting - Matchday
       {
         label: "Sporting - Bilheteira",
-        data: annual.map((d) => (d.rev_matchday ?? 0) / 1000),
+        data: annual.map((d) => d.rev_matchday ?? 0),
         backgroundColor: competitorColors.sporting + "70",
         borderColor: competitorColors.sporting,
         borderWidth: 1,
         borderRadius: 0,
         stack: "sporting",
       },
-      // Sporting - Commercial
       {
         label: "Sporting - Comercial",
-        data: annual.map((d) => (d.rev_commercial ?? 0) / 1000),
+        data: annual.map((d) => d.rev_commercial ?? 0),
         backgroundColor: competitorColors.sporting + "40",
         borderColor: competitorColors.sporting,
         borderWidth: 1,
         borderRadius: 3,
         stack: "sporting",
       },
-      // Benfica - TV
       {
         label: "Benfica - TV & UEFA",
         data: annual.map((d) => {
           const bd = findRivalData(benficaAnnual, d.season);
-          return bd ? (bd.rev_tv_comp ?? 0) / 1000 : null;
+          return bd ? (bd.rev_tv_comp ?? 0) : null;
         }),
         backgroundColor: competitorColors.benfica + "B3",
         borderColor: competitorColors.benfica,
@@ -83,12 +148,11 @@ export function useCompetitiveCharts() {
         borderRadius: 0,
         stack: "benfica",
       },
-      // Benfica - Matchday
       {
         label: "Benfica - Bilheteira",
         data: annual.map((d) => {
           const bd = findRivalData(benficaAnnual, d.season);
-          return bd ? (bd.rev_matchday ?? 0) / 1000 : null;
+          return bd ? (bd.rev_matchday ?? 0) : null;
         }),
         backgroundColor: competitorColors.benfica + "70",
         borderColor: competitorColors.benfica,
@@ -96,12 +160,11 @@ export function useCompetitiveCharts() {
         borderRadius: 0,
         stack: "benfica",
       },
-      // Benfica - Commercial
       {
         label: "Benfica - Comercial",
         data: annual.map((d) => {
           const bd = findRivalData(benficaAnnual, d.season);
-          return bd ? (bd.rev_commercial ?? 0) / 1000 : null;
+          return bd ? (bd.rev_commercial ?? 0) : null;
         }),
         backgroundColor: competitorColors.benfica + "40",
         borderColor: competitorColors.benfica,
@@ -109,12 +172,11 @@ export function useCompetitiveCharts() {
         borderRadius: 3,
         stack: "benfica",
       },
-      // Porto - TV
       {
         label: "Porto - TV & UEFA",
         data: annual.map((d) => {
           const pd = findRivalData(portoAnnual, d.season);
-          return pd ? (pd.rev_tv_comp ?? 0) / 1000 : null;
+          return pd ? (pd.rev_tv_comp ?? 0) : null;
         }),
         backgroundColor: competitorColors.porto + "B3",
         borderColor: competitorColors.porto,
@@ -122,12 +184,11 @@ export function useCompetitiveCharts() {
         borderRadius: 0,
         stack: "porto",
       },
-      // Porto - Matchday
       {
         label: "Porto - Bilheteira",
         data: annual.map((d) => {
           const pd = findRivalData(portoAnnual, d.season);
-          return pd ? (pd.rev_matchday ?? 0) / 1000 : null;
+          return pd ? (pd.rev_matchday ?? 0) : null;
         }),
         backgroundColor: competitorColors.porto + "70",
         borderColor: competitorColors.porto,
@@ -135,12 +196,11 @@ export function useCompetitiveCharts() {
         borderRadius: 0,
         stack: "porto",
       },
-      // Porto - Commercial
       {
         label: "Porto - Comercial",
         data: annual.map((d) => {
           const pd = findRivalData(portoAnnual, d.season);
-          return pd ? (pd.rev_commercial ?? 0) / 1000 : null;
+          return pd ? (pd.rev_commercial ?? 0) : null;
         }),
         backgroundColor: competitorColors.porto + "40",
         borderColor: competitorColors.porto,
@@ -154,80 +214,20 @@ export function useCompetitiveCharts() {
   // Personnel Costs Ratio (line showing % of revenue)
   const personnelCostsRatio = useMemo(() => ({
     labels,
-    datasets: [
-      {
-        label: "Sporting",
-        data: annual.map((d) => {
-          if (!d.revenue_operating) return null;
-          return (Math.abs(d.personnel_costs) / d.revenue_operating) * 100;
-        }),
-        borderColor: competitorColors.sporting,
-        backgroundColor: competitorColors.sporting + "33",
-        tension: 0.3,
-        fill: false,
-      },
-      {
-        label: "Benfica",
-        data: annual.map((d) => {
-          const bd = findRivalData(benficaAnnual, d.season);
-          if (!bd || !bd.revenue_operating) return null;
-          return (Math.abs(bd.personnel_costs) / bd.revenue_operating) * 100;
-        }),
-        borderColor: competitorColors.benfica,
-        backgroundColor: competitorColors.benfica + "33",
-        tension: 0.3,
-        fill: false,
-      },
-      {
-        label: "Porto",
-        data: annual.map((d) => {
-          const pd = findRivalData(portoAnnual, d.season);
-          if (!pd || !pd.revenue_operating) return null;
-          return (Math.abs(pd.personnel_costs) / pd.revenue_operating) * 100;
-        }),
-        borderColor: competitorColors.porto,
-        backgroundColor: competitorColors.porto + "33",
-        tension: 0.3,
-        fill: false,
-      },
-    ],
+    datasets: createCompetitorLineDatasets(
+      annual, benficaAnnual, portoAnnual, competitorColors,
+      (d) => d.revenue_operating ? (Math.abs(d.personnel_costs) / d.revenue_operating) * 100 : null,
+      1
+    ),
   }), [labels, annual, benficaAnnual, portoAnnual, competitorColors]);
 
   // Personnel costs comparison (absolute values)
   const personnelComparison = useMemo(() => ({
     labels,
-    datasets: [
-      {
-        label: "Sporting",
-        data: annual.map((d) => Math.abs(d.personnel_costs) / 1000),
-        borderColor: competitorColors.sporting,
-        backgroundColor: competitorColors.sporting + "33",
-        tension: 0.3,
-        fill: false,
-      },
-      {
-        label: "Benfica",
-        data: annual.map((d) => {
-          const bd = findRivalData(benficaAnnual, d.season);
-          return bd ? Math.abs(bd.personnel_costs) / 1000 : null;
-        }),
-        borderColor: competitorColors.benfica,
-        backgroundColor: competitorColors.benfica + "33",
-        tension: 0.3,
-        fill: false,
-      },
-      {
-        label: "Porto",
-        data: annual.map((d) => {
-          const pd = findRivalData(portoAnnual, d.season);
-          return pd ? Math.abs(pd.personnel_costs) / 1000 : null;
-        }),
-        borderColor: competitorColors.porto,
-        backgroundColor: competitorColors.porto + "33",
-        tension: 0.3,
-        fill: false,
-      },
-    ],
+    datasets: createCompetitorLineDatasets(
+      annual, benficaAnnual, portoAnnual, competitorColors,
+      (d) => Math.abs(d.personnel_costs)
+    ),
   }), [labels, annual, benficaAnnual, portoAnnual, competitorColors]);
 
   // Transfer Balance (net spending: income - cost)
@@ -236,7 +236,7 @@ export function useCompetitiveCharts() {
     datasets: [
       {
         label: "Sporting",
-        data: annual.map((d) => ((d.player_transfer_income ?? 0) - Math.abs(d.player_transfer_cost ?? 0)) / 1000),
+        data: annual.map((d) => (d.player_transfer_income ?? 0) - Math.abs(d.player_transfer_cost ?? 0)),
         backgroundColor: annual.map((d) => {
           const val = (d.player_transfer_income ?? 0) - Math.abs(d.player_transfer_cost ?? 0);
           return val >= 0 ? competitorColors.sporting + "B3" : competitorColors.benfica + "B3";
@@ -253,7 +253,7 @@ export function useCompetitiveCharts() {
         data: annual.map((d) => {
           const bd = findRivalData(benficaAnnual, d.season);
           if (!bd) return null;
-          return ((bd.player_transfer_income ?? 0) - Math.abs(bd.player_transfer_cost ?? 0)) / 1000;
+          return (bd.player_transfer_income ?? 0) - Math.abs(bd.player_transfer_cost ?? 0);
         }),
         backgroundColor: annual.map((d) => {
           const bd = findRivalData(benficaAnnual, d.season);
@@ -270,7 +270,7 @@ export function useCompetitiveCharts() {
         data: annual.map((d) => {
           const pd = findRivalData(portoAnnual, d.season);
           if (!pd) return null;
-          return ((pd.player_transfer_income ?? 0) - Math.abs(pd.player_transfer_cost ?? 0)) / 1000;
+          return (pd.player_transfer_income ?? 0) - Math.abs(pd.player_transfer_cost ?? 0);
         }),
         backgroundColor: annual.map((d) => {
           const pd = findRivalData(portoAnnual, d.season);
@@ -288,38 +288,10 @@ export function useCompetitiveCharts() {
   // Squad value comparison
   const squadValueComparison = useMemo(() => ({
     labels,
-    datasets: [
-      {
-        label: "Sporting",
-        data: annual.map((d) => (d.squad_market_value || 0) / 1000),
-        borderColor: competitorColors.sporting,
-        backgroundColor: competitorColors.sporting + "33",
-        tension: 0.3,
-        fill: false,
-      },
-      {
-        label: "Benfica",
-        data: annual.map((d) => {
-          const bd = findRivalData(benficaAnnual, d.season);
-          return bd ? (bd.squad_market_value || 0) / 1000 : null;
-        }),
-        borderColor: competitorColors.benfica,
-        backgroundColor: competitorColors.benfica + "33",
-        tension: 0.3,
-        fill: false,
-      },
-      {
-        label: "Porto",
-        data: annual.map((d) => {
-          const pd = findRivalData(portoAnnual, d.season);
-          return pd ? (pd.squad_market_value || 0) / 1000 : null;
-        }),
-        borderColor: competitorColors.porto,
-        backgroundColor: competitorColors.porto + "33",
-        tension: 0.3,
-        fill: false,
-      },
-    ],
+    datasets: createCompetitorLineDatasets(
+      annual, benficaAnnual, portoAnnual, competitorColors,
+      (d) => d.squad_market_value || 0
+    ),
   }), [labels, annual, benficaAnnual, portoAnnual, competitorColors]);
 
   // Net result comparison
@@ -328,7 +300,7 @@ export function useCompetitiveCharts() {
     datasets: [
       {
         label: "Sporting",
-        data: annual.map((d) => d.net_result / 1000),
+        data: annual.map((d) => d.net_result),
         borderColor: competitorColors.sporting,
         backgroundColor: competitorColors.sporting + "B3",
         borderWidth: 1,
@@ -337,7 +309,7 @@ export function useCompetitiveCharts() {
         label: "Benfica",
         data: annual.map((d) => {
           const bd = findRivalData(benficaAnnual, d.season);
-          return bd ? bd.net_result / 1000 : null;
+          return bd ? bd.net_result : null;
         }),
         borderColor: competitorColors.benfica,
         backgroundColor: competitorColors.benfica + "B3",
@@ -347,7 +319,7 @@ export function useCompetitiveCharts() {
         label: "Porto",
         data: annual.map((d) => {
           const pd = findRivalData(portoAnnual, d.season);
-          return pd ? pd.net_result / 1000 : null;
+          return pd ? pd.net_result : null;
         }),
         borderColor: competitorColors.porto,
         backgroundColor: competitorColors.porto + "B3",
@@ -359,75 +331,19 @@ export function useCompetitiveCharts() {
   // Equity comparison
   const equityComparison = useMemo(() => ({
     labels,
-    datasets: [
-      {
-        label: "Sporting",
-        data: annual.map((d) => d.equity / 1000),
-        borderColor: competitorColors.sporting,
-        backgroundColor: competitorColors.sporting + "33",
-        tension: 0.3,
-        fill: false,
-      },
-      {
-        label: "Benfica",
-        data: annual.map((d) => {
-          const bd = findRivalData(benficaAnnual, d.season);
-          return bd ? bd.equity / 1000 : null;
-        }),
-        borderColor: competitorColors.benfica,
-        backgroundColor: competitorColors.benfica + "33",
-        tension: 0.3,
-        fill: false,
-      },
-      {
-        label: "Porto",
-        data: annual.map((d) => {
-          const pd = findRivalData(portoAnnual, d.season);
-          return pd ? pd.equity / 1000 : null;
-        }),
-        borderColor: competitorColors.porto,
-        backgroundColor: competitorColors.porto + "33",
-        tension: 0.3,
-        fill: false,
-      },
-    ],
+    datasets: createCompetitorLineDatasets(
+      annual, benficaAnnual, portoAnnual, competitorColors,
+      (d) => d.equity
+    ),
   }), [labels, annual, benficaAnnual, portoAnnual, competitorColors]);
 
   // Total liabilities comparison
   const totalLiabilitiesComparison = useMemo(() => ({
     labels,
-    datasets: [
-      {
-        label: "Sporting",
-        data: annual.map((d) => (d.non_current_liabilities + d.current_liabilities) / 1000),
-        borderColor: competitorColors.sporting,
-        backgroundColor: competitorColors.sporting + "33",
-        tension: 0.3,
-        fill: false,
-      },
-      {
-        label: "Benfica",
-        data: annual.map((d) => {
-          const bd = findRivalData(benficaAnnual, d.season);
-          return bd ? (bd.non_current_liabilities + bd.current_liabilities) / 1000 : null;
-        }),
-        borderColor: competitorColors.benfica,
-        backgroundColor: competitorColors.benfica + "33",
-        tension: 0.3,
-        fill: false,
-      },
-      {
-        label: "Porto",
-        data: annual.map((d) => {
-          const pd = findRivalData(portoAnnual, d.season);
-          return pd ? (pd.non_current_liabilities + pd.current_liabilities) / 1000 : null;
-        }),
-        borderColor: competitorColors.porto,
-        backgroundColor: competitorColors.porto + "33",
-        tension: 0.3,
-        fill: false,
-      },
-    ],
+    datasets: createCompetitorLineDatasets(
+      annual, benficaAnnual, portoAnnual, competitorColors,
+      (d) => (d.non_current_liabilities + d.current_liabilities)
+    ),
   }), [labels, annual, benficaAnnual, portoAnnual, competitorColors]);
 
   // Chart options for currency charts
@@ -451,6 +367,8 @@ export function useCompetitiveCharts() {
         intersect: false,
         callbacks: {
           ...(baseOpts.plugins?.tooltip as any)?.callbacks,
+          label: (ctx: any) =>
+            ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           footer: () => "",
         },
       },
@@ -493,6 +411,8 @@ export function useCompetitiveCharts() {
         intersect: false,
         callbacks: {
           ...(baseOpts.plugins?.tooltip as any)?.callbacks,
+          label: (ctx: any) =>
+            ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}%`,
           footer: () => "",
         },
       },

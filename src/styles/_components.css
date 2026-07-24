@@ -1805,3 +1805,18 @@ body.dark .seating-link-btn:hover {
   color: var(--green);
   font-weight: 600;
 }
+
+/* Table styling inside cards */
+.card > .table-wrap {
+  margin-top: 0.5rem;
+  border-radius: var(--radius-lg);
+}
+
+.card > .table-toggle-btn {
+  margin-top: 0.75rem;
+}
+
+/* Fix spacing when table is visible */
+.card > .chart-box.hidden + .table-wrap {
+  margin-top: 0;
+}

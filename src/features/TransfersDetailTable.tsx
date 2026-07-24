@@ -352,43 +352,40 @@ export function TransfersDetailTable({
           padding: "0.85rem 1.15rem",
           borderRadius: "10px",
           background: "var(--surface-soft, rgba(255, 255, 255, 0.03))",
-          border: "1px solid var(--border-soft, rgba(255, 255, 255, 0.08))",
+          borderLeft: "3px solid var(--green)",
           display: "flex",
-          alignItems: "center",
-          gap: "0.75rem",
-          fontSize: "0.85rem",
+          flexDirection: "column",
+          gap: "0.5rem",
           color: "var(--muted)",
-          flexWrap: "wrap",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "var(--fs-xs)", fontWeight: 600, color: "var(--ink)" }}>
           <svg
-            width="16"
-            height="16"
+            width="14"
+            height="14"
             viewBox="0 0 24 24"
             fill="none"
-            stroke="currentColor"
+            stroke="var(--green)"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            style={{ opacity: 0.85, flexShrink: 0 }}
+            style={{ flexShrink: 0 }}
           >
             <circle cx="12" cy="12" r="10" />
             <line x1="12" y1="16" x2="12" y2="12" />
             <line x1="12" y1="8" x2="12.01" y2="8" />
           </svg>
-          <strong style={{ color: "var(--ink)", fontWeight: 600 }}>
-            {isPt ? "Nota:" : "Note:"}
-          </strong>
+          <span>{isPt ? "Nota" : "Note"}</span>
+          <span style={{ color: "var(--muted)", fontWeight: 400 }}>·</span>
           <span
             className="tf-season-tag"
             style={{
-              padding: "0.15rem 0.55rem",
-              borderRadius: "6px",
-              background: "rgba(46, 158, 108, 0.15)",
+              padding: "0.1rem 0.45rem",
+              borderRadius: "4px",
+              background: "rgba(46, 158, 108, 0.12)",
               color: "var(--green-light, #2e9e6c)",
               fontWeight: 600,
-              fontSize: "0.78rem",
+              fontSize: "var(--fs-2xs)",
             }}
           >
             {activeSeason === "all"
@@ -398,10 +395,10 @@ export function TransfersDetailTable({
               : activeSeason}
           </span>
         </div>
-        <span>
+        <span style={{ fontSize: "var(--fs-sm)", lineHeight: 1.5 }}>
           {isPt
-            ? "— Os valores indicados não incluem comissões de intermediação não divulgadas, mecanismos de solidariedade nem direitos de formação."
-            : "— Figures do not include undisclosed agent fees, solidarity payments, or training compensation."}
+            ? "Os valores indicados não incluem comissões de intermediação não divulgadas, mecanismos de solidariedade nem direitos de formação."
+            : "Figures do not include undisclosed agent fees, solidarity payments, or training compensation."}
         </span>
       </div>
     </>

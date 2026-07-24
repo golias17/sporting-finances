@@ -31,7 +31,7 @@ export function DebtTab() {
         data={debtData}
         options={debtOptions}
         chartClassName="tall"
-        valueType="currency-millions"
+        valueType="currency-thousands"
       />
       <div className="grid-2">
         <ChartCard
@@ -42,7 +42,7 @@ export function DebtTab() {
           chartType="bar"
           data={assetsLiabData}
           options={assetsLiabOptions}
-          valueType="currency-millions"
+          valueType="currency-thousands"
         />
         <ChartCard
           id="chartDebtMaturity"

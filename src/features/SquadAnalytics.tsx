@@ -63,6 +63,7 @@ function transferChartOptions(stacked = false, baseOpts: ChartOptions, COLORS: B
           label: function (context: any) {
             return `${context.dataset.label}: ${context.raw.toFixed(1)} M€`;
           },
+          footer: () => "",
         },
       },
     },
@@ -84,6 +85,7 @@ export function SquadAnalytics() {
   const { t, T } = useTranslation();
   const isPt = useAppState((s) => s.isPt);
   const ledger = useAppState((s) => s.TRANSFER_LEDGER);
+  const annual = useAppState((s) => s.annual);
   const baseOpts = useAppState((s) => s.baseOpts);
   const COLORS = useAppState((s) => s.COLORS);
 
@@ -129,6 +131,17 @@ export function SquadAnalytics() {
           pTotal += p.fee || 0;
           pComm += p.commission || 0;
         });
+      }
+
+      if (sComm + pComm === 0) {
+        const match = annual.find(
+          (d) =>
+            d.season === seasonObj.season ||
+            d.season === seasonObj.season.replace("20", "").replace("/", "-"),
+        );
+        if (match && match.agent_commissions) {
+          pComm = match.agent_commissions / 1000;
+        }
       }
 
       if (erasData[era]) {
@@ -217,27 +230,63 @@ export function SquadAnalytics() {
           <T as="h3" i18nKey="chart_eras_title" />
           <T as="span" className="tag" i18nKey="chart_eras_subtitle" />
         </div>
-        <div className="chart-box tall">
-          <AppChart
-            id="squad-eras"
-            type="bar"
-            data={erasData as any}
-            options={transferChartOptions(false, baseOpts, COLORS)}
-          />
-        </div>
+        <AppChart
+          id="squad-eras"
+          type="bar"
+          data={erasData as any}
+          options={transferChartOptions(false, baseOpts, COLORS)}
+          valueType="currency-millions"
+        />
       </div>
       <div className="card">
         <div className="card-head">
           <T as="h3" i18nKey="chart_commissions_title" />
           <T as="span" className="tag" i18nKey="chart_commissions_subtitle" />
         </div>
-        <div className="chart-box tall">
-          <AppChart
-            id="squad-commissions"
-            type="bar"
-            data={commData}
-            options={transferChartOptions(true, baseOpts, COLORS)}
-          />
+        <AppChart
+          id="squad-commissions"
+          type="bar"
+          data={commData}
+          options={transferChartOptions(true, baseOpts, COLORS)}
+          valueType="currency-millions"
+        />
+        <div
+          className="ledger-footer-note"
+          style={{
+            marginTop: "1rem",
+            padding: "0.85rem 1.15rem",
+            borderRadius: "10px",
+            background: "var(--surface-soft, rgba(255, 255, 255, 0.03))",
+            borderLeft: "3px solid var(--green)",
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.5rem",
+            color: "var(--muted)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "var(--fs-xs)", fontWeight: 600, color: "var(--ink)" }}>
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--green)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{ flexShrink: 0 }}
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+            <span>{isPt ? "Nota" : "Note"}</span>
+          </div>
+          <span style={{ fontSize: "var(--fs-sm)", lineHeight: 1.5 }}>
+            {isPt
+              ? "Nas épocas 2010/11 e 2011/12 não existem dados discriminados por jogador. Os valores apresentados correspondem aos totais auditados nos Relatórios e Contas oficiais da SAD."
+              : "Per-player commission data is not available for the 2010/11 and 2011/12 seasons. The values shown are the audited totals from the SAD's official Annual Reports."}
+          </span>
         </div>
       </div>
     </>

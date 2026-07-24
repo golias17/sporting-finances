@@ -63,7 +63,7 @@ export function CompetitiveTab() {
         data={revenueBySource}
         options={chartOptions}
         chartClassName="tall"
-        valueType="currency-millions"
+        valueType="currency-thousands"
       />
 
       {/* Row 2: Personnel Costs Ratio & Absolute */}
@@ -89,7 +89,7 @@ export function CompetitiveTab() {
           data={personnelComparison}
           options={chartOptions}
           chartClassName="tall"
-          valueType="currency-millions"
+          valueType="currency-thousands"
         />
       </div>
 
@@ -104,7 +104,7 @@ export function CompetitiveTab() {
           data={squadValueComparison}
           options={chartOptions}
           chartClassName="tall"
-          valueType="currency-millions"
+          valueType="currency-thousands"
         />
 
         <ChartCard
@@ -116,7 +116,7 @@ export function CompetitiveTab() {
           data={transferBalance}
           options={chartOptions}
           chartClassName="tall"
-          valueType="currency-millions"
+          valueType="currency-thousands"
         />
       </div>
 
@@ -130,7 +130,7 @@ export function CompetitiveTab() {
         data={netResultComparison}
         options={chartOptions}
         chartClassName="tall"
-        valueType="currency-millions"
+        valueType="currency-thousands"
       >
         <div
           style={{
@@ -215,7 +215,7 @@ export function CompetitiveTab() {
           data={equityComparison}
           options={chartOptions}
           chartClassName="tall"
-          valueType="currency-millions"
+          valueType="currency-thousands"
         />
 
         <ChartCard
@@ -227,7 +227,7 @@ export function CompetitiveTab() {
           data={totalLiabilitiesComparison}
           options={chartOptions}
           chartClassName="tall"
-          valueType="currency-millions"
+          valueType="currency-thousands"
         />
       </div>
 

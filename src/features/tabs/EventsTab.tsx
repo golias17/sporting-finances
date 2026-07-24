@@ -47,90 +47,90 @@ export function EventsTab() {
         <div
           className={`event restructure ${filter !== "all" && filter !== "restructure" ? "hidden" : ""}`}
         >
-          <T as="div" className="event-header" i18nKey="auto-txt-div-36" />
-          <T as="div" className="title" i18nKey="auto-txt-div-37" />
-          <T as="div" className="body" i18nKey="auto-txt-div-38" />
-          <T as="div" className="impact" i18nKey="auto-txt-div-39" />
+          <T as="div" className="event-header" i18nKey="ch10-event-restructure-header" />
+          <T as="div" className="title" i18nKey="ch10-event-restructure-title" />
+          <T as="div" className="body" i18nKey="ch10-event-restructure-body" />
+          <T as="div" className="impact" i18nKey="ch10-event-alcochete-header" />
         </div>
         <div
           className={`event win ${filter !== "all" && filter !== "win" ? "hidden" : ""}`}
         >
-          <T as="div" className="event-header" i18nKey="auto-txt-div-40" />
-          <T as="div" className="title" i18nKey="auto-txt-div-41" />
-          <T as="div" className="body" i18nKey="auto-txt-div-42" />
-          <T as="div" className="impact" i18nKey="auto-txt-div-43" />
+          <T as="div" className="event-header" i18nKey="ch10-event-alcochete-title" />
+          <T as="div" className="title" i18nKey="ch10-event-alcochete-body" />
+          <T as="div" className="body" i18nKey="ch10-event-covid-header" />
+          <T as="div" className="impact" i18nKey="ch10-event-covid-title" />
         </div>
         <div
           className={`event crisis ${filter !== "all" && filter !== "crisis" ? "hidden" : ""}`}
         >
-          <T as="div" className="event-header" i18nKey="auto-txt-div-44" />
-          <T as="div" className="title" i18nKey="auto-txt-div-45" />
-          <T as="div" className="body" i18nKey="auto-txt-div-46" />
-          <T as="div" className="impact" i18nKey="auto-txt-div-47" />
+          <T as="div" className="event-header" i18nKey="ch10-event-covid-body" />
+          <T as="div" className="title" i18nKey="ch10-event-vmoc1-header" />
+          <T as="div" className="body" i18nKey="ch10-event-vmoc1-title" />
+          <T as="div" className="impact" i18nKey="ch10-event-vmoc1-body" />
         </div>
         <div
           className={`event restructure ${filter !== "all" && filter !== "restructure" ? "hidden" : ""}`}
         >
-          <T as="div" className="event-header" i18nKey="auto-txt-div-48" />
-          <T as="div" className="title" i18nKey="auto-txt-div-49" />
-          <T as="div" className="body" i18nKey="auto-txt-div-50" />
-          <T as="div" className="impact" i18nKey="auto-txt-div-51" />
+          <T as="div" className="event-header" i18nKey="ch10-event-vmoc2-header" />
+          <T as="div" className="title" i18nKey="ch10-event-vmoc2-title" />
+          <T as="div" className="body" i18nKey="ch10-event-vmoc2-body" />
+          <T as="div" className="impact" i18nKey="ch10-event-uspp-header" />
         </div>
         <div
           className={`event crisis ${filter !== "all" && filter !== "crisis" ? "hidden" : ""}`}
         >
-          <T as="div" className="event-header" i18nKey="auto-txt-div-52" />
-          <T as="div" className="title" i18nKey="auto-txt-div-53" />
-          <T as="div" className="body" i18nKey="auto-txt-div-54" />
-          <T as="div" className="impact" i18nKey="auto-txt-div-55" />
+          <T as="div" className="event-header" i18nKey="ch10-event-uspp-title" />
+          <T as="div" className="title" i18nKey="ch10-event-uspp-body" />
+          <T as="div" className="body" i18nKey="ch10-event-champions-header" />
+          <T as="div" className="impact" i18nKey="ch10-event-champions-title" />
         </div>
         <div
           className={`event win ${filter !== "all" && filter !== "win" ? "hidden" : ""}`}
         >
-          <T as="div" className="event-header" i18nKey="auto-txt-div-56" />
-          <T as="div" className="title" i18nKey="auto-txt-div-57" />
-          <T as="div" className="body" i18nKey="auto-txt-div-58" />
-          <T as="div" className="impact" i18nKey="auto-txt-div-59" />
+          <T as="div" className="event-header" i18nKey="ch10-event-champions-body" />
+          <T as="div" className="title" i18nKey="ch10-event-academy-header" />
+          <T as="div" className="body" i18nKey="ch10-event-academy-title" />
+          <T as="div" className="impact" i18nKey="ch10-event-academy-body" />
         </div>
         <div
           className={`event restructure ${filter !== "all" && filter !== "restructure" ? "hidden" : ""}`}
         >
-          <T as="div" className="event-header" i18nKey="auto-txt-div-60" />
-          <T as="div" className="title" i18nKey="auto-txt-div-61" />
-          <T as="div" className="body" i18nKey="auto-txt-div-62" />
-          <T as="div" className="impact" i18nKey="auto-txt-div-63" />
+          <T as="div" className="event-header" i18nKey="ch10-event-stadium-header" />
+          <T as="div" className="title" i18nKey="ch10-event-stadium-title" />
+          <T as="div" className="body" i18nKey="ch10-event-stadium-body" />
+          <T as="div" className="impact" i18nKey="ch10-event-sponsorship-header" />
         </div>
         <div
           className={`event restructure ${filter !== "all" && filter !== "restructure" ? "hidden" : ""}`}
         >
-          <T as="div" className="event-header" i18nKey="auto-txt-div-64" />
-          <T as="div" className="title" i18nKey="auto-txt-div-65" />
-          <T as="div" className="body" i18nKey="auto-txt-div-66" />
-          <T as="div" className="impact" i18nKey="auto-txt-div-67" />
+          <T as="div" className="event-header" i18nKey="ch10-event-sponsorship-title" />
+          <T as="div" className="title" i18nKey="ch10-event-sponsorship-body" />
+          <T as="div" className="body" i18nKey="ch10-event-transfer-record-header" />
+          <T as="div" className="impact" i18nKey="ch10-event-transfer-record-title" />
         </div>
         <div
           className={`event win ${filter !== "all" && filter !== "win" ? "hidden" : ""}`}
         >
-          <T as="div" className="event-header" i18nKey="auto-txt-div-68" />
-          <T as="div" className="title" i18nKey="auto-txt-div-69" />
-          <T as="div" className="body" i18nKey="auto-txt-div-70" />
-          <T as="div" className="impact" i18nKey="auto-txt-div-71" />
+          <T as="div" className="event-header" i18nKey="ch10-event-transfer-record-body" />
+          <T as="div" className="title" i18nKey="ch10-event-manager-header" />
+          <T as="div" className="body" i18nKey="ch10-event-manager-title" />
+          <T as="div" className="impact" i18nKey="ch10-event-manager-body" />
         </div>
         <div
           className={`event win ${filter !== "all" && filter !== "win" ? "hidden" : ""}`}
         >
-          <T as="div" className="event-header" i18nKey="auto-txt-div-72" />
-          <T as="div" className="title" i18nKey="auto-txt-div-73" />
-          <T as="div" className="body" i18nKey="auto-txt-div-74" />
-          <T as="div" className="impact" i18nKey="auto-txt-div-75" />
+          <T as="div" className="event-header" i18nKey="ch10-event-youth-header" />
+          <T as="div" className="title" i18nKey="ch10-event-youth-title" />
+          <T as="div" className="body" i18nKey="ch10-event-youth-body" />
+          <T as="div" className="impact" i18nKey="ch10-event-community-header" />
         </div>
         <div
           className={`event restructure ${filter !== "all" && filter !== "restructure" ? "hidden" : ""}`}
         >
-          <T as="div" className="event-header" i18nKey="auto-txt-div-76" />
-          <T as="div" className="title" i18nKey="auto-txt-div-77" />
-          <T as="div" className="body" i18nKey="auto-txt-div-78" />
-          <T as="div" className="impact" i18nKey="auto-txt-div-79" />
+          <T as="div" className="event-header" i18nKey="ch10-event-community-title" />
+          <T as="div" className="title" i18nKey="ch10-event-community-body" />
+          <T as="div" className="body" i18nKey="ch10-event-digital-header" />
+          <T as="div" className="impact" i18nKey="ch10-event-digital-title" />
         </div>
       </div>
     </>
