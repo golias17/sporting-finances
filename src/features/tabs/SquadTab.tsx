@@ -6,7 +6,7 @@ import { TransfersLedger } from "../TransfersLedger";
 import { useTranslation } from "../../hooks/useTranslation.js";
 import { useAppState } from "../../core/state.js";
 
-export function SquadTab() {
+export const SquadTab = React.memo(function SquadTab() {
   const { t, T } = useTranslation();
   const { squadBook, transfers, netTrading } = useSquadCharts();
   const ledgerData = useAppState((s) => s.TRANSFER_LEDGER);
@@ -107,4 +107,4 @@ export function SquadTab() {
       </div>
     </>
   );
-}
+});

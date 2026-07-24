@@ -3,7 +3,7 @@ import { useTranslation } from "../../hooks/useTranslation";
 import { ChartCard } from "../../components/ChartCard";
 import { useCompetitiveCharts } from "./useCompetitiveCharts";
 
-export function CompetitiveTab() {
+export const CompetitiveTab = React.memo(function CompetitiveTab() {
   const { t, T } = useTranslation();
   const {
     labels,
@@ -240,4 +240,4 @@ export function CompetitiveTab() {
       </div>
     </>
   );
-}
+});

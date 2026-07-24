@@ -1,6 +1,6 @@
 import React from "react";
 
-export function TabLoader() {
+export const TabLoader = React.memo(function TabLoader() {
   return (
     <div className="tab-loading-skeleton" aria-live="polite" aria-busy="true">
       <div className="skeleton-header">
@@ -15,4 +15,4 @@ export function TabLoader() {
       </div>
     </div>
   );
-}
+});

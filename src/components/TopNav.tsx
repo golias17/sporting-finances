@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import { useAppState } from "../core/state.js";
 import { loadTranslations } from "../ui/translations.js";
 import { syncStateToUrl } from "../utils/urlSync.js";
@@ -21,16 +21,16 @@ export function TopNav({ onPdfExport }: TopNavProps) {
   const { t, T } = useTranslation();
   const btnRef = useRef<HTMLButtonElement>(null);
 
-  const handleLangToggle = async (lang: "en" | "pt") => {
+  const handleLangToggle = useCallback(async (lang: "en" | "pt") => {
     if ((lang === "pt") === isPt) return;
     setIsPt(lang === "pt");
     document.documentElement.lang = lang;
     localStorage.setItem("lang", lang);
     await loadTranslations(lang);
     syncStateToUrl();
-  };
+  }, [isPt, setIsPt]);
 
-  const handleThemeToggle = () => {
+  const handleThemeToggle = useCallback(() => {
     const isDark = document.body.classList.toggle("dark");
     const newTheme = isDark ? "dark" : "light";
     localStorage.setItem("theme", newTheme);
@@ -47,7 +47,7 @@ export function TopNav({ onPdfExport }: TopNavProps) {
         { once: true },
       );
     }
-  };
+  }, [theme, setTheme, btnRef]);
 
   useEffect(() => {
     document.documentElement.lang = isPt ? "pt" : "en";

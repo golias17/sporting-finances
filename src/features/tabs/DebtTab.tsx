@@ -3,7 +3,7 @@ import { ChartCard } from "../../components/ChartCard.js";
 import { useTranslation } from "../../hooks/useTranslation.js";
 import { useDebtCharts } from "./useDebtCharts.js";
 
-export function DebtTab() {
+export const DebtTab = React.memo(function DebtTab() {
   const { T } = useTranslation();
   const {
     debtData,
@@ -63,4 +63,4 @@ export function DebtTab() {
       </div>
     </>
   );
-}
+});

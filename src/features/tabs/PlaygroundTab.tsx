@@ -2,7 +2,7 @@ import React from "react";
 import { Playground } from "../Playground";
 import { useTranslation } from "../../hooks/useTranslation";
 
-export function PlaygroundTab() {
+export const PlaygroundTab = React.memo(function PlaygroundTab() {
   const { t, T } = useTranslation();
   return (
     <>
@@ -16,4 +16,4 @@ export function PlaygroundTab() {
       <Playground />
     </>
   );
-}
+});

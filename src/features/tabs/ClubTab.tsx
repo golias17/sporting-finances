@@ -4,7 +4,7 @@ import { useJornalModal } from "../../hooks/useJornalModal";
 import { useLightbox } from "../../hooks/useLightboxContext.tsx";
 import { initKitCardFlip } from "../../ui/imageLightbox.js";
 
-export function ClubTab() {
+export const ClubTab = React.memo(function ClubTab() {
   const { t, T } = useTranslation();
   const jornal = useJornalModal();
   const lightbox = useLightbox();
@@ -450,4 +450,4 @@ export function ClubTab() {
       </div>
     </>
   );
-}
+});

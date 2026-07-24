@@ -3,7 +3,7 @@ import { ChartCard } from "../../components/ChartCard.js";
 import { useTranslation } from "../../hooks/useTranslation.js";
 import { useRevenueCharts } from "./useRevenueCharts.js";
 
-export function RevenueTab() {
+export const RevenueTab = React.memo(function RevenueTab() {
   const { T } = useTranslation();
   const {
     revenueData,
@@ -75,4 +75,4 @@ export function RevenueTab() {
       </div>
     </>
   );
-}
+});
