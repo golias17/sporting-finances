@@ -29,6 +29,7 @@ describe("SquadAnalytics", () => {
         },
       ],
     });
+    state.setTransferLedger([]);
   });
 
   it("renders the SquadAnalytics component successfully", () => {
@@ -39,6 +40,54 @@ describe("SquadAnalytics", () => {
 
   it("handles Portuguese localization when state.isPt is true", () => {
     state.setIsPt(true);
+    render(<SquadAnalytics />);
+    const charts = screen.queryAllByTestId("mock-chart-bar");
+    expect(charts.length).toBeGreaterThan(0);
+  });
+
+  it("renders eras data correctly with transfer ledger", () => {
+    state.setTransferLedger([
+      {
+        season: "2013/14",
+        sales: [{ player: "Test Player", fee: 5000, commission: 200 }],
+        purchases: [{ player: "Test Buy", fee: 3000, commission: 100 }],
+      },
+    ]);
+
+    render(<SquadAnalytics />);
+    const charts = screen.queryAllByTestId("mock-chart-bar");
+    expect(charts.length).toBeGreaterThan(0);
+  });
+
+  it("handles empty transfer ledger", () => {
+    state.setTransferLedger([]);
+    render(<SquadAnalytics />);
+    const charts = screen.queryAllByTestId("mock-chart-bar");
+    expect(charts.length).toBeGreaterThan(0);
+  });
+
+  it("handles missing annual data gracefully", () => {
+    state.setDataset({
+      annual_data: [
+        {
+          season: "2013/14",
+          label: "2013/14",
+          transfer_profit: 0,
+          wages: 0,
+          amortisation: 0,
+          agent_commissions: 500,
+        },
+      ],
+      financials_per_season: [],
+    });
+    state.setTransferLedger([
+      {
+        season: "2013/14",
+        sales: [{ player: "Player", fee: 5000, commission: 0 }],
+        purchases: [],
+      },
+    ]);
+
     render(<SquadAnalytics />);
     const charts = screen.queryAllByTestId("mock-chart-bar");
     expect(charts.length).toBeGreaterThan(0);
