@@ -1,0 +1,53 @@
+/* ── Transfer highlight cards ── */
+
+.transfer-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tc {
+  flex: 1 1 100px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-top: 2px solid var(--green);
+  border-radius: var(--radius-xs);
+  padding: 10px 12px;
+}
+.tc:hover {
+  transform: translateY(-1px);
+}
+.tc.record {
+  border-top-color: var(--gold);
+  background: #faf3df;
+}
+body.dark .tc.record {
+  background: #2b2512;
+}
+.tc .tc-season {
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.tc .tc-amount {
+  font-family: var(--serif);
+  font-size: var(--fs-3xl);
+  font-weight: 500;
+  color: var(--green);
+  margin: 4px 0 6px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.tc.record .tc-amount {
+  color: #8a6818;
+}
+body.dark .tc.record .tc-amount {
+  color: #d4b15a;
+}
+.tc .tc-players {
+  font-size: var(--fs-sm);
+  color: var(--ink-2);
+  line-height: 1.55;
+}

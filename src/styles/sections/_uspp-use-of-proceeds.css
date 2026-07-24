@@ -1,0 +1,60 @@
+/* ── USPP use of proceeds ── */
+
+.uspp-uses {
+  margin-top: 24px;
+  border-top: 1px solid var(--rule);
+  padding-top: 18px;
+}
+.uspp-uses-title {
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+.uspp-use-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.uspp-use-row:last-child {
+  border-bottom: 0;
+}
+.uspp-use-num {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-round);
+  background: var(--green);
+  color: #ffffff;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+}
+.uspp-use-icon {
+  font-size: var(--fs-2xl);
+  line-height: 1;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.uspp-use-body {
+  flex: 1;
+}
+.uspp-use-title {
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 3px;
+}
+.uspp-use-desc {
+  font-size: var(--fs-base);
+  color: var(--muted);
+  line-height: 1.55;
+}

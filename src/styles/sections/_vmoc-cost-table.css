@@ -1,0 +1,360 @@
+/* ── VMOC cost table ── */
+
+table.vmoc-cost {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: var(--fs-sm);
+  font-variant-numeric: tabular-nums;
+  margin-top: 4px;
+}
+table.vmoc-cost th,
+table.vmoc-cost td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: middle;
+}
+table.vmoc-cost th {
+  text-align: left;
+  background: var(--paper);
+  font-size: var(--fs-2xs);
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+table.vmoc-cost td {
+  text-align: left;
+}
+table.vmoc-cost td:nth-child(3) {
+  text-align: right;
+}
+table.vmoc-cost td:nth-child(4) {
+  text-align: center;
+}
+table.vmoc-cost tr.period-vmoc td:first-child {
+  border-left: 3px solid var(--info);
+  padding-left: 11px;
+}
+table.vmoc-cost tr.period-conv1 td:first-child {
+  border-left: 3px solid var(--gold-soft);
+  padding-left: 11px;
+}
+table.vmoc-cost tr.period-conv2 td:first-child {
+  border-left: 3px solid var(--gold-soft);
+  padding-left: 11px;
+}
+table.vmoc-cost tr.period-uspp td:first-child {
+  border-left: 3px solid var(--green);
+  padding-left: 11px;
+}
+table.vmoc-cost tr.total-row td {
+  font-weight: 600;
+  border-top: 1px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  background: var(--paper);
+}
+table.vmoc-cost .cost-neg {
+  color: var(--neg);
+}
+table.vmoc-cost .cost-pos {
+  color: var(--pos);
+}
+
+/* VMOC Relative Cost Bars */
+.vmoc-cost-cell {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.cost-bar-container {
+  width: 90px;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+}
+body.dark .cost-bar-container {
+  background: rgba(255, 255, 255, 0.1);
+}
+.cost-bar {
+  height: 100%;
+  border-radius: var(--radius-sm);
+  transition: width 0.3s ease;
+}
+.cost-bar.period-vmoc {
+  background-color: var(--info);
+}
+.cost-bar.period-conv1,
+.cost-bar.period-conv2 {
+  background-color: var(--gold-soft);
+}
+.cost-bar.period-uspp {
+  background-color: var(--pos);
+}
+.cost-bar.pre {
+  background-color: var(--muted-2);
+}
+
+.vmoc-table-legend {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.vmoc-table-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.vtl-bar {
+  width: 12px;
+  height: 10px;
+  border-radius: var(--radius-xs);
+  flex-shrink: 0;
+}
+
+/* =============================================================
+   TRANSFER LEDGER CONTROLS
+   ============================================================= */
+.ledger-controls {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.ledger-control-group {
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+}
+
+.ledger-control-group--grow {
+  flex-grow: 1;
+}
+
+.ledger-label {
+  font-size: var(--fs-base);
+  color: var(--muted);
+  margin-right: 8px;
+  font-family: var(--mono);
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.ledger-select,
+.ledger-input {
+  max-width: 100%;
+  min-width: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  color: var(--ink-2);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-family: var(--mono);
+  font-size: var(--fs-md);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.ledger-select:focus,
+.ledger-input:focus {
+  outline: none;
+  border-color: var(--green-light);
+  box-shadow: 0 0 0 2px rgba(46, 158, 108, 0.12);
+}
+
+.ledger-input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* =============================================================
+   TRANSFER LEDGER TABLE
+   ============================================================= */
+table.ledger {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+table.ledger th {
+  background: var(--paper);
+  font-family: var(--mono);
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-size: var(--fs-2xs);
+  letter-spacing: 0.12em;
+  border-bottom: 2px solid var(--rule-2);
+  border-top: 1px solid var(--rule-2);
+  position: sticky;
+  top: 0;
+  padding: 12px 10px;
+  z-index: 4;
+}
+table.ledger th:first-child,
+table.ledger td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  background: var(--surface);
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+}
+body.dark table.ledger th:first-child,
+body.dark table.ledger td:first-child {
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
+}
+table.ledger th:first-child {
+  z-index: 6;
+  background: var(--paper);
+}
+
+table.ledger th.sortable-header {
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+table.ledger th.sortable-header:hover {
+  background: var(--rule);
+  color: var(--ink);
+}
+
+table.ledger th .sort-indicator {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: var(--fs-3xs);
+  color: var(--green);
+  vertical-align: middle;
+}
+
+table.ledger td {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: middle;
+  font-family: var(--sans);
+  font-size: var(--fs-md);
+  color: var(--ink-2);
+}
+
+table.ledger tbody tr {
+  transition: background 0.15s ease;
+}
+
+table.ledger tbody tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.015);
+}
+body.dark table.ledger tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.015);
+}
+table.ledger tbody tr:hover {
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1px var(--rule);
+}
+table.ledger tbody td:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+body.dark table.ledger tbody td:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Specific cell typography & alignments */
+table.ledger td.player-cell {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+table.ledger td.mono-cell {
+  font-family: var(--mono);
+  font-size: var(--fs-base);
+}
+
+table.ledger td.num-cell {
+  font-family: var(--mono);
+  font-size: var(--fs-base);
+  font-variant-numeric: tabular-nums;
+}
+
+table.ledger td.notes-cell {
+  font-size: var(--fs-base);
+  color: var(--muted);
+  max-width: 300px;
+  white-space: normal;
+  line-height: 1.45;
+}
+
+table.ledger th.align-center,
+table.ledger td.align-center {
+  text-align: center;
+}
+
+table.ledger th.align-right,
+table.ledger td.align-right {
+  text-align: right;
+}
+
+table.ledger td.pos {
+  color: var(--pos);
+}
+
+table.ledger td.neg {
+  color: var(--neg);
+}
+
+/* Badges for Type and Window */
+table.ledger .badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  font-size: var(--fs-xs);
+  font-family: var(--mono);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+table.ledger .badge.arrival {
+  background: rgba(46, 138, 85, 0.08);
+  color: var(--pos);
+  border: 1px solid rgba(46, 138, 85, 0.2);
+}
+
+table.ledger .badge.departure {
+  background: rgba(184, 64, 58, 0.08);
+  color: var(--neg);
+  border: 1px solid rgba(184, 64, 58, 0.2);
+}
+
+table.ledger .badge.summer {
+  background: rgba(212, 177, 90, 0.14);
+  color: var(--gold);
+  border: 1px solid rgba(139, 108, 28, 0.3);
+}
+
+table.ledger .badge.winter {
+  background: rgba(106, 113, 110, 0.12);
+  color: var(--muted);
+  border: 1px solid rgba(106, 113, 110, 0.3);
+}

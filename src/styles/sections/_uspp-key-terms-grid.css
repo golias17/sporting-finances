@@ -1,0 +1,76 @@
+/* ── USPP key-terms grid ── */
+
+.uspp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+.uspp-term {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+.uspp-term:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  border-color: var(--rule-2);
+}
+body.dark .uspp-term:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+.uspp-term .ut-label {
+  font-family: var(--mono);
+  font-size: var(--fs-2xs);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.uspp-term .ut-value {
+  font-family: var(--serif);
+  font-size: var(--fs-3xl);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  line-height: 1.1;
+  margin-bottom: 6px;
+  font-variation-settings: "opsz" 36;
+}
+.uspp-term .ut-value.highlight {
+  color: var(--green);
+}
+.uspp-term .ut-note {
+  font-size: var(--fs-base);
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* Rating Badges */
+.rating-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sans);
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  letter-spacing: -0.01em;
+}
+.rating-badge.investment-grade {
+  background: rgba(46, 162, 108, 0.08);
+  color: var(--pos);
+  border: 1px solid rgba(46, 162, 108, 0.2);
+  box-shadow: 0 0 10px rgba(46, 162, 108, 0.04);
+}
+body.dark .rating-badge.investment-grade {
+  background: rgba(46, 162, 108, 0.18);
+  border-color: rgba(46, 162, 108, 0.35);
+}
