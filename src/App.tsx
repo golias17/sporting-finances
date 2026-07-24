@@ -181,26 +181,24 @@ export function App() {
       <main className="container" id="main">
         <TabsNavigation />
 
-        <ErrorBoundary>
-          <Suspense
-            fallback={<TabLoader />}
-          >
-            {activeTab === "overview" && <OverviewTab />}
-            {activeTab === "revenue" && <RevenueTab />}
-            {activeTab === "healthcheck" && <HealthcheckTab />}
-            {activeTab === "debt" && <DebtTab />}
-            {activeTab === "bonds" && <BondsTab />}
-            {activeTab === "squad" && <SquadTab />}
-            {activeTab === "cash" && <CashTab />}
-            {activeTab === "compare" && <CompareTab />}
-            {activeTab === "events" && <EventsTab />}
-            {activeTab === "data" && <DataTab onExportCsv={dataExport.exportCsv} />}
-            {activeTab === "club" && <ClubTab />}
-            {activeTab === "news" && <NewsTab />}
-            {activeTab === "playground" && <PlaygroundTab />}
-            {activeTab === "competitive" && <CompetitiveTab />}
-          </Suspense>
-        </ErrorBoundary>
+        <Suspense
+          fallback={<TabLoader />}
+        >
+          {activeTab === "overview" && <ErrorBoundary><OverviewTab /></ErrorBoundary>}
+          {activeTab === "revenue" && <ErrorBoundary><RevenueTab /></ErrorBoundary>}
+          {activeTab === "healthcheck" && <ErrorBoundary><HealthcheckTab /></ErrorBoundary>}
+          {activeTab === "debt" && <ErrorBoundary><DebtTab /></ErrorBoundary>}
+          {activeTab === "bonds" && <ErrorBoundary><BondsTab /></ErrorBoundary>}
+          {activeTab === "squad" && <ErrorBoundary><SquadTab /></ErrorBoundary>}
+          {activeTab === "cash" && <ErrorBoundary><CashTab /></ErrorBoundary>}
+          {activeTab === "compare" && <ErrorBoundary><CompareTab /></ErrorBoundary>}
+          {activeTab === "events" && <ErrorBoundary><EventsTab /></ErrorBoundary>}
+          {activeTab === "data" && <ErrorBoundary><DataTab onExportCsv={dataExport.exportCsv} /></ErrorBoundary>}
+          {activeTab === "club" && <ErrorBoundary><ClubTab /></ErrorBoundary>}
+          {activeTab === "news" && <ErrorBoundary><NewsTab /></ErrorBoundary>}
+          {activeTab === "playground" && <ErrorBoundary><PlaygroundTab /></ErrorBoundary>}
+          {activeTab === "competitive" && <ErrorBoundary><CompetitiveTab /></ErrorBoundary>}
+        </Suspense>
       </main>
 
       <button

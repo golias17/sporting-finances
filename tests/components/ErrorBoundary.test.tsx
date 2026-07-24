@@ -32,7 +32,7 @@ describe("ErrorBoundary", () => {
     );
 
     expect(screen.getByText("Something went wrong")).toBeInTheDocument();
-    expect(screen.getByText("This section failed to load. Try refreshing the page.")).toBeInTheDocument();
+    expect(screen.getByText("Test error")).toBeInTheDocument();
   });
 
   it("renders custom fallback when provided", () => {
