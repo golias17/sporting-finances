@@ -3,7 +3,7 @@ import { ChartCard } from "../../components/ChartCard.js";
 import { useCashCharts } from "./useCashCharts.js";
 import { useTranslation } from "../../hooks/useTranslation.js";
 
-export function CashTab() {
+export const CashTab = React.memo(function CashTab() {
   const { t, T } = useTranslation();
   const { cashFlow, cash, annualNet } = useCashCharts();
   return (
@@ -52,4 +52,4 @@ export function CashTab() {
       </div>
     </>
   );
-}
+});

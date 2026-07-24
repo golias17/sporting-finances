@@ -2,7 +2,7 @@ import React from "react";
 import { News } from "../News";
 import { useTranslation } from "../../hooks/useTranslation";
 
-export function NewsTab() {
+export const NewsTab = React.memo(function NewsTab() {
   const { t, T } = useTranslation();
   return (
     <>
@@ -39,4 +39,4 @@ export function NewsTab() {
       </div>
     </>
   );
-}
+});

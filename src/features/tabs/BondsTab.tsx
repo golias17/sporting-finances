@@ -2,7 +2,7 @@ import React from "react";
 import { VmocCost, LionFinance, UsppTerms } from "../Bonds";
 import { useTranslation } from "../../hooks/useTranslation.js";
 
-export function BondsTab() {
+export const BondsTab = React.memo(function BondsTab() {
   const { t, T } = useTranslation();
   return (
     <>
@@ -60,4 +60,4 @@ export function BondsTab() {
       </div>
     </>
   );
-}
+});

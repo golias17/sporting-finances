@@ -6,7 +6,7 @@ import { baseOpts } from "../../charts/chartDefaults.js";
 import { fmtMillions } from "../../charts/chartUtils.js";
 import { netDebt, wageBillRatio } from "../metrics.js";
 
-export function CompareTab() {
+export const CompareTab = React.memo(function CompareTab() {
   const { T } = useTranslation();
   const isPt = useAppState((s) => s.isPt);
   const data = useAppState((s) => s.fullAnnual);
@@ -482,4 +482,4 @@ export function CompareTab() {
       </div>
     </>
   );
-}
+});

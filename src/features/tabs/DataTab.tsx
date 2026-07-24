@@ -8,7 +8,7 @@ interface DataTabProps {
   onExportCsv?: () => void;
 }
 
-export function DataTab({ onExportCsv }: DataTabProps) {
+export const DataTab = React.memo(function DataTab({ onExportCsv }: DataTabProps) {
   const { t, T } = useTranslation();
   const ledgerData = useAppState((s) => s.TRANSFER_LEDGER);
   const annualData = useAppState((s) => s.annual);
@@ -70,4 +70,4 @@ export function DataTab({ onExportCsv }: DataTabProps) {
       </div>
     </>
   );
-}
+});

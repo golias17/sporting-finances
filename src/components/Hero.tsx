@@ -1,7 +1,7 @@
 import React from "react";
 import { useTranslation } from "../hooks/useTranslation.js";
 
-export function Hero() {
+export const Hero = React.memo(function Hero() {
   const { T } = useTranslation();
   return (
     <header className="hero">
@@ -21,4 +21,4 @@ export function Hero() {
       </div>
     </header>
   );
-}
+});

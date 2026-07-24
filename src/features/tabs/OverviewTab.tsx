@@ -5,7 +5,7 @@ import { useTranslation } from "../../hooks/useTranslation.js";
 import { ChartCard } from "../../components/ChartCard.js";
 import { useOverviewCharts } from "./useOverviewCharts.js";
 
-export function OverviewTab() {
+export const OverviewTab = React.memo(function OverviewTab() {
   const { T } = useTranslation();
   const { heroData, heroOptions, netResult, equity } = useOverviewCharts();
 
@@ -68,4 +68,4 @@ export function OverviewTab() {
       </div>
     </>
   );
-}
+});

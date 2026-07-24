@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from "../../hooks/useTranslation";
 import { useAppState } from "../../core/state.js";
 
-export function EventsTab() {
+export const EventsTab = React.memo(function EventsTab() {
   const { t, T } = useTranslation();
   const isPt = useAppState((s) => s.isPt);
   const filter = useAppState((s) => s.activeEventFilter);
@@ -135,4 +135,4 @@ export function EventsTab() {
       </div>
     </>
   );
-}
+});

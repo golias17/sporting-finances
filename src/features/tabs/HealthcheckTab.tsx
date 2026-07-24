@@ -4,7 +4,7 @@ import { HealthSignals } from "../HealthSignals";
 import { useTranslation } from "../../hooks/useTranslation.js";
 import { useHealthcheckCharts } from "./useHealthcheckCharts.js";
 
-export function HealthcheckTab() {
+export const HealthcheckTab = React.memo(function HealthcheckTab() {
   const { T } = useTranslation();
   const {
     payrollBurdenData,
@@ -134,4 +134,4 @@ export function HealthcheckTab() {
       </div>
     </>
   );
-}
+});
