@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import { ErrorBoundary } from "./ErrorBoundary.js";
 import { Chart as ReactChart, Bar } from "react-chartjs-2";
 import { AccessibleTable } from "./AccessibleTable.js";
 import type { ChartType, ChartData, ChartOptions } from "chart.js";

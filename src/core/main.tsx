@@ -41,16 +41,33 @@ applyStoredTheme();
 // APP ENTRY POINT
 // =============================================================
 
+// Retry helper for fetch operations
+async function fetchWithRetry(url: string, maxRetries = 3, delay = 1000): Promise<Response> {
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) return res;
+      if (attempt < maxRetries) {
+        await new Promise((resolve) => setTimeout(resolve, delay * Math.pow(2, attempt)));
+      }
+    } catch (err) {
+      if (attempt === maxRetries) throw err;
+      await new Promise((resolve) => setTimeout(resolve, delay * Math.pow(2, attempt)));
+    }
+  }
+  throw new Error(`Failed to fetch ${url} after ${maxRetries} retries`);
+}
+
 async function initApp() {
   try {
     const initialTab = applyUrlParams();
     state.setActiveTab(initialTab || "overview");
 
     const [finRes, trRes, benRes, porRes] = await Promise.all([
-      fetch(config.financialsPath),
-      fetch(config.transfersPath),
-      fetch(config.benficaPath),
-      fetch(config.portoPath),
+      fetchWithRetry(config.financialsPath),
+      fetchWithRetry(config.transfersPath),
+      fetchWithRetry(config.benficaPath),
+      fetchWithRetry(config.portoPath),
       loadTranslations(detectActiveLang()),
     ]);
 
