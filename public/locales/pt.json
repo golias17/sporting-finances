@@ -1805,7 +1805,7 @@
     "innerHTML": false
   },
   "ch11-card-kits-desc": {
-    "text": "As lendárias listras horizontais verdes e brancas (Principal), o design moderno (Alternativo) e o equipamento bipartido Stromp, em homenagem ao fundador Francisco Stromp.",
+    "text": "As icónicas riscas horizontais verdes e brancas (Home), o design moderno (Away), o exclusivo terceiro equipamento dourado inspirado no icónico template Total 90, e o equipamento Stromp metade verde, metade branco, em homenagem ao fundador Francisco Stromp.",
     "isAria": false,
     "innerHTML": false
   },
@@ -2278,5 +2278,15 @@
     "text": "<strong>Sporting Clube de Portugal — Futebol, SAD.</strong> Elaborado com base nos relatórios anuais e semestrais oficiais da Sporting SAD apresentados à CMVM. Valores em milhares de euros; alguns valores de 2023/24 foram reexpressos de acordo com o relatório de 2024/25. Compilado para fins de referência informativa.",
     "isAria": false,
     "innerHTML": true
+  },
+  "ch11-seating-title": {
+    "text": "Experiência de Lugares no Estádio",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-seating-desc": {
+    "text": "Garanta o seu lugar no Estádio José Alvalade. Escolha entre lugares anuais ou pacotes VIP premium.",
+    "isAria": false,
+    "innerHTML": false
   }
 }

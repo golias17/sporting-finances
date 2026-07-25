@@ -1775,7 +1775,7 @@
     "innerHTML": false
   },
   "ch11-card-kits-desc": {
-    "text": "The legendary green-and-white horizontal hoops (Home), the modern design (Away), and the half-green, half-white Stromp kit named in honour of founder Francisco Stromp.",
+    "text": "The legendary green-and-white horizontal hoops (Home), the modern design (Away), the exclusive golden Third kit inspired by the iconic Total 90 template, and the half-green, half-white Stromp kit named in honour of founder Francisco Stromp.",
     "isAria": false,
     "innerHTML": false
   },
@@ -2248,5 +2248,15 @@
     "text": "<strong>Sporting Clube de Portugal — Futebol, SAD.</strong> Built from the SAD's official annual and semester reports filed with the CMVM. Figures in EUR thousands; some 2023/24 numbers restated per the 2024/25 report. Compiled for editorial reference.",
     "isAria": false,
     "innerHTML": true
+  },
+  "ch11-seating-title": {
+    "text": "Stadium Seating Experience",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch11-seating-desc": {
+    "text": "Secure your seat at Estádio José Alvalade. Choose between season tickets or premium VIP hospitality packages.",
+    "isAria": false,
+    "innerHTML": false
   }
 }

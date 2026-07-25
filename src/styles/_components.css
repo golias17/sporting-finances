@@ -1239,6 +1239,10 @@ body.dark .pdf-export-btn:hover {
   margin-top: 24px;
 }
 
+
+.asset-card.full-width {
+  grid-column: 1 / -1;
+}
 .asset-card {
   display: flex;
   flex-direction: column;
@@ -1270,7 +1274,7 @@ body.dark .pdf-export-btn:hover {
 }
 .kit-card-container {
   flex: 1;
-  height: 230px;
+  height: 320px;
   perspective: 1000px;
 }
 .kit-card-inner {
@@ -1625,6 +1629,64 @@ body.dark .seating-link-btn:hover {
 }
 
 /* Sporting Experience Card */
+
+/* Seating Experience Card — uses the same .experience-card layout */
+.seating-experience {
+  background: linear-gradient(
+    135deg,
+    rgba(10, 93, 58, 0.04) 0%,
+    rgba(200, 169, 81, 0.04) 100%
+  );
+  border: 1.5px solid var(--green);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  margin-top: 30px;
+  padding: 30px;
+}
+.seating-experience h3 {
+  font-family: var(--sans);
+  font-size: var(--fs-2xl);
+  color: var(--green);
+  margin: 0 0 12px;
+}
+.seating-experience .stadium-seating-links {
+  display: flex;
+  gap: 16px;
+}
+.seating-experience .seating-link-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--green);
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(10, 93, 58, 0.15);
+  border: none;
+  cursor: pointer;
+}
+.seating-experience .seating-link-btn:hover {
+  background: #0d7346;
+  transform: translateX(4px);
+  color: #ffffff;
+}
+
+.seating-experience .seating-link-btn .arrow-icon {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s ease;
+}
+.seating-experience .seating-link-btn:hover .arrow-icon {
+  transform: translateX(4px);
+}
+
 .experience-card {
   background: linear-gradient(
     135deg,
@@ -1683,6 +1745,13 @@ body.dark .seating-link-btn:hover {
   height: 14px;
   stroke: currentColor;
 }
+
+/* Seating links inside experience-card */
+.experience-text .stadium-seating-links {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+}
 .experience-branding {
   display: flex;
   align-items: center;
@@ -1710,7 +1779,14 @@ body.dark .seating-link-btn:hover {
     align-items: stretch;
     text-align: center;
   }
-  .experience-branding {
+  
+/* Seating links inside experience-card */
+.experience-text .stadium-seating-links {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+}
+.experience-branding {
     margin-top: 10px;
   }
   .branding-logos {
@@ -1725,7 +1801,11 @@ body.dark .seating-link-btn:hover {
   .club-grid {
     grid-template-columns: 1fr;
   }
-  .asset-card {
+  
+.asset-card.full-width {
+  grid-column: 1 / -1;
+}
+.asset-card {
     min-height: auto;
   }
 }
