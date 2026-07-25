@@ -70,7 +70,7 @@ export const ClubTab = React.memo(function ClubTab() {
 
       <div className="club-grid">
         {/* CARD 1: KITS */}
-        <div className="card asset-card">
+        <div className="card asset-card full-width">
           <div className="card-head">
             <T as="h3" i18nKey="ch11-card-kits-title" />
             <span className="tag">Nike</span>
@@ -125,6 +125,30 @@ export const ClubTab = React.memo(function ClubTab() {
               </div>
             </div>
 
+            {/* Third Kit Flip Card */}
+            <div className="kit-card-container">
+              <div className="kit-card-inner">
+                <div className="kit-card-front">
+                  <img
+                    src="https://lojaverde.sporting.pt/cdn/shop/files/camisola-alternativa-dourada-nike-total-90-sporting-26-27-frente.jpg?v=1784805532&width=1946"
+                    alt="Third Front"
+                    className="kit-img"
+                    loading="lazy"
+                  />
+                  <span className="kit-label">Third Front</span>
+                </div>
+                <div className="kit-card-back">
+                  <img
+                    src="https://lojaverde.sporting.pt/cdn/shop/files/camisola-alternativa-dourada-nike-total-90-sporting-26-27-costas.jpg?v=1784805532&width=1946"
+                    alt="Third Back"
+                    className="kit-img"
+                    loading="lazy"
+                  />
+                  <span className="kit-label">Third Back</span>
+                </div>
+              </div>
+            </div>
+
             {/* Stromp (Unrevealed) */}
             <div className="kit-card-container no-flip">
               <div className="kit-item stromp">
@@ -149,48 +173,6 @@ export const ClubTab = React.memo(function ClubTab() {
             <span className="tag">52,095 Seats</span>
           </div>
           <T as="p" className="card-desc" i18nKey="ch11-card-stadium-desc" />
-          <div className="stadium-seating-links">
-            <a
-              href="https://gamebox.sporting.pt/estadio"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="seating-link-btn"
-            >
-              <T as="span" i18nKey="ch11-stadium-gamebox" />
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="arrow-icon"
-              >
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </a>
-            <a
-              href="https://seating.sporting.pt/lionseats"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="seating-link-btn"
-            >
-              <T as="span" i18nKey="ch11-stadium-lionseats" />
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="arrow-icon"
-              >
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-                <polyline points="12 5 19 12 12 19"></polyline>
-              </svg>
-            </a>
-          </div>
           <div className="stadium-image-box">
             <img
               src="assets/alvalade_stadium_panorama.webp"
@@ -279,6 +261,58 @@ export const ClubTab = React.memo(function ClubTab() {
                 <polyline points="12 5 19 12 12 19"></polyline>
               </svg>
             </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Seating Experience — Season Tickets & Premium VIP */}
+      <div className="card experience-card reveal">
+        <div className="experience-content">
+          <div className="experience-text">
+            <T as="h3" i18nKey="ch11-seating-title" />
+            <T as="p" className="card-desc" i18nKey="ch11-seating-desc" />
+            <div className="stadium-seating-links">
+              <a
+                href="https://gamebox.sporting.pt/estadio"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="experience-btn"
+              >
+                <T as="span" i18nKey="ch11-stadium-gamebox" />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="arrow-icon"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+              <a
+                href="https://seating.sporting.pt/lionseats"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="experience-btn"
+              >
+                <T as="span" i18nKey="ch11-stadium-lionseats" />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="arrow-icon"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
       </div>
