@@ -289,4 +289,17 @@ describe("News Component", () => {
     const recentElements = screen.getAllByText(/Recent/i);
     expect(recentElements.length).toBeGreaterThan(0);
   });
+
+  it("should show empty state when fetch fails with no cache", async () => {
+    // Mock fetch to always fail
+    mockFetchRoutes({ staticFile: null, feedItems: null });
+    sessionStorage.clear();
+
+    render(<News />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/No items found/i)).toBeInTheDocument();
+    });
+  });
+
 });
