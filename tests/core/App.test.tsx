@@ -26,9 +26,8 @@ describe("<App />", () => {
     }
   });
 
-  it("renders without crashing and mounts the TopNav and Hero", async () => {
-    initChartDefaults(); // ensure baseOpts are populated for theme toggler
-    // Populate fake state just to be safe
+  function renderApp() {
+    initChartDefaults();
     state.setDataset({
       currency: "EUR",
       company: "Sporting SAD",
@@ -36,18 +35,24 @@ describe("<App />", () => {
       fiscal_year_end: "June",
       annual_data: [],
     });
+  }
 
+  it("renders without crashing and mounts the TopNav and Hero", async () => {
+    renderApp();
     await act(async () => {
       render(<App />);
     });
-
-    // Check TopNav
     expect(screen.getByText("Sporting SAD · Euronext Lisbon")).not.toBeNull();
-
-    // Check Hero
     expect(screen.getByText(/From insolvency to/)).not.toBeNull();
-
-    // Check Skip Link
     expect(screen.getByText("Skip to content")).not.toBeNull();
+  });
+
+  it("renders the skip link in Portuguese when isPt is true", async () => {
+    state.setIsPt(true);
+    renderApp();
+    await act(async () => {
+      render(<App />);
+    });
+    expect(screen.getByText("Saltar para o conteúdo")).not.toBeNull();
   });
 });

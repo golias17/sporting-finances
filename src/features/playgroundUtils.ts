@@ -1,6 +1,6 @@
 import { state } from "../core/state";
 import { UCL_BONUS_COST_RATE } from "./playgroundTypes.js";
-import type { PlaygroundInputs } from "./playgroundTypes.js";
+import type { PlaygroundInputs, BaselineData, ProjectionData, PinnedData } from "./playgroundTypes.js";
 
 function getBaseline() {
   const season = state.annual?.find((s: { label: string }) => s.label === "2024/25");
@@ -24,7 +24,7 @@ function getBaseline() {
 }
 
 function computeProjection(
-  BASELINE: any,
+  BASELINE: BaselineData,
   {
     uclPrize,
     payrollAdj,
@@ -114,8 +114,8 @@ function cashZoneInfo(cash: number, isPt: boolean) {
 }
 
 function buildVerdict(
-  baseline: any,
-  proj: any,
+  baseline: ProjectionData,
+  proj: ProjectionData,
   isPt: boolean,
 ) {
   const improvements: string[] = [];
