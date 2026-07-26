@@ -165,7 +165,61 @@ export const ClubTab = React.memo(function ClubTab() {
             </div>
           </div>
         </div>
+      </div>
 
+      {/* Seating Experience — Season Tickets & Premium VIP */}
+      <div className="card experience-card reveal">
+        <div className="experience-content">
+          <div className="experience-text">
+            <T as="h3" i18nKey="ch11-seating-title" />
+            <T as="p" className="card-desc" i18nKey="ch11-seating-desc" />
+            <div className="stadium-seating-links">
+              <a
+                href="https://gamebox.sporting.pt/estadio"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="experience-btn"
+              >
+                <T as="span" i18nKey="ch11-stadium-gamebox" />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="arrow-icon"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+              <a
+                href="https://seating.sporting.pt/lionseats"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="experience-btn"
+              >
+                <T as="span" i18nKey="ch11-stadium-lionseats" />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="arrow-icon"
+                >
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="club-grid">
         {/* CARD 2: STADIUM */}
         <div className="card asset-card">
           <div className="card-head">
@@ -261,58 +315,6 @@ export const ClubTab = React.memo(function ClubTab() {
                 <polyline points="12 5 19 12 12 19"></polyline>
               </svg>
             </a>
-          </div>
-        </div>
-      </div>
-
-      {/* Seating Experience — Season Tickets & Premium VIP */}
-      <div className="card experience-card reveal">
-        <div className="experience-content">
-          <div className="experience-text">
-            <T as="h3" i18nKey="ch11-seating-title" />
-            <T as="p" className="card-desc" i18nKey="ch11-seating-desc" />
-            <div className="stadium-seating-links">
-              <a
-                href="https://gamebox.sporting.pt/estadio"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="experience-btn"
-              >
-                <T as="span" i18nKey="ch11-stadium-gamebox" />
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="arrow-icon"
-                >
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-              </a>
-              <a
-                href="https://seating.sporting.pt/lionseats"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="experience-btn"
-              >
-                <T as="span" i18nKey="ch11-stadium-lionseats" />
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="arrow-icon"
-                >
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
-              </a>
-            </div>
           </div>
         </div>
       </div>
