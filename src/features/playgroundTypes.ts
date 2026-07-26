@@ -1,3 +1,44 @@
+export interface BaselineData {
+  revenue_operating: number;
+  personnel_costs: number;
+  external_supplies: number;
+  da_excl_squad: number;
+  squad_amortization: number;
+  player_transfer_cost: number;
+  player_transfer_income: number;
+  financial_result: number;
+  net_result: number;
+  equity: number;
+  current_assets: number;
+  current_liabilities: number;
+  total_assets: number;
+  cash: number;
+}
+
+export interface ProjectionData {
+  revenue: number;
+  payroll: number;
+  overhead: number;
+  financialResult: number;
+  netTrading: number;
+  netResult: number;
+  equity: number;
+  cash: number;
+  solvency: number;
+  personnelCostRatio: number;
+}
+
+export interface PinnedData {
+  revenue: number;
+  payroll: number;
+  overhead: number;
+  financialResult: number;
+  netTrading: number;
+  netResult: number;
+  equity: number;
+  solvency: number;
+}
+
 import { getBrandColors } from "../charts/chartUtils.js";
 
 export const FALLBACK = getBrandColors(false);
