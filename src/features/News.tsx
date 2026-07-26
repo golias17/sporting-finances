@@ -195,10 +195,6 @@ export function News() {
     };
   }, []);
 
-  if (loading) {
-    return null;
-  }
-
   if (errorMsg) {
     return (
       <div className="news-loading" style={{ color: "var(--neg)" }}>
@@ -269,12 +265,6 @@ export function News() {
     }
   }
 
-  if (storyClusters.length === 0) {
-    return (
-      <div className="news-loading">No recent corporate updates found.</div>
-    );
-  }
-
   storyClusters.sort((a, b) => {
     const da = new Date(
       a.primary.pubDate ? a.primary.pubDate.replace(" ", "T") + "Z" : 0,
@@ -296,6 +286,38 @@ export function News() {
             : "Couldn't refresh news right now — showing the last saved results."}
         </div>
       )}
+
+      {/* Skeleton loader while loading */}
+      {loading && [0, 1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="news-skeleton-card">
+              <div className="news-skeleton-line badge" />
+              <div className="news-skeleton-line title" />
+              <div className="news-skeleton-line long" />
+              <div className="news-skeleton-line medium" />
+              <div className="news-skeleton-pills">
+                <div className="news-skeleton-pill" />
+                <div className="news-skeleton-pill" />
+              </div>
+            </div>
+          ))}
+
+      {/* Empty state */}
+      {!loading && storyClusters.length === 0 && !errorMsg && (
+        <div className="news-empty">
+          <svg className="news-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
+          </svg>
+          <p className="news-empty-text">
+            {isPt
+              ? "Nenhuma notícia encontrada. As notícias aparecerão aqui quando disponíveis."
+              : "No news found. Updates will appear here when available."}
+          </p>
+        </div>
+      )}
+
       {storyClusters.slice(0, 18).map((cluster, index) => {
         const item = cluster.primary;
         let classes = "news-card";
