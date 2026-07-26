@@ -19,3 +19,4 @@ export * from "./chartPalette.js";
 export * from "./chartAnnotations.js";
 export * from "./chartWidgets.js";
 export * from "./chartDefaults.js";
+export * from "./chartHelpers.js";
