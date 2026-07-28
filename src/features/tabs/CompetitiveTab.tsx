@@ -24,31 +24,31 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
   return (
     <>
       <div className="chapter">
-        <T as="div" className="num" i18nKey="ch09-num" />
+        <T as="div" className="num" i18nKey="ch08-num" />
         <div>
-          <T as="h2" i18nKey="ch09-h2" />
-          <T as="p" className="lede" i18nKey="ch09-lede" />
+          <T as="h2" i18nKey="ch08-h2" />
+          <T as="p" className="lede" i18nKey="ch08-lede" />
         </div>
       </div>
 
       {/* Data Source & Legend Hero Banner */}
       <div className="card" style={{ marginBottom: "1.5rem" }}>
         <div className="card-head">
-          <T as="h3" i18nKey="ch09-data-source" />
+          <T as="h3" i18nKey="ch08-data-source" />
         </div>
-        <T as="p" className="desc" i18nKey="ch09-data-source-desc" />
+        <T as="p" className="desc" i18nKey="ch08-data-source-desc" />
         <div style={{ display: "flex", gap: "1.5rem", marginTop: "1rem", flexWrap: "wrap" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <div style={{ width: "16px", height: "16px", borderRadius: "50%", background: competitorColors.sporting }}></div>
-            <T as="span" i18nKey="ch09-sporting" />
+            <T as="span" i18nKey="ch08-sporting" />
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <div style={{ width: "16px", height: "16px", borderRadius: "50%", background: competitorColors.benfica }}></div>
-            <T as="span" i18nKey="ch09-benfica" />
+            <T as="span" i18nKey="ch08-benfica" />
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <div style={{ width: "16px", height: "16px", borderRadius: "50%", background: competitorColors.porto }}></div>
-            <T as="span" i18nKey="ch09-porto" />
+            <T as="span" i18nKey="ch08-porto" />
           </div>
         </div>
       </div>
@@ -56,9 +56,9 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
       {/* Row 1: Revenue by Source (full width) */}
       <ChartCard
         id="competitiveRevenueSource"
-        title={<T as="h3" i18nKey="ch09-revenue-source-h3" />}
+        title={<T as="h3" i18nKey="ch08-revenue-source-h3" />}
         tag={<span className="tag">2010/11 → 2024/25</span>}
-        desc={<T as="p" className="desc" i18nKey="ch09-revenue-source-desc" />}
+        desc={<T as="p" className="desc" i18nKey="ch08-revenue-source-desc" />}
         chartType="bar"
         data={revenueBySource}
         options={chartOptions}
@@ -70,9 +70,9 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
       <div className="grid-2">
         <ChartCard
           id="competitivePersonnelRatio"
-          title={<T as="h3" i18nKey="ch09-personnel-ratio-h3" />}
+          title={<T as="h3" i18nKey="ch08-personnel-ratio-h3" />}
           tag={<span className="tag">2010/11 → 2024/25</span>}
-          desc={<T as="p" className="desc" i18nKey="ch09-personnel-ratio-desc" />}
+          desc={<T as="p" className="desc" i18nKey="ch08-personnel-ratio-desc" />}
           chartType="line"
           data={personnelCostsRatio}
           options={percentageOptions}
@@ -82,9 +82,9 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
 
         <ChartCard
           id="competitivePersonnel"
-          title={<T as="h3" i18nKey="ch09-personnel-h3" />}
+          title={<T as="h3" i18nKey="ch08-personnel-h3" />}
           tag={<span className="tag">2010/11 → 2024/25</span>}
-          desc={<T as="p" className="desc" i18nKey="ch09-personnel-desc" />}
+          desc={<T as="p" className="desc" i18nKey="ch08-personnel-desc" />}
           chartType="line"
           data={personnelComparison}
           options={chartOptions}
@@ -97,9 +97,9 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
       <div className="grid-2">
         <ChartCard
           id="competitiveSquad"
-          title={<T as="h3" i18nKey="ch09-squad-h3" />}
+          title={<T as="h3" i18nKey="ch08-squad-h3" />}
           tag={<span className="tag">2010/11 → 2024/25</span>}
-          desc={<T as="p" className="desc" i18nKey="ch09-squad-desc" />}
+          desc={<T as="p" className="desc" i18nKey="ch08-squad-desc" />}
           chartType="line"
           data={squadValueComparison}
           options={chartOptions}
@@ -109,9 +109,9 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
 
         <ChartCard
           id="competitiveTransferBalance"
-          title={<T as="h3" i18nKey="ch09-transfer-balance-h3" />}
+          title={<T as="h3" i18nKey="ch08-transfer-balance-h3" />}
           tag={<span className="tag">2010/11 → 2024/25</span>}
-          desc={<T as="p" className="desc" i18nKey="ch09-transfer-balance-desc" />}
+          desc={<T as="p" className="desc" i18nKey="ch08-transfer-balance-desc" />}
           chartType="bar"
           data={transferBalance}
           options={chartOptions}
@@ -123,9 +123,9 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
       {/* Row 4: Net Result (full width) */}
       <ChartCard
         id="competitiveNetResult"
-        title={<T as="h3" i18nKey="ch09-netresult-h3" />}
+        title={<T as="h3" i18nKey="ch08-netresult-h3" />}
         tag={<span className="tag">2010/11 → 2024/25</span>}
-        desc={<T as="p" className="desc" i18nKey="ch09-netresult-desc" />}
+        desc={<T as="p" className="desc" i18nKey="ch08-netresult-desc" />}
         chartType="bar"
         data={netResultComparison}
         options={chartOptions}
@@ -152,7 +152,7 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
               letterSpacing: "0.03em",
             }}
           >
-            {t("ch09-cumulative-label") || "Total Acumulado (15 Épocas):"}
+            {t("ch08-cumulative-label") || "Total Acumulado (15 Épocas):"}
           </span>
           <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
             <span
@@ -162,7 +162,7 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
                 fontWeight: 700,
                 padding: "2px 7px",
                 borderRadius: "var(--radius-sm)",
-                background: "rgba(10, 93, 58, 0.12)",
+                background: "var(--sporting-bg, rgba(10, 93, 58, 0.12))",
                 color: competitorColors.sporting,
                 border: `1px solid ${competitorColors.sporting}33`,
               }}
@@ -177,7 +177,7 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
                 fontWeight: 700,
                 padding: "2px 7px",
                 borderRadius: "var(--radius-sm)",
-                background: "rgba(184, 64, 58, 0.12)",
+                background: "var(--benfica-bg, rgba(184, 64, 58, 0.12))",
                 color: competitorColors.benfica,
                 border: `1px solid ${competitorColors.benfica}33`,
               }}
@@ -192,7 +192,7 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
                 fontWeight: 700,
                 padding: "2px 7px",
                 borderRadius: "var(--radius-sm)",
-                background: "rgba(44, 91, 138, 0.12)",
+                background: "var(--porto-bg, rgba(44, 91, 138, 0.12))",
                 color: competitorColors.porto,
                 border: `1px solid ${competitorColors.porto}33`,
               }}
@@ -208,9 +208,9 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
       <div className="grid-2">
         <ChartCard
           id="competitiveEquity"
-          title={<T as="h3" i18nKey="ch09-equity-h3" />}
+          title={<T as="h3" i18nKey="ch08-equity-h3" />}
           tag={<span className="tag">2010/11 → 2024/25</span>}
-          desc={<T as="p" className="desc" i18nKey="ch09-equity-desc" />}
+          desc={<T as="p" className="desc" i18nKey="ch08-equity-desc" />}
           chartType="line"
           data={equityComparison}
           options={chartOptions}
@@ -220,9 +220,9 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
 
         <ChartCard
           id="competitiveLiabilities"
-          title={<T as="h3" i18nKey="ch09-liabilities-h3" />}
+          title={<T as="h3" i18nKey="ch08-liabilities-h3" />}
           tag={<span className="tag">2010/11 → 2024/25</span>}
-          desc={<T as="p" className="desc" i18nKey="ch09-liabilities-desc" />}
+          desc={<T as="p" className="desc" i18nKey="ch08-liabilities-desc" />}
           chartType="line"
           data={totalLiabilitiesComparison}
           options={chartOptions}
@@ -232,11 +232,11 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
       </div>
 
       <div className="narrative">
-        <T as="h4" i18nKey="ch09-narrative-h4" />
-        <T as="p" i18nKey="ch09-narrative-p1" />
-        <T as="p" i18nKey="ch09-narrative-p2" />
-        <T as="p" i18nKey="ch09-narrative-p3" />
-        <T as="p" i18nKey="ch09-narrative-p4" />
+        <T as="h4" i18nKey="ch08-narrative-h4" />
+        <T as="p" i18nKey="ch08-narrative-p1" />
+        <T as="p" i18nKey="ch08-narrative-p2" />
+        <T as="p" i18nKey="ch08-narrative-p3" />
+        <T as="p" i18nKey="ch08-narrative-p4" />
       </div>
     </>
   );

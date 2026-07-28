@@ -6,7 +6,7 @@ import {
   fmtMillions,
 } from "../../charts/chartUtils.js";
 import { useChartLabels } from "../../charts/chartHooks.js";
-import { wageBillRatio } from "../metrics.js";
+import { wageBillRatio } from "../financialMetrics.js";
 import { HEALTH_THRESHOLDS } from "../healthThresholds.js";
 import type { ChartData, ChartOptions } from "chart.js";
 
@@ -33,14 +33,11 @@ export function useRevenueCharts() {
           label: isPt ? "Custos com pessoal" : "Personnel Costs",
           data: annual.map((d) => Math.abs(d.personnel_costs)),
           borderColor: state.COLORS.neg,
-          backgroundColor: "transparent",
-          borderWidth: 3,
+          backgroundColor: state.COLORS.neg,
           tension: 0.35,
-          pointRadius: 4,
-          pointBackgroundColor: state.COLORS.chartBg,
-          pointBorderWidth: 2,
-          pointHoverRadius: 7,
-          pointHoverBorderWidth: 3,
+          fill: false,
+          pointRadius: 3,
+          pointHoverRadius: 5,
           order: 0,
         },
       ] as any,
@@ -94,7 +91,7 @@ export function useRevenueCharts() {
             ? "Outras receitas operacionais"
             : "Other operating income",
           data: other,
-          backgroundColor: state.COLORS.mutedSoft,
+          backgroundColor: state.COLORS.mutedSoft || state.COLORS.muted,
           borderColor: state.COLORS.muted,
           borderWidth: 1,
           borderRadius: 3,
@@ -112,11 +109,14 @@ export function useRevenueCharts() {
         legend: {
           display: true,
           position: "bottom",
-          labels: { color: state.COLORS.ink, font: { size: 12 }, padding: 16 },
+          labels: {
+            color: state.COLORS.ink,
+            font: { size: 12 },
+            padding: 16,            boxWidth: 8,
+          },
         },
         tooltip: {
-          ...baseOpts.plugins.tooltip,
-          callbacks: {
+          ...baseOpts.plugins.tooltip,          callbacks: {
             label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
             footer: (items: Array<{ parsed: { y: number } }>) => {
@@ -154,7 +154,7 @@ export function useRevenueCharts() {
             r == null
               ? state.COLORS.muted
               : r > danger
-                ? state.COLORS.negSoft
+                ? state.COLORS.negSoft || state.COLORS.neg
                 : r > warn
                   ? state.COLORS.goldSoft
                   : state.COLORS.posSoft,
@@ -181,8 +181,7 @@ export function useRevenueCharts() {
         ...baseOpts.plugins,
         legend: { display: false },
         tooltip: {
-          ...baseOpts.plugins.tooltip,
-          callbacks: {
+          ...baseOpts.plugins.tooltip,          callbacks: {
             label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               `${isPt ? "Rácio" : "Ratio"}: ${ctx.parsed.y.toFixed(0)}%`,
           },
@@ -216,7 +215,7 @@ export function useRevenueCharts() {
             ? "Operações Recorrentes (excl. passes)"
             : "Recurring (excl. players)",
           data: recurring,
-          backgroundColor: state.COLORS.negSoft,
+          backgroundColor: state.COLORS.negSoft || state.COLORS.neg,
           borderColor: state.COLORS.neg,
           borderWidth: 1,
           stack: "s1",
@@ -231,15 +230,20 @@ export function useRevenueCharts() {
           stack: "s1",
           order: 1,
         },
-        styledLineDataset({
+        {
           label: isPt
             ? "Resultado Operacional Total"
             : "Total Operating Result",
           data: total,
-          color: state.COLORS.gold,
-          bg: state.COLORS.goldSoft,
-          extra: { type: "line", order: 0 },
-        }),
+          borderColor: state.COLORS.gold,
+          backgroundColor: state.COLORS.gold,
+          tension: 0.35,
+          fill: false,
+          pointRadius: 3,
+          pointHoverRadius: 5,
+          type: "line",
+          order: 0,
+        },
       ] as any,
     };
   }, [labels, annual, isPt]);
@@ -250,8 +254,7 @@ export function useRevenueCharts() {
       plugins: {
         ...baseOpts.plugins,
         tooltip: {
-          ...baseOpts.plugins.tooltip,
-          callbacks: {
+          ...baseOpts.plugins.tooltip,          callbacks: {
             label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
@@ -266,6 +269,89 @@ export function useRevenueCharts() {
     [],
   );
 
+  // Personnel Costs Breakdown
+  const costLabels = annual.map((d: any) => d.label);
+  const wageData = annual.map((d: any) => Math.abs(d.personnel_costs || 0));
+  const squadAmortData = annual.map((d: any) => Math.abs(d.squad_amortization_impairment || 0));
+  const extSuppliesData = annual.map((d: any) => Math.abs(d.external_supplies || 0));
+  const daData = annual.map((d: any) => Math.abs(d.da_excl_squad || 0));
+
+  const costBreakdownData = {
+    labels: costLabels,
+    datasets: [
+      {
+        label: isPt ? "Salários" : "Wages",
+        data: wageData,
+        backgroundColor: state.COLORS.posSoft,
+        borderColor: state.COLORS.pos,
+        borderWidth: 1,
+        stack: "costs",
+        fill: true,
+      },
+      {
+        label: isPt ? "Amort. Plantel" : "Squad Amort.",
+        data: squadAmortData,
+        backgroundColor: state.COLORS.goldSoft,
+        borderColor: state.COLORS.gold,
+        borderWidth: 1,
+        stack: "costs",
+        fill: true,
+      },
+      {
+        label: isPt ? "Fornec. Externos" : "External Supplies",
+        data: extSuppliesData,
+        backgroundColor: state.COLORS.infoSoft,
+        borderColor: state.COLORS.info,
+        borderWidth: 1,
+        stack: "costs",
+        fill: true,
+      },
+      {
+        label: isPt ? "Dep. & Amort." : "Dep. & Amort.",
+        data: daData,
+        backgroundColor: state.COLORS.mutedSoft || state.COLORS.muted,
+        borderColor: state.COLORS.muted,
+        borderWidth: 1,
+        stack: "costs",
+        fill: true,
+      },
+    ],
+  };
+
+  const costBreakdownOptions = {
+    ...state.baseOpts,
+    plugins: {
+      ...state.baseOpts.plugins,
+      tooltip: {
+        ...state.baseOpts.plugins.tooltip,        callbacks: {
+          label: (ctx: { dataset: { label: string }; parsed: { y: number } }) => {
+            return ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`;
+          },
+          footer: (items: { chart: { data: { datasets: { data: number[] }[] } }; dataIndex: number }[]) => {
+            if (items.length === 0) return "";
+            const idx = items[0].dataIndex;
+            const total = items[0].chart.data.datasets.reduce(
+              (sum: number, ds: { data: number[] }) => sum + (ds.data[idx] as number || 0), 0
+            );
+            return `Total: ${fmtMillions(total)}`;
+          },
+        },
+      },
+    },
+    scales: {
+      ...state.baseOpts.scales,
+      x: { ...state.baseOpts.scales?.x, stacked: true },
+      y: {
+        ...state.baseOpts.scales?.y,
+        stacked: true,
+        ticks: {
+          ...state.baseOpts.scales?.y?.ticks,
+          callback: (v: number | string) => fmtMillions(Number(v)),
+        },
+      },
+    },
+  };
+
   return {
     revenueData,
     revenueOptions: {
@@ -273,8 +359,7 @@ export function useRevenueCharts() {
       plugins: {
         ...state.baseOpts.plugins,
         tooltip: {
-          ...state.baseOpts.plugins.tooltip,
-          callbacks: {
+          ...state.baseOpts.plugins.tooltip,          callbacks: {
             label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
@@ -287,5 +372,7 @@ export function useRevenueCharts() {
     revVsPayrollOptions,
     opResultData,
     opResultOptions,
+    costBreakdownData,
+    costBreakdownOptions,
   };
 }

@@ -1,11 +1,6 @@
 import { describe, it, expect } from "vitest";
-import {
-  calculateKpis,
-  calculateHealthSignals,
-  ordinal,
-  netDebt,
-  wageBillRatio,
-} from "../../src/features/metrics.js";
+import { netDebt, wageBillRatio } from "../../src/features/financialMetrics.js";
+import { calculateKpis, calculateHealthSignals } from "../../src/features/kpiCalculations.js";
 import {
   fmtMillions,
   getEventAnnotations,
@@ -53,20 +48,6 @@ function makeState(overrides = {}) {
     ...overrides,
   };
 }
-
-// ---------------------------------------------------------------------------
-// ordinal()
-// ---------------------------------------------------------------------------
-
-describe("ordinal()", () => {
-  it("formats 1 as 1st", () => expect(ordinal(1)).toBe("1st"));
-  it("formats 2 as 2nd", () => expect(ordinal(2)).toBe("2nd"));
-  it("formats 3 as 3rd", () => expect(ordinal(3)).toBe("3rd"));
-  it("formats 4 as 4th", () => expect(ordinal(4)).toBe("4th"));
-  it("formats 11 as 11th", () => expect(ordinal(11)).toBe("11th"));
-  it("formats 12 as 12th", () => expect(ordinal(12)).toBe("12th"));
-  it("formats 21 as 21st", () => expect(ordinal(21)).toBe("21st"));
-});
 
 // ---------------------------------------------------------------------------
 // netDebt() / wageBillRatio() — shared formula helpers extracted out of the

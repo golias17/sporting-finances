@@ -4,7 +4,7 @@ import { useAppState, state } from "../../core/state.js";
 import { AppChart } from "../../components/AppChart.js";
 import { baseOpts } from "../../charts/chartDefaults.js";
 import { fmtMillions } from "../../charts/chartUtils.js";
-import { netDebt, wageBillRatio } from "../metrics.js";
+import { netDebt, wageBillRatio } from "../financialMetrics.js";
 
 export const CompareTab = React.memo(function CompareTab() {
   const { T } = useTranslation();
@@ -12,6 +12,8 @@ export const CompareTab = React.memo(function CompareTab() {
   const data = useAppState((s) => s.fullAnnual);
 
   const [idxA, setIdxA] = useState(0);
+  const [vsAverage, setVsAverage] = useState(false);
+  const [avgWindow, setAvgWindow] = useState("all");
   const [idxB, setIdxB] = useState(() =>
     data && data.length > 0 ? data.length - 1 : 0,
   );
@@ -42,31 +44,86 @@ export const CompareTab = React.memo(function CompareTab() {
   const b = data[idxB];
   if (!a || !b) return null;
 
+  // Averages for vsAverage mode — excludes selected season, supports windows
+  const avgData = useMemo(() => {
+    if (!data || data.length === 0) return null;
+    // Determine window range
+    const currentIdx = idxA;
+    let windowData = data;
+    if (avgWindow === "last3" && data.length >= 3) {
+      windowData = data.slice(-3);
+    } else if (avgWindow === "last5" && data.length >= 5) {
+      windowData = data.slice(-5);
+    }
+    // Exclude the selected season from the average
+    const filtered = windowData.filter((_: any, i: number) => {
+      const globalIdx = data.indexOf(windowData[i]);
+      return globalIdx !== currentIdx;
+    });
+    if (filtered.length === 0) return null;
+    const count = filtered.length;
+    const avg = (field: string) => filtered.reduce((s: number, d: any) => s + (d[field] || 0), 0) / count;
+    const vals = (field: string) => filtered.map((d: any) => d[field] || 0);
+    const min = (field: string) => Math.min(...vals(field));
+    const max = (field: string) => Math.max(...vals(field));
+    return {
+      revenue_operating: avg("revenue_operating"),
+      player_transfer_income: avg("player_transfer_income"),
+      net_result: avg("net_result"),
+      equity: avg("equity"),
+      cash: avg("cash"),
+      operating_result_excl_players: avg("operating_result_excl_players"),
+      financial_result: avg("financial_result"),
+      squad_book_value: avg("squad_book_value"),
+      squad_amortization_impairment: avg("squad_amortization_impairment"),
+      player_transfer_cost: avg("player_transfer_cost"),
+      total_assets: avg("total_assets"),
+      current_assets: avg("current_assets"),
+      current_liabilities: avg("current_liabilities"),
+      personnel_costs: avg("personnel_costs"),
+      borrowings_nc: avg("borrowings_nc"),
+      borrowings_c: avg("borrowings_c"),
+      min_revenue: min("revenue_operating"),
+      max_revenue: max("revenue_operating"),
+      min_equity: min("equity"),
+      max_equity: max("equity"),
+      min_net_result: min("net_result"),
+      max_net_result: max("net_result"),
+      min_cash: min("cash"),
+      max_cash: max("cash"),
+      count,
+      label: isPt ? "Média" : "Average",
+    };
+  }, [data, isPt, idxA, avgWindow]);
+
+  const useAverage = vsAverage && avgData !== null;
+  const seasonB = useAverage ? avgData : b;
+
   const netDebtA = netDebt(a);
-  const netDebtB = netDebt(b);
+  const netDebtB = netDebt(seasonB);
   const wageRatioA = wageBillRatio(a);
-  const wageRatioB = wageBillRatio(b);
+  const wageRatioB = wageBillRatio(seasonB);
 
   // Chart data
   const barKeys = [
     {
       label: isPt ? "Receitas" : "Revenue",
       a: a.revenue_operating,
-      b: b.revenue_operating,
+      b: seasonB.revenue_operating,
     },
     {
       label: isPt ? "Transferências" : "Transfers",
       a: a.player_transfer_income,
-      b: b.player_transfer_income,
+      b: seasonB.player_transfer_income,
     },
     {
       label: isPt ? "Res. Líquido" : "Net result",
       a: a.net_result,
-      b: b.net_result,
+      b: seasonB.net_result,
     },
-    { label: isPt ? "Cap. Próprio" : "Equity", a: a.equity, b: b.equity },
+    { label: isPt ? "Cap. Próprio" : "Equity", a: a.equity, b: seasonB.equity },
     { label: isPt ? "Dívida Líq." : "Net debt", a: netDebtA, b: netDebtB },
-    { label: isPt ? "Caixa" : "Cash", a: a.cash, b: b.cash },
+    { label: isPt ? "Caixa" : "Cash", a: a.cash, b: seasonB.cash },
   ];
 
   const chartData = {
@@ -81,10 +138,10 @@ export const CompareTab = React.memo(function CompareTab() {
         borderRadius: 3,
       },
       {
-        label: b.label,
+        label: useAverage ? (isPt ? "Média" : "Average") : b.label,
         data: barKeys.map((k) => k.b),
-        backgroundColor: state.COLORS.goldSoft,
-        borderColor: state.COLORS.gold,
+        backgroundColor: useAverage ? state.COLORS.mutedSoft : state.COLORS.goldSoft,
+        borderColor: useAverage ? state.COLORS.muted : state.COLORS.gold,
         borderWidth: 1,
         borderRadius: 3,
       },
@@ -93,6 +150,19 @@ export const CompareTab = React.memo(function CompareTab() {
 
   const chartOptions = {
     ...baseOpts,
+    plugins: {
+      ...baseOpts.plugins,
+      tooltip: {
+        ...baseOpts.plugins?.tooltip,
+        callbacks: {
+          label: (ctx: { dataset: { label: string }; parsed: { y: number } }) => {
+            const val = ctx.parsed.y;
+            const sign = val < 0 ? "−" : "";
+            return ` ${ctx.dataset.label}: ${sign}€${(Math.abs(val) / 1000).toFixed(1)}M`;
+          },
+        },
+      },
+    },
     scales: {
       ...baseOpts.scales,
       y: { ...(baseOpts.scales?.y || {}), beginAtZero: false },
@@ -102,28 +172,28 @@ export const CompareTab = React.memo(function CompareTab() {
   // Narrative
   const revGrowth =
     Number.isFinite(a.revenue_operating) && a.revenue_operating !== 0
-      ? ((b.revenue_operating - a.revenue_operating) /
+      ? ((seasonB.revenue_operating - a.revenue_operating) /
           Math.abs(a.revenue_operating)) *
         100
       : null;
   const wageBillA = wageRatioA !== null ? (wageRatioA * 100).toFixed(0) : null;
   const wageBillB = wageRatioB !== null ? (wageRatioB * 100).toFixed(0) : null;
-  const equityFlip = a.equity < 0 && b.equity >= 0;
+  const equityFlip = a.equity < 0 && seasonB.equity >= 0;
 
   const parts = [];
   if (isPt) {
     parts.push(
       revGrowth !== null
-        ? `A receita ${revGrowth >= 0 ? "cresceu" : "caiu"} ${Math.abs(revGrowth).toFixed(0)}% — de ${fmtMillions(a.revenue_operating)} para ${fmtMillions(b.revenue_operating)}.`
-        : `A receita passou de ${fmtMillions(a.revenue_operating)} para ${fmtMillions(b.revenue_operating)}.`,
+        ? `A receita ${revGrowth >= 0 ? "cresceu" : "caiu"} ${Math.abs(revGrowth).toFixed(0)}% — de ${fmtMillions(a.revenue_operating)} para ${fmtMillions(seasonB.revenue_operating)}.`
+        : `A receita passou de ${fmtMillions(a.revenue_operating)} para ${fmtMillions(seasonB.revenue_operating)}.`,
     );
     if (equityFlip) {
       parts.push(
-        `O capital próprio passou a ser positivo (${fmtMillions(a.equity)} → ${fmtMillions(b.equity)}), um marco estrutural.`,
+        `O capital próprio passou a ser positivo (${fmtMillions(a.equity)} → ${fmtMillions(seasonB.equity)}), um marco estrutural.`,
       );
     } else {
       parts.push(
-        `O capital próprio passou de ${fmtMillions(a.equity)} para ${fmtMillions(b.equity)}.`,
+        `O capital próprio passou de ${fmtMillions(a.equity)} para ${fmtMillions(seasonB.equity)}.`,
       );
     }
     parts.push(
@@ -134,16 +204,16 @@ export const CompareTab = React.memo(function CompareTab() {
   } else {
     parts.push(
       revGrowth !== null
-        ? `Revenue ${revGrowth >= 0 ? "grew" : "fell"} ${Math.abs(revGrowth).toFixed(0)}% — from ${fmtMillions(a.revenue_operating)} to ${fmtMillions(b.revenue_operating)}.`
-        : `Revenue moved from ${fmtMillions(a.revenue_operating)} to ${fmtMillions(b.revenue_operating)}.`,
+        ? `Revenue ${revGrowth >= 0 ? "grew" : "fell"} ${Math.abs(revGrowth).toFixed(0)}% — from ${fmtMillions(a.revenue_operating)} to ${fmtMillions(seasonB.revenue_operating)}.`
+        : `Revenue moved from ${fmtMillions(a.revenue_operating)} to ${fmtMillions(seasonB.revenue_operating)}.`,
     );
     if (equityFlip) {
       parts.push(
-        `Equity crossed zero (${fmtMillions(a.equity)} → ${fmtMillions(b.equity)}), a structural milestone.`,
+        `Equity crossed zero (${fmtMillions(a.equity)} → ${fmtMillions(seasonB.equity)}), a structural milestone.`,
       );
     } else {
       parts.push(
-        `Equity moved from ${fmtMillions(a.equity)} to ${fmtMillions(b.equity)}.`,
+        `Equity moved from ${fmtMillions(a.equity)} to ${fmtMillions(seasonB.equity)}.`,
       );
     }
     parts.push(
@@ -152,7 +222,11 @@ export const CompareTab = React.memo(function CompareTab() {
         : `Net debt: ${fmtMillions(netDebtA)} → ${fmtMillions(netDebtB)}.`,
     );
   }
-  const narrative = parts.join(" ");
+  const narrative = useAverage
+    ? (isPt
+        ? `Comparação entre ${a.label} e a média do período. ${parts.join(" ")}`
+        : `Comparison between ${a.label} and the period average. ${parts.join(" ")}`)
+    : parts.join(" ");
 
   // Grid
   const safeDiv = (n: number, d: number) =>
@@ -168,7 +242,7 @@ export const CompareTab = React.memo(function CompareTab() {
           icon: "💰",
           label: isPt ? "Receita Operacional" : "Operating Revenue",
           a: a.revenue_operating,
-          b: b.revenue_operating,
+          b: seasonB.revenue_operating,
           fmt: fmtMillions,
           better: "high",
           monetary: true,
@@ -177,7 +251,7 @@ export const CompareTab = React.memo(function CompareTab() {
           icon: "📈",
           label: isPt ? "Resultado Líquido" : "Net Result",
           a: a.net_result,
-          b: b.net_result,
+          b: seasonB.net_result,
           fmt: fmtMillions,
           better: "high",
           monetary: true,
@@ -186,7 +260,7 @@ export const CompareTab = React.memo(function CompareTab() {
           icon: "⚙️",
           label: isPt ? "Resultado Oper. Recorrente" : "Recurring Op. Result",
           a: a.operating_result_excl_players,
-          b: b.operating_result_excl_players,
+          b: seasonB.operating_result_excl_players,
           fmt: fmtMillions,
           better: "high",
           monetary: true,
@@ -195,7 +269,7 @@ export const CompareTab = React.memo(function CompareTab() {
           icon: "💸",
           label: isPt ? "Resultado Financeiro" : "Financial Result",
           a: a.financial_result,
-          b: b.financial_result,
+          b: seasonB.financial_result,
           fmt: fmtMillions,
           better: "high",
           monetary: true,
@@ -209,7 +283,7 @@ export const CompareTab = React.memo(function CompareTab() {
           icon: "⚖️",
           label: isPt ? "Capital Próprio" : "Shareholders' Equity",
           a: a.equity,
-          b: b.equity,
+          b: seasonB.equity,
           fmt: fmtMillions,
           better: "high",
           monetary: true,
@@ -218,7 +292,7 @@ export const CompareTab = React.memo(function CompareTab() {
           icon: "📊",
           label: isPt ? "Ativo Total" : "Total Assets",
           a: a.total_assets,
-          b: b.total_assets,
+          b: seasonB.total_assets,
           fmt: fmtMillions,
           better: "high",
           monetary: true,
@@ -236,7 +310,7 @@ export const CompareTab = React.memo(function CompareTab() {
           icon: "🏧",
           label: isPt ? "Caixa e Equivalentes" : "Cash on Hand",
           a: a.cash,
-          b: b.cash,
+          b: seasonB.cash,
           fmt: fmtMillions,
           better: "high",
           monetary: true,
@@ -262,7 +336,7 @@ export const CompareTab = React.memo(function CompareTab() {
           icon: "🔗",
           label: isPt ? "Dívida Líquida / Receita" : "Net Debt / Revenue",
           a: safeDiv(netDebtA, a.revenue_operating),
-          b: safeDiv(netDebtB, b.revenue_operating),
+          b: safeDiv(netDebtB, seasonB.revenue_operating),
           fmt: (v: number | null) => (v === null ? "—" : v.toFixed(1) + "×"),
           better: "low",
           monetary: false,
@@ -275,8 +349,8 @@ export const CompareTab = React.memo(function CompareTab() {
             a.revenue_operating + a.player_transfer_income,
           ),
           b: safeDiv(
-            b.player_transfer_income * 100,
-            b.revenue_operating + b.player_transfer_income,
+            seasonB.player_transfer_income * 100,
+            seasonB.revenue_operating + seasonB.player_transfer_income,
           ),
           fmt: (v: number | null) =>
             v === null
@@ -291,7 +365,7 @@ export const CompareTab = React.memo(function CompareTab() {
           icon: "⚡",
           label: isPt ? "Rácio de Solvência" : "Current Ratio",
           a: safeDiv(a.current_assets, a.current_liabilities),
-          b: safeDiv(b.current_assets, b.current_liabilities),
+          b: safeDiv(seasonB.current_assets, seasonB.current_liabilities),
           fmt: (v: number | null) => (v === null ? "—" : v.toFixed(2) + "×"),
           better: "high",
           monetary: false,
@@ -305,7 +379,7 @@ export const CompareTab = React.memo(function CompareTab() {
           icon: "💵",
           label: isPt ? "Receitas de Passes" : "Transfer Income",
           a: a.player_transfer_income,
-          b: b.player_transfer_income,
+          b: seasonB.player_transfer_income,
           fmt: fmtMillions,
           better: "high",
           monetary: true,
@@ -318,9 +392,9 @@ export const CompareTab = React.memo(function CompareTab() {
             a.player_transfer_cost +
             a.squad_amortization_impairment,
           b:
-            b.player_transfer_income +
-            b.player_transfer_cost +
-            b.squad_amortization_impairment,
+            seasonB.player_transfer_income +
+            seasonB.player_transfer_cost +
+            seasonB.squad_amortization_impairment,
           fmt: fmtMillions,
           better: "high",
           monetary: true,
@@ -329,7 +403,7 @@ export const CompareTab = React.memo(function CompareTab() {
           icon: "📋",
           label: isPt ? "Valor Contabilístico" : "Squad Book Value",
           a: a.squad_book_value,
-          b: b.squad_book_value,
+          b: seasonB.squad_book_value,
           fmt: fmtMillions,
           better: "high",
           monetary: true,
@@ -338,7 +412,7 @@ export const CompareTab = React.memo(function CompareTab() {
           icon: "📉",
           label: isPt ? "Amortização do Plantel" : "Squad Amortization",
           a: a.squad_amortization_impairment,
-          b: b.squad_amortization_impairment,
+          b: seasonB.squad_amortization_impairment,
           fmt: fmtMillions,
           better: "high",
           monetary: true,
@@ -350,22 +424,22 @@ export const CompareTab = React.memo(function CompareTab() {
   return (
     <>
       <div className="chapter">
-        <T as="div" className="num" i18nKey="ch08-num" />
+        <T as="div" className="num" i18nKey="ch07-num" />
         <div>
-          <T as="h2" i18nKey="ch08-h2" />
-          <T as="p" className="lede" i18nKey="ch08-lede" />
+          <T as="h2" i18nKey="ch07-h2" />
+          <T as="p" className="lede" i18nKey="ch07-lede" />
         </div>
       </div>
       <div className="card">
         <div className="card-head">
-          <T as="h3" i18nKey="ch08-cmp-h3" />
-          <T as="span" className="tag" i18nKey="ch08-cmp-tag" />
+          <T as="h3" i18nKey="ch07-cmp-h3" />
+          <T as="span" className="tag" i18nKey="ch07-cmp-tag" />
         </div>
-        <T as="p" className="desc" i18nKey="ch08-cmp-desc" />
+        <T as="p" className="desc" i18nKey="ch07-cmp-desc" />
 
         <div className="cmp-selectors">
           <div className="cmp-season-pick">
-            <T as="label" htmlFor="compareSeasonA" i18nKey="ch08-season-a" />
+            <T as="label" htmlFor="compareSeasonA" i18nKey="ch07-season-a" />
             <select
               id="compareSeasonA"
               value={idxA}
@@ -378,9 +452,9 @@ export const CompareTab = React.memo(function CompareTab() {
               ))}
             </select>
           </div>
-          <T as="div" className="cmp-vs" i18nKey="ch08-vs" />
+          <T as="div" className="cmp-vs" i18nKey="ch07-vs" />
           <div className="cmp-season-pick">
-            <T as="label" htmlFor="compareSeasonB" i18nKey="ch08-season-b" />
+            <T as="label" htmlFor="compareSeasonB" i18nKey="ch07-season-b" />
             <select
               id="compareSeasonB"
               value={idxB}
@@ -393,6 +467,54 @@ export const CompareTab = React.memo(function CompareTab() {
               ))}
             </select>
           </div>
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px", padding: "0 20px", flexWrap: "wrap" }}>
+          <span className="desc" style={{ margin: 0 }}>
+            {isPt ? "Comparar vs média:" : "Compare vs average:"}
+          </span>
+          <button
+            className={`btn-preset ${vsAverage ? "active" : ""}`}
+            onClick={() => setVsAverage(!vsAverage)}
+            style={{ padding: "6px 14px", fontSize: "var(--fs-sm)" }}
+          >
+            {vsAverage
+              ? (isPt ? "Duas épocas" : "Two seasons")
+              : (isPt ? "Vs média" : "Vs average")}
+          </button>
+          {vsAverage && (
+            <>
+              <span style={{ fontSize: "var(--fs-sm)", color: "var(--muted)" }}>|</span>
+              <button
+                className={`btn-preset ${avgWindow === "all" ? "active" : ""}`}
+                onClick={() => setAvgWindow("all")}
+                style={{ padding: "4px 10px", fontSize: "var(--fs-sm)" }}
+              >
+                {isPt ? "Todas" : "All"}
+              </button>
+              <button
+                className={`btn-preset ${avgWindow === "last5" ? "active" : ""}`}
+                onClick={() => setAvgWindow("last5")}
+                style={{ padding: "4px 10px", fontSize: "var(--fs-sm)" }}
+              >
+                {isPt ? "Últ. 5" : "Last 5"}
+              </button>
+              <button
+                className={`btn-preset ${avgWindow === "last3" ? "active" : ""}`}
+                onClick={() => setAvgWindow("last3")}
+                style={{ padding: "4px 10px", fontSize: "var(--fs-sm)" }}
+              >
+                {isPt ? "Últ. 3" : "Last 3"}
+              </button>
+              <span style={{ fontSize: "var(--fs-sm)", color: "var(--muted)" }}>
+                {avgData
+                  ? (isPt
+                      ? `${avgData.count} épocas (exclui ${data[idxA]?.label || ""})`
+                      : `${avgData.count} seasons (excludes ${data[idxA]?.label || ""})`)
+                  : ""}
+              </span>
+            </>
+          )}
         </div>
 
         <p className="cmp-narrative">{narrative}</p>

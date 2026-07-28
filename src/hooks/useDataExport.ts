@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useAppState } from "../core/state.js";
-import { netDebt } from "../features/metrics.js";
+import { netDebt } from "../features/financialMetrics.js";
 
 interface FieldDef {
   key?: string;

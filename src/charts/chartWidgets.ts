@@ -73,12 +73,11 @@ export function externalTooltipHandler(context: TooltipContext) {
     bodyHtml += "</div>";
 
     if (tooltip.footer && tooltip.footer.length > 0) {
-      let footerHtml = '<div class="glass-tooltip-footer">';
+      bodyHtml += '<div class="glass-tooltip-footer">';
       tooltip.footer.forEach((ft: string) => {
-        footerHtml += `<div class="glass-tooltip-footer-line">${ft}</div>`;
+        bodyHtml += `<div class="glass-tooltip-footer-line">${ft}</div>`;
       });
-      footerHtml += "</div>";
-      bodyHtml += footerHtml;
+      bodyHtml += "</div>";
     }
 
     tooltipEl.innerHTML = titleHtml + bodyHtml;

@@ -1,7 +1,7 @@
 import React from "react";
 import { useAppState } from "../core/state.ts";
 import { fmtMillions } from "../charts/chartUtils.js";
-import { netDebt } from "./metrics.js";
+import { netDebt } from "./financialMetrics.js";
 import type { FinancialRecord } from "../core/types.ts";
 
 const getFields = (isPt: boolean) => [

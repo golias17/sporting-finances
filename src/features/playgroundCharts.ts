@@ -124,6 +124,7 @@ export function usePlaygroundCharts(
                 return `${context.dataset.label}: ${val.toFixed(1)} M€${deltaStr}`;
               }
             },
+            footer: () => [],
           },
         },
       },
@@ -247,6 +248,7 @@ export function usePlaygroundCharts(
               const suffix = context.datasetIndex === 0 ? " M€" : "%";
               return `${context.dataset.label}: ${val.toFixed(1)}${suffix}`;
             },
+            footer: () => [],
           },
         },
       },

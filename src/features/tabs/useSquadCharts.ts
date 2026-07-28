@@ -5,7 +5,7 @@ import {
   styledLineDataset,
   fmtMillions,
 } from "../../charts/chartUtils.js";
-import { getLatestH1Data } from "../metrics.js";
+import { getLatestH1Data } from "../financialMetrics.js";
 import { useChartLabels, usePosNegBarChart } from "../../charts/chartHooks.js";
 import type { ChartData, ChartOptions } from "chart.js";
 
@@ -52,18 +52,19 @@ export function useSquadCharts() {
           type: "bar",
         },
         {
-          ...styledLineDataset({
-            label: isPt
-              ? "Valor de mercado do plantel (Transfermarkt)"
-              : "Squad market value (Transfermarkt)",
-            data: marketValues,
-            color: state.COLORS.gold,
-            bg: "rgba(200,169,81,0.18)",
-            spanGaps: true,
-            pointBorderColor: state.COLORS.gold,
-            extra: { order: 1 },
-          }),
+          label: isPt
+            ? "Valor de mercado do plantel (Transfermarkt)"
+            : "Squad market value (Transfermarkt)",
+          data: marketValues,
+          borderColor: state.COLORS.gold,
+          backgroundColor: state.COLORS.gold,
+          tension: 0.35,
+          fill: false,
+          pointRadius: 3,
+          pointHoverRadius: 5,
+          spanGaps: true,
           type: "line",
+          order: 1,
         },
       ] as any,
     };
@@ -127,8 +128,7 @@ export function useSquadCharts() {
         ...baseOpts.plugins,
         legend: { display: false },
         tooltip: {
-          ...baseOpts.plugins.tooltip,
-          callbacks: {
+          ...baseOpts.plugins.tooltip,          callbacks: {
             label: (ctx: { dataset: { label: string }; parsed: { y: number | null } }) =>
               ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },

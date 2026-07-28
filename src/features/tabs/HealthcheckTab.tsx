@@ -7,12 +7,8 @@ import { useHealthcheckCharts } from "./useHealthcheckCharts.js";
 export const HealthcheckTab = React.memo(function HealthcheckTab() {
   const { T } = useTranslation();
   const {
-    payrollBurdenData,
-    payrollBurdenOptions,
     transferRelianceData,
     transferRelianceOptions,
-    debtLoadData,
-    debtLoadOptions,
     currentRatioData,
     currentRatioOptions,
     transferDebtData,
@@ -44,21 +40,6 @@ export const HealthcheckTab = React.memo(function HealthcheckTab() {
       </div>
       <div className="grid-2">
         <ChartCard
-          id="chartPayrollBurden"
-          title={<T as="h3" i18nKey="ch03-wage-h3" />}
-          tag={<T as="span" className="tag" i18nKey="ch03-wage-tag" />}
-          desc={
-            <>
-              <T as="p" className="desc" i18nKey="ch03-wage-desc" />
-              <T as="div" className="zone-legend" i18nKey="ch03-zone-healthy" />
-            </>
-          }
-          chartType="line"
-          data={payrollBurdenData}
-          options={payrollBurdenOptions}
-          valueType="percentage"
-        />
-        <ChartCard
           id="chartTransferReliance"
           title={<T as="h3" i18nKey="ch03-rel-h3" />}
           tag={<T as="span" className="tag" i18nKey="ch03-rel-tag" />}
@@ -72,23 +53,6 @@ export const HealthcheckTab = React.memo(function HealthcheckTab() {
           data={transferRelianceData}
           options={transferRelianceOptions}
           valueType="percentage"
-        />
-      </div>
-      <div className="grid-2">
-        <ChartCard
-          id="chartDebtLoad"
-          title={<T as="h3" i18nKey="ch03-debt-h3" />}
-          tag={<T as="span" className="tag" i18nKey="ch03-debt-tag" />}
-          desc={
-            <>
-              <T as="p" className="desc" i18nKey="ch03-zone-warning-desc" />
-              <T as="div" className="zone-legend" i18nKey="ch03-zone-warning" />
-            </>
-          }
-          chartType="line"
-          data={debtLoadData}
-          options={debtLoadOptions}
-          valueType="ratio"
         />
         <ChartCard
           id="chartCurrentRatio"
@@ -106,6 +70,7 @@ export const HealthcheckTab = React.memo(function HealthcheckTab() {
           valueType="ratio"
         />
       </div>
+
       <div className="grid-2">
         <ChartCard
           id="chartTransferDebt"

@@ -1,6 +1,6 @@
 import React from "react";
 import { state, useAppState } from "../core/state.ts";
-import { calculateHealthSignals } from "./metrics.ts";
+import { calculateHealthSignals } from "./kpiCalculations.ts";
 import { fmtMillions } from "../charts/chartUtils.ts";
 import { AppChart } from "../components/AppChart.js";
 

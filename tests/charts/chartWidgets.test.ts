@@ -131,6 +131,39 @@ describe("chartWidgets.js — externalTooltipHandler", () => {
     expect(tooltipEl.innerHTML).toContain("€100M");
   });
 
+  
+
+
+
+  it("renders label without colon as strong text", () => {
+    mockGetElementById.mockReturnValue(tooltipEl);
+    
+    const chart = {
+      canvas: {
+        getBoundingClientRect: mockGetBoundingClientRect,
+      },
+    };
+    const tooltip = {
+      opacity: 1,
+      body: [
+        {
+          lines: ["Empty Label"],
+        },
+      ],
+      title: [],
+      footer: [],
+      labelColors: [
+        { backgroundColor: "#00ff00", borderColor: "#00cc00" },
+      ],
+      caretX: 50,
+      caretY: 30,
+    };
+
+    externalTooltipHandler({ chart, tooltip });
+
+    expect(tooltipEl.innerHTML).toContain("<strong>Empty Label</strong>");
+  });
+
   it("renders footer when present", () => {
     mockGetElementById.mockReturnValue(tooltipEl);
     
@@ -143,13 +176,13 @@ describe("chartWidgets.js — externalTooltipHandler", () => {
       opacity: 1,
       body: [
         {
-          lines: ["Test: value"],
+          lines: ["Revenue: €100M"],
         },
       ],
-      title: ["Title"],
-      footer: ["Footer text"],
+      title: ["2023/24"],
+      footer: ["Total: €100M"],
       labelColors: [
-        { backgroundColor: "#00ff00", borderColor: "#00cc00" },
+        { backgroundColor: "#ff0000", borderColor: "#cc0000" },
       ],
       caretX: 50,
       caretY: 30,
@@ -158,7 +191,7 @@ describe("chartWidgets.js — externalTooltipHandler", () => {
     externalTooltipHandler({ chart, tooltip });
 
     expect(tooltipEl.innerHTML).toContain("glass-tooltip-footer");
-    expect(tooltipEl.innerHTML).toContain("Footer text");
+    expect(tooltipEl.innerHTML).toContain("Total: €100M");
   });
 
   it("positions tooltip correctly", () => {

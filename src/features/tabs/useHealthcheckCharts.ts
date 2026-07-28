@@ -4,7 +4,7 @@ import { baseOpts, ZONE_COLORS, fmtMillions } from "../../charts/chartUtils.js";
 
 import { getBrandColors } from "../../charts/chartPalette.js";
 import { useChartLabels } from "../../charts/chartHooks.js";
-import { wageBillRatio, netDebt } from "../metrics.js";
+import { wageBillRatio, netDebt } from "../financialMetrics.js";
 import { HEALTH_THRESHOLDS } from "../healthThresholds.js";
 import type { ChartData, ChartOptions } from "chart.js";
 
@@ -78,14 +78,13 @@ export function useHealthcheckCharts() {
             : "Wage bill as % of revenue",
           data: ratios,
           borderColor: state.COLORS.lineBorder,
-          backgroundColor: "transparent",
+          backgroundColor: state.COLORS.lineBorder + "22",
           borderWidth: 2.5,
           tension: 0.25,
           pointRadius: 5,
           pointBackgroundColor: ratios.map((r) =>
             zoneColor(r, warnPct, dangerPct),
           ),
-          pointBorderColor: "#fff",
           pointBorderWidth: 1.5,
           fill: false,
         },
@@ -171,14 +170,13 @@ export function useHealthcheckCharts() {
             : "Transfer income as % of total revenue",
           data: reliance,
           borderColor: state.COLORS.lineBorder,
-          backgroundColor: "transparent",
+          backgroundColor: state.COLORS.lineBorder + "22",
           borderWidth: 2.5,
           tension: 0.25,
           pointRadius: 5,
           pointBackgroundColor: reliance.map((r) =>
             zoneColor(r, warnPct, dangerPct),
           ),
-          pointBorderColor: "#fff",
           pointBorderWidth: 1.5,
           fill: false,
         },
@@ -241,98 +239,7 @@ export function useHealthcheckCharts() {
     };
   }, [isPt]);
 
-  // 3. Debt Load
-  const debtLoadData = useMemo<ChartData<"line">>(() => {
-    const netDebtRatio = annual.map((d) =>
-      d.revenue_operating !== 0 ? netDebt(d) / d.revenue_operating : null,
-    );
-    const { warn, danger } = HEALTH_THRESHOLDS.netDebtRatio;
-
-    return {
-      labels,
-      datasets: [
-        {
-          label: isPt
-            ? "Dívida líquida / receita anual"
-            : "Net debt / annual revenue",
-          data: netDebtRatio,
-          borderColor: state.COLORS.lineBorder,
-          backgroundColor: "transparent",
-          borderWidth: 2.5,
-          tension: 0.25,
-          pointRadius: 5,
-          pointBackgroundColor: netDebtRatio.map((r) =>
-            zoneColor(r, warn, danger),
-          ),
-          pointBorderColor: "#fff",
-          pointBorderWidth: 1.5,
-          fill: false,
-        },
-      ] as any,
-    };
-  }, [labels, annual, isPt]);
-
-  const debtLoadOptions = useMemo<ChartOptions<any>>(() => {
-    const { warn, danger } = HEALTH_THRESHOLDS.netDebtRatio;
-    const amberLabel = {
-      display: false,
-      content: isPt
-        ? `Alerta (${warn.toFixed(1)}-${danger.toFixed(1)}x)`
-        : `Caution (${warn.toFixed(1)}-${danger.toFixed(1)}x)`,
-      position: { x: "start", y: "center" },
-      xAdjust: 10,
-      color: state.COLORS.warn,
-      font: { family: "Inter", size: 10, weight: "bold" },
-      padding: 6,
-    };
-    return {
-      ...baseOpts,
-      plugins: {
-        ...baseOpts.plugins,
-        legend: { display: false },
-        tooltip: {
-          ...baseOpts.plugins.tooltip,
-          callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
-              `${isPt ? "Dívida líquida" : "Net debt"}: ${ctx.parsed.y.toFixed(1)}× ${isPt ? "receita anual" : "annual revenue"}`,
-          },
-        },
-        annotation: {
-          drawTime: "beforeDatasetsDraw",
-          annotations: zoneAnnotations({
-            zones: [
-              { key: "redBg", min: danger, max: 14, color: ZONE_COLORS.red },
-              {
-                key: "amberBg",
-                min: warn,
-                max: danger,
-                color: ZONE_COLORS.amber,
-                label: amberLabel,
-              },
-              { key: "greenBg", min: -2, max: warn, color: ZONE_COLORS.green },
-            ],
-            lines: [
-              { key: "line2", value: danger, color: state.COLORS.neg },
-              { key: "line1", value: warn, color: state.COLORS.warn },
-            ],
-          }),
-        },
-      },
-      scales: {
-        ...baseOpts.scales,
-        y: {
-          ...baseOpts.scales.y,
-          beginAtZero: false,
-          ticks: {
-            ...(baseOpts.scales?.y?.ticks || {}),
-            callback: (v: number | string) => v.toFixed(1) + "×",
-          },
-        },
-      },
-    };
-  }, [isPt]);
-
-  // 4. Current Ratio
+  
   const currentRatioData = useMemo<ChartData<"line">>(() => {
     const ratios = annual.map((d) =>
       d.current_liabilities !== 0
@@ -350,14 +257,13 @@ export function useHealthcheckCharts() {
             : "Short-term assets / short-term liabilities",
           data: ratios,
           borderColor: state.COLORS.lineBorder,
-          backgroundColor: "transparent",
+          backgroundColor: state.COLORS.lineBorder + "22",
           borderWidth: 2.5,
           tension: 0.25,
           pointRadius: 5,
           pointBackgroundColor: ratios.map((r) =>
             zoneColor(r, danger, warn, true),
           ),
-          pointBorderColor: "#fff",
           pointBorderWidth: 1.5,
           fill: false,
         },
@@ -466,10 +372,10 @@ export function useHealthcheckCharts() {
         ...baseOpts.plugins,
         legend: { display: true, position: "bottom" },
         tooltip: {
-          ...baseOpts.plugins.tooltip,
-          callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
-              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+          ...baseOpts.plugins.tooltip,          callbacks: {
+            label: (ctx: { dataset: { label: string }; parsed: { y: number }; datasetIndex: number }) => {
+              return ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`;
+            },
           },
         },
       },
@@ -498,10 +404,11 @@ export function useHealthcheckCharts() {
               d.operating_result_excl_players + Math.abs(d.da_excl_squad),
           ),
           borderColor: colors.gold,
-          backgroundColor: "transparent",
-          borderWidth: 2,
-          tension: 0.25,
+          backgroundColor: colors.gold,
+          tension: 0.35,
           fill: false,
+          pointRadius: 3,
+          pointHoverRadius: 5,
         },
         {
           label: isPt ? "EBITDA Total (c/ Passes)" : "Total EBITDA (w/ Transfers)",
@@ -512,10 +419,11 @@ export function useHealthcheckCharts() {
                 Math.abs(d.squad_amortization_impairment),
           ),
           borderColor: colors.pos,
-          backgroundColor: "transparent",
-          borderWidth: 2.5,
-          tension: 0.25,
+          backgroundColor: colors.pos,
+          tension: 0.35,
           fill: false,
+          pointRadius: 3,
+          pointHoverRadius: 5,
         },
       ],
     };
@@ -528,10 +436,10 @@ export function useHealthcheckCharts() {
         ...baseOpts.plugins,
         legend: { display: true, position: "bottom" },
         tooltip: {
-          ...baseOpts.plugins.tooltip,
-          callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
-              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+          ...baseOpts.plugins.tooltip,          callbacks: {
+            label: (ctx: { dataset: { label: string }; parsed: { y: number }; datasetIndex: number }) => {
+              return ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`;
+            },
           },
         },
       },
@@ -553,8 +461,6 @@ export function useHealthcheckCharts() {
     payrollBurdenOptions,
     transferRelianceData,
     transferRelianceOptions,
-    debtLoadData,
-    debtLoadOptions,
     currentRatioData,
     currentRatioOptions,
     transferDebtData,

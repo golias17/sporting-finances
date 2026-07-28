@@ -121,7 +121,6 @@ export function TopNav({ onPdfExport }: TopNavProps) {
         <button
           ref={btnRef}
           aria-pressed={isDark}
-          aria-label={t("nav-theme-toggle-aria") || "Toggle dark mode"}
           className="theme-toggle-btn"
           onClick={handleThemeToggle}
         >

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { state } from "../../src/core/state";
-import { getBaseline, equityZoneInfo, cashZoneInfo, buildVerdict, scenarioLabels, getSliderBackground } from "../../src/features/playgroundUtils";
+import { getBaseline, computeProjection, equityZoneInfo, cashZoneInfo, buildVerdict, scenarioLabels, getSliderBackground } from "../../src/features/playgroundUtils";
 
 describe("playgroundUtils", () => {
   beforeEach(() => {
@@ -96,4 +96,70 @@ describe("playgroundUtils", () => {
     const verdict = buildVerdict(baseline, proj, true);
     expect(verdict.text).toContain("melhora");
   });
+
+  it("computeProjection returns projected values with default inputs", () => {
+    const baseline = {
+      revenue_operating: 150000,
+      personnel_costs: -90000,
+      external_supplies: -20000,
+      da_excl_squad: -5000,
+      squad_amortization: -15000,
+      player_transfer_cost: -10000,
+      player_transfer_income: 25000,
+      financial_result: -3000,
+      net_result: 5000,
+      equity: 30000,
+      cash: 10000,
+      total_assets: 200000,
+    };
+    const inputs = { uclPrize: 0, payrollAdj: 0, salesTarget: 117, purchasesTarget: 30, capexAdj: 0, debtRepayTarget: 0, revGrowthAdj: 0 };
+    const result = computeProjection(baseline, inputs, false);
+    expect(result).not.toBeNull();
+    expect(result!.revenue).toBe(150000);
+    expect(result!.netResult).toBeGreaterThan(0);
+  });
+
+  it("computeProjection applies revenue growth adjustment", () => {
+    const baseline = {
+      revenue_operating: 150000,
+      personnel_costs: -90000,
+      external_supplies: -20000,
+      da_excl_squad: -5000,
+      squad_amortization: -15000,
+      player_transfer_cost: -10000,
+      player_transfer_income: 25000,
+      financial_result: -3000,
+      net_result: 5000,
+      equity: 30000,
+      cash: 10000,
+      total_assets: 200000,
+    };
+    const inputs = { uclPrize: 0, payrollAdj: 0, salesTarget: 117, purchasesTarget: 30, capexAdj: 0, debtRepayTarget: 0, revGrowthAdj: 10 };
+    const result = computeProjection(baseline, inputs, false);
+    expect(result).not.toBeNull();
+    expect(result!.revenue).toBe(165000);  // 150000 + 10% + 0 uclPrize // 150000 + 10%
+    expect(result!.netResult).toBe(20000); // 5000 + 15000 revenue increase (roughly)
+  });
+
+  it("computeProjection uses Portuguese labels", () => {
+    const baseline = {
+      revenue_operating: 150000,
+      personnel_costs: -90000,
+      external_supplies: -20000,
+      da_excl_squad: -5000,
+      squad_amortization: -15000,
+      player_transfer_cost: -10000,
+      player_transfer_income: 25000,
+      financial_result: -3000,
+      net_result: 5000,
+      equity: 30000,
+      cash: 10000,
+      total_assets: 200000,
+    };
+    const inputs = { uclPrize: 0, payrollAdj: 0, salesTarget: 117, purchasesTarget: 30, capexAdj: 0, debtRepayTarget: 0, revGrowthAdj: 0 };
+    const result = computeProjection(baseline, inputs, true);
+    expect(result).not.toBeNull();
+    expect(result!.revenue).toBe(150000);
+  });
+
 });

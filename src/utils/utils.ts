@@ -27,12 +27,4 @@ export function debounce<T extends (...args: unknown[]) => void>(
  * kept safe a different way, via textContent assignment instead of
  * innerHTML — see initNewsFeed().)
  */
-export function escapeHtml(str: string) {
-  if (str === null || str === undefined) return "";
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
+

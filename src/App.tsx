@@ -32,17 +32,16 @@ const HealthcheckTab = React.lazy(() =>
     default: m.HealthcheckTab,
   })),
 );
-const DebtTab = React.lazy(() =>
-  import("./features/tabs/DebtTab.js").then((m) => ({ default: m.DebtTab })),
+const BalanceSheetTab = React.lazy(() =>
+  import("./features/tabs/BalanceSheetTab.js").then((m) => ({
+    default: m.BalanceSheetTab,
+  })),
 );
 const BondsTab = React.lazy(() =>
   import("./features/tabs/BondsTab.js").then((m) => ({ default: m.BondsTab })),
 );
 const SquadTab = React.lazy(() =>
   import("./features/tabs/SquadTab.js").then((m) => ({ default: m.SquadTab })),
-);
-const CashTab = React.lazy(() =>
-  import("./features/tabs/CashTab.js").then((m) => ({ default: m.CashTab })),
 );
 const CompareTab = React.lazy(() =>
   import("./features/tabs/CompareTab.js").then((m) => ({
@@ -187,10 +186,9 @@ export function App() {
           {activeTab === "overview" && <ErrorBoundary><OverviewTab /></ErrorBoundary>}
           {activeTab === "revenue" && <ErrorBoundary><RevenueTab /></ErrorBoundary>}
           {activeTab === "healthcheck" && <ErrorBoundary><HealthcheckTab /></ErrorBoundary>}
-          {activeTab === "debt" && <ErrorBoundary><DebtTab /></ErrorBoundary>}
+          {activeTab === "balance-sheet" && <ErrorBoundary><BalanceSheetTab /></ErrorBoundary>}
           {activeTab === "bonds" && <ErrorBoundary><BondsTab /></ErrorBoundary>}
           {activeTab === "squad" && <ErrorBoundary><SquadTab /></ErrorBoundary>}
-          {activeTab === "cash" && <ErrorBoundary><CashTab /></ErrorBoundary>}
           {activeTab === "compare" && <ErrorBoundary><CompareTab /></ErrorBoundary>}
           {activeTab === "events" && <ErrorBoundary><EventsTab /></ErrorBoundary>}
           {activeTab === "data" && <ErrorBoundary><DataTab onExportCsv={dataExport.exportCsv} /></ErrorBoundary>}

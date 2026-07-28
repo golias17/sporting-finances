@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useAppState, state } from "../../core/state.js";
-import { baseOpts, styledLineDataset, fmtMillions } from "../../charts/chartUtils.js";
+import { baseOpts, fmtMillions } from "../../charts/chartUtils.js";
 import { useChartLabels } from "../../charts/chartHooks.js";
 import type { ChartData, ChartOptions } from "chart.js";
 
@@ -35,13 +35,18 @@ export function useDebtCharts() {
           stack: "s1",
           order: 1,
         },
-        styledLineDataset({
+        {
           label: isPt ? "Caixa e equivalentes" : "Cash on hands; equivalents",
           data: annual.map((d) => d.cash),
-          color: state.COLORS.gold,
-          bg: state.COLORS.goldSoft,
-          extra: { type: "line", order: 0 },
-        }),
+          borderColor: state.COLORS.gold,
+          backgroundColor: state.COLORS.gold,
+          tension: 0.35,
+          fill: false,
+          pointRadius: 3,
+          pointHoverRadius: 5,
+          type: "line",
+          order: 0,
+        },
       ] as any,
     }),
     [labels, annual, isPt],
@@ -53,8 +58,7 @@ export function useDebtCharts() {
       plugins: {
         ...baseOpts.plugins,
         tooltip: {
-          ...baseOpts.plugins.tooltip,
-          callbacks: {
+          ...baseOpts.plugins.tooltip,          callbacks: {
             label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
@@ -105,15 +109,18 @@ export function useDebtCharts() {
     return {
       labels,
       datasets: [
-        styledLineDataset({
+        {
           label: isPt
             ? "Percentagem de dívida a longo prazo"
             : "Long-term share of debt",
           data: ncShare.map((v) => (v == null ? null : v * 100)),
-          color: state.COLORS.green,
-          bg: state.COLORS.greenSoft,
-          fill: true,
-        }),
+          borderColor: state.COLORS.green,
+          backgroundColor: state.COLORS.green,
+          tension: 0.35,
+          fill: false,
+          pointRadius: 3,
+          pointHoverRadius: 5,
+        },
       ] as any,
     };
   }, [labels, annual, isPt]);
@@ -125,8 +132,7 @@ export function useDebtCharts() {
         ...baseOpts.plugins,
         legend: { display: false },
         tooltip: {
-          ...baseOpts.plugins.tooltip,
-          callbacks: {
+          ...baseOpts.plugins.tooltip,          callbacks: {
             label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               `${isPt ? "Longo prazo" : "Long-term"}: ${ctx.parsed.y.toFixed(0)}%`,
           },
@@ -154,8 +160,7 @@ export function useDebtCharts() {
       plugins: {
         ...baseOpts.plugins,
         tooltip: {
-          ...baseOpts.plugins.tooltip,
-          callbacks: {
+          ...baseOpts.plugins.tooltip,          callbacks: {
             label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },

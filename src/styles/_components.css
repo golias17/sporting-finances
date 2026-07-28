@@ -44,6 +44,15 @@
   border-radius: var(--radius-xs);
 }
 
+.glass-tooltip-footer {
+  font-weight: 600;
+  font-size: 12px;
+}
+.glass-tooltip-footer-line {
+  white-space: nowrap;
+}
+
+
 * {
   box-sizing: border-box;
 }
@@ -1071,19 +1080,6 @@ body.dark .glass-tooltip-title {
 }
 body.dark .glass-tooltip-body {
   color: #cccccc;
-}
-.glass-tooltip-footer {
-  margin-top: 6px;
-  border-top: 1px solid var(--rule);
-  padding-top: 6px;
-  font-family: var(--sans);
-  font-size: var(--fs-sm);
-  font-weight: 700;
-  color: var(--ink);
-}
-body.dark .glass-tooltip-footer {
-  border-color: rgba(255, 255, 255, 0.08);
-  color: #eaeaea;
 }
 
 /* Restrict raw table wrappers inside fixed-height chart boxes */

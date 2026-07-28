@@ -3,7 +3,7 @@ import { state } from "../core/state.js";
 import { getBrandColors, hexToRgbArray } from "../charts/chartUtils.js";
 import { fmtM, signColorCell, thresholdColorCell, combineCellColorers } from "./pdfHelpers.js";
 import type { PdfContext, ColorPalette, SummaryLabels } from "./pdfTypes.js";
-import { getLatestH1Data, revenueGrowthPct, consecutiveProfitableYears, netDebt } from "../features/metrics.js";
+import { getLatestH1Data, revenueGrowthPct, consecutiveProfitableYears, netDebt } from "../features/financialMetrics.js";
 
 // ==========================================================
 // PAGE 1: TITLE, SUMMARY, AND EXECUTIVE KPI GRID
