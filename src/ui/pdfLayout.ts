@@ -2,7 +2,7 @@ import { jsPDF } from "jspdf";
 import { state } from "../core/state.js";
 import type { PdfContext, ColorPalette, AnnualData } from "./pdfTypes.js";
 import { getBrandColors, hexToRgbArray } from "../charts/chartUtils.js";
-import { getLatestH1Data } from "../features/metrics.js";
+import { getLatestH1Data } from "../features/financialMetrics.js";
 
 export function buildPdfContext({ doc, isPt, data, logoBase64, totalPages }: { doc: jsPDF; isPt: boolean; data: AnnualData[]; logoBase64: string; totalPages: number }) {
   const brand = getBrandColors(false);

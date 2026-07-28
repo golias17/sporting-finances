@@ -35,13 +35,13 @@ describe("translations.js", () => {
   it("should load PT translations and push to Zustand", async () => {
     await loadTranslations("pt");
     const t = useAppState.getState().translations;
-    expect(t["era-all"].text).toBe("Sempre");
+    expect(t["footer-meta"].text).toContain("Período");
   });
 
   it("should load EN translations and push to Zustand", async () => {
     await loadTranslations("en");
     const t = useAppState.getState().translations;
-    expect(t["era-all"].text).toBe("All Time");
+    expect(t["footer-meta"].text).toContain("Period ended");
   });
 
   it("should let the most recent load win when calls race", async () => {
@@ -52,6 +52,6 @@ describe("translations.js", () => {
     await Promise.all([ptPromise, enPromise]);
 
     const t = useAppState.getState().translations;
-    expect(t["era-all"].text).toBe("All Time");
+    expect(t["footer-meta"].text).toContain("Period ended");
   });
 });

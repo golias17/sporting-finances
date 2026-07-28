@@ -1,6 +1,6 @@
 import React from "react";
 import { state, useAppState } from "../core/state.ts";
-import { calculateKpis } from "./metrics.ts";
+import { calculateKpis } from "./kpiCalculations.ts";
 import { fmtMillions } from "../charts/chartUtils.ts";
 
 export function KPIBar() {

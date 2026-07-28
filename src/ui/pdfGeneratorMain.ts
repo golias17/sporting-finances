@@ -2,7 +2,7 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { state } from "../core/state.js";
 import { getBrandColors, hexToRgbArray } from "../charts/chartUtils.js";
-import { getLatestH1Data, revenueGrowthPct, consecutiveProfitableYears, netDebt } from "../features/metrics.js";
+import { getLatestH1Data, revenueGrowthPct, consecutiveProfitableYears, netDebt } from "../features/financialMetrics.js";
 import { fmtM, signColorCell, thresholdColorCell, combineCellColorers, getBase64ImageFromUrl } from "./pdfHelpers.js";
 import { buildPdfContext } from "./pdfLayout.js";
 import { drawCoverPage } from "./pdfCoverPage.js";

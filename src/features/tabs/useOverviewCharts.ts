@@ -20,34 +20,40 @@ export function useOverviewCharts() {
       labels,
       datasets: [
         {
-          ...styledLineDataset({
-            label: isPt ? "Receitas operacionais" : "Operating revenue",
-            data: annual.map((d) => d.revenue_operating),
-            color: state.COLORS.green,
-            bg: state.COLORS.greenSoft,
-            extra: { yAxisID: "y" },
-          }),
+          label: isPt ? "Receitas operacionais" : "Operating revenue",
+          data: annual.map((d) => d.revenue_operating),
+          borderColor: state.COLORS.green,
+          backgroundColor: state.COLORS.green,
+          tension: 0.35,
+          fill: false,
+          pointRadius: 3,
+          pointHoverRadius: 5,
           type: "line",
+          yAxisID: "y",
         },
         {
-          ...styledLineDataset({
-            label: isPt ? "Resultado líquido" : "Net result",
-            data: annual.map((d) => d.net_result),
-            color: state.COLORS.gold,
-            bg: state.COLORS.goldSoft,
-            extra: { yAxisID: "y" },
-          }),
+          label: isPt ? "Resultado líquido" : "Net result",
+          data: annual.map((d) => d.net_result),
+          borderColor: state.COLORS.gold,
+          backgroundColor: state.COLORS.gold,
+          tension: 0.35,
+          fill: false,
+          pointRadius: 3,
+          pointHoverRadius: 5,
           type: "line",
+          yAxisID: "y",
         },
         {
-          ...styledLineDataset({
-            label: isPt ? "Capital próprio" : "Shareholders' equity",
-            data: annual.map((d) => d.equity),
-            color: state.COLORS.info,
-            bg: "rgba(58,114,184,0.1)",
-            extra: { yAxisID: "y" },
-          }),
+          label: isPt ? "Capital próprio" : "Shareholders' equity",
+          data: annual.map((d) => d.equity),
+          borderColor: state.COLORS.info,
+          backgroundColor: state.COLORS.info,
+          tension: 0.35,
+          fill: false,
+          pointRadius: 3,
+          pointHoverRadius: 5,
           type: "line",
+          yAxisID: "y",
         },
       ] as any,
     }),
@@ -87,8 +93,7 @@ export function useOverviewCharts() {
       plugins: {
         ...baseOpts.plugins,
         tooltip: {
-          ...baseOpts.plugins.tooltip,
-          callbacks: {
+          ...baseOpts.plugins.tooltip,          callbacks: {
             label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },

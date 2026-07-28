@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useAppState, state } from "../../core/state.js";
-import { baseOpts, styledLineDataset, fmtMillions } from "../../charts/chartUtils.js";
+import { baseOpts, fmtMillions } from "../../charts/chartUtils.js";
 import { useChartLabels, usePosNegBarChart } from "../../charts/chartHooks.js";
 import type { ChartData, ChartOptions } from "chart.js";
 
@@ -47,8 +47,7 @@ export function useCashCharts() {
       plugins: {
         ...baseOpts.plugins,
         tooltip: {
-          ...baseOpts.plugins.tooltip,
-          callbacks: {
+          ...baseOpts.plugins.tooltip,          callbacks: {
             label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
@@ -67,13 +66,14 @@ export function useCashCharts() {
       labels: baseLabels,
       datasets: [
         {
-          ...styledLineDataset({
-            label: isPt ? "Caixa e equivalentes" : "Cash & equivalents",
-            data: annual.map((d) => d.cash),
-            color: state.COLORS.gold,
-            bg: state.COLORS.goldSoft,
-            fill: true,
-          }),
+          label: isPt ? "Caixa e equivalentes" : "Cash & equivalents",
+          data: annual.map((d) => d.cash),
+          borderColor: state.COLORS.gold,
+          backgroundColor: state.COLORS.gold,
+          tension: 0.35,
+          fill: false,
+          pointRadius: 3,
+          pointHoverRadius: 5,
         } as any,
       ],
     }),
@@ -87,8 +87,7 @@ export function useCashCharts() {
         ...baseOpts.plugins,
         legend: { display: false },
         tooltip: {
-          ...baseOpts.plugins.tooltip,
-          callbacks: {
+          ...baseOpts.plugins.tooltip,          callbacks: {
             label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
               ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },

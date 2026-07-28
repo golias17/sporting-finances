@@ -50,9 +50,11 @@ function createCompetitorLineDatasets(
       label: "Sporting",
       data: annual.map((d) => getField(d) !== null ? getField(d)! / divisor : null),
       borderColor: competitorColors.sporting,
-      backgroundColor: competitorColors.sporting + "33",
-      tension: 0.3,
+      backgroundColor: competitorColors.sporting,
+      tension: 0.35,
       fill: false,
+      pointRadius: 3,
+      pointHoverRadius: 5,
     },
     {
       label: "Benfica",
@@ -61,9 +63,11 @@ function createCompetitorLineDatasets(
         return bd && getField(bd) !== null ? getField(bd)! / divisor : null;
       }),
       borderColor: competitorColors.benfica,
-      backgroundColor: competitorColors.benfica + "33",
-      tension: 0.3,
+      backgroundColor: competitorColors.benfica,
+      tension: 0.35,
       fill: false,
+      pointRadius: 3,
+      pointHoverRadius: 5,
     },
     {
       label: "Porto",
@@ -72,9 +76,11 @@ function createCompetitorLineDatasets(
         return pd && getField(pd) !== null ? getField(pd)! / divisor : null;
       }),
       borderColor: competitorColors.porto,
-      backgroundColor: competitorColors.porto + "33",
-      tension: 0.3,
+      backgroundColor: competitorColors.porto,
+      tension: 0.35,
       fill: false,
+      pointRadius: 3,
+      pointHoverRadius: 5,
     },
   ];
 }
@@ -239,12 +245,9 @@ export function useCompetitiveCharts() {
         data: annual.map((d) => (d.player_transfer_income ?? 0) - Math.abs(d.player_transfer_cost ?? 0)),
         backgroundColor: annual.map((d) => {
           const val = (d.player_transfer_income ?? 0) - Math.abs(d.player_transfer_cost ?? 0);
-          return val >= 0 ? competitorColors.sporting + "B3" : competitorColors.benfica + "B3";
+          return val >= 0 ? competitorColors.sporting + "B3" : competitorColors.sporting + "50";
         }),
-        borderColor: annual.map((d) => {
-          const val = (d.player_transfer_income ?? 0) - Math.abs(d.player_transfer_cost ?? 0);
-          return val >= 0 ? competitorColors.sporting : competitorColors.benfica;
-        }),
+        borderColor: competitorColors.sporting,
         borderWidth: 1,
         borderRadius: 3,
       },
@@ -357,9 +360,7 @@ export function useCompetitiveCharts() {
         labels: {
           color: COLORS.muted,
           font: { size: 12 },
-          padding: 16,
-          usePointStyle: true,
-        },
+          padding: 16,        },
       },
       tooltip: {
         ...baseOpts.plugins?.tooltip,
@@ -401,9 +402,7 @@ export function useCompetitiveCharts() {
         labels: {
           color: COLORS.muted,
           font: { size: 12 },
-          padding: 16,
-          usePointStyle: true,
-        },
+          padding: 16,        },
       },
       tooltip: {
         ...baseOpts.plugins?.tooltip,
