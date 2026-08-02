@@ -82,7 +82,7 @@ export function useOverviewCharts() {
           type: "line",
           xMin: step.season,
           xMax: step.season,
-          borderColor: "rgba(200,169,81,0.95)",
+          borderColor: state.COLORS.gold,
           borderWidth: 3,
           label: { display: false },
         };
