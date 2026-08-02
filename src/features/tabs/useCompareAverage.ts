@@ -68,7 +68,7 @@ export function useCompareAverage(
   return avgData;
 }
 
-export function useCompareRatios(a: any, seasonB: any) {
+export function useCompareRatios(a: CompareData, seasonB: CompareData) {
   const netDebtA = netDebt(a);
   const netDebtB = netDebt(seasonB);
   const wageRatioA = wageBillRatio(a);
