@@ -40,18 +40,36 @@ export function TransfersLedger({
   const activeWindow = useAppState((s) => s.tlActiveWindow);
   const setActiveWindow = useAppState((s) => s.setTlActiveWindow);
 
-  const seasonObj =
-    ledgerData.find((x) => x.season === activeSeason) || ledgerData[0];
-  if (!seasonObj) return null;
+  let purchases: TransferTransaction[] = [];
+  let sales: TransferTransaction[] = [];
+  let displayedNote: string | undefined = undefined;
 
-  let purchases = seasonObj.purchases;
-  let sales = seasonObj.sales;
+  if (activeSeason === "all") {
+    ledgerData.forEach((s) => {
+      purchases.push(...s.purchases);
+      sales.push(...s.sales);
+    });
+  } else {
+    const seasonObj =
+      ledgerData.find((x) => x.season === activeSeason) || ledgerData[0];
+    if (seasonObj) {
+      purchases = seasonObj.purchases;
+      sales = seasonObj.sales;
+      displayedNote = localizedNote(seasonObj, isPt);
+    }
+  }
 
   if (activeWindow !== "All") {
     purchases = purchases.filter(
       (p) => p.window === activeWindow.toLowerCase(),
     );
     sales = sales.filter((p) => p.window === activeWindow.toLowerCase());
+  }
+
+  // Sort by fee descending for consistency when showing all seasons
+  if (activeSeason === "all") {
+    purchases.sort((a, b) => (b.fee || 0) - (a.fee || 0));
+    sales.sort((a, b) => (b.fee || 0) - (a.fee || 0));
   }
 
   const renderRows = (arr: TransferTransaction[]) => {
@@ -81,10 +99,19 @@ export function TransfersLedger({
             {p.rights}
           </span>,
         );
-      if (p.bonus)
+      let remainingBonus = p.bonus || 0;
+      if (p.timeline) {
+         p.timeline.forEach(e => {
+            if (e.type === "bonus") {
+                remainingBonus = Math.max(0, remainingBonus - e.amount);
+            }
+         });
+      }
+
+      if (remainingBonus > 0)
         tags.push(
           <span key="bonus" className="tl-tag bonus">
-            +€{fmtNumStr(p.bonus)}M {isPt ? "bónus" : "bonus"}
+            +€{fmtNumStr(remainingBonus)}M {isPt ? "bónus restantes" : "bonus remaining"}
           </span>,
         );
       if (p.commission)
@@ -103,6 +130,16 @@ export function TransfersLedger({
             <div className="tl-club">{p.club ? p.club : "—"}</div>
             {tags.length > 0 && <div className="tl-tags">{tags}</div>}
             {displayedNote && <div className="tl-obs">{displayedNote}</div>}
+            {p.timeline && p.timeline.length > 0 && (
+               <div className="tl-obs" style={{ color: "var(--color-gold)", marginTop: "4px" }}>
+                 {isPt ? "Eventos consolidados:" : "Consolidated events:"}{" "}
+                 {p.timeline.map((e, i) => (
+                   <span key={i}>
+                     [{e.season}] {e.desc_pt || e.desc}: €{e.amount}M{i < p.timeline!.length - 1 ? ", " : ""}
+                   </span>
+                 ))}
+               </div>
+            )}
           </div>
           <FmtFee fee={p.fee} />
         </div>
@@ -110,16 +147,62 @@ export function TransfersLedger({
     });
   };
 
-  const totalIn = purchases.reduce((a, p) => a + (p.fee || 0), 0);
-  const totalOut = sales.reduce((a, p) => a + (p.fee || 0), 0);
+  const calculateTotal = (txs: TransferTransaction[]) => {
+    return txs.reduce((a, p) => a + (p.fee || 0), 0);
+  };
+
+  const totalIn = calculateTotal(purchases);
+  const totalOut = calculateTotal(sales);
   const net = totalOut - totalIn;
   const netCls = net >= 0 ? "pos" : "neg";
   const netSign = net >= 0 ? "+" : "";
-  const displayedNote = localizedNote(seasonObj, isPt);
+
+  const totalRealizedIn = purchases.reduce((sum, p) => {
+    let cost = (p.fee || 0) + (p.commission || 0);
+    if (p.timeline) {
+      p.timeline.forEach(e => {
+        cost += e.amount;
+      });
+    }
+    return sum + cost;
+  }, 0);
+
+  const totalRealizedOut = sales.reduce((sum, p) => {
+    let fee = p.fee || 0;
+    let comm = p.commission || 0;
+    if (p.timeline) {
+      p.timeline.forEach((e: any) => {
+        if (e.type === "bonus") fee += e.amount;
+        if (e.type === "commission" || e.type === "other") comm += e.amount;
+      });
+    }
+    
+    let tpTotal = 0;
+    if (p.sell_on_gain_pct !== undefined && p.purchase_fee !== undefined) {
+      const gain = Math.max(0, fee - p.purchase_fee);
+      tpTotal = gain * (p.sell_on_gain_pct / 100);
+    } else {
+      const rights = parseFloat((p.rights || "100%").replace("%", "")) / 100;
+      tpTotal = fee * (1 - rights);
+    }
+    
+    return sum + (fee - comm - tpTotal);
+  }, 0);
+
+  const netRealized = totalRealizedOut - totalRealizedIn;
+  const netRealizedCls = netRealized >= 0 ? "pos" : "neg";
+  const netRealizedSign = netRealized >= 0 ? "+" : "";
 
   return (
     <>
       <div className="tl-season-nav">
+        <button
+          className={`season-pill${activeSeason === "all" ? " active" : ""}`}
+          aria-pressed={activeSeason === "all"}
+          onClick={() => setActiveSeason("all")}
+        >
+          {isPt ? "Todas" : "All"}
+        </button>
         {ledgerData.map((s) => (
           <button
             key={s.season}
@@ -220,6 +303,70 @@ export function TransfersLedger({
             </span>
             <span className="tl-sum-val pos">+€{fmtNumStr(totalOut)}M</span>
           </div>
+        </div>
+        <div className="tl-summary" style={{ marginTop: "1rem", borderTop: "1px dashed var(--border)", paddingTop: "1rem" }}>
+          <div className="tl-sum-item">
+            <span className="tl-sum-label">
+              {isPt
+                ? "Total consolidado (Custo base + Comissões + Eventos)"
+                : "Consolidated spent (Fee + Comm + Events)"}
+            </span>
+            <span className="tl-sum-val neg">−€{fmtNumStr(totalRealizedIn)}M</span>
+          </div>
+          <div className="tl-net-box">
+            <div className="tl-sum-label">
+              {isPt ? "Saldo consolidado (SAD)" : "Consolidated net (SAD)"}
+            </div>
+            <div className={`tl-sum-val ${netRealizedCls}`}>
+              {netRealizedSign}€{fmtNumStr(Math.abs(netRealized))}M
+            </div>
+          </div>
+          <div className="tl-sum-item">
+            <span className="tl-sum-label">
+              {isPt
+                ? "Líquido SAD (Receitas - Comissões - Terceiros)"
+                : "Net Proceeds (Fee - Comm - 3rd Party)"}
+            </span>
+            <span className="tl-sum-val pos">+€{fmtNumStr(totalRealizedOut)}M</span>
+          </div>
+        </div>
+        <div
+          className="ledger-footer-note"
+          style={{
+            marginTop: "1.25rem",
+            padding: "0.85rem 1.15rem",
+            borderRadius: "10px",
+            background: "var(--surface-soft, rgba(255, 255, 255, 0.03))",
+            borderLeft: "3px solid var(--green)",
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.5rem",
+            color: "var(--muted)",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "var(--fs-xs)", fontWeight: 600, color: "var(--ink)" }}>
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--green)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{ flexShrink: 0 }}
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="16" x2="12" y2="12" />
+              <line x1="12" y1="8" x2="12.01" y2="8" />
+            </svg>
+            <span>{isPt ? "Nota" : "Note"}</span>
+          </div>
+          <span style={{ fontSize: "var(--fs-sm)", lineHeight: 1.5 }}>
+            {isPt
+              ? "Os valores não incluem retenções para mecanismos de solidariedade. O encargo com terceiros pode tratar-se de uma estimativa conservadora baseada na percentagem (passe ou mais-valia) detida."
+              : "Values do not include solidarity mechanism retentions. Third-party charges may be conservative estimates based on the held percentage (economic rights or capital gains)."}
+          </span>
         </div>
       </div>
     </>

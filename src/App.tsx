@@ -11,6 +11,7 @@ import { LightboxProvider } from "./hooks/useLightboxContext.tsx";
 import { usePdfExport } from "./hooks/usePdfExport.js";
 import { useDataExport } from "./hooks/useDataExport.js";
 import { usePWA } from "./hooks/usePWA.js";
+import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts.js";
 import { initKitCardFlip } from "./ui/imageLightbox.js";
 import { initNewsFeed } from "./features/News.js";
 import { loadTranslations } from "./ui/translations.js";
@@ -141,6 +142,7 @@ export function App() {
   const pdfExport = usePdfExport();
   const dataExport = useDataExport();
   const pwa = usePWA();
+  useKeyboardShortcuts();
 
   // Re-run scroll animations when tab changes and new nodes appear
   useScrollAnimations(activeTab);

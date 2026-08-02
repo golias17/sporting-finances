@@ -218,7 +218,7 @@
 /* Footer */
 footer.site-footer {
   border-top: 2px solid var(--ink);
-  margin-top: 96px;
+  margin-top: 0px;
   padding: 64px 0 80px;
   background: var(--paper);
 }

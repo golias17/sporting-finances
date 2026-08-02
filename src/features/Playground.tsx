@@ -138,7 +138,7 @@ export function Playground() {
               className="playground-select"
               value={inputs.uclPrize}
               onChange={(e) =>
-                setInput("uclPrize", parseInt(e.target.value, 10))
+                setInput("uclPrize", parseInt(e.target.value, 10) || 0)
               }
             >
               <option value="0">
@@ -502,6 +502,7 @@ export function Playground() {
         <div
           className={`pg-verdict ${verdict.warn ? "warn" : ""}`}
           style={{ display: "block" }}
+          aria-live="polite"
         >
           <div className="pg-verdict-header">
             <svg

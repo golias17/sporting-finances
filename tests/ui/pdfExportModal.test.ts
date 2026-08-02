@@ -126,3 +126,60 @@ describe("usePdfExport hook", () => {
     expect(result.current.error).toBeNull();
   });
 });
+
+describe("usePdfExport hook additional coverage", () => {
+  it("handles toggle page", () => {
+    const { result } = renderHook(() => usePdfExport());
+    act(() => {
+      result.current.togglePage(0);
+    });
+    expect(result.current.pages[0]).toBe(false);
+  });
+
+  it("handles set language", () => {
+    const { result } = renderHook(() => usePdfExport());
+    act(() => {
+      result.current.setLanguage("pt");
+    });
+    expect(result.current.language).toBe("pt");
+  });
+
+  it("handles set executive note", () => {
+    const { result } = renderHook(() => usePdfExport());
+    act(() => {
+      result.current.setExecutiveNote("Test note");
+    });
+    expect(result.current.executiveNote).toBe("Test note");
+  });
+
+  it("handles close", () => {
+    const { result } = renderHook(() => usePdfExport());
+    act(() => {
+      result.current.open();
+    });
+    act(() => {
+      result.current.close();
+    });
+    expect(result.current.isOpen).toBe(false);
+  });
+
+  it("handles open", () => {
+    const { result } = renderHook(() => usePdfExport());
+    act(() => {
+      result.current.open();
+    });
+    expect(result.current.isOpen).toBe(true);
+  });
+
+  it("handles multiple toggle pages", () => {
+    const { result } = renderHook(() => usePdfExport());
+    act(() => {
+      result.current.togglePage(0);
+      result.current.togglePage(1);
+      result.current.togglePage(2);
+    });
+    expect(result.current.pages[0]).toBe(false);
+    expect(result.current.pages[1]).toBe(false);
+    expect(result.current.pages[2]).toBe(false);
+  });
+});

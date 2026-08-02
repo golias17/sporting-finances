@@ -32,7 +32,11 @@ export function getLatestH1Data(dataset: FinancialDataset | null) {
  * a future change to how net debt is defined only has to happen once.
  */
 export function netDebt(d: FinancialRecord) {
-  return d.borrowings_nc + d.borrowings_c - d.cash;
+  if (!d) return 0;
+  const nc = d.borrowings_nc || 0;
+  const c = d.borrowings_c || 0;
+  const cash = d.cash || 0;
+  return nc + c - cash;
 }
 
 /**
@@ -57,9 +61,11 @@ export function netDebt(d: FinancialRecord) {
  * copy didn't), so that's the contract this shared helper keeps.
  */
 export function wageBillRatio(d: FinancialRecord) {
-  return Number.isFinite(d.revenue_operating) && d.revenue_operating !== 0
-    ? Math.abs(d.personnel_costs) / d.revenue_operating
-    : null;
+  if (!d) return null;
+  const rev = d.revenue_operating;
+  const payroll = d.personnel_costs;
+  if (!Number.isFinite(rev) || rev === 0 || !Number.isFinite(payroll)) return null;
+  return Math.abs(payroll) / rev;
 }
 
 /**

@@ -147,7 +147,7 @@ describe("Event Annotations Utilities", () => {
     state.COLORS.green = "#0a5d3a";
     state.isPt = false;
 
-    const annos = eventBoxes(["restructure14", "covid"]);
+    const annos = eventBoxes(["restructure14", "title21"]);
     expect(annos.e_restructure14).toBeDefined();
     expect(annos.e_restructure14.type).toBe("line");
     expect(annos.e_restructure14.xMin).toBe("2014/15");
@@ -157,17 +157,16 @@ describe("Event Annotations Utilities", () => {
     );
     expect(annos.e_restructure14.label.display).toBe(true);
 
-    expect(annos.e_covid).toBeDefined();
-    expect(annos.e_covid.xMin).toBe("2020/21");
-    expect(annos.e_covid.borderColor).toBe("#d99c2b");
-    expect(annos.e_covid.label.content).toBe("COVID");
+    expect(annos.e_title21).toBeDefined();
+    expect(annos.e_title21.xMin).toBe("2020/21");
+    expect(annos.e_title21.label.content).toBe("🏆 Champions 2021 (COVID)");
   });
 
   it("keeps all event markers when no dataset is loaded yet (defensive default)", () => {
     state.DATASET = null;
-    const annos = eventBoxes(["restructure14", "covid"]);
+    const annos = eventBoxes(["restructure14", "title21"]);
     expect(annos.e_restructure14).toBeDefined();
-    expect(annos.e_covid).toBeDefined();
+    expect(annos.e_title21).toBeDefined();
   });
 });
 

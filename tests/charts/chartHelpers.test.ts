@@ -5,6 +5,7 @@ import {
   createTooltipOptionsWithFn,
   createChartOptions,
 } from "../../src/charts/chartHelpers";
+import { styledLineDataset } from "../../src/charts/chartDefaults";
 
 describe("chartHelpers", () => {
   describe("formatters", () => {
@@ -132,5 +133,77 @@ describe("chartHelpers", () => {
       expect(result).toHaveProperty("plugins.tooltip");
       expect(result).toHaveProperty("scales.y.ticks");
     });
+  });
+});
+
+describe("createTooltipOptionsWithFn", () => {
+  it("returns tooltip options with custom footer function", () => {
+    const footerFn = (items: any[]) => items.map((i: any) => i.label);
+    const result = createTooltipOptionsWithFn(footerFn);
+    expect(result).toBeDefined();
+    expect(result.callbacks).toBeDefined();
+  });
+
+  it("returns tooltip options with custom label function", () => {
+    const labelFn = (ctx: any) => `${ctx.dataset.label}: ${ctx.parsed.y}`;
+    const result = createTooltipOptionsWithFn(undefined, labelFn);
+    expect(result).toBeDefined();
+  });
+});
+
+describe("styledLineDataset", () => {
+  it("returns dataset with default styles", () => {
+    const result = styledLineDataset({
+      label: "Test",
+      data: [1, 2, 3],
+      color: "#ff0000",
+      bg: "#ff000022",
+    });
+    expect(result).toBeDefined();
+    expect(result.label).toBe("Test");
+  });
+
+  it("returns dataset with fill option", () => {
+    const result = styledLineDataset({
+      label: "Test",
+      data: [1, 2, 3],
+      color: "#ff0000",
+      bg: "#ff000022",
+      fill: true,
+    });
+    expect(result.fill).toBe(true);
+  });
+
+  it("returns dataset with spanGaps option", () => {
+    const result = styledLineDataset({
+      label: "Test",
+      data: [1, null, 3],
+      color: "#ff0000",
+      bg: "#ff000022",
+      spanGaps: true,
+    });
+    expect(result.spanGaps).toBe(true);
+  });
+
+  it("returns dataset with pointBorderColor", () => {
+    const result = styledLineDataset({
+      label: "Test",
+      data: [1, 2, 3],
+      color: "#ff0000",
+      bg: "#ff000022",
+      pointBorderColor: "#000",
+    });
+    expect(result.pointBorderColor).toBe("#000");
+  });
+
+  it("returns dataset with extra properties", () => {
+    const result = styledLineDataset({
+      label: "Test",
+      data: [1, 2, 3],
+      color: "#ff0000",
+      bg: "#ff000022",
+      extra: { borderDash: [5, 5] },
+    });
+    expect(result.borderDash).toEqual([5, 5]);
   });
 });

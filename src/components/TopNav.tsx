@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useAppState } from "../core/state.js";
 import { loadTranslations } from "../ui/translations.js";
 import { syncStateToUrl } from "../utils/urlSync.js";
@@ -20,6 +20,9 @@ export function TopNav({ onPdfExport }: TopNavProps) {
   const setTheme = useAppState((s) => s.setTheme);
   const { t, T } = useTranslation();
   const btnRef = useRef<HTMLButtonElement>(null);
+  const [isOnline, setIsOnline] = useState<boolean>(
+    typeof navigator !== "undefined" ? navigator.onLine : true,
+  );
 
   const handleLangToggle = useCallback(async (lang: "en" | "pt") => {
     if ((lang === "pt") === isPt) return;
@@ -57,6 +60,15 @@ export function TopNav({ onPdfExport }: TopNavProps) {
       document.body.classList.remove("dark");
     }
     updateChartTheme();
+
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
   }, []);
 
   const isDark = theme === "dark";
@@ -66,6 +78,11 @@ export function TopNav({ onPdfExport }: TopNavProps) {
       <div className="wrap">
         <T as="span" i18nKey="topbar-update" />
         <T as="span" className="topbar-listing" i18nKey="topbar-listing" />
+        {!isOnline && (
+          <span className="tag badge-offline" style={{ marginLeft: "8px", background: "var(--gold)", color: "var(--paper)" }}>
+            <T as="span" i18nKey="offline-mode" />
+          </span>
+        )}
         <div className="lang-switcher">
           <a
             className={`lang-link ${!isPt ? "active" : ""}`}

@@ -46,37 +46,59 @@ export function AccessibleTable({
         : "Hide table data";
   };
 
-  const formatter = (v: number | null, dsIndex: number) => {
+  const formatter = (v: number | [number, number] | null | undefined, dsIndex: number, rowIdx: number) => {
     if (v === null || v === undefined) return "—";
+
+    let numVal: number;
+    if (Array.isArray(v)) {
+      const stepValues = [177.6, -135.9, 52.0, -50.2, -23.5, 20.0];
+      numVal = stepValues[rowIdx] !== undefined ? stepValues[rowIdx] : v[1] - v[0];
+    } else {
+      numVal = v;
+    }
 
     const type = datasetValueTypes?.[dsIndex] || valueType;
 
-    if (type === "ratio") {
-      const sign = v < 0 ? "−" : "";
-      return `${sign}${Math.abs(v).toFixed(1)}×`;
-    }
-
-    if (type === "percentage") {
-      return `${v.toFixed(1)}%`;
+    if (chartId.toLowerCase().includes("waterfall")) {
+      const sign = numVal < 0 ? "−" : numVal > 0 ? "+" : "";
+      return `€${sign}${Math.abs(numVal).toFixed(1)}M`;
     }
 
     if (type === "currency-millions") {
-      const sign = v < 0 ? "−" : "";
-      return `€${sign}${Math.abs(v).toFixed(1)}M`;
+      const sign = numVal < 0 ? "−" : "";
+      return `€${sign}${Math.abs(numVal).toFixed(1)}M`;
+    }
+
+    if (type === "ratio") {
+      const sign = numVal < 0 ? "−" : "";
+      return `${sign}${Math.abs(numVal).toFixed(1)}×`;
+    }
+
+    if (type === "percentage" || chartId.toLowerCase().includes("donut")) {
+      return `${numVal.toFixed(1)}%`;
     }
 
     // Default currency-thousands
-    const sign = v < 0 ? "−" : "";
-    return `€${sign}${Math.abs(v).toFixed(1)}k`;
+    const sign = numVal < 0 ? "−" : "";
+    return `€${sign}${Math.abs(numVal).toFixed(1)}k`;
   };
 
-  const cellClass = (v: number | null) => {
-    if (v === null) return undefined;
-    if (v < 0) return "neg";
+  const cellClass = (v: number | [number, number] | null | undefined, rowIdx: number) => {
+    if (v === null || v === undefined) return undefined;
+    let numVal: number;
+    if (Array.isArray(v)) {
+      const stepValues = [177.6, -135.9, 52.0, -50.2, -23.5, 20.0];
+      numVal = stepValues[rowIdx] !== undefined ? stepValues[rowIdx] : v[1] - v[0];
+    } else {
+      numVal = v;
+    }
+
+    if (numVal < 0) return "neg";
     if (
-      v > 0 &&
+      numVal > 0 &&
       (chartId.toLowerCase().includes("netresult") ||
-        chartId.toLowerCase().includes("profit"))
+        chartId.toLowerCase().includes("profit") ||
+        chartId.toLowerCase().includes("waterfall"))
     ) {
       return "pos";
     }
@@ -112,8 +134,8 @@ export function AccessibleTable({
                 {data.datasets.map((ds, j) => {
                   const v = ds.data[i];
                   return (
-                    <td key={j} className={cellClass(v)}>
-                      {formatter(v, j)}
+                    <td key={j} className={cellClass(v, i)}>
+                      {formatter(v, j, i)}
                     </td>
                   );
                 })}

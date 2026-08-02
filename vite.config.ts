@@ -1,5 +1,5 @@
 /// <reference types="vitest" />
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 import { VitePWA } from "vite-plugin-pwa";
 import viteCompression from "vite-plugin-compression";
 import react from "@vitejs/plugin-react";
@@ -92,51 +92,9 @@ export default defineConfig({
     // for the browserslist field in package.json (which was targeting a much
     // wider audience and could conflict with this setting).
     target: "es2022",
-  },
-  test: {
-    globals: true,
-    environment: "jsdom",
-    setupFiles: ["./tests/setup.js"],
-    exclude: ["node_modules", "dist", ".idea", ".git", ".cache", "tests/e2e/**"],
-    coverage: {
-      // chartUtils.js is a pure `export * from "./x.js"` re-export barrel
-      // (see its own header comment) with no logic of its own — every
-      // symbol it surfaces is fully covered via the source files it
-      // re-exports from (chartPalette.js, chartAnnotations.js,
-      // chartWidgets.js, chartDefaults.js, all otherwise at/near 100%) and
-      // via chartUtils.test.js's own "re-export barrel" suite, which
-      // imports and asserts on every symbol through this exact file.
-      // Despite that, @vitest/coverage-v8 reports it at a flat 0% across
-      // every metric: native ESM `export * from` declarations are resolved
-      // during module linking rather than as instrumentable executed
-      // statements, so V8's coverage collector never records a hit on them
-      // even though the linkage unquestionably runs on every test that
-      // imports through this file. Excluded so that reports don't misread
-      // this as an actual untested file.
-      exclude: ["src/charts/chartUtils.ts"],
-      // A starting floor set against a real measured baseline (see the
-      // coverage report below), not a precisely-tuned target — kept with
-      // headroom under the actual numbers so normal day-to-day variance
-      // doesn't trip it, while still catching a real regression (a large
-      // deletion of tests, or a big new untested file).
-      //
-      //   All files   93.08% stmts | 81.36% branch | 91.08% funcs | 94.79% lines
-      //
-      // `vitest run --coverage` still can't complete inside some sandboxed
-      // dev environments used on this project (it times out before
-      // finishing) — this baseline came from a real run outside that
-      // constraint. Re-raise these again the next time a full report is
-      // available and coverage has meaningfully improved.
-      thresholds: {
-        statements: 84,
-        branches: 72,
-        functions: 82,
-        lines: 86,
-      },
-  },
     rollupOptions: {
       output: {
-        manualChunks(id) {
+        manualChunks(id: string) {
           if (id.includes("node_modules")) {
             if (id.includes("react") || id.includes("react-dom"))
               return "react";
@@ -145,6 +103,27 @@ export default defineConfig({
             return "vendor";
           }
         },
+      },
+    },
+  },
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: ["./tests/setup.ts"],
+    include: [
+      "./tests/**/*.test.ts",
+      "./tests/**/*.test.tsx",
+      "./tests/**/*.spec.ts",
+      "./tests/**/*.spec.tsx",
+    ],
+    exclude: ["node_modules", "dist", ".idea", ".git", ".cache", "tests/e2e/**"],
+    coverage: {
+      exclude: ["src/charts/chartUtils.ts"],
+      thresholds: {
+        statements: 84,
+        branches: 72,
+        functions: 82,
+        lines: 86,
       },
     },
   },

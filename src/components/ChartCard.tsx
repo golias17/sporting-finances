@@ -8,6 +8,7 @@ interface ChartCardProps {
   title: React.ReactNode;
   tag?: React.ReactNode;
   desc?: React.ReactNode;
+  footer?: React.ReactNode;
 
   chartType: ChartType | "chart";
   data: ChartData<any>;
@@ -36,6 +37,7 @@ export function ChartCard({
   title,
   tag,
   desc,
+  footer,
   chartType,
   data,
   options,
@@ -66,6 +68,7 @@ export function ChartCard({
         datasetValueTypes={datasetValueTypes}
         chartRef={chartRef}
       />
+      {footer}
     </div>
   );
 }

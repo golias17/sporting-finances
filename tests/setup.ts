@@ -1,23 +1,60 @@
-import { beforeAll } from "vitest";
+import "@testing-library/jest-dom";
+import { beforeAll, vi } from "vitest";
 import { initChartDefaults } from "../src/charts/chartUtils.js";
+import fs from "fs";
+import path from "path";
+
+vi.mock("react-chartjs-2", () => {
+  const React = require("react");
+  return {
+    Bar: () => React.createElement("div", { "data-testid": "mock-chart-bar" }),
+    Line: () => React.createElement("div", { "data-testid": "mock-chart-line" }),
+    Pie: () => React.createElement("div", { "data-testid": "mock-chart-pie" }),
+    Doughnut: () => React.createElement("div", { "data-testid": "mock-chart-doughnut" }),
+    Chart: () => React.createElement("div", { "data-testid": "mock-chart-bar" }),
+  };
+});
+
+if (typeof global !== "undefined") {
+  global.fetch = vi.fn((url: string | URL | Request) => {
+    const urlStr = typeof url === "string" ? url : url.toString();
+    let filePath: string;
+    if (urlStr.includes("en.json")) {
+      filePath = path.resolve(__dirname, "../public/locales/en.json");
+    } else if (urlStr.includes("pt.json")) {
+      filePath = path.resolve(__dirname, "../public/locales/pt.json");
+    } else {
+      return Promise.resolve({ ok: true, json: () => Promise.resolve({}) });
+    }
+
+    try {
+      const content = fs.readFileSync(filePath, "utf8");
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(JSON.parse(content)),
+      });
+    } catch {
+      return Promise.resolve({ ok: true, json: () => Promise.resolve({}) });
+    }
+  }) as any;
+}
 
 beforeAll(() => {
-  // Ensure window.getComputedStyle is robustly mocked
   if (typeof window !== "undefined") {
     const mockStorage = (() => {
-      let store = {};
+      let store: Record<string, string> = {};
       return {
-        getItem: (key) => store[key] || null,
-        setItem: (key, value) => {
+        getItem: (key: string) => store[key] || null,
+        setItem: (key: string, value: string) => {
           store[key] = String(value);
         },
-        removeItem: (key) => {
+        removeItem: (key: string) => {
           delete store[key];
         },
         clear: () => {
           store = {};
         },
-        key: (index) => Object.keys(store)[index] || null,
+        key: (index: number) => Object.keys(store)[index] || null,
         get length() {
           return Object.keys(store).length;
         },
@@ -25,14 +62,14 @@ beforeAll(() => {
     })();
 
     try {
-      delete globalThis.localStorage;
+      delete (globalThis as any).localStorage;
     } catch {
-      // Not configurable in this environment; defineProperty below will overwrite it.
+      // Not configurable in this environment
     }
     try {
-      delete window.localStorage;
+      delete (window as any).localStorage;
     } catch {
-      // Not configurable in this environment; defineProperty below will overwrite it.
+      // Not configurable in this environment
     }
 
     try {
@@ -47,38 +84,39 @@ beforeAll(() => {
         configurable: true,
       });
     } catch {
-      // localStorage already defined as non-configurable; leave native impl in place.
+      // localStorage already defined
     }
 
     if (!window.getComputedStyle) {
-      window.getComputedStyle = (el) => ({
-        getPropertyValue: () => "",
-        width: el?.style?.width || "0px",
-        height: el?.style?.height || "0px",
-      });
+      window.getComputedStyle = (el: Element) =>
+        ({
+          getPropertyValue: () => "",
+          width: (el as HTMLElement)?.style?.width || "0px",
+          height: (el as HTMLElement)?.style?.height || "0px",
+        }) as any;
     } else {
       const originalGetComputedStyle = window.getComputedStyle;
-      window.getComputedStyle = (el) => {
+      window.getComputedStyle = (el: Element) => {
         try {
           return (
-            originalGetComputedStyle(el) || {
+            originalGetComputedStyle(el) ||
+            (({
               getPropertyValue: () => "",
-              width: el?.style?.width || "0px",
-              height: el?.style?.height || "0px",
-            }
+              width: (el as HTMLElement)?.style?.width || "0px",
+              height: (el as HTMLElement)?.style?.height || "0px",
+            } as any) as CSSStyleDeclaration)
           );
         } catch {
-          return {
+          return ({
             getPropertyValue: () => "",
-            width: el?.style?.width || "0px",
-            height: el?.style?.height || "0px",
-          };
+            width: (el as HTMLElement)?.style?.width || "0px",
+            height: (el as HTMLElement)?.style?.height || "0px",
+          } as any) as CSSStyleDeclaration;
         }
       };
     }
   }
 
-  // Prevent defaultView from returning null on detached documents
   if (typeof Document !== "undefined" && typeof window !== "undefined") {
     Object.defineProperty(Document.prototype, "defaultView", {
       get() {
@@ -88,7 +126,6 @@ beforeAll(() => {
     });
   }
 
-  // Mock global ResizeObserver if not already present
   if (typeof global !== "undefined" && !global.ResizeObserver) {
     global.ResizeObserver = class {
       observe() {}
@@ -97,6 +134,5 @@ beforeAll(() => {
     };
   }
 
-  // Populate state.COLORS and state.baseOpts to prevent accessed-before-init warnings in tests
   initChartDefaults();
 });

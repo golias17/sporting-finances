@@ -5,6 +5,7 @@ import { config } from "./config.js";
 import { state } from "./state.js";
 import { loadTranslations } from "../ui/translations.js";
 import { applyUrlParams } from "../utils/urlSync.js";
+import { initChartDefaults } from "../charts/chartUtils.js";
 
 // =============================================================
 // LANGUAGE DETECTION
@@ -95,7 +96,6 @@ async function initApp() {
     state.setPortoDataset(portoData);
 
     // Initialise chart options and palette before charts mount
-    const { initChartDefaults } = await import("../charts/chartUtils.js");
     initChartDefaults();
 
     // Unmount any pre-existing loading DOM from index.html if we want to rely on React.

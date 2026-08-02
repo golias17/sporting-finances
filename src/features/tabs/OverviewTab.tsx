@@ -7,7 +7,7 @@ import { useOverviewCharts } from "./useOverviewCharts.js";
 
 export const OverviewTab = React.memo(function OverviewTab() {
   const { T } = useTranslation();
-  const { heroData, heroOptions, netResult, equity } = useOverviewCharts();
+  const { heroData, heroOptions, netResult, equity, waterfallData, waterfallOptions, activeSeasonLabel } = useOverviewCharts();
 
   return (
     <>
@@ -35,6 +35,20 @@ export const OverviewTab = React.memo(function OverviewTab() {
         options={heroOptions}
         chartClassName="tall"
         valueType="currency-thousands"
+      />
+
+      <ChartCard
+        id="chartWaterfall"
+        title={
+          <h3 className="card-title">
+            <T as="span" i18nKey="ch01-waterfall-h3" /> ({activeSeasonLabel})
+          </h3>
+        }
+        tag={<T as="span" className="tag" i18nKey="ch01-waterfall-tag" />}
+        desc={<T as="p" className="desc" i18nKey="ch01-waterfall-desc" />}
+        chartType="bar"
+        data={waterfallData}
+        options={waterfallOptions}
       />
 
       <div className="grid-2">

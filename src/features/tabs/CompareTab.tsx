@@ -4,19 +4,19 @@ import { useAppState, state } from "../../core/state.js";
 import { AppChart } from "../../components/AppChart.js";
 import { baseOpts } from "../../charts/chartDefaults.js";
 import { fmtMillions } from "../../charts/chartUtils.js";
-import { netDebt, wageBillRatio } from "../financialMetrics.js";
+import { useCompareAverage, useCompareRatios } from "./useCompareAverage.js";
 
 export const CompareTab = React.memo(function CompareTab() {
   const { T } = useTranslation();
   const isPt = useAppState((s) => s.isPt);
   const data = useAppState((s) => s.fullAnnual);
 
-  const [idxA, setIdxA] = useState(0);
-  const [vsAverage, setVsAverage] = useState(false);
-  const [avgWindow, setAvgWindow] = useState("all");
-  const [idxB, setIdxB] = useState(() =>
+  const [idxA, setIdxA] = useState(() =>
     data && data.length > 0 ? data.length - 1 : 0,
   );
+  const [vsAverage, setVsAverage] = useState(false);
+  const [avgWindow, setAvgWindow] = useState("all");
+  const [idxB, setIdxB] = useState(0);
 
   useEffect(() => {
     if (!data || data.length === 0) return;
@@ -44,65 +44,12 @@ export const CompareTab = React.memo(function CompareTab() {
   const b = data[idxB];
   if (!a || !b) return null;
 
-  // Averages for vsAverage mode — excludes selected season, supports windows
-  const avgData = useMemo(() => {
-    if (!data || data.length === 0) return null;
-    // Determine window range
-    const currentIdx = idxA;
-    let windowData = data;
-    if (avgWindow === "last3" && data.length >= 3) {
-      windowData = data.slice(-3);
-    } else if (avgWindow === "last5" && data.length >= 5) {
-      windowData = data.slice(-5);
-    }
-    // Exclude the selected season from the average
-    const filtered = windowData.filter((_: any, i: number) => {
-      const globalIdx = data.indexOf(windowData[i]);
-      return globalIdx !== currentIdx;
-    });
-    if (filtered.length === 0) return null;
-    const count = filtered.length;
-    const avg = (field: string) => filtered.reduce((s: number, d: any) => s + (d[field] || 0), 0) / count;
-    const vals = (field: string) => filtered.map((d: any) => d[field] || 0);
-    const min = (field: string) => Math.min(...vals(field));
-    const max = (field: string) => Math.max(...vals(field));
-    return {
-      revenue_operating: avg("revenue_operating"),
-      player_transfer_income: avg("player_transfer_income"),
-      net_result: avg("net_result"),
-      equity: avg("equity"),
-      cash: avg("cash"),
-      operating_result_excl_players: avg("operating_result_excl_players"),
-      financial_result: avg("financial_result"),
-      squad_book_value: avg("squad_book_value"),
-      squad_amortization_impairment: avg("squad_amortization_impairment"),
-      player_transfer_cost: avg("player_transfer_cost"),
-      total_assets: avg("total_assets"),
-      current_assets: avg("current_assets"),
-      current_liabilities: avg("current_liabilities"),
-      personnel_costs: avg("personnel_costs"),
-      borrowings_nc: avg("borrowings_nc"),
-      borrowings_c: avg("borrowings_c"),
-      min_revenue: min("revenue_operating"),
-      max_revenue: max("revenue_operating"),
-      min_equity: min("equity"),
-      max_equity: max("equity"),
-      min_net_result: min("net_result"),
-      max_net_result: max("net_result"),
-      min_cash: min("cash"),
-      max_cash: max("cash"),
-      count,
-      label: isPt ? "Média" : "Average",
-    };
-  }, [data, isPt, idxA, avgWindow]);
+  const avgData = useCompareAverage(data, idxA, avgWindow, isPt);
 
   const useAverage = vsAverage && avgData !== null;
   const seasonB = useAverage ? avgData : b;
 
-  const netDebtA = netDebt(a);
-  const netDebtB = netDebt(seasonB);
-  const wageRatioA = wageBillRatio(a);
-  const wageRatioB = wageBillRatio(seasonB);
+  const { netDebtA, netDebtB, wageRatioA, wageRatioB } = useCompareRatios(a, seasonB);
 
   // Chart data
   const barKeys = [
@@ -469,14 +416,13 @@ export const CompareTab = React.memo(function CompareTab() {
           </div>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px", padding: "0 20px", flexWrap: "wrap" }}>
-          <span className="desc" style={{ margin: 0 }}>
+        <div className="cmp-controls">
+          <span className="desc">
             {isPt ? "Comparar vs média:" : "Compare vs average:"}
           </span>
           <button
-            className={`btn-preset ${vsAverage ? "active" : ""}`}
+            className="btn-preset"
             onClick={() => setVsAverage(!vsAverage)}
-            style={{ padding: "6px 14px", fontSize: "var(--fs-sm)" }}
           >
             {vsAverage
               ? (isPt ? "Duas épocas" : "Two seasons")
@@ -484,35 +430,40 @@ export const CompareTab = React.memo(function CompareTab() {
           </button>
           {vsAverage && (
             <>
-              <span style={{ fontSize: "var(--fs-sm)", color: "var(--muted)" }}>|</span>
-              <button
-                className={`btn-preset ${avgWindow === "all" ? "active" : ""}`}
-                onClick={() => setAvgWindow("all")}
-                style={{ padding: "4px 10px", fontSize: "var(--fs-sm)" }}
-              >
-                {isPt ? "Todas" : "All"}
-              </button>
-              <button
-                className={`btn-preset ${avgWindow === "last5" ? "active" : ""}`}
-                onClick={() => setAvgWindow("last5")}
-                style={{ padding: "4px 10px", fontSize: "var(--fs-sm)" }}
-              >
-                {isPt ? "Últ. 5" : "Last 5"}
-              </button>
-              <button
-                className={`btn-preset ${avgWindow === "last3" ? "active" : ""}`}
-                onClick={() => setAvgWindow("last3")}
-                style={{ padding: "4px 10px", fontSize: "var(--fs-sm)" }}
-              >
-                {isPt ? "Últ. 3" : "Last 3"}
-              </button>
-              <span style={{ fontSize: "var(--fs-sm)", color: "var(--muted)" }}>
-                {avgData
-                  ? (isPt
-                      ? `${avgData.count} épocas (exclui ${data[idxA]?.label || ""})`
-                      : `${avgData.count} seasons (excludes ${data[idxA]?.label || ""})`)
-                  : ""}
-              </span>
+              <div className="cmp-average-window">
+                <button
+                  className={`btn-preset btn-preset--sm ${avgWindow === "all" ? "active" : ""}`}
+                  onClick={() => setAvgWindow("all")}
+                >
+                  {isPt ? "Todas" : "All"}
+                </button>
+                <button
+                  className={`btn-preset btn-preset--sm ${avgWindow === "last5" ? "active" : ""}`}
+                  onClick={() => setAvgWindow("last5")}
+                >
+                  {isPt ? "Últimas 5" : "Last 5"}
+                </button>
+                <button
+                  className={`btn-preset btn-preset--sm ${avgWindow === "last3" ? "active" : ""}`}
+                  onClick={() => setAvgWindow("last3")}
+                >
+                  {isPt ? "Últimas 3" : "Last 3"}
+                </button>
+              </div>
+              {avgData && (
+                <div className="cmp-average-info">
+                  <span className="cmp-average-badge">
+                    {isPt
+                      ? `${avgData.count} época${avgData.count !== 1 ? "s" : ""}`
+                      : `${avgData.count} season${avgData.count !== 1 ? "s" : ""}`}
+                  </span>
+                  <span className="cmp-average-excluded">
+                    {isPt
+                      ? `exclui ${data[idxA]?.label || ""}`
+                      : `excludes ${data[idxA]?.label || ""}`}
+                  </span>
+                </div>
+              )}
             </>
           )}
         </div>
@@ -529,10 +480,21 @@ export const CompareTab = React.memo(function CompareTab() {
         />
 
         <div className="cmp-col-headers">
-          <span className="sr-only">Metric</span>
-          <span>{a.label}</span>
-          <span className="sr-only">Trend</span>
-          <span>{b.label}</span>
+          <div className="cmp-col-header">
+            <span className="cmp-col-header-label">{isPt ? "Época A" : "Season A"}</span>
+            <span className="cmp-col-header-season">{a.label}</span>
+          </div>
+          <div className="cmp-col-trend">→</div>
+          <div className="cmp-col-header">
+            <span className="cmp-col-header-label">{isPt ? (useAverage ? "Média" : "Época B") : (useAverage ? "Average" : "Season B")}</span>
+            <span className={`cmp-col-header-season${useAverage ? " average" : ""}`}>
+              {useAverage
+                ? (isPt
+                    ? `Média (${avgWindow === "all" ? "todas" : avgWindow === "last5" ? "últimas 5" : "últimas 3"})`
+                    : `Average (${avgWindow === "all" ? "all" : avgWindow === "last5" ? "last 5" : "last 3"})`)
+                : b.label}
+            </span>
+          </div>
         </div>
 
         <div className="comparison-grid">

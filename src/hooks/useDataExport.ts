@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { useAppState } from "../core/state.js";
 import { netDebt } from "../features/financialMetrics.js";
+import { exportToCsv } from "../utils/exportCsv.js";
 
 interface FieldDef {
   key?: string;
@@ -66,7 +67,7 @@ function getFields(isPt: boolean): FieldDef[] {
       key: "squad_market_value",
       label: isPt
         ? "Valor de Mercado (Transfermarkt)"
-        : "Squad Market Value",
+        : "Squad Market Value (Transfermarkt)",
     },
     {
       key: "cf_operating",
@@ -91,7 +92,6 @@ function getFields(isPt: boolean): FieldDef[] {
 
 /**
  * Provides the CSV data export functionality for the financial data table.
- * Replaces the imperative initDataExport() with a React-friendly hook.
  */
 export function useDataExport() {
   const annual = useAppState((s) => s.annual);
@@ -99,30 +99,25 @@ export function useDataExport() {
 
   const exportCsv = useCallback(() => {
     const fields = getFields(isPt);
-    let csv =
-      (isPt ? "Métrica," : "Metric,") +
-      annual.map((d) => d.label).join(",") +
-      "\n";
+    const delimiter = isPt ? ";" : ",";
+    const headers = [
+      isPt ? "Métrica (€M)" : "Metric (€M)",
+      ...annual.map((d) => d.label),
+    ];
 
-    fields.forEach((f) => {
-      csv += `"${f.label}",`;
+    const rows = fields.map((f) => {
       const rowVals = annual.map((d) => {
-        const v = f.compute ? f.compute(d) : d[f.key as keyof typeof d];
-        return v;
+        const rawVal = f.compute ? f.compute(d) : (d[f.key as keyof typeof d] as number);
+        if (rawVal === null || rawVal === undefined) return "—";
+        const inMillions = rawVal / 1000;
+        return inMillions.toFixed(1);
       });
-      csv += rowVals.join(",") + "\n";
+      return [f.label, ...rowVals];
     });
 
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", "sporting_finances_annual_data.csv");
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    URL.revokeObjectURL(url);
-    document.body.removeChild(link);
+    exportToCsv("sporting_finances_annual_data.csv", headers, rows, {
+      delimiter,
+    });
   }, [annual, isPt]);
 
   return { exportCsv };

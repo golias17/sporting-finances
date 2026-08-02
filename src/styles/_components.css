@@ -1896,3 +1896,51 @@ body.dark .seating-link-btn:hover {
 .card > .chart-box.hidden + .table-wrap {
   margin-top: 0;
 }
+
+/* Transfer Breakdown Table */
+.transfer-breakdown-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-sm);
+}
+.transfer-breakdown-table th,
+.transfer-breakdown-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--rule);
+}
+.transfer-breakdown-table th {
+  font-weight: 600;
+  color: var(--ink);
+  font-size: var(--fs-xs);
+}
+.transfer-breakdown-table td {
+  color: var(--muted);
+}
+.transfer-breakdown-table tr:last-child td {
+  border-bottom: none;
+}
+.transfer-breakdown-table td:first-child {
+  font-weight: 500;
+}
+.transfer-breakdown-table td:nth-child(2) {
+  font-weight: 600;
+  font-family: var(--mono);
+  text-align: right;
+}
+
+/* Transfer Breakdown Scroll */
+.transfer-breakdown-scroll {
+  max-height: 400px;
+  overflow-y: auto;
+}
+.transfer-breakdown-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.transfer-breakdown-scroll::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+.transfer-breakdown-scroll::-webkit-scrollbar-thumb {
+  background: var(--rule);
+  border-radius: 3px;
+}
