@@ -97,7 +97,11 @@ export function getEventAnnotations(): Record<string, any> {
       label: state.isPt ? "Alcochete 2018" : "2018 Alcochete",
       color: state.COLORS.neg,
     },
-    covid: { x: "2020/21", label: "COVID", color: state.COLORS.warn },
+    title21: {
+      x: "2020/21",
+      label: state.isPt ? "🏆 Campeões 2021 (COVID)" : "🏆 Champions 2021 (COVID)",
+      color: state.COLORS.green,
+    },
     vmoc1: {
       x: "2022/23",
       label: state.isPt ? "Conversão VMOC €83,6M" : "€83.6M VMOC conversion",
@@ -114,6 +118,11 @@ export function getEventAnnotations(): Record<string, any> {
         ? "→ Out 2025: USPP de €225M"
         : "→ Oct 2025: €225M USPP",
       color: state.COLORS.green,
+    },
+    amorim: {
+      x: "2019/20",
+      label: state.isPt ? "Entrada Amorim (€10M)" : "Amorim (€10M)",
+      color: state.COLORS.gold,
     },
   };
 }
@@ -146,13 +155,13 @@ export function eventBoxes(eventKeys: string[]) {
       label: {
         display: true,
         content: e.label,
-        position: "start",
+        position: e.position || "start",
         backgroundColor: e.color,
         color: "#fff",
         font: { size: 10, weight: "600" },
         padding: 4,
         rotation: -90,
-        yAdjust: 0,
+        yAdjust: e.yAdjust || 0,
       },
     };
   });

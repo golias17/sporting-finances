@@ -49,6 +49,14 @@ export interface FinancialDataset {
   annual_data: FinancialRecord[];
 }
 
+export interface TransferTimelineEvent {
+  season: string;
+  type: "bonus" | "commission" | "other";
+  amount: number;
+  desc?: string;
+  desc_pt?: string;
+}
+
 export interface TransferTransaction {
   player: string;
   club: string;
@@ -59,6 +67,9 @@ export interface TransferTransaction {
   note_pt?: string;
   commission?: number;
   bonus?: number;
+  sell_on_gain_pct?: number;
+  purchase_fee?: number;
+  timeline?: TransferTimelineEvent[];
 }
 
 export interface TransferLedgerSeason {

@@ -14,6 +14,7 @@ export function useSquadCharts() {
   const annual = useAppState((s) => s.annual);
   const fullAnnual = useAppState((s) => s.fullAnnual);
   const DATASET = useAppState((s) => s.DATASET);
+  const transferLedger = useAppState((s) => s.TRANSFER_LEDGER);
   const baseLabels = useChartLabels();
 
   const squadBookData = useMemo<ChartData<"bar" | "line">>(() => {
@@ -150,9 +151,119 @@ export function useSquadCharts() {
     ),
   );
 
+  const transferDonutData = useMemo<ChartData<"bar">>(() => {
+    if (!transferLedger) return { labels: [], datasets: [] };
+    const labels = transferLedger.map((d) => d.season);
+    const stats = transferLedger.map((d) => {
+      const sales = d.sales || [];
+      let totalFee = 0;
+      let totalComm = 0;
+      let totalTP = 0;
+
+      for (const sale of sales) {
+        let fee = sale.fee || 0;
+        let comm = sale.commission || 0;
+        if (sale.timeline) {
+          sale.timeline.forEach((e: any) => {
+            if (e.type === "bonus") fee += e.amount;
+            if (e.type === "commission" || e.type === "other") comm += e.amount;
+          });
+        }
+        
+        totalFee += fee;
+        totalComm += comm;
+        
+        let thirdParty = 0;
+        if (sale.sell_on_gain_pct !== undefined && sale.purchase_fee !== undefined) {
+          const gain = Math.max(0, fee - sale.purchase_fee);
+          thirdParty = gain * (sale.sell_on_gain_pct / 100);
+        } else {
+          const rights = parseFloat((sale.rights || "100%").replace("%", "")) / 100;
+          thirdParty = fee * (1 - rights);
+        }
+        totalTP += thirdParty;
+      }
+      
+      const netToSad = totalFee - totalComm - totalTP;
+      
+      if (totalFee > 0) {
+        return {
+           netPct: (netToSad / totalFee) * 100,
+           commPct: (totalComm / totalFee) * 100,
+           tpPct: (totalTP / totalFee) * 100,
+        };
+      }
+      return { netPct: 0, commPct: 0, tpPct: 0 };
+    });
+
+    const netProceeds = stats.map(s => s.netPct);
+    const commissions = stats.map(s => s.commPct);
+    const thirdParty = stats.map(s => s.tpPct);
+    return {
+      labels,
+      datasets: [
+        {
+          label: isPt ? "Líquido SAD" : "Net SAD",
+          data: netProceeds,
+          backgroundColor: state.COLORS.posSoft,
+          borderColor: state.COLORS.pos,
+          borderWidth: 1,
+        },
+        {
+          label: isPt ? "Comissões" : "Commissions",
+          data: commissions,
+          backgroundColor: state.COLORS.goldSoft,
+          borderColor: state.COLORS.gold,
+          borderWidth: 1,
+        },
+        {
+          label: isPt ? "Terceiros" : "Third-Party",
+          data: thirdParty,
+          backgroundColor: state.COLORS.infoSoft,
+          borderColor: state.COLORS.info,
+          borderWidth: 1,
+        },
+      ],
+    };
+  }, [isPt, transferLedger]);
+
+  const transferDonutOptions = useMemo<ChartOptions<"bar">>(
+    () => ({
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        tooltip: {
+          ...baseOpts.plugins?.tooltip,
+          callbacks: {
+            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) => {
+              const val = ctx.parsed.y;
+              return ` ${ctx.dataset.label}: ${val.toFixed(1)}%`;
+            },
+          },
+        },
+      },
+      scales: {
+        x: {
+          stacked: true,
+          ticks: { font: { size: 10 } },
+        },
+        y: {
+          stacked: true,
+          max: 100,
+          beginAtZero: true,
+          ticks: {
+            callback: (v: number) => v.toFixed(0) + "%",
+          },
+        },
+      },
+    }),
+    [baseOpts],
+  );
+
   return {
     squadBook: { data: squadBookData, options: squadBookOptions },
     transfers: { data: transfersData, options: transfersOptions },
     netTrading,
+    transferDonut: { data: transferDonutData, options: transferDonutOptions },
   };
 }

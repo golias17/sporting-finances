@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import { useAppState } from "../core/state.ts";
+import { exportToCsv } from "../utils/exportCsv.js";
 import type {
   TransferLedgerSeason,
   TransferTransaction,
@@ -63,8 +64,23 @@ export function TransfersDetailTable({
       ledgerData.forEach((s) => {
         if (activeType === "all" || activeType === "in") {
           s.purchases.forEach((p) => {
+            let realizedFee = p.fee || 0;
+            let realizedComm = p.commission || 0;
+            let remainingBonus = p.bonus || 0;
+            if (p.timeline) {
+               p.timeline.forEach(e => {
+                  if (e.type === "bonus") {
+                      realizedFee += e.amount;
+                      remainingBonus = Math.max(0, remainingBonus - e.amount);
+                  }
+                  if (e.type === "commission" || e.type === "other") realizedComm += e.amount;
+               });
+            }
             result.push({
               ...p,
+              fee: realizedFee,
+              bonus: remainingBonus > 0 ? remainingBonus : undefined,
+              commission: realizedComm,
               season: s.season,
               type: "Arrival",
               typeCls: "rights",
@@ -74,8 +90,23 @@ export function TransfersDetailTable({
         }
         if (activeType === "all" || activeType === "out") {
           s.sales.forEach((p) => {
+            let realizedFee = p.fee || 0;
+            let realizedComm = p.commission || 0;
+            let remainingBonus = p.bonus || 0;
+            if (p.timeline) {
+               p.timeline.forEach(e => {
+                  if (e.type === "bonus") {
+                      realizedFee += e.amount;
+                      remainingBonus = Math.max(0, remainingBonus - e.amount);
+                  }
+                  if (e.type === "commission" || e.type === "other") realizedComm += e.amount;
+               });
+            }
             result.push({
               ...p,
+              fee: realizedFee,
+              bonus: remainingBonus > 0 ? remainingBonus : undefined,
+              commission: realizedComm,
               season: s.season,
               type: "Departure",
               typeCls: "comm",
@@ -89,8 +120,23 @@ export function TransfersDetailTable({
       if (s) {
         if (activeType === "all" || activeType === "in") {
           s.purchases.forEach((p) => {
+            let realizedFee = p.fee || 0;
+            let realizedComm = p.commission || 0;
+            let remainingBonus = p.bonus || 0;
+            if (p.timeline) {
+               p.timeline.forEach(e => {
+                  if (e.type === "bonus") {
+                      realizedFee += e.amount;
+                      remainingBonus = Math.max(0, remainingBonus - e.amount);
+                  }
+                  if (e.type === "commission" || e.type === "other") realizedComm += e.amount;
+               });
+            }
             result.push({
               ...p,
+              fee: realizedFee,
+              bonus: remainingBonus > 0 ? remainingBonus : undefined,
+              commission: realizedComm,
               season: s.season,
               type: "Arrival",
               typeCls: "rights",
@@ -100,8 +146,23 @@ export function TransfersDetailTable({
         }
         if (activeType === "all" || activeType === "out") {
           s.sales.forEach((p) => {
+            let realizedFee = p.fee || 0;
+            let realizedComm = p.commission || 0;
+            let remainingBonus = p.bonus || 0;
+            if (p.timeline) {
+               p.timeline.forEach(e => {
+                  if (e.type === "bonus") {
+                      realizedFee += e.amount;
+                      remainingBonus = Math.max(0, remainingBonus - e.amount);
+                  }
+                  if (e.type === "commission" || e.type === "other") realizedComm += e.amount;
+               });
+            }
             result.push({
               ...p,
+              fee: realizedFee,
+              bonus: remainingBonus > 0 ? remainingBonus : undefined,
+              commission: realizedComm,
               season: s.season,
               type: "Departure",
               typeCls: "comm",
@@ -253,6 +314,76 @@ export function TransfersDetailTable({
             onChange={(e) => setQuery(e.target.value)}
           />
         </div>
+        <div className="ledger-control-group">
+          <button
+            className="story-btn btn-small"
+            onClick={() => {
+              const delimiter = isPt ? ";" : ",";
+              const headers = [
+                isPt ? "Jogador" : "Player",
+                isPt ? "Época" : "Season",
+                isPt ? "Janela" : "Window",
+                isPt ? "Tipo" : "Type",
+                isPt ? "Clube" : "Club",
+                isPt ? "Fixo (€M)" : "Fee (€M)",
+                isPt ? "Passe" : "Rights",
+                isPt ? "Bónus (€M)" : "Bonus (€M)",
+                isPt ? "Comissão (€M)" : "Commission (€M)",
+                isPt ? "Notas" : "Notes",
+              ];
+              const formatVal = (val: number | null | undefined) => {
+                if (val === null || val === undefined) return "—";
+                if (val === 0) return isPt ? "Custo Zero" : "Free";
+                return val.toFixed(2).replace(/\.00$/, "");
+              };
+
+              const csvRows = rows.map((r) => {
+                let winText = "—";
+                if (r.window === "summer") winText = isPt ? "Verão" : "Summer";
+                else if (r.window === "winter") winText = isPt ? "Inverno" : "Winter";
+
+                const typeClean = r.type === "Arrival"
+                  ? (isPt ? "Entrada" : "Arrival")
+                  : (isPt ? "Saída" : "Departure");
+
+                return [
+                  r.player,
+                  r.season,
+                  winText,
+                  typeClean,
+                  r.club || "—",
+                  formatVal(r.fee),
+                  r.rights || "100%",
+                  formatVal(r.bonus),
+                  formatVal(r.commission),
+                  localizedNote(r, isPt) ?? "—",
+                ];
+              });
+
+              exportToCsv("sporting_transfers_ledger.csv", headers, csvRows, {
+                delimiter,
+              });
+            }}
+          >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="icon-small"
+              aria-hidden="true"
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>{isPt ? "Exportar CSV" : "Export CSV"}</span>
+          </button>
+        </div>
       </div>
 
       <div className="scroll-x">
@@ -397,8 +528,13 @@ export function TransfersDetailTable({
         </div>
         <span style={{ fontSize: "var(--fs-sm)", lineHeight: 1.5 }}>
           {isPt
-            ? "Os valores indicados não incluem comissões de intermediação não divulgadas, mecanismos de solidariedade nem direitos de formação."
-            : "Figures do not include undisclosed agent fees, solidarity payments, or training compensation."}
+            ? "Nesta tabela são apresentados os valores totais pagos pelo atleta (incluindo bónus ativados e parcelas recompradas). Na vista detalhada do plantel ('Detailed Transfer Ledger') podes consultar a compra original isolada dos eventos de consolidação."
+            : "This table presents the total amount paid for the athlete (including triggered bonuses and repurchased rights). In the detailed squad view ('Detailed Transfer Ledger') you can consult the original purchase isolated from consolidation events."}
+        </span>
+        <span style={{ fontSize: "var(--fs-sm)", lineHeight: 1.5, marginTop: "0.25rem", color: "var(--muted-darker, #6b7280)" }}>
+          {isPt
+            ? "*Os valores não incluem comissões não divulgadas ou mecanismos de solidariedade."
+            : "*Figures do not include undisclosed agent fees or solidarity payments."}
         </span>
       </div>
     </>

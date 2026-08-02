@@ -80,15 +80,24 @@ describe("Story Component", () => {
     act(() => {
       fireEvent.keyDown(document, { key: "ArrowRight" });
     });
+    act(() => {
+      vi.runAllTimers();
+    });
     expect(useAppState.getState().storyIndex).toBe(1);
 
     act(() => {
       fireEvent.keyDown(document, { key: "ArrowLeft" });
     });
+    act(() => {
+      vi.runAllTimers();
+    });
     expect(useAppState.getState().storyIndex).toBe(0);
 
     act(() => {
       fireEvent.keyDown(document, { key: "Escape" });
+    });
+    act(() => {
+      vi.runAllTimers();
     });
     expect(useAppState.getState().isStoryVisible).toBe(false);
   });
@@ -116,6 +125,9 @@ describe("Story Component", () => {
 
     act(() => {
       if (track) fireEvent.click(track, { clientX: 500 });
+    });
+    act(() => {
+      vi.runAllTimers();
     });
     expect(useAppState.getState().storyIndex).toBe(5);
   });
@@ -147,6 +159,7 @@ describe("Story Component", () => {
     for (let i = 0; i < 20; i++) {
       act(() => {
         nextStory();
+        vi.runAllTimers();
       });
     }
 

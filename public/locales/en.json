@@ -40,7 +40,7 @@
     "innerHTML": false
   },
   "ch01-hero-tag": {
-    "text": "Hero · 3 series",
+    "text": "Overview · 3 series",
     "isAria": false,
     "innerHTML": false
   },
@@ -91,6 +91,21 @@
   },
   "ch01-story-play": {
     "text": "Play the story",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch01-waterfall-desc": {
+    "text": "Visual breakdown showing how operating costs, player trading, and amortizations shape the Net Result.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch01-waterfall-h3": {
+    "text": "Income Statement Bridge: Revenue to Net Profit",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch01-waterfall-tag": {
+    "text": "P&L Bridge",
     "isAria": false,
     "innerHTML": false
   },
@@ -554,6 +569,21 @@
     "isAria": false,
     "innerHTML": false
   },
+  "ch06-donut-desc": {
+    "text": "Net percentage accruing to Sporting SAD vs intermediary commissions and third-party retentions on player sales.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch06-donut-h3": {
+    "text": "Transfer Proceeds Breakdown (Net Proceeds vs Charges)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch06-donut-tag": {
+    "text": "Distribution %",
+    "isAria": false,
+    "innerHTML": false
+  },
   "ch06-h2": {
     "text": "Alcochete, the <em>perpetual cash machine</em>.",
     "isAria": false,
@@ -645,7 +675,7 @@
     "innerHTML": false
   },
   "ch06-squad-tag": {
-    "text": "Book vs market",
+    "text": "Book value vs market value",
     "isAria": false,
     "innerHTML": false
   },
@@ -1304,6 +1334,156 @@
     "isAria": false,
     "innerHTML": false
   },
+  "chart-error": {
+    "text": "Chart error",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "chart_commissions_subtitle": {
+    "text": "Direct commissions contracted in player acquisition and sale transactions",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "chart_commissions_title": {
+    "text": "Agent Commissions Trend",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "chart_eras_subtitle": {
+    "text": "Grouped cumulative sales vs. purchases in millions",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "chart_eras_title": {
+    "text": "Net Transfer Earnings by Managerial Era",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "footer-credit": {
+    "text": "<strong>Sporting Clube de Portugal — Futebol, SAD.</strong> Built from the SAD's official annual reports and documents filed with the CMVM. Figures in EUR thousands; some 2023/24 numbers restated per the 2024/25 report. Compiled for editorial reference.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "footer-meta": {
+    "text": "Dossier · 2010/11 → 2024/25<br/> Period ended 30 June 2025<br/> Euronext Lisbon · SCP",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "hero-eyebrow": {
+    "text": "A Financial Dossier · 2010 → 2025",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "nav-theme-dark": {
+    "text": "Light mode",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "nav-theme-light": {
+    "text": "Dark mode",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "offline-mode": {
+    "text": "Offline Mode",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_customizer_subtitle": {
+    "text": "Select options to generate your personalized dossier",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_customizer_title": {
+    "text": "Customize PDF Report",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_executive_notes": {
+    "text": "Custom Executive Annotation",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_generate_btn": {
+    "text": "Generate Report",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_language": {
+    "text": "Report Language",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_page_1": {
+    "text": "Cover Page & KPIs",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_page_2": {
+    "text": "I. Operating Income & II. Balance Sheet",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_page_3": {
+    "text": "III. Player Trading & IV. Cash Flows",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_page_4": {
+    "text": "V. Strategic Financing & VI. Turnaround Milestones",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_page_5": {
+    "text": "VII. Landmark Player Transfers Ledger",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_pages": {
+    "text": "Pages to Include",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "skip-link": {
+    "text": "Skip to content",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "squad_sub_analytics": {
+    "text": "Transfer Analytics",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "squad_sub_financials": {
+    "text": "Financial Trends",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "squad_sub_ledger": {
+    "text": "Detailed Ledger",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "story-launch-button": {
+    "text": "Exit",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "story-launch-quote": {
+    "text": "From <em class=\"neg\">−€119M</em> to <em class=\"pos\">+€41M</em>.<br />Fifteen fiscal years, told in one chart.",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "story-next": {
+    "text": "Next →",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "story-prev": {
+    "text": "← Prev",
+    "isAria": false,
+    "innerHTML": false
+  },
   "tab-btn-balance-sheet": {
     "text": "04. Balance Sheet",
     "isAria": false,
@@ -1366,146 +1546,6 @@
   },
   "tab-btn-squad": {
     "text": "06. Squad",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "pdf_customizer_subtitle": {
-    "text": "Select options to generate your personalized dossier",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "pdf_customizer_title": {
-    "text": "Customize PDF Report",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "pdf_executive_notes": {
-    "text": "Custom Executive Annotation",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "pdf_generate_btn": {
-    "text": "Generate Report",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "pdf_language": {
-    "text": "Report Language",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "pdf_page_1": {
-    "text": "Cover Page & KPIs",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "pdf_page_2": {
-    "text": "I. Operating Income & II. Balance Sheet",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "pdf_page_3": {
-    "text": "III. Player Trading & IV. Cash Flows",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "pdf_page_4": {
-    "text": "V. Strategic Financing & VI. Turnaround Milestones",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "pdf_page_5": {
-    "text": "VII. Landmark Player Transfers Ledger",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "pdf_pages": {
-    "text": "Pages to Include",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "nav-theme-dark": {
-    "text": "Light mode",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "nav-theme-light": {
-    "text": "Dark mode",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "hero-eyebrow": {
-    "text": "A Financial Dossier · 2010 → 2025",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "chart_commissions_subtitle": {
-    "text": "Direct commissions contracted in player acquisition and sale transactions",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "chart_commissions_title": {
-    "text": "Agent Commissions Trend",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "chart_eras_subtitle": {
-    "text": "Grouped cumulative sales vs. purchases in millions",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "chart_eras_title": {
-    "text": "Net Transfer Earnings by Managerial Era",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "footer-credit": {
-    "text": "<strong>Sporting Clube de Portugal — Futebol, SAD.</strong> Built from the SAD's official annual reports and documents filed with the CMVM. Figures in EUR thousands; some 2023/24 numbers restated per the 2024/25 report. Compiled for editorial reference.",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "footer-meta": {
-    "text": "Dossier · 2010/11 → 2024/25<br/> Period ended 30 June 2025<br/> Euronext Lisbon · SCP",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "skip-link": {
-    "text": "Skip to content",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "squad_sub_analytics": {
-    "text": "Transfer Analytics",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "squad_sub_financials": {
-    "text": "Financial Trends",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "squad_sub_ledger": {
-    "text": "Detailed Ledger",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "story-launch-button": {
-    "text": "Exit",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "story-launch-quote": {
-    "text": "From <em class=\"neg\">−€119M</em> to <em class=\"pos\">+€41M</em>.<br />Fifteen fiscal years, told in one chart.",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "story-next": {
-    "text": "Next →",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "story-prev": {
-    "text": "← Prev",
     "isAria": false,
     "innerHTML": false
   },

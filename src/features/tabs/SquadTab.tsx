@@ -8,7 +8,9 @@ import { useAppState } from "../../core/state.js";
 
 export const SquadTab = React.memo(function SquadTab() {
   const { t, T } = useTranslation();
-  const { squadBook, transfers, netTrading } = useSquadCharts();
+  const isPt = useAppState((s) => s.isPt);
+  const annual = useAppState((s) => s.annual);
+  const { squadBook, transfers, netTrading, transferDonut } = useSquadCharts();
   const ledgerData = useAppState((s) => s.TRANSFER_LEDGER);
 
   const [activeSubTab, setActiveSubTab] = useState<
@@ -57,6 +59,7 @@ export const SquadTab = React.memo(function SquadTab() {
             data={squadBook.data}
             options={squadBook.options}
             chartClassName="tall"
+            valueType="currency-thousands"
           />
           <div className="grid-2">
             <ChartCard
@@ -67,6 +70,7 @@ export const SquadTab = React.memo(function SquadTab() {
               chartType="bar"
               data={transfers.data}
               options={transfers.options}
+              valueType="currency-thousands"
             />
             <ChartCard
               id="chartNetTrading"
@@ -76,8 +80,60 @@ export const SquadTab = React.memo(function SquadTab() {
               chartType="bar"
               data={netTrading.data}
               options={netTrading.options}
+              valueType="currency-thousands"
             />
           </div>
+          <ChartCard
+            id="chartTransferBreakdown"
+            title={<T as="h3" i18nKey="ch06-donut-h3" />}
+            tag={<T as="span" className="tag" i18nKey="ch06-donut-tag" />}
+            desc={<T as="p" className="desc" i18nKey="ch06-donut-desc" />}
+            chartType="bar"
+            data={transferDonut.data}
+            options={transferDonut.options}
+            chartClassName="tall"
+            valueType="percentage"
+            footer={
+              <div
+                className="ledger-footer-note"
+                style={{
+                  marginTop: "1.25rem",
+                  padding: "0.85rem 1.15rem",
+                  borderRadius: "10px",
+                  background: "var(--surface-soft, rgba(255, 255, 255, 0.03))",
+                  borderLeft: "3px solid var(--green)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.5rem",
+                  color: "var(--muted)",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "var(--fs-xs)", fontWeight: 600, color: "var(--ink)" }}>
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="var(--green)"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{ flexShrink: 0 }}
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="16" x2="12" y2="12" />
+                    <line x1="12" y1="8" x2="12.01" y2="8" />
+                  </svg>
+                  <span>{isPt ? "Nota" : "Note"}</span>
+                </div>
+                <span style={{ fontSize: "var(--fs-sm)", lineHeight: 1.5 }}>
+                  {isPt
+                    ? "Os valores não incluem retenções para mecanismos de solidariedade. O encargo com terceiros pode tratar-se de uma estimativa conservadora baseada na percentagem (passe ou mais-valia) detida."
+                    : "Values do not include solidarity mechanism retentions. Third-party charges may be conservative estimates based on the held percentage (economic rights or capital gains)."}
+                </span>
+              </div>
+            }
+          />
         </div>
       )}
 
