@@ -48,7 +48,7 @@ const getFields = (isPt: boolean) => [
     label: isPt ? "Caixa e Equivalentes" : "Cash & Equivalents",
   },
   {
-    compute: (d: Record<string, number>) => netDebt(d),
+    compute: (d: any) => netDebt(d),
     label: isPt ? "Dívida Líquida" : "Net Debt",
   },
   {
@@ -57,7 +57,9 @@ const getFields = (isPt: boolean) => [
   },
   {
     key: "squad_market_value",
-    label: isPt ? "Valor de Mercado (Transfermarkt)" : "Squad Market Value (Transfermarkt)",
+    label: isPt
+      ? "Valor de Mercado (Transfermarkt)"
+      : "Squad Market Value (Transfermarkt)",
   },
   {
     key: "cf_operating",

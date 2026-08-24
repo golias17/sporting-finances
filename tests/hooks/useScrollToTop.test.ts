@@ -44,7 +44,9 @@ describe("useScrollToTop", () => {
   });
 
   it("scrollToTop scrolls window to top", () => {
-    const scrollToSpy = vi.spyOn(window, "scrollTo").mockImplementation(() => {});
+    const scrollToSpy = vi
+      .spyOn(window, "scrollTo")
+      .mockImplementation(() => {});
     const { result } = renderHook(() => useScrollToTop());
 
     act(() => {
@@ -76,6 +78,9 @@ describe("useScrollToTop", () => {
 
     unmount();
 
-    expect(removeEventListenerSpy).toHaveBeenCalledWith("scroll", expect.any(Function));
+    expect(removeEventListenerSpy).toHaveBeenCalledWith(
+      "scroll",
+      expect.any(Function),
+    );
   });
 });

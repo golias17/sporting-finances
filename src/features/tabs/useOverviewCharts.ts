@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { useAppState, state } from "../../core/state.js";
 import {
   baseOpts,
-  styledLineDataset,
   eventBoxes,
   fmtMillions,
 } from "../../charts/chartUtils.js";
@@ -64,7 +63,17 @@ export function useOverviewCharts() {
   const storyIndex = useAppState((s) => s.storyIndex);
 
   const heroOptions = useMemo<ChartOptions<any>>(() => {
-    const annotations: Record<string, { type: string; xMin: string; xMax: string; borderColor: string; borderWidth: number; label: { display: boolean; content: string } }> = eventBoxes([
+    const annotations: Record<
+      string,
+      {
+        type: string;
+        xMin: string;
+        xMax: string;
+        borderColor: string;
+        borderWidth: number;
+        label: { display: boolean; content: string };
+      }
+    > = eventBoxes([
       "restructure14",
       "alcochete",
       "amorim",
@@ -84,7 +93,7 @@ export function useOverviewCharts() {
           xMax: step.season,
           borderColor: state.COLORS.gold,
           borderWidth: 3,
-          label: { display: false },
+          label: { display: false, content: "" },
         };
       }
     }
@@ -94,10 +103,12 @@ export function useOverviewCharts() {
       plugins: {
         ...baseOpts.plugins,
         tooltip: {
-          ...baseOpts.plugins.tooltip,
+          ...baseOpts.plugins?.tooltip,
           callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
-              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+            label: (ctx: {
+              dataset: { label: string };
+              parsed: { y: number };
+            }) => ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
         },
         annotation: {
@@ -137,7 +148,9 @@ export function useOverviewCharts() {
   const rev = d ? d.revenue_operating / 1000 : 0;
   const opExcl = d ? d.operating_result_excl_players / 1000 : 0;
   const costs = d ? opExcl - rev : 0;
-  const trading = d ? (d.player_transfer_income + d.player_transfer_cost) / 1000 : 0;
+  const trading = d
+    ? (d.player_transfer_income + d.player_transfer_cost) / 1000
+    : 0;
   const opTotal = d ? d.operating_result_total / 1000 : 0;
   const amort = d ? d.squad_amortization_impairment / 1000 : 0;
   const net = d ? d.net_result / 1000 : 0;
@@ -209,7 +222,7 @@ export function useOverviewCharts() {
         ...baseOpts.plugins,
         legend: { display: false },
         tooltip: {
-          ...baseOpts.plugins.tooltip,
+          ...baseOpts.plugins?.tooltip,
           callbacks: {
             label: (ctx: { dataIndex: number }) => {
               const diffs = [rev, costs, trading, amort, fin, net];
@@ -263,5 +276,13 @@ export function useOverviewCharts() {
     [isPt, activeSeasonLabel, rev, costs, trading, amort, fin, net],
   );
 
-  return { heroData, heroOptions, netResult, equity, waterfallData, waterfallOptions, activeSeasonLabel };
+  return {
+    heroData,
+    heroOptions,
+    netResult,
+    equity,
+    waterfallData,
+    waterfallOptions,
+    activeSeasonLabel,
+  };
 }

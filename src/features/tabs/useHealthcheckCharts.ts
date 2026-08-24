@@ -4,7 +4,7 @@ import { baseOpts, ZONE_COLORS, fmtMillions } from "../../charts/chartUtils.js";
 
 import { getBrandColors } from "../../charts/chartPalette.js";
 import { useChartLabels } from "../../charts/chartHooks.js";
-import { wageBillRatio, netDebt } from "../financialMetrics.js";
+import { wageBillRatio } from "../financialMetrics.js";
 import { HEALTH_THRESHOLDS } from "../healthThresholds.js";
 import type { ChartData, ChartOptions } from "chart.js";
 
@@ -29,8 +29,20 @@ function zoneColor(
       : state.COLORS.pos;
 }
 
-function zoneAnnotations({ zones, lines }: { zones: Array<{ low: number; high: number; color: string; label: string }>; lines: Array<{ value: number; color: string; label: string }> }) {
-  const annotations: Record<string, { type: string; yMin: number; yMax: number; backgroundColor: string; label: { display: boolean; content: string } }> = {};
+function zoneAnnotations({
+  zones,
+  lines,
+}: {
+  zones: Array<{
+    key: string;
+    min: number;
+    max: number;
+    color: string;
+    label?: any;
+  }>;
+  lines: Array<{ key: string; value: number; color: string; label?: any }>;
+}) {
+  const annotations: Record<string, any> = {};
   zones.forEach((z) => {
     annotations[z.key] = {
       type: "box",
@@ -101,9 +113,12 @@ export function useHealthcheckCharts() {
         ...baseOpts.plugins,
         legend: { display: false },
         tooltip: {
-          ...baseOpts.plugins.tooltip,
+          ...baseOpts.plugins?.tooltip,
           callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
+            label: (ctx: {
+              dataset: { label: string };
+              parsed: { y: number };
+            }) =>
               `${isPt ? "Custos com pessoal" : "Wage bill"}: ${ctx.parsed.y.toFixed(0)}% ${isPt ? "da receita" : "of revenue"}`,
           },
         },
@@ -140,7 +155,7 @@ export function useHealthcheckCharts() {
       scales: {
         ...baseOpts.scales,
         y: {
-          ...baseOpts.scales.y,
+          ...baseOpts.scales?.y,
           min: 30,
           max: 130,
           ticks: {
@@ -193,9 +208,12 @@ export function useHealthcheckCharts() {
         ...baseOpts.plugins,
         legend: { display: false },
         tooltip: {
-          ...baseOpts.plugins.tooltip,
+          ...baseOpts.plugins?.tooltip,
           callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
+            label: (ctx: {
+              dataset: { label: string };
+              parsed: { y: number };
+            }) =>
               `${isPt ? "Dependência de passes" : "Transfer reliance"}: ${ctx.parsed.y.toFixed(0)}%`,
           },
         },
@@ -227,7 +245,7 @@ export function useHealthcheckCharts() {
       scales: {
         ...baseOpts.scales,
         y: {
-          ...baseOpts.scales.y,
+          ...baseOpts.scales?.y,
           min: 0,
           max: 80,
           ticks: {
@@ -239,7 +257,6 @@ export function useHealthcheckCharts() {
     };
   }, [isPt]);
 
-  
   const currentRatioData = useMemo<ChartData<"line">>(() => {
     const ratios = annual.map((d) =>
       d.current_liabilities !== 0
@@ -291,9 +308,12 @@ export function useHealthcheckCharts() {
         ...baseOpts.plugins,
         legend: { display: false },
         tooltip: {
-          ...baseOpts.plugins.tooltip,
+          ...baseOpts.plugins?.tooltip,
           callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
+            label: (ctx: {
+              dataset: { label: string };
+              parsed: { y: number };
+            }) =>
               `${isPt ? "Rácio de solvência" : "Current ratio"}: ${ctx.parsed.y.toFixed(2)}×`,
           },
         },
@@ -321,11 +341,11 @@ export function useHealthcheckCharts() {
       scales: {
         ...baseOpts.scales,
         y: {
-          ...baseOpts.scales.y,
+          ...baseOpts.scales?.y,
           beginAtZero: true,
           ticks: {
             ...(baseOpts.scales?.y?.ticks || {}),
-            callback: (v: number | string) => v.toFixed(1) + "×",
+            callback: (v: number | string) => Number(v).toFixed(1) + "×",
           },
         },
       },
@@ -343,8 +363,7 @@ export function useHealthcheckCharts() {
         {
           label: isPt ? "Dívidas a Clubes (Passes)" : "Transfer Payables",
           data: annual.map(
-            (d) =>
-              (d.transfer_payables_c || 0) + (d.transfer_payables_nc || 0),
+            (d) => (d.transfer_payables_c || 0) + (d.transfer_payables_nc || 0),
           ),
           backgroundColor: colors.neg + "B3",
           borderColor: colors.neg,
@@ -355,7 +374,7 @@ export function useHealthcheckCharts() {
           data: annual.map(
             (d) =>
               (d.transfer_receivables_c || 0) +
-                (d.transfer_receivables_nc || 0),
+              (d.transfer_receivables_nc || 0),
           ),
           backgroundColor: colors.pos + "B3",
           borderColor: colors.pos,
@@ -372,8 +391,13 @@ export function useHealthcheckCharts() {
         ...baseOpts.plugins,
         legend: { display: true, position: "bottom" },
         tooltip: {
-          ...baseOpts.plugins.tooltip,          callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number }; datasetIndex: number }) => {
+          ...baseOpts.plugins?.tooltip,
+          callbacks: {
+            label: (ctx: {
+              dataset: { label: string };
+              parsed: { y: number };
+              datasetIndex: number;
+            }) => {
               return ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`;
             },
           },
@@ -382,10 +406,11 @@ export function useHealthcheckCharts() {
       scales: {
         ...baseOpts.scales,
         y: {
-          ...baseOpts.scales.y,
+          ...baseOpts.scales?.y,
           ticks: {
             ...(baseOpts.scales?.y?.ticks || {}),
-            callback: (v: number | string) => `€${(Number(v) / 1000).toFixed(0)}M`,
+            callback: (v: number | string) =>
+              `€${(Number(v) / 1000).toFixed(0)}M`,
           },
         },
       },
@@ -401,6 +426,7 @@ export function useHealthcheckCharts() {
           label: isPt ? "EBITDA Operacional" : "Operating EBITDA",
           data: annual.map(
             (d) =>
+              d.ebitda_operating ??
               d.operating_result_excl_players + Math.abs(d.da_excl_squad),
           ),
           borderColor: colors.gold,
@@ -411,9 +437,12 @@ export function useHealthcheckCharts() {
           pointHoverRadius: 5,
         },
         {
-          label: isPt ? "EBITDA Total (c/ Passes)" : "Total EBITDA (w/ Transfers)",
+          label: isPt
+            ? "EBITDA Total (c/ Passes)"
+            : "Total EBITDA (w/ Transfers)",
           data: annual.map(
             (d) =>
+              d.ebitda_total ??
               d.operating_result_total +
                 Math.abs(d.da_excl_squad) +
                 Math.abs(d.squad_amortization_impairment),
@@ -436,8 +465,13 @@ export function useHealthcheckCharts() {
         ...baseOpts.plugins,
         legend: { display: true, position: "bottom" },
         tooltip: {
-          ...baseOpts.plugins.tooltip,          callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number }; datasetIndex: number }) => {
+          ...baseOpts.plugins?.tooltip,
+          callbacks: {
+            label: (ctx: {
+              dataset: { label: string };
+              parsed: { y: number };
+              datasetIndex: number;
+            }) => {
               return ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`;
             },
           },
@@ -446,10 +480,11 @@ export function useHealthcheckCharts() {
       scales: {
         ...baseOpts.scales,
         y: {
-          ...baseOpts.scales.y,
+          ...baseOpts.scales?.y,
           ticks: {
             ...(baseOpts.scales?.y?.ticks || {}),
-            callback: (v: number | string) => `€${(Number(v) / 1000).toFixed(0)}M`,
+            callback: (v: number | string) =>
+              `€${(Number(v) / 1000).toFixed(0)}M`,
           },
         },
       },

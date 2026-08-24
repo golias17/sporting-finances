@@ -4,23 +4,28 @@ import type { PdfContext, ColorPalette, AnnualData } from "./pdfTypes.js";
 import { getBrandColors, hexToRgbArray } from "../charts/chartUtils.js";
 import { getLatestH1Data } from "../features/financialMetrics.js";
 
-export function buildPdfContext({ doc, isPt, data, logoBase64, totalPages }: { doc: jsPDF; isPt: boolean; data: AnnualData[]; logoBase64: string; totalPages: number }) {
+export function buildPdfContext({
+  doc,
+  isPt,
+  data,
+  logoBase64,
+  totalPages,
+}: {
+  doc: jsPDF;
+  isPt: boolean;
+  data: AnnualData[];
+  logoBase64: string | null;
+  totalPages: number;
+}): PdfContext {
   const brand = getBrandColors(false);
-  // Colors matching corporate green/gold guidelines — derived from the same
-  // canonical light-mode palette the live dashboard uses (chartUtils.js's
-  // getBrandColors()), rather than a separate hand-picked RGB set. That
-  // second copy had drifted from the app's actual palette (stale gold
-  // #c8a951 vs the app's #b08923, and a "negative" red that didn't match
-  // --neg at all) — this PDF export can no longer disagree with the
-  // dashboard's colors.
-  const colors = {
-    green: hexToRgbArray(brand.green),
-    gold: hexToRgbArray(brand.gold),
-    darkInk: hexToRgbArray(brand.ink),
-    mutedText: hexToRgbArray(brand.muted),
-    positive: hexToRgbArray(brand.pos),
-    negative: hexToRgbArray(brand.neg),
-    lightGreyBg: [248, 249, 250], // #f8f9fa — PDF-only background tint, no app equivalent
+  const colors: ColorPalette = {
+    green: hexToRgbArray(brand.green) as [number, number, number],
+    gold: hexToRgbArray(brand.gold) as [number, number, number],
+    darkInk: hexToRgbArray(brand.ink) as [number, number, number],
+    mutedText: hexToRgbArray(brand.muted) as [number, number, number],
+    positive: hexToRgbArray(brand.pos) as [number, number, number],
+    negative: hexToRgbArray(brand.neg) as [number, number, number],
+    lightGreyBg: [248, 249, 250],
   };
 
   // Use the most recent *complete* season in annual_data (the in-progress
@@ -37,7 +42,7 @@ export function buildPdfContext({ doc, isPt, data, logoBase64, totalPages }: { d
   // hardcoded so it doesn't need a manual edit every season.
   const rangeEndLabel = h1Data?.label || latestSeason.label || "";
 
-  // Header Helper across Pages
+  // Header & Footer Helper across Pages
   const addHeader = (pageNum: number) => {
     doc.setFillColor(...colors.green);
     doc.rect(15, 12, 180, 4, "F");
@@ -52,29 +57,49 @@ export function buildPdfContext({ doc, isPt, data, logoBase64, totalPages }: { d
     }
 
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
+    doc.setFontSize(10.5);
     doc.setTextColor(...colors.green);
-    doc.text("SPORTING CLUBE DE PORTUGAL — FUTEBOL, SAD", textStartX, 26);
+    doc.text(
+      isPt
+        ? "SPORTING CLUBE DE PORTUGAL - FUTEBOL, SAD"
+        : "SPORTING CLUBE DE PORTUGAL - FUTEBOL, SAD",
+      textStartX,
+      26,
+    );
 
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(8.5);
+    doc.setFontSize(8);
     doc.setTextColor(...colors.mutedText);
     doc.text(
       isPt
-        ? `Relatório de Evolução Financeira · ${firstSeason.label || "2012/13"} a ${rangeEndLabel}`
-        : `Financial Evolution Dossier · ${firstSeason.label || "2012/13"} to ${rangeEndLabel}`,
+        ? `Relatório de Evolução Financeira · ${firstSeason.label || "2010/11"} a ${rangeEndLabel}`
+        : `Financial Evolution Dossier · ${firstSeason.label || "2010/11"} to ${rangeEndLabel}`,
       textStartX,
       31,
+    );
+
+    doc.setDrawColor(220, 224, 222);
+    doc.line(15, 34, 195, 34);
+
+    // Running Footer
+    doc.setDrawColor(220, 224, 222);
+    doc.line(15, 283, 195, 283);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7);
+    doc.setTextColor(...colors.mutedText);
+    doc.text(
+      isPt
+        ? "Documento Oficial de Análise Financeira · Sporting SAD (Euronext: SCP) · Fonte: CMVM"
+        : "Official Financial Analysis Dossier · Sporting SAD (Euronext: SCP) · Source: CMVM Filings",
+      15,
+      287,
     );
 
     const pageStr = isPt
       ? `Página ${pageNum} de ${totalPages}`
       : `Page ${pageNum} of ${totalPages}`;
-    doc.setFontSize(8);
-    doc.text(pageStr, 178, 31);
-
-    doc.setDrawColor(220, 224, 222);
-    doc.line(15, 34, 195, 34);
+    doc.text(pageStr, 175, 287);
   };
 
   const pageCounter = { count: 0 };
@@ -97,5 +122,3 @@ export function buildPdfContext({ doc, isPt, data, logoBase64, totalPages }: { d
     pageCounter,
   };
 }
-
-

@@ -8,8 +8,30 @@ vi.spyOn(React, "useMemo").mockImplementation((fn: () => any) => fn());
 import { usePlaygroundCharts } from "../../src/features/playgroundCharts";
 
 describe("usePlaygroundCharts", () => {
-  const baseline = { revenue: 150000, payroll: 90000, overhead: 20000, financialResult: -3000, netTrading: 5000, netResult: 5000, equity: 30000, cash: 10000, solvency: 20, personnelCostRatio: 60 };
-  const proj = { revenue: 180000, payroll: 95000, overhead: 20000, financialResult: -3000, netTrading: 5000, netResult: 15000, equity: 40000, cash: 15000, solvency: 25, personnelCostRatio: 53 };
+  const baseline = {
+    revenue: 150000,
+    payroll: 90000,
+    overhead: 20000,
+    financialResult: -3000,
+    netTrading: 5000,
+    netResult: 5000,
+    equity: 30000,
+    cash: 10000,
+    solvency: 20,
+    personnelCostRatio: 60,
+  };
+  const proj = {
+    revenue: 180000,
+    payroll: 95000,
+    overhead: 20000,
+    financialResult: -3000,
+    netTrading: 5000,
+    netResult: 15000,
+    equity: 40000,
+    cash: 15000,
+    solvency: 25,
+    personnelCostRatio: 53,
+  };
 
   it("returns null when baseline is null", () => {
     const result = usePlaygroundCharts(null as any, proj, null, false);
@@ -32,7 +54,16 @@ describe("usePlaygroundCharts", () => {
   });
 
   it("includes pinned scenario data when provided", () => {
-    const pinned = { revenue: 160000, payroll: 92000, overhead: 20000, financialResult: -3000, netTrading: 5000, netResult: 8000, equity: 35000, solvency: 22 };
+    const pinned = {
+      revenue: 160000,
+      payroll: 92000,
+      overhead: 20000,
+      financialResult: -3000,
+      netTrading: 5000,
+      netResult: 8000,
+      equity: 35000,
+      solvency: 22,
+    };
     const result = usePlaygroundCharts(baseline, proj, pinned, false);
     expect(result).not.toBeNull();
     // With pinned, solvency data has 3 labels (baseline, projected, pinned)

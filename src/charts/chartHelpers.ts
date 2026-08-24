@@ -3,7 +3,6 @@
 // Shared helper functions for chart configurations.
 // Reduces code duplication across chart option files.
 
-import type { ChartOptions } from "chart.js";
 import { fmtMillions } from "./chartPalette.js";
 
 // Context type for tooltip callbacks
@@ -49,9 +48,9 @@ export const formatters = {
  * @returns Tooltip configuration object
  */
 export function createTooltipOptions(
-  baseOpts: ChartOptions["plugins"] extends { tooltip: infer T } ? T : never,
+  baseOpts: any,
   formatter: TooltipFormatter,
-  suffix?: string
+  suffix?: string,
 ): Record<string, unknown> {
   return {
     ...baseOpts?.tooltip,
@@ -76,8 +75,8 @@ export function createTooltipOptions(
  * @returns Tooltip configuration object
  */
 export function createTooltipOptionsWithFn(
-  baseOpts: ChartOptions["plugins"] extends { tooltip: infer T } ? T : never,
-  labelFn: (ctx: TooltipContext) => string
+  baseOpts: any,
+  labelFn: (ctx: TooltipContext) => string,
 ): Record<string, unknown> {
   return {
     ...baseOpts?.tooltip,
@@ -97,17 +96,14 @@ export function createTooltipOptionsWithFn(
  * @returns Chart options with tooltip and y-axis configured
  */
 export function createChartOptions(
-  baseOpts: Record<string, unknown>,
-  formatter: TooltipFormatter
+  baseOpts: any,
+  formatter: TooltipFormatter,
 ): Record<string, unknown> {
   return {
     ...baseOpts,
     plugins: {
       ...baseOpts?.plugins,
-      tooltip: createTooltipOptions(
-        baseOpts?.plugins as any,
-        formatter
-      ),
+      tooltip: createTooltipOptions(baseOpts?.plugins, formatter),
     },
     scales: {
       ...baseOpts?.scales,

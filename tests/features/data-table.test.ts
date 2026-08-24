@@ -57,7 +57,8 @@ describe("useDataExport hook", () => {
     expect(clickSpy).toHaveBeenCalled();
 
     // Verify the CSV content
-    const blobCall = (global.Blob as any).mock?.calls?.[0] || 
+    const blobCall =
+      (global.Blob as any).mock?.calls?.[0] ||
       vi.mocked(global.Blob).mock?.calls?.[0];
     // Blob constructor was called - that's the key assertion
   });

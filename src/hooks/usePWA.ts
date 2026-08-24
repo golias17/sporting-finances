@@ -33,15 +33,18 @@ export function usePWA() {
       .then(({ registerSW }) => {
         const updateSW = registerSW({
           onNeedRefresh() {
-            setState((prev) => ({ ...prev, showUpdate: true, updateSW: () => updateSW(true) }));
+            setState((prev) => ({
+              ...prev,
+              showUpdate: true,
+              updateSW: () => updateSW(true),
+            }));
           },
           onOfflineReady() {
             setState((prev) => ({ ...prev, showOfflineReady: true }));
           },
         });
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
   }, []);
 
   const dismissUpdate = useCallback(() => {

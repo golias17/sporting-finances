@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { useAppState, state } from "../../core/state.js";
 import {
   baseOpts,
-  styledLineDataset,
   fmtMillions,
 } from "../../charts/chartUtils.js";
 import { useChartLabels } from "../../charts/chartHooks.js";
@@ -52,7 +51,12 @@ export function useRevenueCharts() {
     const other = annual.map((d) => {
       if (d.rev_tv_comp == null) return null;
       const gap =
-        d.revenue_operating - d.rev_tv_comp - d.rev_matchday - d.rev_commercial;
+        d.rev_other !== undefined
+          ? d.rev_other
+          : d.revenue_operating -
+            d.rev_tv_comp -
+            d.rev_matchday -
+            d.rev_commercial;
       return gap > 1 ? gap : null;
     });
 
@@ -112,13 +116,17 @@ export function useRevenueCharts() {
           labels: {
             color: state.COLORS.ink,
             font: { size: 12 },
-            padding: 16,            boxWidth: 8,
+            padding: 16,
+            boxWidth: 8,
           },
         },
         tooltip: {
-          ...baseOpts.plugins.tooltip,          callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
-              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+          ...baseOpts.plugins?.tooltip,
+          callbacks: {
+            label: (ctx: {
+              dataset: { label: string };
+              parsed: { y: number };
+            }) => ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
             footer: (items: Array<{ parsed: { y: number } }>) => {
               const total = items.reduce(
                 (s: number, i: { parsed: { y: number } }) => s + i.parsed.y,
@@ -131,8 +139,8 @@ export function useRevenueCharts() {
       },
       scales: {
         ...baseOpts.scales,
-        x: { ...baseOpts.scales.x, stacked: true },
-        y: { ...baseOpts.scales.y, stacked: true },
+        x: { ...baseOpts.scales?.x, stacked: true },
+        y: { ...baseOpts.scales?.y, stacked: true },
       },
     }),
     [],
@@ -181,16 +189,19 @@ export function useRevenueCharts() {
         ...baseOpts.plugins,
         legend: { display: false },
         tooltip: {
-          ...baseOpts.plugins.tooltip,          callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
-              `${isPt ? "Rácio" : "Ratio"}: ${ctx.parsed.y.toFixed(0)}%`,
+          ...baseOpts.plugins?.tooltip,
+          callbacks: {
+            label: (ctx: {
+              dataset: { label: string };
+              parsed: { y: number };
+            }) => `${isPt ? "Rácio" : "Ratio"}: ${ctx.parsed.y.toFixed(0)}%`,
           },
         },
       },
       scales: {
         ...baseOpts.scales,
         y: {
-          ...baseOpts.scales.y,
+          ...baseOpts.scales?.y,
           ticks: {
             ...(baseOpts.scales?.y?.ticks || {}),
             callback: (v: number | string) => v + "%",
@@ -254,16 +265,19 @@ export function useRevenueCharts() {
       plugins: {
         ...baseOpts.plugins,
         tooltip: {
-          ...baseOpts.plugins.tooltip,          callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
-              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+          ...baseOpts.plugins?.tooltip,
+          callbacks: {
+            label: (ctx: {
+              dataset: { label: string };
+              parsed: { y: number };
+            }) => ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
         },
       },
       scales: {
         ...baseOpts.scales,
-        x: { ...baseOpts.scales.x, stacked: true },
-        y: { ...baseOpts.scales.y, stacked: true, beginAtZero: false },
+        x: { ...baseOpts.scales?.x, stacked: true },
+        y: { ...baseOpts.scales?.y, stacked: true, beginAtZero: false },
       },
     }),
     [],
@@ -272,8 +286,12 @@ export function useRevenueCharts() {
   // Personnel Costs Breakdown
   const costLabels = annual.map((d: any) => d.label);
   const wageData = annual.map((d: any) => Math.abs(d.personnel_costs || 0));
-  const squadAmortData = annual.map((d: any) => Math.abs(d.squad_amortization_impairment || 0));
-  const extSuppliesData = annual.map((d: any) => Math.abs(d.external_supplies || 0));
+  const squadAmortData = annual.map((d: any) =>
+    Math.abs(d.squad_amortization_impairment || 0),
+  );
+  const extSuppliesData = annual.map((d: any) =>
+    Math.abs(d.external_supplies || 0),
+  );
   const daData = annual.map((d: any) => Math.abs(d.da_excl_squad || 0));
 
   const costBreakdownData = {
@@ -323,15 +341,26 @@ export function useRevenueCharts() {
     plugins: {
       ...state.baseOpts.plugins,
       tooltip: {
-        ...state.baseOpts.plugins.tooltip,        callbacks: {
-          label: (ctx: { dataset: { label: string }; parsed: { y: number } }) => {
+        ...state.baseOpts.plugins?.tooltip,
+        callbacks: {
+          label: (ctx: {
+            dataset: { label: string };
+            parsed: { y: number };
+          }) => {
             return ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`;
           },
-          footer: (items: { chart: { data: { datasets: { data: number[] }[] } }; dataIndex: number }[]) => {
+          footer: (
+            items: {
+              chart: { data: { datasets: { data: number[] }[] } };
+              dataIndex: number;
+            }[],
+          ) => {
             if (items.length === 0) return "";
             const idx = items[0].dataIndex;
             const total = items[0].chart.data.datasets.reduce(
-              (sum: number, ds: { data: number[] }) => sum + (ds.data[idx] as number || 0), 0
+              (sum: number, ds: { data: number[] }) =>
+                sum + ((ds.data[idx] as number) || 0),
+              0,
             );
             return `Total: ${fmtMillions(total)}`;
           },
@@ -359,9 +388,12 @@ export function useRevenueCharts() {
       plugins: {
         ...state.baseOpts.plugins,
         tooltip: {
-          ...state.baseOpts.plugins.tooltip,          callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
-              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+          ...state.baseOpts.plugins?.tooltip,
+          callbacks: {
+            label: (ctx: {
+              dataset: { label: string };
+              parsed: { y: number };
+            }) => ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
         },
       },

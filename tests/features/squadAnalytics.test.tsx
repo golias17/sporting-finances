@@ -101,9 +101,7 @@ describe("SquadAnalytics", () => {
           { player: "Player A", fee: 10000, commission: 500 },
           { player: "Player B", fee: 5000, commission: 250 },
         ],
-        purchases: [
-          { player: "Player C", fee: 8000, commission: 400 },
-        ],
+        purchases: [{ player: "Player C", fee: 8000, commission: 400 }],
       },
       {
         season: "2019/20",

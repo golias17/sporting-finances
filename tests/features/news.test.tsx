@@ -115,9 +115,7 @@ describe("News Component", () => {
     render(<News />);
 
     await waitFor(() => {
-      expect(
-        screen.getAllByText(/No items found/i)[0],
-      ).toBeInTheDocument();
+      expect(screen.getAllByText(/No items found/i)[0]).toBeInTheDocument();
     });
   });
 
@@ -135,7 +133,9 @@ describe("News Component", () => {
 
     render(<News />);
     await waitFor(() => {
-      expect(screen.getAllByText(/aeroporto de Lisboa/i)[0]).toBeInTheDocument();
+      expect(
+        screen.getAllByText(/aeroporto de Lisboa/i)[0],
+      ).toBeInTheDocument();
       expect(screen.getAllByText("SAPO Desporto")[0]).toBeInTheDocument();
     });
   });
@@ -154,9 +154,7 @@ describe("News Component", () => {
 
     render(<News />);
     await waitFor(() => {
-      expect(
-        screen.getAllByText(/No items found/i)[0],
-      ).toBeInTheDocument();
+      expect(screen.getAllByText(/No items found/i)[0]).toBeInTheDocument();
     });
   });
 
@@ -175,9 +173,7 @@ describe("News Component", () => {
     render(<News />);
 
     await waitFor(() => {
-      expect(
-        screen.getAllByText(/VMOCs/i)[0],
-      ).toBeInTheDocument();
+      expect(screen.getAllByText(/VMOCs/i)[0]).toBeInTheDocument();
       expect(screen.getAllByText("Record & Notícias")[0]).toBeInTheDocument();
     });
   });
@@ -244,7 +240,9 @@ describe("News Component", () => {
       expect(
         screen.getAllByText(/showing the last saved results/i)[0],
       ).toBeInTheDocument();
-      expect(screen.getAllByText("Stale Cached Article").length).toBeGreaterThan(0);
+      expect(
+        screen.getAllByText("Stale Cached Article").length,
+      ).toBeGreaterThan(0);
     });
   });
 
@@ -281,7 +279,9 @@ describe("News Component", () => {
         screen.getAllByText(/Grande reforco de peso contratado/i)[0],
       ).toBeInTheDocument();
       expect(
-        screen.getAllByText(/Resultados financeiros excelentes apresentados/i)[0],
+        screen.getAllByText(
+          /Resultados financeiros excelentes apresentados/i,
+        )[0],
       ).toBeInTheDocument();
     });
 
@@ -301,5 +301,4 @@ describe("News Component", () => {
       expect(screen.getAllByText(/No items found/i)[0]).toBeInTheDocument();
     });
   });
-
 });

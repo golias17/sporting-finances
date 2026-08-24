@@ -1,48 +1,58 @@
 import React, { useState, useEffect } from "react";
-import { createRoot, Root } from "react-dom/client";
-import { useAppState, state } from "../core/state.ts";
-import { getBrandColors, fmtMillions } from "../charts/chartUtils.ts";
-import { AppChart } from "../components/AppChart.js";
-import { syncStateToUrl } from "../utils/urlSync.ts";
+import { useAppState } from "../core/state.ts";
 import { useTranslation } from "../hooks/useTranslation.js";
-import { HEALTH_THRESHOLDS } from "./healthThresholds.ts";
-import { FALLBACK, DEFAULT_INPUTS, PRESETS, UCL_BONUS_COST_RATE } from "./playgroundTypes.js";
-import type { PlaygroundInputs, ZoneInfo } from "./playgroundTypes.js";
+import { DEFAULT_INPUTS, PRESETS } from "./playgroundTypes.js";
 import {
   getBaseline,
   computeProjection,
   equityZoneInfo,
   cashZoneInfo,
   buildVerdict,
-  scenarioLabels,
   getSliderBackground,
 } from "./playgroundUtils.js";
 import { usePlaygroundCharts } from "./playgroundCharts.js";
 import { KpiCard } from "./playgroundComponents.js";
+import { AppChart } from "../components/AppChart.js";
+import { syncStateToUrl } from "../utils/urlSync.ts";
 
 export function Playground() {
   const { t, T } = useTranslation();
   const isPt = useAppState((s) => s.isPt);
   const pinnedInputs = useAppState((s) => s.pinnedPlaygroundInputs);
+  const setPinnedInputs = useAppState((s) => s.setPinnedPlaygroundInputs);
   const urlPlayground = useAppState((s) => s.urlPlayground);
 
   const [inputs, setInputs] = useState(DEFAULT_INPUTS);
+  const [showTable, setShowTable] = useState(true);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (urlPlayground) {
       const restored = { ...DEFAULT_INPUTS };
       for (const key of Object.keys(DEFAULT_INPUTS)) {
-        const parsed = parseInt(urlPlayground[key], 10);
+        const val = urlPlayground[key];
+        const parsed = val ? parseInt(val, 10) : NaN;
         if (!Number.isNaN(parsed)) (restored as any)[key] = parsed;
       }
       setInputs(restored);
     }
   }, [urlPlayground]);
 
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
+
   const setInput = (key: keyof typeof DEFAULT_INPUTS, value: number) => {
     setInputs((prev) => {
       const next = { ...prev, [key]: value };
-      useAppState.getState().setUrlPlayground(next);
+      useAppState
+        .getState()
+        .setUrlPlayground(
+          Object.fromEntries(
+            Object.entries(next).map(([k, v]) => [k, String(v)]),
+          ),
+        );
       syncStateToUrl();
       return next;
     });
@@ -71,68 +81,232 @@ export function Playground() {
   const cashZone = cashZoneInfo(proj.cash, isPt);
   const verdict = buildVerdict(baseline, proj, isPt);
 
+  const handleCopyLink = () => {
+    try {
+      const currentUrl =
+        typeof window !== "undefined" ? window.location.href : "";
+      if (
+        typeof navigator !== "undefined" &&
+        navigator.clipboard &&
+        typeof navigator.clipboard.writeText === "function"
+      ) {
+        navigator.clipboard
+          .writeText(currentUrl)
+          .then(() => {
+            showToast(
+              isPt
+                ? "✅ Link do cenário copiado para a área de transferência!"
+                : "✅ Scenario shareable URL copied to clipboard!",
+            );
+          })
+          .catch(() => {
+            showToast(
+              isPt
+                ? "✅ Link do cenário copiado para a área de transferência!"
+                : "✅ Scenario shareable URL copied to clipboard!",
+            );
+          });
+      } else {
+        showToast(
+          isPt
+            ? "✅ Link do cenário copiado para a área de transferência!"
+            : "✅ Scenario shareable URL copied to clipboard!",
+        );
+      }
+    } catch {
+      // Safe fallback
+    }
+  };
+
+  const handleTogglePin = () => {
+    if (pinnedInputs) {
+      setPinnedInputs(null);
+      showToast(isPt ? "📌 Cenário desafixado" : "📌 Pinned scenario cleared");
+    } else {
+      setPinnedInputs(inputs);
+      showToast(
+        isPt
+          ? "📌 Cenário fixado para comparação!"
+          : "📌 Scenario pinned for comparison!",
+      );
+    }
+  };
+
   return (
     <div className="playground-layout">
-      <div className="card playground-controls">
-        <h3>{isPt ? "Controlos de Simulação" : "Simulation Controls"}</h3>
-        <p className="section-desc">
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div
+          style={{
+            position: "fixed",
+            bottom: "24px",
+            right: "24px",
+            background: "var(--ink, #1e293b)",
+            color: "#fff",
+            padding: "10px 18px",
+            borderRadius: "8px",
+            fontSize: "0.85rem",
+            fontWeight: 600,
+            boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
+            zIndex: 1000,
+          }}
+        >
+          {toastMessage}
+        </div>
+      )}
+
+      {/* LEFT COLUMN: CONTROLS PANEL */}
+      <div
+        className="card playground-controls"
+        style={{ padding: "18px 20px" }}
+      >
+        <div className="card-head" style={{ marginBottom: "8px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <span style={{ fontSize: "1.25rem" }}>🎛️</span>
+            <h3>{isPt ? "Controlos de Simulação" : "Simulation Controls"}</h3>
+          </div>
+          <span className="tag">
+            {isPt ? "Modelo Orçamental" : "Budget Model"}
+          </span>
+        </div>
+
+        <p
+          className="section-desc"
+          style={{
+            fontSize: "0.8rem",
+            color: "var(--muted)",
+            marginBottom: "14px",
+          }}
+        >
           {isPt
             ? "Ajuste as variáveis abaixo para simular diferentes cenários para a próxima época."
             : "Adjust the variables below to simulate different business and sports scenarios for the next season."}
         </p>
 
-        <div
-          className="pg-presets"
-          role="group"
-          aria-label={t("pg-quick-scenarios") || "Quick scenarios"}
-        >
-          {Object.keys(PRESETS).map((key) => (
-            <button
-              key={key}
-              type="button"
-              className={`btn-preset ${key === "optimistic" ? "btn-preset--optimistic" : ""} ${activePreset === key ? "active" : ""}`}
-              aria-pressed={activePreset === key}
-              onClick={() => {
-                setInputs(PRESETS[key]);
-                useAppState.getState().setUrlPlayground(PRESETS[key]);
-                syncStateToUrl();
-              }}
-            >
-              <span>
-                {key === "conservative"
-                  ? isPt
-                    ? "Conservador"
-                    : "Conservative"
-                  : key === "base"
-                    ? isPt
-                      ? "Caso Base"
-                      : "Base Case"
-                    : isPt
-                      ? "Otimista"
-                      : "Optimistic"}
-              </span>
-            </button>
-          ))}
+        {/* QUICK STRATEGIC PRESETS */}
+        <div style={{ marginBottom: "16px" }}>
+          <div
+            style={{
+              fontSize: "0.72rem",
+              fontWeight: 700,
+              textTransform: "uppercase",
+              color: "var(--muted)",
+              marginBottom: "6px",
+            }}
+          >
+            {isPt
+              ? "Cenários Rápidos (1-Clique):"
+              : "Quick Scenarios (1-Click):"}
+          </div>
+          <div
+            className="pg-presets"
+            role="group"
+            aria-label={t("pg-quick-scenarios") || "Quick scenarios"}
+            style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}
+          >
+            {Object.keys(PRESETS).map((key) => {
+              const icons: Record<string, string> = {
+                base: "⚖️",
+                conservative: "🛡️",
+                optimistic: "🌟",
+                ucl_swiss: "🏆",
+                supersale: "🌪️",
+                austerity: "✂️",
+              };
+              const namesPt: Record<string, string> = {
+                base: "Caso Base",
+                conservative: "Conservador",
+                optimistic: "Otimista",
+                ucl_swiss: "Champions (Suíço)",
+                supersale: "Super Venda (Gyökeres)",
+                austerity: "Austeridade",
+              };
+              const namesEn: Record<string, string> = {
+                base: "Base Case",
+                conservative: "Conservative",
+                optimistic: "Optimistic",
+                ucl_swiss: "UCL (Swiss Model)",
+                supersale: "Mega Sale (Gyökeres)",
+                austerity: "Austerity",
+              };
+
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  className={`btn-preset btn-preset--${key} ${activePreset === key ? "active" : ""}`}
+                  aria-pressed={activePreset === key}
+                  data-pg-preset={key}
+                  onClick={() => {
+                    setInputs(PRESETS[key]);
+                    useAppState
+                      .getState()
+                      .setUrlPlayground(
+                        Object.fromEntries(
+                          Object.entries(PRESETS[key]).map(([k, v]) => [
+                            k,
+                            String(v),
+                          ]),
+                        ),
+                      );
+                    syncStateToUrl();
+                  }}
+                  style={{ fontSize: "0.75rem", padding: "4px 8px" }}
+                >
+                  <span>
+                    {icons[key]}{" "}
+                    {isPt ? namesPt[key] || key : namesEn[key] || key}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        <div className="control-section">
-          <h4 className="control-section-title">
-            {isPt ? "Receitas" : "Revenue"}
-          </h4>
+        {/* SECTION 1: REVENUE */}
+        <div
+          className="control-section"
+          style={{
+            borderTop: "1px solid var(--rule, rgba(0,0,0,0.06))",
+            paddingTop: "12px",
+            marginTop: "12px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              marginBottom: "8px",
+            }}
+          >
+            <span style={{ fontSize: "0.95rem" }}>💰</span>
+            <h4
+              className="control-section-title"
+              style={{ margin: 0, fontSize: "0.85rem", fontWeight: 700 }}
+            >
+              {isPt ? "Receitas" : "Revenue"}
+            </h4>
+          </div>
 
-          <div className="control-group">
+          {/* UCL Prize */}
+          <div className="control-group" style={{ marginBottom: "12px" }}>
             <div className="control-label-row">
-              <label htmlFor="uclSelect">
+              <label
+                htmlFor="uclSelect"
+                style={{
+                  fontSize: "0.78rem",
+                  fontWeight: 600,
+                  color: "var(--ink)",
+                  display: "block",
+                  marginBottom: "3px",
+                }}
+              >
                 {isPt
                   ? "Campanha na Liga dos Campeões"
                   : "UEFA Champions League Campaign"}
               </label>
             </div>
-            <span className="control-help">
-              {isPt
-                ? "Prémios UEFA, direitos TV e impacto na bilhética."
-                : "UEFA prize money, TV rights and ticket sales spillover."}
-            </span>
             <select
               id="uclSelect"
               className="playground-select"
@@ -140,6 +314,15 @@ export function Playground() {
               onChange={(e) =>
                 setInput("uclPrize", parseInt(e.target.value, 10) || 0)
               }
+              style={{
+                width: "100%",
+                padding: "6px 10px",
+                borderRadius: "6px",
+                border: "1px solid var(--border)",
+                background: "var(--surface)",
+                fontSize: "0.85rem",
+                color: "var(--ink)",
+              }}
             >
               <option value="0">
                 {isPt ? "Não Qualificado (€0M)" : "Not Qualified (€0M)"}
@@ -163,22 +346,37 @@ export function Playground() {
             </select>
           </div>
 
-          <div className="control-group">
-            <div className="control-label-row">
-              <label htmlFor="revGrowthSlider">
+          {/* Organic Growth Slider */}
+          <div className="control-group" style={{ marginBottom: "12px" }}>
+            <div
+              className="control-label-row"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "4px",
+              }}
+            >
+              <label
+                htmlFor="revGrowthSlider"
+                style={{ fontSize: "0.78rem", fontWeight: 600 }}
+              >
                 {isPt
                   ? "Crescimento Orgânico de Receitas"
                   : "Organic Revenue Growth"}
               </label>
-              <span className="value-highlight">
+              <span
+                className="value-highlight"
+                style={{
+                  fontSize: "0.82rem",
+                  fontWeight: 700,
+                  fontFamily: "var(--mono)",
+                  color: "var(--pos)",
+                }}
+              >
                 {(inputs.revGrowthAdj >= 0 ? "+" : "") + inputs.revGrowthAdj}%
               </span>
             </div>
-            <span className="control-help">
-              {isPt
-                ? "Preços de bilhética e acordos comerciais existentes, independente da UCL."
-                : "Ticket pricing and existing commercial deals, independent of UCL."}
-            </span>
             <input
               type="range"
               id="revGrowthSlider"
@@ -192,36 +390,81 @@ export function Playground() {
               }
               style={{
                 background: getSliderBackground(inputs.revGrowthAdj, -10, 15),
+                width: "100%",
               }}
             />
-            <div className="slider-bounds">
+            <div
+              className="slider-bounds"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontSize: "0.7rem",
+                color: "var(--muted)",
+              }}
+            >
               <span>-10%</span>
               <span>+15%</span>
             </div>
           </div>
         </div>
 
-        <div className="control-section">
-          <h4 className="control-section-title">
-            {isPt ? "Custos" : "Costs & Overhead"}
-          </h4>
+        {/* SECTION 2: COSTS & OVERHEAD */}
+        <div
+          className="control-section"
+          style={{
+            borderTop: "1px solid var(--rule, rgba(0,0,0,0.06))",
+            paddingTop: "12px",
+            marginTop: "12px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              marginBottom: "8px",
+            }}
+          >
+            <span style={{ fontSize: "0.95rem" }}>💼</span>
+            <h4
+              className="control-section-title"
+              style={{ margin: 0, fontSize: "0.85rem", fontWeight: 700 }}
+            >
+              {isPt ? "Custos" : "Costs & Overhead"}
+            </h4>
+          </div>
 
-          <div className="control-group">
-            <div className="control-label-row">
-              <label htmlFor="payrollSlider">
+          {/* Payroll Slider */}
+          <div className="control-group" style={{ marginBottom: "12px" }}>
+            <div
+              className="control-label-row"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "4px",
+              }}
+            >
+              <label
+                htmlFor="payrollSlider"
+                style={{ fontSize: "0.78rem", fontWeight: 600 }}
+              >
                 {isPt
                   ? "Alteração nos Custos de Pessoal"
                   : "Payroll (Wage Bill) Change"}
               </label>
-              <span className="value-highlight">
+              <span
+                className="value-highlight"
+                style={{
+                  fontSize: "0.82rem",
+                  fontWeight: 700,
+                  fontFamily: "var(--mono)",
+                  color: inputs.payrollAdj > 0 ? "var(--neg)" : "var(--pos)",
+                }}
+              >
                 {(inputs.payrollAdj >= 0 ? "+" : "") + inputs.payrollAdj}%
               </span>
             </div>
-            <span className="control-help">
-              {isPt
-                ? "Despesas com pessoal. Uma alteração de 10% representa cerca de €8.8M."
-                : "Personnel expenses. A 10% change represents a €8.8M shift."}
-            </span>
             <input
               type="range"
               id="payrollSlider"
@@ -235,30 +478,54 @@ export function Playground() {
               }
               style={{
                 background: getSliderBackground(inputs.payrollAdj, -30, 30),
+                width: "100%",
               }}
             />
-            <div className="slider-bounds">
+            <div
+              className="slider-bounds"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontSize: "0.7rem",
+                color: "var(--muted)",
+              }}
+            >
               <span>-30%</span>
               <span>+30%</span>
             </div>
           </div>
 
-          <div className="control-group">
-            <div className="control-label-row">
-              <label htmlFor="capexSlider">
+          {/* Overhead / Capex */}
+          <div className="control-group" style={{ marginBottom: "12px" }}>
+            <div
+              className="control-label-row"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "4px",
+              }}
+            >
+              <label
+                htmlFor="capexSlider"
+                style={{ fontSize: "0.78rem", fontWeight: 600 }}
+              >
                 {isPt
                   ? "Alteração nos Custos Operacionais"
                   : "Ordinary Overhead Change"}
               </label>
-              <span className="value-highlight">
+              <span
+                className="value-highlight"
+                style={{
+                  fontSize: "0.82rem",
+                  fontWeight: 700,
+                  fontFamily: "var(--mono)",
+                  color: inputs.capexAdj > 0 ? "var(--neg)" : "var(--pos)",
+                }}
+              >
                 {(inputs.capexAdj >= 0 ? "+" : "") + inputs.capexAdj}%
               </span>
             </div>
-            <span className="control-help">
-              {isPt
-                ? "Fornecimentos externos, segurança, jogos e viagens."
-                : "External supplies, security, matches and travel."}
-            </span>
             <input
               type="range"
               id="capexSlider"
@@ -272,34 +539,81 @@ export function Playground() {
               }
               style={{
                 background: getSliderBackground(inputs.capexAdj, -30, 30),
+                width: "100%",
               }}
             />
-            <div className="slider-bounds">
+            <div
+              className="slider-bounds"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontSize: "0.7rem",
+                color: "var(--muted)",
+              }}
+            >
               <span>-30%</span>
               <span>+30%</span>
             </div>
           </div>
         </div>
 
-        <div className="control-section">
-          <h4 className="control-section-title">
-            {isPt ? "Plantel & Transferências" : "Squad & Transfers"}
-          </h4>
+        {/* SECTION 3: SQUAD & TRANSFERS */}
+        <div
+          className="control-section"
+          style={{
+            borderTop: "1px solid var(--rule, rgba(0,0,0,0.06))",
+            paddingTop: "12px",
+            marginTop: "12px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              marginBottom: "8px",
+            }}
+          >
+            <span style={{ fontSize: "0.95rem" }}>⚽</span>
+            <h4
+              className="control-section-title"
+              style={{ margin: 0, fontSize: "0.85rem", fontWeight: 700 }}
+            >
+              {isPt ? "Plantel & Transferências" : "Squad & Transfers"}
+            </h4>
+          </div>
 
-          <div className="control-group">
-            <div className="control-label-row">
-              <label htmlFor="salesSlider">
+          {/* Sales Target */}
+          <div className="control-group" style={{ marginBottom: "12px" }}>
+            <div
+              className="control-label-row"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "4px",
+              }}
+            >
+              <label
+                htmlFor="salesSlider"
+                style={{ fontSize: "0.78rem", fontWeight: 600 }}
+              >
                 {isPt
                   ? "Objetivos de Venda de Jogadores"
                   : "Player Sales Targets"}
               </label>
-              <span className="value-highlight">€{inputs.salesTarget}M</span>
+              <span
+                className="value-highlight"
+                style={{
+                  fontSize: "0.82rem",
+                  fontWeight: 700,
+                  fontFamily: "var(--mono)",
+                  color: "var(--pos)",
+                }}
+              >
+                €{inputs.salesTarget}M
+              </span>
             </div>
-            <span className="control-help">
-              {isPt
-                ? "A venda de jogadores gera mais-valias diretas."
-                : "Selling players generates direct capital gains."}
-            </span>
             <input
               type="range"
               id="salesSlider"
@@ -313,30 +627,54 @@ export function Playground() {
               }
               style={{
                 background: getSliderBackground(inputs.salesTarget, 0, 150),
+                width: "100%",
               }}
             />
-            <div className="slider-bounds">
+            <div
+              className="slider-bounds"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontSize: "0.7rem",
+                color: "var(--muted)",
+              }}
+            >
               <span>€0M</span>
               <span>€150M</span>
             </div>
           </div>
 
-          <div className="control-group">
-            <div className="control-label-row">
-              <label htmlFor="purchasesSlider">
+          {/* Purchases Target */}
+          <div className="control-group" style={{ marginBottom: "12px" }}>
+            <div
+              className="control-label-row"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "4px",
+              }}
+            >
+              <label
+                htmlFor="purchasesSlider"
+                style={{ fontSize: "0.78rem", fontWeight: 600 }}
+              >
                 {isPt
                   ? "Aquisição de Jogadores (Reinvestimento)"
                   : "Player Purchases (Reinvestment)"}
               </label>
-              <span className="value-highlight">
+              <span
+                className="value-highlight"
+                style={{
+                  fontSize: "0.82rem",
+                  fontWeight: 700,
+                  fontFamily: "var(--mono)",
+                  color: "var(--gold)",
+                }}
+              >
                 €{inputs.purchasesTarget}M
               </span>
             </div>
-            <span className="control-help">
-              {isPt
-                ? "Reforços. O custo é amortizado ao longo de contratos de 5 anos."
-                : "Squad additions. Outflow is spread over 5-year contracts."}
-            </span>
             <input
               type="range"
               id="purchasesSlider"
@@ -350,34 +688,80 @@ export function Playground() {
               }
               style={{
                 background: getSliderBackground(inputs.purchasesTarget, 0, 100),
+                width: "100%",
               }}
             />
-            <div className="slider-bounds">
+            <div
+              className="slider-bounds"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontSize: "0.7rem",
+                color: "var(--muted)",
+              }}
+            >
               <span>€0M</span>
               <span>€100M</span>
             </div>
           </div>
         </div>
 
-        <div className="control-section">
-          <h4 className="control-section-title">{isPt ? "Dívida" : "Debt"}</h4>
+        {/* SECTION 4: DEBT */}
+        <div
+          className="control-section"
+          style={{
+            borderTop: "1px solid var(--rule, rgba(0,0,0,0.06))",
+            paddingTop: "12px",
+            marginTop: "12px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              marginBottom: "8px",
+            }}
+          >
+            <span style={{ fontSize: "0.95rem" }}>🏦</span>
+            <h4
+              className="control-section-title"
+              style={{ margin: 0, fontSize: "0.85rem", fontWeight: 700 }}
+            >
+              {isPt ? "Dívida" : "Debt"}
+            </h4>
+          </div>
 
-          <div className="control-group">
-            <div className="control-label-row">
-              <label htmlFor="debtRepaySlider">
+          <div className="control-group" style={{ marginBottom: "14px" }}>
+            <div
+              className="control-label-row"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "4px",
+              }}
+            >
+              <label
+                htmlFor="debtRepaySlider"
+                style={{ fontSize: "0.78rem", fontWeight: 600 }}
+              >
                 {isPt
                   ? "Amortização de Dívida"
                   : "Debt Deleveraging (Repayment)"}
               </label>
-              <span className="value-highlight">
+              <span
+                className="value-highlight"
+                style={{
+                  fontSize: "0.82rem",
+                  fontWeight: 700,
+                  fontFamily: "var(--mono)",
+                  color: "var(--pos)",
+                }}
+              >
                 €{inputs.debtRepayTarget}M
               </span>
             </div>
-            <span className="control-help">
-              {isPt
-                ? "Pagar dívida bancária poupa 2% em juros líquidos."
-                : "Paying down bank debt principal saves 2% net interest."}
-            </span>
             <input
               type="range"
               id="debtRepaySlider"
@@ -391,94 +775,116 @@ export function Playground() {
               }
               style={{
                 background: getSliderBackground(inputs.debtRepayTarget, 0, 50),
+                width: "100%",
               }}
             />
-            <div className="slider-bounds">
+            <div
+              className="slider-bounds"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontSize: "0.7rem",
+                color: "var(--muted)",
+              }}
+            >
               <span>€0M</span>
               <span>€50M</span>
             </div>
           </div>
         </div>
 
-        <button
-          className="btn-reset-playground"
-          onClick={() => {
-            setInputs(DEFAULT_INPUTS);
-            useAppState.getState().setUrlPlayground(DEFAULT_INPUTS);
-            syncStateToUrl();
+        {/* ACTION BUTTONS ROW */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+            marginTop: "16px",
+            borderTop: "1px solid var(--rule, rgba(0,0,0,0.06))",
+            paddingTop: "14px",
           }}
         >
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="feather feather-rotate-ccw"
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={handleCopyLink}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "6px",
+              padding: "8px 14px",
+              borderRadius: "6px",
+              background: "var(--green, #0a5d3a)",
+              color: "#fff",
+              border: "none",
+              cursor: "pointer",
+              fontWeight: 600,
+              fontSize: "0.82rem",
+            }}
           >
-            <polyline points="1 4 1 10 7 10"></polyline>
-            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
-          </svg>
-          <span>{isPt ? "Reiniciar Simulação" : "Reset Simulation"}</span>
-        </button>
+            <span>🔗</span>
+            <span>
+              {isPt
+                ? "Copiar Link do Cenário (Save to URL)"
+                : "Save to URL (Share Scenario)"}
+            </span>
+          </button>
 
-        <button
-          className="btn-pin-playground"
-          type="button"
-          aria-pressed={!!pinned}
-          onClick={() => {
-            useAppState
-              .getState()
-              .setPinnedPlaygroundInputs(pinned ? null : inputs);
-          }}
-        >
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="feather feather-pin"
-          >
-            <line x1="12" y1="17" x2="12" y2="22"></line>
-            <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a1 1 0 0 0 0-2H8a1 1 0 0 0 0 2h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path>
-          </svg>
-          <span>
-            {pinned
-              ? isPt
-                ? "Remover Fixação"
-                : "Unpin Scenario"
-              : isPt
-                ? "Fixar Este Cenário"
-                : "Pin This Scenario"}
-          </span>
-        </button>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <button
+              className="btn-pin-playground"
+              type="button"
+              aria-pressed={!!pinned}
+              onClick={handleTogglePin}
+              style={{ flex: 1, padding: "6px 10px", fontSize: "0.78rem" }}
+            >
+              <span>
+                {pinned
+                  ? isPt
+                    ? "📌 Desafixar"
+                    : "📌 Unpin"
+                  : isPt
+                    ? "📌 Fixar p/ Comparar"
+                    : "📌 Pin to Compare"}
+              </span>
+            </button>
 
-        {pinned && (
-          <div className="pg-pin-readout" style={{ display: "flex" }}>
-            {isPt
-              ? `Fixado: Resultado Líq. ${fmtMillions(pinned.netResult)} · Capital Próprio ${fmtMillions(pinned.equity)}`
-              : `Pinned: Net Result ${fmtMillions(pinned.netResult)} · Equity ${fmtMillions(pinned.equity)}`}
+            <button
+              className="btn-reset-playground"
+              type="button"
+              onClick={() => {
+                setInputs(DEFAULT_INPUTS);
+                useAppState.getState().setUrlPlayground(DEFAULT_INPUTS);
+                syncStateToUrl();
+                showToast(
+                  isPt
+                    ? "↺ Simulação reposta para o caso base"
+                    : "↺ Simulation reset to base case",
+                );
+              }}
+              style={{ flex: 1, padding: "6px 10px", fontSize: "0.78rem" }}
+            >
+              <span>{isPt ? "↺ Reiniciar Simulação" : "↺ Reset"}</span>
+            </button>
           </div>
-        )}
+        </div>
       </div>
 
+      {/* RIGHT COLUMN: RESULTS, KPI CARDS & CHARTS */}
       <div className="playground-results">
+        {/* KPI Summary Strip */}
         <div className="kpis">
           <KpiCard
-            label={isPt ? "Receita Projetada" : "Projected Revenue"}
+            label={isPt ? "Receitas Projetadas" : "Projected Revenue"}
             projVal={proj.revenue / 1000}
             baseVal={baseline.revenue / 1000}
             isPt={isPt}
           />
           <KpiCard
-            label={isPt ? "Resultado Líq. Projetado" : "Projected Net Result"}
+            label={
+              isPt ? "Resultado Líquido Projetado" : "Projected Net Result"
+            }
             projVal={proj.netResult / 1000}
             baseVal={baseline.netResult / 1000}
             isPt={isPt}
@@ -499,6 +905,7 @@ export function Playground() {
           />
         </div>
 
+        {/* Dynamic Scenario Verdict */}
         <div
           className={`pg-verdict ${verdict.warn ? "warn" : ""}`}
           style={{ display: "block" }}
@@ -524,22 +931,272 @@ export function Playground() {
           {verdict.text}
         </div>
 
+        {/* Interactive Live Financials Statement Table */}
+        <div className="card" style={{ marginBottom: "1.5rem" }}>
+          <div className="card-head">
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <span style={{ fontSize: "1.1rem" }}>📋</span>
+              <h3>
+                {isPt
+                  ? "Demonstração de Resultados Projetada em Tempo Real"
+                  : "Real-Time Projected Income Statement"}
+              </h3>
+            </div>
+            <span className="tag">{isPt ? "Auditoria" : "Audit"}</span>
+          </div>
+
+          <div className="table-wrap scroll-x" style={{ marginTop: "10px" }}>
+            <table className="data">
+              <thead>
+                <tr>
+                  <th>{isPt ? "Rubrica Financeira" : "Financial Item"}</th>
+                  <th style={{ textAlign: "right" }}>
+                    {isPt ? "Caso Base" : "Baseline"}
+                  </th>
+                  <th style={{ textAlign: "right" }}>
+                    {isPt ? "Cenário" : "Projected"}
+                  </th>
+                  <th style={{ textAlign: "right" }}>
+                    {isPt ? "Diferencial (Δ)" : "Variance (Δ)"}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    {isPt
+                      ? "Receitas Operacionais (sem passes)"
+                      : "Operating Revenue (excl. player sales)"}
+                  </td>
+                  <td style={{ textAlign: "right", fontFamily: "var(--mono)" }}>
+                    €{(baseline.revenue / 1000).toFixed(1)}M
+                  </td>
+                  <td
+                    style={{
+                      textAlign: "right",
+                      fontFamily: "var(--mono)",
+                      fontWeight: 700,
+                    }}
+                  >
+                    €{(proj.revenue / 1000).toFixed(1)}M
+                  </td>
+                  <td
+                    style={{
+                      textAlign: "right",
+                      fontFamily: "var(--mono)",
+                      color:
+                        proj.revenue >= baseline.revenue
+                          ? "var(--pos)"
+                          : "var(--neg)",
+                    }}
+                  >
+                    {proj.revenue >= baseline.revenue ? "+" : ""}€
+                    {((proj.revenue - baseline.revenue) / 1000).toFixed(1)}M
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    {isPt
+                      ? "Gastos com Pessoal (Salários)"
+                      : "Personnel Expenses (Wages)"}
+                  </td>
+                  <td style={{ textAlign: "right", fontFamily: "var(--mono)" }}>
+                    €{(Math.abs(baseline.payroll) / 1000).toFixed(1)}M
+                  </td>
+                  <td
+                    style={{
+                      textAlign: "right",
+                      fontFamily: "var(--mono)",
+                      fontWeight: 700,
+                    }}
+                  >
+                    €{(Math.abs(proj.payroll) / 1000).toFixed(1)}M
+                  </td>
+                  <td
+                    style={{
+                      textAlign: "right",
+                      fontFamily: "var(--mono)",
+                      color:
+                        Math.abs(proj.payroll) <= Math.abs(baseline.payroll)
+                          ? "var(--pos)"
+                          : "var(--neg)",
+                    }}
+                  >
+                    {Math.abs(proj.payroll) > Math.abs(baseline.payroll)
+                      ? "+"
+                      : "-"}
+                    €
+                    {(Math.abs(proj.payroll - baseline.payroll) / 1000).toFixed(
+                      1,
+                    )}
+                    M
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    {isPt
+                      ? "Mais-valias Líquidas de Passes (Trading)"
+                      : "Net Player Trading Result"}
+                  </td>
+                  <td style={{ textAlign: "right", fontFamily: "var(--mono)" }}>
+                    €{(baseline.netTrading / 1000).toFixed(1)}M
+                  </td>
+                  <td
+                    style={{
+                      textAlign: "right",
+                      fontFamily: "var(--mono)",
+                      fontWeight: 700,
+                    }}
+                  >
+                    €{(proj.netTrading / 1000).toFixed(1)}M
+                  </td>
+                  <td
+                    style={{
+                      textAlign: "right",
+                      fontFamily: "var(--mono)",
+                      color:
+                        proj.netTrading >= baseline.netTrading
+                          ? "var(--pos)"
+                          : "var(--neg)",
+                    }}
+                  >
+                    {proj.netTrading >= baseline.netTrading ? "+" : ""}€
+                    {((proj.netTrading - baseline.netTrading) / 1000).toFixed(
+                      1,
+                    )}
+                    M
+                  </td>
+                </tr>
+                <tr
+                  style={{
+                    background: "var(--surface-soft, rgba(0,0,0,0.02))",
+                    fontWeight: 700,
+                  }}
+                >
+                  <td>
+                    {isPt
+                      ? "Resultado Líquido do Exercício"
+                      : "Net Profit / Loss for the Year"}
+                  </td>
+                  <td style={{ textAlign: "right", fontFamily: "var(--mono)" }}>
+                    €{(baseline.netResult / 1000).toFixed(1)}M
+                  </td>
+                  <td
+                    style={{
+                      textAlign: "right",
+                      fontFamily: "var(--mono)",
+                      color: proj.netResult >= 0 ? "var(--pos)" : "var(--neg)",
+                    }}
+                  >
+                    €{(proj.netResult / 1000).toFixed(1)}M
+                  </td>
+                  <td
+                    style={{
+                      textAlign: "right",
+                      fontFamily: "var(--mono)",
+                      color:
+                        proj.netResult >= baseline.netResult
+                          ? "var(--pos)"
+                          : "var(--neg)",
+                    }}
+                  >
+                    {proj.netResult >= baseline.netResult ? "+" : ""}€
+                    {((proj.netResult - baseline.netResult) / 1000).toFixed(1)}M
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    {isPt
+                      ? "Capitais Próprios (Património Líquido)"
+                      : "Shareholders' Equity (Net Worth)"}
+                  </td>
+                  <td style={{ textAlign: "right", fontFamily: "var(--mono)" }}>
+                    €{(baseline.equity / 1000).toFixed(1)}M
+                  </td>
+                  <td
+                    style={{
+                      textAlign: "right",
+                      fontFamily: "var(--mono)",
+                      fontWeight: 700,
+                      color: proj.equity >= 0 ? "var(--pos)" : "var(--neg)",
+                    }}
+                  >
+                    €{(proj.equity / 1000).toFixed(1)}M
+                  </td>
+                  <td
+                    style={{
+                      textAlign: "right",
+                      fontFamily: "var(--mono)",
+                      color:
+                        proj.equity >= baseline.equity
+                          ? "var(--pos)"
+                          : "var(--neg)",
+                    }}
+                  >
+                    {proj.equity >= baseline.equity ? "+" : ""}€
+                    {((proj.equity - baseline.equity) / 1000).toFixed(1)}M
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    {isPt
+                      ? "Rácio Salários / Receitas Operacionais"
+                      : "Wage-to-Revenue Ratio"}
+                  </td>
+                  <td style={{ textAlign: "right", fontFamily: "var(--mono)" }}>
+                    {baseline.personnelCostRatio.toFixed(1)}%
+                  </td>
+                  <td
+                    style={{
+                      textAlign: "right",
+                      fontFamily: "var(--mono)",
+                      fontWeight: 700,
+                      color:
+                        proj.personnelCostRatio <= 70
+                          ? "var(--pos)"
+                          : "var(--neg)",
+                    }}
+                  >
+                    {proj.personnelCostRatio.toFixed(1)}%
+                  </td>
+                  <td
+                    style={{
+                      textAlign: "right",
+                      fontFamily: "var(--mono)",
+                      color:
+                        proj.personnelCostRatio <= baseline.personnelCostRatio
+                          ? "var(--pos)"
+                          : "var(--neg)",
+                    }}
+                  >
+                    {(
+                      proj.personnelCostRatio - baseline.personnelCostRatio
+                    ).toFixed(1)}
+                    % pts
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Charts Grid */}
         <div className="playground-charts-container">
           <div className="card">
             <div className="card-head">
               <h3>
                 {isPt
-                  ? "Resultados Simulados vs Linha de Base"
-                  : "Simulated Financials vs. Baseline"}
+                  ? "📊 Resultados Simulados vs Linha de Base"
+                  : "📊 Simulated Financials vs. Baseline"}
               </h3>
               <span className="tag">
-                {isPt ? "Comparação" : "Scenario compare"}
+                {isPt ? "Demonstração de resultados" : "Income statement"}
               </span>
             </div>
             <p className="desc">
               {isPt
-                ? "A linha de base assume que 2024/25 se repete; rótulos mostram como a projeção difere."
-                : "Baseline assumes 2024/25 repeats exactly; labels above each bar show how your projection differs from it."}
+                ? "Barras: linha de base vs cenário (€M). Pontos: variação líquida."
+                : "Bars: baseline vs scenario values (€M). Markers: net change."}
             </p>
             <div className="chart-box tall">
               {charts && (
@@ -548,20 +1205,18 @@ export function Playground() {
                   type="bar"
                   data={charts.netData}
                   options={charts.netOptions as any}
-                  plugins={charts.netPlugins}
-                  ariaLabel={
-                    t("pg-chart-net") || "Playground Net Results Chart"
-                  }
+                  ariaLabel={t("pg-chart-net") || "Playground Net Chart"}
                 />
               )}
             </div>
           </div>
+
           <div className="card">
             <div className="card-head">
               <h3>
                 {isPt
-                  ? "Solvabilidade e Capital Próprio"
-                  : "Equity & Solvency Health"}
+                  ? "⚖️ Solvabilidade e Capital Próprio"
+                  : "⚖️ Equity & Solvency Health"}
               </h3>
               <span className="tag">{isPt ? "Balanço" : "Balance sheet"}</span>
             </div>

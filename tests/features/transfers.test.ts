@@ -130,6 +130,64 @@ describe("transfers.test.ts", () => {
       expect(screen.getByText("Free")).toBeInTheDocument();
       expect(screen.queryByText("Player A")).not.toBeInTheDocument();
     });
+
+    it("should filter by deal magnitude and commissions correctly", () => {
+      state.setIsPt(false);
+      state.setTlActiveSeason("2025/26");
+      state.setTlActiveWindow("All");
+      state.setTransferLedger([
+        {
+          season: "2025/26",
+          purchases: [
+            { player: "Cheap Player", club: "Club A", fee: 3.0, commission: 0 },
+            {
+              player: "Expensive Star",
+              club: "Club B",
+              fee: 25.0,
+              commission: 2.5,
+            },
+          ],
+          sales: [
+            { player: "Minor Out", club: "Club C", fee: 5.0, commission: 0 },
+            { player: "Major Out", club: "Club D", fee: 60.0, commission: 5.0 },
+          ],
+        },
+      ]);
+
+      render(
+        React.createElement(TransfersLedger, {
+          ledgerData: state.TRANSFER_LEDGER,
+        }),
+      );
+
+      // Default: All Deals
+      expect(screen.getByText("Cheap Player")).toBeInTheDocument();
+      expect(screen.getByText("Expensive Star")).toBeInTheDocument();
+      expect(screen.getByText("Minor Out")).toBeInTheDocument();
+      expect(screen.getByText("Major Out")).toBeInTheDocument();
+
+      // Click Deals > €10M
+      const over10mBtn = screen.getByText("Deals > €10M");
+      fireEvent.click(over10mBtn);
+      expect(screen.queryByText("Cheap Player")).not.toBeInTheDocument();
+      expect(screen.getByText("Expensive Star")).toBeInTheDocument();
+      expect(screen.queryByText("Minor Out")).not.toBeInTheDocument();
+      expect(screen.getByText("Major Out")).toBeInTheDocument();
+
+      // Click With Commission
+      const commBtn = screen.getByText("With Commission");
+      fireEvent.click(commBtn);
+      expect(screen.queryByText("Cheap Player")).not.toBeInTheDocument();
+      expect(screen.getByText("Expensive Star")).toBeInTheDocument();
+      expect(screen.queryByText("Minor Out")).not.toBeInTheDocument();
+      expect(screen.getByText("Major Out")).toBeInTheDocument();
+
+      // Click All Deals
+      const allDealsBtn = screen.getByText("All Deals");
+      fireEvent.click(allDealsBtn);
+      expect(screen.getByText("Cheap Player")).toBeInTheDocument();
+      expect(screen.getByText("Minor Out")).toBeInTheDocument();
+    });
   });
 
   describe("Detail Table (TransfersDetailTable)", () => {
@@ -265,163 +323,163 @@ describe("transfers.test.ts", () => {
   });
 });
 
-  describe("TransfersLedger additional coverage", () => {
-    it("should render note for the active season", () => {
-      render(
-        React.createElement(TransfersLedger, {
-          ledgerData: state.TRANSFER_LEDGER,
-        }),
-      );
-      expect(screen.getByText("Great season")).toBeInTheDocument();
-    });
-
-    it("should show All pill and pool rows when clicked", () => {
-      state.TRANSFER_LEDGER.push({
-        season: "2024/25",
-        note: "Older",
-        purchases: [{ player: "Old Player", fee: 5, window: "summer" }],
-        sales: [],
-      });
-      render(
-        React.createElement(TransfersLedger, {
-          ledgerData: state.TRANSFER_LEDGER,
-        }),
-      );
-      const allPill = screen.getByText("All");
-      fireEvent.click(allPill);
-      expect(state.tlActiveSeason).toBe("all");
-      expect(screen.getByText("Player A")).toBeInTheDocument();
-      expect(screen.getByText("Old Player")).toBeInTheDocument();
-    });
-
-    it("should render Portuguese labels", () => {
-      state.setIsPt(true);
-      state.setTlActiveWindow("All");
-      render(
-        React.createElement(TransfersLedger, {
-          ledgerData: state.TRANSFER_LEDGER,
-        }),
-      );
-      expect(screen.getByText("Player A")).toBeInTheDocument();
-      state.setIsPt(false);
-    });
-
-    it("should show Free for zero fee transfers", () => {
-      state.TRANSFER_LEDGER[0].purchases.push({
-        player: "Free Agent",
-        club: "Club Z",
-        fee: 0,
-        window: "summer",
-      });
-      render(
-        React.createElement(TransfersLedger, {
-          ledgerData: state.TRANSFER_LEDGER,
-        }),
-      );
-      expect(screen.getByText("Free Agent")).toBeInTheDocument();
-      expect(screen.getByText("Free")).toBeInTheDocument();
-    });
-
-    it("should render empty state for season with no transfers", () => {
-      state.TRANSFER_LEDGER.push({
-        season: "2023/24",
-        note: "Empty",
-        purchases: [],
-        sales: [],
-      });
-      state.setTlActiveSeason("2023/24");
-      render(
-        React.createElement(TransfersLedger, {
-          ledgerData: state.TRANSFER_LEDGER,
-        }),
-      );
-      expect(screen.getByText("Empty")).toBeInTheDocument();
-    });
+describe("TransfersLedger additional coverage", () => {
+  it("should render note for the active season", () => {
+    render(
+      React.createElement(TransfersLedger, {
+        ledgerData: state.TRANSFER_LEDGER,
+      }),
+    );
+    expect(screen.getByText("Great season")).toBeInTheDocument();
   });
 
-  describe("TransfersDetailTable additional coverage", () => {
-    it("should render the table with all rows", () => {
-      render(
-        React.createElement(TransfersDetailTable, {
-          ledgerData: state.TRANSFER_LEDGER,
-        }),
-      );
-      expect(screen.getByText("Player A")).toBeInTheDocument();
-      expect(screen.getByText("Player B")).toBeInTheDocument();
+  it("should show All pill and pool rows when clicked", () => {
+    state.TRANSFER_LEDGER.push({
+      season: "2024/25",
+      note: "Older",
+      purchases: [{ player: "Old Player", fee: 5, window: "summer" }],
+      sales: [],
     });
-
-    it("should display arrival and departure labels", () => {
-      render(
-        React.createElement(TransfersDetailTable, {
-          ledgerData: state.TRANSFER_LEDGER,
-        }),
-      );
-      expect(screen.getAllByText("↓ Arrival").length).toBeGreaterThan(0);
-      expect(screen.getAllByText("↑ Departure").length).toBeGreaterThan(0);
-    });
-
-    it("should display player names in the table", () => {
-      render(
-        React.createElement(TransfersDetailTable, {
-          ledgerData: state.TRANSFER_LEDGER,
-        }),
-      );
-      expect(screen.getByText("Player A")).toBeInTheDocument();
-      expect(screen.getByText("Player B")).toBeInTheDocument();
-    });
-
-    it("should display club names in the table", () => {
-      render(
-        React.createElement(TransfersDetailTable, {
-          ledgerData: state.TRANSFER_LEDGER,
-        }),
-      );
-      expect(screen.getByText("Club X")).toBeInTheDocument();
-      expect(screen.getByText("Club Y")).toBeInTheDocument();
-    });
-
-    it("should handle search filtering", () => {
-      render(
-        React.createElement(TransfersDetailTable, {
-          ledgerData: state.TRANSFER_LEDGER,
-        }),
-      );
-      const searchInput = screen.getByPlaceholderText(/Search player/i);
-      fireEvent.change(searchInput, { target: { value: "Player A" } });
-      expect(screen.getByText("Player A")).toBeInTheDocument();
-      expect(screen.queryByText("Player B")).not.toBeInTheDocument();
-    });
-
-    it("should handle column sorting by player", () => {
-      render(
-        React.createElement(TransfersDetailTable, {
-          ledgerData: state.TRANSFER_LEDGER,
-        }),
-      );
-      const playerHeader = screen.getByText("Player");
-      fireEvent.click(playerHeader);
-      expect(state.tfSortCol).toBe("player");
-    });
-
-    it("should handle column sorting by fee", () => {
-      render(
-        React.createElement(TransfersDetailTable, {
-          ledgerData: state.TRANSFER_LEDGER,
-        }),
-      );
-      const feeHeader = screen.getByText("Fee");
-      fireEvent.click(feeHeader);
-      expect(state.tfSortCol).toBe("fee");
-    });
-
-    it("should handle empty search results", () => {
-      render(
-        React.createElement(TransfersDetailTable, {
-          ledgerData: state.TRANSFER_LEDGER,
-        }),
-      );
-      const searchInput = screen.getByPlaceholderText(/Search player/i);
-      fireEvent.change(searchInput, { target: { value: "NonExistentXYZ" } });
-      expect(screen.getByText("No results found")).toBeInTheDocument();
-    });
+    render(
+      React.createElement(TransfersLedger, {
+        ledgerData: state.TRANSFER_LEDGER,
+      }),
+    );
+    const allPill = screen.getByText("All");
+    fireEvent.click(allPill);
+    expect(state.tlActiveSeason).toBe("all");
+    expect(screen.getByText("Player A")).toBeInTheDocument();
+    expect(screen.getByText("Old Player")).toBeInTheDocument();
   });
+
+  it("should render Portuguese labels", () => {
+    state.setIsPt(true);
+    state.setTlActiveWindow("All");
+    render(
+      React.createElement(TransfersLedger, {
+        ledgerData: state.TRANSFER_LEDGER,
+      }),
+    );
+    expect(screen.getByText("Player A")).toBeInTheDocument();
+    state.setIsPt(false);
+  });
+
+  it("should show Free for zero fee transfers", () => {
+    state.TRANSFER_LEDGER[0].purchases.push({
+      player: "Free Agent",
+      club: "Club Z",
+      fee: 0,
+      window: "summer",
+    });
+    render(
+      React.createElement(TransfersLedger, {
+        ledgerData: state.TRANSFER_LEDGER,
+      }),
+    );
+    expect(screen.getByText("Free Agent")).toBeInTheDocument();
+    expect(screen.getByText("Free")).toBeInTheDocument();
+  });
+
+  it("should render empty state for season with no transfers", () => {
+    state.TRANSFER_LEDGER.push({
+      season: "2023/24",
+      note: "Empty",
+      purchases: [],
+      sales: [],
+    });
+    state.setTlActiveSeason("2023/24");
+    render(
+      React.createElement(TransfersLedger, {
+        ledgerData: state.TRANSFER_LEDGER,
+      }),
+    );
+    expect(screen.getByText("Empty")).toBeInTheDocument();
+  });
+});
+
+describe("TransfersDetailTable additional coverage", () => {
+  it("should render the table with all rows", () => {
+    render(
+      React.createElement(TransfersDetailTable, {
+        ledgerData: state.TRANSFER_LEDGER,
+      }),
+    );
+    expect(screen.getByText("Player A")).toBeInTheDocument();
+    expect(screen.getByText("Player B")).toBeInTheDocument();
+  });
+
+  it("should display arrival and departure labels", () => {
+    render(
+      React.createElement(TransfersDetailTable, {
+        ledgerData: state.TRANSFER_LEDGER,
+      }),
+    );
+    expect(screen.getAllByText("↓ Arrival").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("↑ Departure").length).toBeGreaterThan(0);
+  });
+
+  it("should display player names in the table", () => {
+    render(
+      React.createElement(TransfersDetailTable, {
+        ledgerData: state.TRANSFER_LEDGER,
+      }),
+    );
+    expect(screen.getByText("Player A")).toBeInTheDocument();
+    expect(screen.getByText("Player B")).toBeInTheDocument();
+  });
+
+  it("should display club names in the table", () => {
+    render(
+      React.createElement(TransfersDetailTable, {
+        ledgerData: state.TRANSFER_LEDGER,
+      }),
+    );
+    expect(screen.getByText("Club X")).toBeInTheDocument();
+    expect(screen.getByText("Club Y")).toBeInTheDocument();
+  });
+
+  it("should handle search filtering", () => {
+    render(
+      React.createElement(TransfersDetailTable, {
+        ledgerData: state.TRANSFER_LEDGER,
+      }),
+    );
+    const searchInput = screen.getByPlaceholderText(/Search player/i);
+    fireEvent.change(searchInput, { target: { value: "Player A" } });
+    expect(screen.getByText("Player A")).toBeInTheDocument();
+    expect(screen.queryByText("Player B")).not.toBeInTheDocument();
+  });
+
+  it("should handle column sorting by player", () => {
+    render(
+      React.createElement(TransfersDetailTable, {
+        ledgerData: state.TRANSFER_LEDGER,
+      }),
+    );
+    const playerHeader = screen.getByText("Player");
+    fireEvent.click(playerHeader);
+    expect(state.tfSortCol).toBe("player");
+  });
+
+  it("should handle column sorting by fee", () => {
+    render(
+      React.createElement(TransfersDetailTable, {
+        ledgerData: state.TRANSFER_LEDGER,
+      }),
+    );
+    const feeHeader = screen.getByText("Fee");
+    fireEvent.click(feeHeader);
+    expect(state.tfSortCol).toBe("fee");
+  });
+
+  it("should handle empty search results", () => {
+    render(
+      React.createElement(TransfersDetailTable, {
+        ledgerData: state.TRANSFER_LEDGER,
+      }),
+    );
+    const searchInput = screen.getByPlaceholderText(/Search player/i);
+    fireEvent.change(searchInput, { target: { value: "NonExistentXYZ" } });
+    expect(screen.getByText("No results found")).toBeInTheDocument();
+  });
+});

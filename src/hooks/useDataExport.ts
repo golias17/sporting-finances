@@ -6,7 +6,7 @@ import { exportToCsv } from "../utils/exportCsv.js";
 interface FieldDef {
   key?: string;
   label: string;
-  compute?: (d: Record<string, unknown>) => number;
+  compute?: (d: any) => number;
 }
 
 function getFields(isPt: boolean): FieldDef[] {
@@ -43,9 +43,7 @@ function getFields(isPt: boolean): FieldDef[] {
     },
     {
       key: "borrowings_nc",
-      label: isPt
-        ? "Passivo Não Corrente (Dívida L.P.)"
-        : "Non-Current Debt",
+      label: isPt ? "Passivo Não Corrente (Dívida L.P.)" : "Non-Current Debt",
     },
     {
       key: "borrowings_c",
@@ -71,9 +69,7 @@ function getFields(isPt: boolean): FieldDef[] {
     },
     {
       key: "cf_operating",
-      label: isPt
-        ? "Fluxo de Caixa Operacional"
-        : "Cash Flow from Operations",
+      label: isPt ? "Fluxo de Caixa Operacional" : "Cash Flow from Operations",
     },
     {
       key: "cf_investing",
@@ -107,7 +103,9 @@ export function useDataExport() {
 
     const rows = fields.map((f) => {
       const rowVals = annual.map((d) => {
-        const rawVal = f.compute ? f.compute(d) : (d[f.key as keyof typeof d] as number);
+        const rawVal = f.compute
+          ? f.compute(d)
+          : (d[f.key as keyof typeof d] as number);
         if (rawVal === null || rawVal === undefined) return "—";
         const inMillions = rawVal / 1000;
         return inMillions.toFixed(1);

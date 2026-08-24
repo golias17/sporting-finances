@@ -27,7 +27,7 @@ export class ErrorBoundary extends Component<
     this.state = { hasError: false, error: null, retryCount: 0 };
   }
 
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+  static getDerivedStateFromError(error: Error): Partial<ErrorBoundaryState> {
     return { hasError: true, error };
   }
 
@@ -82,18 +82,38 @@ export class ErrorBoundary extends Component<
               <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
           </div>
-          <h3 style={{ color: "var(--neg)", marginBottom: "0.5rem", margin: "0 0 0.5rem" }}>
+          <h3
+            style={{
+              color: "var(--neg)",
+              marginBottom: "0.5rem",
+              margin: "0 0 0.5rem",
+            }}
+          >
             Something went wrong
           </h3>
-          <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "0 0 1rem" }}>
+          <p
+            style={{
+              color: "var(--muted)",
+              fontSize: "0.875rem",
+              margin: "0 0 1rem",
+            }}
+          >
             {error?.message || "This section failed to load."}
           </p>
           {retryCount > 0 && (
-            <p style={{ color: "var(--muted)", fontSize: "0.75rem", margin: "0 0 1rem" }}>
+            <p
+              style={{
+                color: "var(--muted)",
+                fontSize: "0.75rem",
+                margin: "0 0 1rem",
+              }}
+            >
               Retry {retryCount}/{maxRetries}
             </p>
           )}
-          <div style={{ display: "flex", gap: "0.5rem", justifyContent: "center" }}>
+          <div
+            style={{ display: "flex", gap: "0.5rem", justifyContent: "center" }}
+          >
             {canRetry && (
               <button
                 onClick={this.handleRetry}

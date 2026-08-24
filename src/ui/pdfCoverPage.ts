@@ -1,9 +1,11 @@
-import autoTable from "jspdf-autotable";
 import { state } from "../core/state.js";
-import { getBrandColors, hexToRgbArray } from "../charts/chartUtils.js";
-import { fmtM, signColorCell, thresholdColorCell, combineCellColorers } from "./pdfHelpers.js";
-import type { PdfContext, ColorPalette, SummaryLabels } from "./pdfTypes.js";
-import { getLatestH1Data, revenueGrowthPct, consecutiveProfitableYears, netDebt } from "../features/financialMetrics.js";
+import {
+  fmtM,
+  } from "./pdfHelpers.js";
+import type { PdfContext, SummaryLabels } from "./pdfTypes.js";
+import {
+  netDebt,
+} from "../features/financialMetrics.js";
 
 // ==========================================================
 // PAGE 1: TITLE, SUMMARY, AND EXECUTIVE KPI GRID
@@ -101,7 +103,7 @@ export function drawCoverPage(
     doc.setFont("helvetica", "bold");
     doc.setFontSize(13);
     doc.setTextColor(...colors.darkInk);
-    doc.text(value, x + 4, y + 15);
+    doc.text(String(value), x + 4, y + 15);
 
     doc.setFont("helvetica", "italic");
     doc.setFontSize(7);
@@ -139,15 +141,12 @@ export function drawCoverPage(
     equityLabel,
   );
 
-  const nd = netDebt(latestSeason);
-  // revenue_operating is the divisor here — if it's ever 0/null/undefined
-  // (e.g. an in-progress season with no revenue booked yet), nd / 0 is NaN
-  // or Infinity, which used to print literally as "NaN x"/"Infinity x" in
-  // the exported PDF, and worse, every ndRatio < N comparison below is
-  // false for NaN, so it fell through to the red "risk zone" label — an
-  // actively wrong claim for missing data, not just a cosmetic glitch.
+  const nd = netDebt(latestSeason as any);
   const hasRevenue = !!latestSeason.revenue_operating;
-  const ndRatio = hasRevenue ? nd / latestSeason.revenue_operating : null;
+  const ndRatio =
+    hasRevenue && latestSeason.revenue_operating
+      ? nd / latestSeason.revenue_operating
+      : null;
   const ratioStr = hasRevenue ? ndRatio!.toFixed(2) + " x" : "—";
   // Same thresholds used by chartDebtLoad()/calculateHealthSignals() in the
   // dashboard (green < 1x, amber < 2x, red >= 2x) so the PDF caption always
@@ -204,5 +203,3 @@ export function drawCoverPage(
   doc.setFillColor(...colors.green);
   doc.rect(15, 220, 180, 0.5, "F");
 }
-
-

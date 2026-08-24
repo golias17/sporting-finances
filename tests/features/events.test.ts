@@ -35,7 +35,14 @@ describe("events.js", () => {
   });
 
   it("should support all filter values", () => {
-    const filters = ["all", "on-pitch", "off-pitch", "win", "crisis", "restructure"];
+    const filters = [
+      "all",
+      "on-pitch",
+      "off-pitch",
+      "win",
+      "crisis",
+      "restructure",
+    ];
     filters.forEach((filter) => {
       state.setActiveEventFilter(filter);
       expect(state.activeEventFilter).toBe(filter);

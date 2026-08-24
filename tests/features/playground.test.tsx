@@ -156,7 +156,9 @@ describe("Playground", () => {
 
   it("renders baseline comparison section", () => {
     render(<Playground />);
-    expect(screen.getByText(/Simulated Financials vs. Baseline/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Simulated Financials vs. Baseline/i),
+    ).toBeInTheDocument();
   });
 
   it("renders baseline comparison section in Portuguese", () => {
@@ -266,7 +268,7 @@ describe("Playground input handling", () => {
   it("handles save to URL button", () => {
     render(<Playground />);
     const btns = screen.getAllByRole("button");
-    const saveBtn = btns.find(b => b.textContent?.includes("URL"));
+    const saveBtn = btns.find((b) => b.textContent?.includes("URL"));
     if (saveBtn) {
       fireEvent.click(saveBtn);
     }
@@ -285,7 +287,7 @@ describe("Playground edge cases", () => {
   it("handles zero values in sliders", () => {
     render(<Playground />);
     const sliders = screen.getAllByRole("slider");
-    sliders.forEach(slider => {
+    sliders.forEach((slider) => {
       fireEvent.change(slider, { target: { value: 0 } });
     });
     expect(sliders.length).toBeGreaterThan(0);
@@ -294,7 +296,7 @@ describe("Playground edge cases", () => {
   it("handles negative values in sliders", () => {
     render(<Playground />);
     const sliders = screen.getAllByRole("slider");
-    sliders.forEach(slider => {
+    sliders.forEach((slider) => {
       fireEvent.change(slider, { target: { value: -10 } });
     });
     expect(sliders.length).toBeGreaterThan(0);
@@ -303,7 +305,7 @@ describe("Playground edge cases", () => {
   it("handles large values in sliders", () => {
     render(<Playground />);
     const sliders = screen.getAllByRole("slider");
-    sliders.forEach(slider => {
+    sliders.forEach((slider) => {
       fireEvent.change(slider, { target: { value: 1000 } });
     });
     expect(sliders.length).toBeGreaterThan(0);
@@ -356,7 +358,7 @@ describe("Playground final edge cases", () => {
     const btns = screen.getAllByRole("button");
     // Click through all presets multiple times
     for (let i = 0; i < 5; i++) {
-      btns.forEach(btn => {
+      btns.forEach((btn) => {
         try {
           fireEvent.click(btn);
         } catch {
@@ -370,7 +372,7 @@ describe("Playground final edge cases", () => {
   it("handles slider focus and blur", () => {
     render(<Playground />);
     const sliders = screen.getAllByRole("slider");
-    sliders.forEach(slider => {
+    sliders.forEach((slider) => {
       fireEvent.focus(slider);
       fireEvent.blur(slider);
     });

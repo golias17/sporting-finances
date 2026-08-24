@@ -1,6 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { renderHook, act } from "@testing-library/react";
-import { useLightbox, LightboxProvider } from "../../src/hooks/useLightboxContext";
+import {
+  useLightbox,
+  LightboxProvider,
+} from "../../src/hooks/useLightboxContext";
 import React from "react";
 
 const mockOpen = vi.fn();

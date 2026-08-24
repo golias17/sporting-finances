@@ -50,10 +50,12 @@ export function usePosNegBarChart(
         ...baseOpts.plugins,
         legend: { display: false },
         tooltip: {
-          ...baseOpts.plugins.tooltip,
+          ...baseOpts.plugins?.tooltip,
           callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
-              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+            label: (ctx: {
+              dataset: { label: string };
+              parsed: { y: number };
+            }) => ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
         },
       },

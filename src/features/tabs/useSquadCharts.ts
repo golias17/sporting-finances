@@ -2,7 +2,6 @@ import { useMemo } from "react";
 import { useAppState, state } from "../../core/state.js";
 import {
   baseOpts,
-  styledLineDataset,
   fmtMillions,
 } from "../../charts/chartUtils.js";
 import { getLatestH1Data } from "../financialMetrics.js";
@@ -24,10 +23,12 @@ export function useSquadCharts() {
       return season && season <= "2024/25";
     });
     const filteredLabels = baseLabels.filter((l) => l <= "2024/25");
-    
+
     const h1Data = getLatestH1Data(DATASET);
     const labels = [...filteredLabels];
-    const bookValues: (number | null)[] = filteredAnnual.map((d) => d.squad_book_value);
+    const bookValues: (number | null)[] = filteredAnnual.map(
+      (d) => d.squad_book_value,
+    );
     const marketValues: (number | null)[] = filteredAnnual.map(
       (d) => d.squad_market_value,
     );
@@ -79,7 +80,10 @@ export function useSquadCharts() {
         tooltip: {
           ...baseOpts.plugins?.tooltip,
           callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number | null } }) => {
+            label: (ctx: {
+              dataset: { label: string };
+              parsed: { y: number | null };
+            }) => {
               if (ctx.parsed.y === null || ctx.parsed.y === undefined)
                 return null;
               return ctx.dataset.label + ": " + fmtMillions(ctx.parsed.y);
@@ -93,8 +97,9 @@ export function useSquadCharts() {
 
   const transfersData = useMemo<ChartData<"bar">>(() => {
     const recordLabel = fullAnnual?.reduce(
-      (best: { player_transfer_income: number } | null, d: { player_transfer_income: number }) =>
-        best === null || d.player_transfer_income > best.player_transfer_income
+      (best: any, d: any) =>
+        best === null ||
+        (d.player_transfer_income || 0) > (best.player_transfer_income || 0)
           ? d
           : best,
       null,
@@ -129,9 +134,12 @@ export function useSquadCharts() {
         ...baseOpts.plugins,
         legend: { display: false },
         tooltip: {
-          ...baseOpts.plugins.tooltip,          callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number | null } }) =>
-              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+          ...baseOpts.plugins?.tooltip,
+          callbacks: {
+            label: (ctx: {
+              dataset: { label: string };
+              parsed: { y: number | null };
+            }) => ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
         },
       },
@@ -169,36 +177,40 @@ export function useSquadCharts() {
             if (e.type === "commission" || e.type === "other") comm += e.amount;
           });
         }
-        
+
         totalFee += fee;
         totalComm += comm;
-        
+
         let thirdParty = 0;
-        if (sale.sell_on_gain_pct !== undefined && sale.purchase_fee !== undefined) {
+        if (
+          sale.sell_on_gain_pct !== undefined &&
+          sale.purchase_fee !== undefined
+        ) {
           const gain = Math.max(0, fee - sale.purchase_fee);
           thirdParty = gain * (sale.sell_on_gain_pct / 100);
         } else {
-          const rights = parseFloat((sale.rights || "100%").replace("%", "")) / 100;
+          const rights =
+            parseFloat((sale.rights || "100%").replace("%", "")) / 100;
           thirdParty = fee * (1 - rights);
         }
         totalTP += thirdParty;
       }
-      
+
       const netToSad = totalFee - totalComm - totalTP;
-      
+
       if (totalFee > 0) {
         return {
-           netPct: (netToSad / totalFee) * 100,
-           commPct: (totalComm / totalFee) * 100,
-           tpPct: (totalTP / totalFee) * 100,
+          netPct: (netToSad / totalFee) * 100,
+          commPct: (totalComm / totalFee) * 100,
+          tpPct: (totalTP / totalFee) * 100,
         };
       }
       return { netPct: 0, commPct: 0, tpPct: 0 };
     });
 
-    const netProceeds = stats.map(s => s.netPct);
-    const commissions = stats.map(s => s.commPct);
-    const thirdParty = stats.map(s => s.tpPct);
+    const netProceeds = stats.map((s) => s.netPct);
+    const commissions = stats.map((s) => s.commPct);
+    const thirdParty = stats.map((s) => s.tpPct);
     return {
       labels,
       datasets: [
@@ -235,7 +247,10 @@ export function useSquadCharts() {
         tooltip: {
           ...baseOpts.plugins?.tooltip,
           callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) => {
+            label: (ctx: {
+              dataset: { label: string };
+              parsed: { y: number };
+            }) => {
               const val = ctx.parsed.y;
               return ` ${ctx.dataset.label}: ${val.toFixed(1)}%`;
             },
@@ -252,7 +267,7 @@ export function useSquadCharts() {
           max: 100,
           beginAtZero: true,
           ticks: {
-            callback: (v: number) => v.toFixed(0) + "%",
+            callback: (v: number | string) => Number(v).toFixed(0) + "%",
           },
         },
       },

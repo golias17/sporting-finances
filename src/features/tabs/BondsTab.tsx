@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { VmocCost, LionFinance, UsppTerms } from "../Bonds";
+import { VmocCost, LionFinance, UsppTerms, DebtMaturityTracker } from "../Bonds";
 import { ChartCard } from "../../components/ChartCard.js";
 import { useAppState, state } from "../../core/state.js";
 import { useChartLabels } from "../../charts/chartHooks.js";
@@ -13,28 +13,34 @@ export const BondsTab = React.memo(function BondsTab() {
   const labels = useChartLabels();
 
   // Financing Cost Evolution — total borrowings (NC + C) over time
-  const financingData = useMemo(() => ({
-    labels,
-    datasets: [{
-      label: isPt ? "Empréstimos não correntes" : "Non-current borrowings",
-      data: annual.map((d: any) => d.borrowings_nc / 1000),
-      borderColor: state.COLORS.pos,
-      backgroundColor: state.COLORS.pos,
-      tension: 0.35,
-      fill: false,
-      pointRadius: 3,
-      pointHoverRadius: 5,
-    }, {
-      label: isPt ? "Empréstimos correntes" : "Current borrowings",
-      data: annual.map((d: any) => d.borrowings_c / 1000),
-      borderColor: state.COLORS.gold,
-      backgroundColor: state.COLORS.gold,
-      tension: 0.35,
-      fill: false,
-      pointRadius: 3,
-      pointHoverRadius: 5,
-    }],
-  }), [labels, annual, isPt]);
+  const financingData = useMemo(
+    () => ({
+      labels,
+      datasets: [
+        {
+          label: isPt ? "Empréstimos não correntes" : "Non-current borrowings",
+          data: annual.map((d: any) => d.borrowings_nc / 1000),
+          borderColor: state.COLORS.pos,
+          backgroundColor: state.COLORS.pos,
+          tension: 0.35,
+          fill: false,
+          pointRadius: 3,
+          pointHoverRadius: 5,
+        },
+        {
+          label: isPt ? "Empréstimos correntes" : "Current borrowings",
+          data: annual.map((d: any) => d.borrowings_c / 1000),
+          borderColor: state.COLORS.gold,
+          backgroundColor: state.COLORS.gold,
+          tension: 0.35,
+          fill: false,
+          pointRadius: 3,
+          pointHoverRadius: 5,
+        },
+      ],
+    }),
+    [labels, annual, isPt],
+  );
 
   const financingOptions = {
     responsive: true,
@@ -67,12 +73,18 @@ export const BondsTab = React.memo(function BondsTab() {
         ...baseOpts?.plugins?.tooltip,
         mode: "index",
         callbacks: {
-          label: (ctx: { dataset: { label: string }; parsed: { y: number } }) => {
+          label: (ctx: {
+            dataset: { label: string };
+            parsed: { y: number };
+          }) => {
             return ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)} M€`;
           },
           footer: (items: { parsed: { y: number } }[]) => {
             if (items.length === 0) return "";
-            const total = items.reduce((s: number, i: { parsed: { y: number } }) => s + i.parsed.y, 0);
+            const total = items.reduce(
+              (s: number, i: { parsed: { y: number } }) => s + i.parsed.y,
+              0,
+            );
             return [`Total: ${total.toFixed(1)} M€`];
           },
         },
@@ -147,6 +159,9 @@ export const BondsTab = React.memo(function BondsTab() {
         <T as="p" className="desc" i18nKey="ch05-schedule-p1" />
         <UsppTerms />
       </div>
+
+      {/* Debt Maturity Tracker & Repayment Schedule */}
+      <DebtMaturityTracker />
     </>
   );
 });

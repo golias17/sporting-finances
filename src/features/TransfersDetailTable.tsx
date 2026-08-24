@@ -68,13 +68,14 @@ export function TransfersDetailTable({
             let realizedComm = p.commission || 0;
             let remainingBonus = p.bonus || 0;
             if (p.timeline) {
-               p.timeline.forEach(e => {
-                  if (e.type === "bonus") {
-                      realizedFee += e.amount;
-                      remainingBonus = Math.max(0, remainingBonus - e.amount);
-                  }
-                  if (e.type === "commission" || e.type === "other") realizedComm += e.amount;
-               });
+              p.timeline.forEach((e) => {
+                if (e.type === "bonus") {
+                  realizedFee += e.amount;
+                  remainingBonus = Math.max(0, remainingBonus - e.amount);
+                }
+                if (e.type === "commission" || e.type === "other")
+                  realizedComm += e.amount;
+              });
             }
             result.push({
               ...p,
@@ -94,13 +95,14 @@ export function TransfersDetailTable({
             let realizedComm = p.commission || 0;
             let remainingBonus = p.bonus || 0;
             if (p.timeline) {
-               p.timeline.forEach(e => {
-                  if (e.type === "bonus") {
-                      realizedFee += e.amount;
-                      remainingBonus = Math.max(0, remainingBonus - e.amount);
-                  }
-                  if (e.type === "commission" || e.type === "other") realizedComm += e.amount;
-               });
+              p.timeline.forEach((e) => {
+                if (e.type === "bonus") {
+                  realizedFee += e.amount;
+                  remainingBonus = Math.max(0, remainingBonus - e.amount);
+                }
+                if (e.type === "commission" || e.type === "other")
+                  realizedComm += e.amount;
+              });
             }
             result.push({
               ...p,
@@ -124,13 +126,14 @@ export function TransfersDetailTable({
             let realizedComm = p.commission || 0;
             let remainingBonus = p.bonus || 0;
             if (p.timeline) {
-               p.timeline.forEach(e => {
-                  if (e.type === "bonus") {
-                      realizedFee += e.amount;
-                      remainingBonus = Math.max(0, remainingBonus - e.amount);
-                  }
-                  if (e.type === "commission" || e.type === "other") realizedComm += e.amount;
-               });
+              p.timeline.forEach((e) => {
+                if (e.type === "bonus") {
+                  realizedFee += e.amount;
+                  remainingBonus = Math.max(0, remainingBonus - e.amount);
+                }
+                if (e.type === "commission" || e.type === "other")
+                  realizedComm += e.amount;
+              });
             }
             result.push({
               ...p,
@@ -150,13 +153,14 @@ export function TransfersDetailTable({
             let realizedComm = p.commission || 0;
             let remainingBonus = p.bonus || 0;
             if (p.timeline) {
-               p.timeline.forEach(e => {
-                  if (e.type === "bonus") {
-                      realizedFee += e.amount;
-                      remainingBonus = Math.max(0, remainingBonus - e.amount);
-                  }
-                  if (e.type === "commission" || e.type === "other") realizedComm += e.amount;
-               });
+              p.timeline.forEach((e) => {
+                if (e.type === "bonus") {
+                  realizedFee += e.amount;
+                  remainingBonus = Math.max(0, remainingBonus - e.amount);
+                }
+                if (e.type === "commission" || e.type === "other")
+                  realizedComm += e.amount;
+              });
             }
             result.push({
               ...p,
@@ -190,7 +194,7 @@ export function TransfersDetailTable({
     }
 
     if (sortCol) {
-      result.sort((a: { date?: string; season?: string }, b: { date?: string; season?: string }) => {
+      result.sort((a: any, b: any) => {
         let valA = a[sortCol];
         let valB = b[sortCol];
 
@@ -260,7 +264,9 @@ export function TransfersDetailTable({
     <>
       <div className="ledger-controls">
         <div className="ledger-control-group">
-          <label className="ledger-label" htmlFor="seasonFilter">Season:</label>
+          <label className="ledger-label" htmlFor="seasonFilter">
+            Season:
+          </label>
           <select
             id="seasonFilter"
             className="ledger-select"
@@ -278,7 +284,9 @@ export function TransfersDetailTable({
           </select>
         </div>
         <div className="ledger-control-group">
-          <label className="ledger-label" htmlFor="windowFilter">Window:</label>
+          <label className="ledger-label" htmlFor="windowFilter">
+            Window:
+          </label>
           <select
             id="windowFilter"
             className="ledger-select"
@@ -291,7 +299,9 @@ export function TransfersDetailTable({
           </select>
         </div>
         <div className="ledger-control-group">
-          <label className="ledger-label" htmlFor="typeFilter">Type:</label>
+          <label className="ledger-label" htmlFor="typeFilter">
+            Type:
+          </label>
           <select
             id="typeFilter"
             className="ledger-select"
@@ -304,7 +314,9 @@ export function TransfersDetailTable({
           </select>
         </div>
         <div className="ledger-control-group ledger-control-group--grow">
-          <label className="sr-only" htmlFor="searchInput">Search transfers</label>
+          <label className="sr-only" htmlFor="searchInput">
+            Search transfers
+          </label>
           <input
             id="searchInput"
             className="ledger-input"
@@ -340,11 +352,17 @@ export function TransfersDetailTable({
               const csvRows = rows.map((r) => {
                 let winText = "—";
                 if (r.window === "summer") winText = isPt ? "Verão" : "Summer";
-                else if (r.window === "winter") winText = isPt ? "Inverno" : "Winter";
+                else if (r.window === "winter")
+                  winText = isPt ? "Inverno" : "Winter";
 
-                const typeClean = r.type === "Arrival"
-                  ? (isPt ? "Entrada" : "Arrival")
-                  : (isPt ? "Saída" : "Departure");
+                const typeClean =
+                  r.type === "Arrival"
+                    ? isPt
+                      ? "Entrada"
+                      : "Arrival"
+                    : isPt
+                      ? "Saída"
+                      : "Departure";
 
                 return [
                   r.player,
@@ -490,7 +508,16 @@ export function TransfersDetailTable({
           color: "var(--muted)",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "var(--fs-xs)", fontWeight: 600, color: "var(--ink)" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            fontSize: "var(--fs-xs)",
+            fontWeight: 600,
+            color: "var(--ink)",
+          }}
+        >
           <svg
             width="14"
             height="14"
@@ -531,7 +558,14 @@ export function TransfersDetailTable({
             ? "Nesta tabela são apresentados os valores totais pagos pelo atleta (incluindo bónus ativados e parcelas recompradas). Na vista detalhada do plantel ('Detailed Transfer Ledger') podes consultar a compra original isolada dos eventos de consolidação."
             : "This table presents the total amount paid for the athlete (including triggered bonuses and repurchased rights). In the detailed squad view ('Detailed Transfer Ledger') you can consult the original purchase isolated from consolidation events."}
         </span>
-        <span style={{ fontSize: "var(--fs-sm)", lineHeight: 1.5, marginTop: "0.25rem", color: "var(--muted-darker, #6b7280)" }}>
+        <span
+          style={{
+            fontSize: "var(--fs-sm)",
+            lineHeight: 1.5,
+            marginTop: "0.25rem",
+            color: "var(--muted-darker, #6b7280)",
+          }}
+        >
           {isPt
             ? "*Os valores não incluem comissões não divulgadas ou mecanismos de solidariedade."
             : "*Figures do not include undisclosed agent fees or solidarity payments."}

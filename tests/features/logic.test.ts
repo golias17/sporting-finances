@@ -1,6 +1,9 @@
 import { describe, it, expect } from "vitest";
 import { netDebt, wageBillRatio } from "../../src/features/financialMetrics.js";
-import { calculateKpis, calculateHealthSignals } from "../../src/features/kpiCalculations.js";
+import {
+  calculateKpis,
+  calculateHealthSignals,
+} from "../../src/features/kpiCalculations.js";
 import {
   fmtMillions,
   getEventAnnotations,

@@ -1,6 +1,14 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { state } from "../../src/core/state";
-import { getBaseline, computeProjection, equityZoneInfo, cashZoneInfo, buildVerdict, scenarioLabels, getSliderBackground } from "../../src/features/playgroundUtils";
+import {
+  getBaseline,
+  computeProjection,
+  equityZoneInfo,
+  cashZoneInfo,
+  buildVerdict,
+  scenarioLabels,
+  getSliderBackground,
+} from "../../src/features/playgroundUtils";
 
 describe("playgroundUtils", () => {
   beforeEach(() => {
@@ -37,7 +45,15 @@ describe("playgroundUtils", () => {
 
   it("getBaseline returns null when no 2024/25 season", () => {
     state.setDataset({
-      annual_data: [{ label: "2023/24", revenue_operating: 100000, net_result: 3000, equity: 20000, cash: 5000 }],
+      annual_data: [
+        {
+          label: "2023/24",
+          revenue_operating: 100000,
+          net_result: 3000,
+          equity: 20000,
+          cash: 5000,
+        },
+      ],
     });
     const baseline = getBaseline();
     expect(baseline).toBeNull();
@@ -71,28 +87,96 @@ describe("playgroundUtils", () => {
 
   it("getSliderBackground returns gradient string", () => {
     const result = getSliderBackground(50, 0, 100);
-    expect(result).toBe("linear-gradient(to right, var(--green, #0a5d3a) 50%, var(--rule-2, #e5e5e5) 50%)");
+    expect(result).toBe(
+      "linear-gradient(to right, var(--green, #0a5d3a) 50%, var(--rule-2, #e5e5e5) 50%)",
+    );
   });
 
   it("buildVerdict generates text for improvement scenario", () => {
-    const baseline = { revenue: 150000, payroll: 90000, netResult: 5000, equity: 30000, cash: 10000, solvency: 20, overhead: 20000, financialResult: -3000, netTrading: 5000, personnelCostRatio: 60 };
-    const proj = { revenue: 180000, payroll: 95000, netResult: 15000, equity: 40000, cash: 15000, solvency: 25, overhead: 20000, financialResult: -3000, netTrading: 5000, personnelCostRatio: 53 };
+    const baseline = {
+      revenue: 150000,
+      payroll: 90000,
+      netResult: 5000,
+      equity: 30000,
+      cash: 10000,
+      solvency: 20,
+      overhead: 20000,
+      financialResult: -3000,
+      netTrading: 5000,
+      personnelCostRatio: 60,
+    };
+    const proj = {
+      revenue: 180000,
+      payroll: 95000,
+      netResult: 15000,
+      equity: 40000,
+      cash: 15000,
+      solvency: 25,
+      overhead: 20000,
+      financialResult: -3000,
+      netTrading: 5000,
+      personnelCostRatio: 53,
+    };
     const verdict = buildVerdict(baseline, proj, false);
     expect(verdict.text).toContain("improves");
     expect(verdict.warn).toBe(false);
   });
 
   it("buildVerdict generates warning for worsening scenario", () => {
-    const baseline = { revenue: 150000, payroll: 90000, netResult: 5000, equity: 30000, cash: 10000, solvency: 20, overhead: 20000, financialResult: -3000, netTrading: 5000, personnelCostRatio: 60 };
-    const proj = { revenue: 140000, payroll: 95000, netResult: -10000, equity: 15000, cash: -5000, solvency: 10, overhead: 20000, financialResult: -3000, netTrading: 5000, personnelCostRatio: 68 };
+    const baseline = {
+      revenue: 150000,
+      payroll: 90000,
+      netResult: 5000,
+      equity: 30000,
+      cash: 10000,
+      solvency: 20,
+      overhead: 20000,
+      financialResult: -3000,
+      netTrading: 5000,
+      personnelCostRatio: 60,
+    };
+    const proj = {
+      revenue: 140000,
+      payroll: 95000,
+      netResult: -10000,
+      equity: 15000,
+      cash: -5000,
+      solvency: 10,
+      overhead: 20000,
+      financialResult: -3000,
+      netTrading: 5000,
+      personnelCostRatio: 68,
+    };
     const verdict = buildVerdict(baseline, proj, false);
     expect(verdict.text).toContain("Watch");
     expect(verdict.warn).toBe(true);
   });
 
   it("buildVerdict uses Portuguese correctly", () => {
-    const baseline = { revenue: 150000, payroll: 90000, netResult: 5000, equity: 30000, cash: 10000, solvency: 20, overhead: 20000, financialResult: -3000, netTrading: 5000, personnelCostRatio: 60 };
-    const proj = { revenue: 180000, payroll: 95000, netResult: 15000, equity: 40000, cash: 15000, solvency: 25, overhead: 20000, financialResult: -3000, netTrading: 5000, personnelCostRatio: 53 };
+    const baseline = {
+      revenue: 150000,
+      payroll: 90000,
+      netResult: 5000,
+      equity: 30000,
+      cash: 10000,
+      solvency: 20,
+      overhead: 20000,
+      financialResult: -3000,
+      netTrading: 5000,
+      personnelCostRatio: 60,
+    };
+    const proj = {
+      revenue: 180000,
+      payroll: 95000,
+      netResult: 15000,
+      equity: 40000,
+      cash: 15000,
+      solvency: 25,
+      overhead: 20000,
+      financialResult: -3000,
+      netTrading: 5000,
+      personnelCostRatio: 53,
+    };
     const verdict = buildVerdict(baseline, proj, true);
     expect(verdict.text).toContain("melhora");
   });
@@ -112,7 +196,15 @@ describe("playgroundUtils", () => {
       cash: 10000,
       total_assets: 200000,
     };
-    const inputs = { uclPrize: 0, payrollAdj: 0, salesTarget: 117, purchasesTarget: 30, capexAdj: 0, debtRepayTarget: 0, revGrowthAdj: 0 };
+    const inputs = {
+      uclPrize: 0,
+      payrollAdj: 0,
+      salesTarget: 117,
+      purchasesTarget: 30,
+      capexAdj: 0,
+      debtRepayTarget: 0,
+      revGrowthAdj: 0,
+    };
     const result = computeProjection(baseline, inputs, false);
     expect(result).not.toBeNull();
     expect(result!.revenue).toBe(150000);
@@ -134,10 +226,18 @@ describe("playgroundUtils", () => {
       cash: 10000,
       total_assets: 200000,
     };
-    const inputs = { uclPrize: 0, payrollAdj: 0, salesTarget: 117, purchasesTarget: 30, capexAdj: 0, debtRepayTarget: 0, revGrowthAdj: 10 };
+    const inputs = {
+      uclPrize: 0,
+      payrollAdj: 0,
+      salesTarget: 117,
+      purchasesTarget: 30,
+      capexAdj: 0,
+      debtRepayTarget: 0,
+      revGrowthAdj: 10,
+    };
     const result = computeProjection(baseline, inputs, false);
     expect(result).not.toBeNull();
-    expect(result!.revenue).toBe(165000);  // 150000 + 10% + 0 uclPrize // 150000 + 10%
+    expect(result!.revenue).toBe(165000); // 150000 + 10% + 0 uclPrize // 150000 + 10%
     expect(result!.netResult).toBe(20000); // 5000 + 15000 revenue increase (roughly)
   });
 
@@ -156,10 +256,17 @@ describe("playgroundUtils", () => {
       cash: 10000,
       total_assets: 200000,
     };
-    const inputs = { uclPrize: 0, payrollAdj: 0, salesTarget: 117, purchasesTarget: 30, capexAdj: 0, debtRepayTarget: 0, revGrowthAdj: 0 };
+    const inputs = {
+      uclPrize: 0,
+      payrollAdj: 0,
+      salesTarget: 117,
+      purchasesTarget: 30,
+      capexAdj: 0,
+      debtRepayTarget: 0,
+      revGrowthAdj: 0,
+    };
     const result = computeProjection(baseline, inputs, true);
     expect(result).not.toBeNull();
     expect(result!.revenue).toBe(150000);
   });
-
 });

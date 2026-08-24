@@ -170,12 +170,3 @@ export function UsppTerms() {
     </>
   );
 }
-
-
-function renderUsppTerms() {
-  const container = document.getElementById("usppTerms");
-  if (!container) return;
-  if (!usppTermsRoot) usppTermsRoot = createRoot(container);
-  usppTermsRoot.render(<UsppTerms />);
-}
-

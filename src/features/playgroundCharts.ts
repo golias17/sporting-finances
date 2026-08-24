@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
-import { useAppState, state } from "../core/state.js";
-import { styledLineDataset, getBrandColors, fmtMillions } from "../charts/chartUtils.js";
+import { state } from "../core/state.js";
+import {
+  } from "../charts/chartUtils.js";
 import { scenarioLabels } from "./playgroundUtils.js";
 import type { ProjectionData, PinnedData } from "./playgroundTypes.js";
 import { FALLBACK } from "./playgroundTypes.js";
@@ -109,12 +110,19 @@ export function usePlaygroundCharts(
           ...baseOpts.plugins?.tooltip,
           callbacks: {
             ...baseOpts.plugins?.tooltip?.callbacks,
-            label: (context: { dataset: { label: string }; dataIndex: number; chart: { data: { datasets: { data: number[] }[] } }; parsed: { y: number }; datasetIndex: number }) => {
+            label: (context: {
+              dataset: { label: string };
+              dataIndex: number;
+              chart: { data: { datasets: { data: number[] }[] } };
+              parsed: { y: number };
+              datasetIndex: number;
+            }) => {
               const val = context.parsed.y;
               if (context.datasetIndex === 0) {
                 return `${context.dataset.label}: ${val.toFixed(1)} M€`;
               } else {
-                const baselineVal = context.chart.data.datasets[0].data[context.dataIndex];
+                const baselineVal =
+                  context.chart.data.datasets[0].data[context.dataIndex];
                 const delta = val - baselineVal;
                 const sign = delta >= 0 ? "+" : "";
                 const deltaStr =
@@ -133,7 +141,18 @@ export function usePlaygroundCharts(
     const netPlugins = [
       {
         id: "barDelta",
-        afterDatasetsDraw(chart: { ctx: CanvasRenderingContext2D; data: { datasets: { data: number[] }[] }; getDatasetMeta: (index: number) => { data: Array<{ x: number; y: number; width: number; height: number }> } }) {
+        afterDatasetsDraw(chart: {
+          ctx: CanvasRenderingContext2D;
+          data: { datasets: { data: number[] }[] };
+          getDatasetMeta: (index: number) => {
+            data: Array<{
+              x: number;
+              y: number;
+              width: number;
+              height: number;
+            }>;
+          };
+        }) {
           const { ctx, data } = chart;
           ctx.save();
           ctx.font = "bold 9px sans-serif";
@@ -142,19 +161,26 @@ export function usePlaygroundCharts(
           const baselineDS = data.datasets[0].data;
           const projDS = data.datasets[1].data;
 
-          chart.getDatasetMeta(1).data.forEach((bar: { x: number; y: number; width: number; height: number }, index: number) => {
-            const baselineVal = baselineDS[index];
-            const projVal = projDS[index];
-            const delta = projVal - baselineVal;
-            if (Math.abs(delta) < 0.05) return;
+          chart
+            .getDatasetMeta(1)
+            .data.forEach(
+              (
+                bar: { x: number; y: number; width: number; height: number },
+                index: number,
+              ) => {
+                const baselineVal = baselineDS[index];
+                const projVal = projDS[index];
+                const delta = projVal - baselineVal;
+                if (Math.abs(delta) < 0.05) return;
 
-            const sign = delta > 0 ? "+" : "";
-            const color = delta > 0 ? colors.pos : colors.neg;
-            ctx.fillStyle = color;
+                const sign = delta > 0 ? "+" : "";
+                const color = delta > 0 ? colors.pos : colors.neg;
+                ctx.fillStyle = color;
 
-            const yPos = bar.y + (projVal >= 0 ? -8 : 12);
-            ctx.fillText(`${sign}${delta.toFixed(1)}M`, bar.x, yPos);
-          });
+                const yPos = bar.y + (projVal >= 0 ? -8 : 12);
+                ctx.fillText(`${sign}${delta.toFixed(1)}M`, bar.x, yPos);
+              },
+            );
           ctx.restore();
         },
       },
@@ -243,7 +269,13 @@ export function usePlaygroundCharts(
           ...baseOpts.plugins?.tooltip,
           callbacks: {
             ...baseOpts.plugins?.tooltip?.callbacks,
-            label: (context: { dataset: { label: string }; dataIndex: number; chart: { data: { datasets: { data: number[] }[] } }; parsed: { y: number }; datasetIndex: number }) => {
+            label: (context: {
+              dataset: { label: string };
+              dataIndex: number;
+              chart: { data: { datasets: { data: number[] }[] } };
+              parsed: { y: number };
+              datasetIndex: number;
+            }) => {
               const val = context.parsed.y;
               const suffix = context.datasetIndex === 0 ? " M€" : "%";
               return `${context.dataset.label}: ${val.toFixed(1)}${suffix}`;

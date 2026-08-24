@@ -101,17 +101,18 @@ export function TransfersLedger({
         );
       let remainingBonus = p.bonus || 0;
       if (p.timeline) {
-         p.timeline.forEach(e => {
-            if (e.type === "bonus") {
-                remainingBonus = Math.max(0, remainingBonus - e.amount);
-            }
-         });
+        p.timeline.forEach((e) => {
+          if (e.type === "bonus") {
+            remainingBonus = Math.max(0, remainingBonus - e.amount);
+          }
+        });
       }
 
       if (remainingBonus > 0)
         tags.push(
           <span key="bonus" className="tl-tag bonus">
-            +€{fmtNumStr(remainingBonus)}M {isPt ? "bónus restantes" : "bonus remaining"}
+            +€{fmtNumStr(remainingBonus)}M{" "}
+            {isPt ? "bónus restantes" : "bonus remaining"}
           </span>,
         );
       if (p.commission)
@@ -131,14 +132,18 @@ export function TransfersLedger({
             {tags.length > 0 && <div className="tl-tags">{tags}</div>}
             {displayedNote && <div className="tl-obs">{displayedNote}</div>}
             {p.timeline && p.timeline.length > 0 && (
-               <div className="tl-obs" style={{ color: "var(--color-gold)", marginTop: "4px" }}>
-                 {isPt ? "Eventos consolidados:" : "Consolidated events:"}{" "}
-                 {p.timeline.map((e, i) => (
-                   <span key={i}>
-                     [{e.season}] {e.desc_pt || e.desc}: €{e.amount}M{i < p.timeline!.length - 1 ? ", " : ""}
-                   </span>
-                 ))}
-               </div>
+              <div
+                className="tl-obs"
+                style={{ color: "var(--color-gold)", marginTop: "4px" }}
+              >
+                {isPt ? "Eventos consolidados:" : "Consolidated events:"}{" "}
+                {p.timeline.map((e, i) => (
+                  <span key={i}>
+                    [{e.season}] {e.desc_pt || e.desc}: €{e.amount}M
+                    {i < p.timeline!.length - 1 ? ", " : ""}
+                  </span>
+                ))}
+              </div>
             )}
           </div>
           <FmtFee fee={p.fee} />
@@ -147,27 +152,42 @@ export function TransfersLedger({
     });
   };
 
+  const [dealFilter, setDealFilter] = React.useState<
+    "all" | "over10m" | "commissions"
+  >("all");
+
+  // Filter by magnitude or commission
+  let displayPurchases = purchases;
+  let displaySales = sales;
+  if (dealFilter === "over10m") {
+    displayPurchases = displayPurchases.filter((p) => (p.fee || 0) >= 10);
+    displaySales = displaySales.filter((p) => (p.fee || 0) >= 10);
+  } else if (dealFilter === "commissions") {
+    displayPurchases = displayPurchases.filter((p) => (p.commission || 0) > 0);
+    displaySales = displaySales.filter((p) => (p.commission || 0) > 0);
+  }
+
   const calculateTotal = (txs: TransferTransaction[]) => {
     return txs.reduce((a, p) => a + (p.fee || 0), 0);
   };
 
-  const totalIn = calculateTotal(purchases);
-  const totalOut = calculateTotal(sales);
+  const totalIn = calculateTotal(displayPurchases);
+  const totalOut = calculateTotal(displaySales);
   const net = totalOut - totalIn;
   const netCls = net >= 0 ? "pos" : "neg";
   const netSign = net >= 0 ? "+" : "";
 
-  const totalRealizedIn = purchases.reduce((sum, p) => {
+  const totalRealizedIn = displayPurchases.reduce((sum, p) => {
     let cost = (p.fee || 0) + (p.commission || 0);
     if (p.timeline) {
-      p.timeline.forEach(e => {
+      p.timeline.forEach((e) => {
         cost += e.amount;
       });
     }
     return sum + cost;
   }, 0);
 
-  const totalRealizedOut = sales.reduce((sum, p) => {
+  const totalRealizedOut = displaySales.reduce((sum, p) => {
     let fee = p.fee || 0;
     let comm = p.commission || 0;
     if (p.timeline) {
@@ -176,7 +196,7 @@ export function TransfersLedger({
         if (e.type === "commission" || e.type === "other") comm += e.amount;
       });
     }
-    
+
     let tpTotal = 0;
     if (p.sell_on_gain_pct !== undefined && p.purchase_fee !== undefined) {
       const gain = Math.max(0, fee - p.purchase_fee);
@@ -185,7 +205,7 @@ export function TransfersLedger({
       const rights = parseFloat((p.rights || "100%").replace("%", "")) / 100;
       tpTotal = fee * (1 - rights);
     }
-    
+
     return sum + (fee - comm - tpTotal);
   }, 0);
 
@@ -214,27 +234,63 @@ export function TransfersLedger({
           </button>
         ))}
       </div>
-      <div className="tl-window-nav">
-        {[
-          { value: "All", label: isPt ? "Todas as janelas" : "All Windows" },
-          {
-            value: "summer",
-            label: isPt ? "Mercado de Verão" : "Summer Window",
-          },
-          {
-            value: "winter",
-            label: isPt ? "Mercado de Inverno" : "Winter Window",
-          },
-        ].map((w) => (
+      <div
+        className="tl-window-nav"
+        style={{
+          display: "flex",
+          gap: "0.5rem",
+          flexWrap: "wrap",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
+          {[
+            { value: "All", label: isPt ? "Todas as janelas" : "All Windows" },
+            {
+              value: "summer",
+              label: isPt ? "Mercado de Verão" : "Summer Window",
+            },
+            {
+              value: "winter",
+              label: isPt ? "Mercado de Inverno" : "Winter Window",
+            },
+          ].map((w) => (
+            <button
+              key={w.value}
+              className={`season-pill${w.value === activeWindow ? " active" : ""}`}
+              aria-pressed={w.value === activeWindow}
+              onClick={() => setActiveWindow(w.value)}
+            >
+              {w.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Deal magnitude / commission quick filters */}
+        <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
           <button
-            key={w.value}
-            className={`season-pill${w.value === activeWindow ? " active" : ""}`}
-            aria-pressed={w.value === activeWindow}
-            onClick={() => setActiveWindow(w.value)}
+            type="button"
+            className={`season-pill${dealFilter === "all" ? " active" : ""}`}
+            onClick={() => setDealFilter("all")}
           >
-            {w.label}
+            {isPt ? "Todos os Negócios" : "All Deals"}
           </button>
-        ))}
+          <button
+            type="button"
+            className={`season-pill${dealFilter === "over10m" ? " active" : ""}`}
+            onClick={() => setDealFilter("over10m")}
+          >
+            {isPt ? "Negócios > 10 M€" : "Deals > €10M"}
+          </button>
+          <button
+            type="button"
+            className={`season-pill${dealFilter === "commissions" ? " active" : ""}`}
+            onClick={() => setDealFilter("commissions")}
+          >
+            {isPt ? "Com Intermediação" : "With Commission"}
+          </button>
+        </div>
       </div>
       <div id="tlBody">
         {displayedNote && <div className="tl-season-note">{displayedNote}</div>}
@@ -248,14 +304,14 @@ export function TransfersLedger({
               </span>
               <span className="tl-total">€{fmtNumStr(totalIn)}M</span>
             </div>
-            {purchases.length > 0 ? (
-              renderRows(purchases)
+            {displayPurchases.length > 0 ? (
+              renderRows(displayPurchases)
             ) : (
               <div className="tl-row">
                 <div className="tl-club">
                   {isPt
-                    ? "Sem contratações nesta janela"
-                    : "No purchases in this window"}
+                    ? "Sem contratações correspondentes"
+                    : "No matching purchases"}
                 </div>
               </div>
             )}
@@ -267,12 +323,12 @@ export function TransfersLedger({
               </span>
               <span className="tl-total">€{fmtNumStr(totalOut)}M</span>
             </div>
-            {sales.length > 0 ? (
-              renderRows(sales)
+            {displaySales.length > 0 ? (
+              renderRows(displaySales)
             ) : (
               <div className="tl-row">
                 <div className="tl-club">
-                  {isPt ? "Sem vendas nesta janela" : "No sales in this window"}
+                  {isPt ? "Sem vendas correspondentes" : "No matching sales"}
                 </div>
               </div>
             )}
@@ -304,14 +360,23 @@ export function TransfersLedger({
             <span className="tl-sum-val pos">+€{fmtNumStr(totalOut)}M</span>
           </div>
         </div>
-        <div className="tl-summary" style={{ marginTop: "1rem", borderTop: "1px dashed var(--border)", paddingTop: "1rem" }}>
+        <div
+          className="tl-summary"
+          style={{
+            marginTop: "1rem",
+            borderTop: "1px dashed var(--border)",
+            paddingTop: "1rem",
+          }}
+        >
           <div className="tl-sum-item">
             <span className="tl-sum-label">
               {isPt
                 ? "Total consolidado (Custo base + Comissões + Eventos)"
                 : "Consolidated spent (Fee + Comm + Events)"}
             </span>
-            <span className="tl-sum-val neg">−€{fmtNumStr(totalRealizedIn)}M</span>
+            <span className="tl-sum-val neg">
+              −€{fmtNumStr(totalRealizedIn)}M
+            </span>
           </div>
           <div className="tl-net-box">
             <div className="tl-sum-label">
@@ -327,7 +392,9 @@ export function TransfersLedger({
                 ? "Líquido SAD (Receitas - Comissões - Terceiros)"
                 : "Net Proceeds (Fee - Comm - 3rd Party)"}
             </span>
-            <span className="tl-sum-val pos">+€{fmtNumStr(totalRealizedOut)}M</span>
+            <span className="tl-sum-val pos">
+              +€{fmtNumStr(totalRealizedOut)}M
+            </span>
           </div>
         </div>
         <div
@@ -344,7 +411,16 @@ export function TransfersLedger({
             color: "var(--muted)",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "var(--fs-xs)", fontWeight: 600, color: "var(--ink)" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              fontSize: "var(--fs-xs)",
+              fontWeight: 600,
+              color: "var(--ink)",
+            }}
+          >
             <svg
               width="14"
               height="14"

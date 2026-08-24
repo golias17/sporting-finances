@@ -1,9 +1,5 @@
 import React from "react";
-
-interface ZoneInfo {
-  cls: string;
-  text: string;
-}
+import type { ZoneInfo } from "./playgroundTypes.js";
 
 interface KpiCardProps {
   label: string;
@@ -13,13 +9,7 @@ interface KpiCardProps {
   zone?: ZoneInfo;
 }
 
-export function KpiCard({
-  label,
-  projVal,
-  baseVal,
-  isPt,
-  zone,
-}: KpiCardProps) {
+export function KpiCard({ label, projVal, baseVal, isPt, zone }: KpiCardProps) {
   const diffVal = projVal - baseVal;
   const isPos = diffVal > 0;
   const cardClass = `kpi ${Math.abs(diffVal) < 0.01 ? "" : isPos ? "pos" : "neg"}`;
@@ -39,7 +29,7 @@ export function KpiCard({
       <div className={diffClass}>{diffText}</div>
       {zone && (
         <div className="pg-zone">
-          <span className={`zone-dot ${zone.cls}`}></span> {zone.text}
+          <span className={`zone-dot ${zone.cls}`}></span> {zone.label}
         </div>
       )}
     </div>

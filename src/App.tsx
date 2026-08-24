@@ -1,19 +1,22 @@
-import React, { useEffect, Suspense } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { useAppState } from "./core/state.js";
 import { TopNav } from "./components/TopNav.js";
 import { Hero } from "./components/Hero.js";
 import { TabsNavigation } from "./components/TabsNavigation.js";
 import { TabLoader } from "./components/TabLoader.js";
 import { ErrorBoundary } from "./components/ErrorBoundary.js";
+import { CommandPalette } from "./components/CommandPalette.js";
 import { useScrollToTop } from "./hooks/useScrollToTop.js";
-import { useImageLightbox, setupLightboxTriggers } from "./hooks/useImageLightbox.js";
+import {
+  useImageLightbox,
+  setupLightboxTriggers,
+} from "./hooks/useImageLightbox.js";
 import { LightboxProvider } from "./hooks/useLightboxContext.tsx";
 import { usePdfExport } from "./hooks/usePdfExport.js";
 import { useDataExport } from "./hooks/useDataExport.js";
 import { usePWA } from "./hooks/usePWA.js";
 import { useKeyboardShortcuts } from "./hooks/useKeyboardShortcuts.js";
 import { initKitCardFlip } from "./ui/imageLightbox.js";
-import { initNewsFeed } from "./features/News.js";
 import { loadTranslations } from "./ui/translations.js";
 import { useTranslation } from "./hooks/useTranslation.js";
 
@@ -137,12 +140,30 @@ export function App() {
   const activeTab = useAppState((s) => s.activeTab);
   const isPt = useAppState((s) => s.isPt);
   const { t, T } = useTranslation();
-  const { btnRef: scrollToTopRef, isVisible: scrollToTopVisible, scrollToTop } = useScrollToTop();
+  const {
+    btnRef: scrollToTopRef,
+    isVisible: scrollToTopVisible,
+    scrollToTop,
+  } = useScrollToTop();
   const lightbox = useImageLightbox();
   const pdfExport = usePdfExport();
   const dataExport = useDataExport();
   const pwa = usePWA();
   useKeyboardShortcuts();
+
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+
+  // Global Cmd+K / Ctrl+K listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setIsCommandPaletteOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   // Re-run scroll animations when tab changes and new nodes appear
   useScrollAnimations(activeTab);
@@ -163,7 +184,6 @@ export function App() {
     // Initialize global UI features that were previously in main.ts
     setupLightboxTriggers(lightbox.open);
     initKitCardFlip();
-    initNewsFeed();
   }, []);
 
   return (
@@ -176,28 +196,87 @@ export function App() {
         aria-atomic="true"
       ></div>
 
-      <TopNav onPdfExport={pdfExport.open} />
+      <TopNav
+        onPdfExport={pdfExport.open}
+        onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+      />
       <Hero />
+
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+        onOpenPdfModal={pdfExport.open}
+      />
 
       <main className="container" id="main">
         <TabsNavigation />
 
-        <Suspense
-          fallback={<TabLoader />}
-        >
-          {activeTab === "overview" && <ErrorBoundary><OverviewTab /></ErrorBoundary>}
-          {activeTab === "revenue" && <ErrorBoundary><RevenueTab /></ErrorBoundary>}
-          {activeTab === "healthcheck" && <ErrorBoundary><HealthcheckTab /></ErrorBoundary>}
-          {activeTab === "balance-sheet" && <ErrorBoundary><BalanceSheetTab /></ErrorBoundary>}
-          {activeTab === "bonds" && <ErrorBoundary><BondsTab /></ErrorBoundary>}
-          {activeTab === "squad" && <ErrorBoundary><SquadTab /></ErrorBoundary>}
-          {activeTab === "compare" && <ErrorBoundary><CompareTab /></ErrorBoundary>}
-          {activeTab === "events" && <ErrorBoundary><EventsTab /></ErrorBoundary>}
-          {activeTab === "data" && <ErrorBoundary><DataTab onExportCsv={dataExport.exportCsv} /></ErrorBoundary>}
-          {activeTab === "club" && <ErrorBoundary><ClubTab /></ErrorBoundary>}
-          {activeTab === "news" && <ErrorBoundary><NewsTab /></ErrorBoundary>}
-          {activeTab === "playground" && <ErrorBoundary><PlaygroundTab /></ErrorBoundary>}
-          {activeTab === "competitive" && <ErrorBoundary><CompetitiveTab /></ErrorBoundary>}
+        <Suspense fallback={<TabLoader />}>
+          {activeTab === "overview" && (
+            <ErrorBoundary>
+              <OverviewTab />
+            </ErrorBoundary>
+          )}
+          {activeTab === "revenue" && (
+            <ErrorBoundary>
+              <RevenueTab />
+            </ErrorBoundary>
+          )}
+          {activeTab === "healthcheck" && (
+            <ErrorBoundary>
+              <HealthcheckTab />
+            </ErrorBoundary>
+          )}
+          {activeTab === "balance-sheet" && (
+            <ErrorBoundary>
+              <BalanceSheetTab />
+            </ErrorBoundary>
+          )}
+          {activeTab === "bonds" && (
+            <ErrorBoundary>
+              <BondsTab />
+            </ErrorBoundary>
+          )}
+          {activeTab === "squad" && (
+            <ErrorBoundary>
+              <SquadTab />
+            </ErrorBoundary>
+          )}
+          {activeTab === "compare" && (
+            <ErrorBoundary>
+              <CompareTab />
+            </ErrorBoundary>
+          )}
+          {activeTab === "events" && (
+            <ErrorBoundary>
+              <EventsTab />
+            </ErrorBoundary>
+          )}
+          {activeTab === "data" && (
+            <ErrorBoundary>
+              <DataTab onExportCsv={dataExport.exportCsv} />
+            </ErrorBoundary>
+          )}
+          {activeTab === "club" && (
+            <ErrorBoundary>
+              <ClubTab />
+            </ErrorBoundary>
+          )}
+          {activeTab === "news" && (
+            <ErrorBoundary>
+              <NewsTab />
+            </ErrorBoundary>
+          )}
+          {activeTab === "playground" && (
+            <ErrorBoundary>
+              <PlaygroundTab />
+            </ErrorBoundary>
+          )}
+          {activeTab === "competitive" && (
+            <ErrorBoundary>
+              <CompetitiveTab />
+            </ErrorBoundary>
+          )}
         </Suspense>
       </main>
 
@@ -318,10 +397,7 @@ export function App() {
               i18nKey="pdf_customizer_subtitle"
             />
           </div>
-          <form
-            className="pdf-modal-form"
-            onSubmit={pdfExport.handleSubmit}
-          >
+          <form className="pdf-modal-form" onSubmit={pdfExport.handleSubmit}>
             <div className="pdf-field-group">
               <T
                 as="label"
@@ -331,18 +407,68 @@ export function App() {
               <select
                 className="pdf-field-input"
                 value={pdfExport.language}
-                onChange={(e) => pdfExport.setLanguage(e.target.value as "en" | "pt")}
+                onChange={(e) =>
+                  pdfExport.setLanguage(e.target.value as "en" | "pt")
+                }
               >
                 <option value="en">English</option>
                 <option value="pt">Português</option>
               </select>
             </div>
             <div className="pdf-field-group">
-              <T
-                as="label"
-                className="pdf-field-label"
-                i18nKey="pdf_pages"
-              />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <T as="label" className="pdf-field-label" i18nKey="pdf_pages" />
+                <span
+                  style={{
+                    fontSize: "var(--fs-xs)",
+                    color: "var(--muted)",
+                    fontWeight: 600,
+                  }}
+                >
+                  {pdfExport.selectedCount} / 7 {isPt ? "secções" : "sections"}
+                </span>
+              </div>
+
+              {/* Quick Presets & Bulk Actions */}
+              <div className="pdf-presets-row">
+                <button
+                  type="button"
+                  className="btn-pdf-preset"
+                  onClick={pdfExport.setFullPreset}
+                >
+                  <T i18nKey="pdf_preset_full" />
+                </button>
+                <button
+                  type="button"
+                  className="btn-pdf-preset"
+                  onClick={pdfExport.setExecutivePreset}
+                >
+                  <T i18nKey="pdf_preset_executive" />
+                </button>
+                <div className="pdf-action-pills">
+                  <button
+                    type="button"
+                    className="btn-pdf-action"
+                    onClick={pdfExport.selectAll}
+                  >
+                    <T i18nKey="pdf_select_all" />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn-pdf-action"
+                    onClick={pdfExport.deselectAll}
+                  >
+                    <T i18nKey="pdf_deselect_all" />
+                  </button>
+                </div>
+              </div>
+
               <div className="pdf-checkbox-list">
                 {pdfExport.pages.map((checked, i) => (
                   <label key={i} className="pdf-checkbox-label">
@@ -365,7 +491,11 @@ export function App() {
               <textarea
                 rows={3}
                 className="pdf-field-input"
-                placeholder="Enter custom notes or disclaimer..."
+                placeholder={
+                  isPt
+                    ? "Introduza uma nota executiva personalizada..."
+                    : "Enter custom notes or disclaimer..."
+                }
                 value={pdfExport.executiveNote}
                 onChange={(e) => pdfExport.setExecutiveNote(e.target.value)}
               ></textarea>
@@ -373,8 +503,41 @@ export function App() {
             <button
               type="submit"
               className="pdf-modal-submit"
+              disabled={pdfExport.isGenerating || pdfExport.selectedCount === 0}
             >
-              <T as="span" i18nKey="pdf_generate_btn" />
+              {pdfExport.isGenerating ? (
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    justifyContent: "center",
+                  }}
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    style={{
+                      width: "16px",
+                      height: "16px",
+                      animation: "spin 1s linear infinite",
+                    }}
+                  >
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      strokeDasharray="32"
+                      strokeDashoffset="12"
+                    />
+                  </svg>
+                  <T as="span" i18nKey="pdf_generating" />
+                </span>
+              ) : (
+                <T as="span" i18nKey="pdf_generate_btn" />
+              )}
             </button>
           </form>
         </div>
@@ -383,10 +546,7 @@ export function App() {
         <div className="pwa-toast visible">
           <div className="toast-body">
             <span>{pdfExport.error}</span>
-            <button
-              className="toast-btn"
-              onClick={() => pdfExport.close()}
-            >
+            <button className="toast-btn" onClick={() => pdfExport.close()}>
               {pdfExport.language === "pt" ? "Ok" : "Dismiss"}
             </button>
           </div>

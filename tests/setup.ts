@@ -8,10 +8,13 @@ vi.mock("react-chartjs-2", () => {
   const React = require("react");
   return {
     Bar: () => React.createElement("div", { "data-testid": "mock-chart-bar" }),
-    Line: () => React.createElement("div", { "data-testid": "mock-chart-line" }),
+    Line: () =>
+      React.createElement("div", { "data-testid": "mock-chart-line" }),
     Pie: () => React.createElement("div", { "data-testid": "mock-chart-pie" }),
-    Doughnut: () => React.createElement("div", { "data-testid": "mock-chart-doughnut" }),
-    Chart: () => React.createElement("div", { "data-testid": "mock-chart-bar" }),
+    Doughnut: () =>
+      React.createElement("div", { "data-testid": "mock-chart-doughnut" }),
+    Chart: () =>
+      React.createElement("div", { "data-testid": "mock-chart-bar" }),
   };
 });
 
@@ -100,18 +103,18 @@ beforeAll(() => {
         try {
           return (
             originalGetComputedStyle(el) ||
-            (({
+            ({
               getPropertyValue: () => "",
               width: (el as HTMLElement)?.style?.width || "0px",
               height: (el as HTMLElement)?.style?.height || "0px",
-            } as any) as CSSStyleDeclaration)
+            } as any as CSSStyleDeclaration)
           );
         } catch {
-          return ({
+          return {
             getPropertyValue: () => "",
             width: (el as HTMLElement)?.style?.width || "0px",
             height: (el as HTMLElement)?.style?.height || "0px",
-          } as any) as CSSStyleDeclaration;
+          } as any as CSSStyleDeclaration;
         }
       };
     }

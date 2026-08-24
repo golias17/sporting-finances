@@ -2,13 +2,15 @@ import React from "react";
 import { TransfersDetailTable } from "../TransfersDetailTable";
 import { DataTable } from "../DataTable";
 import { useTranslation } from "../../hooks/useTranslation";
-import { useAppState } from "../../core/state.js";
+import { state, useAppState } from "../../core/state.js";
 
 interface DataTabProps {
   onExportCsv?: () => void;
 }
 
-export const DataTab = React.memo(function DataTab({ onExportCsv }: DataTabProps) {
+export const DataTab = React.memo(function DataTab({
+  onExportCsv,
+}: DataTabProps) {
   const { t, T } = useTranslation();
   const ledgerData = useAppState((s) => s.TRANSFER_LEDGER);
   const annualData = useAppState((s) => s.annual);
@@ -27,28 +29,54 @@ export const DataTab = React.memo(function DataTab({ onExportCsv }: DataTabProps
             <T as="h3" i18nKey="ch10-annual-h3" />
             <T as="span" className="tag" i18nKey="ch10-annual-tag" />
           </div>
-          <button
-            className="story-btn btn-small"
-            onClick={onExportCsv}
-          >
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="icon-small"
-              aria-hidden="true"
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+            <button
+              className="story-btn btn-small"
+              onClick={() => {
+                import("../../utils/exportExcel.js").then(({ exportFinancialsExcel }) => {
+                  exportFinancialsExcel(state.isPt);
+                });
+              }}
+              style={{ background: "var(--green)", color: "#fff", borderColor: "var(--green)" }}
             >
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            <T as="span" i18nKey="ch10-download-csv" />
-          </button>
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="icon-small"
+                aria-hidden="true"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <T as="span" i18nKey="ch10-download-excel" />
+            </button>
+            <button className="story-btn btn-small" onClick={onExportCsv}>
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="icon-small"
+                aria-hidden="true"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <T as="span" i18nKey="ch10-download-csv" />
+            </button>
+          </div>
         </div>
         <T as="p" className="desc" i18nKey="ch10-annual-desc" />
         <T as="p" className="scroll-hint" i18nKey="ch10-scroll-hint" />

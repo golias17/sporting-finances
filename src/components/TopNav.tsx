@@ -2,18 +2,15 @@ import React, { useEffect, useState, useRef, useCallback } from "react";
 import { useAppState } from "../core/state.js";
 import { loadTranslations } from "../ui/translations.js";
 import { syncStateToUrl } from "../utils/urlSync.js";
-import {
-  updateChartTheme,
-  MOON_SVG,
-  SUN_SVG,
-} from "../ui/themeToggle.js";
+import { updateChartTheme, MOON_SVG, SUN_SVG } from "../ui/themeToggle.js";
 import { useTranslation } from "../hooks/useTranslation.js";
 
 interface TopNavProps {
   onPdfExport?: () => void;
+  onOpenCommandPalette?: () => void;
 }
 
-export function TopNav({ onPdfExport }: TopNavProps) {
+export function TopNav({ onPdfExport, onOpenCommandPalette }: TopNavProps) {
   const isPt = useAppState((s) => s.isPt);
   const theme = useAppState((s) => s.theme);
   const setIsPt = useAppState((s) => s.setIsPt);
@@ -24,14 +21,17 @@ export function TopNav({ onPdfExport }: TopNavProps) {
     typeof navigator !== "undefined" ? navigator.onLine : true,
   );
 
-  const handleLangToggle = useCallback(async (lang: "en" | "pt") => {
-    if ((lang === "pt") === isPt) return;
-    setIsPt(lang === "pt");
-    document.documentElement.lang = lang;
-    localStorage.setItem("lang", lang);
-    await loadTranslations(lang);
-    syncStateToUrl();
-  }, [isPt, setIsPt]);
+  const handleLangToggle = useCallback(
+    async (lang: "en" | "pt") => {
+      if ((lang === "pt") === isPt) return;
+      setIsPt(lang === "pt");
+      document.documentElement.lang = lang;
+      localStorage.setItem("lang", lang);
+      await loadTranslations(lang);
+      syncStateToUrl();
+    },
+    [isPt, setIsPt],
+  );
 
   const handleThemeToggle = useCallback(() => {
     const isDark = document.body.classList.toggle("dark");
@@ -79,7 +79,14 @@ export function TopNav({ onPdfExport }: TopNavProps) {
         <T as="span" i18nKey="topbar-update" />
         <T as="span" className="topbar-listing" i18nKey="topbar-listing" />
         {!isOnline && (
-          <span className="tag badge-offline" style={{ marginLeft: "8px", background: "var(--gold)", color: "var(--paper)" }}>
+          <span
+            className="tag badge-offline"
+            style={{
+              marginLeft: "8px",
+              background: "var(--gold)",
+              color: "var(--paper)",
+            }}
+          >
             <T as="span" i18nKey="offline-mode" />
           </span>
         )}
@@ -108,6 +115,41 @@ export function TopNav({ onPdfExport }: TopNavProps) {
             PT
           </a>
         </div>
+        <button
+          aria-label={isPt ? "Abrir Paleta de Comandos (Cmd+K)" : "Open Command Palette (Cmd+K)"}
+          className="pdf-export-btn"
+          onClick={onOpenCommandPalette}
+          style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
+        >
+          <svg
+            className="icon-inline"
+            fill="none"
+            height="12"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2.5"
+            viewBox="0 0 24 24"
+            width="12"
+            aria-hidden="true"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span>{isPt ? "Pesquisar" : "Search"}</span>
+          <span
+            style={{
+              fontFamily: "var(--mono)",
+              fontSize: "0.65rem",
+              padding: "1px 4px",
+              borderRadius: "3px",
+              background: "var(--rule-2)",
+              marginLeft: "2px",
+            }}
+          >
+            ⌘K
+          </span>
+        </button>
         <button
           aria-label={
             t("topbar-export-pdf-aria") || "Export Financial Dossier as PDF"
@@ -156,7 +198,10 @@ export function TopNav({ onPdfExport }: TopNavProps) {
               __html: isDark ? SUN_SVG : MOON_SVG,
             }}
           />
-          <T as="span" i18nKey={isDark ? "nav-theme-dark" : "nav-theme-light"} />
+          <T
+            as="span"
+            i18nKey={isDark ? "nav-theme-dark" : "nav-theme-light"}
+          />
         </button>
       </div>
     </nav>

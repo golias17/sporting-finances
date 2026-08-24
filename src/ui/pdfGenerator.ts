@@ -2,7 +2,13 @@
 // Re-exports all public symbols from the split modules so existing
 // consumers (19 files across src/ and tests/) keep working unchanged.
 export * from "./pdfTypes.js";
-export { fmtM, signColorCell, thresholdColorCell, combineCellColorers, getBase64ImageFromUrl } from "./pdfHelpers.js";
+export {
+  fmtM,
+  signColorCell,
+  thresholdColorCell,
+  combineCellColorers,
+  getBase64ImageFromUrl,
+} from "./pdfHelpers.js";
 export { buildPdfContext } from "./pdfLayout.js";
 export { drawCoverPage } from "./pdfCoverPage.js";
 export { drawFinancialTablesPage } from "./pdfFinancialTables.js";

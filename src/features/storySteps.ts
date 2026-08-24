@@ -120,8 +120,8 @@ export const STORY_STEPS = [
       pt: "Grau de investimento",
     },
     narrative: {
-      en: "Three Liga titles in five years. Gyökeres sold to Arsenal for €65.8M. Revenue at €148M — 130% higher than five years prior. Wage bill ratio at its healthiest ever. And in October 2025, Sporting became the first Portuguese club with investment-grade bond ratings from Fitch and DBRS. The transformation is complete.",
-      pt: "Três campeonatos em cinco anos. Venda de Gyökeres ao Arsenal por 65,8 M€. Receitas operacionais em 148 M€ — 130% acima de há cinco anos. Rácio de massa salarial no nível mais saudável de sempre. E em Outubro de 2025, o Sporting tornou-se o primeiro clube português com rating de grau de investimento para obrigações pela Fitch e DBRS. A transformação está concluída.",
+      en: "Bicampeão nacional and record operating revenue of €148M — up 130% from five years prior. Positive shareholders' equity for the third consecutive year (+€41M), the healthiest wage ratio of the decade (59%), and the historic USPP bond with investment-grade rating from Fitch and DBRS. The turnaround is complete.",
+      pt: "Bicampeão nacional e recorde histórico de receitas operacionais de 148 M€ — mais 130% face a cinco anos antes. Capitais próprios positivos pelo terceiro ano consecutivo (+41 M€), o rácio salarial mais saudável da década (59%) e a histórica emissão obrigacionista USPP com rating de grau de investimento da Fitch e DBRS. A recuperação está concluída.",
     },
   },
 ];

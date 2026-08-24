@@ -5,7 +5,7 @@
     "innerHTML": false
   },
   "ch01-equity-h3": {
-    "text": "Equity Evolution",
+    "text": "🏛️ Equity Evolution",
     "isAria": false,
     "innerHTML": false
   },
@@ -30,7 +30,7 @@
     "innerHTML": true
   },
   "ch01-hero-h3": {
-    "text": "The 15-year story in one chart",
+    "text": "📊 The 15-year story in one chart",
     "isAria": false,
     "innerHTML": false
   },
@@ -70,7 +70,7 @@
     "innerHTML": false
   },
   "ch01-netresult-h3": {
-    "text": "Net Result by Season",
+    "text": "📈 Net Result by Season",
     "isAria": false,
     "innerHTML": false
   },
@@ -100,7 +100,7 @@
     "innerHTML": false
   },
   "ch01-waterfall-h3": {
-    "text": "Income Statement Bridge: Revenue to Net Profit",
+    "text": "🌊 Income Statement Bridge: Revenue to Net Profit",
     "isAria": false,
     "innerHTML": false
   },
@@ -115,7 +115,7 @@
     "innerHTML": false
   },
   "ch02-costs-h3": {
-    "text": "Personnel Costs Breakdown",
+    "text": "📉 Operating Costs Breakdown",
     "isAria": false,
     "innerHTML": false
   },
@@ -125,7 +125,7 @@
     "innerHTML": true
   },
   "ch02-lede": {
-    "text": "Revenue tripled in five seasons. Personnel cost growth held below it. The ratio that haunted Sporting for a decade is, for the first time, healthy.",
+    "text": "Revenue more than doubled in five years. Wage growth remained disciplined, achieving the most sustainable payroll ratio of the decade.",
     "isAria": false,
     "innerHTML": false
   },
@@ -155,7 +155,7 @@
     "innerHTML": false
   },
   "ch02-opresult-h3": {
-    "text": "Operating Result — Recurring vs Players",
+    "text": "⚖️ Operating Result — Recurring vs Players",
     "isAria": false,
     "innerHTML": false
   },
@@ -170,7 +170,7 @@
     "innerHTML": false
   },
   "ch02-payroll-h3": {
-    "text": "Revenue vs Personnel Costs",
+    "text": "💼 Revenue vs Personnel Costs",
     "isAria": false,
     "innerHTML": false
   },
@@ -185,7 +185,7 @@
     "innerHTML": false
   },
   "ch02-rev-h3": {
-    "text": "Operating Revenue Evolution",
+    "text": "📈 Operating Revenue Evolution",
     "isAria": false,
     "innerHTML": false
   },
@@ -200,12 +200,12 @@
     "innerHTML": false
   },
   "ch02-streams-h3": {
-    "text": "Revenue Streams Breakdown",
+    "text": "🥧 Revenue Streams Breakdown",
     "isAria": false,
     "innerHTML": false
   },
   "ch02-streams-tag": {
-    "text": "3 categories",
+    "text": "4 Revenue Streams",
     "isAria": false,
     "innerHTML": false
   },
@@ -215,7 +215,7 @@
     "innerHTML": false
   },
   "ch02-wage-h3": {
-    "text": "Wage bill burden",
+    "text": "👔 Wage bill burden",
     "isAria": false,
     "innerHTML": false
   },
@@ -235,7 +235,7 @@
     "innerHTML": false
   },
   "ch03-brief-h3": {
-    "text": "Sporting's annual financial check-up",
+    "text": "🩺 Sporting's annual financial check-up",
     "isAria": false,
     "innerHTML": false
   },
@@ -245,7 +245,7 @@
     "innerHTML": false
   },
   "ch03-brief-p": {
-    "text": "Revenue has tripled in five years. The wage bill is the smallest share of income in 15 years. Net debt is — for the first time — below one year's revenue. Equity is positive for the third year running. The one honest caveat: Sporting still relies on selling players for nearly 44% of its total income. That's not a crisis — it's the model. Alcochete academy players cost €0 to produce and sell for tens of millions. But it means a bad transfer window still hurts.",
+    "text": "Revenue more than doubled over five years. The wage bill represents its lowest share of revenue in 15 years. Net debt is below one year of operating revenue for the first time. Shareholders' equity remains positive for the third consecutive year. Sporting still counts on player trading for around 44% of total income, reflecting the strength of its academy and scouting.",
     "isAria": false,
     "innerHTML": false
   },
@@ -260,7 +260,7 @@
     "innerHTML": false
   },
   "ch03-ebitda-h3": {
-    "text": "Operating & Total EBITDA",
+    "text": "⚡ Operating & Total EBITDA",
     "isAria": false,
     "innerHTML": false
   },
@@ -280,7 +280,7 @@
     "innerHTML": false
   },
   "ch03-liq-h3": {
-    "text": "Short-term liquidity",
+    "text": "💧 Short-term liquidity",
     "isAria": false,
     "innerHTML": false
   },
@@ -295,7 +295,7 @@
     "innerHTML": false
   },
   "ch03-narrative-p": {
-    "text": "Every year that Sporting's matchday and TV revenue doesn't cover wages, the gap is filled by the transfer market. That's been true in 13 of the last 15 seasons. But here's the twist: Alcochete academy graduates — Manuel Ugarte, Nuno Mendes, João Palhinha, Gonçalo Inácio — were developed internally at near-zero acquisition cost. Selling a player for €60M who cost nothing to produce is 100% margin. As long as Alcochete keeps producing elite talent, this model works. The question is whether commercial and matchday revenue can keep growing fast enough that Sporting needs to rely on it less.",
+    "text": "In years where operating revenue does not fully cover costs, the gap is balanced by the transfer market. Youth academy graduates — like Nuno Mendes, João Palhinha, Gonçalo Inácio, and Daniel Bragança — were developed internally at zero acquisition cost. Selling home-grown talent yields close to 100% margin. As long as Alcochete and scouting continue producing elite talent, this model remains highly competitive.",
     "isAria": false,
     "innerHTML": false
   },
@@ -310,7 +310,7 @@
     "innerHTML": false
   },
   "ch03-rel-h3": {
-    "text": "Transfer reliance",
+    "text": "⚖️ Transfer reliance",
     "isAria": false,
     "innerHTML": false
   },
@@ -325,7 +325,7 @@
     "innerHTML": false
   },
   "ch03-transfer-debt-h3": {
-    "text": "Transfer Net Debt (Payables vs Receivables)",
+    "text": "💳 Transfer Net Debt (Payables vs Receivables)",
     "isAria": false,
     "innerHTML": false
   },
@@ -345,7 +345,7 @@
     "innerHTML": false
   },
   "ch04-assets-h3": {
-    "text": "Total Assets vs Total Liabilities",
+    "text": "⚖️ Total Assets vs Total Liabilities",
     "isAria": false,
     "innerHTML": false
   },
@@ -360,7 +360,7 @@
     "innerHTML": false
   },
   "ch04-cash-h3": {
-    "text": "Cash Position at Year-End",
+    "text": "💵 Cash Position at Year-End",
     "isAria": false,
     "innerHTML": false
   },
@@ -375,7 +375,7 @@
     "innerHTML": false
   },
   "ch04-cf-h3": {
-    "text": "Cash Flow by Activity",
+    "text": "🌊 Cash Flow by Activity",
     "isAria": false,
     "innerHTML": false
   },
@@ -390,7 +390,7 @@
     "innerHTML": false
   },
   "ch04-debt-h3": {
-    "text": "Total Debt & Cash Position",
+    "text": "🏦 Total Debt & Cash Position",
     "isAria": false,
     "innerHTML": false
   },
@@ -415,7 +415,7 @@
     "innerHTML": false
   },
   "ch04-maturity-h3": {
-    "text": "Debt Maturity Profile",
+    "text": "⏳ Debt Maturity Profile",
     "isAria": false,
     "innerHTML": false
   },
@@ -450,7 +450,7 @@
     "innerHTML": false
   },
   "ch04-net-h3": {
-    "text": "Annual Net Result",
+    "text": "📈 Annual Net Result",
     "isAria": false,
     "innerHTML": false
   },
@@ -495,7 +495,7 @@
     "innerHTML": false
   },
   "ch05-schedule-h3": {
-    "text": "USPP bond — key terms",
+    "text": "🇺🇸 USPP bond — key terms",
     "isAria": false,
     "innerHTML": false
   },
@@ -515,7 +515,7 @@
     "innerHTML": false
   },
   "ch05-summary-h3": {
-    "text": "Lion Finance — key facts",
+    "text": "🦁 Lion Finance — key facts",
     "isAria": false,
     "innerHTML": false
   },
@@ -545,7 +545,7 @@
     "innerHTML": true
   },
   "ch05-uspp-h3": {
-    "text": "Annual financing cost — across all instruments",
+    "text": "📑 Annual financing cost — across all instruments",
     "isAria": false,
     "innerHTML": false
   },
@@ -575,7 +575,7 @@
     "innerHTML": false
   },
   "ch06-donut-h3": {
-    "text": "Transfer Proceeds Breakdown (Net Proceeds vs Charges)",
+    "text": "🥧 Transfer Proceeds Breakdown (Net Proceeds vs Charges)",
     "isAria": false,
     "innerHTML": false
   },
@@ -595,7 +595,7 @@
     "innerHTML": false
   },
   "ch06-income-h3": {
-    "text": "Player Transfer Income",
+    "text": "💰 Player Transfer Income",
     "isAria": false,
     "innerHTML": false
   },
@@ -615,7 +615,7 @@
     "innerHTML": false
   },
   "ch06-ledger-h3": {
-    "text": "Detailed Transfer Ledger",
+    "text": "📋 Detailed Transfer Ledger",
     "isAria": false,
     "innerHTML": false
   },
@@ -630,7 +630,7 @@
     "innerHTML": false
   },
   "ch06-narrative-p1": {
-    "text": "Sporting's youth academy (Alcochete) and scouting model is the most reliable cash generator on the income statement. The academy produces players at near-zero acquisition cost — Cristiano Ronaldo (2003, ~€18M to Man United), João Mário (2016, €40M to Inter), Manuel Ugarte (2023, €60M to PSG) and Nuno Mendes (2022, €38M to PSG) were all Alcochete graduates. Smart recruitment amplifies the model: Bruno Fernandes arrived from Italy and left for €55M (2020); Viktor Gyökeres was bought from Coventry for ~€20M and sold to Arsenal for €65.8M (2025).",
+    "text": "The Cristiano Ronaldo Academy (Alcochete) and scouting model represent the SAD's strongest value creation engine. Alcochete develops players at zero acquisition cost — Cristiano Ronaldo, João Mário (€40M to Inter), Nuno Mendes (€38M to PSG), and Mateus Fernandes (€15M to Southampton) are prime examples. Sharp scouting amplifies the model: Bruno Fernandes arrived from Italy and yielded €55M (2020), Manuel Ugarte came from Famalicão and moved for €60M (2023), and Viktor Gyökeres anchored a historic sporting and financial era.",
     "isAria": false,
     "innerHTML": false
   },
@@ -645,7 +645,7 @@
     "innerHTML": false
   },
   "ch06-net-h3": {
-    "text": "Net Player Trading Result",
+    "text": "⚽ Net Player Trading Result",
     "isAria": false,
     "innerHTML": false
   },
@@ -655,7 +655,7 @@
     "innerHTML": false
   },
   "ch06-note": {
-    "text": "Since 2016/17 the club has generated between €34M and €144M in transfer income every season. The 2023/24 season set the all-time record at €144M. The 2025/26 H1 alone already reached €110M, anchored by the Gyökeres deal.",
+    "text": "Since 2016/17, the SAD has generated between €34M and €144M in transfer income per season. The 2023/24 season set the all-time record with €144M in transfer revenue, continuing strong in 2024/25 with €117M.",
     "isAria": false,
     "innerHTML": false
   },
@@ -670,12 +670,12 @@
     "innerHTML": false
   },
   "ch06-squad-h3": {
-    "text": "Squad Book Value Evolution",
+    "text": "💎 Squad Market Value vs. Book Value",
     "isAria": false,
     "innerHTML": false
   },
   "ch06-squad-tag": {
-    "text": "Book value vs market value",
+    "text": "Market vs. Book",
     "isAria": false,
     "innerHTML": false
   },
@@ -685,7 +685,7 @@
     "innerHTML": false
   },
   "ch07-cmp-h3": {
-    "text": "Compare any two seasons",
+    "text": "🔄 Compare any two seasons",
     "isAria": false,
     "innerHTML": false
   },
@@ -724,6 +724,26 @@
     "isAria": false,
     "innerHTML": false
   },
+  "ch08-agent-commissions-desc": {
+    "text": "Total contracted commission expenses paid to agents and intermediaries across player deals (€M).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-agent-commissions-h3": {
+    "text": "🤝 Total Agent & Intermediary Commissions",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-benchmark-table-desc": {
+    "text": "Comparison of cumulative financial aggregates from 2010/11 to 2024/25 and current balance sheet positions.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-benchmark-table-h3": {
+    "text": "🏆 Big Three Consolidated Benchmark (15 Seasons)",
+    "isAria": false,
+    "innerHTML": false
+  },
   "ch08-benfica": {
     "text": "SL Benfica",
     "isAria": false,
@@ -750,7 +770,7 @@
     "innerHTML": false
   },
   "ch08-equity-h3": {
-    "text": "Shareholders' Equity & Solvency",
+    "text": "🏛️ Shareholders' Equity & Solvency",
     "isAria": false,
     "innerHTML": false
   },
@@ -770,7 +790,7 @@
     "innerHTML": false
   },
   "ch08-liabilities-h3": {
-    "text": "Total Liabilities",
+    "text": "🏦 Total Liabilities",
     "isAria": false,
     "innerHTML": false
   },
@@ -805,7 +825,7 @@
     "innerHTML": false
   },
   "ch08-netresult-h3": {
-    "text": "Net Profit / Loss",
+    "text": "📊 Net Profit / Loss",
     "isAria": false,
     "innerHTML": false
   },
@@ -820,7 +840,7 @@
     "innerHTML": false
   },
   "ch08-personnel-h3": {
-    "text": "Wage Bill & Personnel Costs",
+    "text": "💼 Wage Bill & Personnel Costs",
     "isAria": false,
     "innerHTML": false
   },
@@ -830,7 +850,7 @@
     "innerHTML": false
   },
   "ch08-personnel-ratio-h3": {
-    "text": "Personnel Costs Ratio",
+    "text": "👔 Wage-to-Revenue Ratio (%)",
     "isAria": false,
     "innerHTML": false
   },
@@ -845,12 +865,22 @@
     "innerHTML": false
   },
   "ch08-revenue-source-h3": {
-    "text": "Revenue by Source",
+    "text": "📈 Revenue by Source",
     "isAria": false,
     "innerHTML": false
   },
   "ch08-sporting": {
     "text": "Sporting CP",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-squad-cost-ratio-desc": {
+    "text": "Wages + Squad Amortization & Impairments as % of Operating Revenue (UEFA Cap: 70%).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-squad-cost-ratio-h3": {
+    "text": "🛡️ UEFA Squad Cost Ratio (%)",
     "isAria": false,
     "innerHTML": false
   },
@@ -860,7 +890,7 @@
     "innerHTML": false
   },
   "ch08-squad-h3": {
-    "text": "Squad Market Value",
+    "text": "💎 Squad Market Value",
     "isAria": false,
     "innerHTML": false
   },
@@ -870,7 +900,27 @@
     "innerHTML": false
   },
   "ch08-transfer-balance-h3": {
-    "text": "Transfer Balance",
+    "text": "⚽ Net Player Trading Result",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-transfer-debt-desc": {
+    "text": "Net balance between amounts payable to and receivable from other clubs (€M). Positive values indicate net debt payable; negative values indicate a net receivable balance.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-transfer-debt-h3": {
+    "text": "💳 Net Transfer Debt (Club-to-Club)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-transfers-desc": {
+    "text": "Net player transfer and trading result per season (€M).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-transfers-h3": {
+    "text": "⚽ Net Player Trading Result",
     "isAria": false,
     "innerHTML": false
   },
@@ -1115,7 +1165,7 @@
     "innerHTML": false
   },
   "ch10-annual-h3": {
-    "text": "Annual data — all metrics in EUR thousands",
+    "text": "📊 Annual data — all metrics in thousands EUR",
     "isAria": false,
     "innerHTML": false
   },
@@ -1145,7 +1195,7 @@
     "innerHTML": false
   },
   "ch10-ledger-h3": {
-    "text": "Full Transfer Details Ledger",
+    "text": "📋 Complete Transfer Details Ledger",
     "isAria": false,
     "innerHTML": false
   },
@@ -1270,7 +1320,7 @@
     "innerHTML": false
   },
   "ch11-social-h3": {
-    "text": "Official Channels & Media",
+    "text": "📰 Official Channels & Press",
     "isAria": false,
     "innerHTML": false
   },
@@ -1345,7 +1395,7 @@
     "innerHTML": false
   },
   "chart_commissions_title": {
-    "text": "Agent Commissions Trend",
+    "text": "🤝 Agent & Intermediary Commissions Evolution",
     "isAria": false,
     "innerHTML": false
   },
@@ -1355,7 +1405,27 @@
     "innerHTML": false
   },
   "chart_eras_title": {
-    "text": "Net Transfer Earnings by Managerial Era",
+    "text": "🏆 Net Transfer Gain by Manager Era",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "chart_net_transfer_debt_subtitle": {
+    "text": "Amounts payable vs. receivable from other clubs across short and long term",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "chart_net_transfer_debt_title": {
+    "text": "💳 Net Transfer Debt by Season",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "chart_squad_cost_subtitle": {
+    "text": "Wages + Squad Amortization & Impairment vs. Operating Revenue",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "chart_squad_cost_title": {
+    "text": "👔 Structural Squad Cost (UEFA Squad Cost)",
     "isAria": false,
     "innerHTML": false
   },
@@ -1430,18 +1500,33 @@
     "innerHTML": false
   },
   "pdf_page_4": {
-    "text": "V. Strategic Financing & VI. Turnaround Milestones",
+    "text": "V. Strategic Debt & Financing Instruments",
     "isAria": false,
     "innerHTML": false
   },
   "pdf_page_5": {
-    "text": "VII. Landmark Player Transfers Ledger",
+    "text": "VI. Chronological Turnaround Milestones",
     "isAria": false,
     "innerHTML": false
   },
   "pdf_pages": {
     "text": "Pages to Include",
     "isAria": false,
+    "innerHTML": false
+  },
+  "pg-chart-net": {
+    "text": "Playground Net Results Projected Chart",
+    "isAria": true,
+    "innerHTML": false
+  },
+  "pg-chart-solvency": {
+    "text": "Playground Equity and Solvency Chart",
+    "isAria": true,
+    "innerHTML": false
+  },
+  "pg-quick-scenarios": {
+    "text": "Quick simulation scenarios",
+    "isAria": true,
     "innerHTML": false
   },
   "skip-link": {
@@ -1464,6 +1549,11 @@
     "isAria": false,
     "innerHTML": false
   },
+  "story-finish-aria": {
+    "text": "Finish and close story",
+    "isAria": true,
+    "innerHTML": false
+  },
   "story-launch-button": {
     "text": "Exit",
     "isAria": false,
@@ -1479,9 +1569,19 @@
     "isAria": false,
     "innerHTML": false
   },
+  "story-next-aria": {
+    "text": "Next story step",
+    "isAria": true,
+    "innerHTML": false
+  },
   "story-prev": {
     "text": "← Prev",
     "isAria": false,
+    "innerHTML": false
+  },
+  "story-prev-aria": {
+    "text": "Previous story step",
+    "isAria": true,
     "innerHTML": false
   },
   "tab-btn-balance-sheet": {
@@ -1554,6 +1654,11 @@
     "isAria": false,
     "innerHTML": false
   },
+  "topbar-export-pdf-aria": {
+    "text": "Export Financial Dossier as PDF",
+    "isAria": true,
+    "innerHTML": false
+  },
   "topbar-listing": {
     "text": "Sporting SAD · Euronext Lisbon",
     "isAria": false,
@@ -1561,6 +1666,1116 @@
   },
   "topbar-update": {
     "text": "Last update · 24/25",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-filter-all": {
+    "text": "15 Seasons (All)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-filter-last5": {
+    "text": "Amorim Cycle (2020/21 → 2024/25)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-filter-last3": {
+    "text": "Last 3 Seasons (2022/23 → 2024/25)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-filter-label": {
+    "text": "Time Horizon:",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-preset-conservative": {
+    "text": "Conservative",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-preset-base": {
+    "text": "Base Scenario",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-preset-optimistic": {
+    "text": "Optimistic",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-preset-ucl": {
+    "text": "Champions League (Swiss)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-preset-supersale": {
+    "text": "Super Sale (Gyökeres)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg-preset-austerity": {
+    "text": "Austerity & Deleveraging",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "tl-filter-all": {
+    "text": "All Transfers",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "tl-filter-over10m": {
+    "text": "Deals > €10M",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "tl-filter-commissions": {
+    "text": "With Commissions",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "tl-filter-type": {
+    "text": "Operation Filter:",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf-benchmark-title": {
+    "text": "Consolidated Benchmark — Big Three",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf-benchmark-subtitle": {
+    "text": "Comparative Analysis Sporting CP vs SL Benfica vs FC Porto",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_page_6": {
+    "text": "VII. Consolidated Benchmark — Big Three",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_select_all": {
+    "text": "Select All",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_deselect_all": {
+    "text": "Deselect All",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_preset_full": {
+    "text": "Complete Dossier (7 Sections)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_preset_executive": {
+    "text": "Executive Summary (Cover + Benchmark)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_generating": {
+    "text": "Generating PDF report...",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_pages_selected": {
+    "text": "pages selected",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pdf_page_7": {
+    "text": "VIII. Landmark Player Transfers Ledger",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg_sub_macro": {
+    "text": "Macro Budget Simulator",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg_sub_transfers": {
+    "text": "Transfer Impact (UEFA FSR)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch10-download-excel": {
+    "text": "Download Excel (.xlsx)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "cmd_search_placeholder": {
+    "text": "Search players, financial metrics, news or actions...",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "cmd_no_results": {
+    "text": "No matching results found.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "cmd_nav_tabs": {
+    "text": "Application Tabs",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "cmd_players": {
+    "text": "Players & Transfers",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "cmd_metrics": {
+    "text": "Metrics & Charts",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "cmd_news": {
+    "text": "News & Press Releases",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "cmd_actions": {
+    "text": "Quick Actions",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_h3": {
+    "text": "Debt Maturity Tracker & Repayment Schedule (2025 → 2035)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_tag": {
+    "text": "Maturity & Cash Flow",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_desc": {
+    "text": "Multi-year projection of annual treasury outflow: principal debt repayments, coupon interest payments (USPP €225M fixed rate), and Debt Service Coverage Ratio (DSCR).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_kpi_annual_service": {
+    "text": "Average Annual Debt Service",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_kpi_annual_service_sub": {
+    "text": "Principal + Interest per season",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_kpi_dscr": {
+    "text": "DSCR Coverage Ratio",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_kpi_dscr_sub": {
+    "text": "EBITDA / Debt Service (>2.0x Comfortable)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_kpi_lt_share": {
+    "text": "% Long-Term Debt",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_kpi_lt_share_sub": {
+    "text": "Maturity > 5 years (USPP structured)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_kpi_savings": {
+    "text": "Refinancing Cash Savings",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_kpi_savings_sub": {
+    "text": "vs pre-2024 short-term bank debt",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_filter_all": {
+    "text": "Total Consolidated Debt",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_filter_uspp": {
+    "text": "USPP Notes (€225M)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_filter_banking": {
+    "text": "Banking & Commercial Paper",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_col_year": {
+    "text": "Season / Year",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_col_principal": {
+    "text": "Principal Repayment (€M)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_col_interest": {
+    "text": "Interest Coupons (€M)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_col_total": {
+    "text": "Total Debt Service (€M)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_col_ebitda": {
+    "text": "EBITDA Coverage (€M)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_col_dscr": {
+    "text": "DSCR",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_col_status": {
+    "text": "Risk Status",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_status_grade": {
+    "text": "Investment Grade (Strong)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_status_adequate": {
+    "text": "Adequate",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_chart_principal": {
+    "text": "Principal Repayment",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_chart_interest": {
+    "text": "Interest & Coupons",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_chart_ebitda": {
+    "text": "Operating EBITDA",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_verdict_title": {
+    "text": "Institutional Capital Structure Assessment (Rating BBB− / BBB low)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_verdict_p1": {
+    "text": "The landmark USPP private placement (€225M) fundamentally transformed Sporting SAD’s risk profile, eliminating reliance on short-term bank credit and commercial paper. The Debt Service Coverage Ratio (DSCR) projects robust treasury headroom (>1.8× in standard operating seasons).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_scenario_title": {
+    "text": "Sensitivity Simulation & Stress Testing:",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_scen_base": {
+    "text": "Base Scenario (Fixed 5.75% Rate)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_scen_rates_up": {
+    "text": "Interest Rate Stress (+150 bps variable debt)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_scen_no_ucl": {
+    "text": "UCL Shock (-€15M EBITDA/yr)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_guide_title": {
+    "text": "Methodology & Institutional USPP Mechanics",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_guide_hide": {
+    "text": "Minimize Methodological Details",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_guide_show": {
+    "text": "Understand USPP Mechanics & Debt Covenants",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_guide_p1_title": {
+    "text": "1. Ring-Fencing Structure (Sporting Entertainment)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_guide_p1_desc": {
+    "text": "The €225M notes were issued via a 100%-owned SPV (Sporting Entertainment), ring-fencing ticketing, corporate hospitality, and stadium commercial revenues to insulate debt service from player trading volatility.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_guide_p2_title": {
+    "text": "2. FX Protection (Cross-Currency Swap)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_guide_p2_desc": {
+    "text": "The M USD Tranche B placed with US pension funds and insurers was fully hedged with a cross-currency interest rate swap, locking in effective EUR costs and neutralizing currency risk.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_guide_p3_title": {
+    "text": "3. DSCR Headroom & Amortization Profile",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_guide_p3_desc": {
+    "text": "The DSCR (Debt Service Coverage Ratio) benchmarks operating EBITDA against debt repayments and interest. A ratio exceeding 1.5x represents strong institutional headroom. The amortizing profile prevents sudden maturity cliffs in early years.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_col_refinancing": {
+    "text": "Refinancing / Bullet",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "dmt_total_row": {
+    "text": "Total / Cumulative Average",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_section_h3": {
+    "text": "Financial Efficiency Index: Cost per Point & Title ROI",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_section_tag": {
+    "text": "Efficiency & Sporting ROI",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_section_desc": {
+    "text": "Benchmarking total football spending (wage bill, player amortization, and agent commissions) against Primeira Liga points and official trophies won over 15 seasons.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_kpi_scp_cpp": {
+    "text": "Cost per Point (Sporting CP)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_kpi_slb_cpp": {
+    "text": "Cost per Point (SL Benfica)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_kpi_fcp_cpp": {
+    "text": "Cost per Point (FC Porto)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_kpi_winner_tag": {
+    "text": "Most Efficient Club in Cycle",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_chart_title": {
+    "text": "Primeira Liga Cost per Point Evolution (€k / point)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_chart_tag": {
+    "text": "15-Season Benchmark",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_chart_desc": {
+    "text": "Squad expenditure required to achieve each league point. Lower values represent higher financial efficiency in translating budget to on-pitch points.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_table_title": {
+    "text": "Official Trophies & Average Cost per Title",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_table_tag": {
+    "text": "Return on Investment",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_table_desc": {
+    "text": "Relationship between total football squad investment and official major trophies won across each time horizon.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_col_club": {
+    "text": "Club",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_col_titles": {
+    "text": "Trophies Won",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_col_leagues": {
+    "text": "League Titles",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_col_cups": {
+    "text": "Cups & Super Cups",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_col_total_spent": {
+    "text": "Total Football Spend",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_col_cost_per_title": {
+    "text": "Average Cost / Title",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_col_cost_per_point": {
+    "text": "Average Cost / Point",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_verdict_title": {
+    "text": "Sporting Efficiency Assessment",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_verdict_p1": {
+    "text": "In the 2020-2025 cycle, Sporting CP delivered the highest sporting and financial efficiency among the Big Three, winning 3 League Titles and 7 official trophies with a cost per point substantially lower than rivals.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_view_cpp": {
+    "text": "📈 Cost per Point (€k/pt)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_view_spend_vs_pts": {
+    "text": "⚽ Squad Spend vs League Points",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_view_cost_per_title": {
+    "text": "🏆 Average Cost / Official Title",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_kpi_savings_vs_slb": {
+    "text": "Savings vs Benfica in Cycle",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_kpi_savings_vs_slb_sub": {
+    "text": "Less spend for more points and titles",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_kpi_roi_score": {
+    "text": "Sporting ROI Score",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_kpi_roi_score_sub": {
+    "text": "Capital conversion into performance",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_insights_title": {
+    "text": "Key Structural Drivers of Sporting CP Superior Efficiency",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_insights_hide": {
+    "text": "Minimize Structural Analysis",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_insights_show": {
+    "text": "View Football Efficiency Pillars",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_ins_1_title": {
+    "text": "1. Elite Youth Academy (Zero Amortization Cost)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_ins_1_desc": {
+    "text": "Consistent integration of homegrown talent from Alcochete (Inácio, Quaresma, Nuno Mendes, Quenda, Bragança) slashes player amortization expenses while maintaining peak league competitiveness.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_ins_2_title": {
+    "text": "2. Surgical Recruitment & High On-Pitch Impact",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_ins_2_desc": {
+    "text": "Targeted investments in core assets with immediate impact (Gyökeres, Hjulmand, Pote, Coates, Palhinha, Ugarte) delivering immediate trophies and substantial market appreciation.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_ins_3_title": {
+    "text": "3. Wage Discipline & Sustainable Cost Structure",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "eff_ins_3_desc": {
+    "text": "Disciplined salary banding and wage-to-revenue ratios kept well below direct rivals, ensuring long-term financial viability without sacrificing sporting triumph.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg_sub_stress": {
+    "text": "Stress Testing & Cash Runway",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_title": {
+    "text": "Stress Testing & Cash Runway Simulator",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_tag": {
+    "text": "Resilience & Stress Testing",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_desc": {
+    "text": "Modeling the impact of severe revenue shocks, player trading freezes, and interest rate hikes on Sporting SAD cash flow, equity resilience, and runway months.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_preset_base": {
+    "text": "Base Case (Normal)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_preset_no_ucl_1y": {
+    "text": "No UCL (1 Season)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_preset_winter_2y": {
+    "text": "European Winter (2 Seasons)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_preset_perfect_storm": {
+    "text": "Perfect Storm",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_param_ucl_shock": {
+    "text": "UEFA / Competition Revenue Shock (€M)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_param_transfers_shock": {
+    "text": "Player Trading Profit Drop (€M)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_param_cost_inflation": {
+    "text": "Operating Cost Inflation (Supplies %)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_param_rate_shock": {
+    "text": "Interest Rate Hike (Euribor +bps)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_kpi_runway": {
+    "text": "Cash Runway",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_kpi_runway_sub": {
+    "text": "Months until cash deficit",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_kpi_final_cash": {
+    "text": "Projected Cash at Month 24",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_kpi_final_cash_sub": {
+    "text": "Residual liquidity balance",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_kpi_proj_equity": {
+    "text": "Projected Equity",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_kpi_proj_equity_sub": {
+    "text": "Resilience vs Article 35 CSC",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_kpi_asset_sales_req": {
+    "text": "Required Player Sales",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_kpi_asset_sales_req_sub": {
+    "text": "To balance liquidity buffer",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_chart_title": {
+    "text": "Monthly Cash Trajectory Under Stress (24 Months)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_chart_tag": {
+    "text": "Liquidity Simulation",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_chart_desc": {
+    "text": "Estimated month-by-month cash trajectory. Red dashed line marks the minimum prudential cash reserve (€10M).",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_verdict_safe_title": {
+    "text": "Comfortable Risk Profile: SAD Resilient",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_verdict_safe_desc": {
+    "text": "Even under the simulated shock, the cash buffer remains positive and Equity stays well above Article 35 Portuguese Companies Code regulatory thresholds.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_verdict_warning_title": {
+    "text": "Treasury Caution: Active Monitoring",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_verdict_warning_desc": {
+    "text": "The simulated shock pushes cash reserves below the prudential threshold. Requires operating expense containment or commercial revenue acceleration.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_verdict_danger_title": {
+    "text": "Critical Stress Alert: Liquidity Risk",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_verdict_danger_desc": {
+    "text": "The severe shock depletes cash reserves before 24 months. The SAD would require emergency player trading profits to restore liquidity.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_guide_title": {
+    "text": "Structural Framework: Risk Governance & Defense Buffers",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_guide_hide": {
+    "text": "Minimize Defense Buffers",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_guide_show": {
+    "text": "View SAD Defense Buffers",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_guide_p1_title": {
+    "text": "1. Sporting Buffer (High Squad Market Value)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_guide_p1_desc": {
+    "text": "With a squad market valuation exceeding €400M and key players with low residual book value (Gyökeres, Inácio, Hjulmand, Diomande, Quenda), the SAD holds an immediate liquidity cushion via transfer markets.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_guide_p2_title": {
+    "text": "2. Wage Flexibility (Performance Contingent Bonuses)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_guide_p2_desc": {
+    "text": "A significant portion of team bonuses and managerial remuneration is performance-linked. Missing European targets automatically reduces variable operating payroll.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_guide_p3_title": {
+    "text": "3. Long-Term Debt Structure & USPP Notes",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_guide_p3_desc": {
+    "text": "The landmark €225M 10-year USPP note placement eliminated short-term banking rollover risks, maintaining a weighted average debt maturity exceeding 7 years.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_toggle_table_show": {
+    "text": "📊 View Monthly Treasury Breakdown (24 Months)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_toggle_table_hide": {
+    "text": "Hide Monthly Breakdown",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_col_month": {
+    "text": "Month / Season",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_col_inflows": {
+    "text": "Operating Inflows",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_col_outflows": {
+    "text": "Outflows & Debt",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_col_net_flow": {
+    "text": "Net Monthly Flow",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_col_cash_balance": {
+    "text": "Closing Cash Balance",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_col_status": {
+    "text": "Treasury Status",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_status_safe": {
+    "text": "Comfortable",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_status_buffer": {
+    "text": "Buffer Depleted",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "stress_status_deficit": {
+    "text": "Cash Deficit",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "squad_sub_valuation": {
+    "text": "Book Value & Sale ROI",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_title": {
+    "text": "Player Net Book Value & Sale ROI Calculator",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_tag": {
+    "text": "Squad Intangible Assets",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_desc": {
+    "text": "Simulate transfer proposals and analyze the accounting waterfall of net capital gains for the SAD, deducting residual net book value (accumulated amortization), sell-on fees, and FIFA solidarity.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_select_player": {
+    "text": "Select Player:",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_filter_all": {
+    "text": "All Players",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_filter_forwards": {
+    "text": "Forwards",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_filter_midfielders": {
+    "text": "Midfielders",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_filter_defenders": {
+    "text": "Defenders",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_filter_academy": {
+    "text": "Academy (Homegrown)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_kpi_gross_fee": {
+    "text": "Gross Transfer Fee",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_kpi_gross_fee_sub": {
+    "text": "Agreed headline amount",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_kpi_net_gain": {
+    "text": "Net Accounting Capital Gain",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_kpi_net_gain_sub": {
+    "text": "Direct P&L bottom-line impact",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_kpi_cash_in": {
+    "text": "Net Cash Inflow",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_kpi_cash_in_sub": {
+    "text": "Net liquidity after commissions and third parties",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_kpi_uefa_relief": {
+    "text": "Annual UEFA FSR Relief",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_kpi_uefa_relief_sub": {
+    "text": "Annual squad wage and amortization savings",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_table_title": {
+    "text": "Squad Asset Valuation & Book Value Matrix (2024/25)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_table_desc": {
+    "text": "Official matrix of residual book values, annual amortization, and potential gain at release clause.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_col_player": {
+    "text": "Player",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_col_cost": {
+    "text": "Acquisition Cost",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_col_amort_annual": {
+    "text": "Annual Amort.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_col_book_value": {
+    "text": "Net Book Value",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_col_clause": {
+    "text": "Clause",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_col_market_val": {
+    "text": "Market Value",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_col_contract": {
+    "text": "Expiry",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_col_potential_gain": {
+    "text": "Gain at Clause",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_preset_market": {
+    "text": "Market Value",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_preset_clause": {
+    "text": "Release Clause",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_preset_conservative": {
+    "text": "Conservative Offer (-20%)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_slider_label": {
+    "text": "Proposed Transfer Fee (€M)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_agent_fee_label": {
+    "text": "Agent / Intermediation Commission",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_waterfall_gross": {
+    "text": "Gross Transfer Fee",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_waterfall_book_val": {
+    "text": "Residual Book Value Deduction",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_waterfall_sell_on": {
+    "text": "Sell-On Rights to Third Parties",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_waterfall_solidarity": {
+    "text": "FIFA Solidarity Mechanism (5%)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_waterfall_agent": {
+    "text": "Agent / Intermediation Fees",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_waterfall_net_gain": {
+    "text": "Net Accounting Capital Gain (P&L)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_academy_badge": {
+    "text": "Alcochete Academy (100% Margin)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_sellon_badge": {
+    "text": "Sell-On Rights Attached",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "pg_sub_player_roi": {
+    "text": "Player Sale & Capital Gain ROI",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "share_modal_title": {
+    "text": "Social Infographic Card Generator",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "share_modal_subtitle": {
+    "text": "Export this chart in high-resolution with executive official styling formatted for social media.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "share_format_square": {
+    "text": "📷 1:1 Square (Instagram / LinkedIn)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "share_format_landscape": {
+    "text": "🖥️ 16:9 Landscape (Twitter / WhatsApp)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "share_btn_download": {
+    "text": "📥 Download PNG Image",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "share_btn_copy": {
+    "text": "📋 Copy to Clipboard",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "share_btn_copied": {
+    "text": "✅ Image Copied to Clipboard!",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "share_btn_close": {
+    "text": "Close",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "share_tooltip": {
+    "text": "Share Infographic Card",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "share_format_story": {
+    "text": "📱 9:16 Story (Instagram / TikTok)",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "share_theme_emerald": {
+    "text": "🟢 Emerald",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "share_theme_dark": {
+    "text": "⚫ Dark Carbon",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "share_theme_light": {
+    "text": "⚪ Light Executive",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "share_btn_native_share": {
+    "text": "📲 Share on Device",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "share_custom_note_placeholder": {
+    "text": "Add a custom note to the card (optional)...",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "player_roi_waterfall_title": {
+    "text": "Transfer Accounting Breakdown (Waterfall)",
     "isAria": false,
     "innerHTML": false
   }

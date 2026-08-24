@@ -4,7 +4,7 @@ import { syncStateToUrl } from "../utils/urlSync.js";
 import { debounce } from "../utils/utils.js";
 import { useTranslation } from "../hooks/useTranslation.js";
 
-const TABS = [
+export const TABS = [
   { id: "overview", num: "01", label: "Overview", i18n: "tab-btn-overview" },
   { id: "revenue", num: "02", label: "Revenue", i18n: "tab-btn-revenue" },
   {
@@ -13,7 +13,12 @@ const TABS = [
     label: "Health",
     i18n: "tab-btn-healthcheck",
   },
-  { id: "balance-sheet", num: "04", label: "Balance Sheet", i18n: "tab-btn-balance-sheet" },
+  {
+    id: "balance-sheet",
+    num: "04",
+    label: "Balance Sheet",
+    i18n: "tab-btn-balance-sheet",
+  },
   { id: "bonds", num: "05", label: "Instruments", i18n: "tab-btn-bonds" },
   { id: "squad", num: "06", label: "Squad", i18n: "tab-btn-squad" },
   { id: "compare", num: "07", label: "Compare", i18n: "tab-btn-compare" },

@@ -30,13 +30,17 @@ export function useKeyboardShortcuts() {
           setTimeout(() => input.classList.remove("highlight-pulse"), 1200);
         };
 
-        const searchInput = document.getElementById("searchInput") as HTMLInputElement | null;
+        const searchInput = document.getElementById(
+          "searchInput",
+        ) as HTMLInputElement | null;
         if (searchInput) {
           triggerFocus(searchInput);
         } else {
           setActiveTab("data");
           setTimeout(() => {
-            const input = document.getElementById("searchInput") as HTMLInputElement | null;
+            const input = document.getElementById(
+              "searchInput",
+            ) as HTMLInputElement | null;
             if (input) triggerFocus(input);
           }, 100);
         }

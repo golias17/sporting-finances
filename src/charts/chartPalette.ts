@@ -116,4 +116,3 @@ export function hexToRgbArray(hex: string) {
 // import this exact reference and expect in-place updates from
 // updateChartTheme() (themeToggle.js) to be visible without re-importing.
 export const ZONE_COLORS = getZoneColors(false);
-

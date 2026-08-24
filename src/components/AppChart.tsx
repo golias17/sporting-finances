@@ -12,19 +12,28 @@ interface AppChartProps {
   className?: string;
   ariaLabel?: string;
   valueType?:
-"currency-thousands"
+    | "currency-thousands"
     | "currency-millions"
-   
     | "ratio"
     | "percentage"
+    | "points"
+    | "score"
     | "auto";
   datasetValueTypes?: Record<
     number,
-    "currency-thousands" | "currency-millions" | "ratio" | "percentage"
+    | "currency-thousands"
+    | "currency-millions"
+    | "ratio"
+    | "percentage"
+    | "points"
+    | "score"
   >;
   hideTable?: boolean;
   chartRef?: React.RefObject<any>;
-  plugins?: Array<{ id: string; beforeDraw?: (chart: { ctx: CanvasRenderingContext2D }) => void }>;
+  plugins?: Array<{
+    id: string;
+    beforeDraw?: (chart: { ctx: CanvasRenderingContext2D }) => void;
+  }>;
 }
 
 export function AppChart({
@@ -75,7 +84,7 @@ export function AppChart({
       {!hideTable && (
         <AccessibleTable
           chartId={id}
-          data={data}
+          data={data as any}
           valueType={valueType as any}
           datasetValueTypes={datasetValueTypes}
           onToggle={setIsTableVisible}

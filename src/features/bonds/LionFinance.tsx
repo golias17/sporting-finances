@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { createRoot } from "react-dom/client";
 import { useAppState } from "../../core/state.ts";
 import { useTranslation } from "../../hooks/useTranslation.js";
 
@@ -200,20 +199,4 @@ export function LionFinance() {
       </div>
     </>
   );
-}
-
-// -------------------------------------------------------------
-// Mount functions
-// -------------------------------------------------------------
-const vmocCostKpisRoot: HTMLElement | null = null;
-const vmocCostTableRoot: HTMLElement | null = null;
-const usppTermsRoot: HTMLElement | null = null;
-let lionFinanceCardsRoot: HTMLElement | null = null;
-
-
-function renderLionFinance() {
-  const container = document.getElementById("lionFinanceCards");
-  if (!container) return;
-  if (!lionFinanceCardsRoot) lionFinanceCardsRoot = createRoot(container);
-  lionFinanceCardsRoot.render(<LionFinance />);
 }

@@ -1,8 +1,10 @@
 import autoTable from "jspdf-autotable";
 import { state } from "../core/state.js";
-import { getBrandColors, hexToRgbArray } from "../charts/chartUtils.js";
-import { fmtM, signColorCell, thresholdColorCell, combineCellColorers } from "./pdfHelpers.js";
-import type { PdfContext, ColorPalette } from "./pdfTypes.js";
+import {
+  fmtM,
+  signColorCell,
+  } from "./pdfHelpers.js";
+import type { PdfContext, AnnualData } from "./pdfTypes.js";
 
 // ==========================================================
 // PAGE 3: TABLE 3 (PLAYER TRADING) & TABLE 4 (CASH FLOWS)
@@ -73,11 +75,11 @@ export function drawTradingCashFlowPage(ctx: PdfContext) {
       4: { halign: "right" },
       5: { halign: "right" },
     },
-    didParseCell: signColorCell(3, colors),
+    didParseCell: signColorCell(3, colors) as any,
   });
 
   // Table 4: Cash Flows
-  const table3EndY = doc.lastAutoTable.finalY || 140;
+  const table3EndY = (doc as any).lastAutoTable.finalY || 140;
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10.5);
@@ -107,12 +109,13 @@ export function drawTradingCashFlowPage(ctx: PdfContext) {
       ];
 
   const t4Rows = data.map((d: AnnualData) => {
-    const netChange = d.cf_operating + d.cf_investing + d.cf_financing;
+    const netChange =
+      (d.cf_operating || 0) + (d.cf_investing || 0) + (d.cf_financing || 0);
     return [
       d.label,
-      fmtM(d.cf_operating),
-      fmtM(d.cf_investing),
-      fmtM(d.cf_financing),
+      fmtM(d.cf_operating || 0),
+      fmtM(d.cf_investing || 0),
+      fmtM(d.cf_financing || 0),
       fmtM(netChange),
     ];
   });
@@ -137,8 +140,6 @@ export function drawTradingCashFlowPage(ctx: PdfContext) {
       3: { halign: "right" },
       4: { halign: "right" },
     },
-    didParseCell: signColorCell(4, colors),
+    didParseCell: signColorCell(4, colors) as any,
   });
 }
-
-

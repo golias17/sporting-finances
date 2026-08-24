@@ -1,46 +1,35 @@
 import { jsPDF } from "jspdf";
 
-// PDF Generator Types
-interface CellData {
+export interface CellData {
   section: string;
   column: { index: number };
   cell: {
     text: string[];
     styles: {
-      textColor?: string;
+      textColor?: [number, number, number] | string;
       fontStyle?: string;
     };
   };
 }
 
-interface ColorPalette {
-  negative: string;
-  positive: string;
-  neutral: string;
-  brand: string;
-  brandLight: string;
+export interface ColorPalette {
+  green: [number, number, number];
+  gold: [number, number, number];
+  darkInk: [number, number, number];
+  mutedText: [number, number, number];
+  positive: [number, number, number];
+  negative: [number, number, number];
+  lightGreyBg: [number, number, number];
 }
 
-interface ThresholdConfig {
+export interface ThresholdConfig {
   negativeIf: (val: number) => boolean;
   positiveIf: (val: number) => boolean;
 }
 
-interface PdfContext {
-  doc: jsPDF;
-  isPt: boolean;
-  data: AnnualData[];
-  logoBase64: string;
-  totalPages: number;
-  colors: ColorPalette;
-  brand: ColorPalette;
-  currentPage: number;
-  addPageHeader: () => void;
-}
-
-interface AnnualData {
+export interface AnnualData {
   label: string;
-  season: string;
+  season?: string;
   revenue_operating: number;
   personnel_costs: number;
   net_result: number;
@@ -55,20 +44,39 @@ interface AnnualData {
   cash: number;
   player_transfer_income: number;
   player_transfer_cost: number;
-  transfer_payables_c: number;
-  transfer_payables_nc: number;
-  transfer_receivables_c: number;
-  transfer_receivables_nc: number;
+  transfer_payables_c?: number;
+  transfer_payables_nc?: number;
+  transfer_receivables_c?: number;
+  transfer_receivables_nc?: number;
+  revenue_matchday?: number;
+  revenue_tv?: number;
+  revenue_commercial?: number;
+  cf_operating?: number;
+  cf_investing?: number;
+  cf_financing?: number;
+  [key: string]: any;
 }
 
-interface SummaryLabels {
+export interface SummaryLabels {
   revGrowthLabel: string;
   netResultLabel: string;
   equityLabel: string;
   executiveNote: string;
 }
 
-interface GeneratePdfOptions {
-  isPt?: boolean;
-  language?: string;
+export interface GeneratePdfOptions {
+  lang?: "en" | "pt";
+  pages?: boolean[];
+  executiveNote?: string;
+}
+
+export interface PdfContext {
+  doc: jsPDF;
+  isPt: boolean;
+  data: AnnualData[];
+  colors: ColorPalette;
+  firstSeason: Partial<AnnualData>;
+  latestSeason: Partial<AnnualData>;
+  startNewPage: () => void;
+  pageCounter: { count: number };
 }

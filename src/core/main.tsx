@@ -43,17 +43,25 @@ applyStoredTheme();
 // =============================================================
 
 // Retry helper for fetch operations
-async function fetchWithRetry(url: string, maxRetries = 3, delay = 1000): Promise<Response> {
+async function fetchWithRetry(
+  url: string,
+  maxRetries = 3,
+  delay = 1000,
+): Promise<Response> {
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
       const res = await fetch(url);
       if (res.ok) return res;
       if (attempt < maxRetries) {
-        await new Promise((resolve) => setTimeout(resolve, delay * Math.pow(2, attempt)));
+        await new Promise((resolve) =>
+          setTimeout(resolve, delay * Math.pow(2, attempt)),
+        );
       }
     } catch (err) {
       if (attempt === maxRetries) throw err;
-      await new Promise((resolve) => setTimeout(resolve, delay * Math.pow(2, attempt)));
+      await new Promise((resolve) =>
+        setTimeout(resolve, delay * Math.pow(2, attempt)),
+      );
     }
   }
   throw new Error(`Failed to fetch ${url} after ${maxRetries} retries`);
@@ -64,11 +72,9 @@ async function initApp() {
     const initialTab = applyUrlParams();
     state.setActiveTab(initialTab || "overview");
 
-    const [finRes, trRes, benRes, porRes] = await Promise.all([
+    const [finRes, trRes] = await Promise.all([
       fetchWithRetry(config.financialsPath),
       fetchWithRetry(config.transfersPath),
-      fetchWithRetry(config.benficaPath),
-      fetchWithRetry(config.portoPath),
       loadTranslations(detectActiveLang()),
     ]);
 
@@ -83,29 +89,35 @@ async function initApp() {
       );
     }
 
-    const [dataset, transferLedger, benficaData, portoData] = await Promise.all([
+    const [dataset, transferLedger] = await Promise.all([
       finRes.json(),
       trRes.json(),
-      benRes.json(),
-      porRes.json(),
     ]);
 
     state.setDataset(dataset);
     state.setTransferLedger(transferLedger);
-    state.setBenficaDataset(benficaData);
-    state.setPortoDataset(portoData);
 
     // Initialise chart options and palette before charts mount
     initChartDefaults();
 
-    // Unmount any pre-existing loading DOM from index.html if we want to rely on React.
-    // In our case, React will just overwrite <div id="root"></div>.
+    // Mount the React Application immediately
     const rootEl = document.getElementById("root");
     if (!rootEl) throw new Error("No #root element found in index.html");
 
-    // Mount the React Application
     const root = createRoot(rootEl);
     root.render(<App />);
+
+    // Load rival datasets in parallel in background without blocking initial paint
+    Promise.all([
+      fetchWithRetry(config.benficaPath)
+        .then((r) => r.json())
+        .then((data) => state.setBenficaDataset(data)),
+      fetchWithRetry(config.portoPath)
+        .then((r) => r.json())
+        .then((data) => state.setPortoDataset(data)),
+    ]).catch((err) => {
+      console.warn("Non-critical background rival data load failed:", err);
+    });
   } catch (e: unknown) {
     console.error("Failed to load application data", e);
     const wrap = document.createElement("div");
@@ -116,7 +128,8 @@ async function initApp() {
     const pre = document.createElement("pre");
     pre.style.cssText =
       "margin-top: 2rem; padding: 1rem; background: rgba(255,0,0,0.05); border: 1px dashed #ff4444; border-radius: 4px; text-align: left; font-family: monospace; overflow-x: auto; white-space: pre-wrap;";
-    pre.textContent = `Error Details:\n${e.stack || e.message || String(e)}`;
+    const errMsg = e instanceof Error ? e.stack || e.message : String(e);
+    pre.textContent = `Error Details:\n${errMsg}`;
     wrap.appendChild(pre);
     document.body.innerHTML = "";
     document.body.appendChild(wrap);

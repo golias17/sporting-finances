@@ -96,9 +96,23 @@ export default defineConfig({
       output: {
         manualChunks(id: string) {
           if (id.includes("node_modules")) {
+            if (
+              id.includes("jspdf") ||
+              id.includes("jspdf-autotable") ||
+              id.includes("canvg") ||
+              id.includes("html2canvas") ||
+              id.includes("fflate") ||
+              id.includes("dompurify")
+            ) {
+              return "pdf-libs";
+            }
             if (id.includes("react") || id.includes("react-dom"))
               return "react";
-            if (id.includes("chart.js") || id.includes("react-chartjs-2"))
+            if (
+              id.includes("chart.js") ||
+              id.includes("react-chartjs-2") ||
+              id.includes("chartjs-plugin-annotation")
+            )
               return "chartjs";
             return "vendor";
           }
@@ -116,7 +130,14 @@ export default defineConfig({
       "./tests/**/*.spec.ts",
       "./tests/**/*.spec.tsx",
     ],
-    exclude: ["node_modules", "dist", ".idea", ".git", ".cache", "tests/e2e/**"],
+    exclude: [
+      "node_modules",
+      "dist",
+      ".idea",
+      ".git",
+      ".cache",
+      "tests/e2e/**",
+    ],
     coverage: {
       exclude: ["src/charts/chartUtils.ts"],
       thresholds: {

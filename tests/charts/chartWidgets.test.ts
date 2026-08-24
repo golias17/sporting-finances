@@ -27,7 +27,7 @@ describe("chartWidgets.js — externalTooltipHandler", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    
+
     // Create a mock tooltip element
     tooltipEl = {
       id: "",
@@ -39,7 +39,7 @@ describe("chartWidgets.js — externalTooltipHandler", () => {
         remove: vi.fn(),
       },
     };
-    
+
     mockGetElementById.mockReturnValue(null);
     mockCreateElement.mockReturnValue(tooltipEl);
     mockGetBoundingClientRect.mockReturnValue({
@@ -77,7 +77,7 @@ describe("chartWidgets.js — externalTooltipHandler", () => {
 
   it("hides tooltip when opacity is 0", () => {
     mockGetElementById.mockReturnValue(tooltipEl);
-    
+
     const chart = {
       canvas: {
         getBoundingClientRect: mockGetBoundingClientRect,
@@ -100,7 +100,7 @@ describe("chartWidgets.js — externalTooltipHandler", () => {
 
   it("renders tooltip with body content", () => {
     mockGetElementById.mockReturnValue(tooltipEl);
-    
+
     const chart = {
       canvas: {
         getBoundingClientRect: mockGetBoundingClientRect,
@@ -115,9 +115,7 @@ describe("chartWidgets.js — externalTooltipHandler", () => {
       ],
       title: ["2023/24"],
       footer: [],
-      labelColors: [
-        { backgroundColor: "#ff0000", borderColor: "#cc0000" },
-      ],
+      labelColors: [{ backgroundColor: "#ff0000", borderColor: "#cc0000" }],
       caretX: 50,
       caretY: 30,
     };
@@ -131,13 +129,9 @@ describe("chartWidgets.js — externalTooltipHandler", () => {
     expect(tooltipEl.innerHTML).toContain("€100M");
   });
 
-  
-
-
-
   it("renders label without colon as strong text", () => {
     mockGetElementById.mockReturnValue(tooltipEl);
-    
+
     const chart = {
       canvas: {
         getBoundingClientRect: mockGetBoundingClientRect,
@@ -152,9 +146,7 @@ describe("chartWidgets.js — externalTooltipHandler", () => {
       ],
       title: [],
       footer: [],
-      labelColors: [
-        { backgroundColor: "#00ff00", borderColor: "#00cc00" },
-      ],
+      labelColors: [{ backgroundColor: "#00ff00", borderColor: "#00cc00" }],
       caretX: 50,
       caretY: 30,
     };
@@ -166,7 +158,7 @@ describe("chartWidgets.js — externalTooltipHandler", () => {
 
   it("renders footer when present", () => {
     mockGetElementById.mockReturnValue(tooltipEl);
-    
+
     const chart = {
       canvas: {
         getBoundingClientRect: mockGetBoundingClientRect,
@@ -181,9 +173,7 @@ describe("chartWidgets.js — externalTooltipHandler", () => {
       ],
       title: ["2023/24"],
       footer: ["Total: €100M"],
-      labelColors: [
-        { backgroundColor: "#ff0000", borderColor: "#cc0000" },
-      ],
+      labelColors: [{ backgroundColor: "#ff0000", borderColor: "#cc0000" }],
       caretX: 50,
       caretY: 30,
     };
@@ -196,7 +186,7 @@ describe("chartWidgets.js — externalTooltipHandler", () => {
 
   it("positions tooltip correctly", () => {
     mockGetElementById.mockReturnValue(tooltipEl);
-    
+
     const chart = {
       canvas: {
         getBoundingClientRect: mockGetBoundingClientRect,

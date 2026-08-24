@@ -19,8 +19,10 @@ export function updateChartTheme() {
   Object.assign(ZONE_COLORS, getZoneColors(isDark));
 
   const opts = useAppState.getState().baseOpts;
-  if (opts.scales?.x?.ticks) opts.scales.x.ticks.color = useAppState.getState().COLORS.muted;
-  if (opts.scales?.y?.ticks) opts.scales.y.ticks.color = useAppState.getState().COLORS.muted;
+  if (opts.scales?.x?.ticks)
+    opts.scales.x.ticks.color = useAppState.getState().COLORS.muted;
+  if (opts.scales?.y?.ticks)
+    opts.scales.y.ticks.color = useAppState.getState().COLORS.muted;
   if (opts.scales?.y?.grid) {
     opts.scales.y.grid.color = isDark
       ? "rgba(255,255,255,0.12)"
