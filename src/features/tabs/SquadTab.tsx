@@ -108,7 +108,16 @@ export const SquadTab = React.memo(function SquadTab() {
                   color: "var(--muted)",
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "var(--fs-xs)", fontWeight: 600, color: "var(--ink)" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    fontSize: "var(--fs-xs)",
+                    fontWeight: 600,
+                    color: "var(--ink)",
+                  }}
+                >
                   <svg
                     width="14"
                     height="14"

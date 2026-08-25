@@ -15,10 +15,19 @@ vi.mock("../../src/hooks/useTranslation", () => ({
 
 vi.mock("../../src/features/tabs/useOverviewCharts", () => ({
   useOverviewCharts: () => ({
-    heroData: { labels: ["2023"], datasets: [{ label: "Revenue", data: [100] }] },
+    heroData: {
+      labels: ["2023"],
+      datasets: [{ label: "Revenue", data: [100] }],
+    },
     heroOptions: {},
-    netResult: { data: { labels: ["2023"], datasets: [{ label: "Net", data: [10] }] }, options: {} },
-    equity: { data: { labels: ["2023"], datasets: [{ label: "Equity", data: [50] }] }, options: {} },
+    netResult: {
+      data: { labels: ["2023"], datasets: [{ label: "Net", data: [10] }] },
+      options: {},
+    },
+    equity: {
+      data: { labels: ["2023"], datasets: [{ label: "Equity", data: [50] }] },
+      options: {},
+    },
   }),
 }));
 

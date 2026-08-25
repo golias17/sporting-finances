@@ -55,13 +55,19 @@ describe("chartHelpers", () => {
     };
 
     it("creates tooltip options with formatter", () => {
-      const result = createTooltipOptions(baseTooltip as any, formatters.millions);
+      const result = createTooltipOptions(
+        baseTooltip as any,
+        formatters.millions,
+      );
       expect(result).toHaveProperty("callbacks");
       expect(result.callbacks).toHaveProperty("label");
     });
 
     it("formats tooltip label correctly", () => {
-      const result = createTooltipOptions(baseTooltip as any, formatters.percent);
+      const result = createTooltipOptions(
+        baseTooltip as any,
+        formatters.percent,
+      );
       const labelFn = result.callbacks.label as (ctx: any) => string;
       const ctx = {
         dataset: { label: "Test" },
@@ -73,7 +79,11 @@ describe("chartHelpers", () => {
     });
 
     it("creates tooltip options with suffix", () => {
-      const result = createTooltipOptions(baseTooltip as any, formatters.millions, "of revenue");
+      const result = createTooltipOptions(
+        baseTooltip as any,
+        formatters.millions,
+        "of revenue",
+      );
       const labelFn = result.callbacks.label as (ctx: any) => string;
       const ctx = {
         dataset: { label: "Test" },
@@ -95,7 +105,10 @@ describe("chartHelpers", () => {
       const customLabel = (ctx: any) =>
         `Custom: ${ctx.dataset.label} = ${ctx.parsed.y}`;
 
-      const result = createTooltipOptionsWithFn(baseTooltip as any, customLabel);
+      const result = createTooltipOptionsWithFn(
+        baseTooltip as any,
+        customLabel,
+      );
       const labelFn = result.callbacks.label as (ctx: any) => string;
 
       const ctx = {

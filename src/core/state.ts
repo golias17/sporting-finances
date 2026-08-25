@@ -10,7 +10,7 @@ import type {
 
 export const useAppState = create<AppState>((set, get) => ({
   isPt: false,
-  tlActiveSeason: "2025/26",
+  tlActiveSeason: "2024/25",
   tlActiveWindow: "All",
   healthBarIdx: null,
   storyIndex: 0,
@@ -54,7 +54,7 @@ export const useAppState = create<AppState>((set, get) => ({
   activeLionTab: "both",
   pinnedPlaygroundInputs: null,
 
-  tfActiveSeason: "2025/26",
+  tfActiveSeason: "2024/25",
   tfActiveType: "all",
   tfActiveWindow: "all",
   tfQuery: "",
@@ -99,21 +99,22 @@ export const useAppState = create<AppState>((set, get) => ({
   setUrlCmpA: (v: string | null) => set({ urlCmpA: v }),
   setUrlCmpB: (v: string | null) => set({ urlCmpB: v }),
   setUrlHealthSeason: (v: string | null) => set({ urlHealthSeason: v }),
-  setUrlPlayground: (v: PlaygroundInputs | null) => set({ urlPlayground: v }),
+  setUrlPlayground: (
+    v: PlaygroundInputs | Record<string, string | null> | null,
+  ) => set({ urlPlayground: v as any }),
 }));
 
-export const state = new Proxy({} as AppState, {
-  get(target: Record<string, unknown>, key: PropertyKey, receiver: unknown) {
+export const state = new Proxy({} as any, {
+  get(target: any, key: PropertyKey, receiver: unknown) {
     const s = useAppState.getState() as any;
 
     if (key === "COLORS" && (!s.COLORS || Object.keys(s.COLORS).length === 0)) {
-
       return s.COLORS || {};
     }
 
     return s[key];
   },
-  set(target: Record<string, unknown>, key: PropertyKey, value: unknown, receiver: unknown) {
+  set(target: any, key: PropertyKey, value: unknown, receiver: unknown) {
     const bypassWarnKeys = new Set([
       "COLORS",
       "baseOpts",
@@ -125,8 +126,6 @@ export const state = new Proxy({} as AppState, {
       "set" + String(key).charAt(0).toUpperCase() + String(key).slice(1);
     if (key === "DATASET") setterName = "setDataset";
     if (key === "TRANSFER_LEDGER") setterName = "setTransferLedger";
-
-
 
     if (s[setterName] && typeof s[setterName] === "function") {
       s[setterName](value);

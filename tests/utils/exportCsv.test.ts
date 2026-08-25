@@ -6,8 +6,12 @@ describe("exportToCsv Utility", () => {
   let revokeObjectURLSpy: any;
 
   beforeEach(() => {
-    createObjectURLSpy = vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:mock-url");
-    revokeObjectURLSpy = vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => {});
+    createObjectURLSpy = vi
+      .spyOn(URL, "createObjectURL")
+      .mockReturnValue("blob:mock-url");
+    revokeObjectURLSpy = vi
+      .spyOn(URL, "revokeObjectURL")
+      .mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -15,11 +19,21 @@ describe("exportToCsv Utility", () => {
   });
 
   it("should create blob and trigger download link with correct filename", () => {
-    const clickSpy = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => {});
-    const appendChildSpy = vi.spyOn(document.body, "appendChild").mockImplementation((node) => node);
-    const removeChildSpy = vi.spyOn(document.body, "removeChild").mockImplementation((node) => node);
+    const clickSpy = vi
+      .spyOn(HTMLAnchorElement.prototype, "click")
+      .mockImplementation(() => {});
+    const appendChildSpy = vi
+      .spyOn(document.body, "appendChild")
+      .mockImplementation((node) => node);
+    const removeChildSpy = vi
+      .spyOn(document.body, "removeChild")
+      .mockImplementation((node) => node);
 
-    exportToCsv("test_financials", ["Season", "Revenue"], [["2024/25", 150000]]);
+    exportToCsv(
+      "test_financials",
+      ["Season", "Revenue"],
+      [["2024/25", 150000]],
+    );
 
     expect(createObjectURLSpy).toHaveBeenCalled();
     expect(clickSpy).toHaveBeenCalled();
@@ -37,7 +51,7 @@ describe("exportToCsv Utility", () => {
       return "blob:mock";
     });
 
-    exportToCsv("data.csv", ["Header 1", "Header, 2"], [["Val \"1\"", "Val, 2"]]);
+    exportToCsv("data.csv", ["Header 1", "Header, 2"], [['Val "1"', "Val, 2"]]);
 
     expect(createObjectURLSpy).toHaveBeenCalled();
     expect(capturedBlob).not.toBeNull();

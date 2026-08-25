@@ -1,6 +1,10 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { state } from "../../src/core/state.js";
-import { getPitchMilestone, getEventAnnotations, eventBoxes } from "../../src/charts/chartAnnotations";
+import {
+  getPitchMilestone,
+  getEventAnnotations,
+  eventBoxes,
+} from "../../src/charts/chartAnnotations";
 
 describe("chartAnnotations", () => {
   beforeEach(() => {

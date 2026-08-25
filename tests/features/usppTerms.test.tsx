@@ -38,7 +38,7 @@ describe("UsppTerms", () => {
       isPt: true,
     };
     (state as any).useAppState = vi.fn((selector: any) => selector(mockState));
-    
+
     const { container } = render(<UsppTerms />);
     expect(container.querySelector(".uspp-grid")).toBeTruthy();
   });

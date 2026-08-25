@@ -45,7 +45,6 @@ export function prevStory() {
   }
 }
 
-import { createRoot } from "react-dom/client";
 
 // Kept for backwards compatibility with main.ts if needed, but not strictly required
 

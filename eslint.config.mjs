@@ -49,7 +49,14 @@ export default tseslint.config(
   {
     // dist_check*/ are ad-hoc `vite build --outDir` verification dirs (see
     // .gitignore) — untracked scratch output, not source to lint.
-    ignores: ["dist/**", "dist_check*/**", "node_modules/**", "coverage/**", "playwright-report/**", "test-results/**"],
+    ignores: [
+      "dist/**",
+      "dist_check*/**",
+      "node_modules/**",
+      "coverage/**",
+      "playwright-report/**",
+      "test-results/**",
+    ],
   },
   prettierConfig,
 );

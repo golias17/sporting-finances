@@ -1,8 +1,8 @@
 [
   {
     "season": "2010/11",
-    "income": 36717,
-    "cost": -22976,
+    "income": 25517,
+    "cost": -6890,
     "note": "Major squad overhaul with key sales of João Moutinho to FC Porto (€24M) and Miguel Veloso to Genoa (€9M). Incomings included Ricky van Wolfswinkel, Jaime Valdés, and Alberto Zapater.",
     "note_pt": "Reestruturação profunda do plantel marcada pelas saídas de João Moutinho para o FC Porto (€24M) e Miguel Veloso para o Génova (€9M). Destaque para as entradas de Ricky van Wolfswinkel, Jaime Valdés e Alberto Zapater.",
     "purchases": [
@@ -165,8 +165,8 @@
   },
   {
     "season": "2011/12",
-    "income": 11812,
-    "cost": -32547,
+    "income": 7212,
+    "cost": -4478,
     "note": "High investment under Godinho Lopes presidency. Incomings featured Elias (€8.85M record transfer), Diego Capel, Jeffrén, and Emiliano Insúa. Partial economic rights ceded to Quality Football Fund.",
     "note_pt": "Forte investimento sob a presidência de Godinho Lopes. Entradas de relevo de Elias (€8,85M, contratação recorde), Diego Capel, Jeffrén e Emiliano Insúa. Cedência parcial de direitos económicos ao Quality Football Fund.",
     "purchases": [
@@ -294,7 +294,7 @@
   {
     "season": "2012/13",
     "income": 21887,
-    "cost": -16379,
+    "cost": -4991,
     "note": "Financial restructuring era. Purchased Marcos Rojo (sold next year for €20M). Key incomings from João Moutinho solidarity payment and Ricky van Wolfswinkel sell.",
     "note_pt": "Era de reestruturação financeira. Compra de Marcos Rojo (vendido no ano seguinte por €20M). Proveitos importantes do mecanismo de solidariedade de João Moutinho e venda de Ricky van Wolfswinkel.",
     "purchases": [
@@ -326,13 +326,6 @@
         "note_pt": "Apenas aquisição parcial"
       },
       {
-        "player": "Danijel Pranjic",
-        "club": "Free agent",
-        "fee": 0,
-        "rights": "100%",
-        "window": "summer"
-      },
-      {
         "player": "Zakaria Labyad",
         "club": "PSV Eindhoven",
         "fee": 0.9,
@@ -347,6 +340,13 @@
         "fee": 0.7,
         "rights": "60%",
         "window": "summer"
+      },
+      {
+        "player": "Danijel Pranjic",
+        "club": "Free agent",
+        "fee": 0,
+        "rights": "100%",
+        "window": "summer"
       }
     ],
     "sales": [
@@ -354,18 +354,8 @@
         "player": "Ricky van Wolfswinkel",
         "club": "Norwich City",
         "fee": 10,
-        "commission": 4.149,
         "rights": "35%",
-        "window": "summer",
-        "note": "Individual sport performance add-on included",
-        "note_pt": "Inclui bónus por objetivos desportivos individuais"
-      },
-      {
-        "player": "Matias Fernández",
-        "club": "Fiorentina",
-        "fee": 3.137,
-        "commission": 0.577,
-        "rights": "75%",
+        "commission": 4.149,
         "window": "summer",
         "note": "Individual sport performance add-on included",
         "note_pt": "Inclui bónus por objetivos desportivos individuais"
@@ -374,29 +364,11 @@
         "player": "Emiliano Insúa",
         "club": "Atlético Madrid",
         "fee": 3.5,
-        "bonus": 0.437,
         "rights": "35%",
+        "bonus": 0.437,
         "window": "winter",
         "note": "SCP held 37% economic rights",
         "note_pt": "SCP detinha 37% dos direitos económicos"
-      },
-      {
-        "player": "Marat Izmailov",
-        "club": "FC Porto",
-        "fee": 1,
-        "bonus": 1.108,
-        "rights": "50%",
-        "window": "winter",
-        "note": "SCP held 50% economic rights",
-        "note_pt": "SCP detinha 50% dos direitos económicos"
-      },
-      {
-        "player": "Daniel Carriço",
-        "club": "Reading FC",
-        "fee": 0.75,
-        "commission": 0.112,
-        "rights": "100%",
-        "window": "winter"
       },
       {
         "player": "João Moutinho",
@@ -405,13 +377,41 @@
         "window": "summer",
         "note": "Training compensation for Moutinho Porto→Monaco move",
         "note_pt": "Compensação de formação pela transferência de Moutinho Porto→Mónaco"
+      },
+      {
+        "player": "Matias Fernández",
+        "club": "Fiorentina",
+        "fee": 3.137,
+        "rights": "75%",
+        "commission": 0.577,
+        "window": "summer",
+        "note": "Individual sport performance add-on included",
+        "note_pt": "Inclui bónus por objetivos desportivos individuais"
+      },
+      {
+        "player": "Marat Izmailov",
+        "club": "FC Porto",
+        "fee": 1,
+        "rights": "50%",
+        "bonus": 1.108,
+        "window": "winter",
+        "note": "SCP held 50% economic rights",
+        "note_pt": "SCP detinha 50% dos direitos económicos"
+      },
+      {
+        "player": "Daniel Carriço",
+        "club": "Reading FC",
+        "fee": 0.75,
+        "rights": "100%",
+        "commission": 0.112,
+        "window": "winter"
       }
     ]
   },
   {
     "season": "2013/14",
-    "income": 19555,
-    "cost": -13145,
+    "income": 19200,
+    "cost": -291,
     "note": "Second season of restructuring. Sold Bruma, Tiago Ilori and Elias Trindade while investing modestly. All purchases included contingent add-ons not reflected in fixed fees.",
     "note_pt": "Segunda época de reestruturação. Venda de Bruma, Tiago Ilori e Elias Trindade, com investimento modesto. Todas as aquisições incluíram bónus contingentes não refletidos nos valores fixos.",
     "purchases": [
@@ -477,8 +477,8 @@
         "player": "Bruma",
         "club": "Galatasaray",
         "fee": 10,
-        "commission": 0.835,
         "rights": "100%",
+        "commission": 0.835,
         "window": "summer",
         "note": "Individual sport performance add-on included. 25% of a future capital gain",
         "note_pt": "Inclui bónus por objetivos desportivos individuais. 25% de uma mais-valia futura"
@@ -487,8 +487,8 @@
         "player": "Tiago Ilori",
         "club": "Liverpool FC",
         "fee": 4.88,
-        "bonus": 0.856,
         "rights": "100%",
+        "bonus": 0.856,
         "window": "summer",
         "note": "+€1.5M bonus on appearances at Liverpool. Costs incl. €1.12M debt reversal. 25% of a future capital gain",
         "note_pt": "+€1.5M de bónus por jogos no Liverpool. Custos incluem €1.12M de reversão de dívida. 25% de uma mais-valia futura"
@@ -497,8 +497,8 @@
         "player": "Elias Trindade",
         "club": "Corinthians",
         "fee": 4,
-        "bonus": 0.749,
         "rights": "50%",
+        "bonus": 0.749,
         "window": "summer",
         "note": "SCP held 50% economic rights, which half are attributable to QFIL. Costs incl. €1.03M contract termination.",
         "note_pt": "SCP detinha 50% dos direitos económicos, metade dos quais atribuíveis à QFIL. Custos incluem €1.03M de rescisão contratual."
@@ -507,16 +507,16 @@
         "player": "Stjin Schaars",
         "club": "PSV Eindhoven",
         "fee": 0.675,
-        "bonus": 0.211,
         "rights": "37.5%",
+        "bonus": 0.211,
         "window": "summer"
       }
     ]
   },
   {
     "season": "2014/15",
-    "income": 36000,
-    "cost": -10017,
+    "income": 31105,
+    "cost": -3103,
     "note": "Record sales season at the time. Marcos Rojo sold to Manchester United for €20M just one year after signing. Eric Dier and Cedric Soares also departed for the Premier League.",
     "note_pt": "Época recorde de vendas à data. Venda de Marcos Rojo ao Manchester United por €20M um ano após a contratação. Eric Dier e Cédric Soares também saíram para a Premier League.",
     "purchases": [
@@ -624,8 +624,8 @@
   },
   {
     "season": "2015/16",
-    "income": 7716,
-    "cost": -25510,
+    "income": 8516,
+    "cost": -800,
     "note": "Heavy investment cycle with Alan Ruiz and Teófilo Gutiérrez as marquee buys. Sales underwhelming — only Fredy Montero to China for €5M.",
     "note_pt": "Ciclo de forte investimento com Alan Ruiz e Teófilo Gutiérrez como contratações sonantes. Vendas modestas — apenas Fredy Montero para a China por €5M.",
     "purchases": [
@@ -672,6 +672,23 @@
         "window": "summer"
       },
       {
+        "player": "Radosav Petrović",
+        "club": "Dínamo Kiev",
+        "fee": 1,
+        "rights": "100%",
+        "window": "summer"
+      },
+      {
+        "player": "Marvin Zeegelaar",
+        "club": "Udinese Calcio",
+        "fee": 0.3,
+        "rights": "100%",
+        "commission": 0.39,
+        "window": "winter",
+        "note": "+contingent add-ons; sold to Watford for €3M in 2017",
+        "note_pt": "+bónus contingentes; vendido ao Watford por €3M em 2017"
+      },
+      {
         "player": "Bruno César",
         "club": "Free Agent",
         "fee": 0,
@@ -696,23 +713,6 @@
         "rights": "100%",
         "commission": 1,
         "window": "summer"
-      },
-      {
-        "player": "Radosav Petrović",
-        "club": "Dínamo Kiev",
-        "fee": 1,
-        "rights": "100%",
-        "window": "summer"
-      },
-      {
-        "player": "Marvin Zeegelaar",
-        "club": "Udinese Calcio",
-        "fee": 0.3,
-        "rights": "100%",
-        "commission": 0.39,
-        "window": "winter",
-        "note": "+contingent add-ons; sold to Watford for €3M in 2017",
-        "note_pt": "+bónus contingentes; vendido ao Watford por €3M em 2017"
       }
     ],
     "sales": [
@@ -756,7 +756,7 @@
   {
     "season": "2016/17",
     "income": 92997,
-    "cost": -54509,
+    "cost": -15089,
     "note": "Record season at the time. €95.7M from player sales (João Mário €40M, Slimani €30.5M, Semedo €14M). Heavy squad investment with Bas Dost, Bruno Fernandes, Doumbia.",
     "note_pt": "Época recorde à data. €95,7M em vendas de jogadores (João Mário €40M, Slimani €30,5M, Semedo €14M). Forte investimento no plantel com Bas Dost, Bruno Fernandes e Doumbia.",
     "purchases": [
@@ -781,16 +781,6 @@
         "note_pt": "Comissão: €0.85M + €0.34M de solidariedade. Cláusula de rescisão de €100M fixada."
       },
       {
-        "player": "Seydou Doumbia",
-        "club": "AS Roma",
-        "fee": 3.5,
-        "rights": "70%",
-        "commission": 0.7,
-        "window": "summer",
-        "note": "Loan-to-buy (€0.5M loan + €3M option). €3M signing bonus paid over 2 seasons",
-        "note_pt": "Empréstimo com obrigação de compra (€0.5M de empréstimo + €3M de opção). Prémio de assinatura de €3M pago em 2 épocas"
-      },
-      {
         "player": "Sebastian Coates",
         "club": "Sunderland AFC",
         "fee": 4.48,
@@ -805,6 +795,16 @@
         "rights": "80%",
         "commission": 0.3,
         "window": "summer"
+      },
+      {
+        "player": "Seydou Doumbia",
+        "club": "AS Roma",
+        "fee": 3.5,
+        "rights": "70%",
+        "commission": 0.7,
+        "window": "summer",
+        "note": "Loan-to-buy (€0.5M loan + €3M option). €3M signing bonus paid over 2 seasons",
+        "note_pt": "Empréstimo com obrigação de compra (€0.5M de empréstimo + €3M de opção). Prémio de assinatura de €3M pago em 2 épocas"
       },
       {
         "player": "Cristiano Piccini",
@@ -874,8 +874,8 @@
         "club": "Leicester City FC",
         "fee": 30.5,
         "rights": "100%",
-        "commission": 4,
         "bonus": 0.5,
+        "commission": 4,
         "window": "summer",
         "note": "€4M deducted for third-party capital gain. €0.5M individual performance add-on matured",
         "note_pt": "€4M deduzidos de mais-valia de terceiros. Bónus de desempenho individual de €0.5M concretizado"
@@ -943,7 +943,7 @@
   {
     "season": "2017/18",
     "income": 34368,
-    "cost": -28999,
+    "cost": -2896,
     "note": "Adrien Silva sold to Leicester for up to €29.5M (€20M fixed + €5M variables + €4.5M resign rights). Investment in Marcos Acuña, Raphinha and Wendel.",
     "note_pt": "Venda de Adrien Silva ao Leicester por um valor até €29,5M (€20M fixos + €5M variáveis + €4,5M por renúncia de direitos). Investimento em Marcos Acuña, Raphinha e Wendel.",
     "purchases": [
@@ -982,24 +982,6 @@
         "window": "summer"
       },
       {
-        "player": "Jeremy Mathieu",
-        "club": "Free agent",
-        "fee": 0,
-        "rights": "100%",
-        "window": "summer",
-        "note": "Signed free from Valencia. Commission charges apply.",
-        "note_pt": "Contratado a custo zero do Valencia. Com encargos de comissão."
-      },
-      {
-        "player": "Stefan Ristovski",
-        "club": "HNK Rijeka",
-        "fee": 1.15,
-        "rights": "100%",
-        "window": "summer",
-        "note": "Undisclosed initial fee.",
-        "note_pt": "Valor inicial não revelado."
-      },
-      {
         "player": "Lumor Agbenyenu",
         "club": "Portimonense SC",
         "fee": 2.5,
@@ -1014,6 +996,24 @@
         "fee": 2,
         "rights": "100%",
         "window": "summer"
+      },
+      {
+        "player": "Stefan Ristovski",
+        "club": "HNK Rijeka",
+        "fee": 1.15,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Undisclosed initial fee.",
+        "note_pt": "Valor inicial não revelado."
+      },
+      {
+        "player": "Jeremy Mathieu",
+        "club": "Free agent",
+        "fee": 0,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Signed free from Valencia. Commission charges apply.",
+        "note_pt": "Contratado a custo zero do Valencia. Com encargos de comissão."
       },
       {
         "player": "Fredy Montero",
@@ -1090,8 +1090,8 @@
   },
   {
     "season": "2018/19",
-    "income": 86534,
-    "cost": -57155,
+    "income": 75793,
+    "cost": -11758,
     "note": "Aftermath of the Alcochete attack — mass contract terminations (Gelson, Rui Patrício, William Carvalho). SCP reached agreements: Gelson €22.5M, Rui Patrício €18M, William Carvalho €16M+4M. Unified Summer and Winter.",
     "note_pt": "Rescaldo do ataque a Alcochete — rescisões contratuais em massa (Gelson, Rui Patrício, William Carvalho). O SCP chegou a acordos: Gelson €22,5M, Rui Patrício €18M, William Carvalho €16M+4M. Janelas de Verão e Inverno unificadas.",
     "purchases": [
@@ -1127,24 +1127,6 @@
         "note_pt": "Dijon mantém 20% de mais-valia. Comissão: SAS CLK FOOT"
       },
       {
-        "player": "Bruno Fernandes (add-on)",
-        "club": "Sampdoria",
-        "fee": 0.2,
-        "window": "summer",
-        "note": "Performance add-on matured.",
-        "note_pt": "Bónus de desempenho concretizado."
-      },
-      {
-        "player": "Luiz Phellype",
-        "club": "FC Paços de Ferreira",
-        "fee": 0.5,
-        "rights": "100%",
-        "commission": 0.247,
-        "window": "winter",
-        "note": "Commission with agent João Arazão. €60M release clause.",
-        "note_pt": "Comissão com empresário João Arazão. Cláusula de rescisão de €60M."
-      },
-      {
         "player": "Idrissa Doumbia",
         "club": "Akhmat Grozny",
         "fee": 3.8,
@@ -1152,17 +1134,8 @@
         "bonus": 0.5,
         "commission": 0.48,
         "window": "winter",
-        "note": "Akhmat retains 25% sell-on. Commission: Nomiblue Sport",
-        "note_pt": "Akhmat mantém 25% de mais-valia. Comissão: Nomiblue Sport"
-      },
-      {
-        "player": "Tiago Ilori",
-        "club": "Reading FC",
-        "fee": 2.4,
-        "rights": "60%",
-        "window": "winter",
-        "note": "€45M release clause.",
-        "note_pt": "Cláusula de rescisão de €45M."
+        "note": "Akhmat retains 50% sell-on. Commission: Nomiblue Sport",
+        "note_pt": "Akhmat mantém 50% de mais-valia. Comissão: Nomiblue Sport"
       },
       {
         "player": "Cristian Borja",
@@ -1175,6 +1148,25 @@
         "note_pt": "Comissão: Eurodata Sport LTD"
       },
       {
+        "player": "Tiago Ilori",
+        "club": "Reading FC",
+        "fee": 2.4,
+        "rights": "60%",
+        "window": "winter",
+        "note": "€45M release clause.",
+        "note_pt": "Cláusula de rescisão de €45M."
+      },
+      {
+        "player": "Gonzalo Plata",
+        "club": "Independiente d.V.",
+        "fee": 1.075,
+        "rights": "50%",
+        "commission": 0.44,
+        "window": "winter",
+        "note": "Commission: Fútbol Division S.L.",
+        "note_pt": "Comissão: Fútbol Division S.L."
+      },
+      {
         "player": "Renan Ribeiro",
         "club": "GD Estoril Praia",
         "fee": 1,
@@ -1182,6 +1174,16 @@
         "window": "winter",
         "note": "Option exercised.",
         "note_pt": "Opção exercida."
+      },
+      {
+        "player": "Luiz Phellype",
+        "club": "FC Paços de Ferreira",
+        "fee": 0.5,
+        "rights": "100%",
+        "commission": 0.247,
+        "window": "winter",
+        "note": "Commission with agent João Arazão. €60M release clause.",
+        "note_pt": "Comissão com empresário João Arazão. Cláusula de rescisão de €60M."
       },
       {
         "player": "Matheus Nunes",
@@ -1193,14 +1195,12 @@
         "note_pt": "Direito de adquirir os restantes 50%."
       },
       {
-        "player": "Gonzalo Plata",
-        "club": "Independiente d.V.",
-        "fee": 1.075,
-        "rights": "50%",
-        "commission": 0.44,
-        "window": "winter",
-        "note": "Commission: Fútbol Division S.L.",
-        "note_pt": "Comissão: Fútbol Division S.L."
+        "player": "Bruno Fernandes (add-on)",
+        "club": "Sampdoria",
+        "fee": 0.2,
+        "window": "summer",
+        "note": "Performance add-on matured.",
+        "note_pt": "Bónus de desempenho concretizado."
       },
       {
         "player": "Felipe Chaby",
@@ -1237,22 +1237,32 @@
         "club": "Real Betis",
         "fee": 16,
         "rights": "100%",
-        "commission": 2.314,
         "bonus": 4,
+        "commission": 2.314,
         "window": "summer",
-        "note": "€16M + €4M objectives + SCP retains 25% of future sell-on",
-        "note_pt": "€16M + €4M por objetivos + SCP retém 25% de mais-valia futura"
+        "note": "€16M + €4M objectives + SCP retains 20% of future sell-on",
+        "note_pt": "€16M + €4M por objetivos + SCP retém 20% de mais-valia futura"
       },
       {
         "player": "Cristiano Piccini",
         "club": "Valencia CF",
         "fee": 8,
         "commission": 0.804,
+        "sell_on_gain_pct": 15,
+        "purchase_fee": 2.872,
         "window": "summer",
         "note": "Costs: solidarity + commissions + 15% to Real Betis. SCP retains 10% future capital gain",
-        "note_pt": "Custos: solidariedade + comissões + 15% para o Real Betis. SCP retém 10% de mais-valia futura",
-        "sell_on_gain_pct": 15,
-        "purchase_fee": 2.872
+        "note_pt": "Custos: solidariedade + comissões + 15% para o Real Betis. SCP retém 10% de mais-valia futura"
+      },
+      {
+        "player": "Merih Demiral",
+        "club": "Alanyaspor",
+        "fee": 3.5,
+        "rights": "100%",
+        "commission": 0.3,
+        "window": "winter",
+        "note": "Alanyaspor exercised purchase option. SCP retains 20% future sell-on.",
+        "note_pt": "Alanyaspor exerceu a opção de compra. SCP retém 20% de mais-valia futura."
       },
       {
         "player": "Jonathan Silva",
@@ -1270,16 +1280,6 @@
         "window": "summer",
         "note": "15% capital gain from PSV→Atlético de Madrid transfer materialised",
         "note_pt": "Mais-valia de 15% da transferência PSV→Atlético de Madrid concretizada"
-      },
-      {
-        "player": "Merih Demiral",
-        "club": "Alanyaspor",
-        "fee": 3.5,
-        "rights": "100%",
-        "commission": 0.3,
-        "window": "winter",
-        "note": "Alanyaspor exercised purchase option. SCP retains 20% future sell-on.",
-        "note_pt": "Alanyaspor exerceu a opção de compra. SCP retém 20% de mais-valia futura."
       },
       {
         "player": "Marcelo Ferreira",
@@ -1355,20 +1355,11 @@
   },
   {
     "season": "2019/20",
-    "income": 72000,
-    "cost": -20800,
+    "income": 106946,
+    "cost": -18113,
     "note": "Bruno Fernandes sold to Manchester United in January for €55M+25M — a club-record at the time. Raphinha and Bas Dost also departed in summer. Light summer spending.",
     "note_pt": "Venda de Bruno Fernandes ao Manchester United em janeiro por €55M+25M — recorde do clube à data. Raphinha e Bas Dost também saíram no verão. Investimento ligeiro no mercado de verão.",
     "purchases": [
-      {
-        "player": "Luís Neto",
-        "club": "Zenit FC",
-        "fee": 0,
-        "rights": "100%",
-        "window": "summer",
-        "note": "Free transfer. Commission conditional on player retention: Team of Future",
-        "note_pt": "Custo zero. Comissão condicionada à permanência do jogador: Team of Future"
-      },
       {
         "player": "Luciano Vietto",
         "club": "(confirmed 2019)",
@@ -1377,6 +1368,17 @@
         "window": "summer",
         "note": "Confirmed from prior window (Atlético Madrid). Atlético retains 50%.",
         "note_pt": "Confirmada da janela anterior (Atlético Madrid). Atlético mantém 50%."
+      },
+      {
+        "player": "Andraz Šporar",
+        "club": "Slovan Bratislava",
+        "fee": 6,
+        "rights": "100%",
+        "bonus": 6.6,
+        "commission": 0.5,
+        "window": "winter",
+        "note": "Jan window. Slovan retains 10% sell-on. Commission: AR Sport Management",
+        "note_pt": "Janela de janeiro. Slovan mantém 10% de mais-valia. Comissão: AR Sport Management"
       },
       {
         "player": "Valentin Rosier",
@@ -1410,15 +1412,13 @@
         "note_pt": "Comissão: Ardizoni Consultoria Eireli"
       },
       {
-        "player": "Andraz Šporar",
-        "club": "Slovan Bratislava",
-        "fee": 6,
+        "player": "Luís Neto",
+        "club": "Zenit FC",
+        "fee": 0,
         "rights": "100%",
-        "bonus": 6.6,
-        "commission": 0.5,
-        "window": "winter",
-        "note": "Jan window. Slovan retains 10% sell-on. Commission: AR Sport Management",
-        "note_pt": "Janela de janeiro. Slovan mantém 10% de mais-valia. Comissão: AR Sport Management"
+        "window": "summer",
+        "note": "Free transfer. Commission conditional on player retention: Team of Future",
+        "note_pt": "Custo zero. Comissão condicionada à permanência do jogador: Team of Future"
       }
     ],
     "sales": [
@@ -1444,13 +1444,15 @@
         "note_pt": "Nome: Raphael Bellolli. Vendido mais tarde pelo Rennes ao Leeds e depois ao Barcelona por ~€55M+"
       },
       {
-        "player": "Bas Dost",
-        "club": "Eintracht Frankfurt",
-        "fee": 7,
+        "player": "Marcus Wendel",
+        "club": "FC Zenit",
+        "fee": 20.3,
         "rights": "100%",
-        "bonus": 0.5,
-        "commission": 0.7,
-        "window": "summer"
+        "bonus": 4,
+        "commission": 1.78,
+        "window": "summer",
+        "note": "Commission: M9M7 Soccer Family LTD",
+        "note_pt": "Comissão: M9M7 Soccer Family LTD"
       },
       {
         "player": "Thierry Correia",
@@ -1461,16 +1463,6 @@
         "window": "summer",
         "note": "Commission: Gestifute + Agent Pedro Torrão",
         "note_pt": "Comissão: Gestifute + agente Pedro Torrão"
-      },
-      {
-        "player": "Daniel Podence",
-        "club": "Olympiacos FC",
-        "fee": 7,
-        "rights": "100%",
-        "commission": 0.7,
-        "window": "summer",
-        "note": "Contract termination settlement. Commission (10%): Gestifute",
-        "note_pt": "Acordo de rescisão contratual. Comissão (10%): Gestifute"
       },
       {
         "player": "Marcos Acuña",
@@ -1484,17 +1476,6 @@
         "note_pt": "Comissão: Gestifute"
       },
       {
-        "player": "Marcus Wendel",
-        "club": "FC Zenit",
-        "fee": 20.3,
-        "rights": "100%",
-        "bonus": 4,
-        "commission": 1.78,
-        "window": "summer",
-        "note": "Commission: M9M7 Soccer Family LTD",
-        "note_pt": "Comissão: M9M7 Soccer Family LTD"
-      },
-      {
         "player": "Matheus Pereira",
         "club": "West Brom (WBA)",
         "fee": 8.25,
@@ -1506,30 +1487,23 @@
         "note_pt": "Valor em GBP, equivalente a ~€9.3M. Comissão: Vergette Sports & Tibet Solutions"
       },
       {
-        "player": "Jonathan Silva",
-        "club": "CD Leganés",
-        "fee": 2.7,
+        "player": "Bas Dost",
+        "club": "Eintracht Frankfurt",
+        "fee": 7,
         "rights": "100%",
-        "window": "summer",
-        "note": "Summer confirmation of prior window sale",
-        "note_pt": "Confirmação no verão da venda da janela anterior"
+        "bonus": 0.5,
+        "commission": 0.7,
+        "window": "summer"
       },
       {
-        "player": "Domingos Duarte",
-        "club": "Granada CF",
-        "fee": 3,
-        "bonus": 1.5,
+        "player": "Daniel Podence",
+        "club": "Olympiacos FC",
+        "fee": 7,
+        "rights": "100%",
+        "commission": 0.7,
         "window": "summer",
-        "note": "SCP holds 25% of a future capital gain.",
-        "note_pt": "SCP detém 25% de mais-valia futura."
-      },
-      {
-        "player": "Carlos Mané",
-        "club": "Rio Ave FC",
-        "fee": 0.75,
-        "window": "summer",
-        "note": "SCP holds 50% of a future sale.",
-        "note_pt": "SCP detém 50% de uma futura venda."
+        "note": "Contract termination settlement. Commission (10%): Gestifute",
+        "note_pt": "Acordo de rescisão contratual. Comissão (10%): Gestifute"
       },
       {
         "player": "Félix Correia",
@@ -1541,6 +1515,24 @@
         "note_pt": "SCP detém 10% de uma futura venda."
       },
       {
+        "player": "Domingos Duarte",
+        "club": "Granada CF",
+        "fee": 3,
+        "bonus": 1.5,
+        "window": "summer",
+        "note": "SCP holds 25% of a future capital gain.",
+        "note_pt": "SCP detém 25% de mais-valia futura."
+      },
+      {
+        "player": "Jonathan Silva",
+        "club": "CD Leganés",
+        "fee": 2.7,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Summer confirmation of prior window sale",
+        "note_pt": "Confirmação no verão da venda da janela anterior"
+      },
+      {
         "player": "Iuri Medeiros",
         "club": "FC Nurenberg",
         "fee": 2,
@@ -1549,6 +1541,14 @@
         "window": "summer",
         "note": "SCP holds 10% of a future sale. Commission: BM Consulting.",
         "note_pt": "SCP detém 10% de uma futura venda. Comissão: BM Consulting."
+      },
+      {
+        "player": "Carlos Mané",
+        "club": "Rio Ave FC",
+        "fee": 0.75,
+        "window": "summer",
+        "note": "SCP holds 50% of a future sale.",
+        "note_pt": "SCP detém 50% de uma futura venda."
       },
       {
         "player": "Radosav Petrovic",
@@ -1573,20 +1573,11 @@
   },
   {
     "season": "2020/21",
-    "income": 20000,
-    "cost": -24400,
+    "income": 35765,
+    "cost": -8209,
     "note": "Time of pandemic-affected revenues. Championship season won under Ruben Amorim. Pedro Gonçalves (Pote) was the marquee signing. João Mário returned on loan from Inter.",
     "note_pt": "Época de receitas afetadas pela pandemia. Título de campeão conquistado sob o comando de Rúben Amorim. Pedro Gonçalves (Pote) foi a contratação de destaque. João Mário regressou por empréstimo do Inter.",
     "purchases": [
-      {
-        "player": "Pedro Gonçalves \"Pote\"",
-        "club": "FC Famalicão",
-        "fee": 6.5,
-        "rights": "100%",
-        "window": "summer",
-        "note": "Famalicão retains 50% sell-on. Commission: Esferinédita Lda",
-        "note_pt": "Famalicão mantém 50% de mais-valia. Comissão: Esferinédita Lda"
-      },
       {
         "player": "Paulinho",
         "club": "SC Braga",
@@ -1596,6 +1587,24 @@
         "window": "winter",
         "note": "Jan 2021 window. 30% rights with Braga. Commission: MNM Sports Management",
         "note_pt": "Janela de jan. 2021. 30% dos direitos com o Braga. Comissão: MNM Sports Management"
+      },
+      {
+        "player": "Pedro Gonçalves \"Pote\"",
+        "club": "FC Famalicão",
+        "fee": 6.5,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Famalicão retains 10% sell-on. Commission: Esferinédita Lda",
+        "note_pt": "Famalicão mantém 10% de mais-valia. Comissão: Esferinédita Lda"
+      },
+      {
+        "player": "Nuno Santos",
+        "club": "Rio Ave FC",
+        "fee": 3.75,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Rio Ave retains 20% sell-on. Commission: Esferinédita Lda",
+        "note_pt": "Rio Ave mantém 20% de mais-valia. Comissão: Esferinédita Lda"
       },
       {
         "player": "Zouhair Feddal",
@@ -1608,24 +1617,6 @@
         "note_pt": "Comissão: Promoesport Andalucia SL"
       },
       {
-        "player": "António Adán",
-        "club": "Free agent",
-        "fee": 0,
-        "rights": "100%",
-        "window": "summer",
-        "note": "Commission on maintenance: Gesport Espizua SL",
-        "note_pt": "Comissão de manutenção: Gesport Espizua SL"
-      },
-      {
-        "player": "Nuno Santos",
-        "club": "Rio Ave FC",
-        "fee": 3.75,
-        "rights": "100%",
-        "window": "summer",
-        "note": "Rio Ave retains 20% sell-on. Commission: Esferinédita Lda",
-        "note_pt": "Rio Ave mantém 20% de mais-valia. Comissão: Esferinédita Lda"
-      },
-      {
         "player": "Bruno Tabata",
         "club": "Portimonense SAD",
         "fee": 0.5,
@@ -1634,6 +1625,32 @@
         "window": "summer",
         "note": "Portimonense retains 90% sell-on (reducible to 50%). Commission: D20 Sports Lda",
         "note_pt": "Portimonense mantém 90% de mais-valia (reduzível para 50%). Comissão: D20 Sports Lda"
+      },
+      {
+        "player": "Rafael Moreira",
+        "club": "Estoril Praia SAD",
+        "fee": 0.5,
+        "window": "winter",
+        "note": "Estoril retains 10% future sell-on.",
+        "note_pt": "Estoril mantém 10% de mais-valia futura."
+      },
+      {
+        "player": "Matheus Nunes",
+        "club": "Estoril Praia SAD",
+        "fee": 0.45,
+        "rights": "50%",
+        "window": "winter",
+        "note": "Bought remaining rights from Estoril.",
+        "note_pt": "Compra dos restantes direitos ao Estoril."
+      },
+      {
+        "player": "António Adán",
+        "club": "Free agent",
+        "fee": 0,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Commission on maintenance: Gesport Espizua SL",
+        "note_pt": "Comissão de manutenção: Gesport Espizua SL"
       },
       {
         "player": "Geny Catamo",
@@ -1677,23 +1694,6 @@
         "window": "winter",
         "note": "Free transfer. Joins from Rio Ave FC.",
         "note_pt": "Custo zero. Chega do Rio Ave FC."
-      },
-      {
-        "player": "Matheus Nunes",
-        "club": "Estoril Praia SAD",
-        "fee": 0.45,
-        "rights": "50%",
-        "window": "winter",
-        "note": "Bought remaining rights from Estoril.",
-        "note_pt": "Compra dos restantes direitos ao Estoril."
-      },
-      {
-        "player": "Rafael Moreira",
-        "club": "Estoril Praia SAD",
-        "fee": 0.5,
-        "window": "winter",
-        "note": "Estoril retains 10% future sell-on.",
-        "note_pt": "Estoril mantém 10% de mais-valia futura."
       }
     ],
     "sales": [
@@ -1774,8 +1774,8 @@
   },
   {
     "season": "2021/22",
-    "income": 25100,
-    "cost": -26000,
+    "income": 59254,
+    "cost": -9501,
     "note": "First full season of financial recovery. Nuno Mendes sold to PSG as a loan (€7M fee, option to buy). Rodrigo Fernandes to Porto for €11M. Marcus Edwards and Ugarte signed.",
     "note_pt": "Primeira época completa de recuperação financeira. Venda de Nuno Mendes ao PSG por empréstimo (taxa de €7M, com opção de compra). Rodrigo Fernandes para o Porto por €11M. Marcus Edwards e Ugarte contratados.",
     "purchases": [
@@ -1785,6 +1785,25 @@
         "fee": 11,
         "rights": "100%",
         "window": "summer"
+      },
+      {
+        "player": "Marcus Edwards",
+        "club": "Vitória SC SAD",
+        "fee": 7.5,
+        "rights": "100%",
+        "bonus": 0.5,
+        "commission": 0.115,
+        "window": "winter",
+        "note": "Jan 2022 window. Vitória retains 10% sell-on (SCP option to reduce). Commission: Arete Management",
+        "note_pt": "Janela de jan. 2022. Vitória mantém 10% de mais-valia (opção do SCP para reduzir). Comissão: Arete Management",
+        "timeline": [
+          {
+            "season": "2022/23",
+            "type": "bonus",
+            "amount": 0.25,
+            "desc": "Bónus atingido (RC 22/23)"
+          }
+        ]
       },
       {
         "player": "Manuel Ugarte",
@@ -1822,23 +1841,21 @@
         "note_pt": "SCP comprou 80% — já detinha 20%. Comissão: Proeleven"
       },
       {
-        "player": "Marcus Edwards",
-        "club": "Vitória SC SAD",
-        "fee": 7.5,
-        "rights": "100%",
-        "bonus": 0.5,
-        "commission": 0.115,
-        "window": "winter",
-        "note": "Jan 2022 window. Vitória retains 50% sell-on (SCP option to reduce). Commission: Arete Management",
-        "note_pt": "Janela de jan. 2022. Vitória mantém 50% de mais-valia (opção do SCP para reduzir). Comissão: Arete Management",
-        "timeline": [
-          {
-            "season": "2022/23",
-            "type": "bonus",
-            "amount": 0.25,
-            "desc": "Bónus atingido (RC 22/23)"
-          }
-        ]
+        "player": "Vando Félix",
+        "club": "Leixões SC SAD",
+        "fee": 0.1,
+        "window": "summer",
+        "note": "Leixões retains 40% future sell-on.",
+        "note_pt": "Leixões mantém 40% de mais-valia futura."
+      },
+      {
+        "player": "Domingos Andrade",
+        "club": "GD Interclube",
+        "fee": 0.1,
+        "commission": 0.16,
+        "window": "summer",
+        "note": "Interclube retains 15% future sell-on.",
+        "note_pt": "Interclube mantém 15% de mais-valia futura."
       },
       {
         "player": "Islam Slimani",
@@ -1875,23 +1892,6 @@
         "window": "summer",
         "note": "Free transfer.",
         "note_pt": "Custo zero."
-      },
-      {
-        "player": "Vando Félix",
-        "club": "Leixões SC SAD",
-        "fee": 0.1,
-        "window": "summer",
-        "note": "Leixões retains 40% future sell-on.",
-        "note_pt": "Leixões mantém 40% de mais-valia futura."
-      },
-      {
-        "player": "Domingos Andrade",
-        "club": "GD Interclube",
-        "fee": 0.1,
-        "commission": 0.16,
-        "window": "summer",
-        "note": "Interclube retains 15% future sell-on.",
-        "note_pt": "Interclube mantém 15% de mais-valia futura."
       }
     ],
     "sales": [
@@ -1985,7 +1985,7 @@
         "fee": 0,
         "window": "summer",
         "note": "SCP retains 40% of a future sale.",
-        "note_pt": "SCP mantém 40% de uma futura venda."
+        "note_pt": "SCP mantém 30% de uma futura venda."
       },
       {
         "player": "Leonardo Ruiz",
@@ -2064,11 +2064,20 @@
   },
   {
     "season": "2022/23",
-    "income": 117500,
-    "cost": -45000,
+    "income": 96877,
+    "cost": -11857,
     "note": "Highest-grossing sales season ever until 2023/24. Matheus Nunes €45M (Wolves), Nuno Mendes €38M (PSG), João Palhinha €20M (Fulham). Acquired Gyökeres, Hjulmand, Trincão and others in summer 2023.",
     "note_pt": "Época de vendas com maior receita de sempre até 2023/24. Matheus Nunes €45M (Wolves), Nuno Mendes €38M (PSG), João Palhinha €20M (Fulham). Contratação de Gyökeres, Hjulmand, Trincão e outros no verão de 2023.",
     "purchases": [
+      {
+        "player": "Rúben Vinagre",
+        "club": "Wolverhampton FC",
+        "fee": 10,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Wolves retains 50% sell-on (SCP option to reduce)",
+        "note_pt": "Wolves mantém 50% de mais-valia (opção do SCP para reduzir)"
+      },
       {
         "player": "Jeremiah St. Juste",
         "club": "1. FSV Mainz 05",
@@ -2107,77 +2116,6 @@
         ]
       },
       {
-        "player": "Rúben Vinagre",
-        "club": "Wolverhampton FC",
-        "fee": 10,
-        "rights": "100%",
-        "window": "summer",
-        "note": "Wolves retains 50% sell-on (SCP option to reduce)",
-        "note_pt": "Wolves mantém 50% de mais-valia (opção do SCP para reduzir)"
-      },
-      {
-        "player": "Hidemasa Morita",
-        "club": "Santa Clara SAD",
-        "fee": 3.8,
-        "rights": "100%",
-        "commission": 0.06,
-        "window": "summer",
-        "note": "Santa Clara retains 5% sell-on",
-        "note_pt": "Santa Clara mantém 5% de mais-valia"
-      },
-      {
-        "player": "Sotirios Alexandropoulos",
-        "club": "Panathinaikos FC",
-        "fee": 4,
-        "rights": "100%",
-        "commission": 0.23,
-        "window": "summer",
-        "note": "Panathinaikos retains 30% sell-on. Commission: Prosport Greece",
-        "note_pt": "Panathinaikos mantém 30% de mais-valia. Comissão: Prosport Greece"
-      },
-      {
-        "player": "Abdul Fatawu Issahaku",
-        "club": "Steadfast FC",
-        "fee": 1.2,
-        "rights": "100%",
-        "commission": 0.3,
-        "window": "summer",
-        "note": "Steadfast retains 50% sell-on (reducible). Later sold to Leicester for €16.25M.",
-        "note_pt": "Steadfast mantém 50% de mais-valia (reduzível). Vendido mais tarde ao Leicester por €16.25M."
-      },
-      {
-        "player": "Arthur Gomes",
-        "club": "Estoril Praia SAD",
-        "fee": 2.5,
-        "rights": "100%",
-        "bonus": 1.5,
-        "commission": 0.04,
-        "window": "summer",
-        "note": "Estoril retains 40% sell-on. Commission: N&N Consultoria",
-        "note_pt": "Estoril mantém 40% de mais-valia. Comissão: N&N Consultoria"
-      },
-      {
-        "player": "Diogo Rocha \"Rochinha\"",
-        "club": "Vitória SC SAD",
-        "fee": 2,
-        "rights": "100%",
-        "commission": 0.11,
-        "window": "summer",
-        "note": "Vitória retains 10% sell-on. Commission: MNM Sports Lda",
-        "note_pt": "Vitória mantém 10% de mais-valia. Comissão: MNM Sports Lda"
-      },
-      {
-        "player": "Franco Israel",
-        "club": "Juventus FC",
-        "fee": 0.65,
-        "rights": "100%",
-        "bonus": 0.75,
-        "commission": 0.4,
-        "window": "summer",
-        "note": "Juventus retains 40% sell-on. Commission: Tidenal",
-        "note_pt": "Juventus mantém 40% de mais-valia. Comissão: Tidenal"
-      },
-      {
         "player": "Ousmane Diomandé",
         "club": "FC Midtjylland",
         "fee": 7.5,
@@ -2185,8 +2123,8 @@
         "bonus": 5,
         "commission": 0.12,
         "window": "winter",
-        "note": "Jan 2023. Midtjylland retains 20% sell-on. Commission: AKP Trading 79 LTD",
-        "note_pt": "Jan. 2023. Midtjylland mantém 20% de mais-valia. Comissão: AKP Trading 79 LTD",
+        "note": "Jan 2023. Midtjylland retains 10% sell-on. Commission: AKP Trading 79 LTD",
+        "note_pt": "Jan. 2023. Midtjylland mantém 10% de mais-valia. Comissão: AKP Trading 79 LTD",
         "timeline": [
           {
             "season": "2023/24",
@@ -2215,15 +2153,55 @@
         ]
       },
       {
-        "player": "Hector Bellerín",
-        "club": "FC Barcelona",
-        "fee": 0.5,
+        "player": "Sotirios Alexandropoulos",
+        "club": "Panathinaikos FC",
+        "fee": 4,
         "rights": "100%",
-        "bonus": 1,
-        "commission": 0.15,
-        "window": "winter",
-        "note": "Jan 2023. Barcelona retains 25% sell-on. Commission: Albert Rates",
-        "note_pt": "Jan. 2023. Barcelona mantém 25% de mais-valia. Comissão: Albert Rates"
+        "commission": 0.23,
+        "window": "summer",
+        "note": "Panathinaikos retains 30% sell-on. Commission: Prosport Greece",
+        "note_pt": "Panathinaikos mantém 30% de mais-valia. Comissão: Prosport Greece"
+      },
+      {
+        "player": "Hidemasa Morita",
+        "club": "Santa Clara SAD",
+        "fee": 3.8,
+        "rights": "100%",
+        "commission": 0.06,
+        "window": "summer",
+        "note": "Santa Clara retains 5% sell-on",
+        "note_pt": "Santa Clara mantém 5% de mais-valia"
+      },
+      {
+        "player": "Arthur Gomes",
+        "club": "Estoril Praia SAD",
+        "fee": 2.5,
+        "rights": "100%",
+        "bonus": 1.5,
+        "commission": 0.04,
+        "window": "summer",
+        "note": "Estoril retains 40% sell-on. Commission: N&N Consultoria",
+        "note_pt": "Estoril mantém 40% de mais-valia. Comissão: N&N Consultoria"
+      },
+      {
+        "player": "Diogo Rocha \"Rochinha\"",
+        "club": "Vitória SC SAD",
+        "fee": 2,
+        "rights": "100%",
+        "commission": 0.11,
+        "window": "summer",
+        "note": "Vitória retains 10% sell-on. Commission: MNM Sports Lda",
+        "note_pt": "Vitória mantém 10% de mais-valia. Comissão: MNM Sports Lda"
+      },
+      {
+        "player": "Abdul Fatawu Issahaku",
+        "club": "Steadfast FC",
+        "fee": 1.2,
+        "rights": "100%",
+        "commission": 0.3,
+        "window": "summer",
+        "note": "Steadfast retains 15% sell-on (reducible). Later sold to Leicester for €16.25M.",
+        "note_pt": "Steadfast mantém 15% de mais-valia (reduzível). Vendido mais tarde ao Leicester por €16.25M."
       },
       {
         "player": "Diogo Abreu",
@@ -2233,6 +2211,28 @@
         "window": "summer",
         "note": "SCP holds 100% of economic rights.",
         "note_pt": "SCP detém 100% dos direitos económicos."
+      },
+      {
+        "player": "Franco Israel",
+        "club": "Juventus FC",
+        "fee": 0.65,
+        "rights": "100%",
+        "bonus": 0.75,
+        "commission": 0.4,
+        "window": "summer",
+        "note": "Juventus retains 30% sell-on. Commission: Tidenal",
+        "note_pt": "Juventus mantém 30% de mais-valia. Comissão: Tidenal"
+      },
+      {
+        "player": "Hector Bellerín",
+        "club": "FC Barcelona",
+        "fee": 0.5,
+        "rights": "100%",
+        "bonus": 1,
+        "commission": 0.15,
+        "window": "winter",
+        "note": "Jan 2023. Barcelona retains 25% sell-on. Commission: Albert Rates",
+        "note_pt": "Jan. 2023. Barcelona mantém 25% de mais-valia. Comissão: Albert Rates"
       },
       {
         "player": "Lucas Taibo",
@@ -2259,7 +2259,7 @@
         "commission": 0.02,
         "window": "summer",
         "note": "Real Madrid CF retains 30% of a future sale.",
-        "note_pt": "Real Madrid CF mantém 30% de uma futura venda."
+        "note_pt": "Real Madrid CF mantém 10% de uma futura venda."
       }
     ],
     "sales": [
@@ -2313,17 +2313,9 @@
         "fee": 3,
         "bonus": 3,
         "commission": 0.3,
-        "window": "summer",
         "sell_on_gain_pct": 10,
-        "purchase_fee": 6
-      },
-      {
-        "player": "Tiago Tomás (loan)",
-        "club": "VfB Stuttgart",
-        "fee": 0.5,
-        "window": "winter",
-        "note": "Loan fee; Stuttgart has purchase option. Commission: Proeleven",
-        "note_pt": "Taxa de empréstimo; Stuttgart tem opção de compra. Comissão: Proeleven"
+        "purchase_fee": 6,
+        "window": "summer"
       },
       {
         "player": "Gonzalo Plata",
@@ -2354,6 +2346,14 @@
         "window": "summer"
       },
       {
+        "player": "Tiago Tomás (loan)",
+        "club": "VfB Stuttgart",
+        "fee": 0.5,
+        "window": "winter",
+        "note": "Loan fee; Stuttgart has purchase option. Commission: Proeleven",
+        "note_pt": "Taxa de empréstimo; Stuttgart tem opção de compra. Comissão: Proeleven"
+      },
+      {
         "player": "Pedro Mendes",
         "club": "Ascoli 1898",
         "fee": 0.4,
@@ -2376,8 +2376,8 @@
         "fee": 0,
         "bonus": 0.05,
         "window": "summer",
-        "note": "SCP retains 10% of a future capital gain.",
-        "note_pt": "SCP mantém 10% de uma mais-valia futura."
+        "note": "SCP retains 25% of a future capital gain.",
+        "note_pt": "SCP mantém 25% de uma mais-valia futura."
       },
       {
         "player": "Gonçalo Costa",
@@ -2385,7 +2385,7 @@
         "fee": 0,
         "window": "summer",
         "note": "SCP retains 50% of a future sale.",
-        "note_pt": "SCP mantém 50% de uma futura venda."
+        "note_pt": "SCP mantém 10% de uma futura venda."
       },
       {
         "player": "Pedro Marques",
@@ -2423,11 +2423,11 @@
         "player": "Rafael Moreira",
         "club": "Apoel Nicosia",
         "fee": 0,
+        "sell_on_gain_pct": 10,
+        "purchase_fee": 0.5,
         "window": "summer",
         "note": "SCP retains 50% of a future sale.",
-        "note_pt": "SCP mantém 50% de uma futura venda.",
-        "sell_on_gain_pct": 10,
-        "purchase_fee": 0.5
+        "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
         "player": "Hevverton Santos",
@@ -2450,7 +2450,7 @@
   {
     "season": "2023/24",
     "income": 144207,
-    "cost": -51220,
+    "cost": -44320,
     "note": "All-time record income season. Pedro Porro €45M (Tottenham), Manuel Ugarte €60M (PSG), Gyökeres, Hjulmand and Trincão brought in for a new era. Added winter acquisitions Koba, Pontelo, Mauro Couto.",
     "note_pt": "Época de receitas recorde. Pedro Porro €45M (Tottenham), Manuel Ugarte €60M (PSG), entrada de Gyökeres, Hjulmand e Trincão para uma nova era. Adicionadas as contratações de inverno de Koba, Pontelo e Mauro Couto.",
     "purchases": [
@@ -2462,8 +2462,8 @@
         "bonus": 4,
         "commission": 2,
         "window": "summer",
-        "note": "Coventry retains 15% sell-on (reducible to 10%). Commission: HCM Sports Management + A+ Management. €100M release clause.",
-        "note_pt": "Coventry mantém 15% de mais-valia (reduzível para 10%). Comissão: HCM Sports Management + A+ Management. Cláusula de rescisão de €100M.",
+        "note": "Coventry retains 10% sell-on (reducible to 10%). Commission: HCM Sports Management + A+ Management. €100M release clause.",
+        "note_pt": "Coventry mantém 10% de mais-valia (reduzível para 10%). Comissão: HCM Sports Management + A+ Management. Cláusula de rescisão de €100M.",
         "timeline": [
           {
             "season": "2023/24",
@@ -2532,6 +2532,14 @@
         "note_pt": "Valladolid mantém 10% de mais-valia. Comissão: Lion Sports LTD + Most Valuable Players SL. Cláusula de €80M."
       },
       {
+        "player": "Pedro Gonçalves (buyout)",
+        "club": "FC Famalicão",
+        "fee": 7.7,
+        "window": "summer",
+        "note": "Buyout of Famalicão’s 10% sell-on right, reducing to 0%",
+        "note_pt": "Recompra do direito de mais-valia de 10% do Famalicão, reduzindo-o para 0%"
+      },
+      {
         "player": "Francisco Trincão",
         "club": "FC Barcelona",
         "fee": 7,
@@ -2540,40 +2548,6 @@
         "window": "summer",
         "note": "Barcelona retains 50% sell-on (reducible). Commission: Gestifute SA. €60M release clause.",
         "note_pt": "Barcelona mantém 50% de mais-valia (reduzível). Comissão: Gestifute SA. Cláusula de rescisão de €60M."
-      },
-      {
-        "player": "Pedro Gonçalves (buyout)",
-        "club": "FC Famalicão",
-        "fee": 7.7,
-        "window": "summer",
-        "note": "Buyout of Famalicão’s 50% sell-on right, reducing to 0%",
-        "note_pt": "Recompra do direito de mais-valia de 50% do Famalicão, reduzindo-o para 0%"
-      },
-      {
-        "player": "Manuel Ugarte (buyout)",
-        "club": "FC Famalicão",
-        "fee": 2,
-        "window": "summer",
-        "note": "Buyout reducing Famalicão sell-on from 30% to 20%",
-        "note_pt": "Recompra que reduz a mais-valia do Famalicão de 30% para 20%"
-      },
-      {
-        "player": "Nuno Santos (buyout)",
-        "club": "Rio Ave FC",
-        "fee": 0.4,
-        "window": "summer",
-        "note": "Buyout of Rio Ave’s remaining sell-on right",
-        "note_pt": "Recompra do direito de mais-valia remanescente do Rio Ave"
-      },
-      {
-        "player": "Diogo Cardoso",
-        "club": "Académica de Coimbra",
-        "fee": 0,
-        "rights": "100%",
-        "commission": 0.1,
-        "window": "summer",
-        "note": "Free transfer. Académica retains 5% sell-on. Commission: Foot United",
-        "note_pt": "Custo zero. Académica mantém 5% de mais-valia. Comissão: Foot United"
       },
       {
         "player": "Koba Koindredi",
@@ -2585,6 +2559,14 @@
         "window": "winter",
         "note": "Estoril retains 20% sell-on (reducible). Commission: Team Spirit.",
         "note_pt": "Estoril mantém 20% de mais-valia (reduzível). Comissão: Team Spirit."
+      },
+      {
+        "player": "Manuel Ugarte (buyout)",
+        "club": "FC Famalicão",
+        "fee": 2,
+        "window": "summer",
+        "note": "Buyout reducing Famalicão sell-on from 30% to 20%",
+        "note_pt": "Recompra que reduz a mais-valia do Famalicão de 30% para 20%"
       },
       {
         "player": "Rafael Pontelo",
@@ -2605,6 +2587,24 @@
         "window": "winter",
         "note": "Paços de Ferreira. €60M release clause.",
         "note_pt": "Paços de Ferreira. Cláusula de rescisão de €60M."
+      },
+      {
+        "player": "Nuno Santos (buyout)",
+        "club": "Rio Ave FC",
+        "fee": 0.4,
+        "window": "summer",
+        "note": "Buyout of Rio Ave’s remaining sell-on right",
+        "note_pt": "Recompra do direito de mais-valia remanescente do Rio Ave"
+      },
+      {
+        "player": "Diogo Cardoso",
+        "club": "Académica de Coimbra",
+        "fee": 0,
+        "rights": "100%",
+        "commission": 0.1,
+        "window": "summer",
+        "note": "Free transfer. Académica retains 5% sell-on. Commission: Foot United",
+        "note_pt": "Custo zero. Académica mantém 5% de mais-valia. Comissão: Foot United"
       }
     ],
     "sales": [
@@ -2623,11 +2623,11 @@
         "club": "Tottenham Hotspur",
         "fee": 45,
         "commission": 2.8,
+        "sell_on_gain_pct": 30,
+        "purchase_fee": 8.768,
         "window": "summer",
         "note": "€5M loan + €40M purchase option exercised. Tottenham also transferred 15% of Marcus Edwards rights to SCP. Commission: CAA Base Ltd",
-        "note_pt": "€5M de empréstimo + opção de compra de €40M exercida. O Tottenham transferiu ainda 15% dos direitos de Marcus Edwards para o SCP. Comissão: CAA Base Ltd",
-        "sell_on_gain_pct": 30,
-        "purchase_fee": 8.768
+        "note_pt": "€5M de empréstimo + opção de compra de €40M exercida. O Tottenham transferiu ainda 15% dos direitos de Marcus Edwards para o SCP. Comissão: CAA Base Ltd"
       },
       {
         "player": "Youssef Chermiti",
@@ -2666,11 +2666,19 @@
         "club": "Cruzeiro EC SAD",
         "fee": 3,
         "commission": 0.2,
+        "sell_on_gain_pct": 40,
+        "purchase_fee": 2.5,
         "window": "summer",
         "note": "SCP retains 10% sell-on",
-        "note_pt": "SCP retém 10% de mais-valia",
-        "sell_on_gain_pct": 40,
-        "purchase_fee": 2.5
+        "note_pt": "SCP retém 10% de mais-valia"
+      },
+      {
+        "player": "Martim Marques",
+        "club": "FC Lugano",
+        "fee": 0.3,
+        "window": "summer",
+        "note": "SCP retains 30% of a future sale.",
+        "note_pt": "SCP mantém 30% de uma futura venda."
       },
       {
         "player": "Rochinha",
@@ -2761,14 +2769,6 @@
         "note_pt": "Olympiacos tem opção de compra."
       },
       {
-        "player": "Martim Marques",
-        "club": "FC Lugano",
-        "fee": 0.3,
-        "window": "summer",
-        "note": "SCP retains 30% of a future sale.",
-        "note_pt": "SCP mantém 30% de uma futura venda."
-      },
-      {
         "player": "Gilberto Batista",
         "club": "Moreirense FC SAD",
         "fee": 0,
@@ -2802,11 +2802,11 @@
         "player": "Idrissa Doumbia",
         "club": "Al-Ahli S.F.C.",
         "fee": 0,
+        "sell_on_gain_pct": 25,
+        "purchase_fee": 3.8,
         "window": "summer",
         "note": "SCP retains 50% of a future sale.",
-        "note_pt": "SCP mantém 50% de uma futura venda.",
-        "sell_on_gain_pct": 25,
-        "purchase_fee": 3.8
+        "note_pt": "SCP mantém 50% de uma futura venda."
       },
       {
         "player": "Joelson Fernandes",
@@ -2836,18 +2836,18 @@
         "player": "Domingos Andrade",
         "club": "FC Felgueiras SAD",
         "fee": 0,
+        "sell_on_gain_pct": 15,
+        "purchase_fee": 0.1,
         "window": "summer",
         "note": "SCP retains 50% of a future sale.",
-        "note_pt": "SCP mantém 50% de uma futura venda.",
-        "sell_on_gain_pct": 15,
-        "purchase_fee": 0.1
+        "note_pt": "SCP mantém 50% de uma futura venda."
       }
     ]
   },
   {
     "season": "2024/25",
-    "income": 133280,
-    "cost": -73185,
+    "income": 116830,
+    "cost": -14615,
     "note": "Amorim departed to Manchester United. Added winter transactions: major arrivals Biel, Kochorashvili, and the block-buster sales of Geovany Quenda (€50.78M) and Dário Essugo (€22.27M) to Chelsea.",
     "note_pt": "Saída de Amorim para o Manchester United. Adicionadas as transações de inverno: entradas importantes de Biel e Kochorashvili, e vendas recorde de Geovany Quenda (€50,78M) e Dário Essugo (€22,27M) para o Chelsea.",
     "purchases": [
@@ -2884,17 +2884,6 @@
         "note_pt": "Valor de ~15.2M USD (≈€13.8M). Comissão: Tidenal SA. Cláusula de €80M."
       },
       {
-        "player": "Vladan Kovačević",
-        "club": "RKS Raków",
-        "fee": 4.81,
-        "rights": "100%",
-        "bonus": 1.2,
-        "commission": 0.241,
-        "window": "summer",
-        "note": "Raków retains 15% sell-on (reducible to 10%). Commission: Wesportugoal + Lian Sports",
-        "note_pt": "Raków mantém 15% de mais-valia (reduzível para 10%). Comissão: Wesportugoal + Lian Sports"
-      },
-      {
         "player": "Gabriel Teixeira \"Biel\"",
         "club": "EC Bahia",
         "fee": 6.425,
@@ -2917,6 +2906,17 @@
         "note_pt": "Levante mantém 12.5% de mais-valia futura (reduzível para 10%)."
       },
       {
+        "player": "Vladan Kovačević",
+        "club": "RKS Raków",
+        "fee": 4.81,
+        "rights": "100%",
+        "bonus": 1.2,
+        "commission": 0.241,
+        "window": "summer",
+        "note": "Raków retains 10% sell-on (reducible to 10%). Commission: Wesportugoal + Lian Sports",
+        "note_pt": "Raków mantém 10% de mais-valia (reduzível para 10%). Comissão: Wesportugoal + Lian Sports"
+      },
+      {
         "player": "Alisson Santos",
         "club": "Vitória/UD Leiria",
         "fee": 2.1,
@@ -2937,6 +2937,14 @@
         "note_pt": "Taxa de empréstimo. Opção de compra."
       },
       {
+        "player": "Jakub Stasiak",
+        "club": "Pogoń Szczecin",
+        "fee": 0.1,
+        "window": "summer",
+        "note": "Pogoń Szczecin holds 15% of a future capital gain.",
+        "note_pt": "Pogoń Szczecin detém 15% de mais-valia futura."
+      },
+      {
         "player": "Erik Ingebrethsen",
         "club": "Viking FK",
         "fee": 0.065,
@@ -2945,6 +2953,15 @@
         "window": "winter",
         "note": "Viking FK retains 30% future sell-on.",
         "note_pt": "Viking FK mantém 30% de mais-valia futura."
+      },
+      {
+        "player": "Nilton Cardoso",
+        "club": "SC Lusitânia",
+        "fee": 0.05,
+        "commission": 0.009,
+        "window": "summer",
+        "note": "SC Lusitânia holds 30% of a future capital gain.",
+        "note_pt": "SC Lusitânia detém 30% de mais-valia futura."
       },
       {
         "player": "Luka Petric",
@@ -2973,23 +2990,6 @@
         "note_pt": "Empréstimo com opção de compra."
       },
       {
-        "player": "Nilton Cardoso",
-        "club": "SC Lusitânia",
-        "fee": 0.05,
-        "commission": 0.009,
-        "window": "summer",
-        "note": "SC Lusitânia holds 50% of a future capital gain.",
-        "note_pt": "SC Lusitânia detém 50% de mais-valia futura."
-      },
-      {
-        "player": "Jakub Stasiak",
-        "club": "Pogoń Szczecin",
-        "fee": 0.1,
-        "window": "summer",
-        "note": "Pogoń Szczecin holds 15% of a future capital gain.",
-        "note_pt": "Pogoń Szczecin detém 15% de mais-valia futura."
-      },
-      {
         "player": "Paulo Iago",
         "club": "Real Madrid CF",
         "fee": 0,
@@ -3009,15 +3009,24 @@
     ],
     "sales": [
       {
-        "player": "Mateus Fernandes",
-        "club": "Southampton FC",
-        "fee": 15,
+        "player": "Geovany Quenda",
+        "club": "Chelsea FC",
+        "fee": 50.78,
         "rights": "100%",
-        "bonus": 5,
-        "commission": 1.43,
-        "window": "summer",
-        "note": "SCP retains 10% sell-on. Commission: Gestifute SA",
-        "note_pt": "SCP retém 10% de mais-valia. Comissão: Gestifute SA"
+        "bonus": 1.36,
+        "commission": 3.55,
+        "window": "winter",
+        "note": "Remains at SCP until 30/06/2026. Commission: Sferico Sports.",
+        "note_pt": "Permanece no SCP até 30/06/2026. Comissão: Sferico Sports."
+      },
+      {
+        "player": "Dário Essugo",
+        "club": "Chelsea FC",
+        "fee": 22.27,
+        "commission": 1,
+        "window": "winter",
+        "note": "Remains loaned at Las Palmas until end of season. Commission: Pesport.",
+        "note_pt": "Permanece emprestado ao Las Palmas até fim da época. Comissão: Pesport."
       },
       {
         "player": "A.I. Fatawu",
@@ -3031,6 +3040,25 @@
         "note_pt": "SCP retém 15% de mais-valia. Comissão: Pintex Limited"
       },
       {
+        "player": "Mateus Fernandes",
+        "club": "Southampton FC",
+        "fee": 15,
+        "rights": "100%",
+        "bonus": 5,
+        "commission": 1.43,
+        "window": "summer",
+        "note": "SCP retains 10% sell-on. Commission: Gestifute SA",
+        "note_pt": "SCP retém 10% de mais-valia. Comissão: Gestifute SA"
+      },
+      {
+        "player": "Ruben Amorim (coach)",
+        "club": "Manchester United",
+        "fee": 11,
+        "window": "summer",
+        "note": "Manager compensation clause: €11M + €1.66M from commission liability extinctions",
+        "note_pt": "Cláusula de compensação do treinador: €11M + €1.66M de extinções de passivos de comissões"
+      },
+      {
         "player": "Paulinho",
         "club": "FC Toluca",
         "fee": 7.75,
@@ -3042,12 +3070,25 @@
         "note_pt": "Comissão: PEF Premier Edition Consultancy LLC"
       },
       {
-        "player": "Ruben Amorim (coach)",
-        "club": "Manchester United",
-        "fee": 11,
-        "window": "summer",
-        "note": "Manager compensation clause: €11M + €1.66M from commission liability extinctions",
-        "note_pt": "Cláusula de compensação do treinador: €11M + €1.66M de extinções de passivos de comissões"
+        "player": "Rúben Vinagre",
+        "club": "Legia Warszawa",
+        "fee": 2.3,
+        "commission": 0.084,
+        "sell_on_gain_pct": 50,
+        "purchase_fee": 10,
+        "window": "winter",
+        "note": "Commission: Esferinedita.",
+        "note_pt": "Comissão: Esferinedita."
+      },
+      {
+        "player": "Leonardo Barroso",
+        "club": "MLS",
+        "fee": 1.4,
+        "bonus": 0.35,
+        "commission": 0.14,
+        "window": "winter",
+        "note": "SCP retains 20% future sell-on. Commission: Proeleven.",
+        "note_pt": "SCP retém 20% de mais-valia futura. Comissão: Proeleven."
       },
       {
         "player": "Flávio Nazinho",
@@ -3070,45 +3111,12 @@
         "note_pt": "SCP retém 10% de mais-valia futura"
       },
       {
-        "player": "Geovany Quenda",
-        "club": "Chelsea FC",
-        "fee": 50.78,
-        "rights": "100%",
-        "bonus": 1.36,
-        "commission": 3.55,
+        "player": "Marcus Edwards (loan)",
+        "club": "Burnley FC",
+        "fee": 0.5,
         "window": "winter",
-        "note": "Remains at SCP until 30/06/2026. Commission: Sferico Sports.",
-        "note_pt": "Permanece no SCP até 30/06/2026. Comissão: Sferico Sports."
-      },
-      {
-        "player": "Dário Essugo",
-        "club": "Chelsea FC",
-        "fee": 22.27,
-        "commission": 1,
-        "window": "winter",
-        "note": "Remains loaned at Las Palmas until end of season. Commission: Pesport.",
-        "note_pt": "Permanece emprestado ao Las Palmas até fim da época. Comissão: Pesport."
-      },
-      {
-        "player": "Rúben Vinagre",
-        "club": "Legia Warszawa",
-        "fee": 2.3,
-        "commission": 0.084,
-        "window": "winter",
-        "note": "Commission: Esferinedita.",
-        "note_pt": "Comissão: Esferinedita.",
-        "sell_on_gain_pct": 50,
-        "purchase_fee": 10
-      },
-      {
-        "player": "Leonardo Barroso",
-        "club": "MLS",
-        "fee": 1.4,
-        "bonus": 0.35,
-        "commission": 0.14,
-        "window": "winter",
-        "note": "SCP retains 20% future sell-on. Commission: Proeleven.",
-        "note_pt": "SCP retém 20% de mais-valia futura. Comissão: Proeleven."
+        "note": "Loan with buy option.",
+        "note_pt": "Empréstimo com opção de compra."
       },
       {
         "player": "Isnaba Mané",
@@ -3143,462 +3151,12 @@
         "note_pt": "Empréstimo até ao fim da época."
       },
       {
-        "player": "Marcus Edwards (loan)",
-        "club": "Burnley FC",
-        "fee": 0.5,
-        "window": "winter",
-        "note": "Loan with buy option.",
-        "note_pt": "Empréstimo com opção de compra."
-      },
-      {
         "player": "Vladan Kovačević (loan)",
         "club": "Legia Warszawa",
         "fee": 0,
         "window": "winter",
         "note": "Loan until end of season.",
         "note_pt": "Empréstimo até ao fim da época."
-      }
-    ]
-  },
-  {
-    "season": "2025/26",
-    "note": "Afonso Moreira and Henrique Arreiol sold. Record sale of Viktor Gyökeres. BBB− rating secured.",
-    "note_pt": "Afonso Moreira e Henrique Arreiol vendidos. Venda recorde de Viktor Gyökeres. Rating BBB− assegurado.",
-    "purchases": [
-      {
-        "player": "Luís Suarez",
-        "club": "UD Almería SAD",
-        "fee": 22.157,
-        "rights": "100%",
-        "bonus": 5.263,
-        "commission": 1.25,
-        "window": "summer",
-        "note": "Almería retains 20% of future capital gain.",
-        "note_pt": "Almería mantém 20% de mais-valia futura."
-      },
-      {
-        "player": "Fotios Ioannidis",
-        "club": "Panathinaikos FC",
-        "fee": 22,
-        "rights": "100%",
-        "bonus": 3,
-        "window": "summer",
-        "note": "Panathinaikos retains 25% of future capital gain.",
-        "note_pt": "Panathinaikos mantém 25% de mais-valia futura."
-      },
-      {
-        "player": "Georgios Vagiannidis",
-        "club": "Panathinaikos FC",
-        "fee": 12,
-        "rights": "100%",
-        "bonus": 2.5,
-        "commission": 0.3,
-        "window": "summer",
-        "note": "Panathinaikos retains 15% of future capital gain.",
-        "note_pt": "Panathinaikos mantém 15% de mais-valia futura."
-      },
-      {
-        "player": "Rui Silva",
-        "club": "Real Betis Balompié",
-        "fee": 4,
-        "rights": "100%",
-        "bonus": 0.25,
-        "commission": 0.3,
-        "window": "summer",
-        "note": "Future Lda retains 10% future sell-on.",
-        "note_pt": "Future Lda mantém 10% de mais-valia futura."
-      },
-      {
-        "player": "Geny Catamo (buyout)",
-        "club": "Amora FC / Black Bulls",
-        "fee": 2.25,
-        "rights": "75%",
-        "window": "summer",
-        "note": "Acquired remaining economic rights (40% from Amora & Black Bulls). Amora/Black Bulls retain 10% of future capital gain.",
-        "note_pt": "Adquiriu os restantes Direitos económicos (40% from Amora & Black Bulls). Amora/Black Bulls retêm 10% de mais-valia futura."
-      },
-      {
-        "player": "Paulo Cardoso",
-        "club": "CF Estrela SAD",
-        "fee": 0.7,
-        "rights": "100%",
-        "window": "summer",
-        "note": "Estrela retains 10% of future capital gain.",
-        "note_pt": "Estrela mantém 10% de mais-valia futura."
-      },
-      {
-        "player": "Ricardo Mangas",
-        "club": "FC Spartak Moscow",
-        "fee": 0.32,
-        "rights": "100%",
-        "bonus": 0.79,
-        "window": "summer",
-        "note": "Spartak Moscow retains 20% of future capital gain.",
-        "note_pt": "Spartak Moscow mantém 20% de mais-valia futura."
-      },
-      {
-        "player": "Kauã Oliveira",
-        "club": "FC Ibrachina",
-        "fee": 0.3,
-        "rights": "100%",
-        "window": "summer",
-        "note": "Ibrachina retains 30% of future capital gain.",
-        "note_pt": "Ibrachina mantém 30% de mais-valia futura."
-      },
-      {
-        "player": "Victor Mendoza",
-        "club": "Club Alianza Lima",
-        "fee": 0,
-        "rights": "100%",
-        "bonus": 0.45,
-        "window": "summer",
-        "note": "Alianza Lima retains 10% of future capital gain.",
-        "note_pt": "Alianza Lima mantém 10% de mais-valia futura."
-      },
-      {
-        "player": "Afonso Marques",
-        "club": "Académica OAF",
-        "fee": 0.04,
-        "rights": "100%",
-        "bonus": 0.15,
-        "commission": 0.0075,
-        "window": "summer",
-        "note": "Académica retains 30% of future sale.",
-        "note_pt": "Académica retém 30% de futura venda."
-      },
-      {
-        "player": "João Virgínia",
-        "club": "Free agent",
-        "fee": 0,
-        "rights": "100%",
-        "window": "summer",
-        "note": "Free transfer. €60M release clause. Gestifute maintenance.",
-        "note_pt": "Custo zero. Cláusula de rescisão de €60M. Manutenção: Gestifute."
-      },
-      {
-        "player": "Luís Guilherme",
-        "club": "West Ham United FC",
-        "fee": 14,
-        "rights": "100%",
-        "bonus": 3,
-        "commission": 0.16,
-        "window": "winter",
-        "note": "Winter signing. West Ham retains 15% of future capital gain.",
-        "note_pt": "Contratação de inverno. West Ham mantém 15% de mais-valia futura."
-      },
-      {
-        "player": "Souleymane Faye",
-        "club": "Granada CF SAD",
-        "fee": 6.3,
-        "rights": "100%",
-        "commission": 0.016,
-        "window": "winter",
-        "note": "Winter signing. Granada retains 10% of future capital gain.",
-        "note_pt": "Contratação de inverno. Granada mantém 10% de mais-valia futura."
-      },
-      {
-        "player": "Délcio Aurélio",
-        "club": "GD Interclube",
-        "fee": 0.1,
-        "rights": "100%",
-        "commission": 0.001,
-        "window": "winter",
-        "note": "Winter signing. Interclube retains 10% of future capital gain (reducible to 5%).",
-        "note_pt": "Contratação de inverno. Interclube mantém 10% de mais-valia futura (reduzível para 5%)."
-      },
-      {
-        "player": "Pablo Valeron",
-        "club": "Free agent",
-        "fee": 0,
-        "rights": "100%",
-        "window": "winter",
-        "note": "Winter signing. Free transfer. €45M release clause.",
-        "note_pt": "Contratação de inverno. Custo zero. Cláusula de rescisão de €45M."
-      },
-      {
-        "player": "Francisco Trincão (buyout)",
-        "club": "FC Barcelona",
-        "fee": 11,
-        "rights": "100%",
-        "window": "summer",
-        "note": "Purchase of 50% of the future sale, eliminating the contingent liability with FC Barcelona.",
-        "note_pt": "Compra de 50% da futura venda, eliminando o passivo contingente com o FC Barcelona."
-      },
-      {
-        "player": "Leonardo Paulin",
-        "club": "SC Farense",
-        "fee": 0.015,
-        "rights": "100%",
-        "window": "summer",
-        "note": "SC Farense keeps 15% of a future capital gain.",
-        "note_pt": "SC Farense fica com 15% de uma mais-valia futura."
-      },
-      {
-        "player": "Zaid Bafdili",
-        "club": "KRC Genk",
-        "fee": 0,
-        "rights": "100%",
-        "commission": 0.007,
-        "window": "summer",
-        "note": "KRC Genk keeps 10% of a future sale.",
-        "note_pt": "KRC Genk fica com 10% de uma futura venda."
-      },
-      {
-        "player": "Bruno Ramos (loan)",
-        "club": "Académico de Viseu FC",
-        "fee": 0,
-        "bonus": 0.05,
-        "window": "summer",
-        "note": "Loan fee is ---. Bónus até 0.05M€.",
-        "note_pt": "Taxa de empréstimo: —. Bónus até 0.05M€."
-      },
-      {
-        "player": "Rômulo Júnior (loan)",
-        "club": "Atlético Mineiro S.F.",
-        "fee": 0,
-        "commission": 0.027,
-        "window": "summer",
-        "note": "Loan fee is ---. Maintenance commission of €0.027M.",
-        "note_pt": "Taxa de empréstimo: —. Comissão de manutenção de 0.027M€."
-      },
-      {
-        "player": "Rayan Lucas (loan)",
-        "club": "CR Flamengo",
-        "fee": 0,
-        "window": "summer"
-      }
-    ],
-    "sales": [
-      {
-        "player": "Viktor Gyökeres",
-        "club": "Arsenal FC",
-        "fee": 65.76,
-        "bonus": 10.26,
-        "window": "summer",
-        "sell_on_gain_pct": 10,
-        "purchase_fee": 24
-      },
-      {
-        "player": "Conrad Harder",
-        "club": "RB Leipzig",
-        "fee": 24,
-        "bonus": 6,
-        "window": "summer",
-        "note": "Leipzig retains a 15% future sell-on clause.",
-        "note_pt": "Leipzig mantém cláusula de 15% de mais-valia futura.",
-        "sell_on_gain_pct": 10,
-        "purchase_fee": 19
-      },
-      {
-        "player": "Marcus Edwards",
-        "club": "Burnley FC",
-        "fee": 10,
-        "bonus": 1.5,
-        "commission": 0.104,
-        "window": "summer",
-        "note": "Burnley signing. SCP retains 10% of future capital gain.",
-        "note_pt": "Contratação pelo Burnley. SCP retém 10% de mais-valia futura.",
-        "rights": "65%"
-      },
-      {
-        "player": "Franco Israel",
-        "club": "Torino FC",
-        "fee": 4.09,
-        "bonus": 0.51,
-        "commission": 0.17,
-        "window": "summer",
-        "note": "SCP retains 25% of future sale.",
-        "note_pt": "SCP retém 25% de futura venda.",
-        "sell_on_gain_pct": 40,
-        "purchase_fee": 0.65
-      },
-      {
-        "player": "Vladan Kovačević",
-        "club": "Norwich City FC",
-        "fee": 2.4,
-        "commission": 0.23,
-        "window": "summer",
-        "note": "Norwich signing. SCP retains 20% of future capital gain.",
-        "note_pt": "Contratação pelo Norwich. SCP retém 20% de mais-valia futura.",
-        "sell_on_gain_pct": 10,
-        "purchase_fee": 4.81
-      },
-      {
-        "player": "Afonso Moreira",
-        "club": "Olympique Lyonnais",
-        "fee": 2,
-        "commission": 0.198,
-        "window": "summer",
-        "note": "SCP retains 20% of future sale.",
-        "note_pt": "SCP retém 20% de futura venda."
-      },
-      {
-        "player": "Henrique Arreiol",
-        "club": "Legia Warszawa",
-        "fee": 0.5,
-        "bonus": 0.25,
-        "commission": 0.024,
-        "window": "summer",
-        "note": "SCP retains 40% of future sale.",
-        "note_pt": "SCP retém 40% de futura venda."
-      },
-      {
-        "player": "Pedro Sanca",
-        "club": "Gil Vicente FC",
-        "fee": 0,
-        "window": "summer",
-        "note": "Gil Vicente signing. SCP retains 25% of future sale.",
-        "note_pt": "Contratação pelo Gil Vicente. SCP retém 25% de futura venda."
-      },
-      {
-        "player": "Diogo Pinto",
-        "club": "CF Estrela SAD",
-        "fee": 0,
-        "window": "summer",
-        "note": "SCP retains 30% of future sale and first refusal.",
-        "note_pt": "SCP retém 30% de futura venda e direito de preferência."
-      },
-      {
-        "player": "Telmo Coimbra",
-        "club": "CF Estrela SAD",
-        "fee": 0,
-        "window": "summer",
-        "note": "SCP retains 40% of future sale and first refusal.",
-        "note_pt": "SCP retém 40% de futura venda e direito de preferência."
-      },
-      {
-        "player": "Luís Gustavo",
-        "club": "Atlético Mineiro S.F.",
-        "fee": 0,
-        "window": "summer",
-        "note": "SCP retains 25% of future sale.",
-        "note_pt": "SCP retém 25% de futura venda."
-      },
-      {
-        "player": "Francisco Machado",
-        "club": "CF Estrela SAD",
-        "fee": 0,
-        "window": "summer",
-        "note": "SCP retains 25% of future capital gain and first refusal.",
-        "note_pt": "SCP retém 25% de mais-valia futura e direito de preferência."
-      },
-      {
-        "player": "Afonso Moço",
-        "club": "GD Chaves SAD",
-        "fee": 0,
-        "window": "summer",
-        "note": "SCP retains 40% of future sale, first refusal, and buyback option.",
-        "note_pt": "SCP retém 40% de futura venda, direito de preferência, and opção de recompra."
-      },
-      {
-        "player": "Ricardo Esgaio",
-        "club": "Revogação CTD",
-        "fee": 0,
-        "window": "summer",
-        "note": "Contract terminated by mutual consent.",
-        "note_pt": "Contrato rescindido por mútuo acordo."
-      },
-      {
-        "player": "Luis Gomes",
-        "club": "Estoril Praia SAD",
-        "fee": 0,
-        "window": "summer",
-        "note": "SCP retains 30% of future sale and first refusal.",
-        "note_pt": "SCP retém 30% de futura venda e direito de preferência."
-      },
-      {
-        "player": "Alisson Santos (loan)",
-        "club": "SSC Napoli SpA",
-        "fee": 3.5,
-        "commission": 0.1,
-        "window": "winter",
-        "note": "Winter loan. Napoli has buy option.",
-        "note_pt": "Empréstimo de inverno. Napoli tem opção de compra."
-      },
-      {
-        "player": "Winilson Lopes",
-        "club": "Santa Clara SAD",
-        "fee": 0,
-        "window": "winter",
-        "note": "Winter transfer. SCP retains right to first €0.1M and 30% of global value of future sale.",
-        "note_pt": "Transferência de inverno. SCP retém direito aos primeiros €0.1M e a 30% do valor global de futura venda."
-      },
-      {
-        "player": "Tomás Mendes",
-        "club": "SCU Torreense SAD",
-        "fee": 0,
-        "window": "winter",
-        "note": "Winter transfer. SCP retains 40% of future sale.",
-        "note_pt": "Transferência de inverno. SCP retém 40% de futura venda."
-      },
-      {
-        "player": "Sandro Nascimento",
-        "club": "Torino FC",
-        "fee": 0,
-        "window": "winter",
-        "note": "Winter transfer.",
-        "note_pt": "Transferência de inverno."
-      },
-      {
-        "player": "Jeremiah St. Juste",
-        "club": "Revogação CTD",
-        "fee": 0,
-        "window": "winter",
-        "note": "Winter contract termination. SCP retains 25% of future sale.",
-        "note_pt": "Rescisão contratual de inverno. SCP retém 25% de futura venda.",
-        "sell_on_gain_pct": 10,
-        "purchase_fee": 10
-      },
-      {
-        "player": "Matheus Reis",
-        "club": "Revogação CTD",
-        "fee": 0,
-        "window": "winter",
-        "note": "Winter contract termination.",
-        "note_pt": "Rescisão contratual de inverno."
-      },
-      {
-        "player": "Rodrigo Ribeiro (loan)",
-        "club": "FC Augsburg 1907",
-        "fee": 0,
-        "window": "winter",
-        "note": "Winter loan. Purchase option may become mandatory.",
-        "note_pt": "Empréstimo de inverno. Opção de compra pode tornar-se obrigatória."
-      },
-      {
-        "player": "Chris Grombahi (loan)",
-        "club": "Club Brugge NV",
-        "fee": 0,
-        "window": "winter",
-        "note": "Winter loan. Purchase option may become mandatory.",
-        "note_pt": "Empréstimo de inverno. Opção de compra pode tornar-se obrigatória."
-      },
-      {
-        "player": "Duarte Correia (loan)",
-        "club": "Real Valladolid SAD",
-        "fee": 0,
-        "window": "winter",
-        "note": "Winter loan. Purchase option.",
-        "note_pt": "Empréstimo de inverno. Opção de compra."
-      },
-      {
-        "player": "Adam Arvelo",
-        "club": "UD Las Palmas SAD",
-        "fee": 0,
-        "window": "summer",
-        "note": "SCP retains 10% of a future sale.",
-        "note_pt": "SCP mantém 10% de uma futura venda.",
-        "rights": "70%"
-      },
-      {
-        "player": "Nilton Cardoso",
-        "club": "SCU Torreense SAD",
-        "fee": 0,
-        "window": "summer",
-        "note": "SCP retains 30% of a future sale.",
-        "note_pt": "SCP mantém 30% de uma futura venda.",
-        "sell_on_gain_pct": 50,
-        "purchase_fee": 0.05
       }
     ]
   }

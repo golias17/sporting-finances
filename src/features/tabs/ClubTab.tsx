@@ -33,8 +33,12 @@ export const ClubTab = React.memo(function ClubTab() {
       const handleClick = () => {
         const kitInner = img.closest(".kit-card-inner");
         if (kitInner) {
-          const frontImg = kitInner.querySelector(".kit-card-front img") as HTMLImageElement;
-          const backImg = kitInner.querySelector(".kit-card-back img") as HTMLImageElement;
+          const frontImg = kitInner.querySelector(
+            ".kit-card-front img",
+          ) as HTMLImageElement;
+          const backImg = kitInner.querySelector(
+            ".kit-card-back img",
+          ) as HTMLImageElement;
           if (frontImg && backImg) {
             lightbox.open(img, {
               frontSrc: frontImg.src,
@@ -82,7 +86,7 @@ export const ClubTab = React.memo(function ClubTab() {
               <div className="kit-card-inner">
                 <div className="kit-card-front">
                   <img
-                    src="https://lojaverde.sporting.pt/cdn/shop/files/IMG_06F_9_b2e1c87c-29d3-4088-acb2-0ca59d3a5a08.jpg?v=1783926957&width=1620"
+                    src="./assets/kits/kit_home_front.jpg"
                     alt="Home Front"
                     className="kit-img"
                     loading="lazy"
@@ -91,7 +95,7 @@ export const ClubTab = React.memo(function ClubTab() {
                 </div>
                 <div className="kit-card-back">
                   <img
-                    src="https://lojaverde.sporting.pt/cdn/shop/files/IMG_03F_8_dd697b98-f3b3-48f1-b5c4-c4c22ae8172a.jpg?v=1783926957&width=1946"
+                    src="./assets/kits/kit_home_back.jpg"
                     alt="Home Back"
                     className="kit-img"
                     loading="lazy"
@@ -106,7 +110,7 @@ export const ClubTab = React.memo(function ClubTab() {
               <div className="kit-card-inner">
                 <div className="kit-card-front">
                   <img
-                    src="https://lojaverde.sporting.pt/cdn/shop/files/StrikeFrente.jpg?v=1782742123&width=1946"
+                    src="./assets/kits/kit_away_front.jpg"
                     alt="Away Front"
                     className="kit-img"
                     loading="lazy"
@@ -115,7 +119,7 @@ export const ClubTab = React.memo(function ClubTab() {
                 </div>
                 <div className="kit-card-back">
                   <img
-                    src="https://lojaverde.sporting.pt/cdn/shop/files/StrikeCostas.jpg?v=1782742123&width=1946"
+                    src="./assets/kits/kit_away_back.jpg"
                     alt="Away Back"
                     className="kit-img"
                     loading="lazy"
@@ -130,7 +134,7 @@ export const ClubTab = React.memo(function ClubTab() {
               <div className="kit-card-inner">
                 <div className="kit-card-front">
                   <img
-                    src="https://lojaverde.sporting.pt/cdn/shop/files/camisola-alternativa-dourada-nike-total-90-sporting-26-27-frente.jpg?v=1784805532&width=1946"
+                    src="./assets/kits/kit_third_front.jpg"
                     alt="Third Front"
                     className="kit-img"
                     loading="lazy"
@@ -139,7 +143,7 @@ export const ClubTab = React.memo(function ClubTab() {
                 </div>
                 <div className="kit-card-back">
                   <img
-                    src="https://lojaverde.sporting.pt/cdn/shop/files/camisola-alternativa-dourada-nike-total-90-sporting-26-27-costas.jpg?v=1784805532&width=1946"
+                    src="./assets/kits/kit_third_back.jpg"
                     alt="Third Back"
                     className="kit-img"
                     loading="lazy"
@@ -322,10 +326,7 @@ export const ClubTab = React.memo(function ClubTab() {
       <div className="social-hub reveal">
         <T as="h3" i18nKey="ch11-social-h3" />
         <div className="social-grid">
-          <button
-            className="social-btn jornal"
-            onClick={jornal.open}
-          >
+          <button className="social-btn jornal" onClick={jornal.open}>
             <svg
               viewBox="0 0 24 24"
               fill="none"

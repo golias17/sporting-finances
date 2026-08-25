@@ -1,8 +1,7 @@
 import type {
   FinancialDataset,
   FinancialRecord,
-  AppState,
-} from "../core/types.ts";
+  } from "../core/types.ts";
 
 export function ordinal(n: number) {
   const s = ["th", "st", "nd", "rd"];
@@ -33,6 +32,7 @@ export function getLatestH1Data(dataset: FinancialDataset | null) {
  */
 export function netDebt(d: FinancialRecord) {
   if (!d) return 0;
+  if (d.net_debt !== undefined) return d.net_debt;
   const nc = d.borrowings_nc || 0;
   const c = d.borrowings_c || 0;
   const cash = d.cash || 0;
@@ -62,9 +62,11 @@ export function netDebt(d: FinancialRecord) {
  */
 export function wageBillRatio(d: FinancialRecord) {
   if (!d) return null;
+  if (d.wage_ratio !== undefined) return d.wage_ratio / 100;
   const rev = d.revenue_operating;
   const payroll = d.personnel_costs;
-  if (!Number.isFinite(rev) || rev === 0 || !Number.isFinite(payroll)) return null;
+  if (!Number.isFinite(rev) || rev === 0 || !Number.isFinite(payroll))
+    return null;
   return Math.abs(payroll) / rev;
 }
 

@@ -1,6 +1,7 @@
 import React from "react";
 import { ChartCard } from "../../components/ChartCard.js";
 import { HealthSignals } from "../HealthSignals";
+import { UefaRadar } from "../UefaRadar.js";
 import { useTranslation } from "../../hooks/useTranslation.js";
 import { useHealthcheckCharts } from "./useHealthcheckCharts.js";
 
@@ -25,8 +26,10 @@ export const HealthcheckTab = React.memo(function HealthcheckTab() {
           <T as="p" className="lede" i18nKey="ch03-lede" />
         </div>
       </div>
-      {/* VITAL SIGNS — moved here from above tabs */}
+      {/* VITAL SIGNS */}
       <HealthSignals />
+
+      {/* BRIEFING CARD */}
       <div className="card">
         <div className="card-head">
           <T as="h3" i18nKey="ch03-brief-h3" />
@@ -38,6 +41,9 @@ export const HealthcheckTab = React.memo(function HealthcheckTab() {
           <T as="p" i18nKey="ch03-brief-p" />
         </div>
       </div>
+
+      {/* UEFA FSR & SUSTAINABILITY RADAR */}
+      <UefaRadar />
       <div className="grid-2">
         <ChartCard
           id="chartTransferReliance"

@@ -18,15 +18,21 @@ interface ChartCardProps {
   chartClassName?: string; // Appended to .chart-box
 
   valueType?:
-"currency-thousands"
+    | "currency-thousands"
     | "currency-millions"
-   
     | "ratio"
     | "percentage"
+    | "points"
+    | "score"
     | "auto";
   datasetValueTypes?: Record<
     number,
-    "currency-thousands" | "currency-millions" | "ratio" | "percentage"
+    | "currency-thousands"
+    | "currency-millions"
+    | "ratio"
+    | "percentage"
+    | "points"
+    | "score"
   >;
 
   children?: React.ReactNode;

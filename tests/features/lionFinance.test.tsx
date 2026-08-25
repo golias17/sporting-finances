@@ -36,7 +36,7 @@ describe("LionFinance", () => {
       setActiveLionTab: vi.fn(),
     };
     (state as any).useAppState = vi.fn((selector: any) => selector(mockState));
-    
+
     const { container } = render(<LionFinance />);
     expect(container.querySelector(".lf-switcher")).toBeTruthy();
   });
@@ -48,7 +48,7 @@ describe("LionFinance", () => {
       setActiveLionTab: vi.fn(),
     };
     (state as any).useAppState = vi.fn((selector: any) => selector(mockState));
-    
+
     const { container } = render(<LionFinance />);
     expect(container.querySelector(".lf-switcher")).toBeTruthy();
   });
@@ -60,7 +60,7 @@ describe("LionFinance", () => {
       setActiveLionTab: vi.fn(),
     };
     (state as any).useAppState = vi.fn((selector: any) => selector(mockState));
-    
+
     const { container } = render(<LionFinance />);
     expect(container.querySelector(".lf-switcher")).toBeTruthy();
   });

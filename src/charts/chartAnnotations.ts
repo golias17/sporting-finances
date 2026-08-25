@@ -99,7 +99,9 @@ export function getEventAnnotations(): Record<string, any> {
     },
     title21: {
       x: "2020/21",
-      label: state.isPt ? "🏆 Campeões 2021 (COVID)" : "🏆 Champions 2021 (COVID)",
+      label: state.isPt
+        ? "🏆 Campeões 2021 (COVID)"
+        : "🏆 Champions 2021 (COVID)",
       color: state.COLORS.green,
     },
     vmoc1: {

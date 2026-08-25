@@ -1,36 +1,43 @@
 import { jsPDF } from "jspdf";
-import autoTable from "jspdf-autotable";
 import { state } from "../core/state.js";
-import { getBrandColors, hexToRgbArray } from "../charts/chartUtils.js";
-import { getLatestH1Data, revenueGrowthPct, consecutiveProfitableYears, netDebt } from "../features/financialMetrics.js";
-import { fmtM, signColorCell, thresholdColorCell, combineCellColorers, getBase64ImageFromUrl } from "./pdfHelpers.js";
+import {
+  revenueGrowthPct,
+  consecutiveProfitableYears,
+  } from "../features/financialMetrics.js";
+import {
+  fmtM,
+  getBase64ImageFromUrl,
+} from "./pdfHelpers.js";
 import { buildPdfContext } from "./pdfLayout.js";
 import { drawCoverPage } from "./pdfCoverPage.js";
 import { drawFinancialTablesPage } from "./pdfFinancialTables.js";
 import { drawTradingCashFlowPage } from "./pdfTradingCashFlow.js";
-import { drawFinancingTimelinePage } from "./pdfFinancingTimeline.js";
+import {
+  drawStrategicFinancingPage,
+  drawTurnaroundMilestonesPage,
+} from "./pdfFinancingTimeline.js";
+import { drawCompetitiveBenchmarkPage } from "./pdfCompetitive.js";
 import { drawTransfersLedgerPages } from "./pdfTransfersLedger.js";
-import type { AnnualData, SummaryLabels, GeneratePdfOptions, PdfContext, ColorPalette } from "./pdfTypes.js";
+import type {
+  GeneratePdfOptions,
+  } from "./pdfTypes.js";
+
 export async function generateCuratedPdf(options: GeneratePdfOptions = {}) {
   const {
     lang = state.isPt ? "pt" : "en",
-    pages: requestedPages = [true, true, true, true, true],
+    pages: requestedPages = [true, true, true, true, true, true, true],
     executiveNote = "",
   } = options;
   if (!state.DATASET) return;
 
-  // pages[4] (transfers ledger) needs state.TRANSFER_LEDGER populated —
-  // drawTransfersLedgerPages() below iterates it unconditionally and would
-  // throw if it's unset. Force that page off here rather than letting it
-  // throw partway through rendering (only state.DATASET is checked above),
-  // and do it before totalPages is computed so the page-count/pagination
-  // header ("Page X of Y") stays consistent with what's actually drawn —
-  // copies the array rather than mutating the caller's `options.pages`.
   const hasTransferLedger =
     Array.isArray(state.TRANSFER_LEDGER) && state.TRANSFER_LEDGER.length > 0;
   const pages = [...requestedPages];
-  if (pages[4] && !hasTransferLedger) {
-    pages[4] = false;
+
+  // Adjust transfer ledger page flag if ledger data is unavailable
+  const transferLedgerIndex = pages.length > 6 ? 6 : pages.length - 1;
+  if (pages[transferLedgerIndex] && !hasTransferLedger) {
+    pages[transferLedgerIndex] = false;
   }
 
   // Load the brand logo
@@ -50,15 +57,20 @@ export async function generateCuratedPdf(options: GeneratePdfOptions = {}) {
   const isPt = lang === "pt";
   const data = state.fullAnnual;
   if (!data) return;
+
   const totalPages =
-    pages.slice(0, 4).filter(Boolean).length + (pages[4] ? 2 : 0);
+    pages.slice(0, 6).filter(Boolean).length + (pages[6] ? 2 : 0);
   if (totalPages === 0) return;
 
-  const ctx = buildPdfContext({ doc, isPt, data, logoBase64, totalPages });
+  const ctx = buildPdfContext({
+    doc,
+    isPt,
+    data,
+    logoBase64: logoBase64 as string | null,
+    totalPages,
+  });
   const { latestSeason } = ctx;
 
-  // Same shared helper as the dashboard KPI strip (metrics.js), so the PDF
-  // cover caption can never disagree with the on-screen number.
   const revGrowthPct = revenueGrowthPct(data, data.length - 1);
   const revGrowthLabel = isPt
     ? revGrowthPct !== null
@@ -68,8 +80,6 @@ export async function generateCuratedPdf(options: GeneratePdfOptions = {}) {
       ? `Sustainable ${revGrowthPct}% growth trend`
       : "Not enough seasons to compute a trend";
 
-  // Consecutive profitable seasons ending at the latest season — shared
-  // helper, same reason as above.
   const consecutiveProfitable = consecutiveProfitableYears(
     data,
     data.length - 1,
@@ -86,13 +96,14 @@ export async function generateCuratedPdf(options: GeneratePdfOptions = {}) {
         ? "Profitable year"
         : "Loss-making year";
 
+  const equityVal = latestSeason.equity || 0;
   const equityLabel = isPt
-    ? latestSeason.equity > 0
+    ? equityVal > 0
       ? "Balanço revertido a positivo"
-      : `Ainda negativo — défice de ${fmtM(latestSeason.equity)}`
-    : latestSeason.equity > 0
+      : `Ainda negativo — défice de ${fmtM(equityVal)}`
+    : equityVal > 0
       ? "Balance sheet restored to positive"
-      : `Still negative — deficit of ${fmtM(latestSeason.equity)}`;
+      : `Still negative — deficit of ${fmtM(equityVal)}`;
 
   if (pages[0]) {
     drawCoverPage(ctx, {
@@ -109,9 +120,15 @@ export async function generateCuratedPdf(options: GeneratePdfOptions = {}) {
     drawTradingCashFlowPage(ctx);
   }
   if (pages[3]) {
-    drawFinancingTimelinePage(ctx);
+    drawStrategicFinancingPage(ctx);
   }
   if (pages[4]) {
+    drawTurnaroundMilestonesPage(ctx);
+  }
+  if (pages[5]) {
+    drawCompetitiveBenchmarkPage(ctx);
+  }
+  if (pages[6]) {
     drawTransfersLedgerPages(ctx);
   }
 
@@ -120,4 +137,3 @@ export async function generateCuratedPdf(options: GeneratePdfOptions = {}) {
     doc.save("Sporting_SAD_Financial_Dossier.pdf");
   }
 }
-

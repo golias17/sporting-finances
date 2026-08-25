@@ -1,8 +1,12 @@
 import autoTable from "jspdf-autotable";
 import { state } from "../core/state.js";
-import { getBrandColors, hexToRgbArray } from "../charts/chartUtils.js";
-import { fmtM, signColorCell, thresholdColorCell, combineCellColorers } from "./pdfHelpers.js";
-import type { PdfContext, ColorPalette } from "./pdfTypes.js";
+import {
+  fmtM,
+  signColorCell,
+  thresholdColorCell,
+  combineCellColorers,
+} from "./pdfHelpers.js";
+import type { PdfContext, AnnualData } from "./pdfTypes.js";
 
 // ==========================================================
 // PAGE 2: TABLE 1 (REVENUES & WAGES) & TABLE 2 (BALANCE SHEET)
@@ -98,30 +102,36 @@ export function drawFinancialTablesPage(ctx: PdfContext) {
       // Wage ratio (col 6): higher is worse.
       thresholdColorCell(
         6,
-        { negativeIf: (v: number) => v > 70, positiveIf: (v: number) => v <= 60 },
+        {
+          negativeIf: (v: number) => v > 70,
+          positiveIf: (v: number) => v <= 60,
+        },
         colors,
       ),
       // EBITDA margin (col 8): higher is better.
       thresholdColorCell(
         8,
-        { negativeIf: (v: number) => v < 10, positiveIf: (v: number) => v >= 20 },
+        {
+          negativeIf: (v: number) => v < 10,
+          positiveIf: (v: number) => v >= 20,
+        },
         colors,
       ),
-    ),
+    ) as any,
   });
 
   // Table 2 (Balance Sheet)
-  const table1EndY = doc.lastAutoTable.finalY || 140;
+  const table1EndY = (doc as any).lastAutoTable.finalY || 140;
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10.5);
   doc.setTextColor(...colors.green);
   doc.text(
     isPt
-      ? "II. Estrutura do Balanço e Rácio de Alavancagem"
-      : "II. Balance Sheet Structure & Leverage Metrics",
+      ? "II. Balanço Patrimonial e Endividamento Bancário"
+      : "II. Balance Sheet & Strategic Debt Position",
     15,
-    table1EndY + 8,
+    table1EndY + 10,
   );
 
   const t2Headers = isPt
@@ -129,52 +139,43 @@ export function drawFinancialTablesPage(ctx: PdfContext) {
         "Época",
         "Ativo Total",
         "Passivo Total",
-        "Capitais Próp.",
-        "Dívida Bruta",
+        "Capitais Próprios",
+        "Passivo C.P.",
+        "Dívida Bancária",
         "Caixa",
-        "Dívida Líq.",
-        "Solvência",
-        "Dív. Líq. / EBITDA",
+        "Autonomia Fin.",
       ]
     : [
         "Season",
         "Total Assets",
         "Total Liab.",
         "Equity",
-        "Gross Debt",
+        "Current Liab.",
+        "Bank Debt",
         "Cash",
-        "Net Debt",
-        "Solvency",
-        "Net Debt / EBITDA",
+        "Equity Ratio",
       ];
 
   const t2Rows = data.map((d: AnnualData) => {
-    const grossDebt = d.borrowings_nc + d.borrowings_c;
-    const netDebtVal = grossDebt - d.cash;
     const totalLiab = d.non_current_liabilities + d.current_liabilities;
-    const solvency =
-      d.total_assets > 0
-        ? `${Math.round((d.equity / d.total_assets) * 100)}%`
-        : "—";
-    const ebitda =
-      d.operating_result_excl_players - d.squad_amortization_impairment;
-    const netDebtEbitda =
-      ebitda > 0 ? `${(netDebtVal / ebitda).toFixed(1)}x` : "—";
+    const bankDebt = d.borrowings_nc + d.borrowings_c;
+    const equityRatio =
+      d.total_assets !== 0 ? (d.equity / d.total_assets) * 100 : null;
+
     return [
       d.label,
       fmtM(d.total_assets),
       fmtM(totalLiab),
       fmtM(d.equity),
-      fmtM(grossDebt),
+      fmtM(d.current_liabilities),
+      fmtM(bankDebt),
       fmtM(d.cash),
-      fmtM(netDebtVal),
-      solvency,
-      netDebtEbitda,
+      equityRatio !== null ? equityRatio.toFixed(1) + "%" : "—",
     ];
   });
 
   autoTable(doc, {
-    startY: table1EndY + 12,
+    startY: table1EndY + 14,
     head: [t2Headers],
     body: t2Rows,
     margin: { left: 15, right: 15 },
@@ -183,31 +184,33 @@ export function drawFinancialTablesPage(ctx: PdfContext) {
       fillColor: colors.green,
       textColor: [255, 255, 255],
       fontStyle: "bold",
-      fontSize: 8,
+      fontSize: 7.5,
     },
-    bodyStyles: { fontSize: 7.5, textColor: colors.darkInk },
+    bodyStyles: { fontSize: 7, textColor: colors.darkInk },
     columnStyles: {
-      0: { fontStyle: "bold", cellWidth: 15 },
-      7: { halign: "center", cellWidth: 16 },
-      8: { halign: "center", cellWidth: 26 },
+      0: { fontStyle: "bold", cellWidth: 16 },
       1: { halign: "right" },
       2: { halign: "right" },
       3: { halign: "right" },
       4: { halign: "right" },
       5: { halign: "right" },
       6: { halign: "right" },
+      7: { halign: "right" },
     },
     didParseCell: combineCellColorers(
       signColorCell(3, colors),
       thresholdColorCell(
         7,
-        { negativeIf: (v: number) => v < 0, positiveIf: (v: number) => v >= 15 },
+        {
+          negativeIf: (v: number) => v < 0,
+          positiveIf: (v: number) => v >= 15,
+        },
         colors,
       ),
-    ),
+    ) as any,
   });
 
-  const table2EndY = doc.lastAutoTable.finalY || 220;
+  const table2EndY = (doc as any).lastAutoTable.finalY || 220;
 
   // Render Vector-Drawn Shareholders' Equity Evolution Chart
   if (table2EndY <= 235) {
@@ -283,5 +286,3 @@ export function drawFinancialTablesPage(ctx: PdfContext) {
     doc.setLineWidth(0.2); // reset
   }
 }
-
-

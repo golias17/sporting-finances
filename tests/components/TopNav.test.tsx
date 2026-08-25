@@ -34,7 +34,7 @@ vi.mock("../../src/hooks/useTranslation", () => ({
 describe("TopNav Component", () => {
   let mockSetIsPt: any;
   let mockSetTheme: any;
-  
+
   beforeEach(() => {
     vi.clearAllMocks();
     mockSetIsPt = vi.fn();
@@ -47,9 +47,9 @@ describe("TopNav Component", () => {
       removeItem: vi.fn(),
       clear: vi.fn(),
     };
-    Object.defineProperty(window, 'localStorage', {
+    Object.defineProperty(window, "localStorage", {
       value: mockStorage,
-      writable: true
+      writable: true,
     });
 
     (useAppState as any).mockImplementation((selector: any) => {
@@ -61,13 +61,13 @@ describe("TopNav Component", () => {
       };
       return selector(state);
     });
-    
+
     document.body.classList.remove("dark");
   });
 
   it("renders the top navigation bar", () => {
     render(<TopNav />);
-    
+
     expect(screen.getByText("topbar-update")).toBeInTheDocument();
     expect(screen.getByText("EN")).toBeInTheDocument();
     expect(screen.getByText("PT")).toBeInTheDocument();
@@ -75,7 +75,7 @@ describe("TopNav Component", () => {
 
   it("toggles the language when clicked", () => {
     render(<TopNav />);
-    
+
     const ptBtn = screen.getByText("PT");
     fireEvent.click(ptBtn);
 
@@ -84,7 +84,7 @@ describe("TopNav Component", () => {
 
   it("toggles the theme when theme button is clicked", () => {
     render(<TopNav />);
-    
+
     const themeBtn = screen.getByText("nav-theme-light");
     fireEvent.click(themeBtn);
 
@@ -104,7 +104,7 @@ describe("TopNav Component", () => {
     });
 
     render(<TopNav />);
-    
+
     const ptBtn = screen.getByText("PT");
     fireEvent.click(ptBtn);
 
@@ -124,9 +124,9 @@ describe("TopNav Component", () => {
     });
 
     document.body.classList.add("dark");
-    
+
     render(<TopNav />);
-    
+
     const themeBtn = screen.getByText("nav-theme-dark");
     fireEvent.click(themeBtn);
 
@@ -137,32 +137,37 @@ describe("TopNav Component", () => {
   it("handles PDF export button click", () => {
     const mockOnPdfExport = vi.fn();
     render(<TopNav onPdfExport={mockOnPdfExport} />);
-    
+
     const pdfBtn = screen.getByRole("button", { name: /export/i });
     fireEvent.click(pdfBtn);
 
     expect(mockOnPdfExport).toHaveBeenCalled();
   });
 
-  it("renders without PDF export button when onPdfExport is not provided", () => {
-    render(<TopNav />);
-    
-    // Should still render without errors
-    expect(screen.getByText("EN")).toBeInTheDocument();
+  it("calls onOpenCommandPalette when search button is clicked", () => {
+    const mockOnOpenCommandPalette = vi.fn();
+    render(<TopNav onOpenCommandPalette={mockOnOpenCommandPalette} />);
+
+    const searchBtn = screen.getByRole("button", { name: /command palette|pesquisar/i });
+    fireEvent.click(searchBtn);
+
+    expect(mockOnOpenCommandPalette).toHaveBeenCalledTimes(1);
   });
 });
 
 describe("TopNav additional coverage", () => {
   beforeEach(() => {
-    (useAppState as ReturnType<typeof vi.fn>).mockImplementation((selector: any) => {
-      const state: Record<string, any> = {
-        isPt: false,
-        theme: "light",
-        setIsPt: vi.fn(),
-        setTheme: vi.fn(),
-      };
-      return selector(state);
-    });
+    (useAppState as ReturnType<typeof vi.fn>).mockImplementation(
+      (selector: any) => {
+        const state: Record<string, any> = {
+          isPt: false,
+          theme: "light",
+          setIsPt: vi.fn(),
+          setTheme: vi.fn(),
+        };
+        return selector(state);
+      },
+    );
   });
 
   it("renders keyboard shortcuts help button", () => {
@@ -175,7 +180,7 @@ describe("TopNav additional coverage", () => {
     render(<TopNav />);
     const btns = screen.getAllByRole("button");
     // Click the keyboard help button (should be one of the buttons)
-    const kbdBtn = btns.find(b => b.className.includes("kbd-help"));
+    const kbdBtn = btns.find((b) => b.className.includes("kbd-help"));
     if (kbdBtn) {
       fireEvent.click(kbdBtn);
     }
@@ -195,7 +200,9 @@ describe("TopNav additional coverage", () => {
     render(<TopNav onPdfExport={onPdfExport} />);
     const btns = screen.getAllByRole("button");
     // Find the PDF export button
-    const pdfBtn = btns.find(b => b.textContent?.includes("PDF") || b.textContent?.includes("PDF"));
+    const pdfBtn = btns.find(
+      (b) => b.textContent?.includes("PDF") || b.textContent?.includes("PDF"),
+    );
     if (pdfBtn) {
       fireEvent.click(pdfBtn);
       expect(onPdfExport).toHaveBeenCalled();
@@ -211,15 +218,17 @@ describe("TopNav additional coverage", () => {
 
 describe("TopNav keyboard shortcuts", () => {
   beforeEach(() => {
-    (useAppState as ReturnType<typeof vi.fn>).mockImplementation((selector: any) => {
-      const state: Record<string, any> = {
-        isPt: false,
-        theme: "dark",
-        setIsPt: vi.fn(),
-        setTheme: vi.fn(),
-      };
-      return selector(state);
-    });
+    (useAppState as ReturnType<typeof vi.fn>).mockImplementation(
+      (selector: any) => {
+        const state: Record<string, any> = {
+          isPt: false,
+          theme: "dark",
+          setIsPt: vi.fn(),
+          setTheme: vi.fn(),
+        };
+        return selector(state);
+      },
+    );
   });
 
   it("renders with dark theme", () => {
@@ -232,7 +241,7 @@ describe("TopNav keyboard shortcuts", () => {
     render(<TopNav />);
     const btns = screen.getAllByRole("button");
     // Find theme toggle button
-    const themeBtn = btns.find(b => b.className.includes("theme-toggle"));
+    const themeBtn = btns.find((b) => b.className.includes("theme-toggle"));
     if (themeBtn) {
       fireEvent.click(themeBtn);
     }
@@ -243,7 +252,7 @@ describe("TopNav keyboard shortcuts", () => {
     render(<TopNav />);
     const btns = screen.getAllByRole("button");
     // Find PT button
-    const ptBtn = btns.find(b => b.textContent?.includes("PT"));
+    const ptBtn = btns.find((b) => b.textContent?.includes("PT"));
     if (ptBtn) {
       fireEvent.click(ptBtn);
     }
@@ -259,22 +268,24 @@ describe("TopNav keyboard shortcuts", () => {
 
 describe("TopNav event handlers", () => {
   beforeEach(() => {
-    (useAppState as ReturnType<typeof vi.fn>).mockImplementation((selector: any) => {
-      const state: Record<string, any> = {
-        isPt: true,
-        theme: "light",
-        setIsPt: vi.fn(),
-        setTheme: vi.fn(),
-      };
-      return selector(state);
-    });
+    (useAppState as ReturnType<typeof vi.fn>).mockImplementation(
+      (selector: any) => {
+        const state: Record<string, any> = {
+          isPt: true,
+          theme: "light",
+          setIsPt: vi.fn(),
+          setTheme: vi.fn(),
+        };
+        return selector(state);
+      },
+    );
   });
 
   it("handles all button interactions", () => {
     render(<TopNav />);
     const btns = screen.getAllByRole("button");
     // Click all buttons to cover event handlers
-    btns.forEach(btn => {
+    btns.forEach((btn) => {
       try {
         fireEvent.click(btn);
       } catch (e) {
@@ -288,7 +299,7 @@ describe("TopNav event handlers", () => {
     render(<TopNav />);
     const btns = screen.getAllByRole("button");
     // Find and click keyboard shortcuts button
-    const kbdBtn = btns.find(b => b.className.includes("kbd-help"));
+    const kbdBtn = btns.find((b) => b.className.includes("kbd-help"));
     if (kbdBtn) {
       fireEvent.click(kbdBtn);
       // Click again to close

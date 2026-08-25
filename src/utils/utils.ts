@@ -27,4 +27,3 @@ export function debounce<T extends (...args: unknown[]) => void>(
  * kept safe a different way, via textContent assignment instead of
  * innerHTML — see initNewsFeed().)
  */
-

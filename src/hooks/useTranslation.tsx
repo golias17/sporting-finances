@@ -18,7 +18,7 @@ export function useTranslation() {
     ...props
   }: {
     i18nKey: string;
-    as?: React.ComponentType<any>;
+    as?: React.ElementType;
     className?: string;
     children?: React.ReactNode;
     [key: string]: unknown;

@@ -36,7 +36,15 @@ describe("usePdfExport hook", () => {
     const { result } = renderHook(() => usePdfExport());
 
     act(() => result.current.open());
-    expect(result.current.pages).toEqual([true, true, true, true, true]);
+    expect(result.current.pages).toEqual([
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+    ]);
     expect(result.current.executiveNote).toBe("");
     expect(result.current.error).toBeNull();
   });
@@ -85,14 +93,16 @@ describe("usePdfExport hook", () => {
 
     expect(generateCuratedPdf).toHaveBeenCalledWith({
       lang: "pt",
-      pages: [true, false, true, false, true],
+      pages: [true, false, true, false, true, true, true],
       executiveNote: "Test note",
     });
     expect(result.current.isOpen).toBe(false);
   });
 
   it("shows error toast when generateCuratedPdf rejects", async () => {
-    generateCuratedPdf.mockImplementation(() => Promise.reject(new Error("boom")));
+    generateCuratedPdf.mockImplementation(() =>
+      Promise.reject(new Error("boom")),
+    );
 
     const { result } = renderHook(() => usePdfExport());
 
@@ -108,7 +118,9 @@ describe("usePdfExport hook", () => {
   });
 
   it("clears error on close", async () => {
-    generateCuratedPdf.mockImplementation(() => Promise.reject(new Error("boom")));
+    generateCuratedPdf.mockImplementation(() =>
+      Promise.reject(new Error("boom")),
+    );
 
     const { result } = renderHook(() => usePdfExport());
 
@@ -181,5 +193,49 @@ describe("usePdfExport hook additional coverage", () => {
     expect(result.current.pages[0]).toBe(false);
     expect(result.current.pages[1]).toBe(false);
     expect(result.current.pages[2]).toBe(false);
+  });
+
+  it("handles selectAll, deselectAll, setExecutivePreset, setFullPreset, and selectedCount", () => {
+    const { result } = renderHook(() => usePdfExport());
+
+    act(() => {
+      result.current.deselectAll();
+    });
+    expect(result.current.pages.every((p) => p === false)).toBe(true);
+    expect(result.current.selectedCount).toBe(0);
+
+    act(() => {
+      result.current.selectAll();
+    });
+    expect(result.current.pages.every((p) => p === true)).toBe(true);
+    expect(result.current.selectedCount).toBe(7);
+
+    act(() => {
+      result.current.setExecutivePreset();
+    });
+    expect(result.current.pages).toEqual([
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+    ]);
+    expect(result.current.selectedCount).toBe(2);
+
+    act(() => {
+      result.current.setFullPreset();
+    });
+    expect(result.current.pages).toEqual([
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+    ]);
+    expect(result.current.selectedCount).toBe(7);
   });
 });

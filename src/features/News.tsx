@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { createRoot } from "react-dom/client";
 import { config } from "../core/config.ts";
 import { useAppState } from "../core/state.ts";
 import { useTranslation } from "../hooks/useTranslation.js";
@@ -19,7 +18,7 @@ function getCachedItems(allowStale = false) {
   }
 }
 
-function setCachedItems(items: Array<{ title: string; link: string; pubDate: string; sourceName: string }>) {
+function setCachedItems(items: any[]) {
   try {
     sessionStorage.setItem(
       CACHE_KEY,
@@ -65,7 +64,15 @@ function isNoise(text: string) {
   return NOISE_PATTERNS.some((rx) => rx.test(t));
 }
 
-function filterNoise(items: Array<{ title: string; link: string; pubDate: string; sourceName: string }>) {
+function filterNoise(
+  items: Array<{
+    title: string;
+    link: string;
+    pubDate: string;
+    sourceName?: string;
+    author?: string;
+  }>,
+) {
   return items.filter((item) => {
     const title = (item.title || "").toLowerCase();
     const author = (item.author || "").toLowerCase();
@@ -137,29 +144,37 @@ export function News() {
           .map((r) => r.message)
           .filter(Boolean);
 
-
-
         const rawItems = [
-          ...(responses[0].items || []).map((i: { title: string; link: string; pubDate: string }) => ({
-            ...i,
-            category: "FINANCE",
-          })),
-          ...(responses[1].items || []).map((i: { title: string; link: string; pubDate: string }) => ({
-            ...i,
-            category: "MARKET",
-          })),
-          ...(responses[2].items || []).map((i: { title: string; link: string; pubDate: string }) => ({
-            ...i,
-            category: "CORPORATE",
-          })),
-          ...(responses[3].items || []).map((i: { title: string; link: string; pubDate: string }) => ({
-            ...i,
-            category: "FINANCE",
-          })),
-          ...(responses[4].items || []).map((i: { title: string; link: string; pubDate: string }) => ({
-            ...i,
-            category: "FINANCE",
-          })),
+          ...(responses[0].items || []).map(
+            (i: { title: string; link: string; pubDate: string }) => ({
+              ...i,
+              category: "FINANCE",
+            }),
+          ),
+          ...(responses[1].items || []).map(
+            (i: { title: string; link: string; pubDate: string }) => ({
+              ...i,
+              category: "MARKET",
+            }),
+          ),
+          ...(responses[2].items || []).map(
+            (i: { title: string; link: string; pubDate: string }) => ({
+              ...i,
+              category: "CORPORATE",
+            }),
+          ),
+          ...(responses[3].items || []).map(
+            (i: { title: string; link: string; pubDate: string }) => ({
+              ...i,
+              category: "FINANCE",
+            }),
+          ),
+          ...(responses[4].items || []).map(
+            (i: { title: string; link: string; pubDate: string }) => ({
+              ...i,
+              category: "FINANCE",
+            }),
+          ),
         ];
 
         const filtered = filterNoise(rawItems);
@@ -182,7 +197,7 @@ export function News() {
           }
         } else {
           if (mounted) {
-            setErrorMsg(err.message || "Unknown error");
+            setErrorMsg(err instanceof Error ? err.message : "Unknown error");
             setLoading(false);
           }
         }
@@ -220,7 +235,13 @@ export function News() {
     };
   });
 
-  const storyClusters: Array<{ title: string; sources: Array<{ title: string; link: string; pubDate: string; sourceName: string }> }> = [];
+  interface StoryCluster {
+    primary: any;
+    sources: any[];
+    primaryWords: Set<string>;
+  }
+
+  const storyClusters: StoryCluster[] = [];
   const stopWords = new Set([
     "sporting",
     "sad",
@@ -248,7 +269,9 @@ export function News() {
       }
       if (overlap >= 3) {
         if (
-          !cluster.sources.find((s: { sourceName: string }) => s.sourceName === item.sourceName)
+          !cluster.sources.find(
+            (s: { sourceName: string }) => s.sourceName === item.sourceName,
+          )
         ) {
           cluster.sources.push(item);
         }
@@ -288,27 +311,36 @@ export function News() {
       )}
 
       {/* Skeleton loader while loading */}
-      {loading && [0, 1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="news-skeleton-card">
-              <div className="news-skeleton-line badge" />
-              <div className="news-skeleton-line title" />
-              <div className="news-skeleton-line long" />
-              <div className="news-skeleton-line medium" />
-              <div className="news-skeleton-pills">
-                <div className="news-skeleton-pill" />
-                <div className="news-skeleton-pill" />
-              </div>
+      {loading &&
+        [0, 1, 2, 3, 4, 5].map((i) => (
+          <div key={i} className="news-skeleton-card">
+            <div className="news-skeleton-line badge" />
+            <div className="news-skeleton-line title" />
+            <div className="news-skeleton-line long" />
+            <div className="news-skeleton-line medium" />
+            <div className="news-skeleton-pills">
+              <div className="news-skeleton-pill" />
+              <div className="news-skeleton-pill" />
             </div>
-          ))}
+          </div>
+        ))}
 
       {/* Empty state */}
       {!loading && storyClusters.length === 0 && !errorMsg && (
         <div className="news-empty">
-          <svg className="news-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/>
-            <line x1="12" y1="18" x2="12" y2="12"/>
-            <line x1="9" y1="15" x2="15" y2="15"/>
+          <svg
+            className="news-empty-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="12" y1="18" x2="12" y2="12" />
+            <line x1="9" y1="15" x2="15" y2="15" />
           </svg>
           <p className="news-empty-text">
             {isPt
@@ -349,37 +381,37 @@ export function News() {
             <h3 className="news-title">{item.title}</h3>
             <div className="news-date">{dateText}</div>
             <div className="news-sources-list">
-              {cluster.sources.map((sourceItem: { title: string; link: string; pubDate: string; sourceName: string }, idx: number) => {
-                const link = sourceItem.link;
-                const isSafeUrl =
-                  typeof link === "string" && /^https?:\/\//i.test(link);
-                if (!isSafeUrl) return null;
-                return (
-                  <a
-                    key={idx}
-                    className="source-pill"
-                    href={link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {sourceItem.sourceName}
-                  </a>
-                );
-              })}
+              {cluster.sources.map(
+                (
+                  sourceItem: {
+                    title: string;
+                    link: string;
+                    pubDate: string;
+                    sourceName: string;
+                  },
+                  idx: number,
+                ) => {
+                  const link = sourceItem.link;
+                  const isSafeUrl =
+                    typeof link === "string" && /^https?:\/\//i.test(link);
+                  if (!isSafeUrl) return null;
+                  return (
+                    <a
+                      key={idx}
+                      className="source-pill"
+                      href={link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {sourceItem.sourceName}
+                    </a>
+                  );
+                },
+              )}
             </div>
           </div>
         );
       })}
     </>
   );
-}
-
-let newsRoot: HTMLElement | null = null;
-export function initNewsFeed() {
-  const container = document.getElementById("newsFeed");
-  if (!container) return;
-  if (!newsRoot) {
-    newsRoot = createRoot(container);
-  }
-  newsRoot.render(<News />);
 }

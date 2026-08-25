@@ -97,7 +97,9 @@ describe("ErrorBoundary", () => {
 
     // Check for the default fallback content
     expect(screen.getByText("Something went wrong")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Try again" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Try again" }),
+    ).toBeInTheDocument();
   });
 
   it("resets retry count when reset is clicked", () => {

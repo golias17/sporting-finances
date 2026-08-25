@@ -49,7 +49,10 @@ export const CompareTab = React.memo(function CompareTab() {
   const useAverage = vsAverage && avgData !== null;
   const seasonB = useAverage ? avgData : b;
 
-  const { netDebtA, netDebtB, wageRatioA, wageRatioB } = useCompareRatios(a, seasonB);
+  const { netDebtA, netDebtB, wageRatioA, wageRatioB } = useCompareRatios(
+    a,
+    seasonB,
+  );
 
   // Chart data
   const barKeys = [
@@ -87,7 +90,9 @@ export const CompareTab = React.memo(function CompareTab() {
       {
         label: useAverage ? (isPt ? "Média" : "Average") : b.label,
         data: barKeys.map((k) => k.b),
-        backgroundColor: useAverage ? state.COLORS.mutedSoft : state.COLORS.goldSoft,
+        backgroundColor: useAverage
+          ? state.COLORS.mutedSoft
+          : state.COLORS.goldSoft,
         borderColor: useAverage ? state.COLORS.muted : state.COLORS.gold,
         borderWidth: 1,
         borderRadius: 3,
@@ -102,7 +107,10 @@ export const CompareTab = React.memo(function CompareTab() {
       tooltip: {
         ...baseOpts.plugins?.tooltip,
         callbacks: {
-          label: (ctx: { dataset: { label: string }; parsed: { y: number } }) => {
+          label: (ctx: {
+            dataset: { label: string };
+            parsed: { y: number };
+          }) => {
             const val = ctx.parsed.y;
             const sign = val < 0 ? "−" : "";
             return ` ${ctx.dataset.label}: ${sign}€${(Math.abs(val) / 1000).toFixed(1)}M`;
@@ -170,9 +178,9 @@ export const CompareTab = React.memo(function CompareTab() {
     );
   }
   const narrative = useAverage
-    ? (isPt
-        ? `Comparação entre ${a.label} e a média do período. ${parts.join(" ")}`
-        : `Comparison between ${a.label} and the period average. ${parts.join(" ")}`)
+    ? isPt
+      ? `Comparação entre ${a.label} e a média do período. ${parts.join(" ")}`
+      : `Comparison between ${a.label} and the period average. ${parts.join(" ")}`
     : parts.join(" ");
 
   // Grid
@@ -425,8 +433,12 @@ export const CompareTab = React.memo(function CompareTab() {
             onClick={() => setVsAverage(!vsAverage)}
           >
             {vsAverage
-              ? (isPt ? "Duas épocas" : "Two seasons")
-              : (isPt ? "Vs média" : "Vs average")}
+              ? isPt
+                ? "Duas épocas"
+                : "Two seasons"
+              : isPt
+                ? "Vs média"
+                : "Vs average"}
           </button>
           {vsAverage && (
             <>
@@ -481,17 +493,29 @@ export const CompareTab = React.memo(function CompareTab() {
 
         <div className="cmp-col-headers">
           <div className="cmp-col-header">
-            <span className="cmp-col-header-label">{isPt ? "Época A" : "Season A"}</span>
+            <span className="cmp-col-header-label">
+              {isPt ? "Época A" : "Season A"}
+            </span>
             <span className="cmp-col-header-season">{a.label}</span>
           </div>
           <div className="cmp-col-trend">→</div>
           <div className="cmp-col-header">
-            <span className="cmp-col-header-label">{isPt ? (useAverage ? "Média" : "Época B") : (useAverage ? "Average" : "Season B")}</span>
-            <span className={`cmp-col-header-season${useAverage ? " average" : ""}`}>
+            <span className="cmp-col-header-label">
+              {isPt
+                ? useAverage
+                  ? "Média"
+                  : "Época B"
+                : useAverage
+                  ? "Average"
+                  : "Season B"}
+            </span>
+            <span
+              className={`cmp-col-header-season${useAverage ? " average" : ""}`}
+            >
               {useAverage
-                ? (isPt
-                    ? `Média (${avgWindow === "all" ? "todas" : avgWindow === "last5" ? "últimas 5" : "últimas 3"})`
-                    : `Average (${avgWindow === "all" ? "all" : avgWindow === "last5" ? "last 5" : "last 3"})`)
+                ? isPt
+                  ? `Média (${avgWindow === "all" ? "todas" : avgWindow === "last5" ? "últimas 5" : "últimas 3"})`
+                  : `Average (${avgWindow === "all" ? "all" : avgWindow === "last5" ? "last 5" : "last 3"})`
                 : b.label}
             </span>
           </div>

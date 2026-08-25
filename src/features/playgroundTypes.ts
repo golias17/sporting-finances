@@ -88,6 +88,33 @@ export const PRESETS: Record<string, PlaygroundInputs> = {
     debtRepayTarget: 20,
     revGrowthAdj: 8,
   },
+  ucl_swiss: {
+    uclPrize: 55,
+    payrollAdj: 4,
+    salesTarget: 100,
+    purchasesTarget: 35,
+    capexAdj: 5,
+    debtRepayTarget: 15,
+    revGrowthAdj: 10,
+  },
+  supersale: {
+    uclPrize: 47,
+    payrollAdj: 2,
+    salesTarget: 150,
+    purchasesTarget: 40,
+    capexAdj: 10,
+    debtRepayTarget: 35,
+    revGrowthAdj: 5,
+  },
+  austerity: {
+    uclPrize: 36,
+    payrollAdj: -8,
+    salesTarget: 70,
+    purchasesTarget: 15,
+    capexAdj: 0,
+    debtRepayTarget: 25,
+    revGrowthAdj: 0,
+  },
 };
 
 export const UCL_BONUS_COST_RATE = 0.15;

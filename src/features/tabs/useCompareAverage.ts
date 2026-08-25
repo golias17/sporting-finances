@@ -42,7 +42,8 @@ export function useCompareAverage(
     });
     if (filtered.length === 0) return null;
     const count = filtered.length;
-    const avg = (field: string) => filtered.reduce((s: number, d: any) => s + (d[field] || 0), 0) / count;
+    const avg = (field: string) =>
+      filtered.reduce((s: number, d: any) => s + (d[field] || 0), 0) / count;
     return {
       revenue_operating: avg("revenue_operating"),
       player_transfer_income: avg("player_transfer_income"),
@@ -69,9 +70,9 @@ export function useCompareAverage(
 }
 
 export function useCompareRatios(a: CompareData, seasonB: CompareData) {
-  const netDebtA = netDebt(a);
-  const netDebtB = netDebt(seasonB);
-  const wageRatioA = wageBillRatio(a);
-  const wageRatioB = wageBillRatio(seasonB);
+  const netDebtA = netDebt(a as any);
+  const netDebtB = netDebt(seasonB as any);
+  const wageRatioA = wageBillRatio(a as any);
+  const wageRatioB = wageBillRatio(seasonB as any);
   return { netDebtA, netDebtB, wageRatioA, wageRatioB };
 }

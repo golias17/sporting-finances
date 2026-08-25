@@ -58,16 +58,19 @@ export function useDebtCharts() {
       plugins: {
         ...baseOpts.plugins,
         tooltip: {
-          ...baseOpts.plugins.tooltip,          callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
-              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+          ...baseOpts.plugins?.tooltip,
+          callbacks: {
+            label: (ctx: {
+              dataset: { label: string };
+              parsed: { y: number };
+            }) => ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
         },
       },
       scales: {
         ...baseOpts.scales,
-        x: { ...baseOpts.scales.x, stacked: true },
-        y: { ...baseOpts.scales.y, stacked: true, beginAtZero: true },
+        x: { ...baseOpts.scales?.x, stacked: true },
+        y: { ...baseOpts.scales?.y, stacked: true, beginAtZero: true },
       },
     }),
     [],
@@ -132,8 +135,12 @@ export function useDebtCharts() {
         ...baseOpts.plugins,
         legend: { display: false },
         tooltip: {
-          ...baseOpts.plugins.tooltip,          callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
+          ...baseOpts.plugins?.tooltip,
+          callbacks: {
+            label: (ctx: {
+              dataset: { label: string };
+              parsed: { y: number };
+            }) =>
               `${isPt ? "Longo prazo" : "Long-term"}: ${ctx.parsed.y.toFixed(0)}%`,
           },
         },
@@ -141,7 +148,7 @@ export function useDebtCharts() {
       scales: {
         ...baseOpts.scales,
         y: {
-          ...baseOpts.scales.y,
+          ...baseOpts.scales?.y,
           ticks: {
             ...(baseOpts.scales?.y?.ticks || {}),
             callback: (v: number | string) => v + "%",
@@ -160,15 +167,18 @@ export function useDebtCharts() {
       plugins: {
         ...baseOpts.plugins,
         tooltip: {
-          ...baseOpts.plugins.tooltip,          callbacks: {
-            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
-              ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
+          ...baseOpts.plugins?.tooltip,
+          callbacks: {
+            label: (ctx: {
+              dataset: { label: string };
+              parsed: { y: number };
+            }) => ` ${ctx.dataset.label}: ${fmtMillions(ctx.parsed.y)}`,
           },
         },
       },
       scales: {
         ...baseOpts.scales,
-        y: { ...baseOpts.scales.y, beginAtZero: true },
+        y: { ...baseOpts.scales?.y, beginAtZero: true },
       },
     }),
     [],

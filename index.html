@@ -53,8 +53,18 @@
     />
     <link href="assets/LOGO.png" rel="icon" type="image/png" />
     <link rel="preload" as="image" href="assets/LOGO.png" />
-    <link rel="preload" href="data/financials.json" as="fetch" crossorigin="anonymous" />
-    <link rel="preload" href="data/transfers.json" as="fetch" crossorigin="anonymous" />
+    <link
+      rel="preload"
+      href="data/financials.json"
+      as="fetch"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="data/transfers.json"
+      as="fetch"
+      crossorigin="anonymous"
+    />
     <title data-i18n="auto-txt-title-0">
       Sporting CP — Financial Evolution Dashboard (2012/13 → 2025/26)
     </title>
@@ -67,7 +77,117 @@
     <link href="/src/styles.css" rel="stylesheet" />
   </head>
   <body class="app-loading">
-    <div id="root"></div>
+    <div id="root">
+      <div
+        id="app-initial-splash"
+        style="
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          background: #063b25;
+          color: #ffffff;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          text-align: center;
+          padding: 2rem;
+          position: fixed;
+          inset: 0;
+          z-index: 99999;
+        "
+      >
+        <div
+          style="
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            animation: pulseLogo 2s ease-in-out infinite;
+          "
+        >
+          <img
+            src="assets/LOGO.png"
+            alt="Sporting CP"
+            style="
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.4));
+            "
+          />
+        </div>
+        <div
+          style="
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            color: #e5cf87;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+          "
+        >
+          Sporting CP • Financial Evolution
+        </div>
+        <div
+          style="
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 24px;
+            font-weight: 400;
+          "
+        >
+          Loading audited financial reports & dashboard...
+        </div>
+        <div
+          style="
+            width: 160px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 999px;
+            overflow: hidden;
+            position: relative;
+          "
+        >
+          <div
+            style="
+              position: absolute;
+              top: 0;
+              left: 0;
+              height: 100%;
+              width: 45%;
+              background: linear-gradient(90deg, #c8a951, #e5cf87);
+              border-radius: 999px;
+              animation: shimmerLoad 1.4s infinite ease-in-out;
+            "
+          ></div>
+        </div>
+        <style>
+          @keyframes pulseLogo {
+            0%,
+            100% {
+              transform: scale(1);
+              opacity: 0.95;
+            }
+            50% {
+              transform: scale(1.05);
+              opacity: 1;
+            }
+          }
+          @keyframes shimmerLoad {
+            0% {
+              left: -50%;
+              width: 30%;
+            }
+            50% {
+              width: 60%;
+            }
+            100% {
+              left: 100%;
+              width: 30%;
+            }
+          }
+        </style>
+      </div>
+    </div>
     <script type="module" src="/src/core/main.tsx"></script>
   </body>
 </html>

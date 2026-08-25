@@ -264,13 +264,15 @@ describe("pdfGenerator.js", () => {
   });
 
   // Page markers used below — one distinctive, English section title per
-  // drawPage*() function (see pages[0..4] in generateCuratedPdf()).
+  // drawPage*() function (see pages[0..6] in generateCuratedPdf()).
   const PAGE_MARKERS = [
     "ANNUAL FINANCIAL ANALYSIS DOSSIER", // pages[0]: cover
     "I. Recurring Operating Revenues & Payroll Burden", // pages[1]: financial tables
     "III. Player Transfer Operations & Squad Appraisals", // pages[2]: trading/cash flow
-    "V. Strategic Debt & Financing Instruments Profile", // pages[3]: financing timeline
-    "VII-A. Landmark Player Transfers Ledger — Record Departures (Fee >= 10.0 M€)", // pages[4]: transfers ledger
+    "V. Strategic Debt & Financing Instruments Profile", // pages[3]: strategic debt
+    "VI. Chronological Turnaround Milestones", // pages[4]: turnaround milestones
+    "Consolidated Benchmark — Big Three (15 Seasons · 2010/11 to 2024/25)", // pages[5]: competitive benchmark
+    "VIII-A. Landmark Player Transfers Ledger — Record Departures (Fee >= 10.0 M€)", // pages[6]: transfers ledger
   ];
 
   function textOf(docInstance) {
@@ -285,7 +287,9 @@ describe("pdfGenerator.js", () => {
   it("only draws the selected pages when a partial `pages` array is passed", async () => {
     // Only the cover page (index 0) — every other page's marker should be
     // entirely absent from the output, not just "less prominent".
-    await generateCuratedPdf({ pages: [true, false, false, false, false] });
+    await generateCuratedPdf({
+      pages: [true, false, false, false, false, false, false],
+    });
     const docInstance = vi.mocked(jsPDF).mock.results[0].value;
     const calls = textOf(docInstance);
 
@@ -297,9 +301,11 @@ describe("pdfGenerator.js", () => {
   });
 
   it("draws exactly the pages selected, in a non-default combination", async () => {
-    // Financing timeline (index 3) and transfers ledger (index 4), but not
-    // the cover, financial tables, or trading/cash-flow pages.
-    await generateCuratedPdf({ pages: [false, false, false, true, true] });
+    // Strategic financing (index 3) and competitive benchmark (index 5), but not
+    // the cover, financial tables, trading/cash-flow, turnaround milestones, or transfers ledger pages.
+    await generateCuratedPdf({
+      pages: [false, false, false, true, false, true, false],
+    });
     const docInstance = vi.mocked(jsPDF).mock.results[0].value;
     const calls = textOf(docInstance);
 
@@ -307,10 +313,12 @@ describe("pdfGenerator.js", () => {
     expect(calls.some((t) => t === PAGE_MARKERS[1])).toBe(false);
     expect(calls.some((t) => t === PAGE_MARKERS[2])).toBe(false);
     expect(calls.some((t) => t === PAGE_MARKERS[3])).toBe(true);
-    expect(calls.some((t) => t === PAGE_MARKERS[4])).toBe(true);
+    expect(calls.some((t) => t === PAGE_MARKERS[4])).toBe(false);
+    expect(calls.some((t) => t === PAGE_MARKERS[5])).toBe(true);
+    expect(calls.some((t) => t === PAGE_MARKERS[6])).toBe(false);
   });
 
-  // Regression test: drawTransfersLedgerPages() (pages[4]) iterates
+  // Regression test: drawTransfersLedgerPages() (pages[6]) iterates
   // state.TRANSFER_LEDGER unconditionally — with only state.DATASET
   // checked up front, requesting that page while the ledger is unset used
   // to throw partway through rendering instead of degrading gracefully.
@@ -318,17 +326,21 @@ describe("pdfGenerator.js", () => {
     state.setTransferLedger([]);
     // If this still threw partway through, the missing `await` rejection
     // would fail the test on its own — no extra assertion needed for that.
-    await generateCuratedPdf({ pages: [true, false, false, false, true] });
+    await generateCuratedPdf({
+      pages: [true, false, false, false, false, false, true],
+    });
 
     const docInstance = vi.mocked(jsPDF).mock.results[0].value;
     const calls = textOf(docInstance);
     expect(calls.some((t) => t === PAGE_MARKERS[0])).toBe(true); // cover still drew
-    expect(calls.some((t) => t === PAGE_MARKERS[4])).toBe(false); // ledger page skipped
+    expect(calls.some((t) => t === PAGE_MARKERS[6])).toBe(false); // ledger page skipped
     expect(docInstance.save).toHaveBeenCalled();
   });
 
   it("returns without saving a PDF when every page is deselected", async () => {
-    await generateCuratedPdf({ pages: [false, false, false, false, false] });
+    await generateCuratedPdf({
+      pages: [false, false, false, false, false, false, false],
+    });
     // jsPDF is still instantiated before the empty-selection check runs,
     // but nothing should ever get far enough to call .save().
     const docInstance = vi.mocked(jsPDF).mock.results[0].value;

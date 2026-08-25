@@ -1,5 +1,4 @@
 import { state } from "../core/state.js";
-import { trapFocusWithin } from "../utils/focusTrap.js";
 
 // IMAGE LIGHTBOX MODAL
 // =============================================================

@@ -31,7 +31,10 @@ describe("AccessibleTable", () => {
 
   it("renders nothing when data has no labels", () => {
     const { container } = render(
-      <AccessibleTable data={{ labels: undefined, datasets: [] } as any} chartId="test" />,
+      <AccessibleTable
+        data={{ labels: undefined, datasets: [] } as any}
+        chartId="test"
+      />,
     );
     expect(container.innerHTML).toBe("");
   });
@@ -80,7 +83,9 @@ describe("AccessibleTable", () => {
 
   it("calls onToggle when table is toggled", () => {
     const onToggle = vi.fn();
-    render(<AccessibleTable data={mockData} chartId="test" onToggle={onToggle} />);
+    render(
+      <AccessibleTable data={mockData} chartId="test" onToggle={onToggle} />,
+    );
     fireEvent.click(screen.getByText("View raw table data"));
     expect(onToggle).toHaveBeenCalledWith(true);
   });
@@ -90,7 +95,9 @@ describe("AccessibleTable", () => {
       labels: ["2023"],
       datasets: [{ label: "Ratio", data: [2.5] }],
     };
-    render(<AccessibleTable data={ratioData} chartId="test" valueType="ratio" />);
+    render(
+      <AccessibleTable data={ratioData} chartId="test" valueType="ratio" />,
+    );
     fireEvent.click(screen.getByText("View raw table data"));
     expect(screen.getByText("2.5×")).toBeInTheDocument();
   });
@@ -100,7 +107,9 @@ describe("AccessibleTable", () => {
       labels: ["2023"],
       datasets: [{ label: "Margin", data: [15.5] }],
     };
-    render(<AccessibleTable data={pctData} chartId="test" valueType="percentage" />);
+    render(
+      <AccessibleTable data={pctData} chartId="test" valueType="percentage" />,
+    );
     fireEvent.click(screen.getByText("View raw table data"));
     expect(screen.getByText("15.5%")).toBeInTheDocument();
   });
@@ -110,7 +119,13 @@ describe("AccessibleTable", () => {
       labels: ["2023"],
       datasets: [{ label: "Value", data: [123.4] }],
     };
-    render(<AccessibleTable data={mlnData} chartId="test" valueType="currency-millions" />);
+    render(
+      <AccessibleTable
+        data={mlnData}
+        chartId="test"
+        valueType="currency-millions"
+      />,
+    );
     fireEvent.click(screen.getByText("View raw table data"));
     expect(screen.getByText("€123.4M")).toBeInTheDocument();
   });

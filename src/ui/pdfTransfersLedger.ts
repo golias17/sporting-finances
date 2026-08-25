@@ -1,8 +1,8 @@
 import autoTable from "jspdf-autotable";
 import { state } from "../core/state.js";
-import { getBrandColors, hexToRgbArray } from "../charts/chartUtils.js";
-import { fmtM, signColorCell, thresholdColorCell, combineCellColorers } from "./pdfHelpers.js";
-import type { PdfContext, ColorPalette } from "./pdfTypes.js";
+import {
+  } from "./pdfHelpers.js";
+import type { PdfContext } from "./pdfTypes.js";
 
 // ==========================================================
 // PAGES 5-6: LANDMARK PLAYER TRANSFERS LEDGER (SALES & PURCHASES)
@@ -16,8 +16,21 @@ export function drawTransfersLedgerPages(ctx: PdfContext) {
   };
 
   // Extract transfers >= 8M
-  const salesLedger: Array<{ season: string; player: string; from: string; fee: number; commission: number }> = [];
-  const purchasesLedger: Array<{ season: string; player: string; from: string; fee: number; commission: number }> = [];
+  const salesLedger: Array<{
+    season: string;
+    player: string;
+    club: string;
+    fee: number;
+    commission: number;
+    note: string;
+  }> = [];
+  const purchasesLedger: Array<{
+    season: string;
+    player: string;
+    club: string;
+    fee: number;
+    note: string;
+  }> = [];
 
   state.TRANSFER_LEDGER.forEach((seasonObj) => {
     const sLabel = seasonObj.season;
@@ -59,7 +72,7 @@ export function drawTransfersLedgerPages(ctx: PdfContext) {
   const topSales = salesLedger;
   const topPurchases = purchasesLedger;
 
-  // PAGE 5: SALES
+  // PAGE 6: SALES
   startNewPage();
 
   doc.setFont("helvetica", "bold");
@@ -67,8 +80,8 @@ export function drawTransfersLedgerPages(ctx: PdfContext) {
   doc.setTextColor(...colors.green);
   doc.text(
     isPt
-      ? "VII-A. Livro de Transferências Históricas — Recordes de Saídas (Taxa Principal >= 10.0 M€)"
-      : "VII-A. Landmark Player Transfers Ledger — Record Departures (Fee >= 10.0 M€)",
+      ? "VIII-A. Livro de Transferências Históricas — Recordes de Saídas (Taxa Principal >= 10.0 M€)"
+      : "VIII-A. Landmark Player Transfers Ledger — Record Departures (Fee >= 10.0 M€)",
     15,
     44,
   );
@@ -87,7 +100,7 @@ export function drawTransfersLedgerPages(ctx: PdfContext) {
         "Player",
         "Destination Club",
         "Fixed Fee",
-        "Commission",
+        "Comm.",
         "Notes & Clauses",
       ];
 
@@ -104,7 +117,7 @@ export function drawTransfersLedgerPages(ctx: PdfContext) {
     startY: 48,
     head: [t5SalesHeaders],
     body: t5SalesRows,
-    margin: { left: 15, right: 15 },
+    margin: { left: 15, right: 15, bottom: 20 },
     theme: "striped",
     headStyles: {
       fillColor: colors.green,
@@ -112,18 +125,18 @@ export function drawTransfersLedgerPages(ctx: PdfContext) {
       fontStyle: "bold",
       fontSize: 7.5,
     },
-    bodyStyles: { fontSize: 7, textColor: colors.darkInk, cellPadding: 1.5 },
+    bodyStyles: { fontSize: 7, textColor: colors.darkInk, cellPadding: 1.6 },
     columnStyles: {
       0: { fontStyle: "bold", cellWidth: 16 },
       1: { fontStyle: "bold", cellWidth: 26 },
-      2: { cellWidth: 28 },
+      2: { cellWidth: 26 },
       3: { halign: "right", cellWidth: 18 },
       4: { halign: "right", cellWidth: 18 },
-      5: { cellWidth: 74 },
+      5: { cellWidth: 76 },
     },
   });
 
-  // PAGE 6: PURCHASES
+  // PAGE 7: PURCHASES
   startNewPage();
 
   doc.setFont("helvetica", "bold");
@@ -131,8 +144,8 @@ export function drawTransfersLedgerPages(ctx: PdfContext) {
   doc.setTextColor(...colors.green);
   doc.text(
     isPt
-      ? "VII-B. Livro de Transferências Históricas — Recordes de Entradas (Taxa Principal >= 8.0 M€)"
-      : "VII-B. Landmark Player Transfers Ledger — Record Arrivals (Fee >= 8.0 M€)",
+      ? "VIII-B. Livro de Transferências Históricas — Recordes de Entradas (Taxa Principal >= 8.0 M€)"
+      : "VIII-B. Landmark Player Transfers Ledger — Record Arrivals (Fee >= 8.0 M€)",
     15,
     44,
   );
@@ -165,7 +178,7 @@ export function drawTransfersLedgerPages(ctx: PdfContext) {
     startY: 48,
     head: [t5PurchHeaders],
     body: t5PurchRows,
-    margin: { left: 15, right: 15 },
+    margin: { left: 15, right: 15, bottom: 20 },
     theme: "striped",
     headStyles: {
       fillColor: colors.green,
@@ -173,13 +186,13 @@ export function drawTransfersLedgerPages(ctx: PdfContext) {
       fontStyle: "bold",
       fontSize: 7.5,
     },
-    bodyStyles: { fontSize: 7, textColor: colors.darkInk, cellPadding: 1.5 },
+    bodyStyles: { fontSize: 7, textColor: colors.darkInk, cellPadding: 1.6 },
     columnStyles: {
       0: { fontStyle: "bold", cellWidth: 16 },
-      1: { fontStyle: "bold", cellWidth: 28 },
-      2: { cellWidth: 32 },
-      3: { halign: "right", cellWidth: 26 },
-      4: { cellWidth: 78 },
+      1: { fontStyle: "bold", cellWidth: 26 },
+      2: { cellWidth: 26 },
+      3: { halign: "right", cellWidth: 20 },
+      4: { cellWidth: 92 },
     },
   });
 
@@ -202,4 +215,3 @@ export function drawTransfersLedgerPages(ctx: PdfContext) {
  * five distinct tables (Operating P&L, Balance Sheet, Player Trading, Cash Flows, and Landmark Transfers),
  * and dynamic overlap-free spacing for timelines.
  */
-

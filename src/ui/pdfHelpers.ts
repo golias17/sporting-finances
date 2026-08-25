@@ -64,7 +64,9 @@ export function thresholdColorCell(
 
 // Combines several column-colorers (each already bound to a `colors`
 // palette) into the single didParseCell callback autoTable expects.
-export function combineCellColorers(...colorers: Array<(cellData: CellData) => void>) {
+export function combineCellColorers(
+  ...colorers: Array<(cellData: CellData) => void>
+) {
   return (cellData: CellData) => colorers.forEach((c) => c(cellData));
 }
 

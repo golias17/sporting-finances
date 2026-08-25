@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { createRoot } from "react-dom/client";
 import { useAppState } from "../../core/state.ts";
 import { fmtMillions } from "../../charts/chartUtils.ts";
-import type { FinancialRecord } from "../../core/types.ts";
 import { useTranslation } from "../../hooks/useTranslation.js";
 
 export function VmocCost() {
@@ -280,23 +278,3 @@ export function VmocCost() {
     </>
   );
 }
-
-
-function renderVmocCost() {
-  const kpisContainer = document.getElementById("vmocCostKpis");
-  const tableContainer = document.getElementById("vmocCostTable");
-
-  // We'll render both parts inside their respective containers,
-  // but we can just render the entire VmocCost in one place and let React structure it.
-  // Wait, the HTML has `<div id="vmocCostKpis"></div>` and `<div id="vmocCostTable"></div>` side-by-side.
-  // Let's render the entire thing into a wrapper if we want, or just render it into `vmocCostKpis` and leave `vmocCostTable` empty.
-
-  if (kpisContainer) {
-    if (!vmocCostKpisRoot) vmocCostKpisRoot = createRoot(kpisContainer);
-    vmocCostKpisRoot.render(<VmocCost />);
-
-    // Clear out the old table container since VmocCost renders both
-    if (tableContainer) tableContainer.innerHTML = "";
-  }
-}
-

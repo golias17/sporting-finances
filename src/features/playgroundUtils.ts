@@ -1,9 +1,15 @@
 import { state } from "../core/state";
 import { UCL_BONUS_COST_RATE } from "./playgroundTypes.js";
-import type { PlaygroundInputs, BaselineData, ProjectionData, PinnedData } from "./playgroundTypes.js";
+import type {
+  PlaygroundInputs,
+  BaselineData,
+  ProjectionData,
+  } from "./playgroundTypes.js";
 
 function getBaseline() {
-  const season = state.annual?.find((s: { label: string }) => s.label === "2024/25");
+  const season = state.annual?.find(
+    (s: { label: string }) => s.label === "2024/25",
+  );
   if (!season) return null;
   return {
     revenue_operating: season.revenue_operating,
@@ -45,12 +51,9 @@ function computeProjection(
   const overhead = BASELINE.external_supplies * (1 + capexAdj / 100);
 
   const sales =
-    salesTarget === 117
-      ? BASELINE.player_transfer_income
-      : salesTarget * 1000;
+    salesTarget === 117 ? BASELINE.player_transfer_income : salesTarget * 1000;
   const amortization =
-    BASELINE.squad_amortization -
-    (purchasesTarget - 30) * 1000 * 0.2;
+    BASELINE.squad_amortization - (purchasesTarget - 30) * 1000 * 0.2;
   const netTrading = sales + amortization + BASELINE.player_transfer_cost;
 
   const interestSavings = debtRepayTarget * 1000 * 0.02;
@@ -78,10 +81,9 @@ function computeProjection(
   const equity = BASELINE.equity + netResult - BASELINE.net_result;
   const cash = BASELINE.cash + netResult - BASELINE.net_result;
   const solvency =
-    BASELINE.total_assets > 0
-      ? (equity / BASELINE.total_assets) * 100
-      : 0;
-  const personnelCostRatio = revenue > 0 ? (Math.abs(payroll) / revenue) * 100 : 0;
+    BASELINE.total_assets > 0 ? (equity / BASELINE.total_assets) * 100 : 0;
+  const personnelCostRatio =
+    revenue > 0 ? (Math.abs(payroll) / revenue) * 100 : 0;
 
   return {
     revenue,
@@ -99,15 +101,17 @@ function computeProjection(
 
 function equityZoneInfo(equity: number, isPt: boolean) {
   if (equity < 0)
-    return { label: isPt ? "Negativo (Insolvência)" : "Negative (Insolvency)", cls: "neg" };
+    return {
+      label: isPt ? "Negativo (Insolvência)" : "Negative (Insolvency)",
+      cls: "neg",
+    };
   if (equity < 20000)
     return { label: isPt ? "Zona de Risco" : "Risk Zone", cls: "warn" };
   return { label: isPt ? "Saudável" : "Healthy", cls: "pos" };
 }
 
 function cashZoneInfo(cash: number, isPt: boolean) {
-  if (cash < 0)
-    return { label: isPt ? "Negativo" : "Negative", cls: "neg" };
+  if (cash < 0) return { label: isPt ? "Negativo" : "Negative", cls: "neg" };
   if (cash < 10000)
     return { label: isPt ? "Baixo (Risco)" : "Low (Risk)", cls: "warn" };
   return { label: isPt ? "Confortável" : "Comfortable", cls: "pos" };
@@ -124,13 +128,20 @@ function buildVerdict(
   if (proj.netResult > 0) improvements.push(isPt ? "lucro" : "profit");
   else if (proj.netResult <= 0) warnings.push(isPt ? "prejuízo" : "loss");
 
-  if (proj.equity > baseline.equity) improvements.push(isPt ? "capital próprio" : "equity");
-  else if (proj.equity < baseline.equity) warnings.push(isPt ? "capital próprio" : "equity");
+  if (proj.equity > baseline.equity)
+    improvements.push(isPt ? "capital próprio" : "equity");
+  else if (proj.equity < baseline.equity)
+    warnings.push(isPt ? "capital próprio" : "equity");
 
-  if (proj.cash > baseline.cash) improvements.push(isPt ? "liquidez" : "liquidity");
-  else if (proj.cash < baseline.cash) warnings.push(isPt ? "liquidez" : "liquidity");
+  if (proj.cash > baseline.cash)
+    improvements.push(isPt ? "liquidez" : "liquidity");
+  else if (proj.cash < baseline.cash)
+    warnings.push(isPt ? "liquidez" : "liquidity");
 
-  const revDir = baseline.revenue > 0 ? ((proj.revenue - baseline.revenue) / Math.abs(baseline.revenue)) * 100 : 0;
+  const revDir =
+    baseline.revenue > 0
+      ? ((proj.revenue - baseline.revenue) / Math.abs(baseline.revenue)) * 100
+      : 0;
   const isRevUp = revDir > 1;
   const revenueNote = isRevUp
     ? isPt
@@ -178,4 +189,12 @@ function getSliderBackground(val: number, min: number, max: number) {
   return `linear-gradient(to right, var(--green, #0a5d3a) ${percentage}%, var(--rule-2, #e5e5e5) ${percentage}%)`;
 }
 
-export { getBaseline, computeProjection, equityZoneInfo, cashZoneInfo, buildVerdict, scenarioLabels, getSliderBackground };
+export {
+  getBaseline,
+  computeProjection,
+  equityZoneInfo,
+  cashZoneInfo,
+  buildVerdict,
+  scenarioLabels,
+  getSliderBackground,
+};

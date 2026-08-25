@@ -7,7 +7,15 @@ import { useOverviewCharts } from "./useOverviewCharts.js";
 
 export const OverviewTab = React.memo(function OverviewTab() {
   const { T } = useTranslation();
-  const { heroData, heroOptions, netResult, equity, waterfallData, waterfallOptions, activeSeasonLabel } = useOverviewCharts();
+  const {
+    heroData,
+    heroOptions,
+    netResult,
+    equity,
+    waterfallData,
+    waterfallOptions,
+    activeSeasonLabel,
+  } = useOverviewCharts();
 
   return (
     <>

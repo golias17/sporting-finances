@@ -1,6 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { renderHook, act } from "@testing-library/react";
-import { useImageLightbox, setupLightboxTriggers } from "../../src/hooks/useImageLightbox";
+import {
+  useImageLightbox,
+  setupLightboxTriggers,
+} from "../../src/hooks/useImageLightbox";
 
 vi.mock("../../src/utils/focusTrap", () => ({
   trapFocusWithin: vi.fn(() => vi.fn()),
@@ -178,7 +181,9 @@ describe("useImageLightbox", () => {
 
     setupLightboxTriggers(mockOpen);
 
-    const img = document.querySelector(".stadium-panorama-img") as HTMLImageElement;
+    const img = document.querySelector(
+      ".stadium-panorama-img",
+    ) as HTMLImageElement;
     expect(img.getAttribute("tabindex")).toBe("0");
     expect(img.getAttribute("role")).toBe("button");
 
@@ -208,7 +213,9 @@ describe("useImageLightbox", () => {
     setupLightboxTriggers(mockOpen);
     setupLightboxTriggers(mockOpen);
 
-    const img = document.querySelector(".stadium-panorama-img") as HTMLImageElement;
+    const img = document.querySelector(
+      ".stadium-panorama-img",
+    ) as HTMLImageElement;
     img.click();
     expect(mockOpen).toHaveBeenCalledTimes(1);
   });
@@ -221,7 +228,9 @@ describe("useImageLightbox", () => {
 
     setupLightboxTriggers(mockOpen);
 
-    const img = document.querySelector(".stadium-panorama-img") as HTMLImageElement;
+    const img = document.querySelector(
+      ".stadium-panorama-img",
+    ) as HTMLImageElement;
     expect(img.getAttribute("aria-label")).toContain("Sporting CP asset");
   });
 
@@ -233,8 +242,12 @@ describe("useImageLightbox", () => {
 
     setupLightboxTriggers(mockOpen);
 
-    const img = document.querySelector(".stadium-panorama-img") as HTMLImageElement;
-    img.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    const img = document.querySelector(
+      ".stadium-panorama-img",
+    ) as HTMLImageElement;
+    img.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+    );
     expect(mockOpen).toHaveBeenCalled();
   });
 
@@ -246,8 +259,12 @@ describe("useImageLightbox", () => {
 
     setupLightboxTriggers(mockOpen);
 
-    const img = document.querySelector(".stadium-panorama-img") as HTMLImageElement;
-    img.dispatchEvent(new KeyboardEvent("keydown", { key: " ", bubbles: true }));
+    const img = document.querySelector(
+      ".stadium-panorama-img",
+    ) as HTMLImageElement;
+    img.dispatchEvent(
+      new KeyboardEvent("keydown", { key: " ", bubbles: true }),
+    );
     expect(mockOpen).toHaveBeenCalled();
   });
 

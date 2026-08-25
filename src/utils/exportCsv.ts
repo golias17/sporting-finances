@@ -10,11 +10,13 @@ export function exportToCsv(
   filename: string,
   headers: string[],
   rows: (string | number | boolean | null | undefined)[][],
-  options: ExportCsvOptions = {}
+  options: ExportCsvOptions = {},
 ): void {
   const delimiter = options.delimiter ?? ";";
 
-  const sanitizeCell = (val: string | number | boolean | null | undefined): string => {
+  const sanitizeCell = (
+    val: string | number | boolean | null | undefined,
+  ): string => {
     if (val === null || val === undefined) return '""';
     const str = String(val);
     return `"${str.replace(/"/g, '""')}"`;
@@ -34,7 +36,10 @@ export function exportToCsv(
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.setAttribute("href", url);
-    link.setAttribute("download", filename.endsWith(".csv") ? filename : `${filename}.csv`);
+    link.setAttribute(
+      "download",
+      filename.endsWith(".csv") ? filename : `${filename}.csv`,
+    );
     link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();

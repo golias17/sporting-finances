@@ -9,11 +9,18 @@ interface AccessibleTableProps {
     | "currency-thousands"
     | "currency-millions"
     | "ratio"
-    | "percentage";
+    | "percentage"
+    | "points"
+    | "score";
   // Fallback for combo charts where datasets have different scales (e.g. playground)
   datasetValueTypes?: Record<
     number,
-"currency-thousands" | "currency-millions" | "ratio" | "percentage"
+    | "currency-thousands"
+    | "currency-millions"
+    | "ratio"
+    | "percentage"
+    | "points"
+    | "score"
   >;
   onToggle?: (isTableVisible: boolean) => void;
 }
@@ -46,18 +53,31 @@ export function AccessibleTable({
         : "Hide table data";
   };
 
-  const formatter = (v: number | [number, number] | null | undefined, dsIndex: number, rowIdx: number) => {
+  const formatter = (
+    v: number | [number, number] | null | undefined,
+    dsIndex: number,
+    rowIdx: number,
+  ) => {
     if (v === null || v === undefined) return "—";
 
     let numVal: number;
     if (Array.isArray(v)) {
       const stepValues = [177.6, -135.9, 52.0, -50.2, -23.5, 20.0];
-      numVal = stepValues[rowIdx] !== undefined ? stepValues[rowIdx] : v[1] - v[0];
+      numVal =
+        stepValues[rowIdx] !== undefined ? stepValues[rowIdx] : v[1] - v[0];
     } else {
       numVal = v;
     }
 
     const type = datasetValueTypes?.[dsIndex] || valueType;
+
+    if (
+      type === "points" ||
+      type === "score" ||
+      chartId.toLowerCase().includes("radar")
+    ) {
+      return `${Math.round(numVal)} pts`;
+    }
 
     if (chartId.toLowerCase().includes("waterfall")) {
       const sign = numVal < 0 ? "−" : numVal > 0 ? "+" : "";
@@ -83,14 +103,30 @@ export function AccessibleTable({
     return `€${sign}${Math.abs(numVal).toFixed(1)}k`;
   };
 
-  const cellClass = (v: number | [number, number] | null | undefined, rowIdx: number) => {
+  const cellClass = (
+    v: number | [number, number] | null | undefined,
+    dsIndex: number,
+    rowIdx: number,
+  ) => {
     if (v === null || v === undefined) return undefined;
     let numVal: number;
     if (Array.isArray(v)) {
       const stepValues = [177.6, -135.9, 52.0, -50.2, -23.5, 20.0];
-      numVal = stepValues[rowIdx] !== undefined ? stepValues[rowIdx] : v[1] - v[0];
+      numVal =
+        stepValues[rowIdx] !== undefined ? stepValues[rowIdx] : v[1] - v[0];
     } else {
       numVal = v;
+    }
+
+    const type = datasetValueTypes?.[dsIndex] || valueType;
+    if (
+      type === "points" ||
+      type === "score" ||
+      chartId.toLowerCase().includes("radar")
+    ) {
+      if (numVal >= 70) return "pos";
+      if (numVal >= 50) return "amber";
+      return "neg";
     }
 
     if (numVal < 0) return "neg";
@@ -134,7 +170,7 @@ export function AccessibleTable({
                 {data.datasets.map((ds, j) => {
                   const v = ds.data[i];
                   return (
-                    <td key={j} className={cellClass(v, i)}>
+                    <td key={j} className={cellClass(v, j, i)}>
                       {formatter(v, j, i)}
                     </td>
                   );

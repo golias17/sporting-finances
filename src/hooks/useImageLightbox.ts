@@ -39,7 +39,12 @@ export function useImageLightbox() {
   const open = useCallback(
     (
       img: HTMLImageElement,
-      options?: { frontSrc?: string; backSrc?: string; frontAlt?: string; backAlt?: string },
+      options?: {
+        frontSrc?: string;
+        backSrc?: string;
+        frontAlt?: string;
+        backAlt?: string;
+      },
     ) => {
       const src = img.src;
       const alt = img.alt || "Sporting CP Asset";
@@ -49,7 +54,9 @@ export function useImageLightbox() {
         setState({
           isOpen: true,
           currentSrc: isShowingBack ? options.backSrc : options.frontSrc,
-          currentAlt: isShowingBack ? (options.backAlt || "Kit Back") : (options.frontAlt || "Kit Front"),
+          currentAlt: isShowingBack
+            ? options.backAlt || "Kit Back"
+            : options.frontAlt || "Kit Front",
           isKitFlip: true,
           frontSrc: options.frontSrc,
           backSrc: options.backSrc,
@@ -142,7 +149,15 @@ export function useImageLightbox() {
  * Call this in a useEffect after mount.
  */
 export function setupLightboxTriggers(
-  onOpen: (img: HTMLImageElement, options?: { frontSrc?: string; backSrc?: string; frontAlt?: string; backAlt?: string }) => void,
+  onOpen: (
+    img: HTMLImageElement,
+    options?: {
+      frontSrc?: string;
+      backSrc?: string;
+      frontAlt?: string;
+      backAlt?: string;
+    },
+  ) => void,
 ) {
   const targets = document.querySelectorAll<HTMLImageElement>(
     ".stadium-panorama-img, .court-panorama-img, .academy-panorama-img, .museum-panorama-img, .kit-img",
@@ -164,8 +179,12 @@ export function setupLightboxTriggers(
     const handleClick = () => {
       const kitInner = img.closest(".kit-card-inner");
       if (kitInner) {
-        const frontImg = kitInner.querySelector(".kit-card-front img") as HTMLImageElement;
-        const backImg = kitInner.querySelector(".kit-card-back img") as HTMLImageElement;
+        const frontImg = kitInner.querySelector(
+          ".kit-card-front img",
+        ) as HTMLImageElement;
+        const backImg = kitInner.querySelector(
+          ".kit-card-back img",
+        ) as HTMLImageElement;
         if (frontImg && backImg) {
           onOpen(img, {
             frontSrc: frontImg.src,

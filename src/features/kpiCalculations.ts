@@ -1,8 +1,14 @@
 import { state } from "../core/state.js";
-import { netDebt, wageBillRatio, revenueGrowthPct, consecutiveProfitableYears, getLatestH1Data, ordinal } from "./financialMetrics.js";
+import {
+  netDebt,
+  wageBillRatio,
+  revenueGrowthPct,
+  consecutiveProfitableYears,
+  getLatestH1Data,
+  ordinal,
+} from "./financialMetrics.js";
 import { HEALTH_THRESHOLDS } from "./healthThresholds.js";
 import type { FinancialRecord, AppState } from "../core/types.ts";
-
 
 export function calculateKpis(
   state: AppState,

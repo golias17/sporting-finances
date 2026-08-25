@@ -42,7 +42,11 @@ function getEraForSeason(season: string, isPt: boolean) {
   return isPt && entry.pt ? entry.pt : entry.en;
 }
 
-function transferChartOptions(stacked = false, baseOpts: ChartOptions, COLORS: BrandColors) {
+function transferChartOptions(
+  stacked = false,
+  baseOpts: ChartOptions,
+  COLORS: BrandColors,
+) {
   return {
     ...baseOpts,
     plugins: {
@@ -60,7 +64,10 @@ function transferChartOptions(stacked = false, baseOpts: ChartOptions, COLORS: B
         ...baseOpts?.plugins?.tooltip,
         callbacks: {
           ...baseOpts?.plugins?.tooltip?.callbacks,
-          label: function (context: { dataset: { label: string }; raw: number }) {
+          label: function (context: {
+            dataset: { label: string };
+            raw: number;
+          }) {
             return `${context.dataset.label}: ${context.raw.toFixed(1)} M€`;
           },
           footer: () => [],
@@ -134,13 +141,24 @@ export function SquadAnalytics() {
       }
 
       if (sComm + pComm === 0) {
-        const match = annual.find(
+        const match = (annual || []).find(
           (d) =>
             d.season === seasonObj.season ||
             d.season === seasonObj.season.replace("20", "").replace("/", "-"),
         );
-        if (match && match.agent_commissions) {
-          pComm = match.agent_commissions / 1000;
+        if (match) {
+          if (
+            match.agent_commissions_purchases !== undefined ||
+            match.agent_commissions_sales !== undefined
+          ) {
+            pComm =
+              ((match.agent_commissions_purchases || 0) +
+                (match.agent_commissions_management || 0)) /
+              1000;
+            sComm = (match.agent_commissions_sales || 0) / 1000;
+          } else if (match.agent_commissions) {
+            pComm = match.agent_commissions / 1000;
+          }
         }
       }
 
@@ -161,7 +179,7 @@ export function SquadAnalytics() {
       purchasesCommissions: purchComm,
       seasons: seasonsList,
     };
-  }, [ledger, labels, isPt]);
+  }, [ledger, labels, isPt, annual]);
 
   const erasData = {
     labels,
@@ -225,6 +243,136 @@ export function SquadAnalytics() {
     ],
   };
 
+  // Net Transfer Debt Data (Payables vs Receivables)
+  const annualSeasons = useMemo(
+    () => (annual || []).map((d) => d.label || d.season),
+    [annual],
+  );
+
+  const netTransferDebtData = useMemo(() => {
+    const payablesC = (annual || []).map(
+      (d) => (d.transfer_payables_c || 0) / 1000,
+    );
+    const payablesNC = (annual || []).map(
+      (d) => (d.transfer_payables_nc || 0) / 1000,
+    );
+    const receivablesTotal = (annual || []).map(
+      (d) => (d.transfer_receivables_total || 0) / 1000,
+    );
+    const netDebt = (annual || []).map(
+      (d) => (d.transfer_debt_net_total || 0) / 1000,
+    );
+
+    return {
+      labels: annualSeasons,
+      datasets: [
+        {
+          type: "bar" as const,
+          label: isPt
+            ? "Dívidas a Clubes (Curto Prazo)"
+            : "Payables (Short-Term)",
+          data: payablesC,
+          backgroundColor: COLORS?.negSoft || FALLBACK.negSoft,
+          borderColor: COLORS?.neg || FALLBACK.neg,
+          borderWidth: 1,
+          stack: "Payables",
+          order: 2,
+        },
+        {
+          type: "bar" as const,
+          label: isPt
+            ? "Dívidas a Clubes (Longo Prazo)"
+            : "Payables (Long-Term)",
+          data: payablesNC,
+          backgroundColor: "rgba(239, 68, 68, 0.4)",
+          borderColor: COLORS?.neg || FALLBACK.neg,
+          borderWidth: 1,
+          stack: "Payables",
+          order: 2,
+        },
+        {
+          type: "bar" as const,
+          label: isPt
+            ? "Total a Receber de Clubes"
+            : "Total Receivables from Clubs",
+          data: receivablesTotal,
+          backgroundColor: COLORS?.posSoft || FALLBACK.posSoft,
+          borderColor: COLORS?.pos || FALLBACK.pos,
+          borderWidth: 1,
+          stack: "Receivables",
+          order: 2,
+        },
+        {
+          type: "line" as const,
+          label: isPt ? "Dívida Líquida de Passes" : "Net Transfer Debt",
+          data: netDebt,
+          borderColor: COLORS?.gold || FALLBACK.gold,
+          backgroundColor: COLORS?.gold || FALLBACK.gold,
+          tension: 0.3,
+          fill: false,
+          pointRadius: 3,
+          pointHoverRadius: 5,
+          order: 0,
+        },
+      ],
+    };
+  }, [annual, annualSeasons, isPt, COLORS]);
+
+  // Squad Structural Cost vs Operating Revenue (UEFA Squad Cost)
+  const squadCostData = useMemo(() => {
+    const wages = (annual || []).map(
+      (d) => Math.abs(d.personnel_costs || 0) / 1000,
+    );
+    const amort = (annual || []).map(
+      (d) => Math.abs(d.squad_amortization_impairment || 0) / 1000,
+    );
+    const revenue = (annual || []).map(
+      (d) => (d.revenue_operating || 0) / 1000,
+    );
+
+    return {
+      labels: annualSeasons,
+      datasets: [
+        {
+          type: "bar" as const,
+          label: isPt
+            ? "Gastos com Pessoal (Salários)"
+            : "Personnel Costs (Wages)",
+          data: wages,
+          backgroundColor: "rgba(59, 130, 246, 0.65)",
+          borderColor: "#3b82f6",
+          borderWidth: 1,
+          stack: "SquadCost",
+          order: 2,
+        },
+        {
+          type: "bar" as const,
+          label: isPt
+            ? "Amortização e Imparidades de Passes"
+            : "Squad Amortization & Impairments",
+          data: amort,
+          backgroundColor: "rgba(168, 85, 247, 0.65)",
+          borderColor: "#a855f7",
+          borderWidth: 1,
+          stack: "SquadCost",
+          order: 2,
+        },
+        {
+          type: "line" as const,
+          label: isPt ? "Rendimentos Operacionais" : "Operating Revenue",
+          data: revenue,
+          borderColor: COLORS?.pos || FALLBACK.pos,
+          backgroundColor: COLORS?.pos || FALLBACK.pos,
+          tension: 0.3,
+          fill: false,
+          pointRadius: 3,
+          pointHoverRadius: 5,
+          order: 0,
+        },
+      ],
+    };
+  }, [annual, annualSeasons, isPt, COLORS]);
+
   return (
     <>
       <div className="card">
@@ -240,6 +388,39 @@ export function SquadAnalytics() {
           valueType="currency-millions"
         />
       </div>
+
+      <div className="card">
+        <div className="card-head">
+          <T as="h3" i18nKey="chart_net_transfer_debt_title" />
+          <T
+            as="span"
+            className="tag"
+            i18nKey="chart_net_transfer_debt_subtitle"
+          />
+        </div>
+        <AppChart
+          id="squad-transfer-debt"
+          type="bar"
+          data={netTransferDebtData as any}
+          options={transferChartOptions(true, baseOpts, COLORS)}
+          valueType="currency-millions"
+        />
+      </div>
+
+      <div className="card">
+        <div className="card-head">
+          <T as="h3" i18nKey="chart_squad_cost_title" />
+          <T as="span" className="tag" i18nKey="chart_squad_cost_subtitle" />
+        </div>
+        <AppChart
+          id="squad-cost-structure"
+          type="bar"
+          data={squadCostData as any}
+          options={transferChartOptions(true, baseOpts, COLORS)}
+          valueType="currency-millions"
+        />
+      </div>
+
       <div className="card">
         <div className="card-head">
           <T as="h3" i18nKey="chart_commissions_title" />
@@ -266,7 +447,16 @@ export function SquadAnalytics() {
             color: "var(--muted)",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "var(--fs-xs)", fontWeight: 600, color: "var(--ink)" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.5rem",
+              fontSize: "var(--fs-xs)",
+              fontWeight: 600,
+              color: "var(--ink)",
+            }}
+          >
             <svg
               width="14"
               height="14"

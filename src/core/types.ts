@@ -37,7 +37,34 @@ export interface FinancialRecord {
   transfer_payables_nc?: number;
   transfer_receivables_c?: number;
   transfer_receivables_nc?: number;
+  transfer_payables_total?: number;
+  transfer_receivables_total?: number;
+  transfer_debt_net_c?: number;
+  transfer_debt_net_nc?: number;
+  transfer_debt_net_total?: number;
+  squad_total_cost?: number;
+  squad_cost_ratio?: number;
+  wage_ratio?: number;
+  net_debt?: number;
+  total_borrowings?: number;
+  total_liabilities?: number;
+  ebitda_operating?: number;
+  ebitda_total?: number;
+  player_trading_net?: number;
+  rev_other?: number;
+  transfer_reliance_ratio?: number;
+  net_debt_to_revenue?: number;
+  current_ratio?: number;
+  solvency_ratio?: number;
+  cf_net_change?: number;
+  ebitda_margin_operating?: number;
+  ebitda_margin_total?: number;
+  net_margin?: number;
+  net_debt_to_ebitda?: number | null;
   agent_commissions?: number;
+  agent_commissions_purchases?: number;
+  agent_commissions_management?: number;
+  agent_commissions_sales?: number;
   source: string;
 }
 
@@ -150,7 +177,7 @@ export interface AppState {
   urlCmpA: string | null;
   urlCmpB: string | null;
   urlHealthSeason: string | null;
-  urlPlayground: PlaygroundInputs | null;
+  urlPlayground: Record<string, string | null> | null;
 
   annual: FinancialRecord[];
   fullAnnual: FinancialRecord[] | null;
@@ -197,7 +224,9 @@ export interface AppState {
   setUrlCmpA(v: string | null): void;
   setUrlCmpB: (v: string | null) => void;
   setUrlHealthSeason: (v: string | null) => void;
-  setUrlPlayground: (v: PlaygroundInputs | null) => void;
+  setUrlPlayground: (
+    v: PlaygroundInputs | Record<string, string | null> | null,
+  ) => void;
 
   BENFICA_DATASET: FinancialDataset;
   PORTO_DATASET: FinancialDataset;
