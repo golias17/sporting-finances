@@ -689,7 +689,15 @@ export function CommandPalette({
               ✕
             </button>
           )}
-          <span className="cmd-palette-badge">ESC</span>
+          <button
+            type="button"
+            className="cmd-palette-badge cmd-palette-close-btn"
+            onClick={onClose}
+            aria-label={isPt ? "Fechar pesquisa" : "Close search"}
+          >
+            <span className="badge-desktop">ESC</span>
+            <span className="badge-mobile" aria-hidden="true">✕</span>
+          </button>
         </div>
 
         {/* Results List */}

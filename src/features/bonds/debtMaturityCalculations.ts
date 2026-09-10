@@ -17,7 +17,7 @@ export interface DebtYearSchedule {
 export type DebtFilterType = "all" | "uspp" | "banking";
 export type DebtScenarioType = "base" | "rates_up" | "no_ucl";
 
-export const RAW_DEBT_SCHEDULE: Omit<
+const RAW_DEBT_SCHEDULE: Omit<
   DebtYearSchedule,
   "totalPrincipal" | "totalInterest" | "totalDebtService" | "dscr" | "status"
 >[] = [

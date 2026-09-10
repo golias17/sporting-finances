@@ -16,6 +16,11 @@ interface ManagerEra {
 
 const MANAGER_ERAS: ManagerEra[] = [
   {
+    seasons: ["2010/11", "2011/12"],
+    en: "Paulo Sérgio / Domingos (10/11 - 11/12)",
+    pt: "Paulo Sérgio / Domingos (10/11 - 11/12)",
+  },
+  {
     seasons: ["2012/13"],
     en: "Jesualdo/Sa Pinto (12/13)",
     pt: "Jesualdo/Sá Pinto (12/13)",
@@ -32,13 +37,14 @@ const MANAGER_ERAS: ManagerEra[] = [
     en: "Rúben Amorim (20/21 - 23/24)",
   },
   { seasons: ["2024/25"], en: "Amorim / Pereira / Borges (24/25)" },
-  { seasons: [], en: "Rui Borges (25/26 - )", isFallback: true },
+  { seasons: ["2025/26", "2026/27"], en: "Rui Borges (25/26 - )", isFallback: true },
 ];
 
-function getEraForSeason(season: string, isPt: boolean) {
+function getEraForSeason(season: string, isPt: boolean): string | null {
   const entry =
     MANAGER_ERAS.find((e) => e.seasons.includes(season)) ||
-    MANAGER_ERAS[MANAGER_ERAS.length - 1];
+    (season >= "2025/26" ? MANAGER_ERAS[MANAGER_ERAS.length - 1] : null);
+  if (!entry) return null;
   return isPt && entry.pt ? entry.pt : entry.en;
 }
 
@@ -162,7 +168,7 @@ export function SquadAnalytics() {
         }
       }
 
-      if (erasData[era]) {
+      if (era && erasData[era]) {
         erasData[era].sales += sTotal;
         erasData[era].purchases += pTotal;
       }

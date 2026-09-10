@@ -1,7 +1,5 @@
 import React, { useMemo } from "react";
 import { state } from "../core/state.js";
-import {
-  } from "../charts/chartUtils.js";
 import { scenarioLabels } from "./playgroundUtils.js";
 import type { ProjectionData, PinnedData } from "./playgroundTypes.js";
 import { FALLBACK } from "./playgroundTypes.js";

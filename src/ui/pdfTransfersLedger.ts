@@ -1,7 +1,5 @@
 import autoTable from "jspdf-autotable";
 import { state } from "../core/state.js";
-import {
-  } from "./pdfHelpers.js";
 import type { PdfContext } from "./pdfTypes.js";
 
 // ==========================================================
