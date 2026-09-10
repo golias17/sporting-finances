@@ -223,14 +223,14 @@ export function TransfersLedger({
         >
           {isPt ? "Todas" : "All"}
         </button>
-        {ledgerData.map((s) => (
+        {Array.from(new Set(ledgerData.map((s) => s.season))).map((season) => (
           <button
-            key={s.season}
-            className={`season-pill${s.season === activeSeason ? " active" : ""}`}
-            aria-pressed={s.season === activeSeason}
-            onClick={() => setActiveSeason(s.season)}
+            key={season}
+            className={`season-pill${season === activeSeason ? " active" : ""}`}
+            aria-pressed={season === activeSeason}
+            onClick={() => setActiveSeason(season)}
           >
-            {s.season}
+            {season}
           </button>
         ))}
       </div>

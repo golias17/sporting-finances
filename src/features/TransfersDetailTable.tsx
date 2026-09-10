@@ -276,11 +276,13 @@ export function TransfersDetailTable({
             <option value="all">
               {isPt ? "Todas as Épocas" : "All Seasons"}
             </option>
-            {ledgerData.map((s) => (
-              <option key={s.season} value={s.season}>
-                {s.season}
-              </option>
-            ))}
+            {Array.from(new Set(ledgerData.map((s) => s.season))).map(
+              (season) => (
+                <option key={season} value={season}>
+                  {season}
+                </option>
+              ),
+            )}
           </select>
         </div>
         <div className="ledger-control-group">

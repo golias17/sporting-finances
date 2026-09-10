@@ -1,7 +1,8 @@
 {
   "currency": "EUR thousands",
   "company": "Sport Lisboa e Benfica - Futebol, SAD",
-  "ticker": "SLB",
+  "ticker": "SLBEN (Euronext Lisbon)",
+  "fiscal_year_end": "30 June",
   "annual_data": [
     {
       "season": "10-11",
@@ -11,8 +12,8 @@
       "da_excl_squad": -9231,
       "operating_result_excl_players": -630,
       "squad_amortization_impairment": -27537,
-      "player_transfer_income": 51000,
-      "player_transfer_cost": -43054,
+      "player_transfer_income": 37672,
+      "player_transfer_cost": -2188,
       "operating_result_players": 7947,
       "operating_result_total": 7317,
       "financial_result": -14649,
@@ -54,17 +55,20 @@
       "total_liabilities": 379628,
       "ebitda_operating": 8601,
       "ebitda_total": 44085,
-      "player_trading_net": 7946,
+      "player_trading_net": 35484,
       "rev_other": 18072,
-      "transfer_reliance_ratio": 38.1,
+      "transfer_reliance_ratio": 31.2,
       "net_debt_to_revenue": 2.72,
       "current_ratio": 0.35,
       "solvency_ratio": 0.6,
       "cf_net_change": -39,
       "ebitda_margin_operating": 10.4,
       "net_margin": -9.2,
-      "ebitda_margin_total": 32.9,
-      "net_debt_to_ebitda": 5.11
+      "ebitda_margin_total": 36.6,
+      "net_debt_to_ebitda": 5.11,
+      "label": "2010/11",
+      "year_end": "2011-06-30",
+      "source": "Anual-10-11.pdf (consolidated)"
     },
     {
       "season": "11-12",
@@ -74,10 +78,10 @@
       "da_excl_squad": -8855,
       "operating_result_excl_players": 7556,
       "squad_amortization_impairment": -31343,
-      "player_transfer_income": 24500,
-      "player_transfer_cost": -26931,
-      "operating_result_players": -2430,
-      "operating_result_total": 5126,
+      "player_transfer_income": 30603,
+      "player_transfer_cost": -1691,
+      "operating_result_players": -2431,
+      "operating_result_total": 5125,
       "financial_result": -16922,
       "net_result": -11690,
       "total_assets": 411921,
@@ -116,18 +120,21 @@
       "total_borrowings": 268629,
       "total_liabilities": 426073,
       "ebitda_operating": 16411,
-      "ebitda_total": 45324,
-      "player_trading_net": -2431,
+      "ebitda_total": 45323,
+      "player_trading_net": 28912,
       "rev_other": 16290,
-      "transfer_reliance_ratio": 21.2,
+      "transfer_reliance_ratio": 25.1,
       "net_debt_to_revenue": 2.91,
       "current_ratio": 0.3,
       "solvency_ratio": -3.4,
       "cf_net_change": -3484,
       "ebitda_margin_operating": 18.0,
       "net_margin": -12.8,
-      "ebitda_margin_total": 39.2,
-      "net_debt_to_ebitda": 5.85
+      "ebitda_margin_total": 37.2,
+      "net_debt_to_ebitda": 5.85,
+      "label": "2011/12",
+      "year_end": "2012-06-30",
+      "source": "Anual-11-12.pdf (consolidated)"
     },
     {
       "season": "12-13",
@@ -137,8 +144,8 @@
       "da_excl_squad": -8932,
       "operating_result_excl_players": -4318,
       "squad_amortization_impairment": -29995,
-      "player_transfer_income": 38200,
-      "player_transfer_cost": -26808,
+      "player_transfer_income": 51466,
+      "player_transfer_cost": -10079,
       "operating_result_players": 11392,
       "operating_result_total": 7074,
       "financial_result": -17454,
@@ -180,17 +187,20 @@
       "total_liabilities": 440480,
       "ebitda_operating": 4614,
       "ebitda_total": 46001,
-      "player_trading_net": 11392,
+      "player_trading_net": 41387,
       "rev_other": 15638,
-      "transfer_reliance_ratio": 30.2,
+      "transfer_reliance_ratio": 36.8,
       "net_debt_to_revenue": 3.15,
       "current_ratio": 0.3,
       "solvency_ratio": -5.7,
       "cf_net_change": -3002,
       "ebitda_margin_operating": 5.2,
       "net_margin": -11.8,
-      "ebitda_margin_total": 36.4,
-      "net_debt_to_ebitda": 6.04
+      "ebitda_margin_total": 32.9,
+      "net_debt_to_ebitda": 6.04,
+      "label": "2012/13",
+      "year_end": "2013-06-30",
+      "source": "Anual-12-13.pdf (consolidated)"
     },
     {
       "season": "13-14",
@@ -253,7 +263,10 @@
       "ebitda_margin_operating": 9.3,
       "net_margin": 13.5,
       "ebitda_margin_total": 42.3,
-      "net_debt_to_ebitda": 4.11
+      "net_debt_to_ebitda": 4.11,
+      "label": "2013/14",
+      "year_end": "2014-06-30",
+      "source": "Anual-13-14.pdf (consolidated)"
     },
     {
       "season": "14-15",
@@ -316,7 +329,10 @@
       "ebitda_margin_operating": 8.8,
       "net_margin": 6.9,
       "ebitda_margin_total": 41.1,
-      "net_debt_to_ebitda": 4.1
+      "net_debt_to_ebitda": 4.1,
+      "label": "2014/15",
+      "year_end": "2015-06-30",
+      "source": "Anual-14-15.pdf (consolidated)"
     },
     {
       "season": "15-16",
@@ -379,7 +395,10 @@
       "ebitda_margin_operating": 17.8,
       "net_margin": 16.2,
       "ebitda_margin_total": 43.0,
-      "net_debt_to_ebitda": 3.13
+      "net_debt_to_ebitda": 3.13,
+      "label": "2015/16",
+      "year_end": "2016-06-30",
+      "source": "Anual-15-16.pdf (consolidated)"
     },
     {
       "season": "16-17",
@@ -442,7 +461,10 @@
       "ebitda_margin_operating": 11.5,
       "net_margin": 34.7,
       "ebitda_margin_total": 46.7,
-      "net_debt_to_ebitda": 2.28
+      "net_debt_to_ebitda": 2.28,
+      "label": "2016/17",
+      "year_end": "2017-06-30",
+      "source": "Anual-16-17.pdf (consolidated)"
     },
     {
       "season": "17-18",
@@ -505,7 +527,10 @@
       "ebitda_margin_operating": 13.4,
       "net_margin": 16.9,
       "ebitda_margin_total": 40.2,
-      "net_debt_to_ebitda": 2.04
+      "net_debt_to_ebitda": 2.04,
+      "label": "2017/18",
+      "year_end": "2018-06-30",
+      "source": "Anual-17-18.pdf (consolidated)"
     },
     {
       "season": "18-19",
@@ -568,7 +593,10 @@
       "ebitda_margin_operating": 1.9,
       "net_margin": 19.3,
       "ebitda_margin_total": 30.8,
-      "net_debt_to_ebitda": 1.77
+      "net_debt_to_ebitda": 1.77,
+      "label": "2018/19",
+      "year_end": "2019-06-30",
+      "source": "Anual-18-19.pdf (consolidated)"
     },
     {
       "season": "19-20",
@@ -631,7 +659,10 @@
       "ebitda_margin_operating": -17.0,
       "net_margin": 29.8,
       "ebitda_margin_total": 35.8,
-      "net_debt_to_ebitda": 0.91
+      "net_debt_to_ebitda": 0.91,
+      "label": "2019/20",
+      "year_end": "2020-06-30",
+      "source": "Anual-19-20.pdf (consolidated)"
     },
     {
       "season": "20-21",
@@ -694,7 +725,10 @@
       "ebitda_margin_operating": -55.5,
       "net_margin": -18.5,
       "ebitda_margin_total": 18.2,
-      "net_debt_to_ebitda": 2.85
+      "net_debt_to_ebitda": 2.85,
+      "label": "2020/21",
+      "year_end": "2021-06-30",
+      "source": "Anual-20-21.pdf (consolidated)"
     },
     {
       "season": "21-22",
@@ -757,7 +791,10 @@
       "ebitda_margin_operating": -8.7,
       "net_margin": -20.7,
       "ebitda_margin_total": 11.5,
-      "net_debt_to_ebitda": 5.48
+      "net_debt_to_ebitda": 5.48,
+      "label": "2021/22",
+      "year_end": "2022-06-30",
+      "source": "Anual-21-22.pdf (consolidated)"
     },
     {
       "season": "22-23",
@@ -820,7 +857,10 @@
       "ebitda_margin_operating": -1.2,
       "net_margin": 2.2,
       "ebitda_margin_total": 21.5,
-      "net_debt_to_ebitda": 2.3
+      "net_debt_to_ebitda": 2.3,
+      "label": "2022/23",
+      "year_end": "2023-06-30",
+      "source": "Anual-22-23.pdf (consolidated)"
     },
     {
       "season": "23-24",
@@ -883,7 +923,10 @@
       "ebitda_margin_operating": -11.0,
       "net_margin": -17.5,
       "ebitda_margin_total": 15.1,
-      "net_debt_to_ebitda": 5.22
+      "net_debt_to_ebitda": 5.22,
+      "label": "2023/24",
+      "year_end": "2024-06-30",
+      "source": "Anual-23-24.pdf (consolidated)"
     },
     {
       "season": "24-25",
@@ -946,7 +989,10 @@
       "ebitda_margin_operating": 5.7,
       "net_margin": 14.9,
       "ebitda_margin_total": 29.3,
-      "net_debt_to_ebitda": 1.93
+      "net_debt_to_ebitda": 1.93,
+      "label": "2024/25",
+      "year_end": "2025-06-30",
+      "source": "Anual-24-25.pdf (consolidated)"
     }
   ]
 }

@@ -14,6 +14,18 @@ const financials = JSON.parse(
     "utf8",
   ),
 );
+const benfica = JSON.parse(
+  fs.readFileSync(
+    path.resolve(__dirname, "../../public/data/benfica.json"),
+    "utf8",
+  ),
+);
+const porto = JSON.parse(
+  fs.readFileSync(
+    path.resolve(__dirname, "../../public/data/porto.json"),
+    "utf8",
+  ),
+);
 const transfers = JSON.parse(
   fs.readFileSync(
     path.resolve(__dirname, "../../public/data/transfers.json"),
@@ -134,4 +146,49 @@ describe("transfers.json schema", () => {
       }
     },
   );
+});
+
+describe.each([
+  ["benfica.json", benfica],
+  ["porto.json", porto],
+])("%s schema", (filename, dataset) => {
+  it("has a non-empty annual_data array", () => {
+    expect(Array.isArray(dataset.annual_data)).toBe(true);
+    expect(dataset.annual_data.length).toBeGreaterThan(0);
+  });
+
+  it("has required company metadata", () => {
+    expect(typeof dataset.company).toBe("string");
+    expect(typeof dataset.currency).toBe("string");
+  });
+
+  it.each(
+    dataset.annual_data.map((d: { label: string; [key: string]: unknown }) => [
+      d.label,
+      d,
+    ]),
+  )(
+    "season %s has every required numeric field",
+    (label: string, season: { [key: string]: unknown }) => {
+      expect(typeof label).toBe("string");
+      expect(label).toMatch(/^\d{4}\/\d{2}$/);
+      for (const key of REQUIRED_SEASON_NUMBERS) {
+        expect(
+          typeof season[key],
+          `${filename} > ${label}.${key} must be a number (got ${season[key]})`,
+        ).toBe("number");
+        expect(
+          Number.isFinite(season[key] as number),
+          `${filename} > ${label}.${key} is not finite`,
+        ).toBe(true);
+      }
+    },
+  );
+
+  it("season labels are unique and chronologically ordered", () => {
+    const labels = dataset.annual_data.map((d: { label: string }) => d.label);
+    expect(new Set(labels).size).toBe(labels.length);
+    const sorted = [...labels].sort();
+    expect(labels).toEqual(sorted);
+  });
 });
