@@ -83,7 +83,7 @@ export function DataTable({ data }: { data: FinancialRecord[] }) {
   const fields = getFields(isPt);
 
   return (
-    <table className="data">
+    <table id="dataTable" className="data">
       <thead>
         <tr>
           <th>{isPt ? "Métrica" : "Metric"}</th>
