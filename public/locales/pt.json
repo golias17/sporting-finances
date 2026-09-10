@@ -1199,6 +1199,11 @@
     "isAria": false,
     "innerHTML": false
   },
+  "ch10-ledger-tag": {
+    "text": "Desagregação por época",
+    "isAria": false,
+    "innerHTML": false
+  },
   "ch10-num": {
     "text": "Cap. 10 — Dados",
     "isAria": false,
@@ -1665,7 +1670,7 @@
     "innerHTML": false
   },
   "topbar-update": {
-    "text": "Última atualização · 24/25",
+    "text": "Última atualização · 25/26",
     "isAria": false,
     "innerHTML": false
   },

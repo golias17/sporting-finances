@@ -2512,7 +2512,7 @@ body.dark .skeleton-chart {
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  z-index: 9999;
+  z-index: 10000;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -2553,10 +2553,10 @@ body.dark .skeleton-chart {
   background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  z-index: 9999;
+  z-index: 10000;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   padding: 1rem;
   animation: cmdFadeIn 0.15s ease-out;
 }
@@ -2635,6 +2635,21 @@ body.dark .social-share-modal {
   border-radius: 4px;
   background: var(--rule-2);
   color: var(--muted);
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.cmd-palette-badge.cmd-palette-close-btn:hover {
+  background: var(--rule);
+  color: var(--ink);
+}
+
+.cmd-palette-badge .badge-mobile {
+  display: none;
 }
 
 .cmd-palette-results {

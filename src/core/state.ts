@@ -10,7 +10,7 @@ import type {
 
 export const useAppState = create<AppState>((set, get) => ({
   isPt: false,
-  tlActiveSeason: "2024/25",
+  tlActiveSeason: "2026/27",
   tlActiveWindow: "All",
   healthBarIdx: null,
   storyIndex: 0,
@@ -54,7 +54,7 @@ export const useAppState = create<AppState>((set, get) => ({
   activeLionTab: "both",
   pinnedPlaygroundInputs: null,
 
-  tfActiveSeason: "2024/25",
+  tfActiveSeason: "2026/27",
   tfActiveType: "all",
   tfActiveWindow: "all",
   tfQuery: "",

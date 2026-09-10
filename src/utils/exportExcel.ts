@@ -290,8 +290,9 @@ export async function exportFinancialsExcel(isPt = true): Promise<void> {
       rowIndex++;
       const bg = isEven ? undefined : BG_ZEBRA;
       const typeLabel = isPt ? "Entrada (Compra)" : "Incoming (Purchase)";
+      const fee = tx.fee || 0;
       const commission = tx.commission || 0;
-      const net = tx.fee + commission;
+      const net = fee + commission;
       const notes = (isPt ? tx.note_pt || tx.note : tx.note || tx.note_pt) || "";
 
       trRows.push([
@@ -299,7 +300,7 @@ export async function exportFinancialsExcel(isPt = true): Promise<void> {
         { value: seasonName, align: "center", backgroundColor: bg },
         { value: typeLabel, align: "center", backgroundColor: bg },
         { value: tx.club || "N/A", backgroundColor: bg },
-        { value: tx.fee || 0, type: Number, format: "€#,##0.00'M'", backgroundColor: bg },
+        { value: fee, type: Number, format: "€#,##0.00'M'", backgroundColor: bg },
         { value: commission, type: Number, format: "€#,##0.00'M'", backgroundColor: bg },
         { value: net, type: Number, format: "€#,##0.00'M'", fontWeight: "bold", backgroundColor: bg },
         { value: notes, backgroundColor: bg },
@@ -312,7 +313,8 @@ export async function exportFinancialsExcel(isPt = true): Promise<void> {
       const bg = isEven ? undefined : BG_ZEBRA;
       const typeLabel = isPt ? "Saída (Venda)" : "Outgoing (Sale)";
       const commission = tx.commission || 0;
-      const net = tx.fee - commission;
+      const fee = tx.fee || 0;
+      const net = fee - commission;
       const notes = (isPt ? tx.note_pt || tx.note : tx.note || tx.note_pt) || "";
 
       trRows.push([
@@ -320,7 +322,7 @@ export async function exportFinancialsExcel(isPt = true): Promise<void> {
         { value: seasonName, align: "center", backgroundColor: bg },
         { value: typeLabel, align: "center", backgroundColor: bg },
         { value: tx.club || "N/A", backgroundColor: bg },
-        { value: tx.fee || 0, type: Number, format: "€#,##0.00'M'", backgroundColor: bg },
+        { value: fee, type: Number, format: "€#,##0.00'M'", backgroundColor: bg },
         { value: commission, type: Number, format: "€#,##0.00'M'", backgroundColor: bg },
         { value: net, type: Number, format: "€#,##0.00'M'", fontWeight: "bold", backgroundColor: bg },
         { value: notes, backgroundColor: bg },

@@ -89,9 +89,7 @@ export const DataTab = React.memo(function DataTab({
       <div className="card card--spaced">
         <div className="card-head">
           <T as="h3" i18nKey="ch10-ledger-h3" />
-          <span className="tag" id="transfersTableSeasonTag">
-            2025/26
-          </span>
+          <T as="span" className="tag" i18nKey="ch10-ledger-tag" />
         </div>
         <T as="p" className="desc" i18nKey="ch10-ledger-desc" />
         <TransfersDetailTable ledgerData={ledgerData} />

@@ -76,51 +76,54 @@ export function TopNav({ onPdfExport, onOpenCommandPalette }: TopNavProps) {
   return (
     <nav className="topbar">
       <div className="wrap">
-        <T as="span" i18nKey="topbar-update" />
-        <T as="span" className="topbar-listing" i18nKey="topbar-listing" />
-        {!isOnline && (
-          <span
-            className="tag badge-offline"
-            style={{
-              marginLeft: "8px",
-              background: "var(--gold)",
-              color: "var(--paper)",
-            }}
-          >
-            <T as="span" i18nKey="offline-mode" />
-          </span>
-        )}
-        <div className="lang-switcher">
-          <a
-            className={`lang-link ${!isPt ? "active" : ""}`}
-            data-lang="en"
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              handleLangToggle("en");
-            }}
-          >
-            EN
-          </a>
-          <span className="lang-sep">|</span>
-          <a
-            className={`lang-link ${isPt ? "active" : ""}`}
-            data-lang="pt"
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              handleLangToggle("pt");
-            }}
-          >
-            PT
-          </a>
+        <div className="topbar-left">
+          <T as="span" i18nKey="topbar-update" />
+          <T as="span" className="topbar-listing" i18nKey="topbar-listing" />
+          {!isOnline && (
+            <span
+              className="tag badge-offline"
+              style={{
+                marginLeft: "8px",
+                background: "var(--gold)",
+                color: "var(--paper)",
+              }}
+            >
+              <T as="span" i18nKey="offline-mode" />
+            </span>
+          )}
         </div>
-        <button
-          aria-label={isPt ? "Abrir Paleta de Comandos (Cmd+K)" : "Open Command Palette (Cmd+K)"}
-          className="pdf-export-btn"
-          onClick={onOpenCommandPalette}
-          style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
-        >
+        <div className="topbar-actions">
+          <div className="lang-switcher">
+            <a
+              className={`lang-link ${!isPt ? "active" : ""}`}
+              data-lang="en"
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLangToggle("en");
+              }}
+            >
+              EN
+            </a>
+            <span className="lang-sep">|</span>
+            <a
+              className={`lang-link ${isPt ? "active" : ""}`}
+              data-lang="pt"
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                handleLangToggle("pt");
+              }}
+            >
+              PT
+            </a>
+          </div>
+          <button
+            aria-label={isPt ? "Abrir Paleta de Comandos (Cmd+K)" : "Open Command Palette (Cmd+K)"}
+            className="pdf-export-btn"
+            onClick={onOpenCommandPalette}
+            style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
+          >
           <svg
             className="icon-inline"
             fill="none"
@@ -203,6 +206,7 @@ export function TopNav({ onPdfExport, onOpenCommandPalette }: TopNavProps) {
             i18nKey={isDark ? "nav-theme-dark" : "nav-theme-light"}
           />
         </button>
+        </div>
       </div>
     </nav>
   );

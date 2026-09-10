@@ -1199,6 +1199,11 @@
     "isAria": false,
     "innerHTML": false
   },
+  "ch10-ledger-tag": {
+    "text": "Season breakdown",
+    "isAria": false,
+    "innerHTML": false
+  },
   "ch10-num": {
     "text": "Ch. 10 — Data",
     "isAria": false,
@@ -1665,7 +1670,7 @@
     "innerHTML": false
   },
   "topbar-update": {
-    "text": "Last update · 24/25",
+    "text": "Last update · 25/26",
     "isAria": false,
     "innerHTML": false
   },

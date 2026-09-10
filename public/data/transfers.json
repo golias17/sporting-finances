@@ -3159,5 +3159,615 @@
         "note_pt": "Empréstimo até ao fim da época."
       }
     ]
+  },
+  {
+    "season": "2025/26",
+    "income": 109925,
+    "cost": -94482,
+    "note": "Season marked by the marquee sale of Viktor Gyökeres to Arsenal (€65.76M + €10.26M) and Conrad Harder to RB Leipzig (€24M + €6M). Landmark additions included Fotios Ioannidis (€22M), Luís Suarez (€22.16M), Georgios Vagiannidis (€12M), and winter signing Luís Guilherme (€14M).",
+    "note_pt": "Época marcada pela transferência de Viktor Gyökeres para o Arsenal (€65,76M + €10,26M) e de Conrad Harder para o RB Leipzig (€24M + €6M). Destaque nas entradas para Fotios Ioannidis (€22M), Luís Suarez (€22,16M), Georgios Vagiannidis (€12M) e o reforço de inverno Luís Guilherme (€14M).",
+    "purchases": [
+      {
+        "player": "Fotios Ioannidis",
+        "club": "Panathinaikos FC",
+        "fee": 22,
+        "rights": "100%",
+        "bonus": 3,
+        "window": "summer",
+        "note": "Panathinaikos retains 25% future capital gain. Maintenance commission: Dony Management AG (€0.31M). €100M buyout clause, contract until jun/30.",
+        "note_pt": "Panathinaikos detém 25% de mais-valia futura. Comissão de manutenção: Dony Management AG (€0,31M). Cláusula de rescisão de €100M, contrato até jun/30."
+      },
+      {
+        "player": "Luís Suarez",
+        "club": "UD Almería SAD",
+        "fee": 22.157,
+        "rights": "100%",
+        "bonus": 5.263,
+        "commission": 1.25,
+        "window": "summer",
+        "note": "UD Almería holds 10% future capital gain. Intermediation & maintenance commission: Lian Sports Limited (€1.25M / €0.371M). €80M buyout clause, contract until jun/30.",
+        "note_pt": "UD Almería detém 10% de mais-valia futura. Intermediação e manutenção: Lian Sports Limited (€1,25M / €0,371M). Cláusula de rescisão de €80M, contrato até jun/30."
+      },
+      {
+        "player": "Luís Guilherme",
+        "club": "West Ham FC",
+        "fee": 14,
+        "rights": "100%",
+        "bonus": 3,
+        "window": "winter",
+        "note": "West Ham holds 15% future capital gain. Maintenance commission: Unick Football Consultoria e MKT Esportivo LTDA (€0.16M). €80M clause, contract until jun/30.",
+        "note_pt": "West Ham fica com 15% de mais-valia futura. Comissão de manutenção: Unick Football Consultoria e MKT Esportivo LTDA (€0,16M). Cláusula de €80M, contrato até jun/30."
+      },
+      {
+        "player": "Georgios Vagiannidis",
+        "club": "Panathinaikos FC",
+        "fee": 12,
+        "rights": "100%",
+        "bonus": 2.5,
+        "commission": 0.3,
+        "window": "summer",
+        "note": "Panathinaikos holds 15% future capital gain. Intermediation & maintenance commission: CAA Base Limited (€0.3M / €0.233M). €80M clause, contract until jun/30.",
+        "note_pt": "Panathinaikos fica com 15% de mais-valia futura. Intermediação e manutenção: CAA Base Limited (€0,3M / €0,233M). Cláusula de rescisão de €80M, contrato até jun/30."
+      },
+      {
+        "player": "Francisco Trincão",
+        "club": "FC Barcelona",
+        "fee": 11,
+        "window": "summer",
+        "note": "Purchase of 40% of future sale, eliminating contingent liability with FC Barcelona.",
+        "note_pt": "Compra de 40% da futura venda, eliminando o passivo contingente com o FC Barcelona."
+      },
+      {
+        "player": "Souleymane Faye",
+        "club": "Granada CF SAD",
+        "fee": 6.3,
+        "rights": "100%",
+        "window": "winter",
+        "note": "Granada CF holds 10% future capital gain. Maintenance commission: A Star Sports Management Limited (€0.016M). €80M clause, contract until jun/30.",
+        "note_pt": "Granada CF fica com 10% de mais-valia futura. Comissão de manutenção: A Star Sports Management Limited (€0,016M). Cláusula de rescisão de €80M, contrato até jun/30."
+      },
+      {
+        "player": "Rui Silva",
+        "club": "Real Bétis Balompié",
+        "fee": 4,
+        "rights": "100%",
+        "bonus": 0.25,
+        "commission": 0.3,
+        "window": "summer",
+        "note": "Option to extend contract to 2028/29. Intermediation & maintenance: Team of Future Lda (€0.3M / €0.091M). €45M clause, contract until jun/28.",
+        "note_pt": "Opção de prolongar contrato para a época 2028/29. Intermediação e manutenção: Team of Future Lda (€0,3M / €0,091M). Cláusula de rescisão de €45M, contrato até jun/28."
+      },
+      {
+        "player": "Geny Catamo",
+        "club": "Amora FC SAD & Black Bulls",
+        "fee": 2.25,
+        "rights": "75%",
+        "window": "summer",
+        "note": "Acquisition of additional economic rights. Amora FC and Black Bulls retain 10% future capital gain.",
+        "note_pt": "Aquisição de direitos económicos adicionais. Amora FC SAD e Black Bulls mantêm em conjunto 10% de mais-valia futura."
+      },
+      {
+        "player": "Paulo Cardoso",
+        "club": "CF Estrela SAD",
+        "fee": 0.7,
+        "rights": "100%",
+        "window": "summer",
+        "note": "CF Estrela holds 20% future capital gain (reducible to 10% by SCP option). Maintenance commission: MA Agency4Sports Lda. €45M clause, contract until jun/30.",
+        "note_pt": "CF Estrela detém 20% de mais-valia futura (reduzível para 10% por opção do SCP). Comissão de manutenção: MA Agency4Sports Lda. Cláusula de €45M, contrato até jun/30."
+      },
+      {
+        "player": "Ricardo Mangas",
+        "club": "FC Spartak Moscow",
+        "fee": 0.32,
+        "rights": "100%",
+        "bonus": 0.79,
+        "window": "summer",
+        "note": "Spartak Moscow holds 20% future capital gain. Maintenance commission: Team of Future Lda (€0.103M). €60M clause, contract until jun/29.",
+        "note_pt": "Spartak Moscow detém 20% de mais-valia futura. Comissão de manutenção: Team of Future Lda (€0,103M). Cláusula de €60M, contrato até jun/29."
+      },
+      {
+        "player": "Kauã Oliveira",
+        "club": "FC Ibrachina",
+        "fee": 0.3,
+        "rights": "100%",
+        "window": "summer",
+        "note": "FC Ibrachina holds 30% future capital gain (reducible to 20% on individual targets). €80M clause, contract until jun/30.",
+        "note_pt": "FC Ibrachina detém 30% de mais-valia futura (reduzível para 20% com objetivos). Cláusula de €80M, contrato até jun/30."
+      },
+      {
+        "player": "Délcio Aurélio",
+        "club": "GD Interclube",
+        "fee": 0.1,
+        "rights": "100%",
+        "window": "winter",
+        "note": "GD Interclube holds 10% future capital gain (reducible to 5% by SCP option). Maintenance commission: FootPrestige SA. €45M clause, contract until jun/28.",
+        "note_pt": "GD Interclube detém 10% de mais-valia futura (reduzível para 5% por opção do SCP). Comissão de manutenção: FootPrestige SA. Cláusula de rescisão de €45M, contrato até jun/28."
+      },
+      {
+        "player": "Afonso Marques",
+        "club": "Académica OAF",
+        "fee": 0.04,
+        "rights": "100%",
+        "bonus": 0.15,
+        "commission": 0.0075,
+        "window": "summer",
+        "note": "Académica holds 30% future sale (reducible to 5% by SCP option). Intermediation: PMLeague Gestão de Carreiras. €45M clause, contract until jun/28.",
+        "note_pt": "Académica detém 30% de futura venda (reduzível para 5% por opção do SCP). Intermediação: PMLeague Gestão de Carreiras. Cláusula de €45M, contrato até jun/28."
+      },
+      {
+        "player": "Leonardo Paulin",
+        "club": "SC Farense",
+        "fee": 0.015,
+        "rights": "100%",
+        "window": "summer",
+        "note": "SC Farense holds 15% future capital gain (can be eliminated by SCP option). €45M clause, contract until jun/28.",
+        "note_pt": "SC Farense detém 15% de mais-valia futura (eliminável por opção do SCP). Cláusula de €45M, contrato até jun/28."
+      },
+      {
+        "player": "Victor Mendoza",
+        "club": "Club Alianza Lima",
+        "fee": 0,
+        "rights": "100%",
+        "bonus": 0.45,
+        "window": "summer",
+        "note": "Alianza Lima holds 40% future sale (reducible to 10% by SCP option). Maintenance: Tactical Quotidian Lda (€0.005M). €60M clause, contract until jun/28.",
+        "note_pt": "Alianza Lima detém 40% de futura venda (reduzível para 10% por opção do SCP). Manutenção: Tactical Quotidian Lda (€0,005M). Cláusula de €60M, contrato até jun/28."
+      },
+      {
+        "player": "João Virgínia",
+        "club": "Free Transfer",
+        "fee": 0,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Free transfer. Maintenance commission: Gestifute SA (€0.104M). €60M clause, contract until jun/28.",
+        "note_pt": "A custo zero. Comissão de manutenção: Gestifute SA (€0,104M). Cláusula de rescisão de €60M, contrato até jun/28."
+      },
+      {
+        "player": "Zaïd Bafdili",
+        "club": "KRC Genk",
+        "fee": 0,
+        "rights": "100%",
+        "window": "summer",
+        "note": "KRC Genk holds 10% future sale. Maintenance commission: Leaguepro LTD (€0.007M). €45M clause, contract until jun/28.",
+        "note_pt": "KRC Genk detém 10% de futura venda. Comissão de manutenção: Leaguepro LTD (€0,007M). Cláusula de rescisão de €45M, contrato até jun/28."
+      },
+      {
+        "player": "Pablo Valeron",
+        "club": "Free Transfer",
+        "fee": 0,
+        "rights": "100%",
+        "window": "winter",
+        "note": "Free transfer. €45M release clause, contract until jun/28.",
+        "note_pt": "A custo zero. Cláusula de rescisão de €45M, contrato até jun/28."
+      },
+      {
+        "player": "Bruno Ramos (loan)",
+        "club": "Académico Viseu SAD",
+        "fee": 0,
+        "bonus": 0.05,
+        "window": "summer",
+        "note": "Loan until 30/06/2026. SCP SAD holds purchase option.",
+        "note_pt": "Empréstimo até 30/06/2026. SCP SAD detém opção de compra."
+      },
+      {
+        "player": "Rayan Lucas (loan)",
+        "club": "CR Flamengo",
+        "fee": 0,
+        "window": "summer",
+        "note": "Loan until 30/06/2026. SCP SAD holds purchase option.",
+        "note_pt": "Empréstimo até 30/06/2026. SCP SAD detém opção de compra."
+      },
+      {
+        "player": "Rômulo Junior (loan)",
+        "club": "Atlético Mineiro S.F.",
+        "fee": 0,
+        "window": "summer",
+        "note": "Loan until 30/06/2026. SCP SAD holds purchase option. Maintenance commission: Stunt Consulting Unipessoal Lda (€0.027M).",
+        "note_pt": "Empréstimo até 30/06/2026. SCP SAD detém opção de compra. Comissão de manutenção: Stunt Consulting Unipessoal Lda (€0,027M)."
+      }
+    ],
+    "sales": [
+      {
+        "player": "Viktor Gyökeres",
+        "club": "Arsenal FC",
+        "fee": 65.76,
+        "bonus": 10.26,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Landmark sale to Arsenal FC for €65.76M fixed + up to €10.26M in performance-related add-ons.",
+        "note_pt": "Transferência histórica para o Arsenal FC por €65,76M fixos + até €10,26M em variáveis por objetivos."
+      },
+      {
+        "player": "Conrad Harder",
+        "club": "RB Leipzig",
+        "fee": 24,
+        "bonus": 6,
+        "window": "summer",
+        "note": "SCP SAD retains 15% future capital gain.",
+        "note_pt": "SCP SAD mantém 15% de mais-valia futura."
+      },
+      {
+        "player": "Marcus Edwards",
+        "club": "Burnley FC",
+        "fee": 10,
+        "bonus": 1.5,
+        "commission": 0.104,
+        "window": "summer",
+        "note": "SCP retains 10% future capital gain. Commission: Arete Management LTD.",
+        "note_pt": "SCP mantém 10% de mais-valia futura. Comissão: Arete Management LTD."
+      },
+      {
+        "player": "Franco Israel",
+        "club": "Torino FC",
+        "fee": 4.09,
+        "bonus": 0.51,
+        "commission": 0.17,
+        "window": "summer",
+        "note": "SCP retains 10% future capital gain. Commission: Tidenal SA.",
+        "note_pt": "SCP mantém 10% de mais-valia futura. Comissão: Tidenal SA."
+      },
+      {
+        "player": "Alisson Santos (loan)",
+        "club": "SSC Napoli SpA",
+        "fee": 3.5,
+        "commission": 0.1,
+        "window": "winter",
+        "note": "Loan fee of €3.5M until 30/06/2026. SSC Napoli holds purchase option. Commission: Peris Ruiz Consulting SL.",
+        "note_pt": "Taxa de empréstimo de €3,5M até 30/06/2026. SSC Napoli detém opção de compra. Comissão: Peris Ruiz Consulting SL."
+      },
+      {
+        "player": "Vladan Kovačević",
+        "club": "Norwich City FC",
+        "fee": 2.4,
+        "bonus": 1,
+        "commission": 0.23,
+        "window": "summer",
+        "note": "SCP retains 10% future capital gain. Commission: Lian Sports Limited.",
+        "note_pt": "SCP mantém 10% de mais-valia futura. Comissão: Lian Sports Limited."
+      },
+      {
+        "player": "Afonso Moreira",
+        "club": "Olympique Lyonnais",
+        "fee": 2,
+        "commission": 0.198,
+        "window": "summer",
+        "note": "SCP retains 20% future capital gain. Commission: Proeleven SA.",
+        "note_pt": "SCP mantém 20% de mais-valia futura. Comissão: Proeleven SA."
+      },
+      {
+        "player": "Henrique Arreiol",
+        "club": "Legia Warszawa",
+        "fee": 0.5,
+        "bonus": 0.25,
+        "commission": 0.024,
+        "window": "summer",
+        "note": "SCP retains 40% future capital gain (reducible by Legia option) and first refusal. Commission: Estrelas Líricas Unipessoal Lda.",
+        "note_pt": "SCP mantém 40% de mais-valia futura (reduzível por opção do Legia) e direito de preferência. Comissão: Estrelas Líricas Unipessoal Lda."
+      },
+      {
+        "player": "Alexandre Brito (loan)",
+        "club": "Pafos FC",
+        "fee": 0.1,
+        "window": "summer",
+        "note": "Loan fee up to €0.1M (eliminable on targets). Pafos has buy option, cancellable by SCP.",
+        "note_pt": "Taxa de empréstimo de €0,1M (eliminável por objetivos). Pafos tem opção de compra, cancelável por opção do SCP."
+      },
+      {
+        "player": "Koba Koindredi (loan)",
+        "club": "FC Basel",
+        "fee": 0.075,
+        "window": "summer",
+        "note": "Loan until 30/06/2026. FC Basel has purchase option.",
+        "note_pt": "Empréstimo até 30/06/2026. FC Basel detém opção de compra."
+      },
+      {
+        "player": "Gabriel Teixeira \"Biel\" (loan)",
+        "club": "Atlético Mineiro S.F.",
+        "fee": 0,
+        "commission": 0.125,
+        "window": "summer",
+        "note": "Loan until 30/06/2026. Atlético Mineiro has conditional mandatory purchase option. Commission: PMSM.",
+        "note_pt": "Empréstimo até 30/06/2026. Atlético Mineiro tem opção de compra com condicional obrigatória. Comissão: PMSM."
+      },
+      {
+        "player": "Rodrigo Ribeiro (loan)",
+        "club": "FC Augsburg 1907",
+        "fee": 0,
+        "window": "winter",
+        "note": "Loan until 30/06/2026. FC Augsburg has conditional mandatory purchase option.",
+        "note_pt": "Empréstimo até 30/06/2026. FC Augsburg detém opção de compra condicionalmente obrigatória."
+      },
+      {
+        "player": "Chris Grombahi (loan)",
+        "club": "Club Brugge NV",
+        "fee": 0,
+        "window": "winter",
+        "note": "Loan until 30/06/2026. Club Brugge has conditional mandatory purchase option.",
+        "note_pt": "Empréstimo até 30/06/2026. Club Brugge detém opção de compra condicionalmente obrigatória."
+      },
+      {
+        "player": "Duarte Correia (loan)",
+        "club": "Real Valladolid SAD",
+        "fee": 0,
+        "window": "winter",
+        "note": "Loan until 30/06/2026. Real Valladolid has purchase option.",
+        "note_pt": "Empréstimo até 30/06/2026. Real Valladolid detém opção de compra."
+      },
+      {
+        "player": "Sotirios Alexandropoulos (loan)",
+        "club": "Fortuna Düsseldorf 1895",
+        "fee": 0,
+        "window": "summer",
+        "note": "Loan until 30/06/2026 with conditional mandatory purchase option.",
+        "note_pt": "Empréstimo até 30/06/2026 com opção de compra condicionalmente obrigatória."
+      },
+      {
+        "player": "José Silva (loan)",
+        "club": "FC Arouca",
+        "fee": 0,
+        "window": "winter",
+        "note": "Loan until 30/06/2026. FC Arouca has purchase option.",
+        "note_pt": "Empréstimo até 30/06/2026. FC Arouca detém opção de compra."
+      },
+      {
+        "player": "Adam Arvelo",
+        "club": "UD Las Palmas SAD",
+        "fee": 0,
+        "window": "summer",
+        "note": "SCP retains 10% future sale.",
+        "note_pt": "SCP mantém 10% de uma futura venda."
+      },
+      {
+        "player": "Nilton Cardoso",
+        "club": "SCU Torreense SAD",
+        "fee": 0,
+        "window": "summer",
+        "note": "SCP retains 30% future sale and first refusal.",
+        "note_pt": "SCP mantém 30% de futura venda e direito de preferência."
+      },
+      {
+        "player": "Diogo Pinto",
+        "club": "CF Estrela SAD",
+        "fee": 0,
+        "window": "summer",
+        "note": "SCP retains 50% future sale, first refusal and buyback option.",
+        "note_pt": "SCP mantém 50% de futura venda, direito de preferência e opção de recompra."
+      },
+      {
+        "player": "Pedro Sanca",
+        "club": "Gil Vicente FC",
+        "fee": 0,
+        "window": "summer",
+        "note": "SCP retains 40% future sale and first refusal.",
+        "note_pt": "SCP mantém 40% de futura venda e direito de preferência."
+      },
+      {
+        "player": "Telmo Coimbra",
+        "club": "CF Estrela SAD",
+        "fee": 0,
+        "window": "summer",
+        "note": "SCP retains 25% future sale and first refusal.",
+        "note_pt": "SCP mantém 25% de futura venda e direito de preferência."
+      },
+      {
+        "player": "Luís Gustavo",
+        "club": "Atlético Mineiro S.F.",
+        "fee": 0,
+        "window": "summer",
+        "note": "SCP retains 25% future sale.",
+        "note_pt": "SCP mantém 25% de futura venda."
+      },
+      {
+        "player": "Francisco Machado",
+        "club": "CF Estrela SAD",
+        "fee": 0,
+        "window": "summer",
+        "note": "SCP retains 25% future sale and first refusal.",
+        "note_pt": "SCP mantém 25% de futura venda e direito de preferência."
+      },
+      {
+        "player": "Afonso Moço",
+        "club": "GD Chaves SAD",
+        "fee": 0,
+        "window": "summer",
+        "note": "SCP retains 40% future sale, first refusal and buyback option.",
+        "note_pt": "SCP mantém 40% de futura venda, direito de preferência e opção de recompra."
+      },
+      {
+        "player": "Luis Gomes",
+        "club": "Estoril Praia SAD",
+        "fee": 0,
+        "window": "summer",
+        "note": "SCP retains 30% future sale and first refusal.",
+        "note_pt": "SCP mantém 30% de futura venda e direito de preferência."
+      },
+      {
+        "player": "Winilson Lopes",
+        "club": "Santa Clara SAD",
+        "fee": 0,
+        "window": "winter",
+        "note": "SCP retains 25% future sale.",
+        "note_pt": "SCP mantém 25% de uma futura venda."
+      },
+      {
+        "player": "Tomás Mendes",
+        "club": "SCU Torreense SAD",
+        "fee": 0,
+        "window": "winter",
+        "note": "SCP entitled to first €0.1M of future sale + 30% of total sale.",
+        "note_pt": "SCP tem direito aos primeiros €0,1M de futura venda + 30% do valor global."
+      },
+      {
+        "player": "Sandro Nascimento",
+        "club": "Torino FC",
+        "fee": 0,
+        "window": "winter",
+        "note": "SCP retains 40% future sale.",
+        "note_pt": "SCP mantém 40% de uma futura venda."
+      },
+      {
+        "player": "Jeremiah St. Juste",
+        "club": "Revogação CTD",
+        "fee": 0,
+        "window": "winter",
+        "note": "Contract mutual termination.",
+        "note_pt": "Revogação de contrato por mútuo acordo."
+      },
+      {
+        "player": "Matheus Reis",
+        "club": "Revogação CTD",
+        "fee": 0,
+        "window": "winter",
+        "note": "Contract mutual termination.",
+        "note_pt": "Revogação de contrato por mútuo acordo."
+      },
+      {
+        "player": "Ricardo Esgaio",
+        "club": "Revogação CTD",
+        "fee": 0,
+        "window": "summer",
+        "note": "Contract mutual termination.",
+        "note_pt": "Revogação de contrato por mútuo acordo."
+      },
+      {
+        "player": "João Infante (loan)",
+        "club": "FC Tirsense / AC Marinhense",
+        "fee": 0,
+        "window": "summer",
+        "note": "Loaned to FC Tirsense in summer, then AC Marinhense in winter.",
+        "note_pt": "Empréstimo ao FC Tirsense no verão e ao AC Marinhense no inverno."
+      },
+      {
+        "player": "Manuel Lamúria (loan)",
+        "club": "CD Tondela",
+        "fee": 0,
+        "window": "summer",
+        "note": "Loan until 30/06/2026.",
+        "note_pt": "Empréstimo até 30/06/2026."
+      },
+      {
+        "player": "Diogo Travassos (loan)",
+        "club": "Moreirense FC SAD",
+        "fee": 0,
+        "window": "summer",
+        "note": "Loan until 30/06/2026.",
+        "note_pt": "Empréstimo até 30/06/2026."
+      },
+      {
+        "player": "Carlos Frederico (loan)",
+        "club": "FC Alverca",
+        "fee": 0,
+        "window": "summer",
+        "note": "Loan until 30/06/2026.",
+        "note_pt": "Empréstimo até 30/06/2026."
+      },
+      {
+        "player": "João Valente (loan)",
+        "club": "CF Os Belenenses",
+        "fee": 0,
+        "window": "summer",
+        "note": "Loan until 30/06/2026.",
+        "note_pt": "Empréstimo até 30/06/2026."
+      },
+      {
+        "player": "Sérgio Matos (loan)",
+        "club": "Sporting da Covilhã",
+        "fee": 0,
+        "window": "winter",
+        "note": "Loan until 30/06/2026.",
+        "note_pt": "Empréstimo até 30/06/2026."
+      },
+      {
+        "player": "Rafael Pontelo (loan)",
+        "club": "SC Farense SAD",
+        "fee": 0,
+        "window": "winter",
+        "note": "Loan until 30/06/2026.",
+        "note_pt": "Empréstimo até 30/06/2026."
+      }
+    ]
+  },
+  {
+    "season": "2026/27",
+    "income": 124170,
+    "cost": -68780,
+    "note": "Provisional figures: does not represent the entirety of the 2026/27 season, only transfers officially communicated by Sporting SAD to the market (CMVM) to date. Incomings: Rodrigo Zalazar (€30M), Issa Doumbia (€20.53M), and Sergi Altimira (€18.25M). Outgoings: Morten Hjulmand (€40M), Francisco Trincão ($50M / ~€41.67M), Ousmane Diomande (€40M), and Pedro Gonçalves loan (€2.5M).",
+    "note_pt": "Dados provisórios: não representam a totalidade da época 2026/27, apenas as transferências oficializadas pelo clube através de comunicados ao mercado (CMVM) até ao momento. Entradas: Rodrigo Zalazar (€30M), Issa Doumbia (€20,53M) e Sergi Altimira (€18,25M). Saídas: Morten Hjulmand (€40M), Francisco Trincão (50M$ / ~€41,67M), Ousmane Diomande (€40M) e empréstimo de Pedro Gonçalves (€2,5M).",
+    "purchases": [
+      {
+        "player": "Rodrigo Zalazar",
+        "club": "SC Braga",
+        "fee": 30,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Definitive acquisition for €30M from SC Braga. 5-year contract until 30/06/2031 with €80M buyout clause. Solidarity mechanism shared equally between Sporting SAD and SC Braga.",
+        "note_pt": "Aquisição definitiva por €30M ao SC Braga. Contrato de 5 épocas até 30/06/2031 com cláusula de rescisão de €80M. Mecanismo de solidariedade repartido em partes iguais entre Sporting SAD e SC Braga."
+      },
+      {
+        "player": "Issa Doumbia",
+        "club": "Venezia FC",
+        "fee": 20.53,
+        "bonus": 6.32,
+        "commission": 2.0,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Definitive acquisition for €20.53M (€20,526,315.79) + up to €6.32M in performance objectives. Venezia holds 10% future capital gain. 5-year contract until 30/06/2031 with €80M clause. Intermediation costs: €2.0M. Solidarity mechanism fully borne by Venezia.",
+        "note_pt": "Aquisição definitiva por €20,53M (€20.526.315,79) + até €6,32M em objetivos individuais e coletivos. Venezia tem direito a 10% de mais-valia futura. Contrato de 5 épocas até 30/06/2031 com cláusula de €80M. Serviços de intermediação: €2,0M. Mecanismo de solidariedade integralmente suportado pelo Venezia."
+      },
+      {
+        "player": "Sergi Altimira",
+        "club": "Real Betis Balompié",
+        "fee": 18.25,
+        "bonus": 2.0,
+        "commission": 1.76,
+        "rights": "100%",
+        "window": "summer",
+        "note": "100% economic and sporting rights acquired for €18.25M + up to €2.0M in objectives. Contract until 30/06/2031 (5 seasons) with €80M buyout clause. Intermediation services: €1.76M. Solidarity mechanism shared equally with Real Betis.",
+        "note_pt": "100% dos direitos económicos e desportivos adquiridos por €18,25M + até €2,0M por objetivos. Contrato até 30/06/2031 (5 épocas) com cláusula de rescisão de €80M. Encargos de intermediação: €1,76M. Mecanismo de solidariedade suportado em partes iguais com o Real Betis."
+      }
+    ],
+    "sales": [
+      {
+        "player": "Francisco Trincão",
+        "club": "Al Ahli",
+        "fee": 41.67,
+        "bonus": 4.63,
+        "commission": 4.17,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Transfer to Al Ahli for USD 50M: USD 45M fixed (~€41.67M) + up to USD 5M variable (~€4.63M). Intermediation fee: 10% of amounts received (~€4.17M). Solidarity mechanism borne exclusively by Al Ahli.",
+        "note_pt": "Transferência para o Al Ahli por 50M USD: 45M USD fixos (~€41,67M) + até 5M USD variáveis (~€4,63M). Encargos de intermediação: 10% dos montantes recebidos (~€4,17M). Mecanismo de solidariedade suportado exclusivamente pelo Al Ahli."
+      },
+      {
+        "player": "Morten Hjulmand",
+        "club": "Atlético de Madrid",
+        "fee": 40,
+        "bonus": 5.0,
+        "commission": 0,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Definitive transfer to Atlético de Madrid for €40.0M fixed + up to €5.0M in performance add-ons. Solidarity mechanism borne exclusively by Atlético de Madrid. Zero intermediation costs for Sporting SAD.",
+        "note_pt": "Transferência definitiva para o Atlético de Madrid por €40,0M fixos + até €5,0M em variáveis. Mecanismo de solidariedade suportado exclusivamente pelo Atlético de Madrid. Sem encargos de intermediação para a Sporting SAD."
+      },
+      {
+        "player": "Ousmane Diomande",
+        "club": "Nottingham Forest FC",
+        "fee": 40,
+        "commission": 1.5,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Definitive transfer to Nottingham Forest for €40.0M. Intermediation fees: €1.5M. Solidarity mechanism shared equally between Sporting SAD and Nottingham Forest.",
+        "note_pt": "Transferência definitiva para o Nottingham Forest por €40,0M. Encargos de intermediação: €1,5M. Mecanismo de solidariedade suportado em partes iguais pela Sporting SAD e Nottingham Forest."
+      },
+      {
+        "player": "Pedro Gonçalves (loan)",
+        "club": "ACF Fiorentina",
+        "fee": 2.5,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Loan fee of €2.5M for the 2026/27 season to ACF Fiorentina. Includes purchase option / conditional mandatory obligation to buy for €22.5M. Zero intermediation costs on the loan. Solidarity mechanism shared equally.",
+        "note_pt": "Cedência temporária por €2,5M na época 2026/27 à ACF Fiorentina. Inclui opção de compra / obrigação de compra condicional por €22,5M. Sem encargos de intermediação no empréstimo. Mecanismo de solidariedade suportado em partes iguais."
+      }
+    ]
   }
 ]
