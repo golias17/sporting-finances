@@ -92,6 +92,10 @@ export default defineConfig({
     // for the browserslist field in package.json (which was targeting a much
     // wider audience and could conflict with this setting).
     target: "es2022",
+    // Raise warning limit to 1000 kB (1 MB). The only chunk exceeding the default
+    // 500 kB is the on-demand 'pdf-libs' bundle (~814 kB, ~246 kB gzip/br), which
+    // is loaded asynchronously only when generating PDF reports.
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
         manualChunks(id: string) {
