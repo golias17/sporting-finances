@@ -44,25 +44,23 @@ export function Playground() {
   };
 
   const setInput = (key: keyof typeof DEFAULT_INPUTS, value: number) => {
-    setInputs((prev) => {
-      const next = { ...prev, [key]: value };
-      useAppState
-        .getState()
-        .setUrlPlayground(
-          Object.fromEntries(
-            Object.entries(next).map(([k, v]) => [k, String(v)]),
-          ),
-        );
-      syncStateToUrl();
-      return next;
-    });
+    const next = { ...inputs, [key]: value };
+    setInputs(next);
+    useAppState
+      .getState()
+      .setUrlPlayground(
+        Object.fromEntries(
+          Object.entries(next).map(([k, v]) => [k, String(v)]),
+        ),
+      );
+    syncStateToUrl();
   };
 
   const activePreset = Object.keys(PRESETS).find((key) => {
     const preset = PRESETS[key];
-    return Object.keys(DEFAULT_INPUTS).every(
-      (k) => (inputs as any)[k] === (preset as any)[k],
-    );
+    return (
+      Object.keys(DEFAULT_INPUTS) as Array<keyof typeof DEFAULT_INPUTS>
+    ).every((k) => inputs[k] === preset[k]);
   });
 
   const BASELINE = getBaseline();

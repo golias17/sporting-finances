@@ -335,6 +335,7 @@ export function App() {
       >
         <button
           ref={lightbox.closeBtnRef}
+          id="closeLightboxBtn"
           className="lightbox-close"
           aria-label="Close image"
           onClick={lightbox.close}

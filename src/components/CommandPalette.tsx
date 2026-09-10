@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useRef,
+  useCallback,
+} from "react";
 import { useAppState } from "../core/state.js";
 import { config } from "../core/config.js";
 import { useTranslation } from "../hooks/useTranslation.js";
@@ -41,21 +47,36 @@ export function CommandPalette({
   // Fetch news items when palette opens
   useEffect(() => {
     if (!isOpen) return;
+    let isMounted = true;
     fetch(config.newsPath)
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        if (data && Array.isArray(data.items)) {
+        if (isMounted && data && Array.isArray(data.items)) {
           setNewsItems(
-            data.items.slice(0, 30).map((n: { id?: string; title: string; pubDate?: string; date?: string; category?: string }, idx: number) => ({
-              id: n.id || `news-${idx}`,
-              title: n.title,
-              date: n.pubDate || n.date,
-              category: n.category || "CMVM",
-            })),
+            data.items.slice(0, 30).map(
+              (
+                n: {
+                  id?: string;
+                  title: string;
+                  pubDate?: string;
+                  date?: string;
+                  category?: string;
+                },
+                idx: number,
+              ) => ({
+                id: n.id || `news-${idx}`,
+                title: n.title,
+                date: n.pubDate || n.date,
+                category: n.category || "CMVM",
+              }),
+            ),
           );
         }
       })
       .catch(() => {});
+    return () => {
+      isMounted = false;
+    };
   }, [isOpen]);
 
   // Focus input on open
@@ -63,9 +84,10 @@ export function CommandPalette({
     if (isOpen) {
       setQuery("");
       setSelectedIndex(0);
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         inputRef.current?.focus();
       }, 50);
+      return () => clearTimeout(timer);
     }
   }, [isOpen]);
 
@@ -83,7 +105,9 @@ export function CommandPalette({
         id: `tab-${tab.id}`,
         category: "tabs",
         title: displayTitle,
-        subtitle: isPt ? `Navegar para ${tabLabel}` : `Navigate to ${tabLabel} tab`,
+        subtitle: isPt
+          ? `Navegar para ${tabLabel}`
+          : `Navigate to ${tabLabel} tab`,
         icon: "📑",
         keywords: [
           tab.id,
@@ -105,7 +129,9 @@ export function CommandPalette({
     items.push({
       id: "action-theme",
       category: "actions",
-      title: isPt ? "Alternar Modo Claro / Escuro" : "Toggle Dark / Light Theme",
+      title: isPt
+        ? "Alternar Modo Claro / Escuro"
+        : "Toggle Dark / Light Theme",
       subtitle: isPt
         ? "Mudar a aparência visual da plataforma"
         : "Switch platform visual appearance",
@@ -670,7 +696,9 @@ export function CommandPalette({
         <div className="cmd-palette-results" ref={listRef}>
           {filteredItems.length === 0 ? (
             <div className="cmd-palette-empty">
-              <span style={{ fontSize: "1.5rem", marginBottom: "6px" }}>🔍</span>
+              <span style={{ fontSize: "1.5rem", marginBottom: "6px" }}>
+                🔍
+              </span>
               <div>
                 {isPt
                   ? "Nenhum resultado encontrado para"
