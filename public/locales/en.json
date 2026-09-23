@@ -1900,7 +1900,7 @@
     "innerHTML": false
   },
   "dmt_desc": {
-    "text": "Multi-year projection of annual treasury outflow: principal debt repayments, coupon interest payments (USPP €225M fixed rate), and Debt Service Coverage Ratio (DSCR).",
+    "text": "Projection of the SAD's annual treasury debt service: retail bond redemptions (€90M between 2027 and 2028), fixed annual USPP coupons (€12.94M/year until its bullet maturity in 2053), and Debt Service Coverage Ratio (DSCR).",
     "isAria": false,
     "innerHTML": false
   },
@@ -1955,7 +1955,7 @@
     "innerHTML": false
   },
   "dmt_filter_banking": {
-    "text": "Banking & Commercial Paper",
+    "text": "Retail Bonds & Banking",
     "isAria": false,
     "innerHTML": false
   },
@@ -2025,7 +2025,7 @@
     "innerHTML": false
   },
   "dmt_verdict_p1": {
-    "text": "The landmark USPP private placement (€225M) fundamentally transformed Sporting SAD’s risk profile, eliminating reliance on short-term bank credit and commercial paper. The Debt Service Coverage Ratio (DSCR) projects robust treasury headroom (>1.8× in standard operating seasons).",
+    "text": "The issuance of the USPP (€225M over 28 years, maturing in 2053) fundamentally transformed Sporting SAD's liquidity profile. By deferring the USPP principal repayment to 2053, the SAD only services the fixed 5.75% annual coupon (€12.94M/year), keeping the coverage ratio (DSCR) comfortable (>2.5× in standard seasons). The primary medium-term requirement is the routine refinancing of retail bonds (€50M in 2027 and €40M in 2028).",
     "isAria": false,
     "innerHTML": false
   },

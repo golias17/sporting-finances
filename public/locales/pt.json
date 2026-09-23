@@ -1900,7 +1900,7 @@
     "innerHTML": false
   },
   "dmt_desc": {
-    "text": "Projeção detalhada do esforço anual de tesouraria com a dívida da SAD: amortizações de capital, cupões de juros (USPP €225M a taxa fixa) e rácio de cobertura do serviço da dívida (DSCR).",
+    "text": "Projeção do esforço anual de tesouraria com a dívida da SAD: amortizações das obrigações de retalho (€90M entre 2027 e 2028), cupões anuais fixos do USPP (€12,94M/ano até à sua maturidade bullet em 2053) e rácio de cobertura do serviço da dívida (DSCR).",
     "isAria": false,
     "innerHTML": false
   },
@@ -1955,7 +1955,7 @@
     "innerHTML": false
   },
   "dmt_filter_banking": {
-    "text": "Banca & Papel Comercial",
+    "text": "Obrigações de Retalho & Banca",
     "isAria": false,
     "innerHTML": false
   },
@@ -2025,7 +2025,7 @@
     "innerHTML": false
   },
   "dmt_verdict_p1": {
-    "text": "A colocação histórica do empréstimo obrigacionista USPP (€225M) alterou radicalmente o perfil de risco da Sporting SAD, eliminando a dependência de papel comercial e linhas bancárias de curto prazo. O rácio de cobertura do serviço da dívida (DSCR) projeta-se com sólida folga de tesouraria (>1.8× em épocas operacionais normais).",
+    "text": "A colocação do USPP (€225M a 28 anos, maturidade em 2053) transformou o perfil de liquidez da Sporting SAD. Ao afastar a amortização de capital do USPP para 2053, a SAD suporta apenas o cupão fixo de 5,75% (€12,94M/ano), mantendo o rácio de cobertura (DSCR) em níveis confortáveis (>2.5× em épocas normais). O único desafio de médio prazo consiste no refinanciamento habitual das obrigações de retalho (€50M em 2027 e €40M em 2028).",
     "isAria": false,
     "innerHTML": false
   },

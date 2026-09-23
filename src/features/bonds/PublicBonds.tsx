@@ -21,36 +21,36 @@ export interface RetailBond {
 
 export const RETAIL_BONDS: RetailBond[] = [
   {
-    id: "sad_2025_2028",
-    name: "Sporting SAD 2025-2028",
-    nominalAmount: 39.9,
-    couponRate: 5.75,
-    issueDatePt: "Fevereiro 2025",
-    issueDateEn: "February 2025",
-    maturityDatePt: "16 de Fevereiro de 2028",
-    maturityDateEn: "February 16, 2028",
+    id: "sad_2024_2028",
+    name: "Sporting SAD 2024-2028",
+    nominalAmount: 40.0,
+    couponRate: 5.25,
+    issueDatePt: "Novembro 2024",
+    issueDateEn: "November 2024",
+    maturityDatePt: "6 de Novembro de 2028",
+    maturityDateEn: "November 6, 2028",
     status: "active",
-    isin: "PTSPUBOE0000",
+    isin: "PTSPUCOE0007",
     purposePt: "Apoio aos investimentos correntes de modernização do Estádio José Alvalade, da Academia e reforço de liquidez.",
     purposeEn: "Support for ongoing modernization of José Alvalade stadium, the Academy and general liquidity reinforcement.",
-    detailsPt: "Emissão de até €50M com €39,9M subscritos por 3.800+ investidores. Cupão fixo de 5,75% pago semestralmente.",
-    detailsEn: "Issue up to €50M with €39.9M placed among 3,800+ investors. Fixed 5.75% coupon payable semi-annually.",
+    detailsPt: "Emissão de €40,0M subscrita por 2.690 investidores. Cupão fixo de 5,25% pago semestralmente.",
+    detailsEn: "Issue of €40.0M placed among 2,690 investors. Fixed 5.25% coupon payable semi-annually.",
   },
   {
     id: "sad_2024_2027",
     name: "Sporting SAD 2024-2027",
-    nominalAmount: 50.4,
-    couponRate: 5.25,
+    nominalAmount: 50.0,
+    couponRate: 5.75,
     issueDatePt: "Março 2024",
     issueDateEn: "March 2024",
-    maturityDatePt: "26 de Março de 2027",
-    maturityDateEn: "March 26, 2027",
+    maturityDatePt: "26 de Novembro de 2027",
+    maturityDateEn: "November 26, 2027",
     status: "active",
     isin: "PTSPUDOE0008",
     purposePt: "Refinanciamento integral do empréstimo obrigacionista Sporting SAD 2021-2024 via oferta de troca e subscrição.",
     purposeEn: "Full refinancing of the Sporting SAD 2021-2024 bond loan via combined exchange offer and public subscription.",
-    detailsPt: "Montante de €50,4M com adesão de troca superior a 60%, consolidando a fidelidade da base de investidores.",
-    detailsEn: "Total €50.4M placed with over 60% exchange participation, consolidating a loyal retail investor base.",
+    detailsPt: "Montante de €50,0M (€30M novas obrigações + €20M troca da 2021-2024) subscrito por 4.242 investidores. Cupão fixo de 5,75% pago semestralmente.",
+    detailsEn: "Total €50.0M (€30M new + €20M exchange from 2021-2024) placed among 4,242 investors. Fixed 5.75% coupon payable semi-annually.",
   },
   {
     id: "sad_2021_2024",
@@ -155,7 +155,7 @@ export function PublicBonds() {
             €{totalActiveAmount.toFixed(1)}M
           </div>
           <div className="dmt-kpi-sub">
-            {isPt ? "2 Linhas Ativas (2024-2027 & 2025-2028)" : "2 Active Lines (2024-2027 & 2025-2028)"}
+            {isPt ? "2 Linhas Ativas (2024-2027 & 2024-2028)" : "2 Active Lines (2024-2027 & 2024-2028)"}
           </div>
         </div>
 
@@ -165,17 +165,17 @@ export function PublicBonds() {
             {weightedCoupon.toFixed(2)}%
           </div>
           <div className="dmt-kpi-sub">
-            {isPt ? "Taxa Fixa TANB Ponderada" : "Weighted Fixed Coupon (TANB)"}
+            {isPt ? "Encargo: €4,98M/ano em cupões" : "Service: €4.98M/yr in coupons"}
           </div>
         </div>
 
         <div className="dmt-kpi-card accent-gold">
           <T as="div" className="dmt-kpi-label" i18nKey="bonds_kpi_next_maturity" />
           <div className="dmt-kpi-value" style={{ color: "var(--gold)" }}>
-            {isPt ? "Mar 2027" : "Mar 2027"}
+            {isPt ? "Nov 2027" : "Nov 2027"}
           </div>
           <div className="dmt-kpi-sub">
-            {isPt ? "€50,4M (Sporting SAD 2024-2027)" : "€50.4M (Sporting SAD 2024-2027)"}
+            {isPt ? "€50,0M (Sporting SAD 2024-2027)" : "€50.0M (Sporting SAD 2024-2027)"}
           </div>
         </div>
 
