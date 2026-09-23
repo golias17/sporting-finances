@@ -27,7 +27,7 @@ const RAW_DEBT_SCHEDULE: Omit<
     usppPrincipal: 0.0,
     usppInterest: 12.94,
     bankingPrincipal: 0.0,
-    bankingInterest: 4.98, // Active retail bonds: €50M @ 5.75% + €40M @ 5.25%
+    bankingInterest: 4.98, // Retail bonds coupons: €50M @ 5.75% (€2.88M) + €40M @ 5.25% (€2.10M) = €4.975M (audited Note 33: €4,975k)
     ebitda: 52.0,
   },
   {
@@ -55,7 +55,7 @@ const RAW_DEBT_SCHEDULE: Omit<
     usppPrincipal: 0.0,
     usppInterest: 12.94,
     bankingPrincipal: 40.0, // Maturity of Retail Bond Sporting SAD 2024-2028 (Nov 2028)
-    bankingInterest: 2.1,
+    bankingInterest: 2.1, // Remaining retail bond coupon: €40M @ 5.25% = €2.10M
     ebitda: 51.0,
     isBulletYear: true,
   },

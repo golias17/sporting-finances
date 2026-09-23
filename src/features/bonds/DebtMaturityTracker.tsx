@@ -239,8 +239,8 @@ export function DebtMaturityTracker() {
           </strong>{" "}
           <span style={{ color: "var(--muted)" }}>
             {isPt
-              ? "O empréstimo institucional USPP de €225M tem maturidade bullet de 28 anos (vencimento integral em Junho de 2053). Na década 2025–2035, o encargo com o USPP é estritamente o cupão fixo de 5,75% (€12,94M/ano), com zero amortização de capital. Os únicos reembolsos de capital nesta década correspondem aos empréstimos obrigacionistas de retalho: €50M em 2027/28 (Sporting SAD 2024-2027) e €40M em 2028/29 (Sporting SAD 2025-2028), habitualmente refinanciados no mercado doméstico."
-              : "The €225M institutional USPP bond features a 28-year bullet maturity (due June 2053). Throughout the 2025–2035 decade, the cash impact from the USPP is exclusively the fixed 5.75% coupon (€12.94M/year), with zero principal amortization. The only capital repayments during this decade are the public retail bonds: €50M in 2027/28 (Sporting SAD 2024-2027) and €40M in 2028/29 (Sporting SAD 2025-2028), typically refinanced in the domestic market."}
+              ? "O empréstimo institucional USPP de €225M tem maturidade bullet de 28 anos (vencimento integral em Junho de 2053). Na década 2025–2035, o encargo anual com o USPP é estritamente o cupão fixo de 5,75% (€12,94M/ano), sem amortização de capital. Os juros das duas obrigações de retalho ativas somam €4,98M/ano (€2,88M da emissão 2024-2027 e €2,10M da 2024-2028, conforme Nota 33 do RC), totalizando um serviço de juros de €17,92M/ano. As únicas amortizações de capital nesta década correspondem aos reembolsos de retalho: €50M em 2027/28 (Sporting SAD 2024-2027) e €40M em 2028/29 (Sporting SAD 2024-2028)."
+              : "The €225M institutional USPP bond features a 28-year bullet maturity (due June 2053). Throughout the 2025–2035 decade, the annual cash impact from the USPP is exclusively the fixed 5.75% coupon (€12.94M/year), with zero principal amortization. Coupons on active retail bonds contribute an additional €4.98M/year (€2.88M for 2024-2027 and €2.10M for 2024-2028, per audited Note 33), bringing total annual interest service to €17.92M/year. The only principal redemptions this decade are the retail bonds: €50M in 2027/28 (Sporting SAD 2024-2027) and €40M in 2028/29 (Sporting SAD 2024-2028)."}
           </span>
         </div>
       </div>
@@ -294,7 +294,7 @@ export function DebtMaturityTracker() {
                         >
                           {row.year === 2028
                             ? (isPt ? "Obrig. 2024-2027 (€50M)" : "Retail 2024-2027 (€50M)")
-                            : (isPt ? "Obrig. 2025-2028 (€40M)" : "Retail 2025-2028 (€40M)")}
+                            : (isPt ? "Obrig. 2024-2028 (€40M)" : "Retail 2024-2028 (€40M)")}
                         </span>
                       )}
                     </td>

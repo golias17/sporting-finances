@@ -107,7 +107,7 @@ describe("DebtMaturityTracker Component", () => {
     expect(usppBtn).toHaveClass("active");
 
     const bankingBtn = screen.getByRole("button", {
-      name: /Banca & Papel Comercial/i,
+      name: /Obrigações de Retalho & Banca/i,
     });
     fireEvent.click(bankingBtn);
     expect(bankingBtn).toHaveClass("active");

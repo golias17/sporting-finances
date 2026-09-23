@@ -90,13 +90,13 @@ describe("PublicBonds", () => {
     render(<PublicBonds />);
 
     // Check KPIs
-    expect(screen.getByText("€90.3M")).toBeInTheDocument();
-    expect(screen.getByText("5.47%")).toBeInTheDocument();
+    expect(screen.getByText("€90.0M")).toBeInTheDocument();
+    expect(screen.getByText("5.53%")).toBeInTheDocument();
     expect(screen.getByText("100%")).toBeInTheDocument();
 
     // Active issues present
     expect(screen.getByText("Sporting SAD 2024-2027")).toBeInTheDocument();
-    expect(screen.getByText("Sporting SAD 2025-2028")).toBeInTheDocument();
+    expect(screen.getByText("Sporting SAD 2024-2028")).toBeInTheDocument();
 
     // Switch to repaid issues
     const repaidBtn = screen.getByText(/Emissões Reembolsadas/i);
@@ -107,7 +107,7 @@ describe("PublicBonds", () => {
     // Switch to all issues
     const allBtn = screen.getByText(/Todas as Emissões/i);
     fireEvent.click(allBtn);
-    expect(screen.getByText("Sporting SAD 2025-2028")).toBeInTheDocument();
+    expect(screen.getByText("Sporting SAD 2024-2028")).toBeInTheDocument();
     expect(screen.getByText("Sporting SAD 2014-2017")).toBeInTheDocument();
   });
 
@@ -116,7 +116,7 @@ describe("PublicBonds", () => {
     const { PublicBonds } = await import("../../src/features/bonds/PublicBonds.js");
     render(<PublicBonds />);
 
-    expect(screen.getByText("Active Issues (€90.3M)")).toBeInTheDocument();
+    expect(screen.getByText("Active Issues (€90.0M)")).toBeInTheDocument();
     expect(screen.getByText("Repaid Issues (€96.4M)")).toBeInTheDocument();
   });
 });
