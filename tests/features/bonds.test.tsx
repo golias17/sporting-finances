@@ -78,3 +78,89 @@ describe("LionFinance", () => {
     expect(screen.getAllByText(/Lion Finance/i).length).toBeGreaterThan(0);
   });
 });
+
+describe("PublicBonds", () => {
+  beforeEach(() => {
+    state.setIsPt(true);
+  });
+
+  it("renders active retail bonds by default and switches filters", async () => {
+    const { PublicBonds } = await import("../../src/features/bonds/PublicBonds.js");
+    const { fireEvent } = await import("@testing-library/react");
+    render(<PublicBonds />);
+
+    // Check KPIs
+    expect(screen.getByText("€90.3M")).toBeInTheDocument();
+    expect(screen.getByText("5.47%")).toBeInTheDocument();
+    expect(screen.getByText("100%")).toBeInTheDocument();
+
+    // Active issues present
+    expect(screen.getByText("Sporting SAD 2024-2027")).toBeInTheDocument();
+    expect(screen.getByText("Sporting SAD 2025-2028")).toBeInTheDocument();
+
+    // Switch to repaid issues
+    const repaidBtn = screen.getByText(/Emissões Reembolsadas/i);
+    fireEvent.click(repaidBtn);
+    expect(screen.getByText("Sporting SAD 2021-2024")).toBeInTheDocument();
+    expect(screen.getByText("Sporting SAD 2018-2021")).toBeInTheDocument();
+
+    // Switch to all issues
+    const allBtn = screen.getByText(/Todas as Emissões/i);
+    fireEvent.click(allBtn);
+    expect(screen.getByText("Sporting SAD 2025-2028")).toBeInTheDocument();
+    expect(screen.getByText("Sporting SAD 2014-2017")).toBeInTheDocument();
+  });
+
+  it("renders correctly in English", async () => {
+    state.setIsPt(false);
+    const { PublicBonds } = await import("../../src/features/bonds/PublicBonds.js");
+    render(<PublicBonds />);
+
+    expect(screen.getByText("Active Issues (€90.3M)")).toBeInTheDocument();
+    expect(screen.getByText("Repaid Issues (€96.4M)")).toBeInTheDocument();
+  });
+});
+
+describe("VmocCost", () => {
+  beforeEach(() => {
+    state.setIsPt(true);
+    state.setDataset({
+      annual_data: [
+        {
+          label: "2019/20",
+          financial_result: -20000,
+        },
+        {
+          label: "2024/25",
+          financial_result: -25000,
+        },
+        {
+          label: "2025/26",
+          financial_result: -15000,
+        },
+      ] as any,
+    });
+  });
+
+  it("renders VmocCost without error and includes dynamic caption and peak cost", async () => {
+    const { VmocCost } = await import("../../src/features/bonds/VmocCost.js");
+    render(<VmocCost />);
+
+    expect(
+      screen.getByText(/Custo finan\. líquido total · Era VMOC/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Custo de financiamento líquido por época/i),
+    ).toBeInTheDocument();
+  });
+
+  it("renders VmocCost in English", async () => {
+    state.setIsPt(false);
+    const { VmocCost } = await import("../../src/features/bonds/VmocCost.js");
+    render(<VmocCost />);
+
+    expect(
+      screen.getByText(/Total net financing cost · VMOC era/i),
+    ).toBeInTheDocument();
+  });
+});

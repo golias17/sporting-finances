@@ -464,7 +464,12 @@ export function StressTestingSimulator() {
 
         {showTable && (
           <div className="table-wrap">
-            <div className="scroll-x">
+            <div
+              className="scroll-x"
+              tabIndex={0}
+              role="region"
+              aria-label={t("stress_section_h3") || "Stress testing trajectory table"}
+            >
               <table className="data-table">
                 <thead>
                   <tr>

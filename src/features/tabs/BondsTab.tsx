@@ -1,5 +1,11 @@
 import React, { useMemo } from "react";
-import { VmocCost, LionFinance, UsppTerms, DebtMaturityTracker } from "../Bonds";
+import {
+  VmocCost,
+  LionFinance,
+  PublicBonds,
+  UsppTerms,
+  DebtMaturityTracker,
+} from "../Bonds";
 import { ChartCard } from "../../components/ChartCard.js";
 import { useAppState, state } from "../../core/state.js";
 import { useChartLabels } from "../../charts/chartHooks.js";
@@ -11,6 +17,10 @@ export const BondsTab = React.memo(function BondsTab() {
   const isPt = useAppState((s) => s.isPt);
   const annual = useAppState((s) => s.annual);
   const labels = useChartLabels();
+
+  const firstSeason = labels[0] || "2010/11";
+  const lastSeason = labels[labels.length - 1] || "2025/26";
+  const financingPeriodTag = `${firstSeason} → ${lastSeason}`;
 
   // Financing Cost Evolution — total borrowings (NC + C) over time
   const financingData = useMemo(
@@ -112,7 +122,7 @@ export const BondsTab = React.memo(function BondsTab() {
       <ChartCard
         id="chartFinancingCost"
         title={<T as="h3" i18nKey="ch05-uspp-h3" />}
-        tag={<span className="tag">VMOC Evolution</span>}
+        tag={<span className="tag">{financingPeriodTag}</span>}
         desc={<T as="p" className="desc" i18nKey="ch05-uspp-desc" />}
         chartType="line"
         data={financingData}
@@ -144,6 +154,9 @@ export const BondsTab = React.memo(function BondsTab() {
         <T as="p" className="desc" i18nKey="ch05-summary-desc" />
         <LionFinance />
       </div>
+
+      {/* Public Retail Bonds (Empréstimos Obrigacionistas) */}
+      <PublicBonds />
       {/* USPP narrative + key terms */}
       <div className="narrative narrative--spaced">
         <T as="h4" i18nKey="ch05-impact-h4" />

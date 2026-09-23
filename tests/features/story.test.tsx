@@ -129,7 +129,7 @@ describe("Story Component", () => {
     act(() => {
       vi.runAllTimers();
     });
-    expect(useAppState.getState().storyIndex).toBe(5);
+    expect(useAppState.getState().storyIndex).toBe(6);
   });
 
   it("should handle startStory with custom index", () => {

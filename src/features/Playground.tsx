@@ -943,7 +943,13 @@ export function Playground() {
             <span className="tag">{isPt ? "Auditoria" : "Audit"}</span>
           </div>
 
-          <div className="table-wrap scroll-x" style={{ marginTop: "10px" }}>
+          <div
+            className="table-wrap scroll-x"
+            style={{ marginTop: "10px" }}
+            tabIndex={0}
+            role="region"
+            aria-label={isPt ? "Demonstração de resultados projetada" : "Projected income statement"}
+          >
             <table className="data">
               <thead>
                 <tr>

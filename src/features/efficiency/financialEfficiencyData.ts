@@ -29,6 +29,7 @@ export const SPORTING_PERFORMANCE: Record<"sporting" | "benfica" | "porto", Spor
     { season: "2022/23", points: 74, position: 4, leagues: 0, tacaPortugal: 0, tacaLiga: 0, supertaca: 0, european: 0, totalTitles: 0 },
     { season: "2023/24", points: 90, position: 1, leagues: 1, tacaPortugal: 0, tacaLiga: 0, supertaca: 0, european: 0, totalTitles: 1 },
     { season: "2024/25", points: 82, position: 1, leagues: 1, tacaPortugal: 0, tacaLiga: 0, supertaca: 0, european: 0, totalTitles: 1 },
+    { season: "2025/26", points: 82, position: 2, leagues: 0, tacaPortugal: 0, tacaLiga: 0, supertaca: 0, european: 0, totalTitles: 0 },
   ],
   benfica: [
     { season: "2010/11", points: 63, position: 2, leagues: 0, tacaPortugal: 0, tacaLiga: 1, supertaca: 0, european: 0, totalTitles: 1 },
@@ -46,6 +47,7 @@ export const SPORTING_PERFORMANCE: Record<"sporting" | "benfica" | "porto", Spor
     { season: "2022/23", points: 87, position: 1, leagues: 1, tacaPortugal: 0, tacaLiga: 0, supertaca: 0, european: 0, totalTitles: 1 },
     { season: "2023/24", points: 80, position: 2, leagues: 0, tacaPortugal: 0, tacaLiga: 0, supertaca: 1, european: 0, totalTitles: 1 },
     { season: "2024/25", points: 78, position: 2, leagues: 0, tacaPortugal: 0, tacaLiga: 0, supertaca: 0, european: 0, totalTitles: 0 },
+    { season: "2025/26", points: 80, position: 3, leagues: 0, tacaPortugal: 0, tacaLiga: 0, supertaca: 1, european: 0, totalTitles: 1 },
   ],
   porto: [
     { season: "2010/11", points: 84, position: 1, leagues: 1, tacaPortugal: 1, tacaLiga: 0, supertaca: 1, european: 1, totalTitles: 4 },
@@ -108,21 +110,35 @@ export function computeEfficiencySeries(
 
   for (let i = 0; i < sportingFin.length; i++) {
     const scpFin = sportingFin[i];
-    const slbFin = benficaFin[i] || scpFin;
-    const fcpFin = portoFin[i] || scpFin;
-
     const season = scpFin.season;
-    const scpPerf = SPORTING_PERFORMANCE.sporting.find((p) => p.season === season || p.season.includes(season.slice(-2))) || SPORTING_PERFORMANCE.sporting[i];
-    const slbPerf = SPORTING_PERFORMANCE.benfica.find((p) => p.season === season || p.season.includes(season.slice(-2))) || SPORTING_PERFORMANCE.benfica[i];
-    const fcpPerf = SPORTING_PERFORMANCE.porto.find((p) => p.season === season || p.season.includes(season.slice(-2))) || SPORTING_PERFORMANCE.porto[i];
+
+    const slbFin =
+      benficaFin.find((f) => f.season === season || f.label === season) ||
+      benficaFin[i];
+    const fcpFin =
+      portoFin.find((f) => f.season === season || f.label === season) ||
+      (portoFin[i]?.season === season ? portoFin[i] : undefined);
+
+    const scpPerf =
+      SPORTING_PERFORMANCE.sporting.find(
+        (p) => p.season === season || p.season.includes(season.slice(-2)),
+      ) || SPORTING_PERFORMANCE.sporting[i];
+    const slbPerf =
+      SPORTING_PERFORMANCE.benfica.find(
+        (p) => p.season === season || p.season.includes(season.slice(-2)),
+      ) || (slbFin ? SPORTING_PERFORMANCE.benfica[i] : undefined);
+    const fcpPerf =
+      SPORTING_PERFORMANCE.porto.find(
+        (p) => p.season === season || p.season.includes(season.slice(-2)),
+      ) || (fcpFin ? SPORTING_PERFORMANCE.porto[i] : undefined);
 
     const scpSpend = computeFootballSpending(scpFin) / 1000; // in €M
-    const slbSpend = computeFootballSpending(slbFin) / 1000;
-    const fcpSpend = computeFootballSpending(fcpFin) / 1000;
+    const slbSpend = slbFin ? computeFootballSpending(slbFin) / 1000 : 0;
+    const fcpSpend = fcpFin ? computeFootballSpending(fcpFin) / 1000 : 0;
 
-    const scpPoints = scpPerf?.points || 75;
-    const slbPoints = slbPerf?.points || 75;
-    const fcpPoints = fcpPerf?.points || 75;
+    const scpPoints = scpPerf?.points || (scpSpend > 0 ? 75 : 0);
+    const slbPoints = slbPerf?.points || (slbSpend > 0 ? 75 : 0);
+    const fcpPoints = fcpPerf?.points || (fcpSpend > 0 ? 75 : 0);
 
     result.push({
       season,
@@ -147,15 +163,15 @@ export function computeCycleEfficiencySummary(
   portoFin: FinancialRecord[],
   window: "all" | "last5" | "last3" = "all",
 ): Record<"sporting" | "benfica" | "porto", ClubCycleSummary> {
-  const count = window === "last3" ? 3 : window === "last5" ? 5 : 15;
+  const count = window === "last3" ? 3 : window === "last5" ? 5 : undefined;
 
-  const scpSlice = sportingFin.slice(-count);
-  const slbSlice = benficaFin.slice(-count);
-  const fcpSlice = portoFin.slice(-count);
+  const scpSlice = count ? sportingFin.slice(-count) : sportingFin;
+  const slbSlice = count ? benficaFin.slice(-count) : benficaFin;
+  const fcpSlice = count ? portoFin.slice(-count) : portoFin;
 
-  const scpPerfSlice = SPORTING_PERFORMANCE.sporting.slice(-count);
-  const slbPerfSlice = SPORTING_PERFORMANCE.benfica.slice(-count);
-  const fcpPerfSlice = SPORTING_PERFORMANCE.porto.slice(-count);
+  const scpPerfSlice = count ? SPORTING_PERFORMANCE.sporting.slice(-count) : SPORTING_PERFORMANCE.sporting;
+  const slbPerfSlice = count ? SPORTING_PERFORMANCE.benfica.slice(-count) : SPORTING_PERFORMANCE.benfica;
+  const fcpPerfSlice = count ? SPORTING_PERFORMANCE.porto.slice(-count) : SPORTING_PERFORMANCE.porto;
 
   const calcClub = (
     clubKey: "sporting" | "benfica" | "porto",

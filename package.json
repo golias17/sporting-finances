@@ -1,7 +1,7 @@
 {
   "name": "sporting-finances",
   "version": "1.0.0",
-  "description": "An interactive, high-fidelity single-page application dashboard tracing the financial evolution of **Sporting Clube de Portugal - Futebol, SAD** over the last 13 fiscal years.",
+  "description": "An interactive, high-fidelity single-page application dashboard tracing the financial evolution of **Sporting Clube de Portugal - Futebol, SAD** over 16 fiscal years (2010/11–2025/26).",
   "private": true,
   "scripts": {
     "dev": "vite",

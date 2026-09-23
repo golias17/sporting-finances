@@ -66,9 +66,11 @@ export async function exportFinancialsExcel(isPt = true): Promise<void> {
   // ==========================================
   // SHEET 1: DEMONSTRAÇÃO DE RESULTADOS (INCOME STATEMENT)
   // ==========================================
+  const endSeason = annual[annual.length - 1]?.label || "2025/26";
+
   const isTitle = isPt
-    ? "Sporting Clube de Portugal - Futebol, SAD | Demonstração de Resultados (2010/11 a 2024/25)"
-    : "Sporting Clube de Portugal - Futebol, SAD | Consolidated Income Statement (2010/11 to 2024/25)";
+    ? `Sporting Clube de Portugal - Futebol, SAD | Demonstração de Resultados (2010/11 a ${endSeason})`
+    : `Sporting Clube de Portugal - Futebol, SAD | Consolidated Income Statement (2010/11 to ${endSeason})`;
 
   const isHeaders = isPt
     ? [
@@ -160,8 +162,8 @@ export async function exportFinancialsExcel(isPt = true): Promise<void> {
   // SHEET 2: BALANÇO & DÍVIDA (BALANCE SHEET & DEBT)
   // ==========================================
   const bsTitle = isPt
-    ? "Sporting Clube de Portugal - Futebol, SAD | Balanço & Posição Financeira (2010/11 a 2024/25)"
-    : "Sporting Clube de Portugal - Futebol, SAD | Consolidated Balance Sheet & Debt (2010/11 to 2024/25)";
+    ? `Sporting Clube de Portugal - Futebol, SAD | Balanço & Posição Financeira (2010/11 a ${endSeason})`
+    : `Sporting Clube de Portugal - Futebol, SAD | Consolidated Balance Sheet & Debt (2010/11 to ${endSeason})`;
 
   const bsHeaders = isPt
     ? [
@@ -348,9 +350,13 @@ export async function exportFinancialsExcel(isPt = true): Promise<void> {
   // ==========================================
   // SHEET 4: BENCHMARK DOS TRÊS GRANDES (RIVALS COMPARISON)
   // ==========================================
+  const firstSeason = annual[0]?.label || annual[0]?.season || "2010/11";
+  const latestSeason = annual[annual.length - 1]?.label || annual[annual.length - 1]?.season || "2025/26";
+  const seasonCount = annual.length || 16;
+
   const bmTitle = isPt
-    ? "Benchmark Consolidado dos Três Grandes (15 Épocas: 2010/11 a 2024/25)"
-    : "Consolidated Big Three Benchmark (15 Seasons: 2010/11 to 2024/25)";
+    ? `Benchmark Consolidado dos Três Grandes (${seasonCount} Épocas: ${firstSeason} a ${latestSeason})`
+    : `Consolidated Big Three Benchmark (${seasonCount} Seasons: ${firstSeason} to ${latestSeason})`;
 
   const bmHeaders = isPt
     ? [
@@ -359,10 +365,10 @@ export async function exportFinancialsExcel(isPt = true): Promise<void> {
         "Gastos com Pessoal Acumulados (€M)",
         "Saldo Trading Passes (€M)",
         "Resultado Líquido Acumulado (€M)",
-        "Ativo Atual 2024/25 (€M)",
-        "Passivo Atual 2024/25 (€M)",
-        "Dívida Financeira 2024/25 (€M)",
-        "Capitais Próprios 2024/25 (€M)",
+        "Ativo Mais Recente (€M)",
+        "Passivo Mais Recente (€M)",
+        "Dívida Financeira Recente (€M)",
+        "Capitais Próprios Recentes (€M)",
       ]
     : [
         "Club",
@@ -370,10 +376,10 @@ export async function exportFinancialsExcel(isPt = true): Promise<void> {
         "Cumulative Wage Bill (€M)",
         "Cumulative Player Trading Net (€M)",
         "Cumulative Net Result (€M)",
-        "Total Assets 2024/25 (€M)",
-        "Total Liabilities 2024/25 (€M)",
-        "Total Borrowings 2024/25 (€M)",
-        "Shareholders' Equity 2024/25 (€M)",
+        "Latest Total Assets (€M)",
+        "Latest Total Liabilities (€M)",
+        "Latest Total Borrowings (€M)",
+        "Latest Shareholders' Equity (€M)",
       ];
 
   const calcClubTotals = (data: FinancialRecord[]) => {

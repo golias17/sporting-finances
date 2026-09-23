@@ -83,8 +83,8 @@ export function UsppTerms() {
       label: isPt ? "Data de fecho" : "Closing date",
       value: isPt ? "22 Out 2025" : "Oct 22, 2025",
       note: isPt
-        ? "Agendado após confirmação de capitais próprios de +41 M€ nos resultados anuais de 24/25"
-        : "Timed after 24/25 annual results confirmed equity at +€41M",
+        ? "Agendado após confirmação de capitais próprios de +41 M€ nos resultados anuais de 2024/25"
+        : "Timed after 2024/25 annual results confirmed equity at +€41M",
       highlight: false,
     },
   ];

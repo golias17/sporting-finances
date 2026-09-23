@@ -1,6 +1,6 @@
 {
   "ch01-equity-desc": {
-    "text": "De -€119M (insolvente em substância) a +€41M, com duas conversões de dívida em capital pelo caminho.",
+    "text": "De -€119M (insolvente em substância) a +€76M, com duas conversões de dívida em capital pelo caminho.",
     "isAria": false,
     "innerHTML": false
   },
@@ -15,7 +15,7 @@
     "innerHTML": false
   },
   "ch01-h2": {
-    "text": "A forma de <em>quinze anos</em>.",
+    "text": "A trajetória <em>histórica</em>.",
     "isAria": false,
     "innerHTML": true
   },
@@ -30,12 +30,12 @@
     "innerHTML": true
   },
   "ch01-hero-h3": {
-    "text": "📊 A história de 15 anos num só gráfico",
+    "text": "📊 O percurso financeiro num só gráfico",
     "isAria": false,
     "innerHTML": false
   },
   "ch01-hero-sub": {
-    "text": "Uma jornada de 15 anos no Sporting Clube de Portugal — através de uma reestruturação de capital, um ataque à Academia, um título em estádio vazio, duas conversões de obrigações e uma emissão de €225M com grau de investimento. Dados anuais extraídos diretamente dos relatórios oficiais da Sporting SAD.",
+    "text": "Uma jornada desde 2010 na Sporting SAD — através de uma reestruturação de capital, um ataque à Academia, títulos de campeão, duas conversões de obrigações e uma emissão de €225M com grau de investimento. Dados anuais extraídos diretamente dos relatórios oficiais da Sporting SAD.",
     "isAria": false,
     "innerHTML": false
   },
@@ -55,7 +55,7 @@
     "innerHTML": false
   },
   "ch01-narrative-p1": {
-    "text": "Em 2013, a Sporting SAD estava tecnicamente insolvente — capital próprio negativo de €119M, passivo corrente 7× o ativo corrente, caixa de apenas €1,3M e sem futebol europeu. Em 2025, o clube tem títulos consecutivos, valor de mercado do plantel de €474M, capital próprio de +€41M e uma emissão privada de €225M a 28 anos a 5,75% com notação de grau de investimento.",
+    "text": "Em 2013, a Sporting SAD estava tecnicamente insolvente — capital próprio negativo de €119M, passivo corrente 7× o ativo corrente, caixa de apenas €1,3M e sem futebol europeu. Em 2026, com o exercício 2025/26 fechado, a SAD atinge receitas operacionais recorde de €188M (€300M de volume de negócios total), capital próprio de +€76M e consolidou o financiamento com a histórica emissão privada USPP de €225M a 28 anos com notação de grau de investimento.",
     "isAria": false,
     "innerHTML": false
   },
@@ -485,7 +485,7 @@
     "innerHTML": false
   },
   "ch05-lede": {
-    "text": "Três instrumentos, uma década de recuperação. As VMOCs de 2014 compraram tempo — convertendo €135M de dívida em capital. As titularizações Lion Finance (2019-2025) monetizaram os direitos de TV para reestruturar a dívida bancária. O USPP de 2025 fechou o capítulo, assegurando 28 anos de financiamento com grau de investimento.",
+    "text": "Da reestruturação à maturidade institucional: as VMOCs (2014) compraram tempo ao converter €135M de dívida em capital; as titularizações Lion Finance (2019–2025) anteciparam receitas televisivas; as emissões de obrigações de retalho (€90,3M) e o USPP histórico (€225M a 28 anos) consolidaram a autonomia financeira da SAD.",
     "isAria": false,
     "innerHTML": false
   },
@@ -750,7 +750,7 @@
     "innerHTML": false
   },
   "ch08-cumulative-label": {
-    "text": "Total Acumulado (15 Épocas):",
+    "text": "Total Acumulado:",
     "isAria": false,
     "innerHTML": false
   },
@@ -780,7 +780,7 @@
     "innerHTML": true
   },
   "ch08-lede": {
-    "text": "Análise financeira comparativa entre Sporting CP, SL Benfica e FC Porto ao longo de 15 épocas (2010/11 → 2024/25), com dados extraídos dos Relatórios & Contas consolidados apresentados à CMVM e avaliações do Transfermarkt.",
+    "text": "Análise financeira comparativa entre Sporting CP, SL Benfica e FC Porto desde 2010/11, com dados extraídos dos Relatórios & Contas consolidados oficiais apresentados à CMVM e avaliações do Transfermarkt.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1440,12 +1440,12 @@
     "innerHTML": true
   },
   "footer-meta": {
-    "text": "Dossier · 2010/11 → 2024/25<br/> Período findo em 30 de junho de 2025<br/> Euronext Lisbon · SCP",
+    "text": "Dossier · 2010/11 → 2025/26<br/> Período findo em 30 de junho de 2026<br/> Euronext Lisbon · SCP",
     "isAria": false,
     "innerHTML": true
   },
   "hero-eyebrow": {
-    "text": "Dossier Financeiro · 2010 → 2025",
+    "text": "Dossier Financeiro · 2010 → 2026",
     "isAria": false,
     "innerHTML": false
   },
@@ -1565,7 +1565,7 @@
     "innerHTML": false
   },
   "story-launch-quote": {
-    "text": "De <em class=\"neg\">−€119M</em> a <em class=\"pos\">+€41M</em>.<br/>quinze anos fiscais, contados num só gráfico.",
+    "text": "De <em class=\"neg\">−€119M</em> a <em class=\"pos\">+€76M</em>.<br/>dezasseis anos fiscais, contados num só gráfico.",
     "isAria": false,
     "innerHTML": true
   },
@@ -1844,6 +1844,51 @@
     "isAria": false,
     "innerHTML": false
   },
+  "bonds_retail_h3": {
+    "text": "Empréstimos Obrigacionistas de Retalho",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "bonds_retail_tag": {
+    "text": "Euronext Lisbon",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "bonds_retail_desc": {
+    "text": "Emissões públicas de obrigações distribuídas junto de sócios, adeptos e investidores de retalho, cotadas no mercado regulado com taxa fixa e cupão semestral.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "bonds_kpi_active_total": {
+    "text": "Dívida Obrigacionista Ativa",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "bonds_kpi_avg_coupon": {
+    "text": "Taxa Média Ponderada",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "bonds_kpi_next_maturity": {
+    "text": "Próxima Maturidade",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "bonds_kpi_track_record": {
+    "text": "Histórico de Reembolso",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "bonds_retail_vs_uspp_title": {
+    "text": "Sinergia Estratégica: Obrigações de Retalho vs USPP Institucional",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "bonds_retail_vs_uspp_desc": {
+    "text": "A SAD combina dois perfis complementares de dívida: o USPP norte-americano a 28 anos (grau de investimento BBB-) confere estabilidade estrutural ultra-longa, enquanto os empréstimos obrigacionistas de 3 anos mantêm a proximidade aos sócios e a diversificação de tesouraria no mercado doméstico.",
+    "isAria": false,
+    "innerHTML": false
+  },
   "dmt_h3": {
     "text": "Calendário de Vencimentos & Serviço da Dívida (2025 → 2035)",
     "isAria": false,
@@ -2070,7 +2115,7 @@
     "innerHTML": false
   },
   "eff_section_desc": {
-    "text": "Cruzamento da despesa total com o futebol (massa salarial, amortização de passes e comissões) com os pontos conquistados na Primeira Liga e os troféus oficiais ganhos nas 15 épocas.",
+    "text": "Cruzamento da despesa total com o futebol (massa salarial, amortização de passes e comissões) com os pontos conquistados na Primeira Liga e os troféus oficiais ganhos ao longo do histórico oficial.",
     "isAria": false,
     "innerHTML": false
   },
@@ -2100,7 +2145,7 @@
     "innerHTML": false
   },
   "eff_chart_tag": {
-    "text": "Benchmark 15 Épocas",
+    "text": "Benchmark Histórico",
     "isAria": false,
     "innerHTML": false
   },
@@ -2165,7 +2210,7 @@
     "innerHTML": false
   },
   "eff_verdict_p1": {
-    "text": "No ciclo 2020-2025, o Sporting CP registou a maior eficiência desportiva e financeira entre os Três Grandes, conquistando 3 Campeonatos e 7 troféus oficiais com um custo por ponto significativamente inferior ao dos rivais.",
+    "text": "No ciclo desportivo recente, o Sporting CP registou a maior eficiência desportiva e financeira entre os Três Grandes, aliando títulos de campeão e troféus oficiais com um custo por ponto significativamente inferior ao dos rivais.",
     "isAria": false,
     "innerHTML": false
   },

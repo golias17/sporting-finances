@@ -12,7 +12,18 @@ export function ordinal(n: number) {
 export function getLatestH1Data(dataset: FinancialDataset | null) {
   if (!dataset) return null;
   const h1Key = Object.keys(dataset).find((k) => k.startsWith("h1_"));
-  return h1Key ? (dataset as any)[h1Key] : null;
+  if (!h1Key) return null;
+  const h1 = (dataset as any)[h1Key];
+  if (!h1) return null;
+  const latestAnnual = dataset.annual_data?.[dataset.annual_data.length - 1];
+  if (
+    latestAnnual?.year_end &&
+    h1.period_end &&
+    latestAnnual.year_end >= h1.period_end
+  ) {
+    return null;
+  }
+  return h1;
 }
 
 // -----------------------------------------------------------------
