@@ -124,4 +124,15 @@ export const STORY_STEPS = [
       pt: "Bicampeão nacional e recorde histórico de receitas operacionais de 148 M€ — mais 130% face a cinco anos antes. Capitais próprios positivos pelo terceiro ano consecutivo (+41 M€), o rácio salarial mais saudável da década (59%) e a histórica emissão obrigacionista USPP com rating de grau de investimento da Fitch e DBRS. A recuperação está concluída.",
     },
   },
+  {
+    season: "2025/26",
+    title: {
+      en: "The €300M Era",
+      pt: "A Era dos 300 M€",
+    },
+    narrative: {
+      en: "Record total turnover of €300M, record net profit of €34.7M (+74%), and historic Champions League quarter-finals delivering €80.3M in UEFA revenue. Record transfer of Viktor Gyökeres to Arsenal, USPP 28-year financing concluded, and shareholders' equity climbing to €75.6M.",
+      pt: "Volume de negócios recorde de 300 M€, resultado líquido histórico de 34,7 M€ (+74%) e histórico apuramento para os quartos-de-final da Liga dos Campeões com 80,3 M€ em receitas UEFA. Venda recorde de Viktor Gyökeres ao Arsenal, conclusão do financiamento USPP a 28 anos e capitais próprios a atingir os 75,6 M€.",
+    },
+  },
 ];

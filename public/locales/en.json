@@ -1,6 +1,6 @@
 {
   "ch01-equity-desc": {
-    "text": "From -€119M (insolvent in substance) to +€41M, with two debt-to-equity conversions along the way.",
+    "text": "From -€119M (insolvent in substance) to +€76M, with two debt-to-equity conversions along the way.",
     "isAria": false,
     "innerHTML": false
   },
@@ -15,7 +15,7 @@
     "innerHTML": false
   },
   "ch01-h2": {
-    "text": "The shape of <em>fifteen years</em>.",
+    "text": "The <em>historical trajectory</em>.",
     "isAria": false,
     "innerHTML": true
   },
@@ -30,12 +30,12 @@
     "innerHTML": true
   },
   "ch01-hero-h3": {
-    "text": "📊 The 15-year story in one chart",
+    "text": "📊 The financial journey in one chart",
     "isAria": false,
     "innerHTML": false
   },
   "ch01-hero-sub": {
-    "text": "A 15-year journey at Sporting Clube de Portugal — through a capital restructuring, a training-ground attack, an empty-stadium league title, two bond conversions, and a €225M investment-grade placement. Annual data drawn directly from official Sporting SAD reports.",
+    "text": "A journey from 2010 to the present at Sporting SAD — through a capital restructuring, a training-ground attack, league titles, two bond conversions, and a €225M investment-grade placement. Annual data drawn directly from official Sporting SAD reports.",
     "isAria": false,
     "innerHTML": false
   },
@@ -55,7 +55,7 @@
     "innerHTML": false
   },
   "ch01-narrative-p1": {
-    "text": "In 2013, Sporting SAD was technically insolvent — negative equity of €119M, current liabilities at 7× current assets, cash of just €1.3M, and no European football. By 2025, the club has back-to-back league titles, a €474M squad market value, equity of +€41M, and just secured a €225M 28-year private bond at 5.75% with investment-grade ratings.",
+    "text": "In 2013, Sporting SAD was technically insolvent — negative equity of €119M, current liabilities at 7× current assets, cash of just €1.3M, and no European football. By 2026, with the 2025/26 fiscal year closed, the SAD achieved record operating revenues of €188M (€300M total turnover), equity of +€76M, and consolidated the historic €225M 28-year USPP bond with investment-grade ratings.",
     "isAria": false,
     "innerHTML": false
   },
@@ -485,7 +485,7 @@
     "innerHTML": false
   },
   "ch05-lede": {
-    "text": "Three instruments, one decade of recovery. The VMOCs of 2014 bought time — converting €135M of debt into equity. Lion Finance securitizations (2019–2025) monetised TV rights to restructure the bank debt. The USPP of 2025 closed the chapter, locking in 28 years of investment-grade financing.",
+    "text": "From emergency restructuring to institutional maturity: VMOCs (2014) bought time by converting €135M of debt into equity; Lion Finance securitizations (2019–2025) leveraged TV revenues; retail bond issues (€90.3M) and the landmark USPP (€225M over 28 years) sealed the club's financial autonomy.",
     "isAria": false,
     "innerHTML": false
   },
@@ -750,7 +750,7 @@
     "innerHTML": false
   },
   "ch08-cumulative-label": {
-    "text": "15-Year Cumulative Total:",
+    "text": "Cumulative Total:",
     "isAria": false,
     "innerHTML": false
   },
@@ -780,7 +780,7 @@
     "innerHTML": true
   },
   "ch08-lede": {
-    "text": "Direct financial comparison across Sporting CP, SL Benfica, and FC Porto over 15 seasons (2010/11 → 2024/25), sourced from official CMVM consolidated filings and Transfermarkt.",
+    "text": "Direct financial comparison across Sporting CP, SL Benfica, and FC Porto since 2010/11, sourced from official CMVM consolidated filings and Transfermarkt.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1440,12 +1440,12 @@
     "innerHTML": true
   },
   "footer-meta": {
-    "text": "Dossier · 2010/11 → 2024/25<br/> Period ended 30 June 2025<br/> Euronext Lisbon · SCP",
+    "text": "Dossier · 2010/11 → 2025/26<br/> Period ended 30 June 2026<br/> Euronext Lisbon · SCP",
     "isAria": false,
     "innerHTML": true
   },
   "hero-eyebrow": {
-    "text": "A Financial Dossier · 2010 → 2025",
+    "text": "A Financial Dossier · 2010 → 2026",
     "isAria": false,
     "innerHTML": false
   },
@@ -1565,7 +1565,7 @@
     "innerHTML": false
   },
   "story-launch-quote": {
-    "text": "From <em class=\"neg\">−€119M</em> to <em class=\"pos\">+€41M</em>.<br />Fifteen fiscal years, told in one chart.",
+    "text": "From <em class=\"neg\">−€119M</em> to <em class=\"pos\">+€76M</em>.<br />Sixteen fiscal years, told in one chart.",
     "isAria": false,
     "innerHTML": true
   },
@@ -1844,6 +1844,51 @@
     "isAria": false,
     "innerHTML": false
   },
+  "bonds_retail_h3": {
+    "text": "Public Retail Bond Issues",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "bonds_retail_tag": {
+    "text": "Euronext Lisbon",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "bonds_retail_desc": {
+    "text": "Public retail bonds distributed among club members, supporters, and retail investors, listed on Euronext with fixed rates and semi-annual coupons.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "bonds_kpi_active_total": {
+    "text": "Active Retail Bond Debt",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "bonds_kpi_avg_coupon": {
+    "text": "Weighted Average Coupon",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "bonds_kpi_next_maturity": {
+    "text": "Next Bond Maturity",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "bonds_kpi_track_record": {
+    "text": "Redemption Track Record",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "bonds_retail_vs_uspp_title": {
+    "text": "Strategic Synergy: Retail Bonds vs Institutional USPP",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "bonds_retail_vs_uspp_desc": {
+    "text": "The SAD pairs two complementary debt profiles: the 28-year USPP (BBB- investment grade) provides ultra-long structural stability, while 3-year retail bonds preserve fan engagement and medium-term domestic liquidity diversification.",
+    "isAria": false,
+    "innerHTML": false
+  },
   "dmt_h3": {
     "text": "Debt Maturity Tracker & Repayment Schedule (2025 → 2035)",
     "isAria": false,
@@ -2070,7 +2115,7 @@
     "innerHTML": false
   },
   "eff_section_desc": {
-    "text": "Benchmarking total football spending (wage bill, player amortization, and agent commissions) against Primeira Liga points and official trophies won over 15 seasons.",
+    "text": "Benchmarking total football spending (wage bill, player amortization, and agent commissions) against Primeira Liga points and official trophies won across the official historical timeline.",
     "isAria": false,
     "innerHTML": false
   },
@@ -2100,7 +2145,7 @@
     "innerHTML": false
   },
   "eff_chart_tag": {
-    "text": "15-Season Benchmark",
+    "text": "Historical Benchmark",
     "isAria": false,
     "innerHTML": false
   },
@@ -2165,7 +2210,7 @@
     "innerHTML": false
   },
   "eff_verdict_p1": {
-    "text": "In the 2020-2025 cycle, Sporting CP delivered the highest sporting and financial efficiency among the Big Three, winning 3 League Titles and 7 official trophies with a cost per point substantially lower than rivals.",
+    "text": "In the recent cycle, Sporting CP delivered the highest sporting and financial efficiency among the Big Three, combining league championships and official trophies with a cost per point substantially lower than rivals.",
     "isAria": false,
     "innerHTML": false
   },

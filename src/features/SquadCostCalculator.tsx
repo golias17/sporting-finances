@@ -935,7 +935,13 @@ export function SquadCostCalculator() {
             <span className="tag">{isPt ? "Auditoria" : "Audit"}</span>
           </div>
 
-          <div className="table-wrap scroll-x" style={{ marginTop: "10px" }}>
+          <div
+            className="table-wrap scroll-x"
+            style={{ marginTop: "10px" }}
+            tabIndex={0}
+            role="region"
+            aria-label={isPt ? "Tabela de custos do plantel" : "Squad costs table"}
+          >
             <table className="data">
               <thead>
                 <tr>

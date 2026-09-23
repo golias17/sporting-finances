@@ -35,29 +35,30 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
     benchmarkMetrics,
   } = useCompetitiveCharts(timeWindow);
 
-  const periodTag =
-    timeWindow === "all"
-      ? "2010/11 → 2024/25"
-      : timeWindow === "last5"
-        ? isPt
-          ? "Ciclo 2020-2025 (5 Épocas)"
-          : "2020-2025 Cycle (5 Seasons)"
-        : isPt
-          ? "Últimas 3 Épocas"
-          : "Last 3 Seasons";
+  const firstSeason = labels[0] || "2010/11";
+  const lastSeason = labels[labels.length - 1] || "2025/26";
+  const seasonCount = labels.length || 16;
 
-  const periodLabel =
-    timeWindow === "all"
-      ? isPt
-        ? "15 Anos"
-        : "15-Yr"
-      : timeWindow === "last5"
-        ? isPt
-          ? "5 Anos"
-          : "5-Yr"
-        : isPt
-          ? "3 Anos"
-          : "3-Yr";
+  const periodTag = React.useMemo(() => {
+    if (timeWindow === "all") {
+      return `${firstSeason} → ${lastSeason}`;
+    }
+    if (timeWindow === "last5") {
+      return isPt
+        ? `Últimas ${seasonCount} Épocas (${firstSeason}–${lastSeason})`
+        : `Last ${seasonCount} Seasons (${firstSeason}–${lastSeason})`;
+    }
+    return isPt
+      ? `Últimas ${seasonCount} Épocas (${firstSeason}–${lastSeason})`
+      : `Last ${seasonCount} Seasons (${firstSeason}–${lastSeason})`;
+  }, [timeWindow, firstSeason, lastSeason, seasonCount, isPt]);
+
+  const periodLabel = React.useMemo(() => {
+    if (timeWindow === "all") {
+      return isPt ? `${seasonCount} Anos` : `${seasonCount}-Yr`;
+    }
+    return isPt ? `${seasonCount} Anos` : `${seasonCount}-Yr`;
+  }, [timeWindow, seasonCount, isPt]);
 
   const sportingHeroTag =
     benchmarkMetrics.sporting.net > benchmarkMetrics.benfica.net &&
@@ -424,8 +425,8 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
         <div className="card-head">
           <h3>
             {isPt
-              ? `Benchmark Consolidado dos Três Grandes (${timeWindow === "all" ? "15 Épocas" : timeWindow === "last5" ? "5 Épocas · Ciclo Amorim" : "Últimas 3 Épocas"})`
-              : `Consolidated Benchmark — Big Three (${timeWindow === "all" ? "15 Seasons" : timeWindow === "last5" ? "5 Seasons · Amorim Cycle" : "Last 3 Seasons"})`}
+              ? `Benchmark Consolidado dos Três Grandes (${timeWindow === "all" ? `${seasonCount} Épocas` : `Últimas ${seasonCount} Épocas`})`
+              : `Consolidated Benchmark — Big Three (${timeWindow === "all" ? `${seasonCount} Seasons` : `Last ${seasonCount} Seasons`})`}
           </h3>
           <span className="tag">{periodTag}</span>
         </div>
@@ -502,7 +503,9 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
               style={{ borderBottom: "none", paddingBottom: 0 }}
             >
               <span>
-                {isPt ? "Dívida Financeira Líquida" : "2024/25 Net Debt"}
+                {isPt
+                  ? `Dívida Financeira Líquida ${benchmarkMetrics.sporting.lastSeason ? `(${benchmarkMetrics.sporting.lastSeason})` : ""}`
+                  : `Net Financial Debt ${benchmarkMetrics.sporting.lastSeason ? `(${benchmarkMetrics.sporting.lastSeason})` : ""}`}
               </span>
               <span className="benchmark-club-hero__stat-val">
                 €{benchmarkMetrics.sporting.nd.toFixed(1)}M
@@ -575,7 +578,9 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
               style={{ borderBottom: "none", paddingBottom: 0 }}
             >
               <span>
-                {isPt ? "Dívida Financeira Líquida" : "2024/25 Net Debt"}
+                {isPt
+                  ? `Dívida Financeira Líquida ${benchmarkMetrics.benfica.lastSeason ? `(${benchmarkMetrics.benfica.lastSeason})` : ""}`
+                  : `Net Financial Debt ${benchmarkMetrics.benfica.lastSeason ? `(${benchmarkMetrics.benfica.lastSeason})` : ""}`}
               </span>
               <span className="benchmark-club-hero__stat-val">
                 €{benchmarkMetrics.benfica.nd.toFixed(1)}M
@@ -657,7 +662,9 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
               style={{ borderBottom: "none", paddingBottom: 0 }}
             >
               <span>
-                {isPt ? "Dívida Financeira Líquida" : "2024/25 Net Debt"}
+                {isPt
+                  ? `Dívida Financeira Líquida ${benchmarkMetrics.porto.lastSeason ? `(${benchmarkMetrics.porto.lastSeason})` : ""}`
+                  : `Net Financial Debt ${benchmarkMetrics.porto.lastSeason ? `(${benchmarkMetrics.porto.lastSeason})` : ""}`}
               </span>
               <span className="benchmark-club-hero__stat-val">
                 €{benchmarkMetrics.porto.nd.toFixed(1)}M
@@ -879,12 +886,21 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
                 </td>
               </tr>
 
-              {/* SECTION II: Current Balance Sheet 2024/25 */}
+              {/* SECTION II: Current Balance Sheet */}
               <tr className="benchmark-section-header">
-                <td colSpan={4}>
+                <td>
                   {isPt
-                    ? "II. Posição Patrimonial & Endividamento (30 de Junho de 2025)"
-                    : "II. Balance Sheet & Debt Position (June 30, 2025)"}
+                    ? "II. Posição Patrimonial & Endividamento Mais Recente"
+                    : "II. Latest Balance Sheet & Debt Position"}
+                </td>
+                <td className="col-val" style={{ fontSize: "0.75rem", opacity: 0.9, fontWeight: 600, textAlign: "right" }}>
+                  {benchmarkMetrics.sporting.lastSeason ? `RC ${benchmarkMetrics.sporting.lastSeason}` : ""}
+                </td>
+                <td className="col-val" style={{ fontSize: "0.75rem", opacity: 0.9, fontWeight: 600, textAlign: "right" }}>
+                  {benchmarkMetrics.benfica.lastSeason ? `RC ${benchmarkMetrics.benfica.lastSeason}` : ""}
+                </td>
+                <td className="col-val" style={{ fontSize: "0.75rem", opacity: 0.9, fontWeight: 600, textAlign: "right" }}>
+                  {benchmarkMetrics.porto.lastSeason ? `RC ${benchmarkMetrics.porto.lastSeason}` : ""}
                 </td>
               </tr>
               <tr>

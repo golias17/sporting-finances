@@ -1,3 +1,5 @@
+import { useAppState } from "../core/state.js";
+
 export type SocialCardFormat = "1:1" | "16:9" | "9:16";
 export type SocialCardTheme = "emerald" | "dark" | "light";
 
@@ -255,9 +257,12 @@ export async function generateSocialCardCanvas(
   ctx.font = "13px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
   ctx.fillText("sportingfinances.pt", paddingX, footerY);
 
+  const annual = useAppState.getState().annual;
+  const latestSeasonLabel =
+    annual[annual.length - 1]?.label || "2025/26";
   const centerText = isPt
-    ? "Dados Oficiais Auditados • Época 2024/25"
-    : "Official Audited Financial Data • 2024/25 Season";
+    ? `Dados Oficiais Auditados • Época ${latestSeasonLabel}`
+    : `Official Audited Financial Data • ${latestSeasonLabel} Season`;
   const centerWidth = ctx.measureText(centerText).width;
   ctx.fillText(centerText, (width - centerWidth) / 2, footerY);
 

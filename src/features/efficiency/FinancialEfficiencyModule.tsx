@@ -43,7 +43,7 @@ export function FinancialEfficiencyModule({
     return Math.max(0, cycleSummary.benfica.totalSpend - cycleSummary.sporting.totalSpend);
   }, [cycleSummary]);
 
-  const count = timeWindow === "last3" ? 3 : timeWindow === "last5" ? 5 : 15;
+  const count = timeWindow === "last3" ? 3 : timeWindow === "last5" ? 5 : series.length;
   const slicedSeries = useMemo(() => series.slice(-count), [series, count]);
 
   // Chart configuration based on viewMode
@@ -188,6 +188,9 @@ export function FinancialEfficiencyModule({
           mode: "index" as const,
           callbacks: {
             label: (ctx: { dataset: { label: string }; parsed: { y: number } }) => {
+              if (!ctx.parsed.y || ctx.parsed.y === 0) {
+                return ` ${ctx.dataset.label}: ${isPt ? "N/D (Pendente)" : "N/A (Pending)"}`;
+              }
               if (viewMode === "cpp") {
                 return ` ${ctx.dataset.label}: €${ctx.parsed.y.toFixed(0)}k / ponto`;
               }
@@ -324,7 +327,12 @@ export function FinancialEfficiencyModule({
 
       {/* Detailed Trophies and Spending ROI Table */}
       <div className="table-wrap" style={{ marginBottom: "1.25rem" }}>
-        <div className="scroll-x">
+        <div
+          className="scroll-x"
+          tabIndex={0}
+          role="region"
+          aria-label={t("eff_section_h3") || "Financial Efficiency ROI Table"}
+        >
           <table className="data-table">
             <thead>
               <tr>

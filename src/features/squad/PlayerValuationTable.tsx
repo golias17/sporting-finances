@@ -71,7 +71,12 @@ export function PlayerValuationTable({
       <T as="p" className="desc" i18nKey="player_roi_table_desc" style={{ marginBottom: "1rem" }} />
 
       <div className="table-wrap">
-        <div className="scroll-x">
+        <div
+          className="scroll-x"
+          tabIndex={0}
+          role="region"
+          aria-label={t("player_roi_table_h3") || "Player Valuation and ROI Table"}
+        >
           <table className="data-table">
             <thead>
               <tr>

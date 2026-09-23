@@ -64,8 +64,8 @@ const PITCH_MILESTONES: Record<string, { en: string; pt: string }> = {
     pt: "⚽ Campo: Amorim sai para o Man Utd; João Pereira contratado.",
   },
   "2025/26": {
-    en: "⚽ Pitch: Title contention under João Pereira.",
-    pt: "⚽ Campo: Na luta pelo título sob o comando de João Pereira.",
+    en: "⚽ Pitch: 2nd place (82 pts); historic Champions League quarter-finals.",
+    pt: "⚽ Campo: 2º lugar (82 pts); histórico apuramento para os quartos-de-final da Champions.",
   },
 };
 
@@ -115,10 +115,10 @@ export function getEventAnnotations(): Record<string, any> {
       color: state.COLORS.green,
     },
     uspp: {
-      x: "2024/25",
+      x: "2025/26",
       label: state.isPt
-        ? "→ Out 2025: USPP de €225M"
-        : "→ Oct 2025: €225M USPP",
+        ? "Out 2025: USPP de €225M"
+        : "Oct 2025: €225M USPP",
       color: state.COLORS.green,
     },
     amorim: {

@@ -219,7 +219,12 @@ export function DebtMaturityTracker() {
 
       {/* Schedule Table */}
       <div className="table-wrap" style={{ marginBottom: "1.25rem" }}>
-        <div className="scroll-x">
+        <div
+          className="scroll-x"
+          tabIndex={0}
+          role="region"
+          aria-label={t("dmt_title") || "Debt Maturity Schedule"}
+        >
           <table className="data-table">
             <thead>
               <tr>

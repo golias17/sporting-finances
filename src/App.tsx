@@ -139,6 +139,7 @@ function useScrollAnimations(activeTab: string) {
 export function App() {
   const activeTab = useAppState((s) => s.activeTab);
   const isPt = useAppState((s) => s.isPt);
+  const fullAnnual = useAppState((s) => s.fullAnnual);
   const { t, T } = useTranslation();
   const {
     btnRef: scrollToTopRef,
@@ -172,13 +173,14 @@ export function App() {
     // Load dictionary whenever language toggles
     loadTranslations(isPt ? "pt" : "en");
 
-    // Update document title
+    // Update document title dynamically
+    const seasonCount = fullAnnual?.length || 16;
     if (isPt) {
-      document.title = "Finanças Sporting CP — Um Dossier de 13 Anos";
+      document.title = `Finanças Sporting CP — Um Dossier de ${seasonCount} Anos`;
     } else {
-      document.title = "Sporting CP Finances — A 13-Year Dossier";
+      document.title = `Sporting CP Finances — A ${seasonCount}-Year Dossier`;
     }
-  }, [isPt]);
+  }, [isPt, fullAnnual]);
 
   useEffect(() => {
     // Initialize global UI features that were previously in main.ts
@@ -317,9 +319,9 @@ export function App() {
             per the 2024/25 report. Compiled for editorial reference.
           </T>
           <T as="div" className="footer-meta" i18nKey="footer-meta">
-            Dossier · 2010/11 → 2024/25 H1
+            Dossier · 2010/11 → 2025/26
             <br />
-            Period ended 31 Dec 2025
+            Period ended 30 June 2026
             <br />
             Euronext Lisbon · SCP
           </T>

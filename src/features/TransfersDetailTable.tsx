@@ -406,7 +406,12 @@ export function TransfersDetailTable({
         </div>
       </div>
 
-      <div className="scroll-x">
+      <div
+        className="scroll-x"
+        tabIndex={0}
+        role="region"
+        aria-label={isPt ? "Tabela detalhada de transferências" : "Transfers detail table"}
+      >
         <table className="ledger">
           <thead>
             <tr>

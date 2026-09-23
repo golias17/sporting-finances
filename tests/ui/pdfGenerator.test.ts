@@ -271,7 +271,7 @@ describe("pdfGenerator.js", () => {
     "III. Player Transfer Operations & Squad Appraisals", // pages[2]: trading/cash flow
     "V. Strategic Debt & Financing Instruments Profile", // pages[3]: strategic debt
     "VI. Chronological Turnaround Milestones", // pages[4]: turnaround milestones
-    "Consolidated Benchmark — Big Three (15 Seasons · 2010/11 to 2024/25)", // pages[5]: competitive benchmark
+    "Consolidated Benchmark — Big Three (2 Seasons · 2012/13 to 2024/25)", // pages[5]: competitive benchmark
     "VIII-A. Landmark Player Transfers Ledger — Record Departures (Fee >= 10.0 M€)", // pages[6]: transfers ledger
   ];
 

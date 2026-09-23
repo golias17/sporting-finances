@@ -749,8 +749,9 @@ export function useCompetitiveCharts(
       const eq = (last.equity || 0) / 1000;
       const nd = (last.net_debt || 0) / 1000;
       const td = (last.transfer_debt_net_total || 0) / 1000;
+      const lastSeason = last.label || last.season || "";
 
-      return { rev, tf, wages, comm, net, avgRev, avgWages, eq, nd, td, count };
+      return { rev, tf, wages, comm, net, avgRev, avgWages, eq, nd, td, count, lastSeason };
     };
 
     return {

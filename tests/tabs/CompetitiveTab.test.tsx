@@ -30,6 +30,39 @@ describe("CompetitiveTab", () => {
     useAppState.setState({
       annual: [
         {
+          season: "2020/21",
+          label: "2020/21",
+          revenue_operating: 100000,
+          personnel_costs: -50000,
+          net_result: -10000,
+          equity: 10000,
+          non_current_liabilities: 80000,
+          current_liabilities: 40000,
+          squad_market_value: 200000,
+        },
+        {
+          season: "2021/22",
+          label: "2021/22",
+          revenue_operating: 110000,
+          personnel_costs: -55000,
+          net_result: 5000,
+          equity: 15000,
+          non_current_liabilities: 85000,
+          current_liabilities: 42000,
+          squad_market_value: 220000,
+        },
+        {
+          season: "2022/23",
+          label: "2022/23",
+          revenue_operating: 120000,
+          personnel_costs: -60000,
+          net_result: 10000,
+          equity: 18000,
+          non_current_liabilities: 90000,
+          current_liabilities: 45000,
+          squad_market_value: 250000,
+        },
+        {
           season: "2023/24",
           label: "2023/24",
           revenue_operating: 150000,
@@ -44,8 +77,19 @@ describe("CompetitiveTab", () => {
           rev_commercial: 60000,
           player_transfer_income: 40000,
           player_transfer_cost: -20000,
-        } as any,
-      ],
+        },
+        {
+          season: "2024/25",
+          label: "2024/25",
+          revenue_operating: 160000,
+          personnel_costs: -80000,
+          net_result: 20000,
+          equity: 30000,
+          non_current_liabilities: 110000,
+          current_liabilities: 55000,
+          squad_market_value: 320000,
+        },
+      ] as any,
       BENFICA_DATASET: {
         annual_data: [
           {
@@ -235,20 +279,22 @@ describe("CompetitiveTab", () => {
     useAppState.setState({ isPt: true });
     const { unmount } = render(<CompetitiveTab />);
 
-    // Default: 15 seasons tag
-    expect(screen.getAllByText("2010/11 → 2024/25").length).toBeGreaterThan(0);
+    // Default: all seasons tag
+    expect(screen.getAllByText("2020/21 → 2024/25").length).toBeGreaterThan(0);
 
-    // Click "Ciclo Amorim" button
+    // Click "Últimas 5 Épocas" button
     const last5Btn = screen.getByText("ch08-filter-last5");
     fireEvent.click(last5Btn);
     expect(
-      screen.getAllByText("Ciclo 2020-2025 (5 Épocas)").length,
+      screen.getAllByText("Últimas 5 Épocas (2020/21–2024/25)").length,
     ).toBeGreaterThan(0);
 
     // Click "Últimas 3 Épocas" button
     const last3Btn = screen.getByText("ch08-filter-last3");
     fireEvent.click(last3Btn);
-    expect(screen.getAllByText("Últimas 3 Épocas").length).toBeGreaterThan(0);
+    expect(
+      screen.getAllByText("Últimas 3 Épocas (2022/23–2024/25)").length,
+    ).toBeGreaterThan(0);
 
     unmount();
 
@@ -258,7 +304,7 @@ describe("CompetitiveTab", () => {
     const last5BtnEn = screen.getByText("ch08-filter-last5");
     fireEvent.click(last5BtnEn);
     expect(
-      screen.getAllByText("2020-2025 Cycle (5 Seasons)").length,
+      screen.getAllByText("Last 5 Seasons (2020/21–2024/25)").length,
     ).toBeGreaterThan(0);
   });
 });

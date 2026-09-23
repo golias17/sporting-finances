@@ -152,6 +152,9 @@ export function AccessibleTable({
       <div
         id={`${chartId}-a11y-table-wrap`}
         className={`table-wrap scroll-x ${isHidden ? "sr-only" : ""}`}
+        tabIndex={0}
+        role="region"
+        aria-label={captionText}
       >
         <table id={`${chartId}-a11y-table`} className="data">
           <caption>{captionText}</caption>

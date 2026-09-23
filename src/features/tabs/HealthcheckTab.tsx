@@ -2,11 +2,17 @@ import React from "react";
 import { ChartCard } from "../../components/ChartCard.js";
 import { HealthSignals } from "../HealthSignals";
 import { UefaRadar } from "../UefaRadar.js";
+import { useAppState } from "../../core/state.js";
 import { useTranslation } from "../../hooks/useTranslation.js";
 import { useHealthcheckCharts } from "./useHealthcheckCharts.js";
 
 export const HealthcheckTab = React.memo(function HealthcheckTab() {
   const { T } = useTranslation();
+  const annual = useAppState((s) => s.annual);
+  const rangeTag =
+    annual.length > 0
+      ? `${annual[0]?.label || "2010/11"} → ${annual[annual.length - 1]?.label || "2025/26"}`
+      : "2010/11 → 2025/26";
   const {
     transferRelianceData,
     transferRelianceOptions,
@@ -81,7 +87,7 @@ export const HealthcheckTab = React.memo(function HealthcheckTab() {
         <ChartCard
           id="chartTransferDebt"
           title={<T as="h3" i18nKey="ch03-transfer-debt-h3" />}
-          tag={<span className="tag">2010/11 → 2024/25</span>}
+          tag={<span className="tag">{rangeTag}</span>}
           desc={<T as="p" className="desc" i18nKey="ch03-transfer-debt-desc" />}
           chartType="bar"
           data={transferDebtData}
@@ -91,7 +97,7 @@ export const HealthcheckTab = React.memo(function HealthcheckTab() {
         <ChartCard
           id="chartEbitda"
           title={<T as="h3" i18nKey="ch03-ebitda-h3" />}
-          tag={<span className="tag">2010/11 → 2024/25</span>}
+          tag={<span className="tag">{rangeTag}</span>}
           desc={<T as="p" className="desc" i18nKey="ch03-ebitda-desc" />}
           chartType="line"
           data={ebitdaData}

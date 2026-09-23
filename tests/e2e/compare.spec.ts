@@ -14,7 +14,7 @@ test.describe("Compare Tab", () => {
 
     // Season A should be the latest season
     const seasonA = page.locator(".cmp-col-header-season").first();
-    await expect(seasonA).toContainText("2024/25");
+    await expect(seasonA).toContainText("2025/26");
 
     // Season B should be the earliest season
     const seasonB = page.locator(".cmp-col-header-season").last();
@@ -105,7 +105,7 @@ test.describe("Compare Tab", () => {
 
     // Header should update
     const seasonA = page.locator(".cmp-col-header-season").first();
-    await expect(seasonA).not.toContainText("2024/25");
+    await expect(seasonA).not.toContainText("2025/26");
   });
 
   test("should change Season B selection", async ({ page }) => {

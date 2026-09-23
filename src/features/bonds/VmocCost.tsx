@@ -64,8 +64,8 @@ export function VmocCost() {
       season: "2019/20",
       period: "vmoc",
       note: isPt
-        ? "Ano de custo máximo da era VMOC — VMOCs (€135M) + titularização Lion Finance Nº 1 ativos em simultâneo em ano completo (a era USPP, a partir de 2024/25, ultrapassa este valor)"
-        : "Peak cost year of the VMOC era — VMOCs (€135M) + Lion Finance No. 1 securitization in full force simultaneously (the USPP era, from 2024/25, exceeds this)",
+        ? "Ano de custo máximo da era VMOC — VMOCs (€135M) + titularização Lion Finance Nº 1 ativos em simultâneo em ano completo (a era USPP em 2025/26 passa a estruturar o financiamento a 28 anos)"
+        : "Peak cost year of the VMOC era — VMOCs (€135M) + Lion Finance No. 1 securitization in full force simultaneously (the USPP era in 2025/26 secures 28-year funding)",
     },
     {
       season: "2020/21",
@@ -99,8 +99,15 @@ export function VmocCost() {
       season: "2024/25",
       period: "uspp",
       note: isPt
-        ? "LF Nº 2 + obrigações públicas (2024-2027 e 2024-2028) — USPP emitido em Out 2025, após o fecho desta época; o custo anual do USPP (≈ €12,9M/ano) surgirá a partir de 2025/26"
-        : "LF No. 2 + public bonds (2024-2027 and 2024-2028) — USPP issued Oct 2025, after this FY ended; USPP annual cost ≈ €12.9M/yr will appear from 2025/26 onward",
+        ? "LF Nº 2 + obrigações públicas (2024-2027 e 2024-2028) — preparação da emissão USPP; custos de titularização e cupões das linhas ativas"
+        : "LF No. 2 + public retail bonds (2024-2027 and 2024-2028) — preparation of USPP; securitization and active debt line coupons",
+    },
+    {
+      season: "2025/26",
+      period: "uspp",
+      note: isPt
+        ? "Emissão histórica de €225M USPP (taxa fixa 5,75% a 28 anos). Reembolso total do Lion Finance Nº 2 (€68,8M) e do Sagasta (€14,5M). Resultados financeiros líquidos melhoram €10,2M (para -€15,0M)"
+        : "Historic €225M USPP issue (5.75% fixed coupon over 28 years). Prepayment of Lion Finance No. 2 (€68.8M) and Sagasta (€14.5M). Net financing costs improve €10.2M (to -€15.0M)",
     },
   ];
 
@@ -139,9 +146,11 @@ export function VmocCost() {
     }),
   );
   const peakFmtLabel = fmtMillions(peakFinancingCost);
+  const firstSeason = fullAnnual[0]?.label || fullAnnual[0]?.season || "2010/11";
+  const lastSeason = fullAnnual[fullAnnual.length - 1]?.label || fullAnnual[fullAnnual.length - 1]?.season || "2025/26";
   const tableCaption = isPt
-    ? "Custo de financiamento líquido por época, 2010/11–2024/25"
-    : "Net financing cost by season, 2010/11–2024/25";
+    ? `Custo de financiamento líquido por época, ${firstSeason}–${lastSeason}`
+    : `Net financing cost by season, ${firstSeason}–${lastSeason}`;
 
   return (
     <>
@@ -205,7 +214,12 @@ export function VmocCost() {
         </span>
       </div>
 
-      <div className="scroll-x">
+      <div
+        className="scroll-x"
+        tabIndex={0}
+        role="region"
+        aria-label={tableCaption}
+      >
         <table className="vmoc-cost">
           <caption className="sr-only">{tableCaption}</caption>
           <thead>

@@ -12,6 +12,7 @@ export const DataTab = React.memo(function DataTab({
   onExportCsv,
 }: DataTabProps) {
   const { t, T } = useTranslation();
+  const isPt = useAppState((s) => s.isPt);
   const ledgerData = useAppState((s) => s.TRANSFER_LEDGER);
   const annualData = useAppState((s) => s.annual);
   return (
@@ -81,7 +82,12 @@ export const DataTab = React.memo(function DataTab({
         <T as="p" className="desc" i18nKey="ch10-annual-desc" />
         <T as="p" className="scroll-hint" i18nKey="ch10-scroll-hint" />
         <div className="table-wrap">
-          <div className="scroll-x">
+          <div
+            className="scroll-x"
+            tabIndex={0}
+            role="region"
+            aria-label={isPt ? "Tabela de dados anuais" : "Annual financial data table"}
+          >
             <DataTable data={annualData} />
           </div>
         </div>

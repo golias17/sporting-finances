@@ -57,13 +57,17 @@ export function drawCompetitiveBenchmarkPage(ctx: PdfContext) {
   const slb = calcClub(benficaData);
   const fcp = calcClub(portoData);
 
+  const firstSeason = sportingData[0]?.label || sportingData[0]?.season || "2010/11";
+  const lastSeason = sportingData[sportingData.length - 1]?.label || sportingData[sportingData.length - 1]?.season || "2025/26";
+  const seasonCount = sportingData.length || 16;
+
   doc.setFont("helvetica", "bold");
   doc.setFontSize(11);
   doc.setTextColor(...colors.green);
   doc.text(
     isPt
-      ? "Benchmark Consolidado — Três Grandes (15 Épocas · 2010/11 a 2024/25)"
-      : "Consolidated Benchmark — Big Three (15 Seasons · 2010/11 to 2024/25)",
+      ? `Benchmark Consolidado — Três Grandes (${seasonCount} Épocas · ${firstSeason} a ${lastSeason})`
+      : `Consolidated Benchmark — Big Three (${seasonCount} Seasons · ${firstSeason} to ${lastSeason})`,
     15,
     44,
   );
@@ -153,7 +157,7 @@ export function drawCompetitiveBenchmarkPage(ctx: PdfContext) {
 
     doc.setFont("helvetica", "normal");
     doc.setTextColor(...colors.mutedText);
-    doc.text(isPt ? "Cap. Próprio:" : "Equity 24/25:", x + 4, startY + 24);
+    doc.text(isPt ? "Cap. Próprio:" : "Shareholders' Eq:", x + 4, startY + 24);
     doc.setFont("helvetica", "bold");
     if (c.metrics.eq >= 0) {
       doc.setTextColor(...colors.positive);
@@ -177,8 +181,8 @@ export function drawCompetitiveBenchmarkPage(ctx: PdfContext) {
     [
       {
         content: isPt
-          ? "I. AGREGADOS ACUMULADOS & MÉDIAS ESTRUTURAIS (15 ÉPOCAS · 2010/11 A 2024/25)"
-          : "I. CUMULATIVE AGGREGATES & STRUCTURAL AVERAGES (15 SEASONS · 2010/11 TO 2024/25)",
+          ? `I. AGREGADOS ACUMULADOS & MÉDIAS ESTRUTURAIS (${seasonCount} ÉPOCAS · ${firstSeason} A ${lastSeason})`
+          : `I. CUMULATIVE AGGREGATES & STRUCTURAL AVERAGES (${seasonCount} SEASONS · ${firstSeason} TO ${lastSeason})`,
         colSpan: 4,
         styles: {
           fontStyle: "bold",
@@ -245,8 +249,8 @@ export function drawCompetitiveBenchmarkPage(ctx: PdfContext) {
     ],
     [
       isPt
-        ? "Resultado Líquido Acumulado (15 Épocas)"
-        : "Cumulative Net Result (15 Seasons)",
+        ? `Resultado Líquido Acumulado (${seasonCount} Épocas)`
+        : `Cumulative Net Result (${seasonCount} Seasons)`,
       fmtCurrency(scp.net, true),
       fmtCurrency(slb.net, true),
       fmtCurrency(fcp.net, true),
@@ -256,8 +260,8 @@ export function drawCompetitiveBenchmarkPage(ctx: PdfContext) {
     [
       {
         content: isPt
-          ? "II. POSIÇÃO PATRIMONIAL & ENDIVIDAMENTO (30 DE JUNHO DE 2025)"
-          : "II. BALANCE SHEET & DEBT POSITION (JUNE 30, 2025)",
+          ? "II. POSIÇÃO PATRIMONIAL & ENDIVIDAMENTO MAIS RECENTE"
+          : "II. LATEST BALANCE SHEET & DEBT POSITION",
         colSpan: 4,
         styles: {
           fontStyle: "bold",
