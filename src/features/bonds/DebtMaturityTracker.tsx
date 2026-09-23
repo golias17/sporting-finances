@@ -207,7 +207,7 @@ export function DebtMaturityTracker() {
       </div>
 
       {/* Chart */}
-      <div style={{ marginBottom: "1.5rem" }}>
+      <div style={{ marginBottom: "1rem" }}>
         <AppChart
           id="chartDebtMaturitySchedule"
           type="bar"
@@ -215,6 +215,34 @@ export function DebtMaturityTracker() {
           options={chartOptions}
           hideTable={true}
         />
+      </div>
+
+      {/* USPP 2053 Maturity Structural Highlight Box */}
+      <div
+        style={{
+          marginBottom: "1.25rem",
+          padding: "12px 16px",
+          borderRadius: "8px",
+          background: "var(--surface-soft, rgba(0, 168, 90, 0.05))",
+          border: "1px solid var(--green, #0a5d3a)",
+          display: "flex",
+          alignItems: "flex-start",
+          gap: "12px",
+        }}
+      >
+        <span style={{ fontSize: "1.3rem", lineHeight: 1 }}>🏛️</span>
+        <div style={{ fontSize: "0.82rem", lineHeight: 1.5 }}>
+          <strong style={{ color: "var(--ink)" }}>
+            {isPt
+              ? "Estrutura de Maturidades Real (Auditoria RC 2025/26):"
+              : "Actual Maturity Structure (Audited 2025/26 Report):"}
+          </strong>{" "}
+          <span style={{ color: "var(--muted)" }}>
+            {isPt
+              ? "O empréstimo institucional USPP de €225M tem maturidade bullet de 28 anos (vencimento integral em Junho de 2053). Na década 2025–2035, o encargo com o USPP é estritamente o cupão fixo de 5,75% (€12,94M/ano), com zero amortização de capital. Os únicos reembolsos de capital nesta década correspondem aos empréstimos obrigacionistas de retalho: €50M em 2027/28 (Sporting SAD 2024-2027) e €40M em 2028/29 (Sporting SAD 2025-2028), habitualmente refinanciados no mercado doméstico."
+              : "The €225M institutional USPP bond features a 28-year bullet maturity (due June 2053). Throughout the 2025–2035 decade, the cash impact from the USPP is exclusively the fixed 5.75% coupon (€12.94M/year), with zero principal amortization. The only capital repayments during this decade are the public retail bonds: €50M in 2027/28 (Sporting SAD 2024-2027) and €40M in 2028/29 (Sporting SAD 2025-2028), typically refinanced in the domestic market."}
+          </span>
+        </div>
       </div>
 
       {/* Schedule Table */}
@@ -264,7 +292,9 @@ export function DebtMaturityTracker() {
                             color: "var(--info)",
                           }}
                         >
-                          {t("dmt_col_refinancing")}
+                          {row.year === 2028
+                            ? (isPt ? "Obrig. 2024-2027 (€50M)" : "Retail 2024-2027 (€50M)")
+                            : (isPt ? "Obrig. 2025-2028 (€40M)" : "Retail 2025-2028 (€40M)")}
                         </span>
                       )}
                     </td>

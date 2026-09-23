@@ -17,9 +17,9 @@ describe("debtMaturityCalculations", () => {
 
     const firstYear = schedule[0];
     expect(firstYear.season).toBe("2025/26");
-    expect(firstYear.totalPrincipal).toBe(12.0);
-    expect(firstYear.totalInterest).toBeCloseTo(16.74, 2);
-    expect(firstYear.totalDebtService).toBeCloseTo(28.74, 2);
+    expect(firstYear.totalPrincipal).toBe(0.0);
+    expect(firstYear.totalInterest).toBeCloseTo(17.92, 2);
+    expect(firstYear.totalDebtService).toBeCloseTo(17.92, 2);
     expect(firstYear.dscr).toBeGreaterThan(1.5);
     expect(firstYear.status).toBe("grade");
   });
@@ -41,26 +41,26 @@ describe("debtMaturityCalculations", () => {
     expect(usppSchedule[0].totalPrincipal).toBe(0);
     expect(usppSchedule[0].totalInterest).toBeCloseTo(12.94, 2);
 
-    expect(bankingSchedule[0].totalPrincipal).toBe(12.0);
-    expect(bankingSchedule[0].totalInterest).toBeCloseTo(3.8, 2);
+    expect(bankingSchedule[0].totalPrincipal).toBe(0.0);
+    expect(bankingSchedule[0].totalInterest).toBeCloseTo(4.98, 2);
   });
 
   it("calculates KPIs accurately (average debt service, DSCR, LT share, totals)", () => {
     const schedule = computeDebtSchedule("all");
     const kpis = computeDebtKPIs(schedule);
 
-    expect(kpis.avgAnnualService).toBeGreaterThan(20);
+    expect(kpis.avgAnnualService).toBeGreaterThan(15);
     expect(kpis.avgDscr).toBeGreaterThan(1.3);
-    expect(kpis.ltShare).toBeGreaterThan(70);
+    expect(kpis.ltShare).toBeCloseTo(71.4, 1);
     expect(kpis.estimatedAnnualSavings).toBeGreaterThan(5);
-    expect(kpis.totalPrincipal).toBeGreaterThan(200);
-    expect(kpis.totalInterest).toBeGreaterThan(50);
+    expect(kpis.totalPrincipal).toBe(90.0);
+    expect(kpis.totalInterest).toBeGreaterThan(100);
   });
 
   it("computes KPIs correctly when schedule is empty", () => {
     const kpis = computeDebtKPIs([]);
     expect(kpis.avgAnnualService).toBe(0);
-    expect(kpis.ltShare).toBe(78);
+    expect(kpis.ltShare).toBeCloseTo(71.4, 1);
   });
 });
 
