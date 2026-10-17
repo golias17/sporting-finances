@@ -7,9 +7,9 @@ import type {
   } from "./playgroundTypes.js";
 
 function getBaseline() {
-  const season = state.annual?.find(
-    (s: { label: string }) => s.label === "2024/25",
-  );
+  const season =
+    state.annual?.find((s: { label: string }) => s.label === "2025/26") ||
+    state.annual?.find((s: { label: string }) => s.label === "2024/25");
   if (!season) return null;
   return {
     revenue_operating: season.revenue_operating,

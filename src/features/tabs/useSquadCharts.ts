@@ -14,6 +14,7 @@ export function useSquadCharts() {
   const fullAnnual = useAppState((s) => s.fullAnnual);
   const DATASET = useAppState((s) => s.DATASET);
   const transferLedger = useAppState((s) => s.TRANSFER_LEDGER);
+  const theme = useAppState((s) => s.theme);
   const baseLabels = useChartLabels();
 
   const squadBookData = useMemo<ChartData<"bar" | "line">>(() => {
@@ -25,7 +26,13 @@ export function useSquadCharts() {
       (d) => d.squad_market_value,
     );
     const h1Data = getLatestH1Data(DATASET);
-    if (h1Data && h1Data.label) {
+    const latestAnnual = annual[annual.length - 1];
+    if (
+      h1Data &&
+      h1Data.label &&
+      h1Data.period_end &&
+      (!latestAnnual?.year_end || h1Data.period_end > latestAnnual.year_end)
+    ) {
       labels.push(h1Data.label ?? (isPt ? "1º Semestre" : "H1"));
       bookValues.push(null);
       marketValues.push(h1Data.squad_market_value ?? null);
@@ -63,7 +70,7 @@ export function useSquadCharts() {
         },
       ] as any,
     };
-  }, [baseLabels, annual, DATASET, isPt]);
+  }, [baseLabels, annual, DATASET, isPt, theme]);
 
   const squadBookOptions = useMemo<ChartOptions<any>>(
     () => ({
@@ -73,6 +80,7 @@ export function useSquadCharts() {
         tooltip: {
           ...baseOpts.plugins?.tooltip,
           callbacks: {
+            ...(baseOpts.plugins?.tooltip?.callbacks || {}),
             label: (ctx: {
               dataset: { label: string };
               parsed: { y: number | null };
@@ -85,7 +93,7 @@ export function useSquadCharts() {
         },
       },
     }),
-    [],
+    [theme],
   );
 
   const transfersData = useMemo<ChartData<"bar">>(() => {
@@ -118,7 +126,7 @@ export function useSquadCharts() {
         },
       ],
     };
-  }, [baseLabels, annual, fullAnnual, isPt]);
+  }, [baseLabels, annual, fullAnnual, isPt, theme]);
 
   const transfersOptions = useMemo<ChartOptions<"bar">>(
     () => ({
@@ -129,6 +137,7 @@ export function useSquadCharts() {
         tooltip: {
           ...baseOpts.plugins?.tooltip,
           callbacks: {
+            ...(baseOpts.plugins?.tooltip?.callbacks || {}),
             label: (ctx: {
               dataset: { label: string };
               parsed: { y: number | null };
@@ -137,7 +146,7 @@ export function useSquadCharts() {
         },
       },
     }),
-    [],
+    [theme],
   );
 
   const netTrading = usePosNegBarChart(

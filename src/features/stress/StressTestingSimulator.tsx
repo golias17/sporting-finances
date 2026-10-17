@@ -270,7 +270,11 @@ export function StressTestingSimulator() {
                     : "var(--neg)",
             }}
           >
-            {result.cashRunwayMonths >= 24 ? "> 24 meses" : `${result.cashRunwayMonths} meses`}
+            {result.cashRunwayMonths >= 24
+              ? isPt
+                ? "> 24 meses"
+                : "> 24 months"
+              : `${result.cashRunwayMonths} ${isPt ? "meses" : "months"}`}
           </div>
           <T as="div" className="dmt-kpi-sub" i18nKey="stress_kpi_runway_sub" />
         </div>
@@ -322,7 +326,9 @@ export function StressTestingSimulator() {
             }}
           >
             {result.requiredAssetSales === 0
-              ? "€0.0M (Colchão OK)"
+              ? isPt
+                ? "€0.0M (Colchão OK)"
+                : "€0.0M (Buffer OK)"
               : `€${result.requiredAssetSales.toFixed(1)}M`}
           </div>
           <T as="div" className="dmt-kpi-sub" i18nKey="stress_kpi_asset_sales_req_sub" />
@@ -354,7 +360,7 @@ export function StressTestingSimulator() {
           />
           <div className="pg-slider-bounds">
             <span>0 M€ (Base)</span>
-            <span>-60 M€ (Crítico)</span>
+            <span>{isPt ? "-60 M€ (Crítico)" : "-60 M€ (Critical)"}</span>
           </div>
         </div>
 
@@ -381,7 +387,7 @@ export function StressTestingSimulator() {
           />
           <div className="pg-slider-bounds">
             <span>0 M€ (Normal)</span>
-            <span>-45 M€ (Congelamento)</span>
+            <span>{isPt ? "-45 M€ (Congelamento)" : "-45 M€ (Market Freeze)"}</span>
           </div>
         </div>
 
@@ -408,7 +414,7 @@ export function StressTestingSimulator() {
           />
           <div className="pg-slider-bounds">
             <span>+0%</span>
-            <span>+25% (Inflação Alta)</span>
+            <span>{isPt ? "+25% (Inflação Alta)" : "+25% (High Inflation)"}</span>
           </div>
         </div>
 
@@ -468,7 +474,7 @@ export function StressTestingSimulator() {
               className="scroll-x"
               tabIndex={0}
               role="region"
-              aria-label={t("stress_section_h3") || "Stress testing trajectory table"}
+              aria-label={t("stress_title")}
             >
               <table className="data-table">
                 <thead>

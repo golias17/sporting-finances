@@ -9,6 +9,9 @@ import { useAppState } from "../core/state.js";
 import { config } from "../core/config.js";
 import { useTranslation } from "../hooks/useTranslation.js";
 import { exportFinancialsExcel } from "../utils/exportExcel.js";
+import { updateChartTheme } from "../ui/themeToggle.js";
+import { loadTranslations } from "../ui/translations.js";
+import { syncStateToUrl } from "../utils/urlSync.js";
 import { TABS } from "./TabsNavigation.js";
 
 export interface CommandItem {
@@ -100,26 +103,28 @@ export function CommandPalette({
       const rawTranslated = isPt ? t(tab.i18n) : tab.label;
       const tabLabel =
         rawTranslated && rawTranslated !== tab.i18n ? rawTranslated : tab.label;
-      const displayTitle = `${tab.num}. ${tabLabel}`;
+      const cleanTabLabel = tabLabel.replace(/^\d+\.\s*/, "");
+      const displayTitle = `${tab.num}. ${cleanTabLabel}`;
       items.push({
         id: `tab-${tab.id}`,
         category: "tabs",
         title: displayTitle,
         subtitle: isPt
-          ? `Navegar para ${tabLabel}`
-          : `Navigate to ${tabLabel} tab`,
+          ? `Navegar para ${cleanTabLabel}`
+          : `Navigate to ${cleanTabLabel} tab`,
         icon: "📑",
         keywords: [
           tab.id,
           tab.num,
           tab.label.toLowerCase(),
-          tabLabel.toLowerCase(),
+          cleanTabLabel.toLowerCase(),
           "tab",
           "separador",
           "capitulo",
         ],
         action: () => {
           useAppState.getState().setActiveTab(tab.id);
+          syncStateToUrl();
           onClose();
         },
       });
@@ -140,7 +145,6 @@ export function CommandPalette({
       action: () => {
         const theme = useAppState.getState().theme;
         const newTheme = theme === "dark" ? "light" : "dark";
-        useAppState.getState().setTheme(newTheme);
         if (typeof document !== "undefined") {
           if (newTheme === "dark") {
             document.body.classList.add("dark");
@@ -148,6 +152,11 @@ export function CommandPalette({
             document.body.classList.remove("dark");
           }
         }
+        if (typeof localStorage !== "undefined") {
+          localStorage.setItem("theme", newTheme);
+        }
+        updateChartTheme();
+        useAppState.getState().setTheme(newTheme);
         onClose();
       },
     });
@@ -172,7 +181,17 @@ export function CommandPalette({
         "i18n",
       ],
       action: () => {
-        useAppState.getState().setIsPt(!isPt);
+        const nextIsPt = !isPt;
+        const nextLang = nextIsPt ? "pt" : "en";
+        useAppState.getState().setIsPt(nextIsPt);
+        if (typeof document !== "undefined") {
+          document.documentElement.lang = nextLang;
+        }
+        if (typeof localStorage !== "undefined") {
+          localStorage.setItem("lang", nextLang);
+        }
+        void loadTranslations(nextLang);
+        syncStateToUrl();
         onClose();
       },
     });

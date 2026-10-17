@@ -64,8 +64,13 @@
     "isAria": false,
     "innerHTML": false
   },
+  "auto-txt-title-0": {
+    "text": "Sporting CP — Evolução Financeira (2010/11 → 2025/26)",
+    "isAria": false,
+    "innerHTML": false
+  },
   "ch01-netresult-desc": {
-    "text": "Volátil, mas com tendência positiva. 4 anos consecutivos com lucros (21/22–24/25).",
+    "text": "Volátil, mas com tendência positiva. 5 anos consecutivos com lucros (21/22–25/26, +€117M de lucro acumulado).",
     "isAria": false,
     "innerHTML": false
   },
@@ -125,7 +130,7 @@
     "innerHTML": true
   },
   "ch02-lede": {
-    "text": "As receitas mais do que duplicaram em cinco anos. O crescimento dos custos com pessoal manteve-se disciplinado, permitindo atingir o rácio salarial mais sustentável da década.",
+    "text": "As receitas operacionais quase triplicaram desde 2020/21. O crescimento dos custos com pessoal manteve-se disciplinado, permitindo atingir o rácio salarial mais sustentável das 16 épocas.",
     "isAria": false,
     "innerHTML": false
   },
@@ -135,12 +140,12 @@
     "innerHTML": false
   },
   "ch02-narrative-p1": {
-    "text": "As operações recorrentes do Sporting (receitas menos salários, fornecimentos e D&A ordinária, antes do trading de passes) foram negativas em 13 das 15 épocas. Apenas 2014/15 (redimensionamento pós-reestruturação) e 2021/22 (regresso à Champions League + primeiro estádio pós-COVID completo) produziram resultados operacionais recorrentes positivos. O modelo assenta no trading de passes — no qual o clube é excecionalmente bom — para financiar o resto.",
+    "text": "As operações recorrentes do Sporting (receitas menos salários, fornecimentos e D&A ordinária, antes do trading de passes) foram negativas em 13 das 16 épocas. Apenas 2014/15 (+€4,0M, redimensionamento pós-reestruturação), 2021/22 (+€4,9M, regresso à Champions League + primeiro estádio pós-COVID completo) e 2025/26 (+€10,9M, receitas operacionais recorde de €188M) produziram resultados operacionais recorrentes positivos. O modelo assenta no trading de passes — no qual o clube é excecionalmente bom — para financiar o resto.",
     "isAria": false,
     "innerHTML": false
   },
   "ch02-narrative-p2": {
-    "text": "A boa notícia: as receitas mais do que duplicaram em 5 anos (€64M em 20/21 → €148M in 24/25, um aumento de 2,3×), impulsionadas principalmente pelos jogos da Champions League a partir de 21/22 e pelo crescimento comercial. O crescimento dos custos com pessoal foi mais disciplinado (€62M → €88M no mesmo período), pelo que o hiato está finalmente a fechar.",
+    "text": "A boa notícia: as receitas operacionais quase triplicaram desde 20/21 (€64M em 20/21 → €148M em 24/25 → €188M em 25/26, um aumento de 2,9×), impulsionadas pelas campanhas regulares na Champions League a partir de 21/22 e pela expansão comercial. O crescimento dos custos com pessoal manteve-se disciplinado (€62M → €102M no mesmo período), permitindo fechar o hiato operacional.",
     "isAria": false,
     "innerHTML": false
   },
@@ -165,7 +170,7 @@
     "innerHTML": false
   },
   "ch02-payroll-desc": {
-    "text": "Durante a maior parte da década, o encargo salarial absorveu 70-95% das receitas recorrentes. O rácio de 24/25 (59%) é o mais saudável do conjunto de dados.",
+    "text": "Durante a maior parte da década, o encargo salarial absorveu 70-95% das receitas recorrentes. O rácio de 25/26 (54%) é o mais saudável das 16 épocas do conjunto de dados.",
     "isAria": false,
     "innerHTML": false
   },
@@ -240,17 +245,17 @@
     "innerHTML": false
   },
   "ch03-brief-h4": {
-    "text": "A versão curta (2024/25) — quase tudo verde pela primeira vez",
+    "text": "A versão curta (2025/26) — todos os indicadores no verde",
     "isAria": false,
     "innerHTML": false
   },
   "ch03-brief-p": {
-    "text": "As receitas mais do que duplicaram no espaço de cinco anos. O encargo salarial representa a menor fatia dos rendimentos dos últimos 15 anos. A dívida líquida está — pela primeira vez — abaixo de um ano de receitas operacionais. O capital próprio mantém-se positivo pelo terceiro ano consecutivo. O Sporting ainda conta com o trading de jogadores para cerca de 44% do seu rendimento total, refletindo a força da sua formação e prospeção.",
+    "text": "As receitas operacionais quase triplicaram desde 2020/21 para um recorde de €188M. O encargo salarial representa a menor fatia das receitas em 16 anos (54,3%), gerando um resultado operacional recorrente positivo de +€10,9M. O capital próprio mantém-se positivo pelo quarto ano consecutivo (+€75,6M) e a posição de caixa atingiu um recorde histórico de €117,9M após o USPP. O trading de jogadores representa cerca de 37% do rendimento total, refletindo a força de Alcochete e da prospeção.",
     "isAria": false,
     "innerHTML": false
   },
   "ch03-brief-tag": {
-    "text": "Resumo 2024/25",
+    "text": "Resumo 2025/26",
     "isAria": false,
     "innerHTML": false
   },
@@ -355,7 +360,7 @@
     "innerHTML": false
   },
   "ch04-cash-desc": {
-    "text": "Caixa disponível a 30 de junho de cada ano. Geralmente baixo — o clube opera com margens de liquidez reduzidas.",
+    "text": "Caixa disponível a 30 de junho de cada ano. Recorde histórico de €117,9M em 2025/26 após a emissão USPP.",
     "isAria": false,
     "innerHTML": false
   },
@@ -370,7 +375,7 @@
     "innerHTML": false
   },
   "ch04-cf-desc": {
-    "text": "Atividades operacionais (tipicamente negativas), atividades de investimento (vendas de jogadores geram fluxo positivo), atividades de financiamento (emissão e reembolso de dívida).",
+    "text": "Atividades operacionais (positivas em 2014/15 e 2025/26), atividades de investimento (vendas de jogadores geram fluxo positivo), atividades de financiamento (emissão e reembolso de dívida).",
     "isAria": false,
     "innerHTML": false
   },
@@ -385,7 +390,7 @@
     "innerHTML": false
   },
   "ch04-debt-desc": {
-    "text": "Empréstimos (correntes + não correntes) versus caixa disponível. A dívida total manteve-se estável em €130-160M enquanto a base de ativos triplicou.",
+    "text": "Empréstimos (correntes + não correntes) versus caixa disponível. Em 2025/26, o USPP de €225M consolidou a dívida a longo prazo e elevou o caixa para €117,9M.",
     "isAria": false,
     "innerHTML": false
   },
@@ -405,7 +410,7 @@
     "innerHTML": true
   },
   "ch04-lede": {
-    "text": "O fluxo de caixa operacional foi negativo em 13 das 15 épocas — as vendas de jogadores são a compensação estrutural que mantém o clube solvente. O USPP reestrutura o perfil da dívida e financia o estádio; não resolve diretamente a geração de caixa operacional.",
+    "text": "O fluxo de caixa operacional foi negativo em 14 das 16 épocas (positivo apenas em 2014/15 com +€8,6M e em 2025/26 com +€5,3M) — as vendas de jogadores são a compensação estrutural que mantém o clube solvente. O USPP reestruturou o perfil da dívida a 28 anos e elevou a liquidez para um recorde de €117,9M.",
     "isAria": false,
     "innerHTML": false
   },
@@ -430,22 +435,22 @@
     "innerHTML": false
   },
   "ch04-narrative-p1": {
-    "text": "A Sporting SAD teve fluxo de caixa negativo das atividades operacionais em 14 das 15 épocas do dataset. A única exceção foi 2014/15 (+€29.2M), onde o ano de reestruturação de capital produziu entradas invulgarmente elevadas. Em todas as outras épocas — incluindo 2023/24 com −€92.2M, o pior registo — salários, fornecimentos e pagamentos de prestações de aquisição de jogadores absorvem mais caixa do que o negócio gera antes das transferências. As vendas de jogadores (atividades de investimento) são a compensação estrutural que evita o colapso da posição de caixa.",
+    "text": "A Sporting SAD registou fluxo de caixa operacional negativo em 14 das 16 épocas do dataset, com exceção de 2014/15 (+€8,6M, ano da reestruturação financeira) e de 2025/26 (+€5,3M, impulsionado pelo recorde de €188M em receitas operacionais). Nas restantes épocas — incluindo 2023/24 com −€92,2M — salários, fornecimentos e pagamentos operacionais absorveram mais caixa do que o negócio gerava antes das transferências, sendo as vendas de jogadores (atividades de investimento) a compensação estrutural.",
     "isAria": false,
     "innerHTML": false
   },
   "ch04-narrative-p2": {
-    "text": "O caixa de fim de ano nunca excedeu €15.6M e caiu abaixo de €4M em 7 das 15 épocas — incluindo valores tão baixos como €1.3M em 2010/11. O USPP (€225M, outubro 2025) refinancia instalações de curto prazo e estende o perfil de maturidade da dívida; o seu objetivo principal é a transformação do Estádio Alvalade, não resolver a geração de caixa operacional. A 5,75% sobre €225M, o cupão anual (~€12.9M) irá aumentar os fluxos financeiros a partir de 2025/26.",
+    "text": "O caixa no final do exercício subiu para €15,6M em 2024/25 e disparou para um recorde histórico de €117,9M em 2025/26 após a colocação privada USPP de €225M (outubro de 2025), depois de ter ficado abaixo de €4M em 7 das 16 épocas (incluindo €1,3M em 2010/11). O USPP refinanciou a dívida de curto prazo, estendeu o perfil de maturidade a 28 anos e financia a transformação do Estádio José Alvalade. A 5,75% sobre €225M, o cupão anual fixo (~€12,9M) estrutura os fluxos financeiros de longo prazo.",
     "isAria": false,
     "innerHTML": false
   },
   "ch04-narrative-p3": {
-    "text": "O marco de outubro de 2025: uma obrigação USPP (US Private Placement) de €225M a 28 anos a 5,75% — a primeira notação de grau de investimento do Sporting pela Fitch e DBRS. Refinanciou a dívida legada a menor custo e maior duração, sendo provavelmente o maior evento financeiro do período.",
+    "text": "O marco de outubro de 2025: uma obrigação USPP (US Private Placement) de €225M a 28 anos a 5,75% — a primeira notação de grau de investimento do Sporting pela Fitch (BBB−) e DBRS (BBB). Refinanciou a dívida legada a menor custo e maior duração, sendo provavelmente o maior evento financeiro do período.",
     "isAria": false,
     "innerHTML": false
   },
   "ch04-net-desc": {
-    "text": "Resultado líquido anual a 30 de junho de cada época. Os dois grandes picos em 2022/23 e 2023/24 são impulsionados pelos ganhos contabilísticos da conversão de VMOCs (€83,6M e €51,4M respetivamente) — não por lucro operacional recorrente.",
+    "text": "Resultado líquido anual a 30 de junho de cada época. Os dois grandes picos em 2022/23 e 2023/24 são impulsionados pelos ganhos contabilísticos da conversão de VMOCs (€83,6M e €51,4M respetivamente) — seguidos de lucros sustentados em 2024/25 (€20,0M) e 2025/26 (€35,1M).",
     "isAria": false,
     "innerHTML": false
   },
@@ -455,12 +460,27 @@
     "innerHTML": false
   },
   "ch04-net-tag": {
-    "text": "15 épocas",
+    "text": "16 épocas",
     "isAria": false,
     "innerHTML": false
   },
   "ch04-num": {
     "text": "Cap. 04 — Tesouraria e Caixa",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch05-2425-tag": {
+    "text": "2.º Liga Portugal (82 pts) · Quartos UCL",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch05-borrowings-desc": {
+    "text": "Evolução dos empréstimos obtidos correntes (curto prazo) e não correntes (longo prazo) no balanço da SAD ao longo das 16 épocas.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch05-borrowings-h3": {
+    "text": "🏦 Estrutura da dívida financeira — corrente vs. não corrente",
     "isAria": false,
     "innerHTML": false
   },
@@ -480,7 +500,7 @@
     "innerHTML": false
   },
   "ch05-impact-p2": {
-    "text": "Os ratings obtidos da Fitch (BBB−) e DBRS (BBB low) — ambos nível de investimento (\"Investment Grade\") — tornam o Sporting o primeiro clube em Portugal a atingir este patamar. Isto abre as portas a investidores institucionais que não podem deter dívida sem rating de investimento e assinala ao mercado que a estrutura financeira é sólida.",
+    "text": "Os ratings obtidos da Fitch (BBB−) e DBRS (BBB) — ambos nível de investimento (\"Investment Grade\") — tornam o Sporting o primeiro clube em Portugal a atingir este patamar. Isto abre as portas a investidores institucionais que não podem deter dívida sem rating de investimento e assinala ao mercado que a estrutura financeira é sólida.",
     "isAria": false,
     "innerHTML": false
   },
@@ -590,7 +610,7 @@
     "innerHTML": true
   },
   "ch06-income-desc": {
-    "text": "Vendas de jogadores — o motor financeiro que financiou a recuperação. Cinco épocas acima de €75M.",
+    "text": "Vendas de jogadores — o motor financeiro que financiou a recuperação. Oito épocas acima de €75M.",
     "isAria": false,
     "innerHTML": false
   },
@@ -605,7 +625,7 @@
     "innerHTML": false
   },
   "ch06-lede": {
-    "text": "Os diplomados de Alcochete — e recrutamento inteligente — geraram mais de €75M em sete das últimas quinze épocas.",
+    "text": "Os diplomados de Alcochete — e recrutamento inteligente — geraram mais de €75M em oito das últimas dezasseis épocas.",
     "isAria": false,
     "innerHTML": false
   },
@@ -635,12 +655,12 @@
     "innerHTML": false
   },
   "ch06-narrative-p3": {
-    "text": "O valor de mercado do plantel (Transfermarkt, dez 2025) é de €474M — 3× o €151.9M estimado em 2010/11, apesar do clube ter vendido centenas de milhões em talento no mesmo período. A diferença entre valor de mercado e valor contabilístico é grande porque os diplomados de Alcochete têm custo de aquisição zero no balanço.",
+    "text": "O valor de mercado do plantel (Transfermarkt, 2025/26) é de €572M — quase 4× os €151,9M estimados em 2010/11, apesar de o clube ter vendido centenas de milhões em talento no mesmo período. A diferença entre valor de mercado e valor contabilístico é grande porque os diplomados de Alcochete têm custo de aquisição zero no balanço.",
     "isAria": false,
     "innerHTML": false
   },
   "ch06-net-desc": {
-    "text": "Rendimentos de vendas menos aquisições, amortizações e imparidades. Lucrativo em 13 das 15 épocas.",
+    "text": "Rendimentos de vendas menos aquisições, amortizações e imparidades. Lucrativo em 14 das 16 épocas.",
     "isAria": false,
     "innerHTML": false
   },
@@ -655,7 +675,7 @@
     "innerHTML": false
   },
   "ch06-note": {
-    "text": "Desde 2016/17, a SAD gerou entre €34M e €144M em receitas de vendas por época. A época 2023/24 estabeleceu o recorde histórico com €144M em receitas de transferências, mantendo um nível elevado de alienações em 2024/25 com €117M.",
+    "text": "Desde 2016/17, a SAD gerou entre €34M e €144M em receitas de vendas por época. A época 2023/24 estabeleceu o recorde histórico com €144M em receitas de transferências, mantendo um nível elevado de alienações em 2024/25 (€117M) e em 2025/26 (€112,3M).",
     "isAria": false,
     "innerHTML": false
   },
@@ -735,7 +755,7 @@
     "innerHTML": false
   },
   "ch08-benchmark-table-desc": {
-    "text": "Comparação dos grandes agregados acumulados entre 2010/11 e 2024/25 e da posição financeira à data do último relatório anual.",
+    "text": "Comparação dos grandes agregados acumulados entre 2010/11 e 2025/26 e da posição financeira à data do último relatório anual.",
     "isAria": false,
     "innerHTML": false
   },
@@ -940,34 +960,44 @@
     "innerHTML": false
   },
   "ch09-event-alcochete-body": {
-    "text": "Lucro recorde de €30,5M — pico pré-ataque",
+    "text": "Um grupo de adeptos invade a Academia. Vários jogadores rescindem com justa causa; seguem-se vendas forçadas (Rui Patrício, William, Gelson). Bruno de Carvalho é destituído em AG.",
     "isAria": false,
     "innerHTML": false
   },
   "ch09-event-alcochete-header": {
-    "text": "<span class=\"pitch\"><strong>No relvado —</strong> Regresso da estabilidade — o Sporting voltou a poder planear a época e investir no plantel.</span> <span class=\"numbers\"><strong>Nos números —</strong> O capital próprio passou a positivo (+€7M) pela primeira vez; a dívida de curto prazo caiu para quase metade.</span>",
+    "text": "<span class=\"event-date\">15 Mai 2018</span><span class=\"event-badge\">Crise</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch09-event-alcochete-impact": {
+    "text": "<span class=\"pitch\"><strong>No relvado —</strong> O melhor plantel em anos desmorona-se. O Sporting termina em 3º lugar na época seguinte.</span> <span class=\"numbers\"><strong>Nos números —</strong> Vendas forçadas abaixo do valor de mercado; o capital próprio afunda para -€13M; custos financeiros disparam.</span>",
     "isAria": false,
     "innerHTML": true
   },
   "ch09-event-alcochete-title": {
-    "text": "<span class=\"event-date\">Jun 2017</span><span class=\"event-badge\">Marco</span>",
+    "text": "Invasão da Academia de Alcochete",
     "isAria": false,
-    "innerHTML": true
+    "innerHTML": false
   },
   "ch09-event-champions-body": {
+    "text": "A equipa de Rúben Amorim quebra o maior jejum da história do clube. A festa faz-se num Alvalade despovoado devido à pandemia.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-event-champions-header": {
     "text": "<span class=\"event-date\">11 Mai 2021</span><span class=\"event-badge\">Marco</span>",
     "isAria": false,
     "innerHTML": true
   },
-  "ch09-event-champions-header": {
-    "text": "Estádios vazios, receitas de bilheteira a zero, renegociação de patrocínios. A época histórica de 20/21 é jogada sem público.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch09-event-champions-title": {
-    "text": "<span class=\"pitch\"><strong>No relvado —</strong> O Sporting sagra-se campeão nacional — 19 anos depois — a 11 de maio de 2021, com bancadas desertas.</span> <span class=\"numbers\"><strong>Nos números —</strong> Receitas correntes caem 16% face ao ano anterior; pior prejuízo da série (-€33M); capital próprio bate mínimos históricos de -€41M.</span>",
+  "ch09-event-champions-impact": {
+    "text": "<span class=\"pitch\"><strong>No relvado —</strong> Fim do jejum. Amorim entra na lenda. O espírito de união do grupo sustenta as bases para futuros sucessos.</span> <span class=\"numbers\"><strong>Nos números —</strong> O impacto financeiro total reflete-se em 21/22 — com o regresso do público e o prémio de entrada na Champions (+€58M de receitas num ano).</span>",
     "isAria": false,
     "innerHTML": true
+  },
+  "ch09-event-champions-title": {
+    "text": "Campeão Nacional 19 anos depois",
+    "isAria": false,
+    "innerHTML": false
   },
   "ch09-event-community-body": {
     "text": "USPP de €225M, Investment Grade e Sporting Entertainment",
@@ -985,19 +1015,24 @@
     "innerHTML": true
   },
   "ch09-event-covid-body": {
-    "text": "<span class=\"event-date\">15 Mai 2018</span><span class=\"event-badge\">Crise</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "ch09-event-covid-header": {
-    "text": "Graças às vendas de jogadores (João Mário por €40M ao Inter, Slimani por €30,5M ao Leicester) e à qualificação para a Champions, a SAD atinge o maior lucro da época até então.",
+    "text": "Estádios vazios, receitas de bilheteira a zero, renegociação de patrocínios. A época histórica de 20/21 é jogada sem público.",
     "isAria": false,
     "innerHTML": false
   },
-  "ch09-event-covid-title": {
-    "text": "<span class=\"pitch\"><strong>No relvado —</strong> Fase de grupos da Liga dos Campeões garantida; o futebol da era de Jorge Jesus entusiasma os adeptos.</span> <span class=\"numbers\"><strong>Nos números —</strong> €93M em receitas de transferências — recorde histórico da altura; capitais próprios no melhor nível desde 2014.</span>",
+  "ch09-event-covid-header": {
+    "text": "<span class=\"event-date\">Mar–Jun 2020/21</span><span class=\"event-badge\">Crise</span>",
     "isAria": false,
     "innerHTML": true
+  },
+  "ch09-event-covid-impact": {
+    "text": "<span class=\"pitch\"><strong>No relvado —</strong> O Sporting sagra-se campeão nacional — 19 anos depois — a 11 de maio de 2021, com bancadas desertas.</span> <span class=\"numbers\"><strong>Nos números —</strong> Receitas correntes caem 16% face ao ano anterior; pior prejuízo da série (-€33M); capital próprio bate mínimos históricos de -€41M.</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch09-event-covid-title": {
+    "text": "Pandemia COVID-19: jogos à porta fechada",
+    "isAria": false,
+    "innerHTML": false
   },
   "ch09-event-digital-header": {
     "text": "Mês histórico. O Sporting torna-se o primeiro clube nacional a obter rating \"Investment Grade\" pela Fitch e DBRS, emitindo €225M a 28 anos (5,75%) para limpar a dívida bancária antiga. Criação da Sporting Entertainment e consolidação das contas da SAD.",
@@ -1024,6 +1059,26 @@
     "isAria": false,
     "innerHTML": false
   },
+  "ch09-event-peak-body": {
+    "text": "Graças às vendas de jogadores (João Mário por €40M ao Inter, Slimani por €30,5M ao Leicester) e à qualificação para a Champions, a SAD atinge o maior lucro da época até então.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-event-peak-header": {
+    "text": "<span class=\"event-date\">Jun 2017</span><span class=\"event-badge\">Marco</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch09-event-peak-impact": {
+    "text": "<span class=\"pitch\"><strong>No relvado —</strong> Fase de grupos da Liga dos Campeões garantida; o futebol da era de Jorge Jesus entusiasma os adeptos.</span> <span class=\"numbers\"><strong>Nos números —</strong> €93M em receitas de transferências — recorde histórico da altura; capitais próprios no melhor nível desde 2014.</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch09-event-peak-title": {
+    "text": "Lucro recorde de €30,5M — pico pré-ataque",
+    "isAria": false,
+    "innerHTML": false
+  },
   "ch09-event-restructure-body": {
     "text": "A Assembleia Geral convocada por Bruno de Carvalho autoriza um aumento de capital e emissão de Valores Mobiliários Obrigatoriamente Convertíveis (VMOC), alongando os prazos de vencimento da dívida bancária de curto prazo.",
     "isAria": false,
@@ -1034,10 +1089,35 @@
     "isAria": false,
     "innerHTML": true
   },
+  "ch09-event-restructure-impact": {
+    "text": "<span class=\"pitch\"><strong>No relvado —</strong> Regresso da estabilidade — o Sporting voltou a poder planear a época e investir no plantel.</span> <span class=\"numbers\"><strong>Nos números —</strong> O capital próprio passou a positivo (+€7M) pela primeira vez; a dívida de curto prazo caiu para quase metade.</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
   "ch09-event-restructure-title": {
     "text": "Reestruturação de capital e primeiros VMOC",
     "isAria": false,
     "innerHTML": true
+  },
+  "ch09-event-securitization-body": {
+    "text": "O Sporting refinancia recebíveis futuros de direitos televisivos através de uma titularização, aliviando a tesouraria no curto prazo. Rúben Amorim é contratado.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-event-securitization-header": {
+    "text": "<span class=\"event-date\">2019</span><span class=\"event-badge\">Reestruturação</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch09-event-securitization-impact": {
+    "text": "<span class=\"pitch\"><strong>No relvado —</strong> Libertou orçamento para contratar Rúben Amorim a meio de 19/20 — a escolha que mudaria o rumo do futebol.</span> <span class=\"numbers\"><strong>Nos números —</strong> O passivo não corrente cresce de €110M para €184M com o alongamento da dívida bancária; alívio da pressão de caixa.</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch09-event-securitization-title": {
+    "text": "Titularização de €65M",
+    "isAria": false,
+    "innerHTML": false
   },
   "ch09-event-sponsorship-body": {
     "text": "Segunda Conversão de VMOC (€51,4M)",
@@ -1055,7 +1135,7 @@
     "innerHTML": true
   },
   "ch09-event-stadium-body": {
-    "text": "€83.571.872 dos títulos convertíveis emitidos in 2014 passam a ações, eliminando a respetiva dívida bancária do balanço.",
+    "text": "€83.571.872 dos títulos convertíveis emitidos em 2014 passam a ações, eliminando a respetiva dívida bancária do balanço.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1070,72 +1150,97 @@
     "innerHTML": false
   },
   "ch09-event-transfer-record-body": {
+    "text": "Rúben Amorim conquista o seu segundo campeonato pelo Sporting antes de rumar ao Manchester United em novembro de 2024.",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch09-event-transfer-record-header": {
     "text": "<span class=\"event-date\">Mai 2024</span><span class=\"event-badge\">Marco</span>",
     "isAria": false,
     "innerHTML": true
   },
-  "ch09-event-transfer-record-header": {
-    "text": "Mais €51.416.952 de VMOC passam a capital próprio. No total das duas conversões, o Sporting extinguiu €135M de dívida financeira.",
-    "isAria": false,
-    "innerHTML": false
-  },
-  "ch09-event-transfer-record-title": {
-    "text": "<span class=\"pitch\"><strong>No relvado —</strong> Regresso regular à Champions; valor de mercado do plantel ultrapassa €365M.</span> <span class=\"numbers\"><strong>Nos números —</strong> Segunda conversão eleva a dívida extinta para €135M; capitais próprios sobem para +€21M; estrutura financeira consolidada a longo prazo.</span>",
+  "ch09-event-transfer-record-impact": {
+    "text": "<span class=\"pitch\"><strong>No relvado —</strong> Consolidação da hegemonia nacional. Venda de Ugarte (€60M ao PSG); Gyökeres brilha com dezenas de golos.</span> <span class=\"numbers\"><strong>Nos números —</strong> Recorde de €144M em receitas de trading de jogadores — valor mais alto de sempre da série; capital próprio atinge €21M.</span>",
     "isAria": false,
     "innerHTML": true
   },
+  "ch09-event-transfer-record-title": {
+    "text": "Bicampeão em quatro anos",
+    "isAria": false,
+    "innerHTML": false
+  },
   "ch09-event-uspp-body": {
-    "text": "Pandemia COVID-19: jogos à porta fechada",
+    "text": "Mês histórico. O Sporting torna-se o primeiro clube nacional a obter rating \"Investment Grade\" pela Fitch e DBRS, emitindo €225M a 28 anos (5,75%) para limpar a dívida bancária antiga. Criação da Sporting Entertainment e consolidação das contas da SAD.",
     "isAria": false,
     "innerHTML": false
   },
   "ch09-event-uspp-header": {
-    "text": "<span class=\"pitch\"><strong>No relvado —</strong> Libertou orçamento para contratar Rúben Amorim a meio de 19/20 — a escolha que mudaria o rumo do futebol.</span> <span class=\"numbers\"><strong>Nos números —</strong> O passivo não corrente cresce de €110M para €184M com o alongamento da dívida bancária; alívio da pressão de caixa.</span>",
+    "text": "<span class=\"event-date\">Out 2025</span><span class=\"event-badge\">Reestruturação</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch09-event-uspp-impact": {
+    "text": "<span class=\"pitch\"><strong>No relvado —</strong> A classificação de investimento é uma vantagem competitiva ímpar perante os rivais. A nova subsidiária expande as receitas comerciais.</span> <span class=\"numbers\"><strong>Nos números —</strong> Quase toda a dívida bancária alongada a 28 anos. Primeiro semestre consolidado revela fundo de maneio de €100M e lucro recorde no semestre de €32M.</span>",
     "isAria": false,
     "innerHTML": true
   },
   "ch09-event-uspp-title": {
-    "text": "<span class=\"event-date\">Mar–Jun 2020/21</span><span class=\"event-badge\">Crise</span>",
+    "text": "USPP de €225M, Investment Grade e Sporting Entertainment",
     "isAria": false,
     "innerHTML": true
   },
   "ch09-event-vmoc1-body": {
-    "text": "<span class=\"pitch\"><strong>No relvado —</strong> O melhor plantel em anos desmorona-se. O Sporting termina em 3º lugar na época seguinte.</span> <span class=\"numbers\"><strong>Nos números —</strong> Vendas forçadas abaixo do valor de mercado; o capital próprio afunda para -€13M; custos financeiros disparam.</span>",
-    "isAria": false,
-    "innerHTML": true
-  },
-  "ch09-event-vmoc1-header": {
-    "text": "Invasão da Academia de Alcochete",
+    "text": "€83.571.872 dos títulos convertíveis emitidos em 2014 passam a ações, eliminando a respetiva dívida bancária do balanço.",
     "isAria": false,
     "innerHTML": false
   },
+  "ch09-event-vmoc1-header": {
+    "text": "<span class=\"event-date\">Ago 2022</span><span class=\"event-badge\">Reestruturação</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch09-event-vmoc1-impact": {
+    "text": "<span class=\"pitch\"><strong>No relvado —</strong> Estabilidade financeira deu a Frederico Varandas margem para sustentar o projeto desportivo — contratação de Ugarte, seguida de Gyökeres.</span> <span class=\"numbers\"><strong>Nos números —</strong> €83,6M de passivo financeiro transformam-se em capital próprio; capitais próprios regressam a terreno positivo (+€8,9M); custos com juros diminuem.</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
   "ch09-event-vmoc1-title": {
-    "text": "Um grupo de adeptos invade a Academia. Vários jogadores rescindem com justa causa; seguem-se vendas forçadas (Rui Patrício, William, Gelson). Bruno de Carvalho é destituído em AG.",
+    "text": "Primeira Conversão de VMOC (€83,6M)",
     "isAria": false,
     "innerHTML": false
   },
   "ch09-event-vmoc2-body": {
-    "text": "O Sporting refinancia recebíveis futuros de direitos televisivos através de uma titularização, aliviando a tesouraria no curto prazo. Rúben Amorim é contratado.",
+    "text": "Mais €51.416.952 de VMOC passam a capital próprio. No total das duas conversões, o Sporting extinguiu €135M de dívida financeira.",
     "isAria": false,
     "innerHTML": false
   },
   "ch09-event-vmoc2-header": {
-    "text": "<span class=\"event-date\">2019</span><span class=\"event-badge\">Reestruturação</span>",
+    "text": "<span class=\"event-date\">Dez 2023</span><span class=\"event-badge\">Reestruturação</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch09-event-vmoc2-impact": {
+    "text": "<span class=\"pitch\"><strong>No relvado —</strong> Regresso regular à Champions; valor de mercado do plantel ultrapassa €365M.</span> <span class=\"numbers\"><strong>Nos números —</strong> Segunda conversão eleva a dívida extinta para €135M; capitais próprios sobem para +€21M; estrutura financeira consolidada a longo prazo.</span>",
     "isAria": false,
     "innerHTML": true
   },
   "ch09-event-vmoc2-title": {
-    "text": "Titularização de €65M",
+    "text": "Segunda Conversão de VMOC (€51,4M)",
     "isAria": false,
     "innerHTML": false
   },
   "ch09-event-youth-body": {
-    "text": "O Sporting conquista campeonato e Taça de Portugal sob a liderança do técnico Rui Borges. Gyökeres (€65.8M ao Arsenal) sai no verão.",
+    "text": "O Sporting conquista campeonato e Taça de Portugal sob a liderança do técnico Rui Borges. Gyökeres (€65,8M ao Arsenal) sai no verão.",
     "isAria": false,
     "innerHTML": false
   },
   "ch09-event-youth-header": {
     "text": "<span class=\"event-date\">Mai 2025</span><span class=\"event-badge\">Marco</span>",
+    "isAria": false,
+    "innerHTML": true
+  },
+  "ch09-event-youth-impact": {
+    "text": "<span class=\"pitch\"><strong>No relvado —</strong> Três campeonatos em cinco anos. Rui Borges assegura transição tranquila. Valor de mercado do plantel atinge €511M.</span> <span class=\"numbers\"><strong>Nos números —</strong> Receitas operacionais atingem €148M (+130% em 5 anos); rácio salarial desce para 59% (mínimo de 15 anos); capitais próprios em +€41M.</span>",
     "isAria": false,
     "innerHTML": true
   },
@@ -1159,6 +1264,11 @@
     "isAria": false,
     "innerHTML": false
   },
+  "ch09-val-champ26": {
+    "text": "2.º Lugar Liga Portugal (82 pts) · Quartos de Final UCL (2025/26)",
+    "isAria": false,
+    "innerHTML": false
+  },
   "ch10-annual-desc": {
     "text": "Células negativas a vermelho indicam perdas ou saldos negativos. PDFs fonte: relatórios anuais da Sporting SAD (CMVM).",
     "isAria": false,
@@ -1170,7 +1280,7 @@
     "innerHTML": false
   },
   "ch10-annual-tag": {
-    "text": "15 épocas",
+    "text": "16 épocas",
     "isAria": false,
     "innerHTML": false
   },
@@ -1185,7 +1295,7 @@
     "innerHTML": true
   },
   "ch10-lede": {
-    "text": "Cada métrica ao longo de quinze épocas. Células negativas a vermelho indicam prejuízos ou saldos negativos. PDFs fonte: Relatórios anuais da Sporting SAD entregues à CMVM.",
+    "text": "Cada métrica ao longo de dezasseis épocas. Células negativas a vermelho indicam prejuízos ou saldos negativos. PDFs fonte: Relatórios anuais da Sporting SAD entregues à CMVM.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1210,7 +1320,7 @@
     "innerHTML": false
   },
   "ch10-scroll-hint": {
-    "text": "Deslize horizontalmente para ver todas as 15 épocas",
+    "text": "Deslize horizontalmente para ver todas as 16 épocas",
     "isAria": false,
     "innerHTML": false
   },
@@ -1380,7 +1490,7 @@
     "innerHTML": true
   },
   "ch13-lede": {
-    "text": "Ajuste as variáveis para projetar os resultados da época 2025/26 em tempo real.",
+    "text": "Ajuste as variáveis para projetar os resultados da próxima época em tempo real.",
     "isAria": false,
     "innerHTML": false
   },
@@ -1435,7 +1545,7 @@
     "innerHTML": false
   },
   "footer-credit": {
-    "text": "<strong>Sporting Clube de Portugal — Futebol, SAD.</strong> Elaborado com base nos relatórios anuais e documentos oficiais da Sporting SAD apresentados à CMVM. Valores em milhares de euros; alguns valores de 2023/24 foram reexpressos de acordo com o relatório de 2024/25. Compilado para fins de referência informativa.",
+    "text": "<strong>Sporting Clube de Portugal — Futebol, SAD.</strong> Elaborado com base nos relatórios anuais e documentos oficiais da Sporting SAD apresentados à CMVM até 2025/26. Valores em milhares de euros; alguns valores de 2023/24 foram reexpressos de acordo com o relatório de 2024/25. Compilado para fins de referência informativa.",
     "isAria": false,
     "innerHTML": true
   },
@@ -1551,6 +1661,11 @@
   },
   "squad_sub_ledger": {
     "text": "Livro de Registos",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "story-finish": {
+    "text": "Concluir",
     "isAria": false,
     "innerHTML": false
   },
@@ -1914,6 +2029,11 @@
     "isAria": false,
     "innerHTML": false
   },
+  "dmt_title": {
+    "text": "Calendário de Vencimentos & Serviço da Dívida (2025 → 2035)",
+    "isAria": false,
+    "innerHTML": false
+  },
   "dmt_tag": {
     "text": "Maturidade & Fluxo de Caixa",
     "isAria": false,
@@ -2040,7 +2160,7 @@
     "innerHTML": false
   },
   "dmt_verdict_title": {
-    "text": "Parecer Institucional de Estrutura de Capital (Rating BBB− / BBB low)",
+    "text": "Parecer Institucional de Estrutura de Capital (Rating BBB− / BBB)",
     "isAria": false,
     "innerHTML": false
   },
@@ -2319,6 +2439,11 @@
     "isAria": false,
     "innerHTML": false
   },
+  "stress_section_h3": {
+    "text": "Simulador de Testes de Esforço & Autonomia de Tesouraria",
+    "isAria": false,
+    "innerHTML": false
+  },
   "stress_title": {
     "text": "Simulador de Testes de Esforço & Autonomia de Tesouraria",
     "isAria": false,
@@ -2500,7 +2625,7 @@
     "innerHTML": false
   },
   "stress_guide_p3_desc": {
-    "text": "A colocação da emissão obrigacionista USPP de €225M a 10 anos eliminou as pressões de refinanciamento bancário de curto prazo, garantindo maturidade média da dívida superior a 7 anos.",
+    "text": "A colocação da emissão obrigacionista USPP de €225M a 28 anos eliminou as pressões de refinanciamento bancário de curto prazo, garantindo maturidade média da dívida superior a 7 anos.",
     "isAria": false,
     "innerHTML": false
   },
@@ -2649,8 +2774,13 @@
     "isAria": false,
     "innerHTML": false
   },
+  "player_roi_table_h3": {
+    "text": "Mapa Contabilístico de Ativos do Plantel (2025/26)",
+    "isAria": false,
+    "innerHTML": false
+  },
   "player_roi_table_title": {
-    "text": "Mapa Contabilístico de Ativos do Plantel (2024/25)",
+    "text": "Mapa Contabilístico de Ativos do Plantel (2025/26)",
     "isAria": false,
     "innerHTML": false
   },

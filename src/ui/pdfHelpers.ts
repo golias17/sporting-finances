@@ -30,14 +30,19 @@ export function signColorCell(colIndex: number, colors: ColorPalette) {
     if (val && val.startsWith("-")) {
       cellData.cell.styles.textColor = colors.negative;
       cellData.cell.styles.fontStyle = "bold";
-    } else if (val && val !== "—" && val !== "0.0 M€" && !val.startsWith("0")) {
+    } else if (
+      val &&
+      val !== "—" &&
+      val !== "0.0 M€" &&
+      parseFloat(val) > 0
+    ) {
       cellData.cell.styles.textColor = colors.positive;
       cellData.cell.styles.fontStyle = "bold";
     }
   };
 }
 
-// Colors a column based on a parseInt'd numeric threshold (a percentage or
+// Colors a column based on a parseFloat'd numeric threshold (a percentage or
 // a "2.0x"-style multiple) — the caller supplies the red/green predicates,
 // since the thresholds and their direction (higher-is-worse vs
 // higher-is-better) differ per column.
@@ -51,7 +56,8 @@ export function thresholdColorCell(
       return;
     const str = cellData.cell.text[0];
     if (!str || str === "—") return;
-    const val = parseInt(str, 10);
+    const val = parseFloat(str);
+    if (Number.isNaN(val)) return;
     if (negativeIf(val)) {
       cellData.cell.styles.textColor = colors.negative;
       cellData.cell.styles.fontStyle = "bold";
@@ -82,7 +88,10 @@ export function getBase64ImageFromUrl(url: string) {
       canvas.width = img.width;
       canvas.height = img.height;
       const ctx = canvas.getContext("2d");
-      if (!ctx) return;
+      if (!ctx) {
+        reject(new Error("Canvas 2D context unavailable"));
+        return;
+      }
       ctx.drawImage(img, 0, 0);
       const dataURL = canvas.toDataURL("image/png");
       resolve(dataURL);

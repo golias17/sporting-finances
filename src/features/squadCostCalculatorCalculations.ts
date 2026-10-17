@@ -253,8 +253,11 @@ export function calculateSquadCostImpact(
   };
 
   // Year 2 (Post-Sale / Full Year Phase - One-off sale gain drops to 0)
+  const y2ContractActive = effectiveYears >= 2 ? 1.0 : 0.0;
   const y2SquadCosts =
-    baselineSquadCosts + annualSquadCostImpact - offsetCostReductionY2;
+    baselineSquadCosts +
+    annualSquadCostImpact * y2ContractActive -
+    offsetCostReductionY2;
   const y2TotalRevenue = baselineTotalRevenue; // One-off transfer gain drops off
   const y2Ratio = (y2SquadCosts / y2TotalRevenue) * 100;
   const y2CapValue = 0.7 * y2TotalRevenue; // Definitive 70% in Year 2
@@ -277,16 +280,30 @@ export function calculateSquadCostImpact(
   };
 
   // Year 3 (Medium-Term Horizon)
+  const y3ContractActive = effectiveYears >= 3 ? 1.0 : 0.0;
+  const y3SquadCosts =
+    baselineSquadCosts +
+    annualSquadCostImpact * y3ContractActive -
+    offsetCostReductionY2;
+  const y3TotalRevenue = baselineTotalRevenue;
+  const y3Ratio = (y3SquadCosts / y3TotalRevenue) * 100;
+  const y3CapValue = 0.7 * y3TotalRevenue;
+  const y3Headroom = y3CapValue - y3SquadCosts;
+
+  let y3Status: "green" | "amber" | "red" = "green";
+  if (y3Ratio > 75.0) y3Status = "red";
+  else if (y3Ratio > 70.0) y3Status = "amber";
+
   const year3: YearProjection = {
     yearIndex: 3,
     labelPt: "Ano 3 (Médio Prazo)",
     labelEn: "Year 3 (Medium-Term)",
-    squadCosts: y2SquadCosts,
-    totalRevenue: y2TotalRevenue,
-    ratio: y2Ratio,
+    squadCosts: y3SquadCosts,
+    totalRevenue: y3TotalRevenue,
+    ratio: y3Ratio,
     uefaCap: 70.0,
-    headroom: y2Headroom,
-    status: y2Status,
+    headroom: y3Headroom,
+    status: y3Status,
   };
 
   // Summary mapping

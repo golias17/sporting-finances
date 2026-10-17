@@ -16,6 +16,7 @@ export function usePosNegBarChart(
   borderRadius?: number,
 ) {
   const labels = useChartLabels();
+  const theme = useAppState((s) => s.theme);
 
   const chartData = useMemo(
     () => ({
@@ -40,7 +41,7 @@ export function usePosNegBarChart(
         },
       ],
     }),
-    [labels, labelText, data, borderRadius],
+    [labels, labelText, data, borderRadius, theme],
   );
 
   const chartOptions = useMemo(
@@ -52,6 +53,7 @@ export function usePosNegBarChart(
         tooltip: {
           ...baseOpts.plugins?.tooltip,
           callbacks: {
+            ...(baseOpts.plugins?.tooltip?.callbacks || {}),
             label: (ctx: {
               dataset: { label: string };
               parsed: { y: number };
@@ -64,7 +66,7 @@ export function usePosNegBarChart(
         y: { ...(baseOpts.scales?.y || {}), beginAtZero: false },
       },
     }),
-    [],
+    [theme],
   );
 
   return { data: chartData, options: chartOptions };

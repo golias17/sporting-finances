@@ -70,6 +70,8 @@ function zoneAnnotations({
 export function useHealthcheckCharts() {
   const isPt = useAppState((s) => s.isPt);
   const annual = useAppState((s) => s.annual);
+  const theme = useAppState((s) => s.theme);
+  const colors = useMemo(() => getBrandColors(theme === "dark"), [theme]);
   const labels = useChartLabels();
 
   // 1. Payroll Burden
@@ -102,7 +104,7 @@ export function useHealthcheckCharts() {
         },
       ] as any,
     };
-  }, [labels, annual, isPt]);
+  }, [labels, annual, isPt, theme]);
 
   const payrollBurdenOptions = useMemo<ChartOptions<any>>(() => {
     const warnPct = HEALTH_THRESHOLDS.payrollRatio.warn * 100;
@@ -115,6 +117,7 @@ export function useHealthcheckCharts() {
         tooltip: {
           ...baseOpts.plugins?.tooltip,
           callbacks: {
+            ...(baseOpts.plugins?.tooltip?.callbacks || {}),
             label: (ctx: {
               dataset: { label: string };
               parsed: { y: number };
@@ -165,7 +168,7 @@ export function useHealthcheckCharts() {
         },
       },
     };
-  }, [isPt]);
+  }, [isPt, theme]);
 
   // 2. Transfer Reliance
   const transferRelianceData = useMemo<ChartData<"line">>(() => {
@@ -197,7 +200,7 @@ export function useHealthcheckCharts() {
         },
       ] as any,
     };
-  }, [labels, annual, isPt]);
+  }, [labels, annual, isPt, theme]);
 
   const transferRelianceOptions = useMemo<ChartOptions<any>>(() => {
     const warnPct = HEALTH_THRESHOLDS.transferReliance.warn * 100;
@@ -210,6 +213,7 @@ export function useHealthcheckCharts() {
         tooltip: {
           ...baseOpts.plugins?.tooltip,
           callbacks: {
+            ...(baseOpts.plugins?.tooltip?.callbacks || {}),
             label: (ctx: {
               dataset: { label: string };
               parsed: { y: number };
@@ -255,7 +259,7 @@ export function useHealthcheckCharts() {
         },
       },
     };
-  }, [isPt]);
+  }, [isPt, theme]);
 
   const currentRatioData = useMemo<ChartData<"line">>(() => {
     const ratios = annual.map((d) =>
@@ -286,7 +290,7 @@ export function useHealthcheckCharts() {
         },
       ] as any,
     };
-  }, [labels, annual, isPt]);
+  }, [labels, annual, isPt, theme]);
 
   const currentRatioOptions = useMemo<ChartOptions<any>>(() => {
     const { danger, warn } = HEALTH_THRESHOLDS.currentRatio;
@@ -310,6 +314,7 @@ export function useHealthcheckCharts() {
         tooltip: {
           ...baseOpts.plugins?.tooltip,
           callbacks: {
+            ...(baseOpts.plugins?.tooltip?.callbacks || {}),
             label: (ctx: {
               dataset: { label: string };
               parsed: { y: number };
@@ -350,10 +355,7 @@ export function useHealthcheckCharts() {
         },
       },
     };
-  }, [isPt]);
-
-  const theme = useAppState((s) => s.theme);
-  const colors = useMemo(() => getBrandColors(theme === "dark"), [theme]);
+  }, [isPt, theme]);
 
   // 5. Transfer Net Debt (Payables vs Receivables)
   const transferDebtData = useMemo<ChartData<"bar">>(() => {
@@ -393,6 +395,7 @@ export function useHealthcheckCharts() {
         tooltip: {
           ...baseOpts.plugins?.tooltip,
           callbacks: {
+            ...(baseOpts.plugins?.tooltip?.callbacks || {}),
             label: (ctx: {
               dataset: { label: string };
               parsed: { y: number };
@@ -415,7 +418,7 @@ export function useHealthcheckCharts() {
         },
       },
     };
-  }, []);
+  }, [theme]);
 
   // 6. EBITDA (Operacional vs Total)
   const ebitdaData = useMemo<ChartData<"line">>(() => {
@@ -467,6 +470,7 @@ export function useHealthcheckCharts() {
         tooltip: {
           ...baseOpts.plugins?.tooltip,
           callbacks: {
+            ...(baseOpts.plugins?.tooltip?.callbacks || {}),
             label: (ctx: {
               dataset: { label: string };
               parsed: { y: number };
@@ -489,7 +493,7 @@ export function useHealthcheckCharts() {
         },
       },
     };
-  }, []);
+  }, [theme]);
 
   return {
     payrollBurdenData,

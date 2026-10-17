@@ -4,11 +4,13 @@ import { useAppState, state } from "../../core/state.js";
 import { AppChart } from "../../components/AppChart.js";
 import { baseOpts } from "../../charts/chartDefaults.js";
 import { fmtMillions } from "../../charts/chartUtils.js";
+import { syncStateToUrl } from "../../utils/urlSync.js";
 import { useCompareAverage, useCompareRatios } from "./useCompareAverage.js";
 
 export const CompareTab = React.memo(function CompareTab() {
   const { T } = useTranslation();
   const isPt = useAppState((s) => s.isPt);
+  const theme = useAppState((s) => s.theme);
   const data = useAppState((s) => s.fullAnnual);
 
   const [idxA, setIdxA] = useState(() =>
@@ -35,16 +37,17 @@ export const CompareTab = React.memo(function CompareTab() {
     if (data && data[idxA] && data[idxB]) {
       state.urlCmpA = data[idxA].label;
       state.urlCmpB = data[idxB].label;
+      syncStateToUrl();
     }
   }, [idxA, idxB, data]);
+
+  const avgData = useCompareAverage(data || [], idxA, avgWindow, isPt);
 
   if (!data || data.length === 0) return null;
 
   const a = data[idxA];
   const b = data[idxB];
   if (!a || !b) return null;
-
-  const avgData = useCompareAverage(data, idxA, avgWindow, isPt);
 
   const useAverage = vsAverage && avgData !== null;
   const seasonB = useAverage ? avgData : b;
@@ -55,74 +58,83 @@ export const CompareTab = React.memo(function CompareTab() {
   );
 
   // Chart data
-  const barKeys = [
-    {
-      label: isPt ? "Receitas" : "Revenue",
-      a: a.revenue_operating,
-      b: seasonB.revenue_operating,
-    },
-    {
-      label: isPt ? "Transferências" : "Transfers",
-      a: a.player_transfer_income,
-      b: seasonB.player_transfer_income,
-    },
-    {
-      label: isPt ? "Res. Líquido" : "Net result",
-      a: a.net_result,
-      b: seasonB.net_result,
-    },
-    { label: isPt ? "Cap. Próprio" : "Equity", a: a.equity, b: seasonB.equity },
-    { label: isPt ? "Dívida Líq." : "Net debt", a: netDebtA, b: netDebtB },
-    { label: isPt ? "Caixa" : "Cash", a: a.cash, b: seasonB.cash },
-  ];
-
-  const chartData = {
-    labels: barKeys.map((k) => k.label),
-    datasets: [
+  const barKeys = useMemo(
+    () => [
       {
-        label: a.label,
-        data: barKeys.map((k) => k.a),
-        backgroundColor: state.COLORS.posSoft,
-        borderColor: state.COLORS.pos,
-        borderWidth: 1,
-        borderRadius: 3,
+        label: isPt ? "Receitas" : "Revenue",
+        a: a.revenue_operating,
+        b: seasonB.revenue_operating,
       },
       {
-        label: useAverage ? (isPt ? "Média" : "Average") : b.label,
-        data: barKeys.map((k) => k.b),
-        backgroundColor: useAverage
-          ? state.COLORS.mutedSoft
-          : state.COLORS.goldSoft,
-        borderColor: useAverage ? state.COLORS.muted : state.COLORS.gold,
-        borderWidth: 1,
-        borderRadius: 3,
+        label: isPt ? "Transferências" : "Transfers",
+        a: a.player_transfer_income,
+        b: seasonB.player_transfer_income,
       },
+      {
+        label: isPt ? "Res. Líquido" : "Net result",
+        a: a.net_result,
+        b: seasonB.net_result,
+      },
+      { label: isPt ? "Cap. Próprio" : "Equity", a: a.equity, b: seasonB.equity },
+      { label: isPt ? "Dívida Líq." : "Net debt", a: netDebtA, b: netDebtB },
+      { label: isPt ? "Caixa" : "Cash", a: a.cash, b: seasonB.cash },
     ],
-  };
+    [a, seasonB, netDebtA, netDebtB, isPt],
+  );
 
-  const chartOptions = {
-    ...baseOpts,
-    plugins: {
-      ...baseOpts.plugins,
-      tooltip: {
-        ...baseOpts.plugins?.tooltip,
-        callbacks: {
-          label: (ctx: {
-            dataset: { label: string };
-            parsed: { y: number };
-          }) => {
-            const val = ctx.parsed.y;
-            const sign = val < 0 ? "−" : "";
-            return ` ${ctx.dataset.label}: ${sign}€${(Math.abs(val) / 1000).toFixed(1)}M`;
+  const chartData = useMemo(
+    () => ({
+      labels: barKeys.map((k) => k.label),
+      datasets: [
+        {
+          label: a.label,
+          data: barKeys.map((k) => k.a),
+          backgroundColor: state.COLORS.posSoft,
+          borderColor: state.COLORS.pos,
+          borderWidth: 1,
+          borderRadius: 3,
+        },
+        {
+          label: useAverage ? (isPt ? "Média" : "Average") : b.label,
+          data: barKeys.map((k) => k.b),
+          backgroundColor: useAverage
+            ? state.COLORS.mutedSoft
+            : state.COLORS.goldSoft,
+          borderColor: useAverage ? state.COLORS.muted : state.COLORS.gold,
+          borderWidth: 1,
+          borderRadius: 3,
+        },
+      ],
+    }),
+    [barKeys, a.label, b.label, useAverage, isPt, theme],
+  );
+
+  const chartOptions = useMemo(
+    () => ({
+      ...baseOpts,
+      plugins: {
+        ...baseOpts.plugins,
+        tooltip: {
+          ...baseOpts.plugins?.tooltip,
+          callbacks: {
+            label: (ctx: {
+              dataset: { label: string };
+              parsed: { y: number };
+            }) => {
+              const val = ctx.parsed.y;
+              const sign = val < 0 ? "−" : "";
+              return ` ${ctx.dataset.label}: ${sign}€${(Math.abs(val) / 1000).toFixed(1)}M`;
+            },
           },
         },
       },
-    },
-    scales: {
-      ...baseOpts.scales,
-      y: { ...(baseOpts.scales?.y || {}), beginAtZero: false },
-    },
-  };
+      scales: {
+        ...baseOpts.scales,
+        y: { ...(baseOpts.scales?.y || {}), beginAtZero: false },
+      },
+    }),
+    [theme],
+  );
 
   // Narrative
   const revGrowth =

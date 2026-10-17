@@ -96,19 +96,11 @@ export function Story() {
   const tTitle = step.title[isPt ? "pt" : "en"];
   const tNarrative = step.narrative[isPt ? "pt" : "en"];
 
-  const btnPrevText = isPt ? "← Ant" : "← Prev";
   const btnPrevAria =
     t("story-prev-aria") ||
     (isPt ? "Passo anterior da história" : "Previous story step");
 
   const isLast = storyIndex === total - 1;
-  const btnNextText = isLast
-    ? isPt
-      ? "Concluir"
-      : "Finish"
-    : isPt
-      ? "Seguinte →"
-      : "Next →";
   const btnNextAria = isLast
     ? t("story-finish-aria") ||
       (isPt ? "Concluir e fechar a história" : "Finish and close story")
@@ -126,6 +118,8 @@ export function Story() {
     );
     startStory(newIndex);
   };
+
+  const progressPct = ((storyIndex + 1) / total) * 100;
 
   return (
     <div className="card" id="storyLaunchCard">
@@ -183,7 +177,7 @@ export function Story() {
                 id="btnNextStory"
                 onClick={nextStory}
                 aria-label={btnNextAria}
-                i18nKey="story-next"
+                i18nKey={isLast ? "story-finish" : "story-next"}
               />
               <T
                 as="button"
@@ -196,12 +190,16 @@ export function Story() {
             <div
               className="story-track"
               id="storyTrack"
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={Math.round(progressPct)}
               onClick={handleTrackClick}
             >
               <div
                 className="story-fill"
                 id="storyFill"
-                style={{ width: `${((storyIndex + 1) / total) * 100}%` }}
+                style={{ width: `${progressPct}%` }}
               ></div>
             </div>
           </div>

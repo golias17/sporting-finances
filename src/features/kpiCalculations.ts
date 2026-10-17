@@ -31,8 +31,16 @@ export function calculateKpis(
   // Squad market value
   let sqMv, sqMvLabel;
   const h1Data = getLatestH1Data(state.DATASET);
+  const useH1 =
+    isLatest &&
+    Boolean(
+      h1Data &&
+        (!curr.year_end ||
+          !h1Data.period_end ||
+          h1Data.period_end > curr.year_end),
+    );
 
-  if (isLatest && h1Data) {
+  if (useH1 && h1Data) {
     let h1PeriodLabel;
     // If period_end is missing or malformed, `new Date(...)` produces an
     // Invalid Date, and toLocaleDateString() on that silently returns the
@@ -160,7 +168,7 @@ export function calculateKpis(
     },
   ];
 
-  if (isLatest && h1Data) {
+  if (useH1 && h1Data) {
     kpis.push({
       label: state.isPt
         ? `Result. líquido 1º Sem. ${h1Data.label}`

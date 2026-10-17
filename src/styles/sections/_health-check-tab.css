@@ -28,12 +28,15 @@
   border-radius: var(--radius-round);
   flex-shrink: 0;
 }
-.zone-dot.g {
+.zone-dot.g,
+.zone-dot.pos {
   background: var(--pos);
 }
-.zone-dot.a {
+.zone-dot.a,
+.zone-dot.warn {
   background: var(--warn);
 }
-.zone-dot.r {
+.zone-dot.r,
+.zone-dot.neg {
   background: var(--neg);
 }

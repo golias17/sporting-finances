@@ -12,6 +12,7 @@ import { STORY_STEPS } from "../storySteps.js";
 export function useOverviewCharts() {
   const isPt = useAppState((s) => s.isPt);
   const annual = useAppState((s) => s.annual);
+  const theme = useAppState((s) => s.theme);
   const labels = useChartLabels();
 
   const heroData = useMemo<ChartData<"bar" | "line">>(
@@ -56,7 +57,7 @@ export function useOverviewCharts() {
         },
       ] as any,
     }),
-    [labels, annual, isPt],
+    [labels, annual, isPt, theme],
   );
 
   const isStoryVisible = useAppState((s) => s.isStoryVisible);
@@ -105,6 +106,7 @@ export function useOverviewCharts() {
         tooltip: {
           ...baseOpts.plugins?.tooltip,
           callbacks: {
+            ...(baseOpts.plugins?.tooltip?.callbacks || {}),
             label: (ctx: {
               dataset: { label: string };
               parsed: { y: number };
@@ -128,7 +130,7 @@ export function useOverviewCharts() {
         },
       },
     };
-  }, [isPt, isStoryVisible, storyIndex, annual]);
+  }, [isPt, isStoryVisible, storyIndex, annual, theme]);
 
   const netResult = usePosNegBarChart(
     isPt ? "Resultado líquido" : "Net result",
@@ -213,7 +215,7 @@ export function useOverviewCharts() {
         },
       ],
     };
-  }, [isPt, activeSeasonLabel, val1, val2, val3, val4, val5, net]);
+  }, [isPt, activeSeasonLabel, val1, val2, val3, val4, val5, net, theme]);
 
   const waterfallOptions = useMemo<ChartOptions<"bar">>(
     () => ({
@@ -273,7 +275,7 @@ export function useOverviewCharts() {
         },
       },
     }),
-    [isPt, activeSeasonLabel, rev, costs, trading, amort, fin, net],
+    [isPt, activeSeasonLabel, rev, costs, trading, amort, fin, net, theme],
   );
 
   return {

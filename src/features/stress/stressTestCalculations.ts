@@ -89,9 +89,9 @@ export function runStressSimulation(
   for (let m = 0; m < 24; m++) {
     const monthIndex = m % 12;
 
-    // Seasonality factors
+    // Seasonality factors (normalized so 12-month sum = 12.0)
     let revenueMultiplier = 1.0;
-    let transferMultiplier = 0.5;
+    let transferMultiplier = 4.4 / 7;
 
     if (monthIndex === 0 || monthIndex === 1) {
       // Jul/Aug: Season tickets & Summer transfer window
@@ -99,10 +99,10 @@ export function runStressSimulation(
       transferMultiplier = 2.2;
     } else if (monthIndex === 6) {
       // Jan: Winter window
-      transferMultiplier = 1.5;
+      transferMultiplier = 1.6;
     } else if (monthIndex === 10 || monthIndex === 11) {
       // May/Jun: Season closure
-      revenueMultiplier = 0.8;
+      revenueMultiplier = 0.7;
       transferMultiplier = 0.8;
     }
 
