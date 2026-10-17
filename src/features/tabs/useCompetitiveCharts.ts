@@ -96,10 +96,21 @@ function createCompetitorLineDatasets(
   ];
 }
 
-export type CompetitiveTimeWindow = "all" | "last5" | "last3";
+export type CompetitiveTimeWindow =
+  | "all"
+  | "last10"
+  | "last5"
+  | "last3"
+  | "custom";
+
+export interface CustomRange {
+  start?: string;
+  end?: string;
+}
 
 export function useCompetitiveCharts(
   timeWindow: CompetitiveTimeWindow = "all",
+  customRange?: CustomRange,
 ) {
   const rawAnnual = useAppState((s) => s.annual);
   const benficaDataset = useAppState((s) => s.BENFICA_DATASET);
@@ -110,21 +121,60 @@ export function useCompetitiveCharts(
 
   const annual = useMemo(() => {
     if (timeWindow === "last5") return rawAnnual.slice(-5);
+    if (timeWindow === "last10") return rawAnnual.slice(-10);
     if (timeWindow === "last3") return rawAnnual.slice(-3);
+    if (
+      timeWindow === "custom" &&
+      customRange &&
+      (customRange.start || customRange.end)
+    ) {
+      const sStart = customRange.start || "";
+      const sEnd = customRange.end || "";
+      const idx1 = rawAnnual.findIndex(
+        (d) =>
+          d.season === sStart ||
+          d.label === sStart ||
+          (d.season && sStart && d.season.endsWith(sStart.slice(-2))),
+      );
+      const idx2 = rawAnnual.findIndex(
+        (d) =>
+          d.season === sEnd ||
+          d.label === sEnd ||
+          (d.season && sEnd && d.season.endsWith(sEnd.slice(-2))),
+      );
+      const i1 = idx1 >= 0 ? idx1 : 0;
+      const i2 = idx2 >= 0 ? idx2 : rawAnnual.length - 1;
+      const min = Math.min(i1, i2);
+      const max = Math.max(i1, i2) + 1;
+      const sliced = rawAnnual.slice(min, max);
+      return sliced.length > 0 ? sliced : rawAnnual;
+    }
     return rawAnnual;
-  }, [rawAnnual, timeWindow]);
+  }, [rawAnnual, timeWindow, customRange?.start, customRange?.end]);
 
   const benficaAnnual = useMemo(() => {
+    if (timeWindow === "all") return rawBenficaAnnual;
     if (timeWindow === "last5") return rawBenficaAnnual.slice(-5);
+    if (timeWindow === "last10") return rawBenficaAnnual.slice(-10);
     if (timeWindow === "last3") return rawBenficaAnnual.slice(-3);
+    if (timeWindow === "custom") {
+      const activeSeasons = new Set(annual.map((d) => d.season));
+      return rawBenficaAnnual.filter((d) => activeSeasons.has(d.season));
+    }
     return rawBenficaAnnual;
-  }, [rawBenficaAnnual, timeWindow]);
+  }, [rawBenficaAnnual, timeWindow, annual]);
 
   const portoAnnual = useMemo(() => {
+    if (timeWindow === "all") return rawPortoAnnual;
     if (timeWindow === "last5") return rawPortoAnnual.slice(-5);
+    if (timeWindow === "last10") return rawPortoAnnual.slice(-10);
     if (timeWindow === "last3") return rawPortoAnnual.slice(-3);
+    if (timeWindow === "custom") {
+      const activeSeasons = new Set(annual.map((d) => d.season));
+      return rawPortoAnnual.filter((d) => activeSeasons.has(d.season));
+    }
     return rawPortoAnnual;
-  }, [rawPortoAnnual, timeWindow]);
+  }, [rawPortoAnnual, timeWindow, annual]);
 
   const theme = useAppState((s) => s.theme);
   const COLORS = useAppState((s) => s.COLORS);

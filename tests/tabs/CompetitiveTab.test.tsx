@@ -282,18 +282,32 @@ describe("CompetitiveTab", () => {
     // Default: all seasons tag
     expect(screen.getAllByText("2020/21 → 2024/25").length).toBeGreaterThan(0);
 
-    // Click "Últimas 5 Épocas" button
+    // Click "Últimos 5 Anos" button
     const last5Btn = screen.getByText("ch08-filter-last5");
     fireEvent.click(last5Btn);
     expect(
-      screen.getAllByText("Últimas 5 Épocas (2020/21–2024/25)").length,
+      screen.getAllByText("Últimos 5 Anos (2020/21–2024/25)").length,
     ).toBeGreaterThan(0);
 
-    // Click "Últimas 3 Épocas" button
-    const last3Btn = screen.getByText("ch08-filter-last3");
-    fireEvent.click(last3Btn);
+    // Click "10 Anos" button
+    const last10Btn = screen.getByText("ch08-filter-last10");
+    fireEvent.click(last10Btn);
     expect(
-      screen.getAllByText("Últimas 3 Épocas (2022/23–2024/25)").length,
+      screen.getAllByText("10 Anos (2020/21–2024/25)").length,
+    ).toBeGreaterThan(0);
+
+    // Click "Personalizar" button
+    const customBtn = screen.getByText("ch08-filter-custom");
+    fireEvent.click(customBtn);
+    expect(
+      screen.getAllByText("Personalizado (2020/21–2024/25)").length,
+    ).toBeGreaterThan(0);
+
+    // Change custom start dropdown
+    const startSelect = screen.getByLabelText("Época Inicial");
+    fireEvent.change(startSelect, { target: { value: "2021/22" } });
+    expect(
+      screen.getAllByText("Personalizado (2021/22–2024/25)").length,
     ).toBeGreaterThan(0);
 
     unmount();
@@ -304,7 +318,7 @@ describe("CompetitiveTab", () => {
     const last5BtnEn = screen.getByText("ch08-filter-last5");
     fireEvent.click(last5BtnEn);
     expect(
-      screen.getAllByText("Last 5 Seasons (2020/21–2024/25)").length,
+      screen.getAllByText("Last 5 Years (2020/21–2024/25)").length,
     ).toBeGreaterThan(0);
   });
 });

@@ -11,8 +11,32 @@ import { FinancialEfficiencyModule } from "../efficiency/FinancialEfficiencyModu
 export const CompetitiveTab = React.memo(function CompetitiveTab() {
   const { T } = useTranslation();
   const isPt = useAppState((s) => s.isPt);
+  const rawAnnual = useAppState((s) => s.annual);
   const [timeWindow, setTimeWindow] =
     React.useState<CompetitiveTimeWindow>("all");
+
+  const availableSeasons = React.useMemo(() => {
+    return (rawAnnual || []).map((d) => d.label || d.season).filter(Boolean);
+  }, [rawAnnual]);
+
+  const [customStart, setCustomStart] = React.useState<string>("");
+  const [customEnd, setCustomEnd] = React.useState<string>("");
+
+  const effectiveCustomStart =
+    customStart || (availableSeasons.length > 0 ? availableSeasons[0] : "");
+  const effectiveCustomEnd =
+    customEnd ||
+    (availableSeasons.length > 0
+      ? availableSeasons[availableSeasons.length - 1]
+      : "");
+
+  const customRange = React.useMemo(
+    () => ({
+      start: effectiveCustomStart,
+      end: effectiveCustomEnd,
+    }),
+    [effectiveCustomStart, effectiveCustomEnd],
+  );
 
   const {
     labels,
@@ -33,28 +57,51 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
     competitorColors,
     cumulativeNetResults,
     benchmarkMetrics,
-  } = useCompetitiveCharts(timeWindow);
+  } = useCompetitiveCharts(timeWindow, customRange);
 
   const firstSeason = labels[0] || "2010/11";
   const lastSeason = labels[labels.length - 1] || "2025/26";
   const seasonCount = labels.length || 16;
 
   const periodTag = React.useMemo(() => {
+    const range =
+      firstSeason === lastSeason ? firstSeason : `${firstSeason}–${lastSeason}`;
     if (timeWindow === "all") {
-      return `${firstSeason} → ${lastSeason}`;
+      return firstSeason === lastSeason
+        ? firstSeason
+        : `${firstSeason} → ${lastSeason}`;
     }
     if (timeWindow === "last5") {
       return isPt
-        ? `Últimas ${seasonCount} Épocas (${firstSeason}–${lastSeason})`
-        : `Last ${seasonCount} Seasons (${firstSeason}–${lastSeason})`;
+        ? `Últimos 5 Anos (${range})`
+        : `Last 5 Years (${range})`;
+    }
+    if (timeWindow === "last10") {
+      return isPt
+        ? `10 Anos (${range})`
+        : `10 Years (${range})`;
+    }
+    if (timeWindow === "custom") {
+      return isPt
+        ? `Personalizado (${range})`
+        : `Custom (${range})`;
     }
     return isPt
-      ? `Últimas ${seasonCount} Épocas (${firstSeason}–${lastSeason})`
-      : `Last ${seasonCount} Seasons (${firstSeason}–${lastSeason})`;
+      ? `Últimas ${seasonCount} Épocas (${range})`
+      : `Last ${seasonCount} Seasons (${range})`;
   }, [timeWindow, firstSeason, lastSeason, seasonCount, isPt]);
 
   const periodLabel = React.useMemo(() => {
     if (timeWindow === "all") {
+      return isPt ? `${seasonCount} Anos` : `${seasonCount}-Yr`;
+    }
+    if (timeWindow === "last5") {
+      return isPt ? "5 Anos" : "5-Yr";
+    }
+    if (timeWindow === "last10") {
+      return isPt ? "10 Anos" : "10-Yr";
+    }
+    if (timeWindow === "custom") {
       return isPt ? `${seasonCount} Anos` : `${seasonCount}-Yr`;
     }
     return isPt ? `${seasonCount} Anos` : `${seasonCount}-Yr`;
@@ -137,13 +184,117 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
             </button>
             <button
               type="button"
-              className={`btn-preset ${timeWindow === "last3" ? "active" : ""}`}
-              onClick={() => setTimeWindow("last3")}
+              className={`btn-preset ${timeWindow === "last10" ? "active" : ""}`}
+              onClick={() => setTimeWindow("last10")}
             >
-              <T as="span" i18nKey="ch08-filter-last3" />
+              <T as="span" i18nKey="ch08-filter-last10" />
+            </button>
+            <button
+              type="button"
+              className={`btn-preset ${timeWindow === "custom" ? "active" : ""}`}
+              onClick={() => setTimeWindow("custom")}
+            >
+              <T as="span" i18nKey="ch08-filter-custom" />
             </button>
           </div>
         </div>
+
+        {/* Custom Date / Season Range Pickers */}
+        {timeWindow === "custom" && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1.25rem",
+              marginTop: "0.85rem",
+              flexWrap: "wrap",
+              padding: "0.6rem 0.85rem",
+              background: "var(--surface-2, rgba(255, 255, 255, 0.04))",
+              borderRadius: "6px",
+              border: "1px solid var(--rule-2)",
+            }}
+          >
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <label
+                htmlFor="competitiveCustomStart"
+                style={{
+                  fontSize: "var(--fs-sm)",
+                  color: "var(--muted)",
+                  fontWeight: 600,
+                }}
+              >
+                <T as="span" i18nKey="ch08-filter-from" />
+              </label>
+              <select
+                id="competitiveCustomStart"
+                aria-label={isPt ? "Época Inicial" : "Start Season"}
+                value={effectiveCustomStart}
+                onChange={(e) => setCustomStart(e.target.value)}
+                style={{
+                  padding: "0.3rem 0.6rem",
+                  borderRadius: "4px",
+                  border: "1px solid var(--rule-2)",
+                  background: "var(--surface)",
+                  color: "var(--fg)",
+                  fontSize: "var(--fs-sm)",
+                  fontWeight: 500,
+                }}
+              >
+                {availableSeasons.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.5rem",
+              }}
+            >
+              <label
+                htmlFor="competitiveCustomEnd"
+                style={{
+                  fontSize: "var(--fs-sm)",
+                  color: "var(--muted)",
+                  fontWeight: 600,
+                }}
+              >
+                <T as="span" i18nKey="ch08-filter-to" />
+              </label>
+              <select
+                id="competitiveCustomEnd"
+                aria-label={isPt ? "Época Final" : "End Season"}
+                value={effectiveCustomEnd}
+                onChange={(e) => setCustomEnd(e.target.value)}
+                style={{
+                  padding: "0.3rem 0.6rem",
+                  borderRadius: "4px",
+                  border: "1px solid var(--rule-2)",
+                  background: "var(--surface)",
+                  color: "var(--fg)",
+                  fontSize: "var(--fs-sm)",
+                  fontWeight: 500,
+                }}
+              >
+                {availableSeasons.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        )}
 
         {/* Club Color Legend */}
         <div
@@ -1003,7 +1154,10 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
       </div>
 
       {/* Financial & Sporting Efficiency Module */}
-      <FinancialEfficiencyModule timeWindow={timeWindow} />
+      <FinancialEfficiencyModule
+        timeWindow={timeWindow}
+        customRange={customRange}
+      />
 
       <div className="narrative" style={{ marginTop: "1.5rem" }}>
         <T as="h4" i18nKey="ch08-narrative-h4" />

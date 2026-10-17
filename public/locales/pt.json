@@ -740,7 +740,7 @@
     "innerHTML": false
   },
   "ch08-benchmark-table-h3": {
-    "text": "🏆 Benchmark Consolidado dos Três Grandes (15 Épocas)",
+    "text": "🏆 Benchmark Consolidado dos Três Grandes",
     "isAria": false,
     "innerHTML": false
   },
@@ -1675,17 +1675,37 @@
     "innerHTML": false
   },
   "ch08-filter-all": {
-    "text": "15 Épocas (Completo)",
+    "text": "Todas as Épocas",
     "isAria": false,
     "innerHTML": false
   },
   "ch08-filter-last5": {
-    "text": "Ciclo Amorim (2020/21 → 2024/25)",
+    "text": "Últimos 5 Anos",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-filter-last10": {
+    "text": "10 Anos",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-filter-custom": {
+    "text": "Personalizar",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-filter-from": {
+    "text": "De:",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-filter-to": {
+    "text": "Até:",
     "isAria": false,
     "innerHTML": false
   },
   "ch08-filter-last3": {
-    "text": "Últimas 3 Épocas (2022/23 → 2024/25)",
+    "text": "Últimas 3 Épocas",
     "isAria": false,
     "innerHTML": false
   },
