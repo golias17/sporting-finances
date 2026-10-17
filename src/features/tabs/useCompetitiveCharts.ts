@@ -153,32 +153,23 @@ export function useCompetitiveCharts(
   }, [rawAnnual, timeWindow, customRange?.start, customRange?.end]);
 
   const benficaAnnual = useMemo(() => {
-    if (timeWindow === "all") return rawBenficaAnnual;
-    if (timeWindow === "last5") return rawBenficaAnnual.slice(-5);
-    if (timeWindow === "last10") return rawBenficaAnnual.slice(-10);
-    if (timeWindow === "last3") return rawBenficaAnnual.slice(-3);
-    if (timeWindow === "custom") {
-      const activeSeasons = new Set(annual.map((d) => d.season));
-      return rawBenficaAnnual.filter((d) => activeSeasons.has(d.season));
-    }
-    return rawBenficaAnnual;
-  }, [rawBenficaAnnual, timeWindow, annual]);
+    const activeSeasons = new Set(annual.map((d) => d.season || d.year));
+    return rawBenficaAnnual.filter(
+      (d) => activeSeasons.has(d.season || d.year || ""),
+    );
+  }, [rawBenficaAnnual, annual]);
 
   const portoAnnual = useMemo(() => {
-    if (timeWindow === "all") return rawPortoAnnual;
-    if (timeWindow === "last5") return rawPortoAnnual.slice(-5);
-    if (timeWindow === "last10") return rawPortoAnnual.slice(-10);
-    if (timeWindow === "last3") return rawPortoAnnual.slice(-3);
-    if (timeWindow === "custom") {
-      const activeSeasons = new Set(annual.map((d) => d.season));
-      return rawPortoAnnual.filter((d) => activeSeasons.has(d.season));
-    }
-    return rawPortoAnnual;
-  }, [rawPortoAnnual, timeWindow, annual]);
+    const activeSeasons = new Set(annual.map((d) => d.season || d.year));
+    return rawPortoAnnual.filter(
+      (d) => activeSeasons.has(d.season || d.year || ""),
+    );
+  }, [rawPortoAnnual, annual]);
 
   const theme = useAppState((s) => s.theme);
   const COLORS = useAppState((s) => s.COLORS);
   const baseOpts = useAppState((s) => s.baseOpts);
+  const isPt = useAppState((s) => s.isPt);
 
   const brandColors = useMemo(() => getBrandColors(theme === "dark"), [theme]);
 
@@ -215,7 +206,7 @@ export function useCompetitiveCharts(
           stack: "sporting",
         },
         {
-          label: "Sporting - Bilheteira",
+          label: isPt ? "Sporting - Bilheteira" : "Sporting - Matchday",
           data: annual.map((d) => d.rev_matchday ?? 0),
           backgroundColor: competitorColors.sporting + "70",
           borderColor: competitorColors.sporting,
@@ -224,7 +215,7 @@ export function useCompetitiveCharts(
           stack: "sporting",
         },
         {
-          label: "Sporting - Comercial",
+          label: isPt ? "Sporting - Comercial" : "Sporting - Commercial",
           data: annual.map((d) => d.rev_commercial ?? 0),
           backgroundColor: competitorColors.sporting + "40",
           borderColor: competitorColors.sporting,
@@ -245,7 +236,7 @@ export function useCompetitiveCharts(
           stack: "benfica",
         },
         {
-          label: "Benfica - Bilheteira",
+          label: isPt ? "Benfica - Bilheteira" : "Benfica - Matchday",
           data: annual.map((d) => {
             const bd = findRivalData(benficaAnnual, d.season);
             return bd ? (bd.rev_matchday ?? 0) : null;
@@ -257,7 +248,7 @@ export function useCompetitiveCharts(
           stack: "benfica",
         },
         {
-          label: "Benfica - Comercial",
+          label: isPt ? "Benfica - Comercial" : "Benfica - Commercial",
           data: annual.map((d) => {
             const bd = findRivalData(benficaAnnual, d.season);
             return bd ? (bd.rev_commercial ?? 0) : null;
@@ -281,7 +272,7 @@ export function useCompetitiveCharts(
           stack: "porto",
         },
         {
-          label: "Porto - Bilheteira",
+          label: isPt ? "Porto - Bilheteira" : "Porto - Matchday",
           data: annual.map((d) => {
             const pd = findRivalData(portoAnnual, d.season);
             return pd ? (pd.rev_matchday ?? 0) : null;
@@ -293,7 +284,7 @@ export function useCompetitiveCharts(
           stack: "porto",
         },
         {
-          label: "Porto - Comercial",
+          label: isPt ? "Porto - Comercial" : "Porto - Commercial",
           data: annual.map((d) => {
             const pd = findRivalData(portoAnnual, d.season);
             return pd ? (pd.rev_commercial ?? 0) : null;
@@ -306,7 +297,7 @@ export function useCompetitiveCharts(
         },
       ],
     }),
-    [labels, annual, benficaAnnual, portoAnnual, competitorColors],
+    [labels, annual, benficaAnnual, portoAnnual, competitorColors, isPt],
   );
 
   // Personnel Costs Ratio (line showing % of revenue)

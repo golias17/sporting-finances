@@ -230,7 +230,9 @@ export function SocialShareModal({
         >
           {isGenerating ? (
             <div style={{ color: theme === "light" ? "#0a5d3a" : "#e5cf87", fontFamily: "var(--mono)", fontSize: "0.85rem" }}>
-              ⏳ A gerar cartão de alta resolução...
+              {isPt
+                ? "⏳ A gerar cartão de alta resolução..."
+                : "⏳ Generating high-resolution card..."}
             </div>
           ) : previewUrl ? (
             <img
@@ -246,7 +248,7 @@ export function SocialShareModal({
             />
           ) : (
             <div style={{ color: "var(--muted)", fontSize: "0.85rem" }}>
-              Pré-visualização indisponível
+              {isPt ? "Pré-visualização indisponível" : "Preview unavailable"}
             </div>
           )}
         </div>

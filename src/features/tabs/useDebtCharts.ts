@@ -7,6 +7,7 @@ import type { ChartData, ChartOptions } from "chart.js";
 export function useDebtCharts() {
   const isPt = useAppState((s) => s.isPt);
   const annual = useAppState((s) => s.annual);
+  const theme = useAppState((s) => s.theme);
   const labels = useChartLabels();
 
   const debtData = useMemo<ChartData<"bar" | "line">>(
@@ -49,7 +50,7 @@ export function useDebtCharts() {
         },
       ] as any,
     }),
-    [labels, annual, isPt],
+    [labels, annual, isPt, theme],
   );
 
   const debtOptions = useMemo<ChartOptions<any>>(
@@ -60,6 +61,7 @@ export function useDebtCharts() {
         tooltip: {
           ...baseOpts.plugins?.tooltip,
           callbacks: {
+            ...(baseOpts.plugins?.tooltip?.callbacks || {}),
             label: (ctx: {
               dataset: { label: string };
               parsed: { y: number };
@@ -73,7 +75,7 @@ export function useDebtCharts() {
         y: { ...baseOpts.scales?.y, stacked: true, beginAtZero: true },
       },
     }),
-    [],
+    [theme],
   );
 
   const assetsLiabData = useMemo<ChartData<"bar">>(
@@ -100,7 +102,7 @@ export function useDebtCharts() {
         },
       ] as any,
     }),
-    [labels, annual, isPt],
+    [labels, annual, isPt, theme],
   );
 
   const debtMaturityData = useMemo<ChartData<"line">>(() => {
@@ -126,7 +128,7 @@ export function useDebtCharts() {
         },
       ] as any,
     };
-  }, [labels, annual, isPt]);
+  }, [labels, annual, isPt, theme]);
 
   const debtMaturityOptions = useMemo<ChartOptions<any>>(
     () => ({
@@ -137,6 +139,7 @@ export function useDebtCharts() {
         tooltip: {
           ...baseOpts.plugins?.tooltip,
           callbacks: {
+            ...(baseOpts.plugins?.tooltip?.callbacks || {}),
             label: (ctx: {
               dataset: { label: string };
               parsed: { y: number };
@@ -158,7 +161,7 @@ export function useDebtCharts() {
         },
       },
     }),
-    [isPt],
+    [isPt, theme],
   );
 
   const assetsLiabOptions = useMemo<ChartOptions<any>>(
@@ -169,6 +172,7 @@ export function useDebtCharts() {
         tooltip: {
           ...baseOpts.plugins?.tooltip,
           callbacks: {
+            ...(baseOpts.plugins?.tooltip?.callbacks || {}),
             label: (ctx: {
               dataset: { label: string };
               parsed: { y: number };
@@ -181,7 +185,7 @@ export function useDebtCharts() {
         y: { ...baseOpts.scales?.y, beginAtZero: true },
       },
     }),
-    [],
+    [theme],
   );
 
   return {

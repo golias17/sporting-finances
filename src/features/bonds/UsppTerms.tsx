@@ -65,7 +65,7 @@ export function UsppTerms() {
     },
     {
       label: isPt ? "Rating DBRS" : "DBRS rating",
-      value: "BBB (low)",
+      value: "BBB",
       note: isPt
         ? "Equivalente a grau de investimento pela DBRS Morningstar"
         : "Investment grade equivalent from DBRS Morningstar",
@@ -132,7 +132,8 @@ export function UsppTerms() {
     <>
       <div className="uspp-grid">
         {terms.map((t, i) => {
-          const isRating = t.value === "BBB−" || t.value === "BBB (low)";
+          const isRating =
+            t.value === "BBB−" || t.value === "BBB" || t.value === "BBB (low)";
           return (
             <div className="uspp-term" key={i}>
               <div className="ut-label">{t.label}</div>

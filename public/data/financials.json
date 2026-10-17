@@ -1069,6 +1069,10 @@
       "cf_investing": -48386,
       "cf_financing": 145390,
       "source": "25-26 Anual.pdf; 2nd place Liga (82 pts), UEFA Champions League historic quarter-finals (€80.3M UEFA), record turnover €300M, record net profit €34.7M, USPP €225M 28-yr bond",
+      "sporting_context": {
+        "league_position": 2,
+        "notes": "2nd place in Liga Portugal (82 pts), Taça de Portugal & Supertaça runner-up. Historic UCL QF run (first in club history). €225M USPP 28-yr bond issued (5.75%). Cash at €117.9M, Squad MV €572M."
+      },
       "squad_market_value": 572000,
       "rev_tv_comp": 112267,
       "rev_matchday": 29120,

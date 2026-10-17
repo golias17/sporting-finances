@@ -11,6 +11,14 @@ import { state } from "../core/state.js";
 // user hovers any chart in the app, for no reason since none of it depends
 // on the call's arguments.
 const PITCH_MILESTONES: Record<string, { en: string; pt: string }> = {
+  "2010/11": {
+    en: "⚽ Pitch: 3rd place in Primeira Liga; Europa League Round of 16.",
+    pt: "⚽ Campo: 3º lugar na Primeira Liga; Oitavos-de-final da Liga Europa.",
+  },
+  "2011/12": {
+    en: "⚽ Pitch: 4th place in Liga; Europa League semi-finalists & Taça de Portugal finalists.",
+    pt: "⚽ Campo: 4º lugar na Liga; Meias-finais da Liga Europa e finalista da Taça de Portugal.",
+  },
   "2012/13": {
     en: "⚽ Pitch: 7th place in Primeira Liga (worst in club history).",
     pt: "⚽ Campo: 7º lugar na Primeira Liga (pior na história do clube).",
@@ -60,8 +68,8 @@ const PITCH_MILESTONES: Record<string, { en: string; pt: string }> = {
     pt: "⚽ Campo: Campeões! 20º título da Primeira Liga (Gyökeres 29 golos).",
   },
   "2024/25": {
-    en: "⚽ Pitch: Amorim departs for Man Utd; João Pereira appointed.",
-    pt: "⚽ Campo: Amorim sai para o Man Utd; João Pereira contratado.",
+    en: "⚽ Pitch: Bicampeões & Dobradinha! Rui Borges wins Liga + Taça de Portugal double.",
+    pt: "⚽ Campo: Bicampeões e Dobradinha! Rui Borges conquista Liga Portugal e Taça de Portugal.",
   },
   "2025/26": {
     en: "⚽ Pitch: 2nd place (82 pts); historic Champions League quarter-finals.",

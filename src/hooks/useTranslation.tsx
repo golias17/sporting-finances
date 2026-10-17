@@ -6,7 +6,7 @@ export function useTranslation() {
 
   // Fallback for simple string attributes (e.g. placeholders, aria-labels)
   const t = (key: string): string => {
-    return translations[key]?.text || key;
+    return translations[key]?.text || "";
   };
 
   // Component wrapper for injecting translations safely (supports HTML if flagged in dict)

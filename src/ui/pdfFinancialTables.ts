@@ -56,7 +56,8 @@ export function drawFinancialTablesPage(ctx: PdfContext) {
         ? `${Math.round((Math.abs(d.personnel_costs) / d.revenue_operating) * 100)}%`
         : "—";
     const ebitda =
-      d.operating_result_excl_players - d.squad_amortization_impairment;
+      d.ebitda_operating ??
+      d.operating_result_excl_players + Math.abs(d.da_excl_squad || 0);
     const ebitdaMargin =
       d.revenue_operating > 0
         ? `${Math.round((ebitda / d.revenue_operating) * 100)}%`

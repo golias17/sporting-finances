@@ -91,12 +91,13 @@ export const RevenueTab = React.memo(function RevenueTab() {
       <ChartCard
         id="chartCostBreakdown"
         title={<T as="h3" i18nKey="ch02-costs-h3" />}
-        tag={<span className="tag">stacked area</span>}
+        tag={<T as="span" className="tag" i18nKey="ch02-streams-tag" />}
         desc={<T as="p" className="desc" i18nKey="ch02-costs-desc" />}
         chartType="bar"
         data={costBreakdownData}
         options={costBreakdownOptions}
         chartClassName="tall"
+        valueType="currency-thousands"
       />
       <div className="narrative">
         <T as="h4" i18nKey="ch02-narrative-h4" />

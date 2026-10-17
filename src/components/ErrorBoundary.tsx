@@ -1,4 +1,5 @@
 import React, { Component, type ReactNode } from "react";
+import { useAppState } from "../core/state.js";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -63,6 +64,7 @@ export class ErrorBoundary extends Component<
       }
 
       const canRetry = retryCount < maxRetries;
+      const isPt = useAppState.getState().isPt;
 
       return (
         <div className="card" style={{ padding: "2rem", textAlign: "center" }}>
@@ -76,6 +78,7 @@ export class ErrorBoundary extends Component<
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
+              aria-hidden="true"
             >
               <circle cx="12" cy="12" r="10" />
               <line x1="12" y1="8" x2="12" y2="12" />
@@ -89,7 +92,7 @@ export class ErrorBoundary extends Component<
               margin: "0 0 0.5rem",
             }}
           >
-            Something went wrong
+            {isPt ? "Ocorreu um erro" : "Something went wrong"}
           </h3>
           <p
             style={{
@@ -98,7 +101,10 @@ export class ErrorBoundary extends Component<
               margin: "0 0 1rem",
             }}
           >
-            {error?.message || "This section failed to load."}
+            {error?.message ||
+              (isPt
+                ? "Não foi possível carregar esta secção."
+                : "This section failed to load.")}
           </p>
           {retryCount > 0 && (
             <p
@@ -108,7 +114,7 @@ export class ErrorBoundary extends Component<
                 margin: "0 0 1rem",
               }}
             >
-              Retry {retryCount}/{maxRetries}
+              {isPt ? "Tentativa" : "Retry"} {retryCount}/{maxRetries}
             </p>
           )}
           <div
@@ -127,7 +133,7 @@ export class ErrorBoundary extends Component<
                   fontSize: "0.875rem",
                 }}
               >
-                Try again
+                {isPt ? "Tentar novamente" : "Try again"}
               </button>
             )}
             <button
@@ -142,7 +148,7 @@ export class ErrorBoundary extends Component<
                 fontSize: "0.875rem",
               }}
             >
-              Reset
+              {isPt ? "Repor" : "Reset"}
             </button>
           </div>
         </div>

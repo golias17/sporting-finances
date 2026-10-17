@@ -43,7 +43,11 @@ export function drawTradingCashFlowPage(ctx: PdfContext) {
       ];
 
   const t3Rows = data.map((d: AnnualData) => {
-    const netTradingVal = d.player_transfer_income + d.player_transfer_cost;
+    const netTradingVal =
+      d.operating_result_players ??
+      d.player_transfer_income +
+        d.player_transfer_cost +
+        (d.squad_amortization_impairment || 0);
     return [
       d.label,
       fmtM(d.player_transfer_income),

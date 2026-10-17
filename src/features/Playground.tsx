@@ -64,16 +64,39 @@ export function Playground() {
   });
 
   const BASELINE = getBaseline();
+  const safeBaseline = BASELINE || {
+    revenue_operating: 0,
+    personnel_costs: 0,
+    external_supplies: 0,
+    da_excl_squad: 0,
+    squad_amortization: 0,
+    player_transfer_cost: 0,
+    player_transfer_income: 0,
+    financial_result: 0,
+    net_result: 0,
+    equity: 0,
+    current_assets: 0,
+    current_liabilities: 0,
+    total_assets: 0,
+    cash: 0,
+  };
 
-  if (!BASELINE) return null;
-
-  const baseline = computeProjection(BASELINE, DEFAULT_INPUTS);
-  const proj = computeProjection(BASELINE, inputs);
-  const pinned = pinnedInputs
-    ? computeProjection(BASELINE, pinnedInputs)
-    : null;
+  const baseline = computeProjection(safeBaseline, DEFAULT_INPUTS);
+  const proj = computeProjection(safeBaseline, inputs);
+  const pinned =
+    pinnedInputs && !Array.isArray(pinnedInputs)
+      ? computeProjection(safeBaseline, pinnedInputs)
+      : null;
 
   const charts = usePlaygroundCharts(baseline, proj, pinned, isPt);
+
+  useEffect(() => {
+    if (BASELINE) {
+      syncStateToUrl();
+    }
+  }, [inputs, BASELINE]);
+
+  if (!BASELINE) return null;
 
   const eqZone = equityZoneInfo(proj.equity, isPt);
   const cashZone = cashZoneInfo(proj.cash, isPt);
@@ -332,6 +355,11 @@ export function Playground() {
               </option>
               <option value="47">
                 {isPt ? "Oitavos de Final (+€47M)" : "Round of 16 (+€47M)"}
+              </option>
+              <option value="55">
+                {isPt
+                  ? "Modelo Suíço / Playoff (+€55M)"
+                  : "Swiss Model Knockout (+€55M)"}
               </option>
               <option value="60">
                 {isPt ? "Quartos de Final (+€60M)" : "Quarter-finals (+€60M)"}

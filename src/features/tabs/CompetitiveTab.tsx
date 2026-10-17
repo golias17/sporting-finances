@@ -932,13 +932,13 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
                     : "Average Annual Operating Revenue"}
                 </td>
                 <td className="col-val">
-                  €{benchmarkMetrics.sporting.avgRev.toFixed(1)}M/ano
+                  €{benchmarkMetrics.sporting.avgRev.toFixed(1)}M{isPt ? "/ano" : "/yr"}
                 </td>
                 <td className="col-val">
-                  €{benchmarkMetrics.benfica.avgRev.toFixed(1)}M/ano
+                  €{benchmarkMetrics.benfica.avgRev.toFixed(1)}M{isPt ? "/ano" : "/yr"}
                 </td>
                 <td className="col-val">
-                  €{benchmarkMetrics.porto.avgRev.toFixed(1)}M/ano
+                  €{benchmarkMetrics.porto.avgRev.toFixed(1)}M{isPt ? "/ano" : "/yr"}
                 </td>
               </tr>
               <tr>
@@ -980,13 +980,13 @@ export const CompetitiveTab = React.memo(function CompetitiveTab() {
                     : "Average Annual Wage Costs"}
                 </td>
                 <td className="col-val">
-                  €{benchmarkMetrics.sporting.avgWages.toFixed(1)}M/ano
+                  €{benchmarkMetrics.sporting.avgWages.toFixed(1)}M{isPt ? "/ano" : "/yr"}
                 </td>
                 <td className="col-val">
-                  €{benchmarkMetrics.benfica.avgWages.toFixed(1)}M/ano
+                  €{benchmarkMetrics.benfica.avgWages.toFixed(1)}M{isPt ? "/ano" : "/yr"}
                 </td>
                 <td className="col-val">
-                  €{benchmarkMetrics.porto.avgWages.toFixed(1)}M/ano
+                  €{benchmarkMetrics.porto.avgWages.toFixed(1)}M{isPt ? "/ano" : "/yr"}
                 </td>
               </tr>
               <tr>

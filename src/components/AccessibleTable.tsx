@@ -62,9 +62,7 @@ export function AccessibleTable({
 
     let numVal: number;
     if (Array.isArray(v)) {
-      const stepValues = [177.6, -135.9, 52.0, -50.2, -23.5, 20.0];
-      numVal =
-        stepValues[rowIdx] !== undefined ? stepValues[rowIdx] : v[1] - v[0];
+      numVal = v[1] - v[0];
     } else {
       numVal = v;
     }
@@ -106,14 +104,12 @@ export function AccessibleTable({
   const cellClass = (
     v: number | [number, number] | null | undefined,
     dsIndex: number,
-    rowIdx: number,
+    _rowIdx: number,
   ) => {
     if (v === null || v === undefined) return undefined;
     let numVal: number;
     if (Array.isArray(v)) {
-      const stepValues = [177.6, -135.9, 52.0, -50.2, -23.5, 20.0];
-      numVal =
-        stepValues[rowIdx] !== undefined ? stepValues[rowIdx] : v[1] - v[0];
+      numVal = v[1] - v[0];
     } else {
       numVal = v;
     }

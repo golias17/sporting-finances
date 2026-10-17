@@ -43,15 +43,15 @@ export function VmocCost() {
       season: "2016/17",
       period: "vmoc",
       note: isPt
-        ? "VMOCs + obrigações públicas; época do ataque a Alcochete — sem eventos financeiros extraordinários"
-        : "VMOCs + public bonds; Alcochete attack season — no unusual financial items",
+        ? "VMOCs + obrigações públicas; estrutura estável, sem novos instrumentos"
+        : "VMOCs + public bonds; stable structure, no new instruments",
     },
     {
       season: "2017/18",
       period: "vmoc",
       note: isPt
-        ? "VMOCs + obrigações públicas; estrutura estável, sem novos instrumentos"
-        : "VMOCs + public bonds; stable structure, no new instruments",
+        ? "VMOCs + obrigações públicas; época do ataque a Alcochete (Maio 2018) — sem eventos financeiros extraordinários"
+        : "VMOCs + public bonds; Alcochete attack season (May 2018) — no unusual financial items",
     },
     {
       season: "2018/19",

@@ -415,7 +415,7 @@ export async function exportFinancialsExcel(isPt = true): Promise<void> {
     [],
     makeHeaderRow(bmHeaders),
     [
-      { value: "Sporting CP", fontWeight: "bold", backgroundColor: "rgba(10,93,58,0.1)" },
+      { value: "Sporting CP", fontWeight: "bold", backgroundColor: "#E6EFEA" },
       { value: scpTotals.rev, type: Number, format: "€#,##0.0'M'" },
       { value: scpTotals.wages, type: Number, format: "€#,##0.0'M'" },
       { value: scpTotals.trading, type: Number, format: "€#,##0.0'M'" },
@@ -426,7 +426,7 @@ export async function exportFinancialsExcel(isPt = true): Promise<void> {
       { value: scpTotals.equity, type: Number, format: "€#,##0.0'M'", fontWeight: "bold" },
     ],
     [
-      { value: "SL Benfica", fontWeight: "bold", backgroundColor: "rgba(184,64,58,0.1)" },
+      { value: "SL Benfica", fontWeight: "bold", backgroundColor: "#F8ECEB" },
       { value: slbTotals.rev, type: Number, format: "€#,##0.0'M'" },
       { value: slbTotals.wages, type: Number, format: "€#,##0.0'M'" },
       { value: slbTotals.trading, type: Number, format: "€#,##0.0'M'" },
@@ -437,7 +437,7 @@ export async function exportFinancialsExcel(isPt = true): Promise<void> {
       { value: slbTotals.equity, type: Number, format: "€#,##0.0'M'", fontWeight: "bold" },
     ],
     [
-      { value: "FC Porto", fontWeight: "bold", backgroundColor: "rgba(44,91,138,0.1)" },
+      { value: "FC Porto", fontWeight: "bold", backgroundColor: "#EAEFF4" },
       { value: fcpTotals.rev, type: Number, format: "€#,##0.0'M'" },
       { value: fcpTotals.wages, type: Number, format: "€#,##0.0'M'" },
       { value: fcpTotals.trading, type: Number, format: "€#,##0.0'M'" },
@@ -469,8 +469,8 @@ export async function exportFinancialsExcel(isPt = true): Promise<void> {
   // SHEET 5: FINANCIAMENTO & USPP
   // ==========================================
   const finTitle = isPt
-    ? "Sporting Clube de Portugal - Futebol, SAD | Instrumentos de Financiamento (USPP & VMOCs)"
-    : "Sporting Clube de Portugal - Futebol, SAD | Financing Instruments (USPP & VMOCs)";
+    ? "Sporting Clube de Portugal - Futebol, SAD | Instrumentos de Financiamento (USPP, Lion Finance & VMOCs)"
+    : "Sporting Clube de Portugal - Futebol, SAD | Financing Instruments (USPP, Lion Finance & VMOCs)";
 
   const finHeaders = isPt
     ? ["Instrumento Financeiro", "Montante Emitido", "Taxa de Cupão", "Maturidade", "Rating DBRS / Fitch", "Finalidade Estrutural"]
@@ -481,36 +481,36 @@ export async function exportFinancialsExcel(isPt = true): Promise<void> {
     [],
     makeHeaderRow(finHeaders),
     [
-      { value: "USPP Senior Secured Notes (Tranche A - Euro)", fontWeight: "bold" },
-      { value: "€160,000,000" },
-      { value: "5.85% Fixa" },
-      { value: "Outubro 2034 (10 anos)" },
-      { value: "BBB- / BBB (low) Investment Grade" },
-      { value: "Refinanciamento de dívida bancária de curto prazo e modernização do Estádio" },
+      { value: "USPP Senior Secured Notes (2026–2054)", fontWeight: "bold" },
+      { value: "€225,000,000" },
+      { value: "5.75% Fixa" },
+      { value: "Junho 2054 (28 anos)" },
+      { value: "DBRS BBB / Fitch BBB- (Investment Grade)" },
+      { value: "Colocação privada institucional de longo prazo (carência de capital 5 anos) para Alvalade 2.0 e refinanciamento" },
     ],
     [
-      { value: "USPP Senior Secured Notes (Tranche B - USD)", fontWeight: "bold" },
-      { value: "$70,000,000 (€65,000,000)" },
-      { value: "6.20% Fixa (com Cross-Currency Swap)" },
-      { value: "Outubro 2034 (10 anos)" },
-      { value: "BBB- / BBB (low) Investment Grade" },
-      { value: "Colocação privada com investidores institucionais norte-americanos" },
+      { value: "Lion Finance Bond 2024–2028", fontWeight: "bold" },
+      { value: "€50,000,000" },
+      { value: "5.75% Fixa" },
+      { value: "Maio 2028 (4 anos)" },
+      { value: "N/A (Retalho)" },
+      { value: "Empréstimo obrigacionista retalho para otimização de tesouraria e refinanciamento de EO anterior" },
     ],
     [
-      { value: "VMOCs Valores Sporting 2010 (Millennium BCP)", fontWeight: "bold" },
-      { value: "€55,000,000" },
+      { value: "VMOCs Valores Sporting 2014 (Millennium BCP)", fontWeight: "bold" },
+      { value: "€51,400,000" },
       { value: "Convertíveis em Ações" },
-      { value: "Convertido / Recomprado" },
+      { value: "Extintas / Recompradas (2021–2023)" },
       { value: "N/A" },
-      { value: "Recompra com desconto que gerou mais de €40M de capitais próprios" },
+      { value: "Recompra com 70% de desconto nominal que reforçou os capitais próprios da SAD" },
     ],
     [
       { value: "VMOCs Valores Sporting 2014 (Novo Banco)", fontWeight: "bold" },
-      { value: "€83,400,000" },
+      { value: "€83,600,000" },
       { value: "Convertíveis em Ações" },
-      { value: "Convertido / Recomprado" },
+      { value: "Extintas / Recompradas (Dez 2023)" },
       { value: "N/A" },
-      { value: "Extinção integral das VMOCs devolvendo a maioria do capital da SAD ao Clube (83.9%)" },
+      { value: "Extinção integral das VMOCs (€135M nominais) devolvendo 87,99% do capital da SAD ao Clube" },
     ],
   ];
 
@@ -528,8 +528,8 @@ export async function exportFinancialsExcel(isPt = true): Promise<void> {
   });
 
   const fileName = isPt
-    ? "sporting_cp_financas_historico_2010_2025.xlsx"
-    : "sporting_cp_financials_2010_2025.xlsx";
+    ? "sporting_cp_financas_historico_2010_2026.xlsx"
+    : "sporting_cp_financials_2010_2026.xlsx";
 
   const result = writeXlsx(sheets as unknown as Parameters<typeof writeXlsx>[0]);
   if (result && typeof (result as unknown as { toFile: (fn: string) => Promise<void> }).toFile === "function") {

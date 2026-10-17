@@ -731,13 +731,13 @@ export function SquadCostCalculator() {
             </div>
             <div className="value">€{inputs.annualGrossWage.toFixed(1)}M</div>
             <div className="change" style={{ color: "var(--muted)" }}>
-              {isPt
-                ? inputs.transferWindow === "winter"
-                  ? "€" +
-                    (inputs.annualGrossWage * 0.5).toFixed(1) +
-                    "M no 1º ano"
-                  : "Vencimento bruto"
-                : "Gross salary"}
+              {inputs.transferWindow === "winter"
+                ? isPt
+                  ? `€${(inputs.annualGrossWage * 0.5).toFixed(1)}M no 1º ano`
+                  : `€${(inputs.annualGrossWage * 0.5).toFixed(1)}M in Year 1`
+                : isPt
+                  ? "Vencimento bruto"
+                  : "Gross salary"}
             </div>
           </div>
 
@@ -853,7 +853,7 @@ export function SquadCostCalculator() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
+              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
               gap: "12px",
               marginTop: "14px",
             }}
@@ -897,7 +897,7 @@ export function SquadCostCalculator() {
                     {y.ratio.toFixed(1)}%
                   </span>
                   <span style={{ fontSize: "0.72rem", color: "var(--muted)" }}>
-                    (Teto: {y.uefaCap.toFixed(0)}%)
+                    ({isPt ? "Teto" : "Cap"}: {y.uefaCap.toFixed(0)}%)
                   </span>
                 </div>
                 <div

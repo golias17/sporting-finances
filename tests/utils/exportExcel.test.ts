@@ -97,7 +97,7 @@ describe("exportFinancialsExcel", () => {
       "Benchmark Rivais",
       "Instrumentos Dívida",
     ]);
-    expect(mockToFile).toHaveBeenCalledWith("sporting_cp_financas_historico_2010_2025.xlsx");
+    expect(mockToFile).toHaveBeenCalledWith("sporting_cp_financas_historico_2010_2026.xlsx");
   });
 
   it("calls writeXlsx with English sheet names and filename when isPt is false", async () => {
@@ -115,6 +115,6 @@ describe("exportFinancialsExcel", () => {
       "Rivals Benchmark",
       "Debt Instruments",
     ]);
-    expect(mockToFile).toHaveBeenCalledWith("sporting_cp_financials_2010_2025.xlsx");
+    expect(mockToFile).toHaveBeenCalledWith("sporting_cp_financials_2010_2026.xlsx");
   });
 });
