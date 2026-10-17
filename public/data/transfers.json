@@ -3162,10 +3162,10 @@
   },
   {
     "season": "2025/26",
-    "income": 109925,
-    "cost": -94482,
-    "note": "Season marked by the marquee sale of Viktor Gyökeres to Arsenal (€65.76M + €10.26M) and Conrad Harder to RB Leipzig (€24M + €6M). Landmark additions included Fotios Ioannidis (€22M), Luís Suarez (€22.16M), Georgios Vagiannidis (€12M), and winter signing Luís Guilherme (€14M).",
-    "note_pt": "Época marcada pela transferência de Viktor Gyökeres para o Arsenal (€65,76M + €10,26M) e de Conrad Harder para o RB Leipzig (€24M + €6M). Destaque nas entradas para Fotios Ioannidis (€22M), Luís Suarez (€22,16M), Georgios Vagiannidis (€12M) e o reforço de inverno Luís Guilherme (€14M).",
+    "income": 112301,
+    "cost": -16750,
+    "note": "Season marked by the marquee sale of Viktor Gyökeres to Arsenal (€65.76M + €10.26M), Conrad Harder to RB Leipzig (€24M + €6M), and Alisson Santos to Napoli (€20M total). Landmark additions included Fotios Ioannidis (€22M), Luís Suarez (€22.16M), Georgios Vagiannidis (€12M), winter signing Luís Guilherme (€14M), and late-season additions Silas Andersen (€7.25M) and Pedro Lima (€4M).",
+    "note_pt": "Época marcada pela transferência de Viktor Gyökeres para o Arsenal (€65,76M + €10,26M), Conrad Harder para o RB Leipzig (€24M + €6M) e Alisson Santos para o Nápoles (€20M total). Destaque nas entradas para Fotios Ioannidis (€22M), Luís Suarez (€22,16M), Georgios Vagiannidis (€12M), o reforço de inverno Luís Guilherme (€14M), bem como Silas Andersen (€7,25M) e Pedro Lima (€4M).",
     "purchases": [
       {
         "player": "Fotios Ioannidis",
@@ -3218,6 +3218,16 @@
         "note_pt": "Compra de 40% da futura venda, eliminando o passivo contingente com o FC Barcelona."
       },
       {
+        "player": "Silas Andersen",
+        "club": "BK Häcken",
+        "fee": 7.25,
+        "rights": "100%",
+        "commission": 0.191,
+        "window": "summer",
+        "note": "Definitive acquisition in June 2026 (100% economic rights, contract until Jun 2031). Other acquisition costs: €0.191M (total €7.441M per 2025/26 R&C Note 13.1).",
+        "note_pt": "Aquisição definitiva em junho de 2026 (100% dos direitos económicos, contrato até jun/31). Outros encargos de aquisição: €0,191M (total €7,441M na Nota 13.1 do R&C 2025/26)."
+      },
+      {
         "player": "Souleymane Faye",
         "club": "Granada CF SAD",
         "fee": 6.3,
@@ -3238,6 +3248,15 @@
         "note_pt": "Opção de prolongar contrato para a época 2028/29. Intermediação e manutenção: Team of Future Lda (€0,3M / €0,091M). Cláusula de rescisão de €45M, contrato até jun/28."
       },
       {
+        "player": "Pedro Lima",
+        "club": "AVS SAD",
+        "fee": 4,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Definitive acquisition in May 2026 for €4.0M (100% economic rights, contract until Jun 2031 per 2025/26 R&C Note 13.1).",
+        "note_pt": "Aquisição definitiva em maio de 2026 por €4,0M (100% dos direitos económicos, contrato até jun/31 na Nota 13.1 do R&C 2025/26)."
+      },
+      {
         "player": "Geny Catamo",
         "club": "Amora FC SAD & Black Bulls",
         "fee": 2.25,
@@ -3245,6 +3264,16 @@
         "window": "summer",
         "note": "Acquisition of additional economic rights. Amora FC and Black Bulls retain 10% future capital gain.",
         "note_pt": "Aquisição de direitos económicos adicionais. Amora FC SAD e Black Bulls mantêm em conjunto 10% de mais-valia futura."
+      },
+      {
+        "player": "Bruno Ramos",
+        "club": "Académico Viseu SAD",
+        "fee": 2,
+        "rights": "100%",
+        "bonus": 0.05,
+        "window": "summer",
+        "note": "Initial loan followed by exercise of €2.0M purchase option in June 2026 (100% economic rights, contract until Jun 2031 per 2025/26 R&C Note 13.1).",
+        "note_pt": "Empréstimo inicial seguido do exercício da opção de compra por €2,0M em junho de 2026 (100% dos direitos económicos, contrato até jun/31 na Nota 13.1 do R&C 2025/26)."
       },
       {
         "player": "Paulo Cardoso",
@@ -3341,15 +3370,6 @@
         "note_pt": "A custo zero. Cláusula de rescisão de €45M, contrato até jun/28."
       },
       {
-        "player": "Bruno Ramos (loan)",
-        "club": "Académico Viseu SAD",
-        "fee": 0,
-        "bonus": 0.05,
-        "window": "summer",
-        "note": "Loan until 30/06/2026. SCP SAD holds purchase option.",
-        "note_pt": "Empréstimo até 30/06/2026. SCP SAD detém opção de compra."
-      },
-      {
         "player": "Rayan Lucas (loan)",
         "club": "CR Flamengo",
         "fee": 0,
@@ -3374,8 +3394,8 @@
         "bonus": 10.26,
         "rights": "100%",
         "window": "summer",
-        "note": "Landmark sale to Arsenal FC for €65.76M fixed + up to €10.26M in performance-related add-ons.",
-        "note_pt": "Transferência histórica para o Arsenal FC por €65,76M fixos + até €10,26M em variáveis por objetivos."
+        "note": "Landmark sale to Arsenal FC for €65.76M fixed + up to €10.26M in performance-related add-ons (€69.87M recognized in 2025/26 R&C Note 10).",
+        "note_pt": "Transferência histórica para o Arsenal FC por €65,76M fixos + até €10,26M em variáveis por objetivos (€69,87M reconhecidos na Nota 10 do R&C 2025/26)."
       },
       {
         "player": "Conrad Harder",
@@ -3385,6 +3405,16 @@
         "window": "summer",
         "note": "SCP SAD retains 15% future capital gain.",
         "note_pt": "SCP SAD mantém 15% de mais-valia futura."
+      },
+      {
+        "player": "Alisson Santos",
+        "club": "SSC Napoli SpA",
+        "fee": 20,
+        "rights": "100%",
+        "commission": 0.1,
+        "window": "winter",
+        "note": "Winter loan (€3.5M fee) followed by exercise of €16.5M purchase option in June 2026 for €20.0M total (capital gain €14.42M per 2025/26 R&C Note 10). Commission: Peris Ruiz Consulting SL.",
+        "note_pt": "Empréstimo de inverno (€3,5M) seguido do exercício da opção de compra de €16,5M em junho de 2026, totalizando €20,0M (mais-valia de €14,42M na Nota 10 do R&C 2025/26). Comissão: Peris Ruiz Consulting SL."
       },
       {
         "player": "Marcus Edwards",
@@ -3397,6 +3427,24 @@
         "note_pt": "SCP mantém 10% de mais-valia futura. Comissão: Arete Management LTD."
       },
       {
+        "player": "Diogo Travassos",
+        "club": "SC Braga SAD",
+        "fee": 5.5,
+        "rights": "100%",
+        "window": "summer",
+        "note": "Definitive sale in May 2026 to SC Braga SAD for €5.5M (100% economic rights, capital gain €4.40M per 2025/26 R&C Note 10).",
+        "note_pt": "Venda definitiva em maio de 2026 à SC Braga SAD por €5,5M (100% dos direitos económicos, mais-valia de €4,40M na Nota 10 do R&C 2025/26)."
+      },
+      {
+        "player": "Rodrigo Ribeiro",
+        "club": "FC Augsburg 1907",
+        "fee": 5,
+        "rights": "100%",
+        "window": "winter",
+        "note": "Winter loan to FC Augsburg followed by exercise of €5.0M purchase option in May 2026 (100% economic rights, capital gain €3.98M per 2025/26 R&C Note 10).",
+        "note_pt": "Empréstimo de inverno ao FC Augsburg seguido do exercício da opção de compra por €5,0M em maio de 2026 (100% dos direitos económicos, mais-valia de €3,98M na Nota 10 do R&C 2025/26)."
+      },
+      {
         "player": "Franco Israel",
         "club": "Torino FC",
         "fee": 4.09,
@@ -3405,15 +3453,6 @@
         "window": "summer",
         "note": "SCP retains 10% future capital gain. Commission: Tidenal SA.",
         "note_pt": "SCP mantém 10% de mais-valia futura. Comissão: Tidenal SA."
-      },
-      {
-        "player": "Alisson Santos (loan)",
-        "club": "SSC Napoli SpA",
-        "fee": 3.5,
-        "commission": 0.1,
-        "window": "winter",
-        "note": "Loan fee of €3.5M until 30/06/2026. SSC Napoli holds purchase option. Commission: Peris Ruiz Consulting SL.",
-        "note_pt": "Taxa de empréstimo de €3,5M até 30/06/2026. SSC Napoli detém opção de compra. Comissão: Peris Ruiz Consulting SL."
       },
       {
         "player": "Vladan Kovačević",
@@ -3431,8 +3470,8 @@
         "fee": 2,
         "commission": 0.198,
         "window": "summer",
-        "note": "SCP retains 20% future capital gain. Commission: Proeleven SA.",
-        "note_pt": "SCP mantém 20% de mais-valia futura. Comissão: Proeleven SA."
+        "note": "SCP retains 20% future capital gain (€7.78M total recognized in 2025/26 R&C Note 10). Commission: Proeleven SA.",
+        "note_pt": "SCP mantém 20% de mais-valia futura (€7,78M totais reconhecidos na Nota 10 do R&C 2025/26). Comissão: Proeleven SA."
       },
       {
         "player": "Henrique Arreiol",
@@ -3468,14 +3507,6 @@
         "window": "summer",
         "note": "Loan until 30/06/2026. Atlético Mineiro has conditional mandatory purchase option. Commission: PMSM.",
         "note_pt": "Empréstimo até 30/06/2026. Atlético Mineiro tem opção de compra com condicional obrigatória. Comissão: PMSM."
-      },
-      {
-        "player": "Rodrigo Ribeiro (loan)",
-        "club": "FC Augsburg 1907",
-        "fee": 0,
-        "window": "winter",
-        "note": "Loan until 30/06/2026. FC Augsburg has conditional mandatory purchase option.",
-        "note_pt": "Empréstimo até 30/06/2026. FC Augsburg detém opção de compra condicionalmente obrigatória."
       },
       {
         "player": "Chris Grombahi (loan)",

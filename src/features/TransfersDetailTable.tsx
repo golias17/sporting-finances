@@ -265,7 +265,7 @@ export function TransfersDetailTable({
       <div className="ledger-controls">
         <div className="ledger-control-group">
           <label className="ledger-label" htmlFor="seasonFilter">
-            Season:
+            {isPt ? "Época:" : "Season:"}
           </label>
           <select
             id="seasonFilter"
@@ -287,7 +287,7 @@ export function TransfersDetailTable({
         </div>
         <div className="ledger-control-group">
           <label className="ledger-label" htmlFor="windowFilter">
-            Window:
+            {isPt ? "Janela:" : "Window:"}
           </label>
           <select
             id="windowFilter"
@@ -295,14 +295,20 @@ export function TransfersDetailTable({
             value={activeWindow}
             onChange={(e) => setActiveWindow(e.target.value)}
           >
-            <option value="all">All Windows</option>
-            <option value="summer">Summer Window</option>
-            <option value="winter">Winter Window</option>
+            <option value="all">
+              {isPt ? "Todas as Janelas" : "All Windows"}
+            </option>
+            <option value="summer">
+              {isPt ? "Janela de Verão" : "Summer Window"}
+            </option>
+            <option value="winter">
+              {isPt ? "Janela de Inverno" : "Winter Window"}
+            </option>
           </select>
         </div>
         <div className="ledger-control-group">
           <label className="ledger-label" htmlFor="typeFilter">
-            Type:
+            {isPt ? "Tipo:" : "Type:"}
           </label>
           <select
             id="typeFilter"
@@ -310,20 +316,26 @@ export function TransfersDetailTable({
             value={activeType}
             onChange={(e) => setActiveType(e.target.value)}
           >
-            <option value="all">All Transfers</option>
-            <option value="in">Arrivals</option>
-            <option value="out">Departures</option>
+            <option value="all">
+              {isPt ? "Todas as Transferências" : "All Transfers"}
+            </option>
+            <option value="in">{isPt ? "Entradas" : "Arrivals"}</option>
+            <option value="out">{isPt ? "Saídas" : "Departures"}</option>
           </select>
         </div>
         <div className="ledger-control-group ledger-control-group--grow">
           <label className="sr-only" htmlFor="searchInput">
-            Search transfers
+            {isPt ? "Pesquisar transferências" : "Search transfers"}
           </label>
           <input
             id="searchInput"
             className="ledger-input"
             type="text"
-            placeholder="Search player, club, or notes..."
+            placeholder={
+              isPt
+                ? "Pesquisar jogador, clube ou notas..."
+                : "Search player, club, or notes..."
+            }
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -423,11 +435,25 @@ export function TransfersDetailTable({
                       ? "sortable-header sorted"
                       : "sortable-header"
                   }
+                  tabIndex={0}
+                  aria-sort={
+                    sortCol === h.key
+                      ? sortDir === "asc"
+                        ? "ascending"
+                        : "descending"
+                      : "none"
+                  }
                   onClick={() => handleSort(h.key)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSort(h.key);
+                    }
+                  }}
                 >
                   {isPt ? h.labelPt : h.labelEn}
                   {sortCol === h.key && (
-                    <span className="sort-indicator">
+                    <span className="sort-indicator" aria-hidden="true">
                       {sortDir === "asc" ? " ▲" : " ▼"}
                     </span>
                   )}

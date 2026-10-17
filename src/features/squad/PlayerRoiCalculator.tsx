@@ -17,9 +17,9 @@ export function PlayerRoiCalculator() {
   const baseOpts = useAppState((s) => s.baseOpts);
   const chartRef = useRef<any>(null);
 
-  const [selectedPlayerId, setSelectedPlayerId] = useState<string>("gyokeres");
+  const [selectedPlayerId, setSelectedPlayerId] = useState<string>("suarez");
   const [positionFilter, setPositionFilter] = useState<string>("all");
-  const [proposedFee, setProposedFee] = useState<number>(85.0);
+  const [proposedFee, setProposedFee] = useState<number>(45.0);
   const [agentFeePct, setAgentFeePct] = useState<number>(0.05);
 
   const activePlayer = useMemo(() => {
@@ -244,7 +244,7 @@ export function PlayerRoiCalculator() {
                   {p.shortName}
                 </div>
                 <div style={{ fontSize: "0.72rem", color: "var(--muted)" }}>
-                  {p.isHomegrown ? "Formação" : `NBV: €${p.currentBookValue.toFixed(1)}M`}
+                  {p.isHomegrown ? (isPt ? "Formação" : "Academy") : `NBV: €${p.currentBookValue.toFixed(1)}M`}
                 </div>
               </div>
             </button>
@@ -293,7 +293,12 @@ export function PlayerRoiCalculator() {
                 color: "var(--muted)",
               }}
             >
-              {activePlayer.nationality} • {isPt ? "Contrato até" : "Contract until"} {activePlayer.contractExpiry} ({activePlayer.contractYearsTotal - activePlayer.yearsElapsed} {isPt ? "anos restantes" : "years remaining"})
+              {isPt
+                ? activePlayer.nationality.split(" / ")[0]
+                : activePlayer.nationality.includes(" / ")
+                  ? `${activePlayer.nationality.split(" ")[0]} ${activePlayer.nationality.split(" / ")[1]}`
+                  : activePlayer.nationality}{" "}
+              • {isPt ? "Contrato até" : "Contract until"} {activePlayer.contractExpiry} ({activePlayer.contractYearsTotal - activePlayer.yearsElapsed} {isPt ? "anos restantes" : "years remaining"})
             </p>
           </div>
 
@@ -343,7 +348,7 @@ export function PlayerRoiCalculator() {
           <div>
             <div style={{ fontSize: "0.72rem", color: "var(--muted)" }}>{isPt ? "Amortização Anual" : "Annual Amort."}</div>
             <div style={{ fontFamily: "var(--mono)", fontWeight: 700, fontSize: "0.92rem", color: "var(--muted)" }}>
-              €{activePlayer.annualAmortization.toFixed(2)}M/ano
+              €{activePlayer.annualAmortization.toFixed(2)}M/{isPt ? "ano" : "yr"}
             </div>
           </div>
           <div>
@@ -376,12 +381,17 @@ export function PlayerRoiCalculator() {
             <T as="div" className="dmt-kpi-label" i18nKey="player_roi_kpi_net_gain" />
             <span className="uefa-pillar-badge status-green" style={{ fontSize: "0.65rem" }}>
               {simulation.roiMultiple === 999
-                ? "100% Formação"
+                ? isPt
+                  ? "100% Formação"
+                  : "100% Academy"
                 : `${simulation.roiMultiple.toFixed(1)}x ROI`}
             </span>
           </div>
-          <div className="dmt-kpi-value" style={{ color: "var(--pos)" }}>
-            +€{simulation.netAccountingGain.toFixed(1)}M
+          <div
+            className="dmt-kpi-value"
+            style={{ color: simulation.netAccountingGain >= 0 ? "var(--pos)" : "var(--neg)" }}
+          >
+            {simulation.netAccountingGain >= 0 ? "+" : "-"}€{Math.abs(simulation.netAccountingGain).toFixed(1)}M
           </div>
           <T as="div" className="dmt-kpi-sub" i18nKey="player_roi_kpi_net_gain_sub" />
         </div>
@@ -397,7 +407,7 @@ export function PlayerRoiCalculator() {
         <div className="dmt-kpi-card accent-info">
           <T as="div" className="dmt-kpi-label" i18nKey="player_roi_kpi_uefa_relief" />
           <div className="dmt-kpi-value" style={{ color: "var(--info)" }}>
-            +€{simulation.uefaSquadCostRelief.toFixed(2)}M/ano
+            +€{simulation.uefaSquadCostRelief.toFixed(2)}M/{isPt ? "ano" : "yr"}
           </div>
           <T as="div" className="dmt-kpi-sub" i18nKey="player_roi_kpi_uefa_relief_sub" />
         </div>
@@ -427,8 +437,8 @@ export function PlayerRoiCalculator() {
             aria-label={t("player_roi_slider_label")}
           />
           <div className="pg-slider-bounds">
-            <span>€5M (Mínimo)</span>
-            <span>€120M (Recorde)</span>
+            <span>€5M ({isPt ? "Mínimo" : "Minimum"})</span>
+            <span>€120M ({isPt ? "Recorde" : "Record"})</span>
           </div>
         </div>
 
@@ -454,8 +464,8 @@ export function PlayerRoiCalculator() {
             aria-label={t("player_roi_agent_fee_label")}
           />
           <div className="pg-slider-bounds">
-            <span>0% (Sem comissão)</span>
-            <span>12% (Teto FIFA)</span>
+            <span>0% ({isPt ? "Sem comissão" : "No commission"})</span>
+            <span>12% ({isPt ? "Teto FIFA" : "FIFA cap"})</span>
           </div>
         </div>
       </div>
@@ -470,8 +480,16 @@ export function PlayerRoiCalculator() {
           <ChartDownloadButton
             chartRef={chartRef}
             fileName={`waterfall_${activePlayer.id}_roi`}
-            title={`Venda de ${activePlayer.name} (€${proposedFee}M)`}
-            subtitle={`Mais-valia Líquida: €${simulation.netAccountingGain.toFixed(1)}M | Entrada em Caixa: €${simulation.netCashInflow.toFixed(1)}M`}
+            title={
+              isPt
+                ? `Venda de ${activePlayer.name} (€${proposedFee}M)`
+                : `Sale of ${activePlayer.name} (€${proposedFee}M)`
+            }
+            subtitle={
+              isPt
+                ? `Mais-valia Líquida: €${simulation.netAccountingGain.toFixed(1)}M | Entrada em Caixa: €${simulation.netCashInflow.toFixed(1)}M`
+                : `Net Capital Gain: €${simulation.netAccountingGain.toFixed(1)}M | Cash Inflow: €${simulation.netCashInflow.toFixed(1)}M`
+            }
           />
         </div>
         <AppChart

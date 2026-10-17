@@ -203,7 +203,7 @@ export function drawTransfersLedgerPages(ctx: PdfContext) {
       ? "Nota: Informação compilada para fins informativos. Dados extraídos dos relatórios auditados da Sporting SAD."
       : "Disclaimer: Prepared for information purposes only. Source data compiled from audited Sporting SAD annual reports.",
     15,
-    283,
+    279,
   );
 }
 

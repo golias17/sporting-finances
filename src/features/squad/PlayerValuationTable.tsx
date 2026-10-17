@@ -83,36 +83,42 @@ export function PlayerValuationTable({
                 <th
                   style={{ textAlign: "left", cursor: "pointer" }}
                   onClick={() => handleSort("name")}
+                  aria-sort={sortField === "name" ? (sortAsc ? "ascending" : "descending") : "none"}
                 >
                   <T as="span" i18nKey="player_roi_col_player" /> {sortField === "name" ? (sortAsc ? "▲" : "▼") : ""}
                 </th>
                 <th
                   style={{ textAlign: "right", cursor: "pointer" }}
                   onClick={() => handleSort("acquisitionCost")}
+                  aria-sort={sortField === "acquisitionCost" ? (sortAsc ? "ascending" : "descending") : "none"}
                 >
                   <T as="span" i18nKey="player_roi_col_cost" /> {sortField === "acquisitionCost" ? (sortAsc ? "▲" : "▼") : ""}
                 </th>
                 <th
                   style={{ textAlign: "right", cursor: "pointer" }}
                   onClick={() => handleSort("annualAmortization")}
+                  aria-sort={sortField === "annualAmortization" ? (sortAsc ? "ascending" : "descending") : "none"}
                 >
                   <T as="span" i18nKey="player_roi_col_amort_annual" /> {sortField === "annualAmortization" ? (sortAsc ? "▲" : "▼") : ""}
                 </th>
                 <th
                   style={{ textAlign: "right", cursor: "pointer" }}
                   onClick={() => handleSort("currentBookValue")}
+                  aria-sort={sortField === "currentBookValue" ? (sortAsc ? "ascending" : "descending") : "none"}
                 >
                   <T as="span" i18nKey="player_roi_col_book_value" /> {sortField === "currentBookValue" ? (sortAsc ? "▲" : "▼") : ""}
                 </th>
                 <th
                   style={{ textAlign: "right", cursor: "pointer" }}
                   onClick={() => handleSort("marketValue")}
+                  aria-sort={sortField === "marketValue" ? (sortAsc ? "ascending" : "descending") : "none"}
                 >
                   <T as="span" i18nKey="player_roi_col_market_val" /> {sortField === "marketValue" ? (sortAsc ? "▲" : "▼") : ""}
                 </th>
                 <th
                   style={{ textAlign: "right", cursor: "pointer" }}
                   onClick={() => handleSort("releaseClause")}
+                  aria-sort={sortField === "releaseClause" ? (sortAsc ? "ascending" : "descending") : "none"}
                 >
                   <T as="span" i18nKey="player_roi_col_clause" /> {sortField === "releaseClause" ? (sortAsc ? "▲" : "▼") : ""}
                 </th>
@@ -124,6 +130,7 @@ export function PlayerValuationTable({
                 <th
                   style={{ textAlign: "center", cursor: "pointer" }}
                   onClick={() => handleSort("contractExpiry")}
+                  aria-sort={sortField === "contractExpiry" ? (sortAsc ? "ascending" : "descending") : "none"}
                 >
                   <T as="span" i18nKey="player_roi_col_contract" /> {sortField === "contractExpiry" ? (sortAsc ? "▲" : "▼") : ""}
                 </th>
@@ -133,6 +140,11 @@ export function PlayerValuationTable({
               {filteredAndSorted.map((p) => {
                 const isSelected = selectedPlayerId === p.id;
                 const gainAtClause = calculatePlayerSaleRoi(p, p.releaseClause).netAccountingGain;
+                const natDisplay = isPt
+                  ? p.nationality.split(" / ")[0]
+                  : p.nationality.includes(" / ")
+                    ? `${p.nationality.split(" ")[0]} ${p.nationality.split(" / ")[1]}`
+                    : p.nationality;
 
                 return (
                   <tr
@@ -153,7 +165,7 @@ export function PlayerValuationTable({
                             {p.name}
                           </div>
                           <div style={{ fontSize: "0.72rem", color: "var(--muted)" }}>
-                            {p.nationality} • {p.isHomegrown ? "Formação" : `Contratado em ${p.joinYear}`}
+                            {natDisplay} • {p.isHomegrown ? (isPt ? "Formação" : "Academy") : (isPt ? `Contratado em ${p.joinYear}` : `Signed in ${p.joinYear}`)}
                           </div>
                         </div>
                       </div>
@@ -161,14 +173,14 @@ export function PlayerValuationTable({
                     <td style={{ textAlign: "right", fontFamily: "var(--mono)" }}>
                       {p.isHomegrown ? (
                         <span className="uefa-pillar-badge status-green" style={{ fontSize: "0.68rem" }}>
-                          €0.0M (Base)
+                          €0.0M ({isPt ? "Base" : "Academy"})
                         </span>
                       ) : (
                         `€${p.acquisitionCost.toFixed(1)}M`
                       )}
                     </td>
                     <td style={{ textAlign: "right", fontFamily: "var(--mono)", color: "var(--muted)" }}>
-                      €{p.annualAmortization.toFixed(2)}M/ano
+                      €{p.annualAmortization.toFixed(2)}M/{isPt ? "ano" : "yr"}
                     </td>
                     <td style={{ textAlign: "right", fontFamily: "var(--mono)", fontWeight: 600 }}>
                       €{p.currentBookValue.toFixed(2)}M

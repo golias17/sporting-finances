@@ -28,7 +28,7 @@ export const SPORTING_PERFORMANCE: Record<"sporting" | "benfica" | "porto", Spor
     { season: "2021/22", points: 85, position: 2, leagues: 0, tacaPortugal: 0, tacaLiga: 1, supertaca: 1, european: 0, totalTitles: 2 },
     { season: "2022/23", points: 74, position: 4, leagues: 0, tacaPortugal: 0, tacaLiga: 0, supertaca: 0, european: 0, totalTitles: 0 },
     { season: "2023/24", points: 90, position: 1, leagues: 1, tacaPortugal: 0, tacaLiga: 0, supertaca: 0, european: 0, totalTitles: 1 },
-    { season: "2024/25", points: 82, position: 1, leagues: 1, tacaPortugal: 0, tacaLiga: 0, supertaca: 0, european: 0, totalTitles: 1 },
+    { season: "2024/25", points: 82, position: 1, leagues: 1, tacaPortugal: 1, tacaLiga: 0, supertaca: 0, european: 0, totalTitles: 2 },
     { season: "2025/26", points: 82, position: 2, leagues: 0, tacaPortugal: 0, tacaLiga: 0, supertaca: 0, european: 0, totalTitles: 0 },
   ],
   benfica: [
@@ -68,6 +68,12 @@ export const SPORTING_PERFORMANCE: Record<"sporting" | "benfica" | "porto", Spor
     { season: "2025/26", points: 88, position: 1, leagues: 1, tacaPortugal: 0, tacaLiga: 0, supertaca: 0, european: 0, totalTitles: 1 },
   ],
 };
+
+function normalizeSeasonKey(s?: string): string {
+  if (!s) return "";
+  const m = s.match(/(\d{2})[-/](\d{2})$/);
+  return m ? `${m[1]}-${m[2]}` : s;
+}
 
 export interface SeasonEfficiency {
   season: string;
@@ -112,25 +118,26 @@ export function computeEfficiencySeries(
   for (let i = 0; i < sportingFin.length; i++) {
     const scpFin = sportingFin[i];
     const season = scpFin.season;
+    const normSeason = normalizeSeasonKey(season);
 
     const slbFin =
-      benficaFin.find((f) => f.season === season || f.label === season) ||
+      benficaFin.find((f) => normalizeSeasonKey(f.season) === normSeason || normalizeSeasonKey(f.label) === normSeason) ||
       benficaFin[i];
     const fcpFin =
-      portoFin.find((f) => f.season === season || f.label === season) ||
+      portoFin.find((f) => normalizeSeasonKey(f.season) === normSeason || normalizeSeasonKey(f.label) === normSeason) ||
       (portoFin[i]?.season === season ? portoFin[i] : undefined);
 
     const scpPerf =
       SPORTING_PERFORMANCE.sporting.find(
-        (p) => p.season === season || p.season.includes(season.slice(-2)),
+        (p) => normalizeSeasonKey(p.season) === normSeason,
       ) || SPORTING_PERFORMANCE.sporting[i];
     const slbPerf =
       SPORTING_PERFORMANCE.benfica.find(
-        (p) => p.season === season || p.season.includes(season.slice(-2)),
+        (p) => normalizeSeasonKey(p.season) === normSeason,
       ) || (slbFin ? SPORTING_PERFORMANCE.benfica[i] : undefined);
     const fcpPerf =
       SPORTING_PERFORMANCE.porto.find(
-        (p) => p.season === season || p.season.includes(season.slice(-2)),
+        (p) => normalizeSeasonKey(p.season) === normSeason,
       ) || (fcpFin ? SPORTING_PERFORMANCE.porto[i] : undefined);
 
     const scpSpend = computeFootballSpending(scpFin) / 1000; // in €M
@@ -195,30 +202,30 @@ export function computeCycleEfficiencySummary(
     slbPerfSlice = SPORTING_PERFORMANCE.benfica.slice(-10);
     fcpPerfSlice = SPORTING_PERFORMANCE.porto.slice(-10);
   } else if (window === "custom" && customRange && (customRange.start || customRange.end)) {
-    const sStart = customRange.start || "";
-    const sEnd = customRange.end || "";
+    const sStart = normalizeSeasonKey(customRange.start);
+    const sEnd = normalizeSeasonKey(customRange.end);
     const idx1 = sportingFin.findIndex(
       (d) =>
-        d.season === sStart ||
-        (d.season && sStart && d.season.endsWith(sStart.slice(-2))),
+        normalizeSeasonKey(d.season) === sStart ||
+        normalizeSeasonKey(d.label) === sStart,
     );
     const idx2 = sportingFin.findIndex(
       (d) =>
-        d.season === sEnd ||
-        (d.season && sEnd && d.season.endsWith(sEnd.slice(-2))),
+        normalizeSeasonKey(d.season) === sEnd ||
+        normalizeSeasonKey(d.label) === sEnd,
     );
     const i1 = idx1 >= 0 ? idx1 : 0;
     const i2 = idx2 >= 0 ? idx2 : sportingFin.length - 1;
     const min = Math.min(i1, i2);
     const max = Math.max(i1, i2) + 1;
     scpSlice = sportingFin.slice(min, max);
-    const activeSeasons = new Set(scpSlice.map((d) => d.season));
-    slbSlice = benficaFin.filter((d) => activeSeasons.has(d.season));
-    fcpSlice = portoFin.filter((d) => activeSeasons.has(d.season));
+    const activeSeasons = new Set(scpSlice.map((d) => normalizeSeasonKey(d.season)));
+    slbSlice = benficaFin.filter((d) => activeSeasons.has(normalizeSeasonKey(d.season)));
+    fcpSlice = portoFin.filter((d) => activeSeasons.has(normalizeSeasonKey(d.season)));
 
-    scpPerfSlice = SPORTING_PERFORMANCE.sporting.filter((p) => activeSeasons.has(p.season));
-    slbPerfSlice = SPORTING_PERFORMANCE.benfica.filter((p) => activeSeasons.has(p.season));
-    fcpPerfSlice = SPORTING_PERFORMANCE.porto.filter((p) => activeSeasons.has(p.season));
+    scpPerfSlice = SPORTING_PERFORMANCE.sporting.filter((p) => activeSeasons.has(normalizeSeasonKey(p.season)));
+    slbPerfSlice = SPORTING_PERFORMANCE.benfica.filter((p) => activeSeasons.has(normalizeSeasonKey(p.season)));
+    fcpPerfSlice = SPORTING_PERFORMANCE.porto.filter((p) => activeSeasons.has(normalizeSeasonKey(p.season)));
   }
 
   const calcClub = (

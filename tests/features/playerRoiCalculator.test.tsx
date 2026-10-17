@@ -11,19 +11,19 @@ import { useAppState } from "../../src/core/state.js";
 import { loadTranslations } from "../../src/ui/translations.js";
 
 describe("playerValuationData Calculations", () => {
-  it("calculates accurate waterfall for Gyökeres at €100M release clause", () => {
-    const gyokeres = SQUAD_VALUATION_PROFILES.find((p) => p.id === "gyokeres")!;
-    const res = calculatePlayerSaleRoi(gyokeres, 100.0, 0.05);
+  it("calculates accurate waterfall for Luis Suárez at €80M release clause", () => {
+    const suarez = SQUAD_VALUATION_PROFILES.find((p) => p.id === "suarez")!;
+    const res = calculatePlayerSaleRoi(suarez, 80.0, 0.05);
 
-    expect(res.grossFee).toBe(100.0);
-    expect(res.bookValueDeduction).toBe(14.4);
-    expect(res.sellOnFee).toBe(7.6);
-    expect(res.fifaSolidarity).toBe(5.0);
-    expect(res.agentFee).toBe(5.0);
-    expect(res.netAccountingGain).toBeCloseTo(68.0, 1);
-    expect(res.netCashInflow).toBeCloseTo(82.4, 1);
-    expect(res.annualAmortizationRelief).toBe(4.8);
-    expect(res.uefaSquadCostRelief).toBeCloseTo(8.6, 1);
+    expect(res.grossFee).toBe(80.0);
+    expect(res.bookValueDeduction).toBe(19.83);
+    expect(res.sellOnFee).toBeCloseTo(5.52, 2);
+    expect(res.fifaSolidarity).toBe(4.0);
+    expect(res.agentFee).toBe(4.0);
+    expect(res.netAccountingGain).toBeCloseTo(46.65, 2);
+    expect(res.netCashInflow).toBeCloseTo(66.48, 2);
+    expect(res.annualAmortizationRelief).toBe(4.96);
+    expect(res.uefaSquadCostRelief).toBeCloseTo(8.16, 2);
   });
 
   it("calculates 100% margin for Homegrown Academy player (Gonçalo Inácio)", () => {
@@ -38,12 +38,12 @@ describe("playerValuationData Calculations", () => {
     expect(res.roiMultiple).toBe(999.0);
   });
 
-  it("handles total basis sell-on fee for Franco Israel", () => {
-    const israel = SQUAD_VALUATION_PROFILES.find((p) => p.id === "israel")!;
-    const res = calculatePlayerSaleRoi(israel, 20.0, 0.05);
+  it("accurately computes accounting loss when selling below net book value", () => {
+    const zalazar = SQUAD_VALUATION_PROFILES.find((p) => p.id === "zalazar")!;
+    const res = calculatePlayerSaleRoi(zalazar, 15.0, 0.05);
 
-    expect(res.sellOnFee).toBe(8.0); // 40% of €20M
-    expect(res.fifaSolidarity).toBe(1.0);
+    expect(res.bookValueDeduction).toBe(31.46);
+    expect(res.netAccountingGain).toBeLessThan(0);
   });
 });
 
@@ -67,10 +67,10 @@ describe("PlayerRoiCalculator Component", () => {
   it("switches active player when clicking a player chip", () => {
     render(<PlayerRoiCalculator />);
 
-    const hjulmandBtn = screen.getByRole("button", { name: /Hjulmand/i });
-    fireEvent.click(hjulmandBtn);
+    const zalazarBtn = screen.getByRole("button", { name: /Zalazar/i });
+    fireEvent.click(zalazarBtn);
 
-    expect(screen.getAllByText(/Morten Hjulmand/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/Rodrigo Zalazar/i)[0]).toBeInTheDocument();
   });
 
   it("filters players by position and academy", () => {
@@ -100,19 +100,19 @@ describe("PlayerRoiCalculator Component", () => {
       name: /Cláusula de Rescisão/i,
     });
     fireEvent.click(clauseBtn);
-    expect(screen.getByText(/€100.0M/i)).toBeInTheDocument();
+    expect(screen.getByText(/€80.0M/i)).toBeInTheDocument();
 
     const marketBtn = screen.getByRole("button", {
       name: /Valor de Mercado/i,
     });
     fireEvent.click(marketBtn);
-    expect(screen.getAllByText(/€75.0M/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/€45.0M/i)[0]).toBeInTheDocument();
 
     const consBtn = screen.getByRole("button", {
       name: /Oferta Mínima/i,
     });
     fireEvent.click(consBtn);
-    expect(screen.getByText(/€60.0M/i)).toBeInTheDocument();
+    expect(screen.getByText(/€36.0M/i)).toBeInTheDocument();
   });
 
   it("allows dragging proposed fee and agent commission sliders", () => {
@@ -152,7 +152,7 @@ describe("PlayerValuationTable Component", () => {
     fireEvent.change(searchInput, { target: { value: "Debast" } });
 
     expect(screen.getByText(/Zeno Debast/i)).toBeInTheDocument();
-    expect(screen.queryByText(/Viktor Gyökeres/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Luis Suárez/i)).not.toBeInTheDocument();
 
     const row = screen.getByText(/Zeno Debast/i).closest("tr");
     if (row) fireEvent.click(row);

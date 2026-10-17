@@ -128,6 +128,7 @@ export function applyUrlParams() {
   // 2. Tab Restoration
   let tab =
     params.get("tab") || window.location.hash.replace("#", "") || "overview";
+  if (tab === "debt" || tab === "cash") tab = "balance-sheet";
   if (!state.VALID_TABS.includes(tab)) tab = "overview";
 
   // 3. Story Step Restoration

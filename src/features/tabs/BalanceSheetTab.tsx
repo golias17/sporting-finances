@@ -49,6 +49,7 @@ export const BalanceSheetTab = React.memo(function BalanceSheetTab() {
         data={cashFlow.data}
         options={cashFlow.options}
         chartClassName="tall"
+        valueType="currency-thousands"
       />
 
       {/* Grid: Assets vs Liab + Cash Position */}
@@ -71,6 +72,7 @@ export const BalanceSheetTab = React.memo(function BalanceSheetTab() {
           chartType="line"
           data={cash.data}
           options={cash.options}
+          valueType="currency-thousands"
         />
       </div>
 
@@ -94,6 +96,7 @@ export const BalanceSheetTab = React.memo(function BalanceSheetTab() {
           chartType="bar"
           data={annualNet.data}
           options={annualNet.options}
+          valueType="currency-thousands"
         />
       </div>
 

@@ -158,6 +158,9 @@ body.dark .kpi:hover {
 .kpi.pos {
   border-bottom: 3px solid var(--pos);
 }
+.kpi.amber {
+  border-bottom: 3px solid var(--warn);
+}
 .kpi.neg {
   border-bottom: 3px solid var(--neg);
 }
@@ -972,7 +975,6 @@ nav.tabs {
   -ms-overflow-style: none; /* Hide scrollbar IE */
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
-  position: relative;
 }
 nav.tabs::after {
   content: "";
@@ -2478,7 +2480,8 @@ body.dark .skeleton-chart {
   border: 1px solid rgba(42, 127, 78, 0.25);
 }
 
-.uefa-pillar-badge.status-amber {
+.uefa-pillar-badge.status-amber,
+.uefa-pillar-badge.status-yellow {
   background: rgba(176, 137, 35, 0.12);
   color: var(--gold, #b08923);
   border: 1px solid rgba(176, 137, 35, 0.25);

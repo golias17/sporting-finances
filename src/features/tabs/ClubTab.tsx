@@ -3,9 +3,11 @@ import { useTranslation } from "../../hooks/useTranslation";
 import { useJornalModal } from "../../hooks/useJornalModal";
 import { useLightbox } from "../../hooks/useLightboxContext.tsx";
 import { initKitCardFlip } from "../../ui/imageLightbox.js";
+import { useAppState } from "../../core/state.js";
 
 export const ClubTab = React.memo(function ClubTab() {
   const { t, T } = useTranslation();
+  const isPt = useAppState((s) => s.isPt);
   const jornal = useJornalModal();
   const lightbox = useLightbox();
 
@@ -26,7 +28,7 @@ export const ClubTab = React.memo(function ClubTab() {
       if (!img.hasAttribute("aria-label")) {
         img.setAttribute(
           "aria-label",
-          `${img.alt || "Sporting CP asset"} — view enlarged`,
+          `${img.alt || (isPt ? "Ativo Sporting CP" : "Sporting CP asset")} — ${isPt ? "ver ampliado" : "view enlarged"}`,
         );
       }
 
@@ -43,8 +45,8 @@ export const ClubTab = React.memo(function ClubTab() {
             lightbox.open(img, {
               frontSrc: frontImg.src,
               backSrc: backImg.src,
-              frontAlt: frontImg.alt || "Kit Front",
-              backAlt: backImg.alt || "Kit Back",
+              frontAlt: frontImg.alt || (isPt ? "Equipamento Frente" : "Kit Front"),
+              backAlt: backImg.alt || (isPt ? "Equipamento Costas" : "Kit Back"),
             });
             return;
           }
@@ -60,7 +62,7 @@ export const ClubTab = React.memo(function ClubTab() {
         }
       });
     });
-  }, [lightbox]);
+  }, [lightbox, isPt]);
 
   return (
     <>
@@ -87,20 +89,24 @@ export const ClubTab = React.memo(function ClubTab() {
                 <div className="kit-card-front">
                   <img
                     src="./assets/kits/kit_home_front.jpg"
-                    alt="Home Front"
+                    alt={isPt ? "Principal Frente" : "Home Front"}
                     className="kit-img"
                     loading="lazy"
                   />
-                  <span className="kit-label">Home Front</span>
+                  <span className="kit-label">
+                    {isPt ? "Principal Frente" : "Home Front"}
+                  </span>
                 </div>
                 <div className="kit-card-back">
                   <img
                     src="./assets/kits/kit_home_back.jpg"
-                    alt="Home Back"
+                    alt={isPt ? "Principal Costas" : "Home Back"}
                     className="kit-img"
                     loading="lazy"
                   />
-                  <span className="kit-label">Home Back</span>
+                  <span className="kit-label">
+                    {isPt ? "Principal Costas" : "Home Back"}
+                  </span>
                 </div>
               </div>
             </div>
@@ -111,20 +117,24 @@ export const ClubTab = React.memo(function ClubTab() {
                 <div className="kit-card-front">
                   <img
                     src="./assets/kits/kit_away_front.jpg"
-                    alt="Away Front"
+                    alt={isPt ? "Alternativo Frente" : "Away Front"}
                     className="kit-img"
                     loading="lazy"
                   />
-                  <span className="kit-label">Away Front</span>
+                  <span className="kit-label">
+                    {isPt ? "Alternativo Frente" : "Away Front"}
+                  </span>
                 </div>
                 <div className="kit-card-back">
                   <img
                     src="./assets/kits/kit_away_back.jpg"
-                    alt="Away Back"
+                    alt={isPt ? "Alternativo Costas" : "Away Back"}
                     className="kit-img"
                     loading="lazy"
                   />
-                  <span className="kit-label">Away Back</span>
+                  <span className="kit-label">
+                    {isPt ? "Alternativo Costas" : "Away Back"}
+                  </span>
                 </div>
               </div>
             </div>
@@ -135,20 +145,24 @@ export const ClubTab = React.memo(function ClubTab() {
                 <div className="kit-card-front">
                   <img
                     src="./assets/kits/kit_third_front.jpg"
-                    alt="Third Front"
+                    alt={isPt ? "Terceiro Frente" : "Third Front"}
                     className="kit-img"
                     loading="lazy"
                   />
-                  <span className="kit-label">Third Front</span>
+                  <span className="kit-label">
+                    {isPt ? "Terceiro Frente" : "Third Front"}
+                  </span>
                 </div>
                 <div className="kit-card-back">
                   <img
                     src="./assets/kits/kit_third_back.jpg"
-                    alt="Third Back"
+                    alt={isPt ? "Terceiro Costas" : "Third Back"}
                     className="kit-img"
                     loading="lazy"
                   />
-                  <span className="kit-label">Third Back</span>
+                  <span className="kit-label">
+                    {isPt ? "Terceiro Costas" : "Third Back"}
+                  </span>
                 </div>
               </div>
             </div>
@@ -228,7 +242,7 @@ export const ClubTab = React.memo(function ClubTab() {
         <div className="card asset-card">
           <div className="card-head">
             <T as="h3" i18nKey="ch11-card-stadium-title" />
-            <span className="tag">52,095 Seats</span>
+            <span className="tag">{isPt ? "52.095 Lugares" : "52,095 Seats"}</span>
           </div>
           <T as="p" className="card-desc" i18nKey="ch11-card-stadium-desc" />
           <div className="stadium-image-box">
@@ -245,7 +259,7 @@ export const ClubTab = React.memo(function ClubTab() {
         <div className="card asset-card">
           <div className="card-head">
             <T as="h3" i18nKey="ch11-card-hall-title" />
-            <span className="tag">3,000 Capacity</span>
+            <span className="tag">{isPt ? "3.000 Lugares" : "3,000 Capacity"}</span>
           </div>
           <T as="p" className="card-desc" i18nKey="ch11-card-hall-desc" />
           <div className="court-image-box">
@@ -262,7 +276,7 @@ export const ClubTab = React.memo(function ClubTab() {
         <div className="card asset-card">
           <div className="card-head">
             <T as="h3" i18nKey="ch11-card-museum-title" />
-            <span className="tag">16,000+ Trophies</span>
+            <span className="tag">{isPt ? "16.000+ Troféus" : "16,000+ Trophies"}</span>
           </div>
           <T as="p" className="card-desc" i18nKey="ch11-card-museum-desc" />
           <div className="museum-image-box">
@@ -279,7 +293,7 @@ export const ClubTab = React.memo(function ClubTab() {
         <div className="card asset-card">
           <div className="card-head">
             <T as="h3" i18nKey="ch11-card-academy-title" />
-            <span className="tag">250,000 m²</span>
+            <span className="tag">{isPt ? "250.000 m²" : "250,000 m²"}</span>
           </div>
           <T as="p" className="card-desc" i18nKey="ch11-card-academy-desc" />
           <div className="academy-image-box">
@@ -456,7 +470,7 @@ export const ClubTab = React.memo(function ClubTab() {
           <button
             ref={jornal.closeBtnRef}
             className="modal-close"
-            aria-label="Close Reader"
+            aria-label={isPt ? "Fechar leitor" : "Close Reader"}
             onClick={jornal.close}
           >
             <svg

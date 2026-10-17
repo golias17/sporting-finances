@@ -37,8 +37,8 @@ export function TopNav({ onPdfExport, onOpenCommandPalette }: TopNavProps) {
     const isDark = document.body.classList.toggle("dark");
     const newTheme = isDark ? "dark" : "light";
     localStorage.setItem("theme", newTheme);
-    setTheme(newTheme);
     updateChartTheme();
+    setTheme(newTheme);
 
     // Trigger the animation
     const btn = btnRef.current;

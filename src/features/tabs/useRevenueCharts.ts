@@ -12,6 +12,7 @@ import type { ChartData, ChartOptions } from "chart.js";
 export function useRevenueCharts() {
   const isPt = useAppState((s) => s.isPt);
   const annual = useAppState((s) => s.annual);
+  const theme = useAppState((s) => s.theme);
   const labels = useChartLabels();
 
   const revenueData = useMemo<ChartData<"bar" | "line">>(
@@ -41,7 +42,7 @@ export function useRevenueCharts() {
         },
       ] as any,
     }),
-    [labels, annual, isPt],
+    [labels, annual, isPt, theme],
   );
 
   const revStreamsData = useMemo<ChartData<"bar">>(() => {
@@ -103,7 +104,7 @@ export function useRevenueCharts() {
         },
       ] as any,
     };
-  }, [labels, annual, isPt]);
+  }, [labels, annual, isPt, theme]);
 
   const revStreamsOptions = useMemo<ChartOptions<any>>(
     () => ({
@@ -143,7 +144,7 @@ export function useRevenueCharts() {
         y: { ...baseOpts.scales?.y, stacked: true },
       },
     }),
-    [],
+    [theme],
   );
 
   const revVsPayrollData = useMemo<ChartData<"bar">>(() => {
@@ -180,7 +181,7 @@ export function useRevenueCharts() {
         },
       ] as any,
     };
-  }, [labels, annual, isPt]);
+  }, [labels, annual, isPt, theme]);
 
   const revVsPayrollOptions = useMemo<ChartOptions<any>>(
     () => ({
@@ -191,6 +192,7 @@ export function useRevenueCharts() {
         tooltip: {
           ...baseOpts.plugins?.tooltip,
           callbacks: {
+            ...(baseOpts.plugins?.tooltip?.callbacks || {}),
             label: (ctx: {
               dataset: { label: string };
               parsed: { y: number };
@@ -210,7 +212,7 @@ export function useRevenueCharts() {
         },
       },
     }),
-    [isPt],
+    [isPt, theme],
   );
 
   const opResultData = useMemo<ChartData<"bar" | "line">>(() => {
@@ -257,7 +259,7 @@ export function useRevenueCharts() {
         },
       ] as any,
     };
-  }, [labels, annual, isPt]);
+  }, [labels, annual, isPt, theme]);
 
   const opResultOptions = useMemo<ChartOptions<any>>(
     () => ({
@@ -267,6 +269,7 @@ export function useRevenueCharts() {
         tooltip: {
           ...baseOpts.plugins?.tooltip,
           callbacks: {
+            ...(baseOpts.plugins?.tooltip?.callbacks || {}),
             label: (ctx: {
               dataset: { label: string };
               parsed: { y: number };
@@ -280,7 +283,7 @@ export function useRevenueCharts() {
         y: { ...baseOpts.scales?.y, stacked: true, beginAtZero: false },
       },
     }),
-    [],
+    [theme],
   );
 
   // Personnel Costs Breakdown
@@ -390,6 +393,7 @@ export function useRevenueCharts() {
         tooltip: {
           ...state.baseOpts.plugins?.tooltip,
           callbacks: {
+            ...(state.baseOpts.plugins?.tooltip?.callbacks || {}),
             label: (ctx: {
               dataset: { label: string };
               parsed: { y: number };

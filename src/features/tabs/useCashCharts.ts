@@ -7,6 +7,7 @@ import type { ChartData, ChartOptions } from "chart.js";
 export function useCashCharts() {
   const isPt = useAppState((s) => s.isPt);
   const annual = useAppState((s) => s.annual);
+  const theme = useAppState((s) => s.theme);
   const baseLabels = useChartLabels();
 
   const cashFlowData = useMemo<ChartData<"bar">>(
@@ -38,7 +39,7 @@ export function useCashCharts() {
         },
       ],
     }),
-    [baseLabels, annual, isPt],
+    [baseLabels, annual, isPt, theme],
   );
 
   const cashFlowOptions = useMemo<ChartOptions<"bar">>(
@@ -49,6 +50,7 @@ export function useCashCharts() {
         tooltip: {
           ...baseOpts.plugins?.tooltip,
           callbacks: {
+            ...(baseOpts.plugins?.tooltip?.callbacks || {}),
             label: (ctx: {
               dataset: { label: string };
               parsed: { y: number };
@@ -61,7 +63,7 @@ export function useCashCharts() {
         y: { ...(baseOpts.scales?.y || {}), beginAtZero: false },
       },
     }),
-    [],
+    [theme],
   );
 
   const cashData = useMemo<ChartData<"line">>(
@@ -80,7 +82,7 @@ export function useCashCharts() {
         } as any,
       ],
     }),
-    [baseLabels, annual, isPt],
+    [baseLabels, annual, isPt, theme],
   );
 
   const cashOptions = useMemo<ChartOptions<"line">>(
@@ -92,6 +94,7 @@ export function useCashCharts() {
         tooltip: {
           ...baseOpts.plugins?.tooltip,
           callbacks: {
+            ...(baseOpts.plugins?.tooltip?.callbacks || {}),
             label: (ctx: {
               dataset: { label: string };
               parsed: { y: number };
@@ -100,7 +103,7 @@ export function useCashCharts() {
         },
       },
     }),
-    [],
+    [theme],
   );
 
   const annualNet = usePosNegBarChart(
