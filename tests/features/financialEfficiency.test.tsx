@@ -82,6 +82,18 @@ describe("financialEfficiencyData calculations", () => {
     expect(summary5.sporting.totalTitles).toBeGreaterThan(0);
     expect(summary5.sporting.costPerPoint).toBeLessThan(summary5.benfica.costPerPoint);
 
+    const summary10 = computeCycleEfficiencySummary(scpFin, slbFin, fcpFin, "last10");
+    expect(summary10.sporting.totalPoints).toBeGreaterThan(summary5.sporting.totalPoints);
+
+    const summaryCustom = computeCycleEfficiencySummary(
+      scpFin,
+      slbFin,
+      fcpFin,
+      "custom",
+      { start: "2020/21", end: "2023/24" },
+    );
+    expect(summaryCustom.sporting.totalPoints).toBeGreaterThan(0);
+
     const summary3 = computeCycleEfficiencySummary(scpFin, slbFin, fcpFin, "last3");
     expect(summary3.sporting.totalPoints).toBeGreaterThan(200);
 

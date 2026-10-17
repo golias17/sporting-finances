@@ -740,7 +740,7 @@
     "innerHTML": false
   },
   "ch08-benchmark-table-h3": {
-    "text": "🏆 Big Three Consolidated Benchmark (15 Seasons)",
+    "text": "🏆 Big Three Consolidated Benchmark",
     "isAria": false,
     "innerHTML": false
   },
@@ -1675,17 +1675,37 @@
     "innerHTML": false
   },
   "ch08-filter-all": {
-    "text": "15 Seasons (All)",
+    "text": "All Seasons",
     "isAria": false,
     "innerHTML": false
   },
   "ch08-filter-last5": {
-    "text": "Amorim Cycle (2020/21 → 2024/25)",
+    "text": "Last 5 Years",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-filter-last10": {
+    "text": "10 Years",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-filter-custom": {
+    "text": "Customize",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-filter-from": {
+    "text": "From:",
+    "isAria": false,
+    "innerHTML": false
+  },
+  "ch08-filter-to": {
+    "text": "To:",
     "isAria": false,
     "innerHTML": false
   },
   "ch08-filter-last3": {
-    "text": "Last 3 Seasons (2022/23 → 2024/25)",
+    "text": "Last 3 Seasons",
     "isAria": false,
     "innerHTML": false
   },

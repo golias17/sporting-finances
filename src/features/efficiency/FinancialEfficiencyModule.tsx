@@ -9,13 +9,15 @@ import {
 import type { FinancialRecord } from "../../core/types.js";
 
 interface FinancialEfficiencyModuleProps {
-  timeWindow: "all" | "last5" | "last3";
+  timeWindow?: "all" | "last10" | "last5" | "last3" | "custom";
+  customRange?: { start?: string; end?: string };
 }
 
 type EfficiencyViewMode = "cpp" | "spend_vs_pts" | "cost_per_title";
 
 export function FinancialEfficiencyModule({
   timeWindow = "all",
+  customRange,
 }: FinancialEfficiencyModuleProps) {
   const { t, T } = useTranslation();
   const isPt = useAppState((s) => s.isPt);
@@ -35,16 +37,51 @@ export function FinancialEfficiencyModule({
   );
 
   const cycleSummary = useMemo(
-    () => computeCycleEfficiencySummary(annual, benfica, porto, timeWindow),
-    [annual, benfica, porto, timeWindow],
+    () =>
+      computeCycleEfficiencySummary(
+        annual,
+        benfica,
+        porto,
+        timeWindow,
+        customRange,
+      ),
+    [annual, benfica, porto, timeWindow, customRange],
   );
 
   const savingsVsBenfica = useMemo(() => {
     return Math.max(0, cycleSummary.benfica.totalSpend - cycleSummary.sporting.totalSpend);
   }, [cycleSummary]);
 
-  const count = timeWindow === "last3" ? 3 : timeWindow === "last5" ? 5 : series.length;
-  const slicedSeries = useMemo(() => series.slice(-count), [series, count]);
+  const slicedSeries = useMemo(() => {
+    if (timeWindow === "last3") return series.slice(-3);
+    if (timeWindow === "last5") return series.slice(-5);
+    if (timeWindow === "last10") return series.slice(-10);
+    if (
+      timeWindow === "custom" &&
+      customRange &&
+      (customRange.start || customRange.end)
+    ) {
+      const sStart = customRange.start || "";
+      const sEnd = customRange.end || "";
+      const idx1 = series.findIndex(
+        (d) =>
+          d.season === sStart ||
+          (d.season && sStart && d.season.endsWith(sStart.slice(-2))),
+      );
+      const idx2 = series.findIndex(
+        (d) =>
+          d.season === sEnd ||
+          (d.season && sEnd && d.season.endsWith(sEnd.slice(-2))),
+      );
+      const i1 = idx1 >= 0 ? idx1 : 0;
+      const i2 = idx2 >= 0 ? idx2 : series.length - 1;
+      const min = Math.min(i1, i2);
+      const max = Math.max(i1, i2) + 1;
+      const sliced = series.slice(min, max);
+      return sliced.length > 0 ? sliced : series;
+    }
+    return series;
+  }, [series, timeWindow, customRange?.start, customRange?.end]);
 
   // Chart configuration based on viewMode
   const chartData = useMemo(() => {

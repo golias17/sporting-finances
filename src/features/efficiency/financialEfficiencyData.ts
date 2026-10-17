@@ -162,17 +162,64 @@ export function computeCycleEfficiencySummary(
   sportingFin: FinancialRecord[],
   benficaFin: FinancialRecord[],
   portoFin: FinancialRecord[],
-  window: "all" | "last5" | "last3" = "all",
+  window: "all" | "last10" | "last5" | "last3" | "custom" = "all",
+  customRange?: { start?: string; end?: string },
 ): Record<"sporting" | "benfica" | "porto", ClubCycleSummary> {
-  const count = window === "last3" ? 3 : window === "last5" ? 5 : undefined;
+  let scpSlice = sportingFin;
+  let slbSlice = benficaFin;
+  let fcpSlice = portoFin;
 
-  const scpSlice = count ? sportingFin.slice(-count) : sportingFin;
-  const slbSlice = count ? benficaFin.slice(-count) : benficaFin;
-  const fcpSlice = count ? portoFin.slice(-count) : portoFin;
+  let scpPerfSlice = SPORTING_PERFORMANCE.sporting;
+  let slbPerfSlice = SPORTING_PERFORMANCE.benfica;
+  let fcpPerfSlice = SPORTING_PERFORMANCE.porto;
 
-  const scpPerfSlice = count ? SPORTING_PERFORMANCE.sporting.slice(-count) : SPORTING_PERFORMANCE.sporting;
-  const slbPerfSlice = count ? SPORTING_PERFORMANCE.benfica.slice(-count) : SPORTING_PERFORMANCE.benfica;
-  const fcpPerfSlice = count ? SPORTING_PERFORMANCE.porto.slice(-count) : SPORTING_PERFORMANCE.porto;
+  if (window === "last3") {
+    scpSlice = sportingFin.slice(-3);
+    slbSlice = benficaFin.slice(-3);
+    fcpSlice = portoFin.slice(-3);
+    scpPerfSlice = SPORTING_PERFORMANCE.sporting.slice(-3);
+    slbPerfSlice = SPORTING_PERFORMANCE.benfica.slice(-3);
+    fcpPerfSlice = SPORTING_PERFORMANCE.porto.slice(-3);
+  } else if (window === "last5") {
+    scpSlice = sportingFin.slice(-5);
+    slbSlice = benficaFin.slice(-5);
+    fcpSlice = portoFin.slice(-5);
+    scpPerfSlice = SPORTING_PERFORMANCE.sporting.slice(-5);
+    slbPerfSlice = SPORTING_PERFORMANCE.benfica.slice(-5);
+    fcpPerfSlice = SPORTING_PERFORMANCE.porto.slice(-5);
+  } else if (window === "last10") {
+    scpSlice = sportingFin.slice(-10);
+    slbSlice = benficaFin.slice(-10);
+    fcpSlice = portoFin.slice(-10);
+    scpPerfSlice = SPORTING_PERFORMANCE.sporting.slice(-10);
+    slbPerfSlice = SPORTING_PERFORMANCE.benfica.slice(-10);
+    fcpPerfSlice = SPORTING_PERFORMANCE.porto.slice(-10);
+  } else if (window === "custom" && customRange && (customRange.start || customRange.end)) {
+    const sStart = customRange.start || "";
+    const sEnd = customRange.end || "";
+    const idx1 = sportingFin.findIndex(
+      (d) =>
+        d.season === sStart ||
+        (d.season && sStart && d.season.endsWith(sStart.slice(-2))),
+    );
+    const idx2 = sportingFin.findIndex(
+      (d) =>
+        d.season === sEnd ||
+        (d.season && sEnd && d.season.endsWith(sEnd.slice(-2))),
+    );
+    const i1 = idx1 >= 0 ? idx1 : 0;
+    const i2 = idx2 >= 0 ? idx2 : sportingFin.length - 1;
+    const min = Math.min(i1, i2);
+    const max = Math.max(i1, i2) + 1;
+    scpSlice = sportingFin.slice(min, max);
+    const activeSeasons = new Set(scpSlice.map((d) => d.season));
+    slbSlice = benficaFin.filter((d) => activeSeasons.has(d.season));
+    fcpSlice = portoFin.filter((d) => activeSeasons.has(d.season));
+
+    scpPerfSlice = SPORTING_PERFORMANCE.sporting.filter((p) => activeSeasons.has(p.season));
+    slbPerfSlice = SPORTING_PERFORMANCE.benfica.filter((p) => activeSeasons.has(p.season));
+    fcpPerfSlice = SPORTING_PERFORMANCE.porto.filter((p) => activeSeasons.has(p.season));
+  }
 
   const calcClub = (
     clubKey: "sporting" | "benfica" | "porto",
