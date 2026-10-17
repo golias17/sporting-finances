@@ -65,6 +65,7 @@ export const SPORTING_PERFORMANCE: Record<"sporting" | "benfica" | "porto", Spor
     { season: "2022/23", points: 85, position: 2, leagues: 0, tacaPortugal: 1, tacaLiga: 1, supertaca: 1, european: 0, totalTitles: 3 },
     { season: "2023/24", points: 72, position: 3, leagues: 0, tacaPortugal: 1, tacaLiga: 0, supertaca: 0, european: 0, totalTitles: 1 },
     { season: "2024/25", points: 71, position: 3, leagues: 0, tacaPortugal: 0, tacaLiga: 0, supertaca: 1, european: 0, totalTitles: 1 },
+    { season: "2025/26", points: 88, position: 1, leagues: 1, tacaPortugal: 0, tacaLiga: 0, supertaca: 0, european: 0, totalTitles: 1 },
   ],
 };
 
